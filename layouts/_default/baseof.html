@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home | PingCAP</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+    {{ block "headcss" . }}{{ end }}
+    <style type="text/css" media="screen">
+    * .page {
+      padding-top: 0!important;
+    }
+    .page > header {
+      padding-bottom: 110px;
+    }
+    </style>
+    {{ partial "head/meta" . }}
+    {{ partial "head/ga" . }}
+</head>
+
+<!-- Todo body class extend -->
+<body class="en landingpage archives zh blog jobs recruit about en meetup">
+  {{ $data_i18_zh := $.Scratch.Get "data_i18_zh" }}
+    <div class="page">
+        {{ if $data_i18_zh }}
+          {{ partial "header-zh" . }}
+        {{ else }}
+          {{ partial "header" . }}
+        {{ end }}
+
+        {{ block "main" . }}{{ end }}
+        {{ if $data_i18_zh }}
+          {{ partial "footer-zh" . }}
+        {{ else }}
+          {{ partial "footer" . }}
+        {{ end }}
+    </div>
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/js/app.js"></script>
+    {{ block "footjs" . }}{{ end }}
+    {{ partial "search/algolia-js" . }}
+</body>
+
+</html>

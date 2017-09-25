@@ -1,0 +1,123 @@
+{{ define "headcss" }}
+{{$.Scratch.Set "nav_active" "meetup"}}
+{{$.Scratch.Set "data_i18_zh" true }}
+<link href="/css/meetup.css" rel="stylesheet">
+<style type="text/css" media="screen">
+.page > header {
+   padding-bottom: 0!important;
+}
+</style>
+{{ end }}
+
+{{ define "main" }}
+<section class="banner mkdf-iwt-layout-text-on-hover">
+  <!-- TODO: sign up url -->
+  <a href="http://path/to/signup" class="mkdf-iwt-link-abs" target="_blank"></a>
+  <!-- <a href="http://path/to/detail" class="mkdf-iwt-link-abs" target="_blank"></a> -->
+  <div class="mkdf-iwt-image">
+    <img src="/images/meetup_earth.png" alt="">
+  </div>
+  <div class="mkdf-elements-holder-item-inner">
+    <h1>PingCAP Infra Meetup</h1>
+    <h2>{{.Site.Data.meetup.next_meetup.topic}}</h2>
+    <h3><i class="fa fa-map-marker"></i>&nbsp;&nbsp;北京 . 海淀</h3>
+    <p>{{.Site.Data.meetup.next_meetup.date}}</p>
+  </div>
+  <div class="mkdf-iwt-text">
+    <h3 class="mkdf-iwt-title"> 报名加入 </h3>
+    <!-- <h3 class="mkdf-iwt-title"> 查看详情 </h3> -->
+  </div>
+</section>
+<section class="intro">
+  <div class="container">
+    <div class="text">
+      <h1 class="title"> Infra Meetup</h1>
+      <div class="desc">
+        PingCAP 希望能为国内真正关注技术本身的 Hackers 打造一个自由分享的平台。在这里，我们会定期邀请业内大牛与大家深度探讨基础架构领域的前瞻性技术思考与经验。希望通过提供一个高水准的前沿技术讨论空间，让大家在这里能够真正感受到自由的开源精神魅力。
+      </div>
+    </div>
+  </div>
+</section>
+<section class="review">
+  <div class="container">
+    <div class="text">
+      <h1 class="title">往期回顾</h1>
+    </div>
+    <div class="container details">
+      <div class="row">
+        {{ range first 4 .Data.Pages }}
+        <div class="item col-xs-12 col-sm-12 col-md-4">
+          <div class="mkdf-iwt-layout-text-on-hover">
+            <a href="{{.URL}}" class="mkdf-iwt-link-abs"></a>
+            <div class="mkdf-iwt-image">
+              <img src="{{.Params.image|default .Site.Data.meetup.default_cover}}">
+            </div>
+            <div class="mkdf-iwt-text">
+              <h3 class="mkdf-iwt-title"> {{.Date.Format "2006-01-02"}} </h3>
+            </div>
+          </div>
+          <h2>{{.Date.Format "2006-01-02"}}</h2>
+          <p>{{.Title}}</p>
+        </div>
+        {{ end }}
+      </div>
+      <div class="row">
+        <div class="more col-md-12">
+          <a href="/meetup/list" class="link">查看更多<i class="fa fa-long-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="memoir">
+  <div class="container">
+    <h1 class="title">分享实录</h1>
+    <div class="hover-list">
+      <ul class="list-group">
+        <li class="list-group-item"><a href="./memoir/26-1.html" class="link">NO.26: 分布式系统测试那些事儿 &#8212; 理念<i class="fa fa-long-arrow-right"></i></a></li>
+        <li class="list-group-item"><a href="./memoir/26-2.html" class="link">NO.26: 分布式系统测试那些事儿 &#8212; 错误注入<i class="fa fa-long-arrow-right"></i></a></li>
+        <li class="list-group-item"><a href="./memoir/26-3.html" class="link">NO.26: 分布式系统测试那些事儿 &#8212; 信心的毁灭与重建<i class="fa fa-long-arrow-right"></i></a></li>
+        <li class="list-group-item"><a href="./memoir/23.html" class="link">NO.23: How to write a good commit message<i class="fa fa-long-arrow-right"></i></a></li>
+        <li class="list-group-item"><a href="./memoir/21.html" class="link">NO.21: MPP and SMP in TiDB<i class="fa fa-long-arrow-right"></i></a></li>
+      </ul>
+    </div>
+    <a href="./memoir/list.html" class="link">查看更多<i class="fa fa-long-arrow-right"></i></a>
+  </div>
+</section>
+<section class="lecturer">
+  <div class="container">
+    <div class="text">
+      <h1 class="title">大咖讲师</h1>
+    </div>
+    <div class="container details">
+      {{ range $idx, $i := .Site.Data.meetup.featured_speakers }}
+      {{ if eq (mod $idx 4 ) 0}}<div class="row">{{end}}
+      <div class="item col-xs-12 col-sm-6 col-md-3">
+        <div class="mkdf-iwt-layout-text-on-hover">
+          <div class="mkdf-iwt-image">
+            <img src="{{if isset $i "image"}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}">
+          </div>
+          <div class="mkdf-iwt-text">
+            <p>{{$i.intro}} </p>
+          </div>
+        </div>
+        <h2> {{$i.name}} </h2>
+        <h3> {{$i.title}} </h3>
+        <p> {{$i.topic}}</p>
+      </div>
+      {{ if eq (mod $idx 4 ) 3}}</div>{{end}}
+      {{end}}
+      <div class="row">
+        <div class="jonin col-md-12">
+          <a href="http://path/to/be/lecturer" class="link" target="_blank">成为 PingCAP Infra Meetup 讲师<i class="fa fa-long-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="banner banner-footer">
+  <div class="mkdf-iwt-image">
+    <img src="https://previews.123rf.com/images/masterart/masterart1410/masterart141000010/32795161-A-word-cloud-of-database-related-items-Stock-Vector.jpg" alt="">
+  </div>
+</section>
+{{ end }}

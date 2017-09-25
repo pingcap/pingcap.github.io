@@ -1,0 +1,4 @@
+[{{ range $index, $page := .Site.Pages }}{{ if $page.Title }}{{ if $index }},{{ end }}
+		{"url": "{{ $page.Permalink }}",
+		"title": "{{ $page.Title }}", {{$str := (replaceRE "[\n\\\\]" "" $page.Plain) }}
+		"content": "{{ $str | truncate 8000 }}"}{{ end }}{{ end }}]

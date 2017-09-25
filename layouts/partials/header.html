@@ -1,0 +1,28 @@
+<header id="header" role="navigation">
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="nav-brand" href="/en"><img src="https://download.pingcap.com/images/pingcap_logo.png" alt="pingCAP"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+                {{ $nav_active := $.Scratch.Get "nav_active" }}
+                <ul class="nav navbar-nav navbar-right main-nav">
+                  {{ partial "search/ui.html" . }}
+                    <li class="{{if eq $nav_active "doc"}}sel{{end}}"><a href="/docs">Docs</a></li>
+                    <li class="{{if eq $nav_active "blog"}}sel{{end}}"><a href="https://pingcap.github.io/blog" target="_blank">Blog</a></li>
+                    <li class="{{if eq $nav_active "about"}}sel{{end}}"><a href="/about">About</a></li>
+                    <li><a class="btn-download" href="https://pingcap.com/doc-ansible-deployment">
+                        Download </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

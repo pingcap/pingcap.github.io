@@ -1,0 +1,30 @@
+{{ define "headcss" }}
+{{$.Scratch.Set "nav_active" "about"}}
+{{$.Scratch.Set "data_i18_zh" true }}
+<link href="/css/joblist.css" rel="stylesheet">
+{{ end }}
+
+{{ define "main" }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 nav nav-tags">
+            <h1 class="title">职位类型</h1>
+            <ul class="tag-list f-cb">
+              {{ range .Data.Pages.GroupByParam "tags" }}
+              <!-- Todo sel active class -->
+              <li><a href="" class="tag"> {{ .Key }} ({{ len .Pages }})</a></li>
+              {{ end }}
+            </ul>
+        </div>
+        <div class="col-md-8 list">
+            <h1 class="title board-title">PingCAP 开放职位</h1>
+            {{ range .Data.Pages }}
+                <div class="job">
+                    <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
+                    <div class="job_divider"></div>
+                </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
+{{ end }}
