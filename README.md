@@ -13,12 +13,22 @@ url，content和layout对应关系：
 Todo:
 - webpack & gulpfile 整合入 css/js min, hash, reference 等
 - 小图片小图标处理等
-- 生成 nav(recurit/doc.nav等)
+- 生成 nav(recurit/doc.nav等) - TOC(recurit)
 - process-docs处理（图片路径等）
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
 - babel/eslint，prettier 修复等
 - url 兼容（对于之前套路的url）alias
 - ci 流程确定（submodule 等，触发等）
+- 前端的filter 在列表页如 recruit-cn 等
+- 现在markdown语法中tag和author不是list，而是普通的 separator 空格
+- 修复修改layouts不会更新html
+- 把脚本整合入gulp中（gen-nav等sh
+- tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
+
+
+
+Tip:
+- 新建文件无法被watch和执行hugo等
 
 
 ## 记录
