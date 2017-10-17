@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home | PingCAP</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/base.css" rel="stylesheet">
     {{ block "headcss" . }}{{ end }}
     <style type="text/css" media="screen">
@@ -31,17 +32,18 @@
 
 <!-- Todo body class extend -->
 <body class="en landingpage archives zh blog jobs recruit about en meetup">
-  {{ $data_i18_zh := $.Scratch.Get "data_i18_zh" }}
+  {{ $data_i18_cn := $.Scratch.Get "data_i18_cn" }}
     <div class="page">
-        {{ if $data_i18_zh }}
-          {{ partial "header-zh" . }}
+        {{ if $data_i18_cn }}
+          {{ partial "header-cn" . }}
         {{ else }}
           {{ partial "header" . }}
         {{ end }}
 
         {{ block "main" . }}{{ end }}
-        {{ if $data_i18_zh }}
-          {{ partial "footer-zh" . }}
+
+        {{ if $data_i18_cn }}
+          {{ partial "footer-cn" . }}
         {{ else }}
           {{ partial "footer" . }}
         {{ end }}

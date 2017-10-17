@@ -36,7 +36,7 @@ $(function () {
 /* tree view related */
 $(function () {
     $(".st_tree").SimpleTree({
-        /* 可无视代码部分*/
+        /* 可无视代码部分 */
         click: function (a) {
             if (!$(a).attr("hasChild"))
                 console.log($(a).attr("ref"));
