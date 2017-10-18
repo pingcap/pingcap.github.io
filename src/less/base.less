@@ -1,3 +1,19 @@
+/* base */
+
+// color
+@theme_blue: #3A59F0;
+@white: #fff;
+@bg_black_with_alpha85: rgba(0,0,0,.85);
+@bg_black_with_alpha0: rgba(0,0,0,0);
+@bg_white_with_alpha73: rgba(255,255,255,0.73);
+
+// width
+@max_width: 1000px;
+
+// box
+@box_size: border-box;
+
+
 @font-face {
     font-family: "Lato Light";
     src: url('https://download.pingcap.com/fonts/lato/lato-light-webfont.eot'), url('https://download.pingcap.com/fonts/lato/lato-light-webfont.ttf'), url('https://download.pingcap.com/fonts/lato/lato-light-webfont.woff');
@@ -56,6 +72,11 @@ body {
     font-size: 20px;
 }
 
+body,
+body * {
+  box-sizing: $box_size;
+}
+
 input,
 button,
 select,
@@ -68,12 +89,12 @@ ul li {
 }
 
 .container {
-    max-width: 1000px;
+    max-width: @max_width;
 }
 
 .f-cb:after {
     clear: both;
-    content: '.';
+    content: ' ';
     display: block;
     height: 0;
     visibility: hidden;
@@ -214,6 +235,16 @@ ul li {
 
 .f-vam {
     vertical-align: middle;
+}
+
+.f-vc {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .f-dft,

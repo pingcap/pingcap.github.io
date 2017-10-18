@@ -1,22 +1,12 @@
-/* home page */
+/* landingpage */
+@import './base.less';
+@import "./header.less";
 
-@import 'header.less';
-@import 'footer.less';
-@max-width: 1000px;
-@blue: #3A59F0;
-@font-color: #fff;
-.f-vc {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
+@line_height: 1.7;
+@font_weight_300: 300;
 
 .landingpage {
-    color: #fff;
+    color: @white;
     h1,
     h2,
     h3,
@@ -31,9 +21,9 @@
     }
     p {
         font-family: 'Lato Light';
-        font-size: .8rem;
-        font-weight: 300;
-        line-height: 1.7;
+        font-size: 1rem;
+        font-weight: @font_weight_300;
+        line-height: @line_height;
     }
     .container {
         max-width: @max-width;
@@ -41,6 +31,12 @@
     .page {
         background-image: linear-gradient(to top, #080000, #100f2e);
         background-image: -webkit-linear-gradient(to top, #080000, #100f2e);
+        header .navbar-inverse {
+            background-color: @bg_black_with_alpha0;
+        }
+        header.fixed-top .navbar-inverse {
+            background-color: @bg_black_with_alpha85;
+        }
         /* Section 1 */
         .slogan-mask {
             position: relative;
@@ -62,13 +58,7 @@
                     transform: none;
                 }
             }
-            // padding-top: 80px;
-            header .navbar-inverse {
-                background-color: rgba(0, 0, 0, 0);
-            }
-            header.fixed-top .navbar-inverse {
-                background-color: rgba(0, 0, 0, .85);
-            }
+
             .container,
             .row {
                 height: 100%;
@@ -77,8 +67,10 @@
                 margin: auto;
                 position: absolute;
                 width: 100%;
-                top: calc(~"50% - 80px");
-                transform: translateY(-50%);
+                // top: calc(~"50% - 80px");
+                top: 50%;
+                transform: translateY(calc(~"-50% - 70px"));
+                // transform: translateY(-50%);
                 .logo {
                     img {
                         height: 80px;
@@ -93,9 +85,9 @@
                     margin-bottom: 22px;
                     font-size: 1.1rem;
                 }
-                .desc {
-                    line-height: 28px;
-                }
+                // .desc {
+                //     line-height: 28px;
+                // }
                 .btn {
                     height: 36px;
                     min-width: 130px;
@@ -107,10 +99,10 @@
                     vertical-align: middle;
                 }
                 .btn-primary {
-                    background: @blue;
+                    background: @theme_blue;
                     &:hover {
-                        background-color: #fff;
-                        color: @blue;
+                        background-color: @white;
+                        color: @theme_blue;
                         -webkit-transition: all .5s ease;
                         -moz-transition: all .5s ease;
                         -ms-transition: all .5s ease;
@@ -121,15 +113,15 @@
                 .btn-github {
                     position: relative;
                     padding-right: 22px;
-                    border: 1px solid #fff;
+                    border: 1px solid @white;
                     margin-left: 55px;
                     background: transparent;
-                    color: @font-color;
+                    color: @white;
                     text-align: right;
                     &:hover {
-                        background-color: @blue;
-                        border: 1px solid @blue;
-                        color: #fff;
+                        background-color: @theme_blue;
+                        border: 1px solid @theme_blue;
+                        color: @white;
                         -webkit-transition: all .5s ease;
                         -moz-transition: all .5s ease;
                         -ms-transition: all .5s ease;
@@ -182,6 +174,7 @@
                     max-width: 240px;
                     margin-left: auto;
                     margin-right: auto;
+                    font-size: 0.8rem;
                 }
             }
             .row-1 .item {
@@ -206,7 +199,7 @@
                 width: 70px;
                 height: 70px;
                 margin: 0 auto;
-                border: 2px solid #fff;
+                border: 2px solid @white;
                 border-radius: 50% 50%;
                 img {
                     display: block;
@@ -261,7 +254,7 @@
                         margin-top: 12px;
                         font-size: .9rem;
                         font-weight: 400;
-                        color: @blue;
+                        color: @theme_blue;
                     }
                     .desc {
                         margin-top: 15px;
