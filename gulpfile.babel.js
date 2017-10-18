@@ -1,84 +1,88 @@
-import gulp from "gulp";
-import {spawn} from "child_process";
-import hugoBin from "hugo-bin";
-import gutil from "gulp-util";
-import postcss from "gulp-postcss";
-import less from "gulp-less";
-import cssImport from "postcss-import";
-import cssnext from "postcss-cssnext";
-import BrowserSync from "browser-sync";
-import webpack from "webpack";
-import webpackConfig from "./webpack.conf";
+import gulp from 'gulp';
+import { spawn } from 'child_process';
+import hugoBin from 'hugo-bin';
+import gutil from 'gulp-util';
+import postcss from 'gulp-postcss';
+import less from 'gulp-less';
+import cssImport from 'postcss-import';
+import cssnext from 'postcss-cssnext';
+import BrowserSync from 'browser-sync';
+import webpack from 'webpack';
+import webpackConfig from './webpack.conf';
 
-import path from 'path'
+import path from 'path';
 
 const browserSync = BrowserSync.create();
 
 // Hugo arguments
-const hugoArgsDefault = ["-d", "./dist", "-s", ".", "-v"];
-const hugoArgsPreview = ["--buildDrafts", "--buildFuture"];
+const hugoArgsDefault = ['-d', './dist', '-s', '.', '-v'];
+const hugoArgsPreview = ['--buildDrafts', '--buildFuture'];
 
 // Development tasks
-gulp.task("hugo", (cb) => buildSite(cb));
-gulp.task("hugo-preview", (cb) => buildSite(cb, hugoArgsPreview));
+gulp.task('hugo', cb => buildSite(cb));
+gulp.task('hugo-preview', cb => buildSite(cb, hugoArgsPreview));
 
 // Build/production tasks
-gulp.task("build", ["css", "js"], (cb) => buildSite(cb, [], "production"));
-gulp.task("build-preview", ["css", "js"], (cb) => buildSite(cb, hugoArgsPreview, "production"));
+gulp.task('build', ['css', 'js'], cb => buildSite(cb, [], 'production'));
+gulp.task('build-preview', ['css', 'js'], cb => buildSite(cb, hugoArgsPreview, 'production'));
 
 // Compile CSS with PostCSS
-gulp.task("css", () => (
-  gulp.src("./src/less/*.less")
-    .pipe(less({
-      paths: [path.join(__dirname, 'less', 'includes')]
-    }))
-    .pipe(postcss([cssImport({from: "./src/css/main.css"}), cssnext()]))
-    .pipe(gulp.dest("./dist/css"))
-    .pipe(browserSync.stream())
-));
+gulp.task('css', () => {
+  gulp
+    .src('./src/less/*.less')
+    .pipe(
+      less({
+        paths: [path.join(__dirname, 'less', 'includes')],
+      })
+    )
+    .pipe(postcss([cssImport({ from: './src/css/main.css'}), cssnext()]))
+    .pipe(gulp.dest('./dist/css'))
+    .pipe(browserSync.stream());
+});
 
 // Compile Javascript
-gulp.task("js", (cb) => {
+gulp.task('js', (cb) => {
   const myConfig = Object.assign({}, webpackConfig);
 
   webpack(myConfig, (err, stats) => {
-    if (err) throw new gutil.PluginError("webpack", err);
-    gutil.log("[webpack]", stats.toString({
+    if (err) throw new gutil.PluginError('webpack', err);
+    gutil.log('[webpack]', stats.toString({
       colors: true,
-      progress: true
-    }));
+      progress: true,
+    })
+    );
     browserSync.reload();
     cb();
   });
 });
 
 // Development server with browsersync
-gulp.task("server", ["hugo", "css", "js"], () => {
+gulp.task('server', ['hugo', 'css', 'js'], () => {
   browserSync.init({
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     ui: {
-      port: 4000
+      port: 4000,
     },
     port: 3005,
     server: {
-      baseDir: "./dist"
-    }
+      baseDir: './dist',
+    },
   });
-  gulp.watch("./src/js/**/*.js", ["js"]);
-  gulp.watch("./src/less/**/*.less", ["css"]);
-  gulp.watch("./{data,content,layouts,static}/**/*", ["hugo"]); // Todo more specific monitor
+  gulp.watch('./src/js/**/*.js', ['js']);
+  gulp.watch('./src/less/**/*.less', ['css']);
+  gulp.watch('./{data,content,layouts,static}/**/*', ['hugo']); // Todo more specific monitor
 });
 
 /**
  * Run hugo and build the site
  */
-function buildSite(cb, options, environment = "development") {
-  console.log('running build site - hugo')
+function buildSite(cb, options, environment = 'development') {
+  console.log('running build site - hugo');
   const args = options ? hugoArgsDefault.concat(options) : hugoArgsDefault;
 
   process.env.NODE_ENV = environment;
 
-  return spawn(hugoBin, args, {stdio: "inherit"}).on("close", (code) => {
+  return spawn(hugoBin, args, { stdio: 'inherit'}).on('close', (code) => {
     browserSync.reload();
     cb();
 
