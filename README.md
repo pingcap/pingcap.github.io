@@ -17,6 +17,7 @@ https://portal.qiniu.com/bucket/website-test/index
 
 src：前端代码如css/js，可通过构建工具来编译，如使用babel和css预处理器等，实施现代化开发流程
 site：存储 hugo 使用的站点内容，主要包括：
+
 - contents文档和内容目录
 - layout中有布局的html通过模板集成和partial等功能
 - data 用于非markdown形式的数据，用在渲染模板
@@ -28,22 +29,32 @@ Done:
 - process-docs处理（图片路径等）done
 - 生成 nav(recurit/doc.nav等) - TOC(recurit)
 - babel/eslint，prettier 修复等
+- 修复修改layouts不会更新html
+- 把脚本整合入gulp中（gen-nav等sh
+- webpack & gulpfile 整合入 css/js min, hash, reference 等
+- tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
 
 
 Todo:
-- submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
-- url 兼容（对于之前套路的url）alias
-- 前端的filter 在列表页如 recruit-cn 等
-- 现在markdown语法中tag和author不是list，而是普通的 separator 空格
-
-- webpack & gulpfile 整合入 css/js min, hash, reference 等
-- 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
 - ci 流程确定（submodule 等，触发等）
-- 把脚本整合入gulp中（gen-nav等sh
+- submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
 
-- 修复修改layouts不会更新html
-- tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
+- url 兼容（对于之前套路的url）alias
+- 前端的 filter 在列表页如 recruit-cn 等
+- 现在 markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
+- js/css 重构
+- about 页面加入视频
+- search 样式优化和索引配置
+- i18n
 
+
+Assign:
+- meetup media 处理（把多余的小图删除等，sort by size）
+- meetup markdown 格式整理和图片等
+
+
+Pending:
+- 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
 
 
 Tip:
