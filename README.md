@@ -38,6 +38,7 @@ Done:
 Todo:
 - ci 流程确定（submodule 等，触发等）
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
+- 部署时错误处理方式
 
 - url 兼容（对于之前套路的url）alias
 - 前端的 filter 在列表页如 recruit-cn 等
@@ -51,6 +52,7 @@ Todo:
 Assign:
 - meetup media 处理（把多余的小图删除等，sort by size）
 - meetup markdown 格式整理和图片等
+- meetup meetup_type meta 信息默认是现场（review） 可特殊配置实录（memoir）
 
 
 Pending:
