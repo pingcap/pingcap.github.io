@@ -1,9 +1,10 @@
 <ul>
-  {{range .}}
+  {{.global.Site.Title}}
+  {{range .tree}}
   <!-- {{.link}} -->
     {{ if isset . "children" }}
       <li><a href="#" class="active">{{ .name }}</a></li>
-        {{ partial "tree-nav.html" .children }}
+        {{ partial "tree-nav.html" (dict "tree" .children "global" $) }}
     {{else}}
     <li>
         <i class="icon"></i>
