@@ -2,9 +2,7 @@
 
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
-import '../../dist/css/header.css'
-import '../../dist/css/footer.css'
-import '../../dist/css/index.css'
+import '../../dist/css/style.css'
 
 import './utils/jquery.SimpleTree.js'
 
