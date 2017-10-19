@@ -47,7 +47,7 @@ copy_images_from_media_to_src() {
   media_path=$(echo $parent_dir/$repo_name/media)
   echo $media_path
   echo $parent_dir/images/$repo_name
-  [ -d $media_path ] && cp -R $media_path $parent_dir/images/$repo_name
+  [ -d $media_path ] && mv $media_path $parent_dir/images/$repo_name # cp -R
 }
 
 # mv all content in media to src/images

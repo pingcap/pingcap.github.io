@@ -1,7 +1,8 @@
 // JS Goes here - ES6 supported
 
 // Say hello
-console.log("🦊 Hello! @PingCAP website")
+console.log("🦊 Hello! @PingCAP website");
+import '../../dist/css/index.css'
 
 import './utils/jquery.SimpleTree.js'
 
@@ -33,5 +34,5 @@ $(function () {
       }
     }
   })
-  
+
 })

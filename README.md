@@ -1,5 +1,20 @@
 
 
+## Start
+
+- npm install
+- npm start
+- git submodule foreach --recursive git pull origin master # 拉取所有以submodule形式存存在
+
+
+./gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，用于页面渲染
+./process-docs.sh 用于 copy_images_from_media_to_src 和 replace_dist_html_link，在构建prod时候使用（图片路径和html中url绝对路径
+
+
+qshell qupload qiniu.config
+https://portal.qiniu.com/bucket/website-test/index
+
+
 src：前端代码如css/js，可通过构建工具来编译，如使用babel和css预处理器等，实施现代化开发流程
 site：存储 hugo 使用的站点内容，主要包括：
 - contents文档和内容目录
@@ -9,20 +24,24 @@ site：存储 hugo 使用的站点内容，主要包括：
 
 url，content和layout对应关系：
 
+Done:
+- process-docs处理（图片路径等）done
+- 生成 nav(recurit/doc.nav等) - TOC(recurit)
+- babel/eslint，prettier 修复等
+
 
 Todo:
-- webpack & gulpfile 整合入 css/js min, hash, reference 等
-- 小图片小图标处理等
-- 生成 nav(recurit/doc.nav等) - TOC(recurit)
-- process-docs处理（图片路径等）
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
-- babel/eslint，prettier 修复等
 - url 兼容（对于之前套路的url）alias
-- ci 流程确定（submodule 等，触发等）
 - 前端的filter 在列表页如 recruit-cn 等
 - 现在markdown语法中tag和author不是list，而是普通的 separator 空格
-- 修复修改layouts不会更新html
+
+- webpack & gulpfile 整合入 css/js min, hash, reference 等
+- 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
+- ci 流程确定（submodule 等，触发等）
 - 把脚本整合入gulp中（gen-nav等sh
+
+- 修复修改layouts不会更新html
 - tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
 
 
@@ -31,7 +50,12 @@ Tip:
 - 新建文件无法被watch和执行hugo等
 
 
+全文搜索配置
+https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json
+
 ## 记录
+
+
 
 ### babel & linter
 prettier, prettier-eslint, eslint-config-airbnb-base
@@ -39,6 +63,10 @@ https://www.npmjs.com/package/eslint-config-airbnb-base
 https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb#eslint-config-airbnb-1
 
 https://github.com/standard/standard (待确认和调研 - 不需要配置)
+
+
+airbnb-base:10.0.1 and atom linter-eslint don't seem to work together
+https://github.com/airbnb/javascript/issues/1184
 
 ### 构建相关
 

@@ -12,6 +12,9 @@ import webpackConfig from './webpack.conf'
 
 import path from 'path'
 
+const isDev = process.env.NODE_ENV === 'development'
+console.log(`Running Gulp with ENV:${isDev ? 'development' : 'production'}`)
+
 const browserSync = BrowserSync.create()
 
 // Hugo arguments
@@ -24,10 +27,12 @@ gulp.task('hugo-preview', cb => buildSite(cb, hugoArgsPreview))
 
 // Build/production tasks
 gulp.task('build', ['css', 'js'], cb => buildSite(cb, [], 'production'))
-gulp.task('build-preview', ['css', 'js'], cb => buildSite(cb, hugoArgsPreview, 'production'))
+gulp.task('build-preview', ['css', 'js'], cb =>
+  buildSite(cb, hugoArgsPreview, 'production')
+)
 
 // Compile CSS with PostCSS
-gulp.task('css', () => {
+const buildCss = () => {
   gulp
     .src('./src/less/*.less')
     .pipe(
@@ -35,29 +40,38 @@ gulp.task('css', () => {
         paths: [path.join(__dirname, 'less', 'includes')],
       })
     )
-    .pipe(postcss([cssImport({ from: './src/css/main.css'}), cssnext()]))
+    .pipe(postcss([cssImport({ from: './src/css/main.css' }), cssnext()]))
     .pipe(gulp.dest('./dist/css'))
     .pipe(browserSync.stream())
-})
+}
+gulp.task('css', buildCss)
 
 // Compile Javascript
-gulp.task('js', (cb) => {
+function buildJs(cb) {
   const myConfig = Object.assign({}, webpackConfig)
 
   webpack(myConfig, (err, stats) => {
     if (err) throw new gutil.PluginError('webpack', err)
-    gutil.log('[webpack]', stats.toString({
-      colors: true,
-      progress: true,
-    })
+    gutil.log(
+      '[webpack]',
+      stats.toString({
+        colors: true,
+        progress: true,
+      })
     )
     browserSync.reload()
-    cb()
+    cb && cb()
   })
-})
+}
+gulp.task('js', buildJs)
 
 // Development server with browsersync
+const jsTask = isDev ? ['js'] : ['js', 'hugo']
+const styleTask = isDev ? ['css'] : ['css', 'hugo']
 gulp.task('server', ['hugo', 'css', 'js'], () => {
+  // 初次启动的时候运行 js/css 和build site，避免脏数据
+  buildJs(buildSite)
+  buildCss()
   browserSync.init({
     host: '0.0.0.0',
     ui: {
@@ -68,8 +82,9 @@ gulp.task('server', ['hugo', 'css', 'js'], () => {
       baseDir: './dist',
     },
   })
-  gulp.watch('./src/js/**/*.js', ['js'])
-  gulp.watch('./src/less/**/*.less', ['css'])
+
+  gulp.watch('./src/js/**/*.js', jsTask)
+  gulp.watch('./src/less/**/*.less', styleTask)
   gulp.watch('./{data,content,layouts,static}/**/*', ['hugo']) // Todo more specific monitor
 })
 
@@ -82,9 +97,9 @@ function buildSite(cb, options, environment = 'development') {
 
   process.env.NODE_ENV = environment
 
-  return spawn(hugoBin, args, { stdio: 'inherit'}).on('close', (code) => {
+  return spawn(hugoBin, args, { stdio: 'inherit' }).on('close', code => {
     browserSync.reload()
-    cb()
+    cb && cb()
 
     // if (code === 0) {
     //   browserSync.reload();
