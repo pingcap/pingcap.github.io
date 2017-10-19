@@ -1,63 +1,60 @@
 /* header module */
 @import './base.less';
-@nav-height: 60px;
+@nav_height: 50px;
+@search_box_height: 40px;
+@gray_white: #f5f5f5;
+@white_with_alpha50: rgba(255, 255, 255, 0.5);
+@bg_white_with_alpha10: rgba(255, 255, 255, 0.1);
 
 header {
-  width: 100%;
-  font-family: 'TitilliumWeb';
-  font-size: 0.8rem;
-  letter-spacing: 1px;
+  padding: 15px;
+
   &.fixed-top {
-    position: fixed; // 置顶的效果
+    position: fixed;
     top: 0;
-    left: 0;
-    z-index: 999;
-  }
-  .navbar-inverse {
-    min-height: @nav-height;
-    padding: 10px 15px;
-    margin-bottom: 0;
-    border-radius: 0;
-    border: none;
     background-color: @bg_black_with_alpha85;
-    .navbar-toggle {
-      margin: 13px 8px 0 0;
+    z-index: 99;
+    width: 100%;
+  }
+
+  .nav-brand {
+    img {
+      display: inline-block;
+      height: 36px;
     }
-    .nav-brand {
-      float: left;
-      padding-top: 13px;
-      text-decoration: none;
-      img {
-        height: 36px;
-      }
-    }
-    .main-nav {
-      float: right;
-      padding: 4px 0;
-      text-align: center;
-      li a {
-        padding: 3px;
-        margin: 12px;
+  }
+
+  nav {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    min-height: @nav_height;
+    max-width: @max_width;
+    .navigations {
+      display: flex;
+      margin-right: 1rem;
+      padding: 0;
+      li {
+        margin: 0 10px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
         color: @white;
-      }
-      li.sel a,
-      li a:hover {
-        color: @bg_white_with_alpha73;
-        -webkit-transition: all 0.5s ease;
-        -moz-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        -o-transition: all 0.5s ease;
-        transition: all 0.5s ease;
+        &.sel a,
+        & a:hover {
+          color: @bg_white_with_alpha73;
+          -webkit-transition: all 0.5s ease;
+          -moz-transition: all 0.5s ease;
+          -ms-transition: all 0.5s ease;
+          -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+        }
       }
       .btn-download {
-        box-sizing: border-box;
-        min-width: 60px;
-        height: 30px;
-        line-height: 28px;
-        padding: 0 12px;
-        border: 1px solid @white;
-        border-radius: 15px;
-        margin: 10px 0 10px 12px;
+        padding: 4px 8px 5px;
+        border: 1px solid @white_with_alpha50;
+        border-radius: 2px;
         color: @white;
         &:hover {
           background-color: @white;
@@ -70,24 +67,32 @@ header {
         }
       }
     }
-  }
-}
-
-.en {
-  header {
-    .navbar-inverse {
-      .navbar-toggle {
-        margin-right: 24px;
-      }
+    #search-input {
+      position: relative;
+      height: @search_box_height;
+      padding: 0.5rem;
+      outline: 0;
+      border: none;
+      border-radius: 0;
+      background-color: @bg_white_with_alpha10;
+      color: @gray_white;
+      transition: opacity 0.15s ease-in;
     }
   }
 }
 
 @media (max-width: 768px) {
-  header .navbar-inverse .navbar-toggle {
-    margin-right: 8px;
+  header nav {
+    flex-flow: column wrap;
   }
-  header .navbar-inverse .main-nav .btn-download {
-    margin: 10px 0;
+
+  header nav .navigations {
+    flex-flow: row wrap;
+    justify-content: center;
+    margin-right: 0;
+
+    li {
+      margin: 12px 5px;
+    }
   }
 }

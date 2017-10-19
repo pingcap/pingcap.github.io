@@ -59,7 +59,7 @@ export default {
     }),
     new ExtractTextPlugin({
       filename: isDev
-        ? '../css/[name].css'
+        ? '../css/style.css'
         : `../css/[name].[contenthash:8].css`,
     }),
     // new ExtractTextPlugin('style.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
