@@ -8,7 +8,15 @@ import './utils/jquery.SimpleTree.js'
 
 $(function() {
   /* toggle wechat qr code */
-  $('#wechat').hover(() => {
+  const showQRCode = () => {
+    $('#js_qr_code').removeClass('f-hide')
+  }
+  const hiddenQRCode = () => {
+    $('#js_qr_code').addClass('f-hide')
+  }
+  $('#wechat').mouseover(showQRCode)
+  $('#wechat').mouseout(hiddenQRCode)
+  $('#wechat').on('tap', () => {
     $('#js_qr_code').toggleClass('f-hide')
   })
 
