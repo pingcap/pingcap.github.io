@@ -1,306 +1,293 @@
 /* landingpage */
 @import './base.less';
+@import './header.less';
+@import './footer.less';
 
-@line_height: 1.7;
-@font_weight_300: 300;
+// box
+@logo_wodth: 210px;
+@logo_height: 80px;
+@header_height: calc(~'30px + '@nav_height);
+@button_height: 36px;
+@advantage_row_margin: 80px;
+
+// color
 @dark_blue: #0d0b1e;
 
-.landingpage {
-  color: @white;
+// font
+@font_weight_300: 300;
+@font_weight_400: 400;
+@text_size: 0.8rem;
 
-  h2 {
-    font-size: 1.2rem;
-  }
-  h3 {
-    font-size: 1.1rem;
-  }
-  p {
-    font-family: 'Lato Light';
-    font-size: 1rem;
-    font-weight: @font_weight_300;
-    line-height: @line_height;
-  }
+// others
+@line_height: 1.8;
 
-  .page {
-    background-image: linear-gradient(to top, #080000, #100f2e);
-    background-image: -webkit-linear-gradient(to top, #080000, #100f2e);
+.page {
+  /* Section 1 */
+  .container {
+    display: flex;
+  }
+  .slogan-mask {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 730px;
+    padding: calc(~'120px + '@header_height) 0;
+    background: url('/images/slogan-mask.png') no-repeat center top;
+    background-attachment: fixed;
+    background-size: cover;
+    animation: fadeInRight 0.5s;
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
 
-    /* Section 1 */
-    .slogan-mask {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      height: 100vh;
-      min-height: 730px;
-      background: url('/images/slogan-mask.png') no-repeat center top;
-      background-attachment: fixed;
-      background-size: cover;
-      -webkit-animation: fadeInRight 0.4s;
-      @keyframes fadeInRight {
-        from {
-          opacity: 0;
-          transform: translate3d(100%, 0, 0);
-        }
-        to {
-          opacity: 1;
-          transform: none;
+    .container {
+      flex-direction: column;
+    }
+
+    .logo {
+      width: @logo_wodth;
+      height: @logo_height;
+    }
+
+    .slogan {
+      margin: 22px 0 50px;
+      font-weight: 600;
+      font-size: 2.4rem;
+      color: @white;
+    }
+
+    .tagline {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: @white;
+    }
+
+    .desc {
+      max-width: 70%;
+      font-size: @text_size;
+      line-height: @line_height;
+    }
+
+    .buttons {
+      max-width: 320px;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+
+      .btn {
+        height: @button_height;
+        line-height: @button_height;
+        width: 146px;
+        padding: 0 20px;
+        border-radius: 18px;
+        margin-top: 45px;
+        font-size: 0.8rem;
+        text-align: center;
+      }
+      .btn-primary {
+        background: @theme_blue;
+        &:hover {
+          background-color: @white;
+          color: @theme_blue;
+          transition: all 0.5s ease;
         }
       }
+      .btn-github {
+        position: relative;
+        padding-left: 45px;
+        border: 1px solid @white;
+        background: transparent;
+        line-height: calc(@button_height~' - 2px');
+        color: @white;
 
-      .container,
-      .row {
-        height: 100%;
-      }
-      .template-headline {
-        margin: auto;
-        position: absolute;
-        width: 100%;
-        top: 50%;
-        transform: translateY(calc(~'-50% - 70px'));
-        .logo {
-          img {
-            height: 80px;
-          }
-        }
-        .slogan {
-          margin: 20px 0 52px;
-          font-weight: 600;
-          font-size: 2.4rem;
-        }
-        .tagline {
-          margin-bottom: 22px;
-          font-size: 1.1rem;
-        }
-
-        .btn {
-          height: 36px;
-          min-width: 130px;
-          line-height: 34px;
-          padding: 0 20px;
-          border-radius: 18px;
-          margin-top: 45px;
-          font-size: 0.8rem;
-          vertical-align: middle;
-        }
-        .btn-primary {
-          background: @theme_blue;
-          &:hover {
-            background-color: @white;
-            color: @theme_blue;
-            -webkit-transition: all 0.5s ease;
-            -moz-transition: all 0.5s ease;
-            -ms-transition: all 0.5s ease;
-            -o-transition: all 0.5s ease;
-            transition: all 0.5s ease;
-          }
-        }
-        .btn-github {
-          position: relative;
-          padding-right: 22px;
-          border: 1px solid @white;
-          margin-left: 55px;
-          background: transparent;
+        &:hover {
+          background-color: @theme_blue;
+          border: 1px solid @theme_blue;
           color: @white;
-          text-align: right;
-          &:hover {
-            background-color: @theme_blue;
-            border: 1px solid @theme_blue;
-            color: @white;
-            -webkit-transition: all 0.5s ease;
-            -moz-transition: all 0.5s ease;
-            -ms-transition: all 0.5s ease;
-            -o-transition: all 0.5s ease;
-            transition: all 0.5s ease;
-          }
-          &:after {
-            position: absolute;
-            content: '';
-            top: 50%;
-            left: 20px;
-            width: 20px;
-            height: 19px;
-            margin-top: -10px;
-            // background: url('/images/icon_github.png');
-            // background-size: 20px 19px;
-          }
+          transition: all 0.5s ease;
         }
-      }
-    }
-    /* Section 2 */
-    .features {
-      position: relative;
-      background: url('/images/features-mask.png') no-repeat center top;
-      background-attachment: fixed;
-      background-size: cover;
-      padding: 120px 0;
-      text-align: center;
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        opacity: 0.1;
-      }
-      h3 {
-        height: 48px;
-        margin: 36px 0 6px;
-      }
-      .container {
-        max-width: 1130px;
-        margin: auto;
-        padding: 0;
-      }
-      .item {
-        margin-top: 46px;
-        p {
-          max-width: 240px;
-          margin-left: auto;
-          margin-right: auto;
-          font-size: 0.8rem;
-        }
-      }
-      .row-1 .item {
-        margin-top: 0;
-      }
-      .item-short {
-        p {
-          max-width: 210px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-      .item-long {
-        p {
-          max-width: 250px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-      .image-wrap {
-        position: relative;
-        width: 70px;
-        height: 70px;
-        margin: 0 auto;
-        border: 2px solid @white;
-        border-radius: 50% 50%;
-        img {
-          display: block;
-          width: 34px;
+        &:after {
           position: absolute;
+          content: '';
           top: 50%;
-          left: 50%;
-          -webkit-transform: translate(-50%, -50%);
-          -moz-transform: translate(-50%, -50%);
-          -ms-transform: translate(-50%, -50%);
-          -o-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+          left: 25px;
+          width: 20px;
+          height: 19px;
+          margin-top: -10px;
+          background: url('/images/icon-github.svg');
+          background-size: 20px 19px;
         }
       }
     }
-    /* Section 3 */
-    .advantages {
-      background: @dark_blue url('/images/advantages-mask.png') no-repeat center
-        bottom;
-      background-size: contain;
-      padding: 85px 0 680px;
-      .row {
-        position: relative;
-        min-height: 285px;
-        margin-bottom: 60px;
-        .image-wrap {
-          position: relative;
-          min-height: 285px;
-          padding: 0;
-          img {
-            position: absolute;
-            width: 100%;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            -moz-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            -o-transform: translateY(-50%);
-            transform: translateY(-50%);
-          }
-        }
-        .content {
-          max-width: 700px;
-          min-height: 285px;
-          .text {
-            left: 50px;
-            right: 0;
-            padding: 0 15px;
-          }
-          .title {
-            margin: 5px 0;
-          }
-          .subtitle {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: @theme_blue;
-          }
-          .desc {
-            margin-top: 15px;
-          }
+  }
+  /* Section 2 */
+  .features {
+    padding: calc(~'120px + '@header_height) 0;
+    background: url('/images/features-mask.png') no-repeat center top;
+    background-attachment: fixed;
+    background-size: cover;
+
+    h3 {
+      height: 48px;
+      margin: 36px 0 6px;
+      color: @white;
+    }
+    .container {
+      flex-direction: column;
+    }
+    .row {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+    }
+    .item {
+      margin-top: 60px;
+      p {
+        max-width: 240px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: @text_size;
+        line-height: @line_height;
+      }
+    }
+    .row-1 .item {
+      margin-top: 0;
+    }
+    .item-short {
+      p {
+        max-width: 210px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    .item-long {
+      p {
+        max-width: 250px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    .image-wrap {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto;
+      border: 2px solid @white;
+      border-radius: 50% 50%;
+      img {
+        display: block;
+        width: 34px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  /* Section 3 */
+  .advantages {
+    padding: calc(~'120px + '@header_height) 0 400px;
+    background: url('/images/advantages-mask.png') no-repeat center bottom
+      @dark_blue;
+    background-size: cover;
+
+    h3 {
+      font-size: 1.1rem;
+      color: @white;
+    }
+
+    h4 {
+      color: @theme_blue;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      font-weight: @font_weight_400;
+    }
+
+    .container {
+      flex-direction: column;
+    }
+    .row {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: @advantage_row_margin;
+
+      .image-wrap {
+        margin: 20px 0;
+        img {
+          width: 280px;
         }
       }
-      .row:nth-child(2n) {
-        .image-wrap {
-          float: right;
+
+      .content {
+        flex-basis: 70%;
+        padding: 0 10px;
+
+        .text {
+          font-size: @text_size;
+          line-height: @line_height;
         }
+      }
+
+      &:nth-child(2n) {
+        flex-flow: row-reverse;
         .content {
           text-align: right;
-          .text {
-            left: 0;
-            right: 0;
-          }
         }
       }
-    }
-  }
-}
 
-@media (max-width: 992px) {
-  .landingpage .page .features {
-    padding: 10px;
-  }
-  .landingpage .page .features .row-1 .item {
-    margin-top: 60px;
-  }
-  .landingpage .page .advantages .row .image-wrap img {
-    max-width: 275px;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+      &:last-child {
+        margin-bottom: calc(@advantage_row_margin * 2);
+      }
+    }
   }
 }
 
 @media (max-width: 500px) {
-  .landingpage .page .slogan-mask {
-    height: 700px;
+  .page .slogan-mask .container {
+    align-items: center;
+    text-align: center;
   }
-  .landingpage .page .slogan-mask .template-headline {
-    padding-top: 120px;
+  .page .slogan-mask .buttons {
+    max-width: 100%;
+    width: 90%;
+    justify-content: space-around;
   }
-  .landingpage .page .slogan-mask .template-headline .btn-github {
-    margin-left: 10px;
-    padding-right: 30px;
+  .page .features .item {
+    width: 100%;
   }
-  .landingpage .page .advantages {
-    padding: 80px 0 300px;
+  .page .features .row-1 .item {
+    margin-top: 60px;
   }
-  .landingpage .page .advantages .row .content .text {
-    left: 35px;
-    right: 10px;
+  .page .slogan-mask .desc {
+    max-width: 100%;
   }
-  .landingpage .page .advantages .row:nth-child(2n) .content .text {
-    right: 35px;
-    left: 10px;
+  .page .advantages .row,
+  .page .advantages .row:nth-child(2n) {
+    justify-content: center;
+    flex-wrap: wrap;
+    .content {
+      text-align: center;
+    }
+  }
+  .page .advantages .row .content {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .page .slogan-mask .buttons {
+    flex-direction: column;
+    align-items: center;
   }
 }
