@@ -1,29 +1,69 @@
 /* footer module */
 @import './base.less';
 
+@input_height: 36px;
+@btn_subscribe_width: 100px;
+
 /** add ellipsis in a line **/
-
-.f-thide {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.hide {
-  display: none;
-}
-
 .footer {
   width: 100%;
-  padding: 90px 0 113px;
-  margin: auto;
-  background-color: rgba(0, 0, 0, 0.85);
-  text-decoration: none;
-  font-size: 13px;
+  padding: 60px 0;
+  background-color: @bg_black_with_alpha90;
   color: @white;
-  text-align: center;
-  .icons {
-    padding-top: 16px;
+
+  .container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: baseline;
+  }
+
+  .left,
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+  }
+
+  .left {
+    img {
+      height: 36px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .copyright {
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: fade(@white, 80%);
+  }
+
+  .btn-lang {
+    padding: 0 8px;
+    border: 1px solid @white;
+    .rounded-corners(2px);
+    line-height: 1.7;
+    font-size: 0.6rem;
+    color: @white;
+
+    &:hover {
+      background-color: @white;
+      color: @theme_blue;
+      transition: all 0.5s ease;
+    }
+  }
+
+  .right {
+    flex-basis: 60%;
+    position: relative;
+  }
+
+  .social-links {
+    display: flex;
+    flex-flow: row wrap;
     .link_icon {
       width: 26px;
       height: 26px;
@@ -35,25 +75,32 @@
       }
     }
   }
+
   .subscribe {
     width: 100%;
-    max-width: 340px;
-    margin: 20px auto 0;
+    max-width: 320px;
+    margin-top: 20px;
     vertical-align: middle;
     .form-control {
       float: left;
-      width: calc(~'100% - 100px');
-      height: 36px;
-      background-color: rgba(255, 255, 255, 0.11);
-      border: none;
-      border-radius: 0;
+      width: calc(~'100% - '@btn_subscribe_width);
+      height: @input_height;
+      background-color: fade(@white, 12%);
+      border: 1px solid fade(@white, 0%);
+      .rounded-corners(0);
+      padding: 0 10px;
+      color: @gray_white;
       font-size: 0.6rem;
+
+      &:hover {
+        border-color: fade(@theme_blue, 50%);
+      }
     }
     .btn {
-      width: 100px;
-      height: 36px;
-      margin-left: -3px;
-      border-radius: 0;
+      width: @btn_subscribe_width;
+      height: @input_height;
+      .rounded-corners(0);
+      border: none;
       background-color: @theme_blue;
       font-family: 'TitilliumWeb';
       font-weight: bold;
@@ -62,43 +109,6 @@
       &:hover {
         background-color: @white;
         color: @theme_blue;
-        -webkit-transition: all 0.5s ease;
-        -moz-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        -o-transition: all 0.5s ease;
-        transition: all 0.5s ease;
-      }
-    }
-  }
-  .left {
-    max-width: 320px;
-    margin: 0 auto;
-    padding-top: 10px;
-    text-align: left;
-    .wrap {
-      .copyright {
-        margin-top: 30px;
-        font-family: 'Lato Light';
-      }
-    }
-    .lang {
-      margin: 62px 0 0 15px;
-      text-align: right;
-      .btn-lang {
-        padding: 5px 8px;
-        border: 1px solid @white;
-        border-radius: 0;
-        font-size: 0.6rem;
-        color: @white;
-      }
-      .btn-lang:hover {
-        border-radius: 2px;
-        background-color: @white;
-        color: @theme_blue;
-        -webkit-transition: all 0.5s ease;
-        -moz-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        -o-transition: all 0.5s ease;
         transition: all 0.5s ease;
       }
     }
@@ -135,28 +145,9 @@
   }
 }
 
-@media (min-width: 992px) {
-  .footer .row {
-    margin-left: -50px;
-  }
-}
-
 //iPhone4、iPhone5、iPhone6
 @media (max-width: 500px) {
-  .footer .subscribe {
-    max-width: 100%;
-  }
-  .footer .left {
-    padding: 0;
-    margin-bottom: 20px;
-  }
-  .footer .left .lang {
-    margin-left: 0;
-  }
-  .footer .left .wrap {
-    float: none;
-  }
-  .footer .qr_code_outer {
-    right: 173px;
+  .footer .right {
+    flex-basis: 100%;
   }
 }

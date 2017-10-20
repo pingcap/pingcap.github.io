@@ -1,17 +1,23 @@
 /* base */
 
 // color
+@white: #FFF;
 @theme_blue: #3a59f0;
-@white: #fff;
-@bg_black_with_alpha85: rgba(0,0,0,0.85);
-@bg_black_with_alpha0: rgba(0,0,0,0);
-@bg_white_with_alpha73: rgba(255,255,255,0.73);
+@gray_white: #F5F5F5;
+@bg_black_with_alpha0: fade(@white, 0%);
+@bg_black_with_alpha90: fade(black, 90%);
 
 // width
-@max_width: 1000px;
+@max_width_pc: 1012px;
 
 // box
 @box_size: border-box;
+
+// mixins
+// border-radius
+.rounded-corners (@radius: 3px) {
+  border-radius: @radius;
+}
 
 @font-face {
   font-family: 'Lato Light';
@@ -104,7 +110,8 @@ ul li {
 }
 
 .container {
-  max-width: @max_width;
+  max-width: @max_width_pc;
+  margin: 0 auto;
 }
 
 .f-cb:after {
@@ -216,10 +223,6 @@ ul li {
   -webkit-line-clamp: 2;
 }
 
-.f-thide3 {
-  -webkit-line-clamp: 3;
-}
-
 .f-tdlt {
   text-decoration: line-through;
 }
@@ -255,10 +258,6 @@ ul li {
 .f-vc {
   position: absolute;
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
   transform: translateY(-50%);
 }
 
@@ -302,8 +301,6 @@ p a {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  -webkit-transition: color 0.15s ease-out;
-  -moz-transition: color 0.15s ease-out;
   transition: color 0.15s ease-out;
 }
 
@@ -314,11 +311,20 @@ h4 {
   font-family: 'TitilliumWeb';
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
 /* 小屏幕（平板，大于等于 768px） */
 
 @media (max-width: 768px) {
   html,
   body {
     font-size: 18px;
+  }
+
+  .container {
+    max-width: calc(~'100vw - 1.6rem');
   }
 }
