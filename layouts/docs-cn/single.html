@@ -1,20 +1,19 @@
 {{ define "headcss" }}
 {{$.Scratch.Set "nav_active" "docs"}}
 {{$.Scratch.Set "data_i18_cn" true }}
-<link href="/css/doc.css" rel="stylesheet">
+<!-- <link href="/css/doc.css" rel="stylesheet"> -->
 {{ end }}
 
 {{ define "main" }}
-<div class="container">
-<div class="row">
-  <div class="col-md-4 nav nav-tree">
+<div class="container doc-container">
+  <div class="nav nav-tree">
     <h1 class="title"> 文档 </h1>
     <div class="st_tree">
       {{ partial "tree-nav.html" (dict "tree" .Site.Data.docs_cn_toc "global" .) }}
      </div>
   </div>
 
-  <div class="col-md-8 list">
+  <div class="list">
     <div class="item">
       <div class="content">
         {{ .Content }}
@@ -118,6 +117,5 @@
       </div>
     </div>
   </div>
-</div>
 </div>
 {{ end }}
