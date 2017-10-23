@@ -1,12 +1,15 @@
 /* bloglist page */
-
+@import 'base.less';
 @import 'header.less';
 @import 'footer.less';
+@import 'doc.less';
+@import 'blog.less';
+
 @min-height: 1100px;
 @font-color: #3e3e3e;
 @blue: #3a59f0;
 .bloglist {
-  width: 100%;
+  // width: 100%;
   color: @font-color;
   & a {
     text-decoration: none;
@@ -41,134 +44,134 @@
       transform: translate(-50%, -50%);
     }
   }
-  .page {
-    min-height: @min-height;
-    padding-top: 100px;
-    .list {
-      padding: 0 5px;
+  // .page {
+  min-height: @min-height;
+  padding-top: 100px;
+  .list {
+    padding: 0 5px;
+  }
+  .nav-tags {
+    max-width: 340px;
+    padding: 0 10px;
+    font-family: 'TitilliumWeb';
+    .title {
+      margin: 25px 0 15px;
+      font-weight: 400;
+      font-size: 1.2rem;
+      color: #142848;
     }
-    .nav-tags {
-      max-width: 340px;
-      padding: 0 10px;
-      font-family: 'TitilliumWeb';
-      .title {
-        margin: 25px 0 15px;
-        font-weight: 400;
-        font-size: 1.2rem;
-        color: #142848;
-      }
-      .all {
-        display: inline-block;
+    .all {
+      display: inline-block;
+      padding: 3px 9px;
+      margin-left: -2px;
+      border: 1px solid #cdcdcd;
+      font-size: 0.7rem;
+      color: #333;
+    }
+    .all.sel,
+    .all:hover {
+      background-color: @blue;
+      color: #fff;
+      border: 1px solid @blue;
+    }
+    .tag-list {
+      margin: 12px 0 0 -8px;
+      padding: 0;
+      a.tag {
+        float: left;
         padding: 3px 9px;
-        margin-left: -2px;
         border: 1px solid #cdcdcd;
+        margin: 6px;
         font-size: 0.7rem;
         color: #333;
       }
-      .all.sel,
-      .all:hover {
+      a.sel,
+      a.tag:hover {
         background-color: @blue;
         color: #fff;
         border: 1px solid @blue;
       }
-      .tag-list {
-        margin: 12px 0 0 -8px;
-        padding: 0;
-        a.tag {
-          float: left;
-          padding: 3px 9px;
-          border: 1px solid #cdcdcd;
-          margin: 6px;
-          font-size: 0.7rem;
-          color: #333;
+    }
+  }
+  .list {
+    padding: 0 30px;
+    .article {
+      position: relative;
+      .title {
+        margin: 25px 0 15px;
+        font-family: 'TitilliumWeb';
+        font-size: 1.2rem;
+        font-weight: 400;
+        a {
+          color: #142848;
         }
-        a.sel,
-        a.tag:hover {
-          background-color: @blue;
-          color: #fff;
-          border: 1px solid @blue;
+        a:hover {
+          color: #666;
         }
       }
-    }
-    .list {
-      padding: 0 30px;
-      .article {
-        position: relative;
-        .title {
-          margin: 25px 0 15px;
-          font-family: 'TitilliumWeb';
-          font-size: 1.2rem;
-          font-weight: 400;
-          a {
-            color: #142848;
-          }
-          a:hover {
-            color: #666;
-          }
+      .blog-post-meta {
+        padding-left: 0;
+        margin-bottom: 20px;
+        font-size: 0.6rem;
+        list-style: none;
+        svg {
+          width: 18px;
+          height: 18px;
+          margin-top: -3px;
+          margin-right: 5px;
+          vertical-align: middle;
         }
-        .blog-post-meta {
-          padding-left: 0;
-          margin-bottom: 20px;
-          font-size: 0.6rem;
-          list-style: none;
-          svg {
-            width: 18px;
-            height: 18px;
-            margin-top: -3px;
-            margin-right: 5px;
-            vertical-align: middle;
+        .meta-item {
+          display: inline-block;
+          box-sizing: border-box;
+          padding-right: 20px;
+          .tag {
+            position: relative;
+            margin-right: 16px;
+            color: @blue;
           }
-          .meta-item {
-            display: inline-block;
-            box-sizing: border-box;
-            padding-right: 20px;
-            .tag {
-              position: relative;
-              margin-right: 16px;
-              color: @blue;
-            }
-            .tag:hover {
-              color: #127eff;
-            }
-            .tag:not(:last-child)::after {
-              content: ' ';
-              position: absolute;
-              width: 1px;
-              height: 0.6rem;
-              top: 1px;
-              right: -8px;
-              background-color: #cdcdcd;
-            }
+          .tag:hover {
+            color: #127eff;
+          }
+          .tag:not(:last-child)::after {
+            content: ' ';
+            position: absolute;
+            width: 1px;
+            height: 0.6rem;
+            top: 1px;
+            right: -8px;
+            background-color: #cdcdcd;
           }
         }
-        .brief {
-          font-family: 'Lato';
-          font-weight: 400;
-          font-size: 0.7rem;
-          line-height: 1.8;
-          color: #37434e;
-        }
-        .article_divider {
-          width: 100%;
-          border-top: 1px solid #cdcdcd;
-          margin: 25px 0 20px;
-        }
-        &:after {
-          content: ' ';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          display: block;
-          width: 100%;
-          border-bottom: 3px solid @blue;
-          transform: scale(0);
-          transform-origin: left center;
-          transition: transform 0.3s;
-        }
-        &:hover:after {
-          transform: scale(1);
-        }
+      }
+      .brief {
+        font-family: 'Lato';
+        font-weight: 400;
+        font-size: 0.7rem;
+        line-height: 1.8;
+        color: #37434e;
+      }
+      .article_divider {
+        width: 100%;
+        border-top: 1px solid #cdcdcd;
+        margin: 25px 0 20px;
+      }
+      &:after {
+        content: ' ';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        border-bottom: 3px solid @blue;
+        transform: scale(0);
+        transform-origin: left center;
+        transition: transform 0.3s;
+      }
+      &:hover:after {
+        transform: scale(1);
       }
     }
   }
+  // }
 }
