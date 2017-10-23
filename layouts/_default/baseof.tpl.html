@@ -13,7 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | PingCAP</title>
+    <title>{{- block "title" . }}
+      {{or .Title "Home"}}
+    {{ end -}} | PingCAP</title>
     {{ block "headcss" . }}{{ end }}
     {{ partial "head/meta" . }}
     {{ partial "head/ga" . }}
@@ -29,7 +31,7 @@
           {{ partial "header" . }}
         {{ end }}
 
-        {{ block "{main}" . }}{{ end }}
+        {{ block "main" . }}{{ end }}
 
         {{ if $data_i18_cn }}
           {{ partial "footer-cn" . }}

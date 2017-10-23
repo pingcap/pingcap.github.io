@@ -6,6 +6,27 @@
 - npm start
 - git submodule foreach --recursive git pull origin master # 拉取所有以submodule形式存存在
 
+### Usage
+
+#### head>title
+
+在 base 模板有如下定义
+
+```
+<title>{{- block "title" . }}
+  {{- or .Title "Home" -}}
+{{ end -}} | PingCAP</title>
+```
+
+- 默认情况 Home | PingCAP
+- 如果对应内容markdown有设置.title front meta，会使用 {{ .Title }} PingCAP
+- 特殊的页面，可以在layout模板页（如不方便在markdown或无 _index.md 设置）如 /blog-cn 等，覆盖define title block
+
+```
+{{ define "title" }}博客{{ end }}
+```
+
+
 
 ./gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，用于页面渲染
 ./process-docs.sh 用于 copy_images_from_media_to_src 和 replace_dist_html_link，在构建prod时候使用（图片路径和html中url绝对路径
