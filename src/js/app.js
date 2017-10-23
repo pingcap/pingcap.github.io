@@ -42,6 +42,6 @@ $(function() {
           window.location = $(a).attr('href')
         }
       }
-    }
+    },
   })
 })
