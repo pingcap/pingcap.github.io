@@ -49,6 +49,8 @@ Todo:
 - about 页面加入视频
 - search 样式优化和索引配置
 - i18n
+- svgs 替换
+- 非常规分辨率下样式问题（padding margin 等）
 
 
 Assign:
