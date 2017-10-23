@@ -39,10 +39,13 @@ Todo:
 - ci 流程确定（submodule 等，触发等）
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
 - 部署时错误处理方式
+- 引入英文 blog
+- 多 submodule 构建的影响
+- 新测试环境
 
 - url 兼容（对于之前套路的url）alias
 - 前端的 filter 在列表页如 recruit-cn 等
-- 现在 markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
+- 现在 recruit and blog zh/en markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
 - js/css 重构
 - about 页面加入视频
 - search 样式优化和索引配置
