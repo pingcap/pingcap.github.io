@@ -63,6 +63,7 @@ Todo:
 - 引入英文 blog
 - 多 submodule 构建的影响
 - 新测试环境
+- docs/docs-cn i18n
 
 - 模板优化
 - url 兼容（对于之前套路的url）alias
@@ -73,6 +74,7 @@ Todo:
 - i18n
 - svgs 替换
 - 非常规分辨率下样式问题（padding margin 等）
+- 替换第三方 js
 
 
 Assign:
