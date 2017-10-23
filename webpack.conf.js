@@ -42,7 +42,7 @@ export default {
     new HtmlWebpackPlugin({
       hash: isDev ? false : true,
       inject: true,
-      minify: {
+      /*minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeRedundantAttributes: true,
@@ -53,7 +53,7 @@ export default {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true,
-      },
+      },*/
       filename: path.join(__dirname, 'layouts', '_default', 'baseof.html'),
       template: path.join(__dirname, 'layouts', '_default', 'baseof.tpl.html'),
     }),
