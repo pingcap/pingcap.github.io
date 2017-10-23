@@ -4,7 +4,7 @@
 console.log('🦊 Hello! @PingCAP website')
 import '../../dist/css/style.css'
 
-import './utils/jquery.SimpleTree.js'
+import './vendor/jquery.SimpleTree.js'
 
 $(function() {
   /* toggle wechat qr code */
@@ -42,6 +42,6 @@ $(function() {
           window.location = $(a).attr('href')
         }
       }
-    },
+    }
   })
 })
