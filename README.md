@@ -66,7 +66,6 @@ Todo:
 - 多 submodule 构建的影响
 - 新测试环境
 - docs/docs-cn i18n
-- 自动添加浏览器前缀？？
 
 - 模板优化
 - url 兼容（对于之前套路的url）alias

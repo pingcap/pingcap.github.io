@@ -22,241 +22,240 @@
 // others
 @line_height: 1.8;
 
-// .page {
-  .container {
-    display: flex;
+// .container {
+//   display: flex;
+// }
+/* Section 1 */
+.landingpage-slogan-mask {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  padding: calc(~'4rem + '@header_height) @horizontal_padding;
+  background: url('/images/slogan-mask.png') no-repeat center top;
+  background-attachment: fixed;
+  background-size: cover;
+  animation: fadeInRight 0.5s;
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translate3d(100%, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
-  /* Section 1 */
-  .landingpage-slogan-mask {
-    display: flex;
+
+  .container {
     flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    min-height: 100vh;
-    padding: calc(~'4rem + '@header_height) @horizontal_padding;
-    background: url('/images/slogan-mask.png') no-repeat center top;
-    background-attachment: fixed;
-    background-size: cover;
-    animation: fadeInRight 0.5s;
-    @keyframes fadeInRight {
-      from {
-        opacity: 0;
-        transform: translate3d(100%, 0, 0);
+  }
+
+  .logo {
+    width: @logo_wodth;
+    height: @logo_height;
+  }
+
+  .slogan {
+    margin: 1.1rem 0 2.5rem;
+    font-weight: 600;
+    font-size: 2.4rem;
+    color: @white;
+  }
+
+  .tagline {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: @white;
+  }
+
+  .desc {
+    max-width: 72%;
+    font-size: @text_size;
+    line-height: @line_height;
+  }
+
+  .buttons {
+    max-width: 16rem;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .btn {
+      height: @button_height;
+      line-height: @button_height;
+      width: 7.2rem;
+      padding: 0 1rem;
+      .rounded-corners(0.9rem);
+      margin-top: 2.25rem;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .btn-primary {
+      background: @theme_blue;
+      &:hover {
+        background-color: @white;
+        color: @theme_blue;
+        transition: all 0.5s ease;
       }
-      to {
-        opacity: 1;
-        transform: none;
+    }
+    .btn-github {
+      position: relative;
+      padding-left: 2.25rem;
+      border: 1px solid @white;
+      background: transparent;
+      line-height: calc(@button_height~' - 2px');
+      color: @white;
+
+      &:hover {
+        background-color: @theme_blue;
+        border: 1px solid @theme_blue;
+        color: @white;
+        transition: all 0.5s ease;
+      }
+      &:after {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 25px;
+        width: 20px;
+        height: 19px;
+        margin-top: -10px;
+        background: url('/images/icon-github.svg');
+        background-size: 20px 19px;
       }
     }
+  }
+}
+/* Section 2 */
+.landingpage-features {
+  padding: calc(~'6rem + '@header_height) @horizontal_padding;
+  background: url('/images/features-mask.png') no-repeat center top;
+  background-attachment: fixed;
+  background-size: cover;
 
-    .container {
-      flex-direction: column;
-    }
-
-    .logo {
-      width: @logo_wodth;
-      height: @logo_height;
-    }
-
-    .slogan {
-      margin: 1.1rem 0 2.5rem;
-      font-weight: 600;
-      font-size: 2.4rem;
-      color: @white;
-    }
-
-    .tagline {
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-      color: @white;
-    }
-
-    .desc {
-      max-width: 70%;
+  h3 {
+    height: 2.4rem;
+    margin: 1.8rem 0 0.3rem;
+    color: @white;
+  }
+  .container {
+    flex-direction: column;
+  }
+  .row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: center;
+  }
+  .item {
+    margin-top: 3rem;
+    flex-basis: 33%;
+    p {
+      max-width: 12rem;
+      margin-left: auto;
+      margin-right: auto;
       font-size: @text_size;
       line-height: @line_height;
     }
-
-    .buttons {
-      max-width: 16rem;
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: space-between;
-
-      .btn {
-        height: @button_height;
-        line-height: @button_height;
-        width: 7.2rem;
-        padding: 0 1rem;
-        .rounded-corners(0.9rem);
-        margin-top: 2.25rem;
-        font-size: 0.8rem;
-        text-align: center;
-      }
-      .btn-primary {
-        background: @theme_blue;
-        &:hover {
-          background-color: @white;
-          color: @theme_blue;
-          transition: all 0.5s ease;
-        }
-      }
-      .btn-github {
-        position: relative;
-        padding-left: 2.25rem;
-        border: 1px solid @white;
-        background: transparent;
-        line-height: calc(@button_height~' - 2px');
-        color: @white;
-
-        &:hover {
-          background-color: @theme_blue;
-          border: 1px solid @theme_blue;
-          color: @white;
-          transition: all 0.5s ease;
-        }
-        &:after {
-          position: absolute;
-          content: '';
-          top: 50%;
-          left: 25px;
-          width: 20px;
-          height: 19px;
-          margin-top: -10px;
-          background: url('/images/icon-github.svg');
-          background-size: 20px 19px;
-        }
-      }
+  }
+  .row-1 .item {
+    margin-top: 0;
+  }
+  .item-short {
+    p {
+      max-width: 10.5rem;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
-  /* Section 2 */
-  .landingpage-features {
-    padding: calc(~'6rem + '@header_height) @horizontal_padding;
-    background: url('/images/features-mask.png') no-repeat center top;
-    background-attachment: fixed;
-    background-size: cover;
-
-    h3 {
-      height: 2.4rem;
-      margin: 1.8rem 0 0.3rem;
-      color: @white;
+  .item-long {
+    p {
+      max-width: 13.5rem;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .container {
-      flex-direction: column;
-    }
-    .row {
+  }
+  .image-wrap {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 2px solid @white;
+    border-radius: 50% 50%;
+    .icon {
+      width: 1.7rem;
+      height: 1.7rem;
       display: flex;
-      flex-flow: row wrap;
-      justify-content: space-between;
-      align-items: flex-start;
-      text-align: center;
+      align-items: center;
+      justify-content: center;
     }
-    .item {
-      margin-top: 3rem;
-      flex-basis: 33%;
-      p {
-        max-width: 12rem;
-        margin-left: auto;
-        margin-right: auto;
+  }
+}
+/* Section 3 */
+.landingpage-advantages {
+  padding: calc(~'6rem + '@header_height) @horizontal_padding 10rem;
+  background: url('/images/advantages-mask.png') no-repeat center bottom
+    @dark_blue;
+  background-size: cover;
+
+  h3 {
+    font-size: 1.1rem;
+    color: @white;
+  }
+
+  h4 {
+    color: @theme_blue;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    font-weight: @font_weight_400;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+  .row {
+    display: flex;
+    // flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: @advantage_row_margin;
+
+    .image-wrap {
+      margin: 1rem 0;
+
+      img {
+        width: 14rem;
+      }
+    }
+
+    .content {
+      flex-basis: 72%;
+      padding: 0 0.5rem;
+
+      .text {
         font-size: @text_size;
         line-height: @line_height;
       }
     }
-    .row-1 .item {
-      margin-top: 0;
-    }
-    .item-short {
-      p {
-        max-width: 10.5rem;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-    .item-long {
-      p {
-        max-width: 13.5rem;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-    .image-wrap {
-      width: 3.5rem;
-      height: 3.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto;
-      border: 2px solid @white;
-      border-radius: 50% 50%;
-      .icon {
-        width: 1.7rem;
-        height: 1.7rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
-  /* Section 3 */
-  .landingpage-advantages {
-    padding: calc(~'6rem + '@header_height) @horizontal_padding 10rem;
-    background: url('/images/advantages-mask.png') no-repeat center bottom
-      @dark_blue;
-    background-size: cover;
 
-    h3 {
-      font-size: 1.1rem;
-      color: @white;
-    }
-
-    h4 {
-      color: @theme_blue;
-      font-size: 0.9rem;
-      margin-bottom: 0.6rem;
-      font-weight: @font_weight_400;
-    }
-
-    .container {
-      flex-direction: column;
-    }
-    .row {
-      display: flex;
-      flex-flow: row;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: @advantage_row_margin;
-
-      .image-wrap {
-        margin: 1rem 0;
-        img {
-          width: 14rem;
-        }
-      }
-
+    &:nth-child(2n) {
+      flex-flow: row-reverse;
       .content {
-        flex-basis: 70%;
-        padding: 0 0.5rem;
-
-        .text {
-          font-size: @text_size;
-          line-height: @line_height;
-        }
-      }
-
-      &:nth-child(2n) {
-        flex-flow: row-reverse;
-        .content {
-          text-align: right;
-        }
-      }
-
-      &:last-child {
-        margin-bottom: calc(@advantage_row_margin * 2);
+        text-align: right;
       }
     }
+
+    &:last-child {
+      margin-bottom: calc(@advantage_row_margin * 2);
+    }
   }
-// }
+}
 
 @media (max-width: 500px) {
   .landingpage-slogan-mask {
