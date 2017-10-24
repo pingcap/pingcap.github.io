@@ -1,0 +1,21 @@
+<div class="tag-list">
+        <!-- Get all posts-->
+      <!-- loop all tags that you've used -->
+      <!-- {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+        <!-- (re)set the counter to 0 -->
+        {{ $.Scratch.Set "tagCounter" 0 }}
+        <!-- increment counter if post contains the current tag-->
+        <!-- tag name: {{ $name }}, {{$taxonomy}} -->
+        {{ range $posts}}
+        <!-- Post tags: {{.Params.tags}} -->
+          {{ if in .Params.tags $name }}
+            {{ $.Scratch.Add "tagCounter" 1 }}
+          {{ end }}
+        {{ end }}
+        <!-- {{ $name }} -->
+        {{ if $.Scratch.Get "tagCounter" }}
+            <!-- hide class for li, if less then 2 -->
+          <a href="{{ $name }}" class="tag">{{ $name }} ({{ $.Scratch.Get "tagCounter" }})</a>
+        {{ end }}
+      <!-- {{end}} -->
+</div>

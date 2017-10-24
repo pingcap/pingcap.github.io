@@ -1,64 +1,43 @@
-/* bloglist page */
+/* list page */
 @import 'base.less';
 @import 'header.less';
 @import 'footer.less';
 @import 'doc.less';
-@import 'blog.less';
 
-@min-height: 1100px;
-@font-color: #3e3e3e;
-@blue: #3a59f0;
-.blog {
-  // width: 100%;
-  color: @font-color;
-  & a {
-    text-decoration: none;
-  }
-  .rss {
-    width: 1.2rem;
-    height: 1.2rem;
-    display: inline-block;
-    border: 1px solid #cdcdcd;
-    color: @blue;
-    line-height: 1.1;
-    position: relative;
-    vertical-align: top;
-    margin-top: 1px;
-    margin-left: 12px;
+@nav_tags_width: 16rem;
 
-    &:hover {
-      border-color: @blue;
-      background-color: @blue;
-      color: #fff;
-    }
-
-    &:before {
-      font-size: 0.8rem;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -webkit-transform: translate(-50%, -50%);
-      -moz-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-      -o-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
-  }
-  // .page {
-  min-height: @min-height;
-  padding-top: 100px;
-  .list {
-    padding: 0 5px;
-  }
+.blog,
+.meetup,
+.recruit {
   .nav-tags {
-    max-width: 340px;
-    padding: 0 10px;
-    font-family: 'TitilliumWeb';
+    width: @nav_tags_width;
+    padding-right: @horizontal_padding;
     .title {
+      display: flex;
+      align-items: center;
       margin: 25px 0 15px;
-      font-weight: 400;
       font-size: 1.2rem;
-      color: #142848;
+      font-weight: 400;
+      color: @title_color;
+    }
+    .rss {
+      width: 1.1rem;
+      height: 1.1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 12px;
+      // border: 1px solid #cdcdcd;
+      color: @theme_blue;
+
+      &:hover {
+        border-color: @theme_blue;
+        background-color: @theme_blue;
+        color: @white;
+        svg * {
+          fill: @white;
+        }
+      }
     }
     .all {
       display: inline-block;
@@ -70,15 +49,18 @@
     }
     .all.sel,
     .all:hover {
-      background-color: @blue;
+      background-color: @theme_blue;
       color: #fff;
-      border: 1px solid @blue;
+      border: 1px solid @theme_blue;
     }
+
     .tag-list {
+      display: flex;
+      flex-flow: row wrap;
       margin: 12px 0 0 -8px;
       padding: 0;
+
       a.tag {
-        float: left;
         padding: 3px 9px;
         border: 1px solid #cdcdcd;
         margin: 6px;
@@ -87,14 +69,14 @@
       }
       a.sel,
       a.tag:hover {
-        background-color: @blue;
+        background-color: @theme_blue;
         color: #fff;
-        border: 1px solid @blue;
+        border: 1px solid @theme_blue;
       }
     }
   }
+
   .list {
-    padding: 0 30px;
     .article {
       position: relative;
       .title {
@@ -128,7 +110,7 @@
           .tag {
             position: relative;
             margin-right: 16px;
-            color: @blue;
+            color: @theme_blue;
           }
           .tag:hover {
             color: #127eff;
@@ -163,7 +145,7 @@
         left: 0;
         display: block;
         width: 100%;
-        border-bottom: 3px solid @blue;
+        border-bottom: 3px solid @theme_blue;
         transform: scale(0);
         transform-origin: left center;
         transition: transform 0.3s;
@@ -173,5 +155,4 @@
       }
     }
   }
-  // }
 }

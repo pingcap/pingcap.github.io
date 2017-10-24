@@ -2,41 +2,33 @@
 {{$.Scratch.Set "nav_active" "about"}}
 {{$.Scratch.Set "data_i18_cn" true }}
 {{$.Scratch.Set "data_i18_link" "/recruit" }}
-<link href="/css/recruit.css" rel="stylesheet">
+<!-- <link href="/css/recruit.css" rel="stylesheet"> -->
 {{ end }}
 
 {{ define "main" }}
-<div class="container">
-  <div class="col-md-4 nav nav-tree">
-      <h1 class="title"> 招聘职位 </h1>
-       {{ .Site.Data.all.people }}
-      <div class="st_tree" id="recruit-nav">
-        {{ range .Site.Data.all.recruits_contents }}
-        {{ end }}
-       </div>
-  </div>
+<div class="recruit">
+  <div class="container">
+    <div class="nav nav-tree">
+        <h1 class="title"> 招聘职位 </h1>
+         {{ .Site.Data.all.people }}
+        <div class="st_tree" id="recruit-nav">
+          {{ range .Site.Data.all.recruits_contents }}
+          {{ end }}
+         </div>
+    </div>
 
-  <div class="col-md-8 list">
-    <section class="item">
-      <div class="content">{{ .Content }}</div>
-      <div class="operate">
-        <a href="mailto:hire@pingcap.com" class="link_icon">
-        <i class="icon icon-mail">
-          <svg enable-background="new 0 0 34 26" viewBox="0 0 34 26"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="m29.5 2.5c1.1 0 2 .9 2 2v17c0 1.1-.9 2-2 2h-25c-1.1 0-2-.9-2-2v-17c0-1.1.9-2 2-2zm0-2h-25c-2.2 0-4 1.8-4 4v17c0 2.2 1.8 4 4 4h25c2.2 0 4-1.8 4-4v-17c0-2.2-1.8-4-4-4z"
-          fill="#040000"/>
-          <path d="m25.9 8.7l-6.4 6.4c-1.6 1.6-4.1 1.6-5.7 0l-6.3-6.4" fill="none"
-          stroke="#040000" stroke-linecap="round" stroke-miterlimit="10"
-          stroke-width="2"/>
-          <path d="m11.8 14.5l-4.3 4.3" fill="none" stroke="#040000" stroke-linecap="round"
-          stroke-miterlimit="10" stroke-width="2"/>
-          <path d="m21.5 13.5l4.3 4.3" fill="none" stroke="#040000" stroke-linecap="round"
-          stroke-miterlimit="10" stroke-width="2"/>
-          </svg>
-        </i>投个简历吧</a>
-      </div>
-    </section>
+    <div class="archive">
+        <div class="content">{{ .Content }}</div>
+        <div class="operate">
+          <div class="item">
+            <a href="mailto:hire@pingcap.com">
+              <i class="icon icon-mail">
+                {{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 22 "height" 17 ) }}
+              </i>投个简历吧
+            </a>
+          </div>
+        </div>
+    </div>
   </div>
 </div>
 {{ end }}

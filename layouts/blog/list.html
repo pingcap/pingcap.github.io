@@ -13,32 +13,7 @@
           {{ $posts := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil  }}
             <h1 class="title">Hot Tags <a class="rss fa fa-rss" href="/rss/feed-cn.xml" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a></h1>
             <a href="/bloglist-zh.html" class="all">ALL ({{ len $posts }})</a>
-            <ul class="tag-list f-cb">
-                {{/*
-                    <!-- Get all posts-->
-                  <!-- loop all tags that you've used -->
-                  <!-- {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
-                    <!-- (re)set the counter to 0 -->
-                    {{ $.Scratch.Set "tagCounter" 0 }}
-                    <!-- increment counter if post contains the current tag-->
-                    <!-- tag name: {{ $name }}, {{$taxonomy}} -->
-                    {{ range $posts}}
-                    <!-- Post tags: {{.Params.tags}} -->
-                      {{ if in .Params.tags $name }}
-                        {{ $.Scratch.Add "tagCounter" 1 }}
-                      {{ end }}
-                    {{ end }}
-                    <!-- {{ $name }} -->
-                        {{ if $.Scratch.Get "tagCounter" }}
-                        <!-- hide class for li, if less then 2 -->
-                          <li class="">
-                            <a href="{{ $name }}" class="tag">
-                              {{ $name }} ({{ $.Scratch.Get "tagCounter" }})</a>
-                          </li>
-                        {{ end }}
-                  {{end}} -->
-                 */}}
-            </ul>
+            {{ partial "tags-nav.html" (dict "posts" $posts .) }}
         </div>
         <div class="list">
             {{ range .Data.Pages.ByDate.Reverse }}

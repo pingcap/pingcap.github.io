@@ -5,38 +5,57 @@
 @import './footer.less';
 @import './nav_tree.less';
 
-@text-color: #3e3e3e;
+// color
+@text_color: #3e3e3e;
+@title_color: #142848;
 
 /** documentation list **/
 .doc,
 .blog,
-.meetup {
+.meetup,
+.recruit {
+  padding: calc(~'1rem + @{header_height}') @horizontal_padding;
+  min-height: calc(~'100vh - @{header_height}');
   .container {
-    flex-direction: row;
-    flex-flow: wrap;
+    flex-flow: row wrap;
   }
 
-  .nav {
-    flex-basis: 30%;
+  .nav,
+  .list,
+  .archive {
+    margin-top: 2rem;
   }
 
   .list,
   .archive {
-    flex-basis: 70%;
+    flex-basis: 65%;
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin-bottom: 1rem;
+      font-family: 'TitilliumWeb';
+      font-weight: 400;
+      color: @title_color;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+    }
+    h3 {
+      font-size: 1.1rem;
+    }
+    h4 {
+      font-size: 1rem;
+    }
   }
-}
-.list {
-  // .item {
-  //   margin: 8px 0;
+
+  .archive {
     .content {
-      h1,
-      h2,
-      h3 {
-        margin: 40px 0 20px;
-        font-family: 'TitilliumWeb';
-        font-weight: 400;
-        color: #142848;
-      }
       p,
       ol,
       ul,
@@ -52,18 +71,10 @@
         font-family: 'Lato';
         font-weight: 600;
       }
-      h1 {
-        font-size: 1.5rem;
-      }
-      h2 {
-        font-size: 1.3rem;
-      }
-      h3 {
-        font-size: 1.1rem;
-      }
+
       p {
-        margin: 15px 0;
-        color: @text-color;
+        margin: 0.8rem 0;
+        color: @text_color;
       }
       .figure {
         .caption {
@@ -78,6 +89,7 @@
         border-spacing: 2px;
         margin-bottom: 10px;
         font-size: 0.7rem;
+        overflow: auto;
         thead {
           display: table-header-group;
           vertical-align: middle;
@@ -106,8 +118,8 @@
       }
       ol,
       ul {
-        padding-left: 40px;
-        color: @text-color;
+        padding-left: 1.5rem;
+        color: @text_color;
         p {
           padding-left: 5px;
           margin: 2px 0;
@@ -117,9 +129,11 @@
         list-style-type: disc;
       }
       blockquote {
-        margin: 20px 0;
+        margin: 1rem 0;
+        padding: @horizontal_padding;
         background-color: #ecf7ff;
-        border-left-color: #9ecef1;
+        .rounded-corners();
+        border-left: 3px solid #9ecef1;
         p {
           margin: 0;
           color: #142848;
@@ -133,9 +147,17 @@
       a {
         color: @theme_blue;
       }
+      pre {
+        padding: @horizontal_padding;
+        background-color: @gray_white;
+        font-size: 0.7rem;
+        line-height: 1.45;
+        .rounded-corners();
+        overflow: auto;
+      }
       .blog-post-meta {
         padding-left: 0;
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
         font-size: 0.7rem;
         color: #6a737d;
         list-style: none;
@@ -150,58 +172,45 @@
         .meta-item {
           display: inline-block;
           box-sizing: border-box;
-          padding-right: 20px;
+          padding-right: 1rem;
         }
       }
     }
     .draw {
-      margin-top: 40px;
+      margin: 2rem 0 1rem;
     }
     .operate {
-      padding: 15px 15px 0 30px;
+      padding: 1rem 0;
+      margin: 1rem 0;
       border-top: 2px solid #000;
-      margin-top: 40px;
-      line-height: 22px;
-      font-size: 0.6rem;
-      .link_icon {
-        display: block;
-        line-height: 22px;
-        font-family: 'TitilliumWeb';
-        color: #000;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
+
+      .item a {
+        display: flex;
+        align-items: center;
+        font-size: 0.75rem;
         .icon {
-          float: left;
-          width: 22px;
-          margin-right: 10px;
-        }
-        .icon-mail {
-          padding-top: 3px;
+          margin-right: 0.5rem;
         }
       }
     }
-  // }
+  }
 }
 
-// .doc,
-// .blog {
-//   width: 100%;
-//   & a {
-//     text-decoration: none;
-//   }
-//   .page {
-//     min-height: 100vh;
-//     padding-top: 5rem;
-//   }
-// }
-
 @media (max-width: 768px) {
-  // .list {
-  //   margin-left: 0;
-  // }
-  // .blog .list-comments .item .pic {
-  //   display: block;
-  //   margin: auto;
-  // }
-  // .doc .list .item .operate .col-md-3 {
-  //   margin: 5px 0;
-  // }
+  .doc,
+  .blog,
+  .meetup,
+  .recruit {
+    .container {
+      flex-direction: column;
+    }
+    .list,
+    .archive {
+      flex-basis: 100%;
+    }
+  }
 }

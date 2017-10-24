@@ -1,30 +1,42 @@
 /* tree navigator */
 
+@import 'base.less';
+//width
+@nav_width: 16rem;
+@icon_file_width: 0.8rem;
+@triangle_width: 0.4rem;
+
+//height
+@icon_file_height:0.8rem;
+@triangle_height: 0.4rem;
+
 .nav-tree {
-  max-width: 340px;
-  padding: 0 20px;
+  width: @nav_width;
+  padding-right: @horizontal_padding;
+  // padding-bottom: 1.2rem;
   font-family: 'TitilliumWeb';
+
   .title {
-    margin: 40px 0 20px;
+    margin-bottom: 1rem;
     font-size: 1.5rem;
     font-weight: 400;
     color: #142848;
   }
   .st_tree {
     width: 100%;
-    margin-top: 5px;
+
     ul {
-      padding-left: 23px;
+      padding-left: 1.1rem;
     }
     & > ul {
-      padding-left: 15px;
+      padding-left: 0;
     }
     li {
       position: relative;
-      margin-top: 10px;
+      margin-top: 0.5rem;
       a {
         display: block;
-        padding-left: 23px;
+        padding-left: 1.1rem;
         font-size: 0.8rem;
         line-height: 1.5;
         color: #000;
@@ -36,50 +48,45 @@
       background: none;
     }
     .icon {
-      float: left;
-      width: 14px;
-      height: 18px;
-      margin: 2px 10px 2px 0;
-      background: url('https://download.pingcap.com/images/st_node.png');
-      background-size: 14px 18px;
+      position: absolute;
+      top: 50%;
+      width: @icon_file_width;
+      height: @icon_file_height;
+      margin-top: -@icon_file_height/2;
+      margin-right: 0.5rem;
+      background: url('/images/icon-file.svg');
+      background-size: @icon_file_width @icon_file_height;
     }
     .active .icon {
-      float: left;
-      width: 14px;
-      height: 18px;
-      margin: 2px 10px 2px 0;
-      background: url('https://download.pingcap.com/images/st_node_active.png');
-      background-size: 14px 18px;
+      background: url('/images/icon-file-active.svg');
+      background-size: @icon_file_width @icon_file_height;
     }
     .active a {
-      color: #3a59f0;
+      color: @theme_blue;
     }
+
     .folder:before {
       position: absolute;
       top: 50%;
-      margin-top: -8px;
+      margin-top: -@triangle_width;
       content: ' ';
       width: 0;
       height: 0;
-      border-width: 8px 10px 8px 10px;
+      border-width: @triangle_width @triangle_height @triangle_width
+        @triangle_height;
       border-style: solid dashed dashed dashed;
       border-color: transparent transparent transparent #000;
     }
     .folder.open:before {
       position: absolute;
       top: 50%;
-      margin-top: -5px;
+      margin-top: calc(~'-@{triangle_height}/2');
       width: 0;
       height: 0;
-      border-width: 10px 8px 10px 8px;
+      border-width: @triangle_height @triangle_width @triangle_height
+        @triangle_width;
       border-style: solid dashed dashed dashed;
       border-color: #000 transparent transparent transparent;
     }
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-tree {
-    position: static;
   }
 }

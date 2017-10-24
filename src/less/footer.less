@@ -1,8 +1,9 @@
 /* footer module */
 @import './base.less';
-
-@input_height: 36px;
-@btn_subscribe_width: 100px;
+//height
+@input_height: 2rem;
+@pingcap_logo_height: 1.8rem;
+@btn_subscribe_width: 4rem;
 
 /** add ellipsis in a line **/
 .footer {
@@ -12,9 +13,9 @@
   color: @white;
 
   .container {
-    display: flex;
+    // display: flex;
     flex-flow: row wrap;
-    justify-content: center;
+    justify-content: space-around;
     align-items: baseline;
   }
 
@@ -24,18 +25,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 25px;
+    margin-top: 1.25rem;
   }
 
   .left {
     img {
-      height: 36px;
-      margin-bottom: 20px;
+      height: @pingcap_logo_height;
+      margin-bottom: 1rem;
     }
   }
 
   .copyright {
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     font-size: 0.7rem;
     font-weight: 300;
     color: fade(@white, 80%);
@@ -57,7 +58,6 @@
   }
 
   .right {
-    flex-basis: 60%;
     position: relative;
   }
 
@@ -78,9 +78,10 @@
 
   .subscribe {
     width: 100%;
-    max-width: 320px;
+    width: 15rem;
     margin-top: 20px;
     vertical-align: middle;
+
     .form-control {
       float: left;
       width: calc(~'100% - '@btn_subscribe_width);
@@ -90,9 +91,10 @@
       .rounded-corners(0);
       padding: 0 10px;
       color: @gray_white;
-      font-size: 0.6rem;
+      font-size: 0.7rem;
 
-      &:hover {
+      &:hover,
+      &:focus {
         border-color: fade(@theme_blue, 50%);
       }
     }
@@ -104,7 +106,7 @@
       background-color: @theme_blue;
       font-family: 'TitilliumWeb';
       font-weight: bold;
-      font-size: 0.6rem;
+      font-size: 0.8rem;
       color: @white;
       &:hover {
         background-color: @white;
@@ -146,11 +148,8 @@
 
 //iPhone4、iPhone5、iPhone6
 @media (max-width: 500px) {
-  .footer .right {
-    flex-basis: 100%;
-  }
   .footer .qr_code_outer {
-    left: 50%;
+    left: 45%;
     margin-top: -50%;
   }
 }
