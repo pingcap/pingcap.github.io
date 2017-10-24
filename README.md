@@ -56,6 +56,7 @@ Done:
 - tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
 
 - svgs 替换
+- i18n
 
 
 Todo:
@@ -66,16 +67,20 @@ Todo:
 - 多 submodule 构建的影响
 - 新测试环境
 - docs/docs-cn i18n
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##) - md 解析部分
+
 
 - 模板优化
 - url 兼容（对于之前套路的url）alias
+- tags-nav link 问题 以及过滤 count 小于2个
 - 现在 recruit and blog zh/en markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
 - js/css 重构
 - about 页面加入视频
 - search 样式优化和索引配置
-- i18n
 - 替换第三方 js
-
+- blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##) 样式部分 滚动跳转
+- 增加 Edit this Page 功能
 
 Assign:
 - meetup media 处理（把多余的小图删除等，sort by size）

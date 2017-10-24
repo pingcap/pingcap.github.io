@@ -10,12 +10,16 @@
 // line
 @1px_hr_width: 1.9rem;
 
-.about-company,
-.about-contact,
-.about-culture,
-.about-founders {
+section[class^='about-'],
+section[class^='meetup-landingpage-'] {
   padding: @vertical_padding @horizontal_padding;
   text-align: center;
+
+  .container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
   .title {
     display: inline-block;
@@ -55,31 +59,7 @@
     color: @font_color;
   }
 
-  .container {
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-  }
-}
-
-.about-intro-video {
-  padding: 4em 0;
-  background-color: @bg_gray_white;
-
-  .video {
-    width: 100%;
-    min-height: 518px;
-    position: relative;
-    cursor: pointer;
-
-    &:hover {
-      background-color: fade(black, 10%);
-    }
-  }
-}
-
-.about-company {
-  .link-openjobs {
+  .link {
     display: flex;
     align-items: center;
     margin: 2rem auto 0;
@@ -98,6 +78,22 @@
       svg {
         fill: #ff2c54;
       }
+    }
+  }
+}
+
+.about-intro-video {
+  padding: 4em 0;
+  background-color: @bg_gray_white;
+
+  .video {
+    width: 100%;
+    min-height: 518px;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      background-color: fade(black, 10%);
     }
   }
 }
