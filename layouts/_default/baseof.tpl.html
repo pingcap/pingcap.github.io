@@ -22,26 +22,25 @@
 <!-- Todo body class extend -->
 <body>
   {{ $data_i18_cn := $.Scratch.Get "data_i18_cn" }}
-    <div class="page">
-        {{ if $data_i18_cn }}
-          {{ partial "header-cn" . }}
-        {{ else }}
-          {{ partial "header" . }}
-        {{ end }}
+    <!-- <div class="page"> -->
+  {{ if $data_i18_cn }}
+    {{ partial "header-cn" . }}
+  {{ else }}
+    {{ partial "header" . }}
+  {{ end }}
 
-        {{ block "main" . }}{{ end }}
+  {{ block "main" . }}{{ end }}
 
-        {{ if $data_i18_cn }}
-          {{ partial "footer-cn" . }}
-        {{ else }}
-          {{ partial "footer" . }}
-        {{ end }}
-    </div>
-    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-    <!-- <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
-    <script src="/js/app.js"></script>
-    {{ block "footjs" . }}{{ end }}
-    {{ partial "search/algolia-js" . }}
+  {{ if $data_i18_cn }}
+    {{ partial "footer-cn" . }}
+  {{ else }}
+    {{ partial "footer" . }}
+  {{ end }}
+    <!-- </div> -->
+  <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+  <script src="/js/app.js"></script>
+  {{ block "footjs" . }}{{ end }}
+  {{ partial "search/algolia-js" . }}
 </body>
 
 </html>

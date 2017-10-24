@@ -4,44 +4,47 @@
 {{ end }}
 
 {{ define "main" }}
-<div class="container doc-container">
-  <div class="nav nav-tree">
-    <h1 class="title"> Document </h1>
-    <div class="st_tree">
-      {{ partial "tree-nav.html" (dict "tree" .Site.Data.docs_toc "global" .) }}
-     </div>
-  </div>
+<div class="doc">
+  <div class="container">
+    <div class="nav nav-tree">
+      <h1 class="title"> Document </h1>
+      <div class="st_tree" id="st-tree">
+        {{ partial "tree-nav.html" (dict "tree" .Site.Data.docs_toc "global" .) }}
+       </div>
+    </div>
 
-  <div class="list">
-      <div class="content">
-        {{ .Content }}
-      </div>
+    <div class="archive">
+        <div class="content">
+          {{ .Content }}
+        </div>
 
-      <div class="draw">
-        <img src="https://download.pingcap.com/images/docs-simple.png" width="100%">
-      </div>
-      <div class="operate">
-          <div class="col-xs-12 col-sm-3 col-md-3 f-thide">
-              <a href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fwww.pingcap.com%2f$url$" class="link_icon">
-                <i class="icon">{{ partial "svgs/icon-share.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>Share
-              </a>
-          </div>
-          <div class="col-xs-12 col-sm-3 col-md-3 f-thide" onclick="window.print();">
-              <a href="javascript:;" class="link_icon">
-                <i class="icon">{{ partial "svgs/icon-print.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>Print
-              </a>
-          </div>
-          <div class="col-xs-12 col-sm-3 col-md-3 f-thide">
-              <a href="http://download.pingcap.org/tidb-manual-cn.pdf" class="link_icon" download="tidb-manual-cn.pdf">
-                <i class="icon">{{ partial "svgs/icon-download.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>Download
-              </a>
-          </div>
-          <div class="col-xs-12 col-sm-3 col-md-3 f-thide">
-              <a href="mailto:info@pingcap.com" class="link_icon">
-                <i class="icon icon-mail">{{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 22 "height" 17 ) }}</i>Feedback
-              </a>
-          </div>
-      </div>
+        <div class="draw">
+          <img src="https://download.pingcap.com/images/docs-simple.png" width="100%">
+        </div>
+        <div class="operate">
+            <div class="item">
+                <a href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fwww.pingcap.com%2f$url$" class="link_icon">
+                  <i class="icon">{{ partial "svgs/icon-share.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>Share
+                </a>
+            </div>
+            <div class="item" onclick="window.print();">
+                <a href="javascript:;" class="link_icon">
+                  <i class="icon">{{ partial "svgs/icon-print.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>Print
+                </a>
+            </div>
+            <div class="item">
+                <a href="http://download.pingcap.org/tidb-manual-cn.pdf" class="link_icon" download="tidb-manual-cn.pdf">
+                  <i class="icon">{{ partial "svgs/icon-download.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>Download
+                </a>
+            </div>
+            <div class="item">
+                <a href="mailto:info@pingcap.com" class="link_icon">
+                  <i class="icon icon-mail">{{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 22 "height" 17 ) }}</i>Feedback
+                </a>
+            </div>
+        </div>
+    </div>
   </div>
 </div>
+
 {{ end }}

@@ -1,159 +1,157 @@
 {{ define "headcss" }}
 {{$.Scratch.Set "nav_active" "about"}}
 {{$.Scratch.Set "data_i18_link" "/about-cn" }}
-<link href="/css/about.css" rel="stylesheet">
 <style type="text/css" media="screen">
-.amap-logo,
-.amap-copyright {
+  .amap-logo,
+  .amap-copyright {
     display: none!important;
-}
+  }
 
-.amap-icon img {
+  .amap-icon img {
     width: 100%;
     height: 100%;
-}
+  }
 </style>
 {{ end }}
-
 
 {{ define "footjs" }}
 <script type="text/javascript" src='https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init'></script>
 <script type="text/javascript">
-function init() {
-  var map = new AMap.Map('map', {
-    resizeEnable: true,
-    zoom: 15,
-    center: [116.357273, 40.042345],
-    mapStyle: 'amap://styles/light', //样式URL
-  })
-  //添加点标记，并使用自己的icon
-  new AMap.Marker({
-    map: map,
-    position: [116.357273, 40.042345],
-    icon: new AMap.Icon({
-      size: new AMap.Size(32, 32), //图标大小
-      image: 'https://download.pingcap.com/images/location.svg',
-    }),
-  })
-  map.setLang('en')
-}
+  function init() {
+    var map = new AMap.Map('map', {
+      resizeEnable: true,
+      zoom: 15,
+      center: [116.357273, 40.042345],
+      mapStyle: 'amap://styles/light', //样式URL
+    })
+    //添加点标记，并使用自己的icon
+    new AMap.Marker({
+      map: map,
+      position: [116.357273, 40.042345],
+      icon: new AMap.Icon({
+        size: new AMap.Size(32, 32), //图标大小
+        image: 'https://download.pingcap.com/images/location.svg',
+      }),
+    })
+    map.setLang('en')
+  }
 </script>
 {{ end }}
 
-
 {{ define "main" }}
 <!-- Todo merge zh and en with single layout with diff i18 front matter  -->
-<section class="company">
-    <div class="container">
-        <div class="text">
-            <h1 class="title">ABOUT THE COMPANY</h1>
-            <div class="desc">
-                Headquartered in Beijing, PingCAP is a thriving company that develops TiDB, an open source distributed Hybrid Transactional/Analytical Processing (HTAP) database. The majority of PingCAP’s senior engineers and architects worked for famous internet giants, such as Twitter.com, JD.com, Baidu.com, Qihoo 360, Sogou.com, Wandou Labs, etc.
-            </div>
-        </div>
-        <div class="openjobs">
-            <a href="/recruit" class="link">OPEN JOBS</a>
-        </div>
-    </div>
+<!-- TODO: video  -->
+<section class="about-intro-video">
+  <div class="container">
+    <video class="video" src="">
+    </video>
+  </div>
 </section>
-<section class="founders">
-    <div class="container">
-        <div class="text">
-            <h1 class="title">ABOUT THE FOUNDERS</h1>
-            <div class="desc">
-                Max Liu: Co-founder and CEO, a hacker with a free soul
-                <br> Edward Huang: Co-founder and CTO, an open-source fanatic
-                <br> Dylan Cui: Co-founder, an open-source fancier
-            </div>
-            <div class="image-wrap">
-                <img src="https://download.pingcap.com/images/illustration-tidb.png" alt="">
-            </div>
-        </div>
+<section class="about-company">
+  <div class="container">
+    <h1 class="title">ABOUT THE COMPANY</h1>
+    <div class="desc">
+        Headquartered in Beijing, PingCAP is a thriving company that develops TiDB, an open source distributed Hybrid Transactional/Analytical Processing (HTAP) database. The majority of PingCAP’s senior engineers and architects worked for famous internet giants,
+        such as Twitter.com, JD.com, Baidu.com, Qihoo 360, Sogou.com, Wandou Labs, etc.
     </div>
+    <a href="/recruit" class="link-openjobs">OPEN JOBS {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 22 "height" 22 ) }}</a>
+  </div>
 </section>
-<section class="culture">
-    <div class="container">
-        <div class="text">
-            <h1 class="title">CULTURE</h1>
-            <div class="desc">
-                PingCAP is a young, open and freedom-loving team of a group of curious and skilled talents with a dream to change the world with technology. As the top talents of the industry, they are the core values of PingCAP. Our employees, the most essential element in PingCAP, enjoy a comfortable working environment:
-            </div>
-        </div>
-
-        <div class="container details">
-            <div class="row">
-                <div class="item col-xs-12 col-sm-3 col-md-3">
-                    <div class="image-wrap">
-                        <img class="icon icon-m" src="https://download.pingcap.com/images/icon_pc.svg" alt="Office Equipment">
-                    </div>
-                    <h2>Office Equipment</h2>
-                    <p>Excellent developers need high-end devices.</p>
-                </div>
-                <div class="item item-short col-xs-12 col-sm-6 col-md-6">
-                    <div class="image-wrap">
-                        <img class="icon icon-s" src="https://download.pingcap.com/images/icon_gym.svg" alt="Gym">
-                    </div>
-                    <h2>Gym</h2>
-                    <p>Refresh yourself with a workout!</p>
-                </div>
-                <div class="item col-xs-12 col-sm-3 col-md-3">
-                    <div class="image-wrap">
-                        <img class="icon icon-m" src="https://download.pingcap.com/images/icon_tb.svg" alt="Team Building">
-                    </div>
-                    <h2>Team Building</h2>
-                    <p>A monthly team outing to help you bond with your teammates.</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="item col-xs-12 col-sm-3 col-md-3">
-                    <div class="image-wrap">
-                        <img class="icon" src="https://download.pingcap.com/images/icon_food.svg" alt="Food & Beverage">
-                    </div>
-                    <h2>Food &amp; Beverage</h2>
-                    <p>A selection of food and snacks is provided in the office.</p>
-                </div>
-                <div class="item col-xs-12 col-sm-6 col-md-6">
-                    <div class="image-wrap">
-                        <img class="icon" src="https://download.pingcap.com/images/icon_tgif.svg" alt="TGIF">
-                    </div>
-                    <h2>TGIF</h2>
-                    <p>Thank God It's Friday! Let's talk and share everything to stay on the same page every two weeks.</p>
-                </div>
-                <div class="item col-xs-12 col-sm-3 col-md-3">
-                    <div class="image-wrap">
-                        <img class="icon" src="https://download.pingcap.com/images/icon_hour.svg" alt="Flexible Work Schedule">
-                    </div>
-                    <h2>Flexible Work Schedule</h2>
-                    <p>You are entitled to have a work-life balance by working at flexible hours of your choice or telecommuting.</p>
-                </div>
-            </div>
-        </div>
+<section class="about-founders">
+  <div class="container">
+    <h1 class="title">ABOUT THE FOUNDERS</h1>
+    <div class="desc">
+        Max Liu: Co-founder and CEO, a hacker with a free soul
+        <br> Edward Huang: Co-founder and CTO, an open-source fanatic
+        <br> Dylan Cui: Co-founder, an open-source fancier
     </div>
+    <div class="image-wrap">
+        <img src="https://download.pingcap.com/images/illustration-tidb.png" alt="">
+    </div>
+  </div>
 </section>
-<section class="contact">
-    <div class="container">
-        <h1 class="title">CONTACT</h1>
-        <div class="desc desc-en">
-            <div class="row">
-                <div class="item">
-                    <h3>Telephone</h3>
-                    <p class="text">＋86&nbsp;&nbsp;010-53326356</p>
-                </div>
-                <div class="item">
-                    <h3>General Inquires</h3>
-                    <p class="text">info@pingcap.com</p>
-                </div>
-                <div class="item">
-                    <h3>Media Inquires</h3>
-                    <p class="text">pr@pingcap.com</p>
-                </div>
-                <div class="item item-long">
-                    <h3>Address</h3>
-                    <p class="text">Suite 413, Tower D3, Zhongguancun Dongsheng Science and Technology Zone, No.66 Xixiaokou Road, Haidian District, Beijing,China</p>
-                </div>
-            </div>
-        </div>
-        <div id='map' class="map" style='width: 100%; height: 340px;'></div>
+<section class="about-culture">
+  <div class="container">
+    <h1 class="title">CULTURE</h1>
+    <div class="desc">
+      PingCAP is a young, open and freedom-loving team of a group of curious and skilled talents with a dream to change the world with technology. As the top talents of the industry, they are the core values of PingCAP. Our employees, the most essential element
+      in PingCAP, enjoy a comfortable working environment:
     </div>
+    <!--  TODO: svgs -->
+    <div class="details">
+      <div class="row">
+        <div class="item">
+          <div class="image-wrap">
+            <img class="icon icon-m" src="https://download.pingcap.com/images/icon_pc.svg" alt="Office Equipment">
+          </div>
+          <h2>Office Equipment</h2>
+          <p class="desc">Excellent developers need high-end devices.</p>
+        </div>
+        <div class="item item-short">
+          <div class="image-wrap">
+            <img class="icon icon-s" src="https://download.pingcap.com/images/icon_gym.svg" alt="Gym">
+          </div>
+          <h2>Gym</h2>
+          <p class="desc">Refresh yourself with a workout!</p>
+        </div>
+        <div class="item">
+          <div class="image-wrap">
+            <img class="icon icon-m" src="https://download.pingcap.com/images/icon_tb.svg" alt="Team Building">
+          </div>
+          <h2>Team Building</h2>
+          <p class="desc">A monthly team outing to help you bond with your teammates.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="item">
+          <div class="image-wrap">
+            <img class="icon" src="https://download.pingcap.com/images/icon_food.svg" alt="Food & Beverage">
+          </div>
+          <h2>Food &amp; Beverage</h2>
+          <p class="desc">A selection of food and snacks is provided in the office.</p>
+        </div>
+        <div class="item">
+          <div class="image-wrap">
+            <img class="icon" src="https://download.pingcap.com/images/icon_tgif.svg" alt="TGIF">
+          </div>
+          <h2>TGIF</h2>
+          <p class="desc">Thank God It's Friday! Let's talk and share everything to stay on the same page every two weeks.</p>
+        </div>
+        <div class="item">
+          <div class="image-wrap">
+            <img class="icon" src="https://download.pingcap.com/images/icon_hour.svg" alt="Flexible Work Schedule">
+          </div>
+          <h2>Flexible Work Schedule</h2>
+          <p class="desc">You are entitled to have a work-life balance by working at flexible hours of your choice or telecommuting.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="about-contact">
+  <div class="container">
+    <h1 class="title">CONTACT</h1>
+    <div class="info info-en">
+      <div class="row">
+        <div class="item">
+          <h3>Telephone</h3>
+          <p class="text">＋86&nbsp;&nbsp;010-53326356</p>
+        </div>
+        <div class="item">
+          <h3>General Inquires</h3>
+          <p class="text">info@pingcap.com</p>
+        </div>
+        <div class="item">
+          <h3>Media Inquires</h3>
+          <p class="text">pr@pingcap.com</p>
+        </div>
+        <div class="item item-long">
+          <h3>Address</h3>
+          <p class="text">Suite 413, Tower D3, Zhongguancun Dongsheng Science and Technology Zone, No.66 Xixiaokou Road, Haidian District, Beijing,China</p>
+        </div>
+      </div>
+    </div>
+    <div id='map' class="map" style='width: 100%; height: 340px;'></div>
+  </div>
 </section>
 {{ end }}

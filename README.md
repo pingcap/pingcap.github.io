@@ -55,6 +55,8 @@ Done:
 - webpack & gulpfile 整合入 css/js min, hash, reference 等
 - tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
 
+- svgs 替换
+
 
 Todo:
 - ci 流程确定（submodule 等，触发等）
@@ -64,6 +66,7 @@ Todo:
 - 多 submodule 构建的影响
 - 新测试环境
 - docs/docs-cn i18n
+- 自动添加浏览器前缀？？
 
 - 模板优化
 - url 兼容（对于之前套路的url）alias
@@ -72,8 +75,6 @@ Todo:
 - about 页面加入视频
 - search 样式优化和索引配置
 - i18n
-- svgs 替换
-- 非常规分辨率下样式问题（padding margin 等）
 - 替换第三方 js
 
 

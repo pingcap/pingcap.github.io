@@ -9,11 +9,11 @@
 {{ end }}
 
 {{ define "main" }}
-<div class="container bloglist">
-    <div class="row">
-        <div class="col-md-4 nav nav-tags">
+<div class="blog">
+    <div class="container">
+        <div class="nav nav-tags">
           {{ $posts := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil  }}
-            <h1 class="title">热门标签 <a class="rss fa fa-rss" href="/rss/feed-cn.xml" title="RSS Feed"></a></h1>
+            <h1 class="title">热门标签 <a class="rss" href="/rss/feed-cn.xml" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a></h1>
             <a href="/bloglist-zh.html" class="all">ALL ({{ len $posts }})</a>
             <ul class="tag-list f-cb">
                 {{/*
@@ -42,7 +42,7 @@
                  */}}
             </ul>
         </div>
-        <div class="col-md-8 list">
+        <div class="list">
             {{ range .Data.Pages.ByDate.Reverse }}
               <!-- <li><h2>{{ .Title }}</h2></li> -->
                 <!-- {{ .Render "li"}} -->

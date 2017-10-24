@@ -1,10 +1,15 @@
-{{ define "headcss" }} {{$.Scratch.Set "nav_active" "blog"}} {{$.Scratch.Set "data_i18_link" "/blog" }} {{$.Scratch.Set "data_i18_cn" true }}
-<link href="/css/doc.css" rel="stylesheet">
-<link href="/css/blog.css" rel="stylesheet"> {{ end }} {{ define "main" }}
-<div class="container">
-    <div class="row">
+{{ define "headcss" }}
+{{$.Scratch.Set "nav_active" "blog"}}
+{{$.Scratch.Set "data_i18_link" "/blog" }}
+{{$.Scratch.Set "data_i18_cn" true }}
+<!-- <link href="/css/doc.css" rel="stylesheet">
+<link href="/css/blog.css" rel="stylesheet"> -->
+{{ end }}
 
-        <div class="col-md-4 nav nav-tree" id="st-tree">
+{{ define "main" }}
+<div class="blog">
+    <div class="container">
+        <div class="nav nav-tree" id="st-tree">
             <h1 class="title"> 博客 </h1>
             <div class="st_tree" id="doc-nav">
                 {{ $blogs := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil }}
@@ -26,9 +31,7 @@
             </div>
         </div>
 
-
-        <div class="col-md-8 list">
-            <div class="item">
+        <div class="archive">
                 <div class="content">
                     <h1 class="title">{{ .Title }}</h1>
                     <ul class="blog-post-meta">
@@ -46,16 +49,17 @@
 
                 <div class="operate">
                     <div class="row">
-                        <div class="f-thide">
+                        <div class="item">
                             <a href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fwww.pingcap.com%2f$url$" class="link_icon">
                               <i class="icon">{{ partial "svgs/icon-share.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>分享
                             </a>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
 
-{{ end }} {{ define "footjs" }} {{ end }}
+{{ end }}
+
+{{ define "footjs" }} {{ end }}
