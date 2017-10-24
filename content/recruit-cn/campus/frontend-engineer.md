@@ -1,6 +1,6 @@
 ---
 title: Front End Engineer
-tags: campus
+tags: ['campus']
 ---
 
 # Front End Engineer

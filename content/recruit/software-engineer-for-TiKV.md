@@ -1,9 +1,9 @@
 ---
 title: Database Storage Engineer
-tags: engineer
+tags: ['engineer']
 ---
 
-# Software Engineer for TiKV 
+# Software Engineer for TiKV
 
 ## Qualifications
 
@@ -22,5 +22,3 @@ tags: engineer
 
 
 ![recruit](images/developer.png)
-
-

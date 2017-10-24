@@ -1,6 +1,6 @@
 ---
 title: 渠道合作总监
-tags: Sales
+tags: ['sales']
 ---
 
 # 渠道合作总监

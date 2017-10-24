@@ -1,6 +1,6 @@
 ---
 title: PR经理
-tags: market
+tags: ['market']
 ---
 
 # PR经理

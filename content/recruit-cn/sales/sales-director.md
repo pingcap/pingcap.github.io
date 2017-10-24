@@ -1,6 +1,6 @@
 ---
 title: 行业销售总监
-tags: Sales
+tags: ['sales']
 ---
 
 # 行业销售总监

@@ -1,6 +1,6 @@
 ---
 title: 高级业务拓展（销售）经理
-tags: Sales
+tags: ['sales']
 ---
 
 # 高级业务拓展（销售）经理

@@ -1,6 +1,6 @@
 ---
 title: Infrastructure Engineer Intern
-tags: campus
+tags: ['campus']
 ---
 
 # Infrastructure Engineer Intern

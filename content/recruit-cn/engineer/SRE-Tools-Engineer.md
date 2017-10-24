@@ -1,6 +1,6 @@
 ---
 title: SRE and Tools Engineer
-tags: engineer
+tags: ['engineer']
 ---
 
 # SRE and Tools Engineer

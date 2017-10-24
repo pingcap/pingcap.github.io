@@ -1,6 +1,6 @@
 ---
 title: 售前技术总监
-tags: Sales
+tags: ['sales']
 ---
 
 # 售前技术总监

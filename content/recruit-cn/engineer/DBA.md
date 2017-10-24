@@ -1,6 +1,6 @@
 ---
 title: DBA
-tags: engineer
+tags: ['engineer']
 ---
 
 # DBA

@@ -1,9 +1,9 @@
 ---
 title: Database Storage Engineer
-tags: engineer
+tags: ['engineer']
 ---
 
-# Software Engineer for TiDB 
+# Software Engineer for TiDB
 
 ## Minimum qualifications
 
@@ -26,6 +26,3 @@ tags: engineer
 
 
 ![recruit](images/developer.png)
-
-
-

@@ -1,4 +1,4 @@
 ---
 aliases:
-  - /about-zh/joblist-zh.html
+  - /about-cn/recruit-cn
 ---

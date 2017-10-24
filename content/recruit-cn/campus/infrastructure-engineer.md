@@ -1,6 +1,6 @@
 ---
 title: Infrastructure Engineer
-tags: campus
+tags: ['campus']
 ---
 
 # Infrastructure Engineer
