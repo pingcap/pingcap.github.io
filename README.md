@@ -112,6 +112,19 @@ git rm -rf .
 ](media <= ]({{ site.baseurl }}/assets/img
 
 
+### submodule 先切换分支，非master
+git submodule update --remote
+
+改改现有的 submodule 配置:
+[submodule "content/blog-cn"]
+	path = content/blog-cn
+	url = git@github.com:pingcap/blog-cn.git
+  branch = hugo-refactor
+
+### 引入 submodule
+添加新的
+git submodule add -b hugo-refactor git@github.com:pingcap/blog.git content/blog
+
 
 
 ### babel & linter
