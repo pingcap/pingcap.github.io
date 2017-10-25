@@ -1,6 +1,7 @@
 {{ define "headcss" }}
   {{$.Scratch.Set "nav_active" "docs"}}
   {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "/docs" }}
 {{ end }}
 
 {{ define "main" }}
@@ -17,6 +18,8 @@
         <div class="content">
           {{ .Content }}
         </div>
+
+        {{ partial "improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") }}
 
         <div class="draw">
           <img src="https://download.pingcap.com/images/docs-simple.png" width="100%">
