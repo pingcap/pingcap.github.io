@@ -54,32 +54,32 @@ Done:
 - 把脚本整合入gulp中（gen-nav等sh
 - webpack & gulpfile 整合入 css/js min, hash, reference 等
 - tree-nav 优化，url prefix加入，判断link是相对的而不是绝对的如http://开头的
-
+- 模板优化
 - svgs 替换
 - i18n
+- url 兼容（对于之前套路的url）alias
+- 现在 recruit and blog zh/en markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
 
 
 Todo:
-- ci 流程确定（submodule 等，触发等）
+- ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
 - 部署时错误处理方式
-- 引入英文 blog
+- 引入英文 blog 和 weekly
 - 多 submodule 构建的影响
 - 新测试环境
 - docs/docs-cn i18n
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##) - md 解析部分
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 
 
-- 模板优化
-- url 兼容（对于之前套路的url）alias
+
+
 - tags-nav link 问题 以及过滤 count 小于2个
-- 现在 recruit and blog zh/en markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
 - js/css 重构
 - about 页面加入视频
 - search 样式优化和索引配置
-- 替换第三方 js
 - blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##) 样式部分 滚动跳转
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 - 增加 Edit this Page 功能
 
 Assign:
@@ -90,6 +90,8 @@ Assign:
 
 Pending:
 - 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
+- 替换第三方 js
+- 替换所有图片引用位置（作为 asset 和 html 房子同一个 CDN？）
 
 
 Tip:

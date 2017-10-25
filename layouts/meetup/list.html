@@ -1,16 +1,16 @@
+{{ define "title" }}Meetup{{ end }}
 {{ define "headcss" }}
 {{$.Scratch.Set "nav_active" "meetup"}}
 {{$.Scratch.Set "data_i18_cn" true }}
-<!-- <link href="/css/meetup.css" rel="stylesheet"> -->
 
 {{ end }}
 
 {{ define "main" }}
-<section class="meetup-landingpage-banner mkdf-iwt-layout-text-on-hover">
+<section class="meetup-landingpage-banner layout-text-on-hover">
     <!-- TODO: sign up url -->
-    <a href="http://path/to/signup" class="mkdf-iwt-link-abs" target="_blank"></a>
-    <!-- <a href="http://path/to/detail" class="mkdf-iwt-link-abs" target="_blank"></a> -->
-    <div class="mkdf-iwt-image">
+    <a href="http://path/to/signup" class="link-abs" target="_blank"></a>
+    <!-- <a href="http://path/to/detail" class="link-abs" target="_blank"></a> -->
+    <div class="image">
         <img src="/images/meetup-earth.png" alt="">
     </div>
     <div class="mkdf-elements-holder-item-inner">
@@ -19,9 +19,9 @@
         <h3><i class="fa fa-map-marker"></i>&nbsp;&nbsp;北京 . 海淀</h3>
         <p>{{.Site.Data.meetup.next_meetup.date}}</p>
     </div>
-    <div class="mkdf-iwt-text">
-        <h3 class="mkdf-iwt-title"> 报名加入 </h3>
-        <!-- <h3 class="mkdf-iwt-title"> 查看详情 </h3> -->
+    <div class="text">
+        <h3 class="title"> 报名加入 </h3>
+        <!-- <h3 class="title"> 查看详情 </h3> -->
     </div>
 </section>
 <section class="meetup-landingpage-intro">
@@ -36,21 +36,23 @@
     <div class="container">
         <h1 class="title">往期回顾</h1>
         <div class="details">
+          <div class="row">
                 {{ range first 3 .Data.Pages }}
                 <div class="item">
-                    <div class="mkdf-iwt-layout-text-on-hover">
-                        <a href="{{.URL}}" class="mkdf-iwt-link-abs"></a>
-                        <div class="mkdf-iwt-image">
+                  <a href="{{.URL}}" class="link-abs"></a>
+                    <div class="layout-text-on-hover">
+                        <div class="image">
                             <img src="{{.Params.image|default .Site.Data.meetup.default_cover}}">
                         </div>
-                        <div class="mkdf-iwt-text">
-                            <h3 class="mkdf-iwt-title"> {{.Date.Format "2006-01-02"}} </h3>
+                        <div class="text">
+                            <h3 class="title"> {{.Date.Format "2006-01-02"}} </h3>
                         </div>
                     </div>
                     <h2>{{.Date.Format "2006-01-02"}}</h2>
                     <p>{{.Title}}</p>
                 </div>
                 {{ end }}
+          </div>
         </div>
         <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 22 "height" 22 ) }}</a>
     </div>
@@ -66,7 +68,6 @@
                     <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
                   </a>
                 <!-- </li> -->
-
             </div>
         <!-- </div> -->
         <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 22 "height" 22 ) }}</a>
@@ -77,26 +78,26 @@
         <h1 class="title">大咖讲师</h1>
         <div class="details">
             {{ range $idx, $i := .Site.Data.meetup.featured_speakers }}
-            {{ if eq (mod $idx 4 ) 0}}
-            <div class="row">{{end}}
-                <div class="item">
-                    <div class="mkdf-iwt-layout-text-on-hover">
-                        <div class="mkdf-iwt-image">
-                            <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}">
-                        </div>
-                        <div class="mkdf-iwt-text">
-                            <p>{{$i.intro}} </p>
-                        </div>
-                    </div>
-                    <h2> {{$i.name}} </h2>
-                    <h3> {{$i.title}} </h3>
-                    <p> {{$i.topic}}</p>
+              {{ if eq (mod $idx 5 ) 0}}
+                <div class="row">
+              {{end}}
+                  <div class="item">
+                      <div class="layout-text-on-hover">
+                          <div class="image">
+                              <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}">
+                          </div>
+                          <div class="text">
+                              <p>{{$i.intro}} </p>
+                          </div>
+                      </div>
+                      <h2> {{$i.name}} </h2>
+                      <h3> {{$i.title}} </h3>
+                      <p> {{$i.topic}}</p>
+                  </div>
+              {{ if eq (mod $idx 5 ) 4}}
                 </div>
-            {{ if eq (mod $idx 4 ) 3}}
-            </div>
-            {{end}}
-
-            {{end}}
+              {{end}}
+          {{end}}
             <a href="http://path/to/be/lecturer" class="link link-jonin" target="_blank">成为 PingCAP Infra Meetup 讲师<i class="fa fa-long-arrow-right"></i></a>
         </div>
     </div>
