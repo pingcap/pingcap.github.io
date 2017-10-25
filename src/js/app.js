@@ -27,7 +27,7 @@ $(function() {
   })
 
   /* sidebar */
-  $('.st_tree').SimpleTree({
+  $('#st_tree').SimpleTree({
     /* 可无视代码部分 */
     click: a => {
       if (!$(a).attr('hasChild')) console.log($(a).attr('ref'))
