@@ -6,15 +6,13 @@
 
 ## Usage
 
-./gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，用于页面渲染 ./process-docs.sh 用于 copy_images_from_media_to_src 和 replace_dist_html_link，在构建prod时候使用（图片路径和html中url绝对路径
-src：前端代码如css/js，可通过构建工具来编译，如使用babel和css预处理器等，实施现代化开发流程 site：存储 hugo 使用的站点内容，主要包括：
+./gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，用于页面渲染 ./process-docs.sh 用于 copy_images_from_media_to_src 和 replace_dist_html_link，在构建prod时候使用（图片路径和html中url绝对路径 src：前端代码如css/js，可通过构建工具来编译，如使用babel和css预处理器等，实施现代化开发流程 site：存储 hugo 使用的站点内容，主要包括：
 
 - contents文档和内容目录
 - layout中有布局的html通过模板集成和partial等功能
 - data 用于非markdown形式的数据，用在渲染模板
 
 相关脚本入口，看 package.json 中的 scripts 部分
-
 
 ### head>title
 
@@ -61,7 +59,8 @@ Done:
 - 增加 Edit this Page 功能
 
 Pending:
-- 类似 hugo docs 的“改文档更新于<2017年10月25日>，commit id<>，author<>” 来 reference
+
+- 类似 hugo docs 的"改文档更新于<2017年10月25日>，commit id<>，author<>" 来 reference
 
 Todo:
 
@@ -69,11 +68,12 @@ Todo:
 - docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 - [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式
+- blog-cn 页面 tags link 跳转 404
 
 - search 样式优化和索引配置
+
 - tags-nav link 问题 以及过滤 count 小于2个
 - about 页面加入视频
-
 
 Assign:
 
@@ -91,9 +91,7 @@ Tip:
 
 - 新建文件无法被watch和执行hugo等
 
-
-全文搜索配置
-https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json
+全文搜索配置 <https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json>
 
 ## 记录
 
@@ -101,25 +99,19 @@ https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json
 
 hugo import jekyll blog blog-x
 
-git checkout --orphan newbranch
-git rm -rf .
+git checkout --orphan newbranch git rm -rf .
 
-从生成的hugo中copy asssets/img 和 content/post 更换路径名称等。
-](media <= ]({{ site.baseurl }}/assets/img
-
+从生成的hugo中copy asssets/img 和 content/post 更换路径名称等。 ](media <= ]({{ site.baseurl }}/assets/img
 
 ### submodule 先切换分支，非master
+
 git submodule update --remote
 
-改改现有的 submodule 配置:
-[submodule "content/blog-cn"]
-	path = content/blog-cn
-	url = git@github.com:pingcap/blog-cn.git
-  branch = hugo-refactor
+改改现有的 submodule 配置: [submodule "content/blog-cn"] path = content/blog-cn url = git@github.com:pingcap/blog-cn.git branch = hugo-refactor
 
 ### 引入 submodule
-添加新的
-git submodule add -b hugo-refactor git@github.com:pingcap/blog.git content/blog
+
+添加新的 git submodule add -b hugo-refactor git@github.com:pingcap/blog.git content/blog
 
 - 新建文件无法被watch和执行hugo等
 
@@ -140,8 +132,6 @@ airbnb-base:10.0.1 and atom linter-eslint don't seem to work together <https://g
 基于： git submodule
 
 Todo: README模板 ![Logo of the project](./images/logo.sample.png)
-
-
 
 # Template - Name of the project
 
