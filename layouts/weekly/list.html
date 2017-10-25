@@ -1,52 +1,24 @@
-{{ define "title" }}博客{{ end }}
+{{ define "title" }}Weekly{{ end }}
 
 {{ define "headcss" }}
   {{$.Scratch.Set "nav_active" "weekly"}}
-  {{$.Scratch.Set "data_i18_link" "/blog" }}
 {{ end }}
 
 {{ define "main" }}
 <div class="weekly">
     <div class="container">
-        <div class="list">
-            {{ range .Data.Pages.ByDate.Reverse }}
-              <!-- <li><h2>{{ .Title }}</h2></li> -->
-                <!-- {{ .Render "li"}} -->
-            <div class="article">
-                <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
-                <ul class="blog-post-meta">
-                    <li class="meta-item">
-                      {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
-                      {{ .Date.Format "2006-01-02" }}
-                    </li>
-                    <li class="meta-item">
-                       {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
-                        {{/*
-                            <!-- {{ range .Params.author }}
-                              <li><a href="{{ "/authors/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> </li>
-                            {{ end }} -->
-                            <!-- {{ range .Params.author }} {{ . }}  {{ end }} -->
-
-                        */}}
-                      {{ .Params.author }}
-                    </li>
-                    <li class="meta-item">
-                      <ul id="tags">
-                          {{/*
-                              {{ range .Params.tags }}
-                                <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
-                              {{ end }}
-                         */}}
-                      </ul>
-                    </li>
-                </ul>
-                <a href="{{ .URL }}">
-                    <div class="brief">
-                         <p>{{ .Params.summary }}</p>
-                    </div>
-                </a>
-                <div class="article_divider"></div>
+        <div class="nav nav-tree">
+            <h1 class="title"> Weekly </h1>
+            <div class="st_tree" id="st_tree">
+                {{ $archives := where ( .Data.Pages ) ".Params.title" "!=" nil }}
+                {{ partial "date-tree-nav.html" (dict "data" $archives) }}
             </div>
+        </div>
+        <div class="archive">
+            {{ range first 1 .Data.Pages.ByDate.Reverse }}
+              <div class="content">
+                {{.Content}}
+              </div>
             {{ end }}
         </div>
     </div>
