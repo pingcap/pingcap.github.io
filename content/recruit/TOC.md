@@ -2,5 +2,6 @@
 
 ## Directory
 
-- [Software Engineer for TiDB](software-engineer-for-TiDB.md)
-- [software-engineer-for-TiKV](software-engineer-for-TiKV.md)
++ engineer
+  - [Software Engineer for TiDB](engineer/software-engineer-for-TiDB.md)
+  - [software-engineer-for-TiKV](engineer/software-engineer-for-TiKV.md)
