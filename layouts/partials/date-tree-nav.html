@@ -1,0 +1,19 @@
+<ul>
+    {{ range .data.GroupByDate "2006" }}
+    <li class="level-1 year-item has-child">
+      <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+      <ul>
+          {{ range .Pages.GroupByDate "2006-01" }}
+          <li class="level-2 month-item has-child">
+            <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+            <ul>
+                {{ range .Pages }}
+                <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
+                {{ end }}
+            </ul>
+          </li>
+          {{ end }}
+      </ul>
+    </li>
+    {{ end }}
+</ul>

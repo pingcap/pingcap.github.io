@@ -10,26 +10,8 @@
         <div class="nav nav-tree" id="st-tree">
             <h1 class="title"> 博客 </h1>
             <div class="st_tree" id="doc-nav">
-                {{ $blogs := where (where .Site.Pages "Section" "weekly") ".Params.title" "!=" nil }}
-                <ul>
-                    {{ range $blogs.GroupByDate "2006" }}
-                    <li>
-                      <a href="#">{{ .Key }} ({{ len .Pages }})</a>
-                      <ul>
-                          {{ range .Pages.GroupByDate "2006-01" }}
-                          <li>
-                            <a href="#">{{ .Key }} ({{ len .Pages }})</a>
-                            <ul>
-                                {{ range .Pages }}
-                                <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
-                                {{ end }}
-                            </ul>
-                          </li>
-                          {{ end }}
-                      </ul>
-                    </li>
-                    {{ end }}
-                </ul>
+              {{ $blogs := where (where .Site.Pages "Section" "weekly") ".Params.title" "!=" nil }}
+              {{ partial "date-tree-nav.html" (dict "data" $blogs) }}
             </div>
         </div>
 

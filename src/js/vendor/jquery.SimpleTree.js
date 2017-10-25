@@ -12,6 +12,15 @@ $(function() {
 
   $.fn.extend({
     SimpleTree: function(options) {
+      /*
+      依赖于 DOM 结构：
+
+      div.st_tree
+        ul[show=true]
+          li.folder.open
+          ul[show=true].display:block
+
+       */
       var option = $.extend(
         {
           click: function(a) {},
@@ -22,58 +31,53 @@ $(function() {
       option.tree = this
 
       option._init = function() {
-        this.tree.find('ul ul').hide()
-        this.tree
-          .find('ul ul')
-          .prev('li')
-          .removeClass('open')
+        this.tree.find('.has-child ul').hide()
 
-        this.tree.find("ul ul[show='true']").show()
-        this.tree
-          .find("ul ul[show='true']")
-          .prev('li')
-          .addClass('open')
+        // Hack to match url
+        this.tree.find('li').each(function() {
+          var href = $(this)
+            .find('a')
+            .attr('href')
+          if (href === decodeURIComponent(window.location.pathname)) {
+            var $i = $(this),
+              $p
+            while ($i.is('li')) {
+              $p = $i.parent()
+              if ($p.is('ul')) {
+                $p.show()
+              }
+              $i = $p.parent()
+              $i.addClass('open')
+            }
+            $(this).addClass('active')
+          }
+        })
       }
-      /* option._init() End */
 
-      this.find('a').click(function() {
-        $(this)
-          .parent('li')
-          .click()
+      this.find('li').click(function(e) {
+        const $this = $(this)
+        option.click($this.find('a')[0])
+        $this.toggleClass('open')
+        const $ul = $this.find('ul')
+        if ($ul.is(':visible')) {
+          $ul.hide()
+        } else {
+          $ul.show()
+        }
+
+        e.preventDefault()
         return false
       })
 
-      this.find('li').click(function() {
-        option.click($(this).find('a')[0])
+      this.find('.has-child').addClass('folder')
 
-        if (
-          $(this)
-            .next('ul')
-            .attr('show') == 'true'
-        ) {
-          $(this)
-            .next('ul')
-            .attr('show', 'false')
-        } else {
-          $(this)
-            .next('ul')
-            .attr('show', 'true')
-        }
-
-        option._init()
-      })
-
-      this.find('ul')
-        .prev('li')
-        .addClass('folder')
-
-      this.find('li')
-        .find('a')
-        .attr('hasChild', false)
-      this.find('ul')
-        .prev('li')
-        .find('a')
-        .attr('hasChild', true)
+      // this.find('li')
+      //   .find('a')
+      //   .attr('hasChild', false)
+      // this.find('ul')
+      //   .prev('li')
+      //   .find('a')
+      //   .attr('hasChild', true)
 
       option._init()
     } /* tree Function End */,
