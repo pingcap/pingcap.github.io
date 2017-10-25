@@ -13,17 +13,21 @@
                 {{ $blogs := where (where .Site.Pages "Section" "weekly") ".Params.title" "!=" nil }}
                 <ul>
                     {{ range $blogs.GroupByDate "2006" }}
-                    <li><a href="#">{{ .Key }} ({{ len .Pages }})</a></li>
-                    <ul>
-                        {{ range .Pages.GroupByDate "2006-01" }}
-                        <li><a href="#">{{ .Key }} ({{ len .Pages }})</a></li>
-                        <ul>
-                            {{ range .Pages }}
-                            <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
-                            {{ end }}
-                        </ul>
-                        {{ end }}
-                    </ul>
+                    <li>
+                      <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+                      <ul>
+                          {{ range .Pages.GroupByDate "2006-01" }}
+                          <li>
+                            <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+                            <ul>
+                                {{ range .Pages }}
+                                <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
+                                {{ end }}
+                            </ul>
+                          </li>
+                          {{ end }}
+                      </ul>
+                    </li>
                     {{ end }}
                 </ul>
             </div>
