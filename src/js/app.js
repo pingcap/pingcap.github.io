@@ -46,4 +46,34 @@ $(function() {
     toc_run()
   }
 
+  /* tags frontend filter */
+  // Todo restore selected state from hash
+  $('.anchor-tag').click(function() {
+    const $this = $(this)
+    const filter = $this.data('tag')
+  })
+  $('.nav-tags .tag, .anchor-tag').click(function(e) {
+    const $this = $(this)
+    const isInlineTag = $this.hasClass('anchor-tag')
+    const isAll = $this.hasClass('all')
+    const filter = isInlineTag ? $this.text().trim() : $this.data('tag')
+
+    $('.nav-tags .tag').removeClass('sel')
+    $(`.nav-tags .tag[data-tag="${filter}"]`).addClass('sel')
+    isAll && $('.tag.all').addClass('sel')
+    $('.article-list .article').each(function() {
+      const $this = $(this)
+      if (isAll) {
+        $this.show()
+      } else {
+        if ($this.data('tag').includes(filter)) {
+          $this.show()
+        } else {
+          $this.hide()
+        }
+      }
+    })
+    e.preventDefault()
+    return false
+  })
 })
