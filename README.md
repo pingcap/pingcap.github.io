@@ -59,6 +59,9 @@ Done:
 - 增加 Edit this Page 功能
 - 左边栏等问题处理,sidebar 解决方案
 - docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
+- ags-nav link 问题 以及过滤 count 小于2个
+- blog-cn 页面 tags link 跳转 404
+- search 样式优化和索引配置
 
 Pending:
 
@@ -71,12 +74,12 @@ Todo:
 - [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式
 - 测试环境中修改 blog-cn 等 submodule 触发更新
-- blog-cn 页面 tags link 跳转 404
 - tags filter 页面等
 
-- search 样式优化和索引配置
-- tags-nav link 问题 以及过滤 count 小于2个
+- header 样式调整
 - about 页面加入视频
+- sidebar 样式调整
+- test
 
 Assign:
 
