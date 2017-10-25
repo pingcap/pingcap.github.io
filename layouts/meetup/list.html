@@ -1,11 +1,4 @@
-{{ define "title" }}Meetup{{ end }}
-
-{{ define "headcss" }}
-  {{$.Scratch.Set "nav_active" "meetup"}}
-  {{$.Scratch.Set "data_i18_cn" true }}
-{{ end }}
-
-{{ define "main" }}
+{{ define "title" }}Meetup{{ end }} {{ define "headcss" }} {{$.Scratch.Set "nav_active" "meetup"}} {{$.Scratch.Set "data_i18_cn" true }} {{ end }} {{ define "main" }}
 <section class="meetup-landingpage-banner layout-text-on-hover">
     <!-- TODO: sign up url -->
     <a href="http://path/to/signup" class="link-abs" target="_blank"></a>
@@ -20,7 +13,7 @@
         <p>{{.Site.Data.meetup.next_meetup.date}}</p>
     </div>
     <div class="text">
-        <h3 class="title"> 报名加入 </h3>
+        <h3 class="inner-title"> 报名加入 </h3>
         <!-- <h3 class="title"> 查看详情 </h3> -->
     </div>
 </section>
@@ -36,23 +29,23 @@
     <div class="container">
         <h1 class="title">往期回顾</h1>
         <div class="details">
-          <div class="row">
+            <div class="row">
                 {{ range first 3 .Data.Pages }}
                 <div class="item">
-                  <a href="{{.URL}}" class="link-abs"></a>
                     <div class="layout-text-on-hover">
+                        <a href="{{.URL}}" class="link-abs"></a>
                         <div class="image">
                             <img src="{{.Params.image|default .Site.Data.meetup.default_cover}}">
                         </div>
                         <div class="text">
-                            <h3 class="title"> {{.Date.Format "2006-01-02"}} </h3>
+                            <h3 class="inner-title"> {{.Date.Format "2006-01-02"}} </h3>
                         </div>
                     </div>
                     <h2>{{.Date.Format "2006-01-02"}}</h2>
                     <p>{{.Title}}</p>
                 </div>
                 {{ end }}
-          </div>
+            </div>
         </div>
         <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 22 "height" 22 ) }}</a>
     </div>
@@ -60,16 +53,12 @@
 <section class="meetup-landingpage-memoir">
     <div class="container">
         <h1 class="title">分享实录</h1>
-        <!-- <div class="hover-list"> -->
-            <div class="links-group">
-                <!-- <li class="list-group-item"> -->
-                  <a href="./memoir/26-1.html" class="link">
+        <div class="links-group">
+            <a href="./memoir/26-1.html" class="link">
                     NO.26: 分布式系统测试那些事儿 &#8212; 理念
                     <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
                   </a>
-                <!-- </li> -->
-            </div>
-        <!-- </div> -->
+        </div>
         <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 22 "height" 22 ) }}</a>
     </div>
 </section>
@@ -77,34 +66,32 @@
     <div class="container">
         <h1 class="title">大咖讲师</h1>
         <div class="details">
-            {{ range $idx, $i := .Site.Data.meetup.featured_speakers }}
-              {{ if eq (mod $idx 5 ) 0}}
-                <div class="row">
-              {{end}}
-                  <div class="item">
-                      <div class="layout-text-on-hover">
-                          <div class="image">
-                              <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}">
-                          </div>
-                          <div class="text">
-                              <p>{{$i.intro}} </p>
-                          </div>
-                      </div>
-                      <h2> {{$i.name}} </h2>
-                      <h3> {{$i.title}} </h3>
-                      <p> {{$i.topic}}</p>
-                  </div>
-              {{ if eq (mod $idx 5 ) 4}}
+            {{ range $idx, $i := .Site.Data.meetup.featured_speakers }} {{ if eq (mod $idx 5 ) 0}}
+            <div class="row">
+                {{end}}
+                <div class="item">
+                    <div class="layout-text-on-hover">
+                        <div class="image">
+                            <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}">
+                        </div>
+                        <div class="text">
+                            <p>{{$i.intro}} </p>
+                        </div>
+                    </div>
+                    <h2> {{$i.name}} </h2>
+                    <h3> {{$i.title}} </h3>
+                    <p> {{$i.topic}}</p>
                 </div>
-              {{end}}
-          {{end}}
+                {{ if eq (mod $idx 5 ) 4}}
+            </div>
+            {{end}} {{end}}
             <a href="http://path/to/be/lecturer" class="link link-jonin" target="_blank">成为 PingCAP Infra Meetup 讲师<i class="fa fa-long-arrow-right"></i></a>
         </div>
     </div>
 </section>
 <section class="meetup-landingpage-banner-footer">
-  <div class="container">
-    <img src="/images/meetup-tags.svg" alt="">
-  </div>
+    <div class="container">
+        <img src="/images/meetup-tags.svg" alt="">
+    </div>
 </section>
 {{ end }}
