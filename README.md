@@ -67,12 +67,11 @@ Todo:
 - 部署时错误处理方式
 - 引入英文 blog 和 weekly
 - 多 submodule 构建的影响
-- 新测试环境
-- docs/docs-cn i18n
+- 新测试环境支持 subModule
 - docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 - 隐藏 docs 文章上面的 meta 信息
-
-
+- 左边栏等问题处理
+- 增加 Edit this Page 功能
 
 
 - tags-nav link 问题 以及过滤 count 小于2个
@@ -80,8 +79,6 @@ Todo:
 - about 页面加入视频
 - search 样式优化和索引配置
 - blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
-- 增加 Edit this Page 功能
 
 Assign:
 - meetup media 处理（把多余的小图删除等，sort by size）
@@ -103,6 +100,17 @@ Tip:
 https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json
 
 ## 记录
+
+### 引入 weekly/blog
+
+hugo import jekyll blog blog-x
+
+git checkout --orphan newbranch
+git rm -rf .
+
+从生成的hugo中copy asssets/img 和 content/post 更换路径名称等。
+](media <= ]({{ site.baseurl }}/assets/img
+
 
 
 
