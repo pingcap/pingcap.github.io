@@ -57,22 +57,24 @@ Done:
 - 隐藏 docs 文章上面的 meta 信息
 - blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
 - 增加 Edit this Page 功能
+- 左边栏等问题处理,sidebar 解决方案
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 
 Pending:
 
 - 类似 hugo docs 的"改文档更新于<2017年10月25日>，commit id<>，author<>" 来 reference
+- 分页，load more ajax 加载更多。不用变 url https://gohugo.io/templates/pagination/#readout
 
 Todo:
-
-- 左边栏等问题处理,sidebar 解决方案
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
+- rss feed.xml 生成blog/blog-cn 两套
+- 优化文章内目录 toc 插件
 - [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式
-- blog-cn 页面 tags link 跳转 404
 - 测试环境中修改 blog-cn 等 submodule 触发更新
+- blog-cn 页面 tags link 跳转 404
+- tags filter 页面等
 
 - search 样式优化和索引配置
-
 - tags-nav link 问题 以及过滤 count 小于2个
 - about 页面加入视频
 
