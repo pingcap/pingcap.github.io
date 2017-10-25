@@ -59,19 +59,23 @@ Done:
 - i18n
 - url 兼容（对于之前套路的url）alias
 - 现在 recruit and blog zh/en markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
-
-
-Todo:
-- ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
-- submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
-- 部署时错误处理方式
 - 引入英文 blog 和 weekly
 - 多 submodule 构建的影响
 - 新测试环境支持 subModule
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
+- submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
+- 增加 Edit this Page 功能
+- 修复 docs-cn/docs 的i18n 连接映射问题
+
+
+Pending:
+- 类似 hugo docs 的“改文档更新于<2017年10月25日>，commit id<>，author<>” 来 reference
+
+Todo:
+- 部署时错误处理方式
 - 隐藏 docs 文章上面的 meta 信息
 - 左边栏等问题处理
-- 增加 Edit this Page 功能
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
+- [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 
 
 - tags-nav link 问题 以及过滤 count 小于2个
