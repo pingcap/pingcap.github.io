@@ -1,6 +1,10 @@
 {{ define "headcss" }}
   {{$.Scratch.Set "nav_active" "docs"}}
   {{$.Scratch.Set "data_i18_link" "/docs-cn" }}
+  {{$v0 := (strings.TrimPrefix "docs/" .File.Path )}}
+  {{$v1 := (strings.TrimSuffix ".md" $v0 )}}
+  {{$v := (printf "%s%s" "/docs-cn/" $v1)}}
+  {{$.Scratch.Set "data_i18_link" $v }}
 {{ end }}
 
 {{ define "main" }}
