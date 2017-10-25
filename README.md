@@ -70,15 +70,16 @@ Pending:
 
 Todo:
 - rss feed.xml 生成blog/blog-cn 两套
-- 优化文章内目录 toc 插件
 - [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式
 - 测试环境中修改 blog-cn 等 submodule 触发更新
-- tags filter 页面等
+
 
 - header 样式调整
 - about 页面加入视频
-- sidebar 样式调整
+- doc sidebar 样式调整
+- 优化文章内目录 toc 插件
+- tags filter 应用到其他页面 如 meetup recruit blog 等
 - test
 
 Assign:
