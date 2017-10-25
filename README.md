@@ -6,6 +6,16 @@
 
 ## Usage
 
+./gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，用于页面渲染 ./process-docs.sh 用于 copy_images_from_media_to_src 和 replace_dist_html_link，在构建prod时候使用（图片路径和html中url绝对路径
+src：前端代码如css/js，可通过构建工具来编译，如使用babel和css预处理器等，实施现代化开发流程 site：存储 hugo 使用的站点内容，主要包括：
+
+- contents文档和内容目录
+- layout中有布局的html通过模板集成和partial等功能
+- data 用于非markdown形式的数据，用在渲染模板
+
+相关脚本入口，看 package.json 中的 scripts 部分
+
+
 ### head>title
 
 在 base 模板有如下定义
@@ -24,17 +34,7 @@
 {{ define "title" }}博客{{ end }}
 ```
 
-./gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，用于页面渲染 ./process-docs.sh 用于 copy_images_from_media_to_src 和 replace_dist_html_link，在构建prod时候使用（图片路径和html中url绝对路径
-
-qshell qupload qiniu.config <https://portal.qiniu.com/bucket/website-test/index>
-
-src：前端代码如css/js，可通过构建工具来编译，如使用babel和css预处理器等，实施现代化开发流程 site：存储 hugo 使用的站点内容，主要包括：
-
-- contents文档和内容目录
-- layout中有布局的html通过模板集成和partial等功能
-- data 用于非markdown形式的数据，用在渲染模板
-
-url，content和layout对应关系：
+### Task
 
 Done:
 
@@ -56,41 +56,24 @@ Done:
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
 - 增加 Edit this Page 功能
 - 修复 docs-cn/docs 的i18n 连接映射问题
+- 隐藏 docs 文章上面的 meta 信息
+- blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
+- 增加 Edit this Page 功能
 
-
-<<<<<<< HEAD
-Todo:
-
-- ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
-- submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
-=======
 Pending:
 - 类似 hugo docs 的“改文档更新于<2017年10月25日>，commit id<>，author<>” 来 reference
 
 Todo:
->>>>>>> a49599017489e02f5283787e409ff33e7a41363b
-- 部署时错误处理方式
-- 隐藏 docs 文章上面的 meta 信息
-<<<<<<< HEAD
 
-- search 样式优化和索引配置
-- 增加 Edit this Page 功能
-- sidebar 解决方案
-=======
-- 左边栏等问题处理
+- 左边栏等问题处理,sidebar 解决方案
 - docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 - [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
+- 部署时错误处理方式
 
-
->>>>>>> a49599017489e02f5283787e409ff33e7a41363b
+- search 样式优化和索引配置
 - tags-nav link 问题 以及过滤 count 小于2个
-- js/css 重构
 - about 页面加入视频
-- blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
-<<<<<<< HEAD
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
-=======
->>>>>>> a49599017489e02f5283787e409ff33e7a41363b
+
 
 Assign:
 
@@ -105,8 +88,7 @@ Pending:
 - 替换所有图片引用位置（作为 asset 和 html 房子同一个 CDN？）
 
 Tip:
-<<<<<<< HEAD
-=======
+
 - 新建文件无法被watch和执行hugo等
 
 
@@ -139,8 +121,6 @@ git submodule update --remote
 添加新的
 git submodule add -b hugo-refactor git@github.com:pingcap/blog.git content/blog
 
->>>>>>> a49599017489e02f5283787e409ff33e7a41363b
-
 - 新建文件无法被watch和执行hugo等
 
 全文搜索配置 <https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json>
@@ -161,7 +141,9 @@ airbnb-base:10.0.1 and atom linter-eslint don't seem to work together <https://g
 
 Todo: README模板 ![Logo of the project](./images/logo.sample.png)
 
-# Name of the project
+
+
+# Template - Name of the project
 
 > Additional information or tag line
 
