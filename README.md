@@ -50,27 +50,47 @@ Done:
 - i18n
 - url 兼容（对于之前套路的url）alias
 - 现在 recruit and blog zh/en markdown 语法中 tag 和 author不是 list，而是普通的 separator 空格
+- 引入英文 blog 和 weekly
+- 多 submodule 构建的影响
+- 新测试环境支持 subModule
+- submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
+- 增加 Edit this Page 功能
+- 修复 docs-cn/docs 的i18n 连接映射问题
 
+
+<<<<<<< HEAD
 Todo:
 
 - ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - submodules 引入和预处理等 （先引入自己origin和分支的，稳定了在push回去）
+=======
+Pending:
+- 类似 hugo docs 的“改文档更新于<2017年10月25日>，commit id<>，author<>” 来 reference
+
+Todo:
+>>>>>>> a49599017489e02f5283787e409ff33e7a41363b
 - 部署时错误处理方式
-- 引入英文 blog 和 weekly
-- 多 submodule 构建的影响
-- 新测试环境
-- docs/docs-cn i18n
-- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
 - 隐藏 docs 文章上面的 meta 信息
+<<<<<<< HEAD
 
 - search 样式优化和索引配置
 - 增加 Edit this Page 功能
 - sidebar 解决方案
+=======
+- 左边栏等问题处理
+- docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
+- [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
+
+
+>>>>>>> a49599017489e02f5283787e409ff33e7a41363b
 - tags-nav link 问题 以及过滤 count 小于2个
 - js/css 重构
 - about 页面加入视频
 - blog + weekly 引入官网（weekly 入口放在英文 header 替换 meetup 位置）
+<<<<<<< HEAD
 - docs 和 docs-cn 中加入文章内部的子目录 （规则是：提取文章内部的所有二级标题 ##)
+=======
+>>>>>>> a49599017489e02f5283787e409ff33e7a41363b
 
 Assign:
 
@@ -85,6 +105,41 @@ Pending:
 - 替换所有图片引用位置（作为 asset 和 html 房子同一个 CDN？）
 
 Tip:
+<<<<<<< HEAD
+=======
+- 新建文件无法被watch和执行hugo等
+
+
+全文搜索配置
+https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json
+
+## 记录
+
+### 引入 weekly/blog
+
+hugo import jekyll blog blog-x
+
+git checkout --orphan newbranch
+git rm -rf .
+
+从生成的hugo中copy asssets/img 和 content/post 更换路径名称等。
+](media <= ]({{ site.baseurl }}/assets/img
+
+
+### submodule 先切换分支，非master
+git submodule update --remote
+
+改改现有的 submodule 配置:
+[submodule "content/blog-cn"]
+	path = content/blog-cn
+	url = git@github.com:pingcap/blog-cn.git
+  branch = hugo-refactor
+
+### 引入 submodule
+添加新的
+git submodule add -b hugo-refactor git@github.com:pingcap/blog.git content/blog
+
+>>>>>>> a49599017489e02f5283787e409ff33e7a41363b
 
 - 新建文件无法被watch和执行hugo等
 

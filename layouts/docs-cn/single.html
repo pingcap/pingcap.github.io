@@ -1,6 +1,10 @@
 {{ define "headcss" }}
   {{$.Scratch.Set "nav_active" "docs"}}
   {{$.Scratch.Set "data_i18_cn" true }}
+  {{$v0 := (strings.TrimPrefix "docs-cn/" .File.Path )}}
+  {{$v1 := (strings.TrimSuffix ".md" $v0 )}}
+  {{$v := (printf "%s%s" "/docs/" $v1)}}
+  {{$.Scratch.Set "data_i18_link" $v }}
 {{ end }}
 
 {{ define "main" }}
@@ -17,6 +21,8 @@
         <div class="content">
           {{ .Content }}
         </div>
+
+        {{ partial "improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") }}
 
         <div class="draw">
           <img src="https://download.pingcap.com/images/docs-simple.png" width="100%">

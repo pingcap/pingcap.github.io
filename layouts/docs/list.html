@@ -16,7 +16,10 @@
         </div>
 
         <div class="archive">
-            <div class="content">{{ readFile "/content/docs/overview.md" | markdownify }}</div>
+            <div class="content">
+              {{ with .Site.GetPage "page" "docs/overview.md" }}{{.Content}}{{ end }}
+              <!-- {{ readFile "/content/docs/overview.md" | markdownify }} -->
+            </div>
 
             <div class="draw">
                 <img src="https://download.pingcap.com/images/docs-simple.png" width="100%">
