@@ -10,14 +10,16 @@
     <ul class="st_tree" style="display:none;">
         {{ range .data.GroupByDate "2006" }}
           <li class="level-1 year-item has-child">
-            <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+            <a href="#"><i class="icon"></i>{{ .Key }} ({{ len .Pages }})</a>
             <ul>
                 {{ range .Pages.GroupByDate "2006-01" }}
                 <li class="level-2 month-item has-child">
-                  <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+                  <a href="#"><i class="icon"></i>{{ .Key }} ({{ len .Pages }})</a>
                   <ul>
                       {{ range .Pages }}
-                      <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
+                      <li class="leaf-child">
+                        <a href="{{ .URL }}">{{ partial "svgs/icon-file.svg" (dict "fill" "#000" "width" 14 "height" 14 ) }}{{ .Title }}</a>
+                      </li>
                       {{ end }}
                   </ul>
                 </li>

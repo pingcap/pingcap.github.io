@@ -19,11 +19,17 @@
         {{ range .Params.author }} {{ . }}  {{ end }}
       </li>
       <li class="meta-item">
-        <ul id="tags">
-            {{ range $idx, .Params.tags }}
-              <a href="#{{ . | urlize }}" class="link">{{ . }}</a> |
+        <div>
+            {{ if isset .Params "tags" }}
+              {{ $.global.Scratch.Set "lastIndex" (sub (len .Params.tags) 1) }}
+            {{else}}
+              {{ $.global.Scratch.Set "lastIndex" 0 }}
             {{ end }}
-        </ul>
+
+            {{ range $idx, $i := .Params.tags }}
+              <a href="#{{ $i| urlize }}" class="link anchor-tag" data-tag="{{$i}}">{{ $i }}</a> {{ if lt $idx ($.global.Scratch.Get "lastIndex")}} | {{end}}
+            {{ end }}
+        </div>
       </li>
     </ul>
     {{ end }}

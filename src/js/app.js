@@ -5,7 +5,10 @@ console.log('🦊 Hello! @PingCAP website')
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
-import { run as toc_run, extract as toc_extract } from './vendor/toc'
+import {
+  run as toc_run,
+  extract as toc_extract
+} from './vendor/toc'
 
 $(function() {
   /* toggle wechat qr code */
@@ -48,10 +51,10 @@ $(function() {
 
   /* tags frontend filter */
   // Todo restore selected state from hash
-  $('.anchor-tag').click(function() {
-    const $this = $(this)
-    const filter = $this.data('tag')
-  })
+  // $('.anchor-tag').click(function() {
+  //   const $this = $(this)
+  //   const filter = $this.data('tag')
+  // })
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
     const $this = $(this)
     const isInlineTag = $this.hasClass('anchor-tag')
@@ -73,6 +76,20 @@ $(function() {
         }
       }
     })
+    e.preventDefault()
+    return false
+  })
+
+  /* show search */
+  $('.btn-search').click(function(e) {
+    $('.search-wrapper').addClass('show')
+    e.preventDefault()
+    return false
+  })
+
+  /* hide search */
+  $('.btn-cancel').click(function(e) {
+    $('.search-wrapper').removeClass('show')
     e.preventDefault()
     return false
   })
