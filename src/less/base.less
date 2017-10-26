@@ -1,28 +1,6 @@
 /* base */
 
-// color
-@white: #FFF;
-@theme_blue: #3a59f0;
-@gray_white: #F5F5F5;
-@bg_black_with_alpha0: fade(@white, 0%);
-@bg_black_with_alpha90: fade(black, 90%);
-
-// width
-@max_width_pc: 51rem;
-
-// box
-@box_size: border-box;
-
-//padding
-@vertical_padding: 6rem;
-@horizontal_padding: 0.75rem;
-
-// mixins
-// border-radius
-.rounded-corners (@radius: 3px) {
-  border-radius: @radius;
-}
-
+// fontface
 @font-face {
   font-family: 'Lato Light';
   src: url('https://download.pingcap.com/fonts/lato/lato-light-webfont.eot'),
@@ -86,6 +64,46 @@
   font-style: normal;
 }
 
+// color
+@white: #FFF;
+@theme_blue: #3a59f0;
+@gray_white: #F5F5F5;
+@bg_black_with_alpha0: fade(@white, 0%);
+@bg_black_with_alpha90: fade(black, 90%);
+
+// width
+@max_width_pc: 51rem;
+
+// box
+@box_size: border-box;
+
+//padding
+@vertical_padding: 6rem;
+@horizontal_padding: 0.75rem;
+
+// mixins
+// border-radius
+.rounded-corners (@radius: 3px) {
+  border-radius: @radius;
+}
+
+// animations
+.customAnimation (@animation_attrs) {
+  animation: @animation_attrs;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(1em);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -113,6 +131,23 @@ textarea {
 
 ul li {
   list-style: none;
+}
+
+a,
+p a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease-out;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'TitilliumWeb', Helvetica Neue, Helvetica, PingFang SC,
+    Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, WenQuanYi Micro Hei,
+    Arial, sans-serif;
 }
 
 .container {
@@ -183,11 +218,6 @@ ul li {
 
 .f-fr {
   float: right;
-}
-
-.f-sep {
-  margin-left: 5px;
-  margin-right: 5px;
 }
 
 .f-tdn,
@@ -273,56 +303,11 @@ ul li {
   cursor: default;
 }
 
-/* only for block elememt */
-
-.f-mgt5 {
-  margin-top: 5px;
-}
-
-.f-mgt10 {
-  margin-top: 10px;
-}
-
-.f-mgt20 {
-  margin-top: 20px;
-}
-
-.f-mgr10 {
-  margin-right: 10px;
-}
-
-.f-mgr20 {
-  margin-right: 20px;
-}
-
-.f-mgl10 {
-  margin-left: 10px;
-}
-
-.f-mgl20 {
-  margin-left: 20px;
-}
-
-a,
-p a {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  transition: color 0.15s ease-out;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: 'TitilliumWeb';
-}
-
 /* 大屏幕 */
 @media (min-width: 1920px) {
   html,
   body {
-    font-size: 24px;
+    font-size: 22px;
   }
 }
 
