@@ -77,7 +77,8 @@ Todo:
 
 - header 样式调整
 - about 页面加入视频
-- doc sidebar 样式调整
+- doc、recruit 的 sidebar 样式调整
+- blog、blog-cn、meetup、weekly 的 single 页面样式调整
 - 优化文章内目录 toc 插件
 - tags filter 应用到其他页面 如 meetup recruit blog 等
 - test
