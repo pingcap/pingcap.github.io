@@ -12,15 +12,6 @@ $(function() {
 
   $.fn.extend({
     SimpleTree: function(options) {
-      /*
-      依赖于 DOM 结构：
-
-      div.st_tree
-        ul[show=true]
-          li.folder.open
-          ul[show=true].display:block
-
-       */
       var option = $.extend(
         {
           click: function(a) {},

@@ -77,17 +77,22 @@ Todo:
 - 测试环境中修改 blog-cn 等 submodule 触发更新
 
 
-- doc、recruit 的 sidebar 样式调整
+- simpletree 优化
 - 优化文章内目录 toc 插件
 - header 样式调整
-- about 页面加入视频
-- meetup 页面样式调整
+- markdown 容错处理 （tag and author）
+- meetup single 分类
+
+
 
 Assign:
 
 - meetup media 处理（把多余的小图删除等，sort by size）
 - meetup markdown 格式整理和图片等
 - meetup meetup_type meta 信息默认是现场（review） 可特殊配置实录（memoir）
+- about 页面加入视频
+- meetup 页面样式调整
+- docs 左右 sidebar 展示方式确定
 
 Pending:
 
