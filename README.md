@@ -62,6 +62,8 @@ Done:
 - ags-nav link 问题 以及过滤 count 小于2个
 - blog-cn 页面 tags link 跳转 404
 - search 样式优化和索引配置
+- tags filter 应用到其他页面 如 meetup recruit blog 等
+- blog、blog-cn、meetup、weekly 的 single 页面样式调整
 
 Pending:
 
@@ -75,13 +77,11 @@ Todo:
 - 测试环境中修改 blog-cn 等 submodule 触发更新
 
 
+- doc、recruit 的 sidebar 样式调整
+- 优化文章内目录 toc 插件
 - header 样式调整
 - about 页面加入视频
-- doc、recruit 的 sidebar 样式调整
-- blog、blog-cn、meetup、weekly 的 single 页面样式调整
-- 优化文章内目录 toc 插件
-- tags filter 应用到其他页面 如 meetup recruit blog 等
-- test
+- meetup 页面样式调整
 
 Assign:
 
