@@ -7,13 +7,9 @@
 {{ define "main" }}
 <div class="weekly">
     <div class="container">
-        <div class="nav nav-tree">
-            <h1 class="title"> Weekly <a class="rss" href="/weekly/index.xml" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a></h1>
-            <div class="st_tree" id="st-tree">
-                {{ $archives := where ( where .Site.Pages "Section" "weekly" ) ".Params.title" "!=" nil }}
-                {{ partial "navs/date-tree-nav.html" (dict "data" $archives) }}
-            </div>
-        </div>
+      {{ $archives := where ( where .Site.Pages "Section" "weekly" ) ".Params.title" "!=" nil }}
+      {{ partial "navs/date-tree-nav.html" (dict "data" $archives "title" "Weekly" "rss" "/weekly/index.xml") }}
+
         <div class="archive">
             {{ range first 1 .Data.Pages.ByDate.Reverse }}
               <div class="content">

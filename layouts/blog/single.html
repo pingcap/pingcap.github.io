@@ -6,13 +6,8 @@
 {{ define "main" }}
 <div class="blog">
   <div class="container">
-    <div class="nav nav-tree">
-      <h1 class="title"> Blog </h1>
-      <div class="st_tree">
-        {{ $blogs := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
-        {{ partial "navs/date-tree-nav.html" (dict "data" $blogs) }}
-      </div>
-    </div>
+    {{ $blogs := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
+    {{ partial "navs/date-tree-nav.html" (dict "title" "Blog" "data" $blogs "rss" "/blog/index.xml") }}
 
     <div class="archive">
       <div class="content">

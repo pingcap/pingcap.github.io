@@ -7,13 +7,8 @@
 {{ define "main" }}
 <div class="blog">
     <div class="container">
-        <div class="nav nav-tree" id="st-tree">
-            <h1 class="title"> 博客 </h1>
-            <div class="st_tree" id="st_tree">
-                {{ $blogs := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil }}
-                {{ partial "navs/date-tree-nav.html" (dict "data" $blogs) }}
-            </div>
-        </div>
+      {{ $blogs := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil }}
+      {{ partial "navs/date-tree-nav.html" (dict "title" "博客" "data" $blogs) }}
 
         <div class="archive">
                 <div class="content">

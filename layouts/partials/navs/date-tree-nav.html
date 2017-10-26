@@ -1,19 +1,27 @@
-<ul>
-    {{ range .data.GroupByDate "2006" }}
-    <li class="level-1 year-item has-child">
-      <a href="#">{{ .Key }} ({{ len .Pages }})</a>
-      <ul>
-          {{ range .Pages.GroupByDate "2006-01" }}
-          <li class="level-2 month-item has-child">
+{{ $rss := .rss }}
+
+<div class="nav nav-tree">
+    <h1 class="title">
+      {{ .title }}
+      <a class="rss" href="{{.rss}}" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
+    </h1>
+    <ul class="st_tree" style="display:none;">
+        {{ range .data.GroupByDate "2006" }}
+          <li class="level-1 year-item has-child">
             <a href="#">{{ .Key }} ({{ len .Pages }})</a>
             <ul>
-                {{ range .Pages }}
-                <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
+                {{ range .Pages.GroupByDate "2006-01" }}
+                <li class="level-2 month-item has-child">
+                  <a href="#">{{ .Key }} ({{ len .Pages }})</a>
+                  <ul>
+                      {{ range .Pages }}
+                      <li><i class="icon"></i><a href="{{ .URL }}">{{ .Title }}</a></li>
+                      {{ end }}
+                  </ul>
+                </li>
                 {{ end }}
             </ul>
           </li>
-          {{ end }}
-      </ul>
-    </li>
-    {{ end }}
-</ul>
+       {{ end }}
+    </ul>
+</div>

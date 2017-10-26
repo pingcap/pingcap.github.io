@@ -43,13 +43,14 @@ $(function() {
             $(this).addClass('active')
           }
         })
+        this.tree.show()
       }
 
       this.find('li').click(function(e) {
         const $this = $(this)
         option.click($this.find('a')[0])
         $this.toggleClass('open')
-        const $ul = $this.find('ul')
+        const $ul = $this.children('ul')
         if ($ul.is(':visible')) {
           $ul.hide()
         } else {
@@ -61,14 +62,6 @@ $(function() {
       })
 
       this.find('.has-child').addClass('folder')
-
-      // this.find('li')
-      //   .find('a')
-      //   .attr('hasChild', false)
-      // this.find('ul')
-      //   .prev('li')
-      //   .find('a')
-      //   .attr('hasChild', true)
 
       option._init()
     } /* tree Function End */,
