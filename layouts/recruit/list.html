@@ -8,23 +8,11 @@
 {{ define "main" }}
 <div class="recruit">
     <div class="container">
-        <div class="nav nav-tags">
-            <h1 class="title">Job Categories</h1>
-            <ul class="tag-list">
-              {{ range .Site.Data.recruit_toc }}
-              <!-- Todo sel active class -->
-              <li><a href="" class="tag"> {{ .name }} ({{ len .children }})</a></li>
-              {{ end }}
-            </ul>
-        </div>
-        <div class="list">
-            {{ range .Data.Pages }}
-                <div class="article">
-                    <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
-                    <div class="article_divider"></div>
-                </div>
-            {{ end }}
-        </div>
+      {{ $posts := where (where .Site.Pages "Section" "recruit") ".Params.title" "!=" nil  }}
+
+      {{ partial "navs/tags-nav.html" (dict "title" "Job Categories" "posts" $posts "global" .) }}
+
+      {{ partial "list.html" (dict "posts" $posts "global" .) }}
     </div>
 </div>
 {{ end }}

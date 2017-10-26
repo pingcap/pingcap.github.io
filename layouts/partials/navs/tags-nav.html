@@ -1,0 +1,34 @@
+{{ $rss := .rss }}
+
+<div class="nav nav-tags">
+    <h1 class="title">
+      {{ .title }}
+      {{ if $rss }}
+        <a class="rss" href="{{.rss}}" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
+      {{ end }}
+    </h1>
+    <a href="#" class="tag all sel">ALL ({{ len .posts }})</a>
+    <div class="tag-list">
+      <!-- Get all posts-->
+      <!-- loop all tags that you've used -->
+      {{ range $name, $taxonomy := .global.Site.Taxonomies.tags }}
+        <!-- (re)set the counter to 0 -->
+        {{ $.global.Scratch.Set "tagCounter" 0 }}
+        <!-- increment counter if post contains the current tag-->
+          {{ range $.posts}}
+            {{ if in .Params.tags $name }}
+              {{ $.global.Scratch.Add "tagCounter" 1 }}
+            {{ end }}
+          {{ end }}
+
+          {{ $count := $.global.Scratch.Get "tagCounter" }}
+
+          {{ if (gt $count  1) }}
+            <!-- hide class for li, if less then 2 -->
+            <a href="#{{ $name| urlize }}" class="tag" data-tag="{{$name}}">
+              {{ $name }} ({{ $count }})
+            </a>
+          {{ end }}
+      {{end}}
+    </div>
+</div>
