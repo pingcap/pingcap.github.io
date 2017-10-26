@@ -8,7 +8,7 @@
 <div class="blog">
     <div class="container">
       {{ $blogs := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil }}
-      {{ partial "navs/date-tree-nav.html" (dict "title" "博客" "data" $blogs) }}
+      {{ partial "navs/date-tree-nav.html" (dict "title" "博客" "data" $blogs "rss" "/blog-cn/index.xml") }}
 
         <div class="archive">
                 <div class="content">
@@ -20,7 +20,7 @@
                         </li>
                         <li class="meta-item">
                           {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
-                          {{ .Params.author }}
+                          {{ range .Params.author }} {{ . }}  {{ end }}
                         </li>
                     </ul>
                     <div class="blog-text">{{ .Content }}</div>

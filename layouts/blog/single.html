@@ -14,10 +14,12 @@
         <h1 class="title">{{ .Title }}</h1>
         <ul class="blog-post-meta">
           <li class="meta-item">
-            {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }} {{ .Date.Format "Mon, Jan 2, 2006" }}
+            {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
+            {{ .Date.Format "Mon, Jan 2, 2006" }}
           </li>
           <li class="meta-item">
-            {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }} {{ .Params.author }}
+            {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
+            {{ range .Params.author }} {{ . }}  {{ end }}
           </li>
         </ul>
         <div class="blog-text">{{ .Content }}</div>
