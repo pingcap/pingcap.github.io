@@ -8,6 +8,11 @@
 // color
 @text_color: #3e3e3e;
 @title_color: #142848;
+@code_color: #c7254e;
+@code_bg_color: #f9f2f4;
+
+// padding
+@pre_padding: 9.5px;
 
 /** documentation list **/
 .doc,
@@ -35,7 +40,7 @@
     h2,
     h3,
     h4 {
-      margin-bottom: 1rem;
+      margin: 1.8rem 0 1rem;
       font-weight: 400;
       color: @title_color;
     }
@@ -64,6 +69,7 @@
         line-height: 1.7;
         font-size: 0.7rem;
         font-weight: 400;
+        color: @text_color;
       }
 
       b,
@@ -72,15 +78,43 @@
         font-weight: 600;
       }
 
-      p {
-        // margin: 0.6rem 0;
-        color: @text_color;
+      legend,
+      pre {
+        display: block;
+        color: #333;
       }
-      .figure {
-        .caption {
-          display: none;
+      code,
+      kbd,
+      pre,
+      samp {
+        font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+      }
+      code,
+      kbd {
+        padding: 2px 4px;
+        font-size: 90%;
+      }
+      code {
+        color: @code_color;
+        background: @code_bg_color;
+        border-radius: 4px;
+      }
+      pre {
+        margin: 0.7rem 0;
+        padding: @pre_padding;
+        background-color: @gray_white;
+        border: 1px solid #ccc;
+        font-size: 0.7rem;
+        line-height: 1.43;
+        .rounded-corners(4px);
+        .f-brk;
+        overflow: auto;
+        code {
+          color: inherit;
+          background: none;
         }
       }
+
       table {
         display: block;
         max-width: 100%;
@@ -147,25 +181,13 @@
       a {
         color: @theme_blue;
       }
-      pre,
-      code {
-        display: block;
-        margin: 0.7rem 0;
-        padding: @horizontal_padding;
-        background-color: @gray_white;
-        border: 1px solid #ccc;
-        font-size: 0.7rem;
-        line-height: 1.45;
-        .rounded-corners();
-        .f-brk;
-        overflow: auto;
+
+      .figure {
+        .caption {
+          display: none;
+        }
       }
 
-      pre code {
-        border: none;
-        padding: 0;
-        margin: 0;
-      }
       .blog-post-meta {
         padding-left: 0;
         margin-bottom: 1rem;
