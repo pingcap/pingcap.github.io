@@ -65,6 +65,7 @@ Done:
 - tags filter 应用到其他页面 如 meetup recruit blog 等
 - blog、blog-cn、meetup、weekly 的 single 页面样式调整
 - simpletree 优化
+- header 样式调整
 
 Pending:
 
@@ -78,7 +79,6 @@ Todo:
 - 测试环境中修改 blog-cn 等 submodule 触发更新
 
 - 优化文章内目录 toc 插件
-- header 样式调整
 - markdown 容错处理 （tag and author）
 - meetup single 页面 分类
 - weekly docs docs-cn list 页面 sidebar 默认展开第一项
