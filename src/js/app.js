@@ -5,10 +5,7 @@ console.log('🦊 Hello! @PingCAP website')
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
-import {
-  run as toc_run,
-  extract as toc_extract
-} from './vendor/toc'
+import { run as toc_run, extract as toc_extract } from './vendor/toc'
 
 $(function() {
   /* toggle wechat qr code */
@@ -38,7 +35,7 @@ $(function() {
         $(a)
           .parent()
           .addClass('active')
-        window.location = $(a).attr('href')
+        window.location.href = $(a).attr('href')
       }
     },
   })
