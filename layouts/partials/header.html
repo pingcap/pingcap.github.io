@@ -1,14 +1,27 @@
 <header id="header" role="navigation">
-  <nav class="container">
+  <div class="container">
     <a class="nav-brand" href="/"><img src="https://download.pingcap.com/images/pingcap_logo.png" alt="pingCAP"></a>
-    {{ $nav_active := $.Scratch.Get "nav_active" }}
-      <ul class="navigations">
-        <li {{ if eq $nav_active "docs"}}class="sel"{{end}}><a href="/docs">Docs</a></li>
-        <li {{ if eq $nav_active "blog"}}class="sel"{{end}}><a href="/blog">Blog</a></li>
-        <li {{ if eq $nav_active "weekly"}}class="sel"{{end}}><a href="/weekly">Weekly</a></li>
-        <li {{ if eq $nav_active "about"}}class="sel"{{end}}><a href="/about">About</a></li>
-        <li><a class="btn-download" href="https://pingcap.com/doc-ansible-deployment"> Download </a></li>
-      </ul>
-     {{ partial "search/ui.html" . }}
-  </nav>
+    <div class="nav-wrapper">
+      <div class="navigations">
+        {{ $nav_active := $.Scratch.Get "nav_active" }}
+        <ul>
+          <li {{ if eq $nav_active "docs"}}class="sel"{{end}}><a href="/docs">Docs</a></li>
+          <li {{ if eq $nav_active "blog"}}class="sel"{{end}}><a href="/blog">Blog</a></li>
+          <li {{ if eq $nav_active ""}}class="sel"{{end}}><a href="/weekly">Weekly</a></li>
+          <li {{ if eq $nav_active "about"}}class="sel"{{end}}><a href="/about">About</a></li>
+        </ul>
+        <a class="link-download" href="https://pingcap.com/doc-ansible-deployment">
+          {{ partial "svgs/icon-download-tidb.svg" (dict "fill" "#fff" "width" 20 "height" 20 ) }}
+        </a>
+        <!-- <a class="btn-download" href="https://pingcap.com/doc-ansible-deployment-zh"> 下载 </a> -->
+      </div>
+      <div class="global-search">
+        <button class="btn-search">{{ partial "svgs/icon-search.svg" (dict "fill" "#fff" "width" 20 "height" 20 ) }}</button>
+        <div class="search-wrapper">
+          {{ partial "search/ui.html" . }}
+          <button class="btn-cancel">{{ partial "svgs/icon-cross.svg" (dict "fill" "#fff" "width" 10 "height" 10 ) }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
