@@ -77,6 +77,7 @@ Todo:
 - [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式
 - 测试环境中修改 blog-cn 等 submodule 触发更新
+- fork smart-toc 重新改一版优化（现在这般冗余代码多，待精简
 
 - 优化文章内目录 toc 插件
 - markdown 容错处理 （tag and author）
