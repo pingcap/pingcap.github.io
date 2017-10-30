@@ -84,6 +84,7 @@ Todo:
 - meetup single 页面 分类
 - weekly docs docs-cn list 页面 sidebar 默认展开第一项
 - 各个 single 页面 archive 模板 抽象
+- 修改 docs 左右 sidebar 样式
 
 
 
