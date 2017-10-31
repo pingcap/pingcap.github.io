@@ -4,13 +4,29 @@
 
 @dark_blue: #100f2c;
 
+// animation_fadeIn
+@animation_fadeIn: fadeIn 1s;
+
+
 .layout-text-on-hover {
+  width: 100%;
+  height: auto;
   .image {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    padding-bottom: calc(100% / (1/1)); // 1x1 by default: Default to square
+    // background: @gray_white;
     box-shadow: 0 5px 22px rgba(0, 0, 0, 0.1);
 
     img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
+      .customAnimation(@animation_fadeIn);
     }
   }
 
@@ -119,6 +135,12 @@ section[class^='meetup-landingpage-'] {
       }
     }
   }
+
+  .layout-text-on-hover {
+    .image {
+      background: @gray_white;
+    }
+  }
 }
 
 .meetup-landingpage-banner {
@@ -127,7 +149,7 @@ section[class^='meetup-landingpage-'] {
   width: 100%;
   max-height: 26rem;
   padding: 0 !important;
-  background-color: @dark_blue;
+  background-color: @dark_blue !important;
 
   .mkdf-elements-holder-item-inner {
     position: absolute;
@@ -156,11 +178,6 @@ section[class^='meetup-landingpage-'] {
 
   .image {
     box-shadow: none;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
   }
 
   .text {
@@ -184,6 +201,10 @@ section[class^='meetup-landingpage-'] {
       flex-basis: 30%;
     }
     .layout-text-on-hover {
+      // TODO: fix width/height ratio
+      .image {
+        padding-bottom: calc(100% / (4/3)); // 1x1 by default
+      }
       .text {
         padding: 30px 10px;
       }
