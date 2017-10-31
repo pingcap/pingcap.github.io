@@ -16,7 +16,11 @@
               <!-- {{ range .Params.author }}
                 <li><a href="{{ "/authors/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> </li>
               {{ end }} -->
-        {{ range .Params.author }} {{ . }}  {{ end }}
+        {{ if isset .Params "author" }}
+          {{ range .Params.author }} {{ . }}  {{ end }}
+        {{ else }}
+          PingCAP
+        {{ end }}
       </li>
       <li class="meta-item">
         <div>
