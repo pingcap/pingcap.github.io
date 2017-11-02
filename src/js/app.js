@@ -29,12 +29,12 @@ $(function() {
   })
 
   /* sidebar */
+
   // // sticky sidebar
   // const elements = $('.sticky-nav')
   // Stickyfill.add(elements)
 
   $('.st_tree').SimpleTree({
-    /* 可无视代码部分 */
     click: a => {
       if ($(a).attr('href') != '#') {
         $(a)
@@ -52,11 +52,7 @@ $(function() {
   }
 
   /* tags frontend filter */
-  // Todo restore selected state from hash
-  // $('.anchor-tag').click(function() {
-  //   const $this = $(this)
-  //   const filter = $this.data('tag')
-  // })
+
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
     const $this = $(this)
     const isInlineTag = $this.hasClass('anchor-tag')

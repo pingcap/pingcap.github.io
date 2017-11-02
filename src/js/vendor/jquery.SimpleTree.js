@@ -6,9 +6,6 @@
 
 $(function() {
   //Generally use local variables to save window.location.pathname avoid multiple JS nested property query time-consuming
-  var pathname = window.location.pathname.split('/').pop(),
-    hash = window.location.hash,
-    path
 
   $.fn.extend({
     SimpleTree: function(options) {
@@ -29,7 +26,10 @@ $(function() {
           var href = $(this)
             .find('a')
             .attr('href')
-          if (href === decodeURIComponent(window.location.pathname)) {
+          var pathname = window.location.pathname,
+            hash = window.location.hash
+
+          if (href === decodeURIComponent(pathname + hash)) {
             var $i = $(this),
               $p
             while ($i.is('li')) {
@@ -48,8 +48,13 @@ $(function() {
 
       this.find('li').click(function(e) {
         const $this = $(this)
+        $this
+          .parent()
+          .find('.active')
+          .removeClass('active')
         option.click($this.find('a')[0])
         $this.toggleClass('open')
+
         const $ul = $this.children('ul')
         if ($ul.is(':visible')) {
           $ul.hide()
