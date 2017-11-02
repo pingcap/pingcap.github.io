@@ -69,7 +69,8 @@ Done:
 - 优化文章内目录 toc 插件
 - docs 左右 sidebar 展示方式确定
 - 各个 single 页面 archive 模板 抽象 （待精简
-
+- weekly docs docs-cn list 页面 sidebar 默认展开第一项
+- docs/docs-cn/blog/blog-cn/weekly/meetup 页面图片丢失
 
 Pending:
 
@@ -82,14 +83,13 @@ Todo:
 - 部署时错误处理方式
 - 测试环境中修改 blog-cn 等 submodule 触发更新
 - fork smart-toc 重新改一版优化（现在这般冗余代码多，待精简
+- smarttoc 样式修复：默认位置靠右固定 底部空白需要去掉
+- gen-nav.js 生成 TOC 容错处理
 
-- docs/docs-cn/blog/blog-cn/weekly/meetup 页面图片丢失
+
 - meetup single 页面 分类
-- weekly docs docs-cn list 页面 sidebar 默认展开第一项
-
 - 修改 docs 左右 sidebar 样式
-- markdown 容错处理 （tag and author）
-
+- about / meetup现场 页面加入视频
 
 Assign:
 
@@ -105,6 +105,7 @@ Pending:
 - 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
 - 替换第三方 js
 - 替换所有图片引用位置（作为 asset 和 html 房子同一个 CDN？）
+- markdown 容错处理 （tag and author）
 
 Tip:
 
