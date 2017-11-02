@@ -5,6 +5,7 @@ console.log('🦊 Hello! @PingCAP website')
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
+// import Stickyfill from './vendor/stickyfill.es6.js'
 import { run as toc_run, extract as toc_extract } from './vendor/toc'
 
 $(function() {
@@ -28,8 +29,12 @@ $(function() {
   })
 
   /* sidebar */
+
+  // // sticky sidebar
+  // const elements = $('.sticky-nav')
+  // Stickyfill.add(elements)
+
   $('.st_tree').SimpleTree({
-    /* 可无视代码部分 */
     click: a => {
       if ($(a).attr('href') != '#') {
         $(a)
@@ -47,11 +52,7 @@ $(function() {
   }
 
   /* tags frontend filter */
-  // Todo restore selected state from hash
-  // $('.anchor-tag').click(function() {
-  //   const $this = $(this)
-  //   const filter = $this.data('tag')
-  // })
+
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
     const $this = $(this)
     const isInlineTag = $this.hasClass('anchor-tag')

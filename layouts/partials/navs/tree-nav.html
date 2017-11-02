@@ -1,12 +1,12 @@
 <ul>
   {{range .tree}}
     {{ if isset . "children" }}
-      <li><a href="#" class="active">{{ .name }}</a></li>
+      <li class="has-child"><a href="#">{{ .name }}<i class="icon"></i></a>
         {{ partial "navs/tree-nav.html" (dict "tree" .children "global" $) }}
+      </li>
     {{else}}
-    <li>
-        <i class="icon"></i>
-        <a href="{{ .link | urlize }}">{{ .name }}</a>
+    <li class="leaf-child">
+      <a href="{{ .link }}">{{ .name }}</a>
     </li>
     {{end}}
   {{end}}

@@ -5,22 +5,28 @@
 // color
 @text_color: #3e3e3e;
 @title_color: #142848;
+@nav_bg_color: #fbfbfb;
 
 //width
 @nav_tags_width: 15rem;
 
-// animation_attrs
-@animation_attrs: fadeInUp 1s;
+// animation_fadein_up
+@animation_fadein_up: fadeInUp 1s;
 
 .nav-tree,
 .nav-tags {
   width: @nav_tags_width;
-  padding-right: @horizontal_padding;
-  .customAnimation(@animation_attrs);
+  padding: 2rem @horizontal_padding;
+  .customAnimation(@animation_fadein_up);
+
+  ul li {
+    list-style: none;
+  }
+
   .title {
     display: flex;
     align-items: baseline;
-    margin: 1.8rem 0 1rem;
+    margin-bottom: 1rem;
     font-size: 1.2rem;
     font-weight: 400;
     color: @title_color;
@@ -51,6 +57,7 @@
     font-size: 0.7rem;
     color: #333;
   }
+
   .all.sel,
   .all:hover {
     background-color: @theme_blue;
@@ -92,11 +99,11 @@
 
     li {
       position: relative;
-      margin-top: 0.4rem;
+
       a {
         display: flex;
         align-items: baseline;
-        padding-left: 0.3rem;
+        padding: 0.3rem;
         font-size: 0.7rem;
         line-height: 1.5;
         color: black;
@@ -106,19 +113,19 @@
     .folder {
       .icon {
         margin-right: 0.3rem;
-        width: 0.7rem;
-        height: 0.7rem;
+        width: 0.5rem;
+        height: 0.5rem;
         background-image: url('/images/icon-arrow-right.svg');
-        background-size: 0.7rem 0.7rem;
+        background-size: 0.5rem 0.5rem;
       }
     }
 
     .open > a {
       .icon {
-        width: 0.7rem;
-        height: 0.7rem;
+        width: 0.5rem;
+        height: 0.5rem;
         background-image: url('/images/icon-arrow-down.svg');
-        background-size: 0.7rem 0.7rem;
+        background-size: 0.5rem 0.5rem;
       }
     }
 
@@ -137,5 +144,39 @@
         }
       }
     }
+  }
+
+  .nav-tree-toc {
+    .folder,
+    .open > a {
+      .icon {
+        margin-left: 0.3rem;
+        width: 0.4rem;
+        height: 0.4rem;
+        background-image: url('/images/icon-arrow-down.svg');
+        background-size: 0.4rem 0.4rem;
+      }
+    }
+
+    .open ul li {
+      a {
+        border-left: 1px solid fade(@theme_blue, 50%);
+      }
+      &.active a {
+        border-left: 4px solid @theme_blue;
+      }
+    }
+  }
+}
+
+/* The sticky */
+@media (min-width: 600px) {
+  .sticky-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 40px;
+    flex: 1;
+    align-self: flex-start;
+    background-color: #fff;
   }
 }

@@ -4,37 +4,28 @@
 
 {{ define "main" }}
 <div class="blog">
-    <div class="container">
-      {{ $blogs := where (where .Site.Pages "Section" "weekly") ".Params.title" "!=" nil }}
-      {{ partial "navs/date-tree-nav.html" (dict "title" "Weekly" "data" $blogs "rss" "/weekly/index.xml") }}
+  <div class="container">
+    {{ $blogs := where (where .Site.Pages "Section" "weekly") ".Params.title" "!=" nil }}
+    {{ partial "navs/date-tree-nav.html" (dict "title" "Weekly" "data" $blogs "rss" "/weekly/index.xml") }}
 
-        <div class="archive">
-                <div class="content">
-                    <h1 class="title">{{ .Title }}</h1>
-                    <ul class="blog-post-meta">
-                        <li class="meta-item">
-                          {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
-                          {{ .Date.Format "Mon, Jan 2, 2006" }}
-                        </li>
-                        <li class="meta-item">
-                          {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
-                          {{ range .Params.author }} {{ . }}  {{ end }}
-                        </li>
-                    </ul>
-                    <div class="blog-text">{{ .Content }}</div>
-                </div>
+    <div class="archive">
+      <div class="content markdown-body">
+        <ul class="blog-post-meta">
+          <li class="meta-item">
+            {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
+            {{ .Date.Format "Mon, Jan 2, 2006" }}
+          </li>
+          <!-- <li class="meta-item">
+            {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
+            {{ range .Params.author }} {{ . }}  {{ end }}
+          </li> -->
+        </ul>
+        <div class="blog-text">{{ .Content }}</div>
+      </div>
 
-                <div class="operate">
-                    <div class="row">
-                        <div class="item">
-                            <a href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fwww.pingcap.com%2f$url$">
-                              <i class="icon">{{ partial "svgs/icon-share.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i><span>分享</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-        </div>
+      {{ partial "archives/operate-links.html" (dict "global" .) }}
     </div>
+  </div>
 </div>
 
 {{ end }}

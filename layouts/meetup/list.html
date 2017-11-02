@@ -61,12 +61,19 @@
     <div class="container">
         <h1 class="title">分享实录</h1>
         <div class="links-group">
-            <a href="./memoir/26-1.html" class="link">
-                    NO.26: 分布式系统测试那些事儿 &#8212; 理念
-                    <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
-                  </a>
+          {{ range where .Data.Pages ".Params.meetup_type" "memoir" }}
+            <a href="{{.URL}}" class="link">
+              {{.Title}} <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
+            </a>
+          {{ end }}
+          <!-- TODO: remove mock data -->
+          <a href="./memoir/26-1.html" class="link">
+            NO.26: 分布式系统测试那些事儿 &#8212; 理念
+            <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
+          </a>
         </div>
-        <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
+        <!-- hide memoir list this version -->
+        <!-- <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
     </div>
 </section>
 <section class="meetup-landingpage-lecturer">

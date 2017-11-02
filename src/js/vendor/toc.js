@@ -19,7 +19,7 @@
       const largestChild = iframes
         .map(f => ({
           elem: f,
-          area: f.offsetWidth * f.offsetHeight,
+          area: f.offsetWidth * f.offsetHeight
         }))
         .sort((a, b) => b.area - a.area)[0]
       const html = root.document.documentElement
@@ -136,7 +136,7 @@
       topMargin = 0,
       maxDuration = 300,
       easeFn,
-      callback,
+      callback
     }) {
       cancelAnimationFrame(request)
       let rect = targetElem.getBoundingClientRect()
@@ -247,7 +247,7 @@
         set('enter enter-active', 0),
         set('leave', 3000),
         set('leave leave-active', 3000),
-        set('', 3000 + 200),
+        set('', 3000 + 200)
       ]
     }
   })()
@@ -264,7 +264,7 @@
   }
 
   var tocCSS =
-    '/* EVERYTHING HERE WILL BE \'!IMPORTANT\'  */\n\n/* reset */\n\n#smarttoc {\n  all: initial;\n}\n\n#smarttoc * {\n  all: unset;\n}\n\n/* container */\n\n#smarttoc {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  position: fixed;\n  max-width: 22em;\n  min-width: 14em;\n  max-height: calc(100vh - 100px);\n  z-index: 10000;\n  box-sizing: border-box;\n  background-color: #fff;\n  color: gray;\n  font-size: calc(12px + 0.1vw);\n  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;\n  line-height: 1.5;\n  font-weight: normal;\n  border: 1px solid rgba(158, 158, 158, 0.22);\n  -webkit-font-smoothing: subpixel-antialiased;\n  font-smoothing: subpixel-antialiased;\n  overflow: hidden;\n  will-change: transform, max-width;\n  transition: max-width 0.3s;\n  contain: content;\n}\n\n#smarttoc:hover {\n  max-width: 33vw;\n}\n\n#smarttoc.hidden {\n  display: none;\n}\n\n#smarttoc .handle {\n  -webkit-user-select: none;\n  user-select: none;\n\n  border-bottom: 1px solid rgba(158, 158, 158, 0.22);\n  padding: 0.1em 0.7em;\n  font-variant-caps: inherit;\n  font-variant: small-caps;\n  font-size: 0.9em;\n  color: #bbb;\n  cursor: pointer;\n  text-align: center;\n  opacity: 0;\n  will-change: opacity;\n  transition: opacity 0.3s;\n}\n\n#smarttoc:hover .handle {\n  max-width: 33vw;\n  opacity: 1;\n}\n\n#smarttoc .handle:hover,\n#smarttoc .handle:active {\n  cursor: move;\n}\n\n#smarttoc .handle:active {\n  background: #f9f9f9;\n}\n\n#smarttoc > ul {\n  flex-grow: 1;\n  padding: 0 1.3em 1.3em 1em;\n  overflow-y: auto;\n}\n\n/* all headings  */\n\n#smarttoc ul,\n#smarttoc li {\n  list-style: none;\n  display: block;\n}\n\n#smarttoc a {\n  text-decoration: none;\n  color: gray;\n  display: block;\n  line-height: 1.3;\n  padding-top: 0.2em;\n  padding-bottom: 0.2em;\n  text-overflow: ellipsis;\n  overflow-x: hidden;\n  white-space: nowrap;\n}\n\n#smarttoc a:hover,\n#smarttoc a:active {\n  border-left-color: rgba(86, 61, 124, 0.5);\n  color: #563d7c;\n}\n\n#smarttoc li.active > a {\n  border-left-color: #563d7c;\n  color: #563d7c;\n}\n\n/* heading level: 1 */\n\n#smarttoc ul {\n  line-height: 2;\n}\n\n#smarttoc ul a {\n  font-size: 1em;\n  padding-left: 1.3em;\n}\n\n#smarttoc ul a:hover,\n#smarttoc ul a:active,\n#smarttoc ul li.active > a {\n  border-left-width: 3px;\n  border-left-style: solid;\n  padding-left: calc(1.3em - 3px);\n}\n\n#smarttoc ul li.active > a {\n  font-weight: 700;\n}\n\n/* heading level: 2 (hidden only when there are too many headings)  */\n\n#smarttoc ul ul {\n  line-height: 1.8;\n}\n\n#smarttoc.lengthy ul ul {\n  display: none;\n}\n\n#smarttoc.lengthy ul li.active > ul {\n  display: block;\n}\n\n#smarttoc ul ul a {\n  font-size: 1em;\n  padding-left: 2.7em;\n}\n\n#smarttoc ul ul a:hover,\n#smarttoc ul ul a:active,\n#smarttoc ul ul li.active > a {\n  border-left-width: 2px;\n  border-left-style: solid;\n  padding-left: calc(2.7em - 2px);\n  font-weight: normal;\n}\n\n/* heading level: 3 (hidden unless parent is active) */\n\n#smarttoc ul ul ul {\n  line-height: 1.7;\n  display: none;\n}\n\n#smarttoc ul ul li.active > ul {\n  display: block;\n}\n\n#smarttoc ul ul ul a {\n  font-size: 1em;\n  padding-left: 4em;\n}\n\n#smarttoc ul ul ul a:hover,\n#smarttoc ul ul ul a:active,\n#smarttoc ul ul ul li.active > a {\n  border-left-width: 1px;\n  border-left-style: solid;\n  padding-left: calc(4em - 1px);\n  font-weight: normal;\n}\n'
+    '/* EVERYTHING HERE WILL BE \'!IMPORTANT\'  */\n\n/* reset */\n\n#smarttoc {\n  all: initial;\n}\n\n#smarttoc * {\n  all: unset;\n}\n\n/* container */\n\n#smarttoc {\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  position: fixed;\n  max-width: 22em;\n  min-width: 14em;\n  max-height: calc(100vh - 100px);\n  z-index: 10000;\n  box-sizing: border-box;\n  background-color: #fff;\n  color: gray;\n  font-size: calc(12px + 0.1vw);\n  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;\n  line-height: 1.5;\n  font-weight: normal;\n  border: 1px solid rgba(158, 158, 158, 0.22);\n  -webkit-font-smoothing: subpixel-antialiased;\n  font-smoothing: subpixel-antialiased;\n  overflow: hidden;\n  will-change: transform, max-width;\n  transition: max-width 0.3s;\n  contain: content;\n}\n\n#smarttoc:hover {\n  max-width: 33vw;\n}\n\n#smarttoc.hidden {\n  display: none;\n}\n\n#smarttoc .handle {\n  -webkit-user-select: none;\n  user-select: none;\n\n  border-bottom: 1px solid rgba(158, 158, 158, 0.22);\n  padding: 0.1em 0.7em;\n  font-variant-caps: inherit;\n  font-variant: small-caps;\n  font-size: 0.9em;\n  color: #bbb;\n  cursor: pointer;\n  text-align: center;\n  opacity: 0;\n  will-change: opacity;\n  transition: opacity 0.3s;\n}\n\n#smarttoc:hover .handle {\n  max-width: 33vw;\n  opacity: 1;\n}\n\n#smarttoc .handle:hover,\n#smarttoc .handle:active {\n  cursor: move;\n}\n\n#smarttoc .handle:active {\n  background: #f9f9f9;\n}\n\n#smarttoc > ul {\n  flex-grow: 1;\n  padding: 0 1.3em 1.3em 1em;\n  overflow-y: auto;\n}\n\n/* all headings  */\n\n#smarttoc ul,\n#smarttoc li {\n  list-style: none;\n  display: block;\n}\n\n#smarttoc a {\n  text-decoration: none;\n  color: gray;\n  display: block;\n  line-height: 1.3;\n  padding-top: 0.2em;\n  padding-bottom: 0.2em;\n  text-overflow: ellipsis;\n  overflow-x: hidden;\n  white-space: nowrap;\n}\n\n#smarttoc a:hover,\n#smarttoc a:active {\n  border-left-color: rgba(59, 89, 240, 0.5);\n  color: #3a59f0;\n}\n\n#smarttoc li.active > a {\n  border-left-color: #3a59f0;\n  color: #3a59f0;\n}\n\n/* heading level: 1 */\n\n#smarttoc ul {\n  line-height: 2;\n}\n\n#smarttoc ul a {\n  font-size: 1em;\n  padding-left: 1.3em;\n}\n\n#smarttoc ul a:hover,\n#smarttoc ul a:active,\n#smarttoc ul li.active > a {\n  border-left-width: 3px;\n  border-left-style: solid;\n  padding-left: calc(1.3em - 3px);\n}\n\n#smarttoc ul li.active > a {\n  font-weight: 700;\n}\n\n/* heading level: 2 (hidden only when there are too many headings)  */\n\n#smarttoc ul ul {\n  line-height: 1.8;\n}\n\n#smarttoc.lengthy ul ul {\n  display: none;\n}\n\n#smarttoc.lengthy ul li.active > ul {\n  display: block;\n}\n\n#smarttoc ul ul a {\n  font-size: 1em;\n  padding-left: 2.7em;\n}\n\n#smarttoc ul ul a:hover,\n#smarttoc ul ul a:active,\n#smarttoc ul ul li.active > a {\n  border-left-width: 2px;\n  border-left-style: solid;\n  padding-left: calc(2.7em - 2px);\n  font-weight: normal;\n}\n\n/* heading level: 3 (hidden unless parent is active) */\n\n#smarttoc ul ul ul {\n  line-height: 1.7;\n  display: none;\n}\n\n#smarttoc ul ul li.active > ul {\n  display: block;\n}\n\n#smarttoc ul ul ul a {\n  font-size: 1em;\n  padding-left: 4em;\n}\n\n#smarttoc ul ul ul a:hover,\n#smarttoc ul ul ul a:active,\n#smarttoc ul ul ul li.active > a {\n  border-left-width: 1px;\n  border-left-style: solid;\n  padding-left: calc(4em - 1px);\n  font-weight: normal;\n}\n'
 
   const proto = {
     subscribe(cb, emitOnSubscribe = true) {
@@ -314,7 +314,7 @@
     log(name) {
       this.subscribe(e => console.log(`[${name}]: `, e))
       return this
-    },
+    }
   }
 
   function Stream(init) {
@@ -345,7 +345,7 @@
         },
         flush() {
           combined.flush()
-        },
+        }
       }
       s.addDependent(dependent)
     })
@@ -394,7 +394,7 @@
           _state: undefined,
           events: undefined,
           instance: undefined,
-          skip: false,
+          skip: false
         }
       }
       Vnode.normalize = function(node) {
@@ -563,7 +563,7 @@
           rejectCurrent = handler(rejectors, false)
         var instance = (self._instance = {
           resolvers: resolvers,
-          rejectors: rejectors,
+          rejectors: rejectors
         })
         var callAsync =
           typeof setImmediate === 'function' ? setImmediate : setTimeout
@@ -915,7 +915,7 @@
         return {
           request: request,
           jsonp: jsonp,
-          setCompletionCallback: setCompletionCallback,
+          setCompletionCallback: setCompletionCallback
         }
       }
       var requestService = _8(window, PromisePolyfill)
@@ -924,7 +924,7 @@
         var $emptyFragment = $doc.createDocumentFragment()
         var nameSpace = {
           svg: 'http://www.w3.org/2000/svg',
-          math: 'http://www.w3.org/1998/Math/MathML',
+          math: 'http://www.w3.org/1998/Math/MathML'
         }
         var onevent
         function setEventCallback(callback) {
@@ -984,7 +984,7 @@
               th: 'tr',
               td: 'tr',
               colgroup: 'table',
-              col: 'colgroup',
+              col: 'colgroup'
             }[match1[1]] || 'div'
           var temp = $doc.createElement(parent1)
           temp.innerHTML = vnode.children
@@ -1038,7 +1038,7 @@
                     vnode.text,
                     undefined,
                     undefined
-                  ),
+                  )
                 ]
             }
             if (vnode.children != null) {
@@ -1413,7 +1413,7 @@
                   old.text,
                   undefined,
                   old.dom.firstChild
-                ),
+                )
               ]
             if (vnode.text != null)
               vnode.children = [
@@ -1424,7 +1424,7 @@
                   vnode.text,
                   undefined,
                   undefined
-                ),
+                )
               ]
             updateNodes(
               element,
@@ -1960,7 +1960,7 @@
           subscribe: subscribe,
           unsubscribe: unsubscribe,
           redraw: redraw,
-          render: renderService.render,
+          render: renderService.render
         }
       }
       var redrawService = _11(window)
@@ -2193,7 +2193,8 @@
                     resolved
                   ) {
                     update(payload, resolved)
-                  }, bail)
+                  },
+                  bail)
                 } else update(payload, 'div')
               }
             },
@@ -2289,7 +2290,7 @@
         if (level === stack.length) {
           const node = {
             heading: headings[i],
-            children: [],
+            children: []
           }
           top(stack).children.push(node)
           stack.push(node)
@@ -2306,7 +2307,7 @@
         } else if (level > stack.length) {
           const node = {
             heading: null,
-            children: [],
+            children: []
           }
           top(stack).children.push(node)
           stack.push(node)
@@ -2320,7 +2321,7 @@
         'ul',
         {
           onwheel: isRoot && restrictScroll,
-          onclick: isRoot && onClickHeading,
+          onclick: isRoot && onClickHeading
         },
         children.map(LI)
       )
@@ -2336,7 +2337,7 @@
               { href: `#${heading.anchor}` },
               heading.node.textContent
             ),
-          children && children.length && UL(children),
+          children && children.length && UL(children)
         ].filter(Boolean)
       )
 
@@ -2356,7 +2357,7 @@
                 targetElem: target,
                 scrollElem: dom,
                 maxDuration: 0,
-                topMargin: dom.offsetHeight / 2 - target.offsetHeight / 2,
+                topMargin: dom.offsetHeight / 2 - target.offsetHeight / 2
               })
             }
           }
@@ -2369,7 +2370,7 @@
         $headings().forEach((h, i) => (h.isActive = i === $activeHeading()))
         const tree = toTree($headings())
         return UL(tree.children, { isRoot: true })
-      },
+      }
     }
   }
 
@@ -2413,11 +2414,11 @@
         return mithril(
           '.handle',
           {
-            onmousedown: onDragStart,
+            onmousedown: onDragStart
           },
           'table of contents'
         )
-      },
+      }
     }
   }
 
@@ -2433,7 +2434,7 @@
       $refChange,
       $scroll,
       $offset,
-      $topMargin,
+      $topMargin
     } = options
     let $refRect = Stream.combine($refChange, () => {
       let refRect = ref.getBoundingClientRect()
@@ -2446,7 +2447,7 @@
         bottom: refRect.bottom - scrollTop,
         left: refRect.left - scrollLeft,
         width: refRect.width,
-        height: refRect.height,
+        height: refRect.height
       }
       if (refStyle['box-sizing'] === 'border-box') {
         refFullRect.left += num(refStyle['padding-left'])
@@ -2475,7 +2476,7 @@
           position: 'fixed',
           left: 0,
           top: 0,
-          transform: translate3d(x + offsetX, y + offsetY),
+          transform: translate3d(x + offsetX, y + offsetY)
         }
       }
     )
@@ -2488,7 +2489,7 @@
       right,
       bottom,
       height,
-      width,
+      width
     } = article.getBoundingClientRect()
 
     const depthOf = function(elem) {
@@ -2509,14 +2510,14 @@
     const leftSlotTestPoints = [
       left - gap - testWidth,
       left - gap - testWidth / 2,
-      left - gap,
+      left - gap
     ]
       .map(x => [top, top + testHeight / 2, top + testHeight].map(y => [x, y]))
       .reduce((prev, cur) => prev.concat(cur), [])
     const rightSlotTestPoints = [
       right + gap,
       right + gap + testWidth / 2,
-      right + gap + testWidth,
+      right + gap + testWidth
     ]
       .map(x => [top, top + testHeight / 2, top + testHeight].map(y => [x, y]))
       .reduce((prev, cur) => prev.concat(cur), [])
@@ -2548,7 +2549,7 @@
     $relayout,
     $scroll,
     $topbarHeight,
-    onClickHeading,
+    onClickHeading
   }) {
     const handle = Handle({ $userOffset })
     const toc = TOC({ $headings, $activeHeading, onClickHeading })
@@ -2564,7 +2565,7 @@
           $topMargin: $topbarHeight.map(h => (h || 0) + 50),
           $refChange: $relayout,
           $scroll: $scroll,
-          $offset: $userOffset,
+          $offset: $userOffset
         })
         this.$style.subscribe(_ => mithril.redraw())
       },
@@ -2575,15 +2576,15 @@
             class: [
               theme || 'light',
               $headings().filter(h => h.level <= 2).length > 50 && 'lengthy',
-              $isShow() ? '' : 'hidden',
+              $isShow() ? '' : 'hidden'
             ]
               .filter(Boolean)
               .join(' '),
-            style: this.$style && this.$style(),
+            style: this.$style && this.$style()
           },
           [mithril(handle), mithril(toc)]
         )
-      },
+      }
     }
   }
 
@@ -2625,7 +2626,7 @@
             : 0
         }
         $extender({
-          height: extenderHeight,
+          height: extenderHeight
         })
       }, 300)
     })
@@ -2648,12 +2649,12 @@
           ? {}
           : {
               marginLeft: 'auto',
-              marginRight: 'auto',
+              marginRight: 'auto'
             },
         num(computed.maxWidth)
           ? {}
           : {
-              maxWidth: bestWidth,
+              maxWidth: bestWidth
             }
       )
     }
@@ -2769,7 +2770,7 @@
       scrollElem: scrollElem,
       topMargin: topMargin,
       maxDuration: 300,
-      callback: onScrollEnd && onScrollEnd.bind(null, node),
+      callback: onScrollEnd && onScrollEnd.bind(null, node)
     })
   }
 
@@ -2912,7 +2913,7 @@
         $relayout,
         $scroll,
         $topbarHeight,
-        onClickHeading,
+        onClickHeading
       })
     )
 
@@ -2964,7 +2965,7 @@
         $isShow(false)
         mithril.render(getRoot(), mithril(''))
         return { userOffset: $userOffset() }
-      },
+      }
     }
   }
 
@@ -3016,13 +3017,13 @@
       '.nav': [-500],
       '.navigation': [-500],
       '.toc': [-500],
-      '.table-of-contents': [-500],
+      '.table-of-contents': [-500]
     }
     const selectors = Object.keys(weights)
     selectors
       .map(selector => ({
         selector: selector,
-        elems: [].slice.apply(rootElement.querySelectorAll(selector)),
+        elems: [].slice.apply(rootElement.querySelectorAll(selector))
       }))
       .forEach(({ selector, elems }) =>
         elems.forEach(elem => updateScore(elem, weights[selector]))
@@ -3057,7 +3058,7 @@
               (elem.querySelectorAll('a').length || 1)
           ),
         elem.scrollHeight,
-        elem.querySelectorAll('a').length,
+        elem.querySelectorAll('a').length
       ])
       .sort((a, b) => b[1] - a[1])
     const article = reweighted.length ? reweighted[0][0] : null
@@ -3083,7 +3084,7 @@
       .map((headings, i) => ({
         elems: headings,
         tag: tags[i],
-        score: headings.length * tagWeight(tags[i]),
+        score: headings.length * tagWeight(tags[i])
       }))
       .filter(heading => heading.score >= 10)
       .filter(heading => isGroupVisible(heading.elems))
@@ -3105,7 +3106,7 @@
       let node = treeWalker.currentNode
       headings.push({
         node,
-        level: validTags.indexOf(node.tagName) + 1,
+        level: validTags.indexOf(node.tagName) + 1
       })
     }
     if (false) {
@@ -3170,7 +3171,7 @@
         },
         dispose: () => {
           toc && toc.dispose()
-        },
+        }
       } // return obj for reference hold
     }
   }
