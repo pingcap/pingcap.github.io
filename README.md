@@ -66,6 +66,10 @@ Done:
 - blog、blog-cn、meetup、weekly 的 single 页面样式调整
 - simpletree 优化
 - header 样式调整
+- 优化文章内目录 toc 插件
+- docs 左右 sidebar 展示方式确定
+- 各个 single 页面 archive 模板 抽象 （待精简
+
 
 Pending:
 
@@ -79,13 +83,12 @@ Todo:
 - 测试环境中修改 blog-cn 等 submodule 触发更新
 - fork smart-toc 重新改一版优化（现在这般冗余代码多，待精简
 
-- 优化文章内目录 toc 插件
-- markdown 容错处理 （tag and author）
+- docs/docs-cn/blog/blog-cn/weekly/meetup 页面图片丢失
 - meetup single 页面 分类
 - weekly docs docs-cn list 页面 sidebar 默认展开第一项
-- 各个 single 页面 archive 模板 抽象
-- 修改 docs 左右 sidebar 样式
 
+- 修改 docs 左右 sidebar 样式
+- markdown 容错处理 （tag and author）
 
 
 Assign:
@@ -95,7 +98,7 @@ Assign:
 - meetup meetup_type meta 信息默认是现场（review） 可特殊配置实录（memoir）
 - about 页面加入视频
 - meetup 页面样式调整
-- docs 左右 sidebar 展示方式确定
+
 
 Pending:
 

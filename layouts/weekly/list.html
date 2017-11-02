@@ -11,11 +11,22 @@
       {{ partial "navs/date-tree-nav.html" (dict "data" $archives "title" "Weekly" "rss" "/weekly/index.xml") }}
 
         <div class="archive">
-            {{ range first 1 .Data.Pages.ByDate.Reverse }}
-              <div class="content">
-                {{.Content}}
-              </div>
-            {{ end }}
+          {{ range first 1 .Data.Pages.ByDate.Reverse }}
+            <div class="content markdown-body">
+              <ul class="blog-post-meta">
+                <li class="meta-item">
+                  {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
+                  {{ .Date.Format "Mon, Jan 2, 2006" }}
+                </li>
+                <!-- <li class="meta-item">
+                  {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
+                  {{ range .Params.author }} {{ . }}  {{ end }}
+                </li> -->
+              </ul>
+              <div class="blog-text">{{ .Content }}</div>
+            </div>
+            {{ partial "archives/operate-links.html" (dict "global" .) }}
+          {{ end }}
         </div>
     </div>
 </div>

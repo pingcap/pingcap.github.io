@@ -5,6 +5,7 @@ console.log('🦊 Hello! @PingCAP website')
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
+// import Stickyfill from './vendor/stickyfill.es6.js'
 import { run as toc_run, extract as toc_extract } from './vendor/toc'
 
 $(function() {
@@ -28,6 +29,10 @@ $(function() {
   })
 
   /* sidebar */
+  // // sticky sidebar
+  // const elements = $('.sticky-nav')
+  // Stickyfill.add(elements)
+
   $('.st_tree').SimpleTree({
     /* 可无视代码部分 */
     click: a => {

@@ -11,42 +11,16 @@
   <div class="container">
     <div class="nav nav-tree">
       <h1 class="title"> 文档 </h1>
-      <div class="st_tree">
+      <div class="st_tree nav-tree-toc" style="display: none;">
         {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.docs_cn_toc "global" .) }}
       </div>
     </div>
 
-      <div class="archive">
-          <div class="content">
-            {{ with .Site.GetPage "page" "docs-cn/overview.md" }}{{.Content}}{{ end }}
-          </div>
-
-          <div class="draw">
-            <img src="https://download.pingcap.com/images/docs-simple.png" width="100%">
-          </div>
-
-          <div class="operate">
-              <div class="item">
-                  <a href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fwww.pingcap.com%2f$url$">
-                    <i class="icon">{{ partial "svgs/icon-share.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i><span>分享</span>
-                  </a>
-              </div>
-              <div class="item" onclick="window.print();">
-                  <a href="javascript:;">
-                    <i class="icon">{{ partial "svgs/icon-print.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i><span>打印</span>
-                  </a>
-              </div>
-              <div class="item">
-                  <a href="http://download.pingcap.org/tidb-manual-cn.pdf?v={{ now.Unix }}" download="tidb-manual-cn.pdf">
-                    <i class="icon">{{ partial "svgs/icon-download.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i><span>下载</span>
-                  </a>
-              </div>
-              <div class="item">
-                  <a href="mailto:info@pingcap.com">
-                    <i class="icon icon-mail">{{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 22 "height" 17 ) }}</i><span>反馈</span>
-                  </a>
-              </div>
-          </div>
+    <div class="archive">
+      <div class="content">
+        {{ with .Site.GetPage "page" "docs-cn/overview.md" }}{{.Content}}{{ end }}
+      </div>
+      {{ partial "archives/operate-links.html" (dict "global" . "isCn" "true") }}
     </div>
   </div>
 </div>
