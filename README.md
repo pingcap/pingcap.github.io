@@ -71,6 +71,8 @@ Done:
 - 各个 single 页面 archive 模板 抽象 （待精简
 - weekly docs docs-cn list 页面 sidebar 默认展开第一项
 - docs/docs-cn/blog/blog-cn/weekly/meetup 页面图片丢失
+- 修改 docs 左右 sidebar 样式
+
 
 Pending:
 
@@ -88,7 +90,6 @@ Todo:
 
 
 - meetup single 页面 分类
-- 修改 docs 左右 sidebar 样式
 - about / meetup现场 页面加入视频
 
 Assign:
