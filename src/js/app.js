@@ -6,7 +6,7 @@ import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
 // import Stickyfill from './vendor/stickyfill.es6.js'
-import { run as toc_run, extract as toc_extract } from './vendor/toc'
+import { run as toc_run } from './vendor/toc'
 
 $(function() {
   /* toggle wechat qr code */
