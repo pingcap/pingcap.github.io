@@ -74,7 +74,11 @@ Done:
 - 修改 docs 左右 sidebar 样式
 - rss feed.xml 生成blog/blog-cn 两套
 - fork smart-toc 重新改一版优化（现在这般冗余代码多，待精简
-
+- Search 脚本自己 host
+- 第三方脚本加载方式优化，如 docsearch/userty 等
+- smarttoc 样式修复：默认位置靠右固定 底部空白需要去掉
+- meetup 页面样式调整
+-
 
 Pending:
 
@@ -86,11 +90,8 @@ Todo:
 
 - [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式，修改 blog-cn 等 submodule 触发更新（在相应项目的webhook中添加）
-
-- smarttoc 样式修复：默认位置靠右固定 底部空白需要去掉
-- 第三方脚本加载方式优化，如 docsearch/userty 等
 - 上线第一天 先注释调 search box
-- Search 脚本自己 host
+
 
 - meetup single 页面 分类
 - about / meetup现场 页面加入视频
@@ -101,7 +102,7 @@ Assign:
 - meetup markdown 格式整理和图片等
 - meetup meetup_type meta 信息默认是现场（review） 可特殊配置实录（memoir）
 - about 页面加入视频
-- meetup 页面样式调整
+
 
 
 Pending:
