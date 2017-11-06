@@ -72,6 +72,8 @@ Done:
 - weekly docs docs-cn list 页面 sidebar 默认展开第一项
 - docs/docs-cn/blog/blog-cn/weekly/meetup 页面图片丢失
 - 修改 docs 左右 sidebar 样式
+- rss feed.xml 生成blog/blog-cn 两套
+
 
 
 Pending:
@@ -80,13 +82,13 @@ Pending:
 - 分页，load more ajax 加载更多。不用变 url https://gohugo.io/templates/pagination/#readout
 
 Todo:
-- rss feed.xml 生成blog/blog-cn 两套
-- [生产环境]先决定部署方案，在决定ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
-- 部署时错误处理方式
-- 测试环境中修改 blog-cn 等 submodule 触发更新
+
+- [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
+- 部署时错误处理方式，修改 blog-cn 等 submodule 触发更新（在相应项目的webhook中添加）
 - fork smart-toc 重新改一版优化（现在这般冗余代码多，待精简
 - smarttoc 样式修复：默认位置靠右固定 底部空白需要去掉
 - gen-nav.js 生成 TOC 容错处理
+- 第三方脚本加载方式优化，如 docsearch/userty 等
 
 
 - meetup single 页面 分类
