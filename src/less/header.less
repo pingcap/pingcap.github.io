@@ -5,13 +5,15 @@
 @nav_height: 2rem;
 @search_box_height: 1.8rem;
 @nav_brand_height: 1.8rem;
-@header_height: calc(~'1.5rem + '@search_box_height);
+// @header_height: @nav_height;
+@header_height: calc(~'1rem + @{nav_height} + 3px');
 
 // width
 @search_box_width: 14rem;
 
 header {
   width: 100%;
+  min-height: @header_height;
   background-color: @bg_black_with_alpha90;
 
   &.fixed-top {
@@ -62,7 +64,7 @@ header {
             box-sizing: content-box;
             display: flex;
             align-items: center;
-            height: @search_box_height;
+            height: @nav_height;
             padding: 0.5rem 0.2rem;
             border-bottom: 3px solid fade(white, 0%);
           }
@@ -76,7 +78,7 @@ header {
       }
 
       .link-download {
-        margin: 0 0.6rem;
+        margin: 0 1rem 0 0.5rem;
         &:hover {
           svg,
           svg * {
@@ -91,7 +93,6 @@ header {
       align-items: center;
       position: relative;
       padding: @horizontal_padding 0;
-      // margin-left: 10px;
       min-width: calc(~'20px + @{horizontal_padding}');
       background: transparent;
       transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;

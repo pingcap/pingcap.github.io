@@ -14,6 +14,9 @@
 // padding
 @pre_padding: 9.5px;
 
+// animation_fadein_up
+@animation_fadein_up: fadeInUp 1s;
+
 /** documentation list **/
 .doc,
 .blog,
@@ -28,16 +31,18 @@
   }
 
   .list,
-  .archive {
+  .archive,
+  .nav,
+  #smarttoc_wrapper {
     margin-top: 2rem;
   }
 
   .list,
   .archive {
-    // flex-basis: 68%;
     flex: 3;
     margin-left: 2%;
-    overflow: auto;
+    margin-right: 2%;
+    overflow-x: auto;
 
     h1,
     h2,
@@ -126,8 +131,15 @@
     }
   }
 
-  .markdown-body h2 {
-    border-bottom: none;
+  .markdown-body {
+    h1,
+    h2 {
+      border-bottom: none;
+    }
+
+    h2 {
+      padding-top: @header_height;
+    }
   }
 
   .improve-doc {
@@ -147,6 +159,21 @@
     line-height: 1.7;
     font-size: 0.8rem;
   }
+
+  #smarttoc {
+    position: relative !important;
+    left: initial !important;
+    padding: 1.2rem 0;
+    border-color: transparent;
+    border-left: 1px solid rgba(158, 158, 158, 0.22);
+    transform: initial !important;
+    .customAnimation(@animation_fadein_up);
+  }
+}
+
+// smarttoc-extender global
+#smarttoc-extender {
+  display: none !important;
 }
 
 @media (max-width: 600px) {
