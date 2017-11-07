@@ -86,13 +86,23 @@ $(function() {
     return false
   })
 
-  // playvideo
+  // play video
+  // TODO: polish - use video.js
   const playVideo = () => {
-    $('#video ').attr('controls', 'controls')
+    $('#video')[0].play()
+    $('#video').attr('controls', 'controls')
   }
+
   $('#video-button').click(function(e) {
     $(this).toggleClass('f-hide')
     playVideo()
+    e.preventDefault()
+  })
+
+  $('#video').click(function(e) {
+    $('#video-button').toggleClass('f-hide')
+    const $this = $(this)[0]
+    $this.paused ? playVideo() : $this.pause()
     e.preventDefault()
   })
 
