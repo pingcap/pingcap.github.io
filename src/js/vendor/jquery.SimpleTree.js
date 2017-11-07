@@ -29,7 +29,9 @@ $(function() {
           var pathname = window.location.pathname,
             hash = window.location.hash
 
-          if (href === decodeURIComponent(pathname + hash)) {
+          if (
+            decodeURIComponent(href) === decodeURIComponent(pathname + hash)
+          ) {
             var $i = $(this),
               $p
             while ($i.is('li')) {

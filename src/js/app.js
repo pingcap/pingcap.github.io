@@ -2,6 +2,7 @@
 
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
+console.log('NODE_NVE', window.NODE_NVE)
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
