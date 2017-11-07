@@ -14,8 +14,8 @@
 // padding
 @pre_padding: 9.5px;
 
-// animation_fadein_up
-@animation_fadein_up: fadeInUp 1s;
+// animation_fadein
+@animation_fadein: fadeIn 0.6s;
 
 /** documentation list **/
 .doc,
@@ -35,6 +35,8 @@
   .nav,
   #smarttoc_wrapper {
     margin-top: 2rem;
+    padding: 1.5rem 0;
+    .customAnimation(@animation_fadein);
   }
 
   .list,
@@ -137,7 +139,8 @@
       border-bottom: none;
     }
 
-    h2 {
+    h2,
+    h3 {
       padding-top: @header_height;
     }
   }
@@ -163,11 +166,29 @@
   #smarttoc {
     position: relative !important;
     left: initial !important;
-    padding: 1.2rem 0;
+    padding: 0.5rem 0;
     border-color: transparent;
     border-left: 1px solid rgba(158, 158, 158, 0.22);
     transform: initial !important;
-    .customAnimation(@animation_fadein_up);
+    z-index: auto;
+
+    ul {
+      padding-left: 0.4rem;
+    }
+
+    a {
+      white-space: normal !important;
+    }
+
+    ul ul a {
+      padding-left: 1.2rem;
+    }
+
+    ul ul a:hover,
+    ul ul a:active,
+    ul ul li.active > a {
+      padding-left: calc(~'1.2rem - 2px');
+    }
   }
 }
 
