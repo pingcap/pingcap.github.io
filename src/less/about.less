@@ -14,6 +14,7 @@
 section[class^='about-'],
 section[class^='meetup-landingpage-'] {
   padding: @vertical_padding @horizontal_padding;
+  min-height: 20rem;
   text-align: center;
 
   .container {
@@ -85,19 +86,26 @@ section[class^='meetup-landingpage-'] {
   }
 }
 
-.about-intro-video {
-  padding: 4em 0;
-  background-color: @bg_gray_white;
+.intro-video {
+  position: relative;
+  width: 100%;
+  height: calc(~'100vh - @{header_height}');
+  padding: 0;
 
-  .video {
-    width: 100%;
-    min-height: 518px;
-    position: relative;
-    cursor: pointer;
-
-    &:hover {
-      background-color: fade(black, 10%);
-    }
+  #video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 924px;
+    height: 520px;
+    background: transparent
+      url('https://download.pingcap.com/images/poster.png') no-repeat 0 0;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    z-index: auto;
   }
 }
 
@@ -159,8 +167,6 @@ section[class^='meetup-landingpage-'] {
         max-width: 7.5rem;
       }
     }
-
-    // TODO: flex and <svg>
     .image-wrap {
       height: 2.4rem;
 
@@ -235,7 +241,25 @@ section[class^='meetup-landingpage-'] {
     }
   }
 }
+
+/* ---- particles.js container ---- */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  background-image: url('');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  z-index: -1;
+}
+
 @media (max-width: 600px) {
+  .intro-video #video {
+    width: 100%;
+    height: auto;
+  }
   .about-contact .info .row,
   .about-culture .details .row {
     flex-direction: column;

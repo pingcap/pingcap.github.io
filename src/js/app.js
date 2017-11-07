@@ -5,7 +5,6 @@ console.log('🦊 Hello! @PingCAP website')
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
-// import Stickyfill from './vendor/stickyfill.es6.js'
 import { run as toc_run } from './vendor/toc'
 
 $(function() {
@@ -30,10 +29,6 @@ $(function() {
 
   /* sidebar */
 
-  // // sticky sidebar
-  // const elements = $('.sticky-nav')
-  // Stickyfill.add(elements)
-
   $('.st_tree').SimpleTree({
     click: a => {
       if ($(a).attr('href') != '#') {
@@ -52,7 +47,6 @@ $(function() {
   }
 
   /* tags frontend filter */
-
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
     const $this = $(this)
     const isInlineTag = $this.hasClass('anchor-tag')
@@ -91,4 +85,10 @@ $(function() {
     e.preventDefault()
     return false
   })
+
+  /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+
+  // particlesJS('particles-js', particlesConfig, function() {
+  //   console.log('callback - particles.js config loaded')
+  // })
 })
