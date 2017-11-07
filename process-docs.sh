@@ -17,10 +17,8 @@ replace_dist_html_link() {
         replace_dist_html_link "$html" $repo_name
       fi
       if [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
-
         # using double quote to variable, using [\"] to
-        # sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
-       sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
+        sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
         # cat _tmp_out1 > $doc_tmp_path/$html
       fi
     done
