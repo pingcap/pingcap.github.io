@@ -90,7 +90,7 @@ $(function() {
   const playVideo = () => {
     $('#video ').attr('controls', 'controls')
   }
-  $('#video-button ').click(function(e) {
+  $('#video-button').click(function(e) {
     $(this).toggleClass('f-hide')
     playVideo()
     e.preventDefault()

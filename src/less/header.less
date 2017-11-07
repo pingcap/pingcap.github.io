@@ -5,7 +5,6 @@
 @nav_height: 2rem;
 @search_box_height: 1.8rem;
 @nav_brand_height: 1.8rem;
-// @header_height: @nav_height;
 @header_height: calc(~'1rem + @{nav_height} + 3px');
 
 // width
@@ -92,8 +91,9 @@ header {
       display: flex;
       align-items: center;
       position: relative;
-      padding: @horizontal_padding 0;
+      // padding: @horizontal_padding 0;
       min-width: calc(~'20px + @{horizontal_padding}');
+      height: @search_box_height;
       background: transparent;
       transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
 
@@ -101,10 +101,16 @@ header {
         background: none;
         border: none;
         cursor: pointer;
+        position: absolute;
+        padding: 0;
 
         &.btn-search {
-          position: absolute;
-          left: 2px;
+          left: 8px;
+          top: calc(~'(@{search_box_height} - 20px)/2');
+        }
+        &.btn-cancel {
+          right: 8px;
+          top: calc(~'(@{search_box_height} - 15px)/2');
         }
       }
 
@@ -116,13 +122,12 @@ header {
           display: flex;
           justify-content: space-between;
           width: @search_box_width;
-          height: @search_box_height;
+          height: inherit;
           padding: 0 0.5rem;
           border: 1px solid fade(white, 0%);
           .rounded-corners(2px);
           background-color: fade(white, 20%);
           color: @gray_white;
-          transition: opacity 0.5s ease-in;
         }
       }
 
@@ -132,7 +137,7 @@ header {
         height: 100%;
         padding: 0.5rem 0.5rem 0.5rem 1.5rem;
         border: none;
-        outline: 0;
+        outline: none;
         background-color: transparent;
         color: @gray_white;
         font-size: 0.8rem;
@@ -144,12 +149,18 @@ header {
 @media screen and (max-width: 600px) {
   header .container {
     flex-direction: column;
-    padding: @horizontal_padding 0;
+    padding-top: @horizontal_padding;
   }
 
   header .nav-wrapper {
     flex-flow: row wrap;
     justify-content: center;
+  }
+
+  header .nav-wrapper {
+    .navigations, .global-search {
+      margin-bottom: @horizontal_padding;
+    }
   }
 
   header .container .global-search .search-wrapper.show {
