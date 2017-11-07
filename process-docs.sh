@@ -19,7 +19,8 @@ replace_dist_html_link() {
       if [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
 
         # using double quote to variable, using [\"] to
-        sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
+        # sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
+       sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
         # cat _tmp_out1 > $doc_tmp_path/$html
       fi
     done
@@ -31,14 +32,13 @@ en_tmp_docs_path="dist/docs"
 replace_dist_html_link "$cn_tmp_docs_path" docs-cn
 replace_dist_html_link "$en_tmp_docs_path" docs
 
-
 cn_tmp_blogs_path="dist/blog-cn"
 en_tmp_blogs_path="dist/blog"
 replace_dist_html_link "$cn_tmp_blogs_path" blog-cn
-# replace_md_link_to_html "$en_tmp_blogs_path" en
-
+replace_dist_html_link "$en_tmp_blogs_path" blog
 
 replace_dist_html_link "dist/meetup" meetup
+replace_dist_html_link "dist/weekly" weekly
 
 
 parent_dir="`echo $(pwd) | sed 's;/scripts;;g'`/dist"
@@ -54,4 +54,6 @@ copy_images_from_media_to_src() {
 copy_images_from_media_to_src docs
 copy_images_from_media_to_src docs-cn
 copy_images_from_media_to_src blog-cn
+copy_images_from_media_to_src blog
+copy_images_from_media_to_src weekly
 copy_images_from_media_to_src meetup

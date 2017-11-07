@@ -93,7 +93,10 @@ Todo:
 - 上线第一天 先注释调 search box
 - 测试环境 hugo-bin lock
 
-- meetup single 页面 分类
+- 解决 docs 等所有页面 锚链接定位问题 （与 header fixed 有关）使用 js 滚动实现
+- sidebar hash url 匹配
+- weekly / blog 图片丢失
+- 搜索结果限定语言 English only, Chinese only
 
 
 Assign:
@@ -101,12 +104,12 @@ Assign:
 - meetup media 处理（把多余的小图删除等，sort by size）
 - meetup markdown 格式整理和图片等
 - meetup meetup_type meta 信息默认是现场（review） 可特殊配置实录（memoir）
-- about 页面加入视频
 
 
 
 Pending:
 
+- meetup single 页面 分类
 - 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
 - 替换第三方 js
 - 替换所有图片引用位置（作为 asset 和 html 房子同一个 CDN？）
