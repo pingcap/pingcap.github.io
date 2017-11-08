@@ -8,11 +8,13 @@
 {{ define "main" }}
 <div class="doc">
     <div class="container">
-        <div class="nav nav-tree sticky-sidebar">
+        <div class="sidebar">
+          <div class="sticky-sidebar">
             <h1 class="title"> Document </h1>
-            <div class="st_tree nav-tree-toc" style="display: none;">
+            <div class="st_tree nav-toc " style="display: none;">
               {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.docs_toc "global" .) }}
             </div>
+          </div>
         </div>
 
         <div class="archive">
@@ -20,11 +22,15 @@
             {{ with .Site.GetPage "page" "docs/overview.md" }}{{.Content}}{{ end }}
           </div>
           <div class="article-toc"></div>
-          {{ partial "improve-doc.html" (dict "repo" "docs" "global" .) }}
+
           {{ partial "archives/operate-links.html" (dict "global" .) }}
         </div>
 
-        <div id="smarttoc_wrapper" class="sticky-sidebar"></div>
+        <div class="sidebar-page sticky-sidebar">
+          {{ partial "improve-doc.html" (dict "repo" "docs" "global" .) }}
+          <p class="toc-title">What's on this Page</p>
+          <div id="smarttoc_wrapper"></div>
+        </div>
     </div>
 </div>
 {{ end }}

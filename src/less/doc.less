@@ -3,7 +3,7 @@
 @import './base.less';
 @import './header.less';
 @import './footer.less';
-@import './nav.less';
+@import './sidebar.less';
 
 // color
 @text_color: #3e3e3e;
@@ -23,8 +23,7 @@
 .weekly,
 .meetup,
 .recruit {
-  // padding: 0 @horizontal_padding;
-  min-height: calc(~'100vh - 257px');
+  min-height: calc(~'100vh - 200px');
 
   .container {
     padding: 0 @horizontal_padding;
@@ -33,17 +32,37 @@
 
   .list,
   .archive,
-  .nav,
-  #smarttoc_wrapper {
-    padding: 1.5rem 0;
+  .sidebar,
+  .sidebar-page {
     .customAnimation(@animation_fadein);
+  }
+
+  .sidebar,
+  .sidebar-page {
+    flex: 0 0 @sidebar_width;
+  }
+
+  .sidebar-page {
+    display: flex;
+    flex-direction: column;
+    .improve-doc,
+    .toc-title {
+      margin-bottom: 10px;
+      color: @title_color;
+      font-size: 14px;
+
+      svg {
+        margin-right: 5px;
+      }
+    }
   }
 
   .list,
   .archive {
-    flex: 3;
-    margin-left: 2%;
-    margin-right: 2%;
+    flex: 1;
+    padding: 20px;
+    min-height: 500px;
+    padding: calc(~'@{header_height} + 15px') 1.2rem 1.5rem 1rem;
     overflow-x: auto;
 
     h1,
@@ -140,23 +159,13 @@
       border-bottom: none;
     }
 
-    h1,
     h2,
     h3 {
-      margin-top: 0;
-      padding-top: 1.5rem;
-    }
-  }
-
-  .improve-doc {
-    display: flex;
-    justify-content: flex-end;
-    margin: 1.2rem 0;
-    color: @theme_blue;
-    font-size: 0.7rem;
-
-    svg {
-      margin-right: 0.5rem;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      line-height: 1.6;
+      padding: 0;
+      // padding-top: 25px;
     }
   }
 
@@ -170,6 +179,7 @@
     position: relative !important;
     left: initial !important;
     padding: 0.5rem 0;
+    border: none;
     border-color: transparent;
     border-left: 1px solid rgba(158, 158, 158, 0.22);
     transform: initial !important;
@@ -177,10 +187,12 @@
 
     ul {
       padding-left: 0.4rem;
+      padding-right: 0;
     }
 
     a {
       white-space: normal !important;
+      word-wrap: break-word;
     }
 
     ul ul a {
@@ -195,8 +207,23 @@
   }
 }
 
-.doc .archive {
-  padding-top: @header_height;
+.blog,
+.meetup,
+.weekly,
+.recruit {
+  .sidebar {
+      flex: 0 0 15rem;
+      max-width: 15rem;
+  }
+  .nav-tags {
+    padding: 20px 0;
+    position: relative;
+    top: @header_height;
+  }
+  .archive,
+  .list {
+    padding-left: 50px;
+  }
 }
 
 // smarttoc-extender global
@@ -219,7 +246,7 @@
     }
   }
 
-  .doc .nav-tree {
+  .doc .sidebar {
     padding-top: 140px;
   }
 }

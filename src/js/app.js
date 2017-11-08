@@ -22,12 +22,6 @@ $(function() {
     $('#js_qr_code').toggleClass('f-hide')
   })
 
-  /* scoll - fixed header */
-  $(document).scroll(() => {
-    $('#header').addClass('fixed-top')
-    if ($(document).scrollTop() == 0) $('#header').removeClass('fixed-top')
-  })
-
   /* sidebar */
   $('.st_tree').SimpleTree({
     click: a => {
@@ -107,41 +101,63 @@ $(function() {
   })
 
   /* anchor scroll */
-  function scrollSection() {
-    $('.st_tree a').click(function(e) {
-      //Toggle Class
-      $('.active').removeClass('active')
-      $(this)
-        .closest('li')
-        .addClass('active')
-      var theClass = $(this).attr('class')
-      $('.' + theClass)
-        .parent('li')
-        .addClass('active')
-      const targetID = $(this)
-        .attr('href')
-        .split('#')[1]
-      const targetEl = $('#' + decodeURIComponent(targetID))
-      const y = $('#header').height()
 
-      if (targetID)
-        // Animate
-        $('html, body')
-          .stop()
-          .animate(
+  // Select all links with hashes
+  $('a[href*="#"]')
+    // Remove links that don't actually link to anything
+    .not('[href="#"]')
+    .not('[href="#0"]')
+    .click(function(event) {
+      // On-page links
+      if (
+        location.pathname.replace(/^\//, '') ==
+          this.pathname.replace(/^\//, '') &&
+        location.hostname == this.hostname
+      ) {
+        // Figure out element to scroll to
+        var hash = decodeURIComponent(this.hash)
+        var target = $(hash)
+        target = target.length ? target : $('[name=' + hash.slice(1) + ']')
+        // Does a scroll target exist?
+        if (target.length) {
+          // Only prevent default if animation is actually gonna happen
+          event.preventDefault()
+          const y = $('#header').height()
+          $('html, body').animate(
             {
-              scrollTop: targetEl.offset().top - y,
+              scrollTop: target.offset().top - y,
             },
-            400
+            1000,
+            function() {
+              // // Callback after animation
+              // // Must change focus!
+              // var $target = $(target)
+              // $target.focus()
+              // if ($target.is(':focus')) {
+              //   // Checking if the target was focused
+              //   return false
+              // } else {
+              //   $target.attr('tabindex', '-1') // Adding tabindex for elements not focusable
+              //   $target.focus() // Set focus again
+              // }
+            }
           )
-      // return false
+        }
+      }
     })
-  }
-  scrollSection()
+
+  // Smooth scrolling when the document is loaded and ready
+  $(document).ready(function() {
+    const hash = decodeURIComponent(location.hash)
+    const y = $('#header').height()
+    if (hash)
+      $('html, body').animate(
+        {
+          scrollTop: $(hash).offset().top - y,
+        },
+        1000
+      )
+  })
 
   /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-
-  // particlesJS('particles-js', particlesConfig, function() {
-  //   console.log('callback - particles.js config loaded')
-  // })
 })
