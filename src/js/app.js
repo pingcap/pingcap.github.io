@@ -2,7 +2,7 @@
 
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
-console.log('NODE_ENV', process.env.NODE_ENV)
+
 import '../../dist/css/style.css'
 
 import './vendor/jquery.SimpleTree.js'
