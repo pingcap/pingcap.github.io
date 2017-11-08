@@ -66,6 +66,10 @@ export default {
     new webpack.ProvidePlugin({
       fetch: 'imports-loader?this=>global!exports?global.fetch!whatwg-fetch',
     }),
+    // define NODE_ENV
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
   ],
 
   externals: [/^vendor\/.+\.js$/],

@@ -1,9 +1,10 @@
-<header id="header" role="navigation">
+{{ $nav_active := $.Scratch.Get "nav_active" }}
+
+<header id="header" role="navigation" {{ if eq $nav_active "docs"}}style="position: fixed;"{{end}}>
   <div class="container">
     <a class="nav-brand" href="/"><img src="https://download.pingcap.com/images/pingcap_logo.png" alt="pingCAP"></a>
     <div class="nav-wrapper">
       <div class="navigations">
-        {{ $nav_active := $.Scratch.Get "nav_active" }}
         <ul>
           <li {{ if eq $nav_active "docs"}}class="sel"{{end}}><a href="/docs-cn">文档</a></li>
           <li {{ if eq $nav_active "blog"}}class="sel"{{end}}><a href="/blog-cn">博客</a></li>
