@@ -95,15 +95,17 @@ Pending:
 - 类似 hugo docs 的"改文档更新于<2017年10月25日>，commit id<>，author<>" 来 reference
 - 分页，load more ajax 加载更多。不用变 url https://gohugo.io/templates/pagination/#readout
 - gen-nav.js 生成 TOC 容错处理
+- 搜索结果限定语言 English only, Chinese only
+
 
 Todo:
 
-- [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 ？？ 是否 submodule 的 非 master 分支也会触发）
+- [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式，修改 blog-cn 等 submodule 触发更新（在相应项目的webhook中添加）
 - 上线第一天 先注释调 search box
+- 隐藏 Meetup 入口
 
 
-- 搜索结果限定语言 English only, Chinese only
 
 
 Assign:

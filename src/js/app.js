@@ -196,17 +196,14 @@ $(function() {
       $this.click(function(e) {
         var href = $(this).attr('href')
         var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
-          mdSuffixExp = /\.md$/
+          mdSuffixExp = /\.md/
 
         var absUrlRegex = new RegExp(absUrlExp),
           mdSuffixRegex = new RegExp(mdSuffixExp)
 
         if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
           // ref
-          // var newHref = href.match(/^(\.)*\//gi)
-          //   ? href.slice(0, -3)
-          //   : '../' + href.slice(0, -3)
-          var newHref = '../' + href.slice(0, -3)
+          var newHref = '../' + href.replace(/\.md/, '')
           $(this).attr('href', newHref)
         }
       })
