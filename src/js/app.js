@@ -171,5 +171,21 @@ $(function() {
       )
   })
 
+  /* open first item in docs/docs-cn/weekly list page */
+  const openFolder = li => {
+    if (li.hasClass('has-child')) {
+      li.addClass('open')
+      const $firstUL = li.find('ul')[0]
+      const $LI = $($firstUL)
+        .attr('style', 'display: block;')
+        .find('li:first-child')
+      return openFolder($LI)
+    }
+    li.addClass('active')
+    return false
+  }
+  const $firstLI = $('#list_page .st_tree > ul > li:first-child')
+  openFolder($firstLI)
+
   /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
 })
