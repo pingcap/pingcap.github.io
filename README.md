@@ -85,6 +85,11 @@ Done:
 - 设置 package.json 中 hugo-bin 版本号位指定版本
 - 测试环境 hugo-bin lock
 
+- 在 blog 和 weekly 的 default 页面的 template 中加入 js 脚本重定向到官网新地址
+  - 路径匹配问题: 原 blog 和 weekly 中文章 url 使用 /:year/:month/:day/:title 的方式 而官网目前采用 :repo/year-month-day-title
+  - 解决方式: 使用 {{ page.url | slugify }} 转化 '/' to '-'
+
+
 Pending:
 
 - 类似 hugo docs 的"改文档更新于<2017年10月25日>，commit id<>，author<>" 来 reference
@@ -99,7 +104,6 @@ Todo:
 
 
 - 搜索结果限定语言 English only, Chinese only
-- 在 blog 和 weekly 的 default 页面的 template 中加入 js 脚本重定向到官网新地址
 
 
 Assign:

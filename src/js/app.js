@@ -83,25 +83,37 @@ $(function() {
   /* play video */
   // TODO: polish - use video.js
   const playVideo = () => {
-    $('#video')[0].play()
     $('#video').attr('controls', 'controls')
+    // for safari
+    var promise = document.getElementById('video').play()
+    if (promise !== undefined) {
+      promise
+        .then(_ => {
+          // Autoplay started!
+        })
+        .catch(error => {
+          // Autoplay was prevented.
+          // Show a "Play" button so that user can start playback.
+        })
+    }
   }
-
-  $('#video-button').click(function(e) {
-    $(this).toggleClass('f-hide')
-    playVideo()
+  $('#video-control').click(function(e) {
+    const videoEl = document.getElementById('video')
+    if (videoEl.paused) {
+      $(this).css('opacity', '0')
+      playVideo()
+    } else {
+      $(this).css('opacity', '1')
+      videoEl.pause()
+    }
     e.preventDefault()
   })
-
-  $('#video').click(function(e) {
-    $('#video-button').toggleClass('f-hide')
-    const $this = $(this)[0]
-    $this.paused ? playVideo() : $this.pause()
+  $('#video').focus(function(e) {
+    $(this).attr('controls', 'controls')
     e.preventDefault()
   })
 
   /* anchor scroll */
-
   // Select all links with hashes
   $('a[href*="#"]')
     // Remove links that don't actually link to anything
