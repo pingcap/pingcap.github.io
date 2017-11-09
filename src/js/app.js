@@ -187,5 +187,28 @@ $(function() {
   const $firstLI = $('#list_page .st_tree > ul > li:first-child')
   openFolder($firstLI)
 
-  /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+  /* markdown-body tag a ref */
+  $('.markdown-body')
+    .find('a')
+    .each(function() {
+      var $this = $(this)
+
+      $this.click(function(e) {
+        var href = $(this).attr('href')
+        var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
+          mdSuffixExp = /\.md$/
+
+        var absUrlRegex = new RegExp(absUrlExp),
+          mdSuffixRegex = new RegExp(mdSuffixExp)
+
+        if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
+          // ref
+          // var newHref = href.match(/^(\.)*\//gi)
+          //   ? href.slice(0, -3)
+          //   : '../' + href.slice(0, -3)
+          var newHref = '../' + href.slice(0, -3)
+          $(this).attr('href', newHref)
+        }
+      })
+    })
 })
