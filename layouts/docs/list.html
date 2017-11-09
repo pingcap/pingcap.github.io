@@ -27,7 +27,9 @@
         </div>
 
         <div class="sidebar-page sticky-sidebar">
-          {{ partial "improve-doc.html" (dict "repo" "docs" "global" .) }}
+          {{ with .Site.GetPage "page" "docs/overview.md" }}
+            {{ partial "improve-doc.html" (dict "repo" "docs" "global" .) }}
+          {{ end }}
           <p class="toc-title">What's on this Page</p>
           <div id="smarttoc_wrapper"></div>
         </div>
