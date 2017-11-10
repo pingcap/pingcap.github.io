@@ -42,7 +42,5 @@ jobs:
       - run: npm run build
 
       - deploy:
-        name: "Publish Website"
-        command: |
-          ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
-          rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" ;
+          name: "Publish Website"
+          command: ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}";
