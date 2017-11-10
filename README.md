@@ -102,7 +102,7 @@ Todo:
 
 - [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 是否 submodule 的 非 master 分支也会触发）
 - 部署时错误处理方式，修改 blog-cn 等 submodule 触发更新（在相应项目的webhook中添加）
-- 上线第一天 先注释调 search box
+- 上线第一天 先注释调 search box (header.html header-cn.html baseof.tpl.html)
 - 隐藏 Meetup 入口
 
 
