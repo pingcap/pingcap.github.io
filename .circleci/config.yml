@@ -39,12 +39,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - add_ssh_keys:
-          fingerprints:
-            - "b8:b5:39:59:ff:7e:87:99:74:1d:6a:34:5a:3e:9c:53"
-
-      # run tests!
       - run: npm run build
-      - run: chmod +x ./publish-release.sh
-      - run: sh ./publish-release.sh
 
+      - deploy:
+        name: "Publish Website"
+        command: |
+          ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
+          rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" ;
