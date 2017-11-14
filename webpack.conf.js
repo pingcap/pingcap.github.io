@@ -14,7 +14,6 @@ export default {
     publicPath: '/js/',
     filename: '[name].js',
   },
-
   module: {
     rules: [
       {
@@ -40,9 +39,9 @@ export default {
 
   plugins: [
     new HtmlWebpackPlugin({
-      hash: isDev ? false : true,
+      // hash: isDev ? false : true,
       inject: true,
-      /*minify: {
+      minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeRedundantAttributes: true,
@@ -53,15 +52,18 @@ export default {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true,
-      },*/
+      },
       filename: path.join(__dirname, 'layouts', '_default', 'baseof.html'),
       template: path.join(__dirname, 'layouts', '_default', 'baseof.tpl.html'),
     }),
     new ExtractTextPlugin({
-      filename: isDev
-        ? '../css/style.css'
-        : `../css/[name].[contenthash:8].css`,
+      filename: '../css/style.css',
     }),
+    // new ExtractTextPlugin({
+    //   filename: isDev
+    //     ? '../css/style.css'
+    //     : `../css/[name].[contenthash:8].css`,
+    // }),
     // new ExtractTextPlugin('style.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
     new webpack.ProvidePlugin({
       fetch: 'imports-loader?this=>global!exports?global.fetch!whatwg-fetch',
@@ -71,7 +73,6 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
   ],
-
   externals: [/^vendor\/.+\.js$/],
   resolve: {
     extensions: ['.js', '.jsx'],
