@@ -40,7 +40,11 @@
   <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
   {{ block "footjs" . }}{{ end }}
   <!-- TODO: hide search entry -->
-  <!-- {{ partial "search/algolia-js" . }} -->
+  {{ if $data_i18_cn }}
+    {{ partial "search/algolia-cn-js" . }}
+  {{ else }}
+    {{ partial "search/algolia-js" . }}
+  {{ end }}
 </body>
 
 </html>

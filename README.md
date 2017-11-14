@@ -84,10 +84,13 @@ Done:
 - weekly / blog 图片丢失
 - 设置 package.json 中 hugo-bin 版本号位指定版本
 - 测试环境 hugo-bin lock
-
+- 搜索结果限定语言 English only, Chinese all
 - 在 blog 和 weekly 的 default 页面的 template 中加入 js 脚本重定向到官网新地址
   - 路径匹配问题: 原 blog 和 weekly 中文章 url 使用 /:year/:month/:day/:title 的方式 而官网目前采用 :repo/year-month-day-title
   - 解决方式: 使用 {{ page.url | slugify }} 转化 '/' to '-'
+- 上线第一天 先注释调 search box (header.html header-cn.html baseof.tpl.html)
+- [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 是否 submodule 的 非 master 分支也会触发）
+- 隐藏 Meetup 入口
 
 
 Pending:
@@ -95,15 +98,13 @@ Pending:
 - 类似 hugo docs 的"改文档更新于<2017年10月25日>，commit id<>，author<>" 来 reference
 - 分页，load more ajax 加载更多。不用变 url https://gohugo.io/templates/pagination/#readout
 - gen-nav.js 生成 TOC 容错处理
-- 搜索结果限定语言 English only, Chinese only
+
 
 
 Todo:
 
-- [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 是否 submodule 的 非 master 分支也会触发）
-- 部署时错误处理方式，修改 blog-cn 等 submodule 触发更新（在相应项目的webhook中添加）
-- 上线第一天 先注释调 search box (header.html header-cn.html baseof.tpl.html)
-- 隐藏 Meetup 入口
+- 自动化部署：配置 blog-cn docs-cn meetup 等 repo webhook 触发更新（在各个 submodule 的 repo 中配置 webhook）
+- blog weekly ghpages redirect
 
 
 

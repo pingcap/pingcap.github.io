@@ -12,7 +12,11 @@
         </a>
     </div>
     <div class="item">
+      {{ if .isCn }}
         <a href="http://download.pingcap.org/tidb-manual-cn.pdf?v={{ now.Unix }}" download="tidb-manual-cn.pdf">
+      {{ else }}
+      <a href="http://download.pingcap.org/tidb-manual-en.pdf?v={{ now.Unix }}" download="tidb-manual-en.pdf">
+      {{ end }}
           <i class="icon">{{ partial "svgs/icon-download.svg" (dict "fill" "#040000" "width" 22 "height" 22 ) }}</i>
           <span>{{ if .isCn }}下载{{ else }}Download{{ end }}</span>
         </a>
