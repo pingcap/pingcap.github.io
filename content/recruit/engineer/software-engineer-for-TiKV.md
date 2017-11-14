@@ -19,6 +19,3 @@ tags: ['engineer']
 2. TiKV distributed testing, creating corner cases to ensure the system stability and reliability
 3. Performance optimization of TiKV, including but not limited to the optimization of applications and Linux system
 4. Placement Driver development and optimization of cluster management
-
-
-![recruit](images/developer.png)

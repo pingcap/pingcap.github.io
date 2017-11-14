@@ -17,108 +17,6 @@
     "link": "/docs-cn/QUICKSTART/"
   },
   {
-    "name": "TiDB 运维文档",
-    "children": [
-      {
-        "name": "软硬件环境需求",
-        "link": "/docs-cn/op-guide/recommendation/"
-      },
-      {
-        "name": "部署集群 ",
-        "children": [
-          {
-            "name": "Ansible 部署方案（强烈推荐）",
-            "link": "/docs-cn/op-guide/ansible-deployment/"
-          },
-          {
-            "name": "离线 Ansible 部署方案（强烈推荐）",
-            "link": "/docs-cn/op-guide/offline-ansible-deployment/"
-          },
-          {
-            "name": "Docker 部署方案",
-            "link": "/docs-cn/op-guide/docker-deployment/"
-          },
-          {
-            "name": "跨机房部署方案",
-            "link": "/docs-cn/op-guide/location-awareness/"
-          }
-        ]
-      },
-      {
-        "name": "配置集群",
-        "link": "/docs-cn/op-guide/configuration/"
-      },
-      {
-        "name": "监控集群",
-        "children": [
-          {
-            "name": "整体监控框架概述",
-            "link": "/docs-cn/op-guide/monitor-overview/"
-          },
-          {
-            "name": "重要监控指标详解",
-            "link": "/docs-cn/op-guide/dashboard-overview-info/"
-          },
-          {
-            "name": "组件状态 API & 监控",
-            "link": "/docs-cn/op-guide/monitor/"
-          }
-        ]
-      },
-      {
-        "name": "扩容缩容",
-        "children": [
-          {
-            "name": "使用 Ansible 扩容缩容",
-            "link": "/docs-cn/QUICKSTART/#tidb-集群扩容缩容方案"
-          },
-          {
-            "name": "集群扩容缩容方案",
-            "link": "/docs-cn/op-guide/horizontal-scale/"
-          }
-        ]
-      },
-      {
-        "name": "升级",
-        "link": "/docs-cn/op-guide/ansible-deployment/#滚动升级"
-      },
-      {
-        "name": "性能调优",
-        "link": "/docs-cn/op-guide/tune-tikv/"
-      },
-      {
-        "name": "备份与迁移",
-        "children": [
-          {
-            "name": "备份与恢复",
-            "link": "/docs-cn/op-guide/backup-restore/"
-          },
-          {
-            "name": "数据迁移",
-            "children": [
-              {
-                "name": "数据迁移概述",
-                "link": "/docs-cn/op-guide/migration-overview/"
-              },
-              {
-                "name": "全量导入",
-                "link": "/docs-cn/op-guide/migration/#使用-mydumperloader-全量导入数据"
-              },
-              {
-                "name": "增量导入",
-                "link": "/docs-cn/op-guide/migration/#使用-syncer-增量导入数据"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Binary 部署方案",
-        "link": "/docs-cn/op-guide/binary-deployment/"
-      }
-    ]
-  },
-  {
     "name": "TiDB 用户文档",
     "children": [
       {
@@ -245,6 +143,14 @@
             "link": "/docs-cn/sql/datatype/#json-类型"
           },
           {
+            "name": "枚举类型",
+            "link": "/docs-cn/sql/datatype/#枚举类型"
+          },
+          {
+            "name": "集合类型",
+            "link": "/docs-cn/sql/datatype/#集合类型"
+          },
+          {
             "name": "数据类型默认值",
             "link": "/docs-cn/sql/datatype/#数据类型的默认值"
           }
@@ -363,28 +269,134 @@
       {
         "name": "与 MySQL 兼容性对比",
         "link": "/docs-cn/sql/mysql-compatibility/"
-      }
-    ]
-  },
-  {
-    "name": "高级功能",
-    "children": [
-      {
-        "name": "历史数据回溯",
-        "link": "/docs-cn/op-guide/history-read/"
-      }
-    ]
-  },
-  {
-    "name": "工具",
-    "children": [
-      {
-        "name": "Loader 使用文档",
-        "link": "/docs-cn/tools/loader/"
       },
+      {
+        "name": "高级功能",
+        "children": [
+          {
+            "name": "历史数据回溯",
+            "link": "/docs-cn/op-guide/history-read/"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TiDB 运维文档",
+    "children": [
+      {
+        "name": "软硬件环境需求",
+        "link": "/docs-cn/op-guide/recommendation/"
+      },
+      {
+        "name": "部署集群 ",
+        "children": [
+          {
+            "name": "Ansible 部署方案（强烈推荐）",
+            "link": "/docs-cn/op-guide/ansible-deployment/"
+          },
+          {
+            "name": "离线 Ansible 部署方案（强烈推荐）",
+            "link": "/docs-cn/op-guide/offline-ansible-deployment/"
+          },
+          {
+            "name": "Docker 部署方案",
+            "link": "/docs-cn/op-guide/docker-deployment/"
+          },
+          {
+            "name": "跨机房部署方案",
+            "link": "/docs-cn/op-guide/location-awareness/"
+          }
+        ]
+      },
+      {
+        "name": "配置集群",
+        "link": "/docs-cn/op-guide/configuration/"
+      },
+      {
+        "name": "监控集群",
+        "children": [
+          {
+            "name": "整体监控框架概述",
+            "link": "/docs-cn/op-guide/monitor-overview/"
+          },
+          {
+            "name": "重要监控指标详解",
+            "link": "/docs-cn/op-guide/dashboard-overview-info/"
+          },
+          {
+            "name": "组件状态 API & 监控",
+            "link": "/docs-cn/op-guide/monitor/"
+          }
+        ]
+      },
+      {
+        "name": "扩容缩容",
+        "children": [
+          {
+            "name": "使用 Ansible 扩容缩容",
+            "link": "/docs-cn/QUICKSTART/#tidb-集群扩容缩容方案"
+          },
+          {
+            "name": "集群扩容缩容方案",
+            "link": "/docs-cn/op-guide/horizontal-scale/"
+          }
+        ]
+      },
+      {
+        "name": "升级",
+        "link": "/docs-cn/op-guide/ansible-deployment/#滚动升级"
+      },
+      {
+        "name": "性能调优",
+        "link": "/docs-cn/op-guide/tune-tikv/"
+      },
+      {
+        "name": "备份与迁移",
+        "children": [
+          {
+            "name": "备份与恢复",
+            "link": "/docs-cn/op-guide/backup-restore/"
+          },
+          {
+            "name": "数据迁移",
+            "children": [
+              {
+                "name": "数据迁移概述",
+                "link": "/docs-cn/op-guide/migration-overview/"
+              },
+              {
+                "name": "全量导入",
+                "link": "/docs-cn/op-guide/migration/#使用-mydumperloader-全量导入数据"
+              },
+              {
+                "name": "增量导入",
+                "link": "/docs-cn/op-guide/migration/#使用-syncer-增量导入数据"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Binary 部署方案",
+        "link": "/docs-cn/op-guide/binary-deployment/"
+      },
+      {
+        "name": "故障诊断",
+        "link": "/docs-cn/trouble-shooting/"
+      }
+    ]
+  },
+  {
+    "name": "TiDB 周边工具",
+    "children": [
       {
         "name": "Syncer 使用文档",
         "link": "/docs-cn/tools/syncer/"
+      },
+      {
+        "name": "Loader 使用文档",
+        "link": "/docs-cn/tools/loader/"
       },
       {
         "name": "TiDB-binlog 使用文档",
@@ -414,10 +426,6 @@
     "link": "/docs-cn/FAQ/"
   },
   {
-    "name": "故障诊断",
-    "link": "/docs-cn/trouble-shooting/"
-  },
-  {
     "name": "最佳实践",
     "link": "https://pingcap.com/blog-cn/tidb-best-practice/"
   },
@@ -426,11 +434,19 @@
     "link": "/docs-cn/releases/README/"
   },
   {
+    "name": "TiDB 路线图",
+    "link": "https://github.com/pingcap/docs-cn/blob/master/ROADMAP.md"
+  },
+  {
     "name": "更多资源",
     "children": [
       {
+        "name": "常用工具",
+        "link": "https://github.com/pingcap/tidb-tools"
+      },
+      {
         "name": "PingCAP 团队技术博客",
-        "link": "https://pingcap.com/bloglist-zh.html"
+        "link": "https://pingcap.com/blog-cn/"
       },
       {
         "name": "知乎专栏",
@@ -438,7 +454,7 @@
       },
       {
         "name": "Weekly",
-        "link": "http://weekly.pingcap.com/"
+        "link": "https://pingcap.com/weekly/"
       },
       {
         "name": "英文文档",
