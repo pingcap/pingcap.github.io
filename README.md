@@ -2,7 +2,7 @@
 
 - npm install
 - npm start
-- git submodule foreach --recursive git pull origin master # 拉取所有以submodule形式存存在
+- git submodule foreach --recursive git pull origin master    # 拉取所有以submodule形式存存在
 
 ## Usage
 
@@ -91,7 +91,7 @@ Done:
 - 上线第一天 先注释调 search box (header.html header-cn.html baseof.tpl.html)
 - [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 是否 submodule 的 非 master 分支也会触发）
 - 隐藏 Meetup 入口
-
+- 自动化部署：配置 blog-cn docs-cn meetup 等 repo webhook 触发更新（在各个 submodule 的 repo 中配置 webhook）
 
 Pending:
 
@@ -103,9 +103,8 @@ Pending:
 
 Todo:
 
-- 自动化部署：配置 blog-cn docs-cn meetup 等 repo webhook 触发更新（在各个 submodule 的 repo 中配置 webhook）
 - blog weekly ghpages redirect
-
+- 等网站稳定后（预计一周后）将每个 submodule 的 hugo-refactor 分支合并到 master
 
 
 
@@ -122,12 +121,12 @@ Pending:
 - meetup single 页面 分类
 - 小图片小图标处理等 (放在assets目录，引用在less或者html中？)
 - 替换第三方 js
-- 替换所有图片引用位置（作为 asset 和 html 房子同一个 CDN？）
+- 替换所有图片引用位置（作为 asset 和 html 放在同一个 CDN？）
 - markdown 容错处理 （tag and author）
 
 Tip:
 
-- 新建文件无法被watch和执行hugo等
+- 新建文件无法被 watch 和执行 hugo 等
 
 全文搜索配置 <https://github.com/algolia/docsearch-configs/blob/master/configs/pingcap.json>
 
