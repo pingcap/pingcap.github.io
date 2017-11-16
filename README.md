@@ -92,6 +92,7 @@ Done:
 - [生产环境] 先决定部署方案，在决定 ci 流程确定（submodule 等，触发等 是否 submodule 的 非 master 分支也会触发）
 - 隐藏 Meetup 入口
 - 自动化部署：配置 blog-cn docs-cn meetup 等 repo webhook 触发更新（在各个 submodule 的 repo 中配置 webhook）
+- blog weekly ghpages redirect
 
 Pending:
 
@@ -103,8 +104,7 @@ Pending:
 
 Todo:
 
-- blog weekly ghpages redirect
-- 等网站稳定后（预计一周后）将每个 submodule 的 hugo-refactor 分支合并到 master
+- 等网站稳定后（预计一周后）将每个 submodule 的 hugo-refactor 分支合并到 master 并保留 hugo-refactor 分支作为预览使用，同时修改当前 repo 的 master 分支中 .gitmodules 文件中各个 submodule 的指定 branch 为 master
 
 
 
