@@ -23,6 +23,3 @@ tags: ['engineer']
 1. TiDB kernel development, including but not limited to SQL statement parsing and execution, Query optimization, distributed computing framework.
 2. Design, development and testing of TiDB to ensure the stability and reliability of the service.
 3. Performance optimization of TiDB
-
-
-![recruit](images/developer.png)

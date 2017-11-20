@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+
 export default {
   entry: {
     app: [path.join(__dirname, 'src', 'js', 'app')],
@@ -14,7 +16,6 @@ export default {
     publicPath: '/js/',
     filename: '[name].js',
   },
-
   module: {
     rules: [
       {
@@ -37,41 +38,109 @@ export default {
       },
     ],
   },
-
-  plugins: [
-    new HtmlWebpackPlugin({
-      hash: isDev ? false : true,
-      inject: true,
-      /*minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },*/
-      filename: path.join(__dirname, 'layouts', '_default', 'baseof.html'),
-      template: path.join(__dirname, 'layouts', '_default', 'baseof.tpl.html'),
-    }),
-    new ExtractTextPlugin({
-      filename: isDev
-        ? '../css/style.css'
-        : `../css/[name].[contenthash:8].css`,
-    }),
-    // new ExtractTextPlugin('style.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
-    new webpack.ProvidePlugin({
-      fetch: 'imports-loader?this=>global!exports?global.fetch!whatwg-fetch',
-    }),
-    // define NODE_ENV
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-    }),
-  ],
-
+  plugins:
+    process.env.NODE_ENV === 'development'
+      ? [
+          new HtmlWebpackPlugin({
+            // hash: isDev ? false : true,
+            inject: true,
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              useShortDoctype: true,
+              removeEmptyAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              keepClosingSlash: true,
+              minifyJS: true,
+              minifyCSS: true,
+              minifyURLs: true,
+            },
+            filename: path.join(
+              __dirname,
+              'layouts',
+              '_default',
+              'baseof.html'
+            ),
+            template: path.join(
+              __dirname,
+              'layouts',
+              '_default',
+              'baseof.tpl.html'
+            ),
+          }),
+          new ExtractTextPlugin({
+            filename: '../css/style.css',
+          }),
+          new webpack.ProvidePlugin({
+            fetch:
+              'imports-loader?this=>global!exports?global.fetch!whatwg-fetch',
+          }),
+        ]
+      : [
+          new HtmlWebpackPlugin({
+            // hash: isDev ? false : true,
+            inject: true,
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              useShortDoctype: true,
+              removeEmptyAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              keepClosingSlash: true,
+              minifyJS: true,
+              minifyCSS: true,
+              minifyURLs: true,
+            },
+            filename: path.join(
+              __dirname,
+              'layouts',
+              '_default',
+              'baseof.html'
+            ),
+            template: path.join(
+              __dirname,
+              'layouts',
+              '_default',
+              'baseof.tpl.html'
+            ),
+          }),
+          new ExtractTextPlugin({
+            filename: '../css/style.css',
+          }),
+          new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\/css\/style\.css$/g,
+            cssProcessorOptions: {
+              safe: true,
+            },
+          }),
+          // new ExtractTextPlugin({
+          //   filename: isDev
+          //     ? '../css/style.css'
+          //     : `../css/[name].[contenthash:8].css`,
+          // }),
+          new webpack.ProvidePlugin({
+            fetch:
+              'imports-loader?this=>global!exports?global.fetch!whatwg-fetch',
+          }),
+          // This helps ensure the builds are consistent if source hasn't changed:
+          new webpack.optimize.OccurrenceOrderPlugin(),
+          // Minify the code.
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              screw_ie8: true, // React doesn't support IE8
+              warnings: false,
+            },
+            mangle: {
+              screw_ie8: true,
+            },
+            output: {
+              comments: false,
+              screw_ie8: true,
+            },
+          }),
+        ],
   externals: [/^vendor\/.+\.js$/],
   resolve: {
     extensions: ['.js', '.jsx'],

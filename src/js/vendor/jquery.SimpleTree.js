@@ -30,7 +30,8 @@ $(function() {
             hash = window.location.hash
 
           if (
-            decodeURIComponent(href) === decodeURIComponent(pathname + hash)
+            decodeURIComponent(href.toLocaleLowerCase()) ===
+            decodeURIComponent((pathname + hash).toLocaleLowerCase())
           ) {
             var $i = $(this),
               $p

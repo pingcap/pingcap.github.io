@@ -7,6 +7,41 @@ docsearch({
   apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
   indexName: 'pingcap',
   inputSelector: '#search-input',
-  debug: false // Set debug to true if you want to inspect the dropdown
+  algoliaOptions: {
+    hitsPerPage: 5
+  },
+  debug: true, // Set debug to true if you want to inspect the dropdown
+  transformData: function (hits) {
+    // filter hits
+
+    // isChinese validation
+    function isChinese (s) {
+      //4E00 - 9FA5
+      var patrn=/[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi
+      if(!patrn.exec(s)) {  
+        return false;  
+      } else {  
+        return true;  
+      }
+    }
+    
+    // check hierarchy of suggestions isChinese
+    function hasChHierarchy (hierarchy) {
+      for (var key in hierarchy) {
+        if (hierarchy.hasOwnProperty(key)) {
+          var val = hierarchy[key]
+          if(isChinese(val))
+            return true
+        }
+      }
+      return false
+    }
+    
+    var en_hits = hits.filter(function(hit){
+      var hierarchy = hit.hierarchy
+      return !isChinese(hit.anchor) && !hasChHierarchy(hierarchy) && !isChinese(hit.content)
+    })
+    return en_hits;
+  }
 })
 </script>

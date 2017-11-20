@@ -15,7 +15,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{- block "title" . }}{{- or .Title "Home" -}}{{ end -}} | PingCAP</title>
     {{ partial "head/meta" . }}
-    {{ partial "head/ga" . }}
     {{ block "headcss" . }}{{ end }}
 </head>
 
@@ -40,7 +39,13 @@
   <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
   {{ block "footjs" . }}{{ end }}
   <!-- TODO: hide search entry -->
-  <!-- {{ partial "search/algolia-js" . }} -->
+  {{ if $data_i18_cn }}
+    {{ partial "search/algolia-cn-js" . }}
+  {{ else }}
+    {{ partial "search/algolia-js" . }}
+  {{ end }}
+
+  {{ partial "head/ga" . }}
 </body>
 
 </html>
