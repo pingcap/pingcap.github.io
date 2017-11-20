@@ -7,7 +7,7 @@
     "hugo": "gulp hugo",
     "gen-contents": "bash ./gen-nav.sh",
     "clean-build": "rm -rf dist;",
-    "build": "git submodule update --init --recursive --remote;bash ./gen-nav.sh;export NODE_ENV=prod;gulp css;gulp build &> gulp-build.log;if cat gulp-build.log|grep 'md'; then echo 'Encouter Error';exit -1; fi;bash ./process-docs.sh",
+    "build": "git submodule update --init --recursive --remote;bash ./gen-nav.sh;export NODE_ENV=prod;gulp css;gulp build &> gulp-build.log;if cat gulp-build.log|grep 'Error'; then echo 'Encouter Error';exit -1; else bash ./process-docs.sh; fi;",
     "build-preview": "gulp build-preview",
     "start": "export NODE_ENV=development;gulp server",
     "lint": "eslint src"
