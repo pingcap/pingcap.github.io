@@ -11,4 +11,4 @@ git remote add origin "$remote"
 git checkout -b gh-pages
 git add .
 git commit -m "Update Release gh-pages"
-git push -f origin gh-pages
+ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa_6aa6ace89eee7def1892940bb02c3482;git push -f origin gh-pages'

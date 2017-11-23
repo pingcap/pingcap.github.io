@@ -53,9 +53,13 @@ jobs:
               then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
             fi
 
+      - add_ssh_keys:
+          fingerprints:
+            - "6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82"
+
       - deploy:
           name: "Publish github.io"
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ];
-              then ssh-keyscan "sivagao-ssh" >> ~/.ssh/known_hosts 2>/dev/null;sh ./push-gh-pages.sh;
+              then chmod +x ./push-gh-pages.sh;sh ./push-gh-pages.sh;
             fi
