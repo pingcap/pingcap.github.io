@@ -18,7 +18,7 @@ jobs:
 
     branches:
       only:
-        - master
+        - src
         # - preview
 
     steps:
@@ -49,7 +49,7 @@ jobs:
       - deploy:
           name: "Publish Website"
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ];
+            if [ "${CIRCLE_BRANCH}" == "src" ];
               then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
             fi
 
@@ -60,6 +60,6 @@ jobs:
       - deploy:
           name: "Publish github.io"
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ];
+            if [ "${CIRCLE_BRANCH}" == "src" ];
               then chmod +x ./push-gh-pages.sh;sh ./push-gh-pages.sh;
             fi
