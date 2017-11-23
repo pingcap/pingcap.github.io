@@ -19,6 +19,7 @@ jobs:
     branches:
       only:
         - master
+        # - preview
 
     steps:
       - checkout
@@ -41,6 +42,20 @@ jobs:
 
       - run: npm run build
 
+      # notice netlify to deploy preview branch
+      # when be triggered by webhook from submodule
+      - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5a0d79c4a6188f210c6d455e
+
       - deploy:
           name: "Publish Website"
-          command: ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
+            fi
+
+      - deploy:
+          name: "Publish github.io"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              then ssh-keyscan "sivagao-ssh" >> ~/.ssh/known_hosts 2>/dev/null;sh ./push-gh-pages.sh;
+            fi
