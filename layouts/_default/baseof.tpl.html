@@ -14,6 +14,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{- block "title" . }}{{- or .Title "Home" -}}{{ end -}} | PingCAP</title>
+    <script type="text/javascript">
+    if (location.pathname === "/") {
+      if (location.hostname === "pingcap.github.io") {
+        location.href = "/en/";
+      }
+    }
+    </script>
     {{ partial "head/meta" . }}
     {{ block "headcss" . }}{{ end }}
 </head>
@@ -36,7 +43,7 @@
     {{ partial "footer" . }}
   {{ end }}
 
-  <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+  <script src="/lib/jquery.min.js"></script>
   {{ block "footjs" . }}{{ end }}
   <!-- TODO: hide search entry -->
   {{ if $data_i18_cn }}
