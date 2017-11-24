@@ -3,13 +3,17 @@
 ## 目录
 
 + 技术类职位
-  - [Database Kernel Engineer](engineer/database-kernel-engineer.md)
-  - [Database Storage Engineer](engineer/database-storage-engineer.md)
-  - [SRE and Tools Engineer](engineer/SRE-Tools-Engineer.md)
-  - [OPS Engineer](engineer/OPS-engineer.md)
-  - [DBA](engineer/DBA.md)
+  - [TiDB Engineer](engineer/database-kernel-engineer.md)
+  - [TiKV Engineer](engineer/database-storage-engineer.md)
+  - [Bizdev & Tools Engineer](engineer/bizdev-tools-engineer.md)
+  - [Bizdev & Cloud Engineer](engineer/bizdev-cloud-engineer.md)
+  - [Bizdev & SRE Engineer](engineer/bizdev-sre-engineer.md)
+  - [Bizdev & FE Engineer](engineer/bizdev-fe-engineer.md)
+  - [OPS Engineer](engineer/ops-engineer.md)
+  - [DBA](engineer/dba.md)
 + 市场类职位
-  - [PR](market/pr-manager.md)
+  - [PR Manager](market/pr-manager.md)
+  - [市场运营](market/operation-manager.md)
 + 销售 | 售前 | 售后类职位
   - [渠道合作总监](sales/channel-co-director.md)
   - [高级业务拓展（销售）经理](sales/senior-business-manager.md)
