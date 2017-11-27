@@ -1,11 +1,11 @@
 ---
-title: Database Storage Engineer
+title: TiKV Engineer
 tags: ['engineer']
 ---
 
-# Database Storage Engineer
+# TiKV Engineer
 
-#### 职位描述
+#### 岗位职责
 
 1. 负责分布式数据库 TiKV 相关的设计，开发
 
@@ -34,6 +34,6 @@ tags: ['engineer']
 20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
 
 
-#### 工作地址
+#### 工作地点
 
-北京、上海、广州
+北京，上海，广州，杭州，特别优秀可 remote

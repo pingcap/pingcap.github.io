@@ -5,7 +5,7 @@ tags: ['engineer']
 
 # Bizdev & Cloud Engineer
 
-#### 职位描述
+#### 岗位职责
 
 1. TiDB 基于 Kubernetes 平台自动化部署运维工具的开发
 
@@ -40,6 +40,6 @@ tags: ['engineer']
 20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
 
 
-#### 工作地址
+#### 工作地点
 
-北京、上海、广州
+北京，上海，广州，杭州，特别优秀可 remote

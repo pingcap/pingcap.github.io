@@ -1,11 +1,11 @@
 ---
-title: Database Kernel Engineer
+title: TiDB Engineer
 tags: ['engineer']
 ---
 
-# Database Kernel Engineer
+# TiDB Engineer
 
-#### 职位描述
+#### 岗位职责
 
 1. 负责分布式数据库查询优化器相关的设计，开发，文档撰写和新人指导
 
@@ -37,6 +37,6 @@ tags: ['engineer']
 
 20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
 
-#### 工作地址
+#### 工作地点
 
-北京、上海、广州
+北京，上海，广州，杭州，特别优秀可 remote

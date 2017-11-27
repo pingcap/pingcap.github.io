@@ -3,8 +3,8 @@
 ## 目录
 
 + 技术类职位
-  - [TiDB Engineer](engineer/database-kernel-engineer.md)
-  - [TiKV Engineer](engineer/database-storage-engineer.md)
+  - [TiKV Engineer](engineer/tikv-engineer.md)
+  - [TiDB Engineer](engineer/tidb-engineer.md)
   - [Bizdev & Tools Engineer](engineer/bizdev-tools-engineer.md)
   - [Bizdev & Cloud Engineer](engineer/bizdev-cloud-engineer.md)
   - [Bizdev & SRE Engineer](engineer/bizdev-sre-engineer.md)

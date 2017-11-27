@@ -32,6 +32,6 @@ tags: ['campus']
 hire@pingcap.com
 
 
-#### 工作地址
+#### 工作地点
 
-北京 上海 广州 成都
+北京
