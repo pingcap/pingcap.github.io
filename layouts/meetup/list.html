@@ -12,16 +12,16 @@
     <a href="http://path/to/signup" class="link-abs" target="_blank"></a>
     <!-- <a href="http://path/to/detail" class="link-abs" target="_blank"></a> -->
     <div class="image">
-        <img src="/images/meetup-earth.png" alt="">
+        <img src="/images/meetup-earth.png" alt="banner">
     </div>
     <div class="mkdf-elements-holder-item-inner">
-        <h1>PingCAP Infra Meetup</h1>
-        <h2>{{.Site.Data.meetup.next_meetup.topic}}</h2>
-        <h3><i class="fa fa-map-marker"></i>&nbsp;&nbsp;北京 . 海淀</h3>
+        <h2>PingCAP Infra Meetup</h2>
+        <h3>{{.Site.Data.meetup.next_meetup.topic}}</h3>
+        <h4><i class="fa fa-map-marker"></i>&nbsp;&nbsp;北京 . 海淀</h4>
         <p>{{.Site.Data.meetup.next_meetup.date}}</p>
     </div>
     <div class="text">
-        <h3 class="inner-title"> 报名加入 </h3>
+        <h4 class="inner-title"> 报名加入 </h4>
         <!-- <h3 class="title"> 查看详情 </h3> -->
     </div>
 </section>
@@ -35,7 +35,7 @@
 </section>
 <section class="meetup-landingpage-review">
     <div class="container">
-        <h1 class="title">往期回顾</h1>
+        <h2 class="title">往期回顾</h2>
         <div class="details">
             <div class="row">
                 {{ range first 3 .Data.Pages }}
@@ -43,13 +43,13 @@
                     <div class="layout-text-on-hover">
                         <a href="{{.URL}}" class="link-abs"></a>
                         <div class="image">
-                            <img src="{{.Params.image|default .Site.Data.meetup.default_cover}}">
+                            <img src="{{.Params.image|default .Site.Data.meetup.default_cover}}" alt="cover">
                         </div>
                         <div class="text">
                             <h3 class="inner-title"> {{.Date.Format "2006-01-02"}} </h3>
                         </div>
                     </div>
-                    <h2>{{.Date.Format "2006-01-02"}}</h2>
+                    <h3>{{.Date.Format "2006-01-02"}}</h3>
                     <p>{{.Title}}</p>
                 </div>
                 {{ end }}
@@ -60,7 +60,7 @@
 </section>
 <section class="meetup-landingpage-memoir">
     <div class="container">
-        <h1 class="title">分享实录</h1>
+        <h2 class="title">分享实录</h2>
         <div class="links-group">
           {{ range where .Data.Pages ".Params.meetup_type" "memoir" }}
             <a href="{{.URL}}" class="link">
@@ -79,7 +79,7 @@
 </section>
 <section class="meetup-landingpage-lecturer">
     <div class="container">
-        <h1 class="title">大咖讲师</h1>
+        <h2 class="title">大咖讲师</h2>
         <div class="details">
             {{ range $idx, $i := .Site.Data.meetup.featured_speakers }} {{ if eq (mod $idx 5 ) 0}}
             <div class="row">
@@ -87,14 +87,14 @@
                 <div class="item">
                     <div class="layout-text-on-hover">
                         <div class="image">
-                            <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}">
+                            <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}" alt="lecturer">
                         </div>
                         <div class="text">
                             <p>{{$i.intro}} </p>
                         </div>
                     </div>
-                    <h2> {{$i.name}} </h2>
-                    <h3> {{$i.title}} </h3>
+                    <h3> {{$i.name}} </h3>
+                    <h4> {{$i.title}} </h4>
                     <p> {{$i.topic}}</p>
                 </div>
                 {{ if eq (mod $idx 5 ) 4}}
@@ -106,7 +106,7 @@
 </section>
 <section class="meetup-landingpage-banner-footer">
     <div class="container">
-        <img src="/images/meetup-tags.svg" alt="">
+        <img src="/images/meetup-tags.svg" alt="meetup tags">
     </div>
 </section>
 {{ end }}

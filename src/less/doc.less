@@ -3,26 +3,19 @@
 @import './base.less';
 @import './header.less';
 @import './footer.less';
-@import './sidebar.less';
-
-// color
+@import './sidebar.less'; // color
 @text_color: #3e3e3e;
 @title_color: #142848;
 @code_color: #c7254e;
-@code_bg_color: #f9f2f4;
-
-// padding
-@pre_padding: 9.5px;
-
-// animation_fadein
+@code_bg_color: #f9f2f4; // padding
+@pre_padding: 9.5px; // animation_fadein
 @animation_fadein: fadeIn 0.6s;
-
 /** documentation list **/
-.doc,
 .blog,
-.weekly,
+.doc,
 .meetup,
-.recruit {
+.recruit,
+.weekly {
   min-height: calc(~'100vh - @{footer_height_pc}');
 
   .container {
@@ -30,8 +23,8 @@
     flex-flow: row wrap;
   }
 
-  .list,
   .archive,
+  .list,
   .sidebar,
   .sidebar-page {
     .customAnimation(@animation_fadein);
@@ -46,6 +39,7 @@
   .sidebar-page {
     display: flex;
     flex-direction: column;
+
     .improve-doc,
     .toc-title {
       margin-bottom: 12px;
@@ -65,12 +59,12 @@
     }
   }
 
-  .list,
-  .archive {
+  .archive,
+  .list {
     flex: 1;
     padding: 20px;
     min-height: 500px;
-    padding: calc(~'@{header_height} + 15px') 1.2rem 1.5rem 1rem;
+    padding: calc(~'@{header_height} + 20px') 1.2rem 1.5rem 1rem;
     overflow-x: auto;
 
     h1,
@@ -80,16 +74,20 @@
       font-weight: 400;
       color: @title_color;
     }
+
     h1 {
       margin-bottom: 1.5rem;
       font-size: 1.2rem;
     }
+
     h2 {
       font-size: 1.1rem;
     }
+
     h3 {
       font-size: 1rem;
     }
+
     h4 {
       font-size: 0.9rem;
     }
@@ -97,19 +95,21 @@
 
   .archive {
     .content {
-      p,
       ol,
-      ul,
-      table {
+      p,
+      table,
+      ul {
         margin: 0.7rem 0;
         line-height: 1.7;
         font-size: 0.7rem;
         font-weight: 400;
         color: @text_color;
       }
+
       a {
         color: @theme_blue;
       }
+
       img {
         display: block;
         max-width: 100%;
@@ -122,6 +122,7 @@
         font-size: 0.7rem;
         color: #6a737d;
         list-style: none;
+
         svg {
           width: 18px;
           height: 18px;
@@ -130,6 +131,7 @@
           fill: #37434e;
           vertical-align: middle;
         }
+
         .meta-item {
           display: inline-block;
           box-sizing: border-box;
@@ -137,9 +139,11 @@
         }
       }
     }
+
     .draw {
       margin: 2rem 0 1rem;
     }
+
     .operate {
       margin-top: 1.6rem;
       border-top: 2px solid #000;
@@ -153,6 +157,7 @@
         align-items: center;
         margin-top: 1rem;
         font-size: 0.75rem;
+
         .icon {
           margin-right: 0.5rem;
         }
@@ -205,8 +210,8 @@
       padding-left: 1.2rem;
     }
 
-    ul ul a:hover,
     ul ul a:active,
+    ul ul a:hover,
     ul ul li.active > a {
       padding-left: calc(~'1.2rem - 2px');
     }
@@ -215,52 +220,53 @@
 
 .blog,
 .meetup,
-.weekly,
-.recruit {
-  .sidebar {
+.recruit,
+.weekly {
+  .nav-tags {
     flex: 0 0 15rem;
     max-width: 15rem;
-  }
-  .nav-tags {
     padding: 20px 0;
     position: relative;
     top: @header_height;
   }
+
   .archive,
   .list {
-    padding-left: 50px;
+    padding-left: 40px;
   }
 }
-
 // smarttoc-extender global
 #smarttoc-extender {
   display: none !important;
 }
-
 @media (max-width: 600px) {
-  .doc,
   .blog,
+  .doc,
   .meetup,
-  .weekly,
-  .recruit {
+  .recruit,
+  .weekly {
     .container {
       flex-direction: column;
     }
-    .list,
-    .archive {
+
+    .archive,
+    .list {
       flex-basis: 100%;
       margin: 30px 0;
       padding-left: 5px;
       padding-right: 5px;
     }
+
     .sidebar {
       flex: 100%;
       padding-top: 140px;
       overflow: auto;
     }
+
     .sidebar .tag-list {
       margin-left: -5px;
     }
+
     .sidebar-page {
       min-height: calc(~'100vh - 280px');
       overflow: auto;
