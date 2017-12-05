@@ -17,7 +17,7 @@ tags: ['engineer']
 
 #### 职位要求
 
-1. 三年以上 MySQL/postgreSQL/ Oracle 运维相关工作经验
+1. 三年以上 MySQL/postgreSQL/Oracle 运维相关工作经验
 
 2. 精通 MySQL 数据库配置、备份、优化、监控，擅长使用自动化运维脚本
 
