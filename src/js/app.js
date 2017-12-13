@@ -134,7 +134,7 @@ $(function() {
         if (target.length) {
           // Only prevent default if animation is actually gonna happen
           event.preventDefault()
-          const y = $('#header').height()
+          const y = $('header.header').height()
           $('html, body').animate(
             {
               scrollTop: target.offset().top - y,
@@ -161,7 +161,7 @@ $(function() {
   // Smooth scrolling when the document is loaded and ready
   $(document).ready(function() {
     const hash = decodeURIComponent(location.hash)
-    const y = $('#header').height()
+    const y = $('header.header').height()
     if (hash)
       $('html, body').animate(
         {
