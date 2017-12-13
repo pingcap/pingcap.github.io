@@ -7,6 +7,19 @@ docsearch({
   apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
   indexName: 'pingcap',
   inputSelector: '#search-input',
-  debug: true // Set debug to true if you want to inspect the dropdown
+  debug: true, // Set debug to true if you want to inspect the dropdown
+  transformData: function (hits) {
+    // filter hits
+
+    function isChinese (s) {
+      var patrn=/\/.*-cn\//gi
+      return patrn.exec(s)
+    }
+
+    var cn_hits = hits.filter(function(hit){
+      return isChinese(hit.url)
+    })
+    return cn_hits;
+  }
 })
 </script>
