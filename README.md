@@ -34,7 +34,7 @@
 
 ### Strcture
 
-![architecture](misc/website.png)
+![architecture](doc/media/website.png)
 
 
 ## Start
