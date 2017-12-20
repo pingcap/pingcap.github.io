@@ -7,20 +7,28 @@
     justify-content: center;
     background: linear-gradient(to top, #080000, #100f2e);
     z-index: 99;
-    animation: fadeOut 1s;
   }
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
+  .loading-wrapper .bar {
+    float: left;
+    width: 15px;
+    height: 6px;
+    border-radius: 2px;
+    background-color: #4b9cdb;
+    animation: loading 2s cubic-bezier(.17,.37,.43,.67) infinite;
+  }
+  @keyframes loading {
+    0%,100% {transform: translate(0,0);}
+
+    50% {
+        transform: translate(80px,0);
+        background-color: #f5634a;
+        width: 25px;
     }
   }
 </style>
 
 <div class="loading-wrapper" id="loading">
-  {{ partial "svgs/loading.svg" (dict "fill" "#fff" "width" 36 "height" 36 ) }}
+  <div class="bar"></div>
 </div>
 
 <script type="text/javascript">
