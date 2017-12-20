@@ -2,31 +2,27 @@
 @import './base.less';
 @import './header.less';
 @import './footer.less';
-
 // width
 @logo_width: 10.5rem;
-
 // height
 @logo_height: 4rem;
 @button_height: 1.8rem;
-
 // margin
 @advantage_row_margin: 4rem;
-
 // color
 @dark_blue: #0d0b1e;
-
 // font
 @font_weight_300: 300;
 @font_weight_400: 400;
 @text_size: 0.8rem;
-
 // others
 @line_height: 1.8;
-
 // animation_fadein
-@animation_fadein: fadeIn 0.6s;
+@animation_fadein: fadeIn 0.4s;
 
+#landingpage {
+  .customAnimation(@animation_fadein);
+}
 /* Section 1 */
 .landingpage-slogan-mask {
   display: flex;
@@ -35,10 +31,9 @@
   width: 100%;
   height: 100vh;
   padding: calc(~'@{vertical_padding} + @{header_height}') 0;
-  background: url('/images/slogan-mask.png') no-repeat center top;
+  background: url("/images/slogan-mask.png") no-repeat center top;
   background-attachment: fixed;
   background-size: cover;
-  .customAnimation(@animation_fadein);
 
   .container {
     flex-direction: column;
@@ -85,14 +80,17 @@
       font-size: 0.8rem;
       text-align: center;
     }
+
     .btn-primary {
       background: @theme_blue;
+
       &:hover {
         background-color: @white;
         color: @theme_blue;
         transition: all 0.5s ease;
       }
     }
+
     .btn-github {
       position: relative;
       padding-left: 2.25rem;
@@ -107,6 +105,7 @@
         color: @white;
         transition: all 0.5s ease;
       }
+
       &:after {
         position: absolute;
         content: '';
@@ -115,7 +114,7 @@
         width: 20px;
         height: 19px;
         margin-top: -10px;
-        background: url('/images/icon-github.svg');
+        background: url("/images/icon-github.svg");
         background-size: 20px 19px;
       }
     }
@@ -124,7 +123,7 @@
 /* Section 2 */
 .landingpage-features {
   padding: calc(~'@{vertical_padding} + @{header_height}') 0;
-  background: url('/images/features-mask.png') no-repeat center top;
+  background: url("/images/features-mask.png") no-repeat center top;
   background-attachment: fixed;
   background-size: cover;
 
@@ -133,10 +132,12 @@
     margin: 1.8rem 0 0.3rem;
     color: @white;
   }
+
   .container {
     flex-direction: column;
     padding: 0 @horizontal_padding;
   }
+
   .row {
     display: flex;
     flex-flow: row wrap;
@@ -144,9 +145,11 @@
     align-items: flex-start;
     text-align: center;
   }
+
   .item {
     margin-top: 3rem;
     flex-basis: 33%;
+
     p {
       max-width: 12rem;
       margin-left: auto;
@@ -155,9 +158,11 @@
       line-height: @line_height;
     }
   }
+
   .row-1 .item {
     margin-top: 0;
   }
+
   .item-short {
     p {
       max-width: 10.5rem;
@@ -165,6 +170,7 @@
       margin-right: auto;
     }
   }
+
   .item-long {
     p {
       max-width: 13.5rem;
@@ -172,6 +178,7 @@
       margin-right: auto;
     }
   }
+
   .image-wrap {
     width: 3.5rem;
     height: 3.5rem;
@@ -181,6 +188,7 @@
     margin: 0 auto;
     border: 2px solid @white;
     border-radius: 50% 50%;
+
     .icon {
       width: 1.7rem;
       height: 1.7rem;
@@ -193,8 +201,7 @@
 /* Section 3 */
 .landingpage-advantages {
   padding: calc(~'@{vertical_padding} + @{header_height}') 0 10rem;
-  background: url('/images/advantages-mask.png') no-repeat center bottom
-    @dark_blue;
+  background: url("/images/advantages-mask.png") no-repeat center bottom @dark_blue;
   background-size: cover;
 
   h3 {
@@ -213,6 +220,7 @@
     flex-direction: column;
     padding: 0 @horizontal_padding;
   }
+
   .row {
     display: flex;
     justify-content: space-between;
@@ -239,6 +247,7 @@
 
     &:nth-child(2n) {
       flex-flow: row-reverse;
+
       .content {
         text-align: right;
       }
@@ -249,58 +258,66 @@
     }
   }
 }
-
 @media (max-width: 600px) {
   .landingpage-slogan-mask {
     padding: 8rem 0 0;
     height: auto;
     min-height: 100vh;
   }
+
   .landingpage-slogan-mask .container {
     align-items: center;
     text-align: center;
   }
+
   .landingpage-slogan-mask .tagline {
     margin-bottom: 1.2rem;
     font-size: 1rem;
   }
+
   .landingpage-slogan-mask .buttons {
     max-width: 100%;
     width: 90%;
     justify-content: space-around;
   }
-  .landingpage-features,
-  .landingpage-advantages {
+
+  .landingpage-advantages,
+  .landingpage-features {
     padding-top: 3rem;
   }
 
   .landingpage-features .item {
     flex-basis: 100%;
   }
+
   .landingpage-features .row-1 .item {
     margin-top: 3rem;
   }
+
   .landingpage-slogan-mask .desc {
     max-width: 100%;
   }
+
   .landingpage-advantages .row,
   .landingpage-advantages .row:nth-child(2n) {
     justify-content: center;
     flex-wrap: wrap;
+
     .content {
       padding: 0;
       text-align: center;
     }
   }
+
   .landingpage-advantages .row .content {
     flex-basis: 100%;
   }
 }
-
 @media (max-width: 320px) {
   .landingpage-slogan-mask .buttons {
     flex-direction: column;
     align-items: center;
+
     .btn {
       margin-top: 1.2rem;
     }
