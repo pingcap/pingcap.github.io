@@ -22,11 +22,14 @@ export default {
         test: /\.((png)|(eot)|(woff)|(woff2)|(ttf)|(svg)|(gif))(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader?name=/[hash].[ext]',
       },
-      { test: /\.json$/, loader: 'json-loader' },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
-          publicPath: 'css/',
+          publicPath: '/css/',
           use: 'css-loader',
         }),
       },
@@ -34,7 +37,9 @@ export default {
         loader: 'babel-loader',
         test: /\.js?$/,
         exclude: /node_modules/,
-        query: { cacheDirectory: true },
+        query: {
+          cacheDirectory: true,
+        },
       },
     ],
   },
@@ -70,7 +75,17 @@ export default {
             ),
           }),
           new ExtractTextPlugin({
-            filename: '../css/style.css',
+            filename: '/css/style.css',
+          }),
+          new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: require('cssnano'),
+            cssProcessorOptions: {
+              discardComments: {
+                removeAll: true,
+              },
+            },
+            canPrint: true,
           }),
           new webpack.ProvidePlugin({
             fetch:
@@ -107,19 +122,17 @@ export default {
             ),
           }),
           new ExtractTextPlugin({
-            filename: '../css/style.css',
+            filename: '/css/style.css',
           }),
           new OptimizeCssAssetsPlugin({
-            assetNameRegExp: /\/css\/style\.css$/g,
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: require('cssnano'),
             cssProcessorOptions: {
-              safe: true,
+              discardComments: {
+                removeAll: true,
+              },
             },
           }),
-          // new ExtractTextPlugin({
-          //   filename: isDev
-          //     ? '../css/style.css'
-          //     : `../css/[name].[contenthash:8].css`,
-          // }),
           new webpack.ProvidePlugin({
             fetch:
               'imports-loader?this=>global!exports?global.fetch!whatwg-fetch',
