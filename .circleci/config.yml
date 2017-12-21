@@ -50,7 +50,7 @@ jobs:
           name: "Publish Website"
           command: |
             if [ "${CIRCLE_BRANCH}" == "src" ];
-              then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
+              then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz --delete dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
             fi
 
       - add_ssh_keys:
