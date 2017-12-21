@@ -70,6 +70,7 @@ Done:
 * 等网站稳定后（预计一周后）将每个 submodule 的 hugo-refactor 分支合并到 master
   并保留 hugo-refactor 分支作为预览使用，同时修改当前 repo 的 master 分支中
   .gitmodules 文件中各个 submodule 的指定 branch 为 master
+* rsync 同步调研：如何更新删除的文件 （增加 --delete 参数在 源和目标目录之前
 
 Pending:
 
@@ -83,9 +84,7 @@ Todo:
 
 * doc-search config polish: Search 配置项优化 提供 sitemap 并强制使用 sitemap 中
   的内容
-* rsync 同步调研：如何更新删除的文件
-* 页面 render 优化：首次加载的 loading 动画优化， docs 页面 sidebar render 优化
-  （现在首次 render 比较慢
+* 页面 render 优化：docs 页面 sidebar render 优化（现在首次 render 比较慢
 
 Assign:
 

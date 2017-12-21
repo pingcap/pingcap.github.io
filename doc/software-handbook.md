@@ -41,11 +41,11 @@ title: 多模块持续交付的 Web 全站静态化发布构建工具
 
 该套软件可以良好运行在常用的 Linux 发行版本中，经过测试的推荐服务器如下：
 
-| Linux 操作系统平台       | 版本         |
-| :----------------------- | :----------: |
-| Red Hat Enterprise Linux | 7.3 及以上   |
-| CentOS                   | 7.3 及以上   |
-| Oracle Enterprise Linux  | 7.3 及以上   |
+| Linux 操作系统平台       |     版本     |
+|:-------------------------|:------------:|
+| Red Hat Enterprise Linux |  7.3 及以上  |
+| CentOS                   |  7.3 及以上  |
+| Oracle Enterprise Linux  |  7.3 及以上  |
 | Ubuntu LTS               | 14.04 及以上 |
 
 
@@ -237,7 +237,7 @@ jobs:
           name: "Publish Website"
           command: |
             if [ "${CIRCLE_BRANCH}" == "src" ];
-              then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
+              then ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;rsync -avz --delete dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
             fi
 
       - add_ssh_keys:
@@ -449,7 +449,7 @@ gulp.task('js', buildJs)
 ```html
 <title>{{- block "title" . }}{{- or .Title "Home" -}}{{ end -}} | PingCAP</title>
 
-<!-- 英文页面 -->    
+<!-- 英文页面 -->
 {{ define "title" }} Blog {{ end }}
 
 {{ define "headcss" }}
@@ -499,8 +499,8 @@ gulp.task('js', buildJs)
 ```
 
 示例效果如下显示：
-| 移动设备       | 桌面浏览器         |
-| :----------------------- | :----------: |
-| ![](media/15136842109779.jpg)
- | ![](media/15136842440482.jpg)
-   |
+| 移动设备                      | 桌面浏览器 |
+|:------------------------------|:----------:|
+| ![](media/15136842109779.jpg) |            |
+| ![](media/15136842440482.jpg) |            |
+|                               |            |
