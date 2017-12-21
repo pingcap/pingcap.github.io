@@ -208,4 +208,14 @@ $(function() {
         }
       })
     })
+
+  /* hide search suggestions dropdown menue on focusout*/
+  $('#search-input').focusout(function() {
+    $('.ds-dropdown-menu').hide()
+  })
+  /* show search suggestions dropdown menue on focus*/
+  $('#search-input').focus(function(e) {
+    e.preventDefault()
+    if (e.target && e.target.value) $('.ds-dropdown-menu').show()
+  })
 })
