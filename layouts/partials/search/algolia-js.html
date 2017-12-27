@@ -8,19 +8,24 @@ docsearch({
   indexName: 'pingcap',
   inputSelector: '#search-input',
   debug: true, // Set debug to true if you want to inspect the dropdown
-  transformData: function (hits) {
+  transformData: function(hits) {
     // filter hits
-
-    function isChinese (s) {
-      var patrn=/\/.*-cn\//gi
+    function isChinese(s) {
+      var patrn = /\/.*-cn\//gi
       return patrn.exec(s)
     }
 
-    var en_hits = hits.filter(function(hit){
-      return !isChinese(hit.url)
+    // filter 404 results
+    function is404(h) {
+      var patrn = /404/gi
+      return h && h.lvl1 && patrn.exec(h.lvl1)
+    }
+
+    var en_hits = hits.filter(function(hit) {
+      return !isChinese(hit.url) && !is404(hit.hierarchy)
     })
 
-    return en_hits;
+    return en_hits
   }
 })
 </script>
