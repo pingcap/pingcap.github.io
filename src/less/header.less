@@ -1,9 +1,13 @@
 /* header module */
-@import './base.less'; // height
+@import './base.less';
+
+// height
 @nav_height: 2rem;
 @search_box_height: 1.8rem;
 @nav_brand_height: 1.8rem;
-@header_height: calc(~'1rem + @{nav_height} + 3px'); // width
+@header_height: calc(~'1rem + @{nav_height} + 3px');
+
+// width
 @search_box_width: 13rem;
 
 .header {
@@ -42,6 +46,7 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      margin: 0 0.6rem;
       font-size: 0.8rem;
       letter-spacing: 1px;
       color: white;
@@ -54,20 +59,17 @@
         li {
           display: flex;
           align-items: center;
-          margin: 0 0.3rem;
 
           a {
             box-sizing: content-box;
             display: flex;
             align-items: center;
             height: @nav_height;
-            padding: 0.5rem 0.2rem;
-            // border-bottom: 3px solid fade(white, 0%);
+            padding: 0.5rem 0.3rem;
           }
 
           & a:hover,
           &.sel a {
-            // border-bottom: 3px solid white;
             color: fade(white, 50%);
             transition: all 0.5s ease;
           }
@@ -75,9 +77,10 @@
       }
 
       .link-download {
-        // margin: 0 0.8rem 0 0.5rem;
-        margin: 0 0.8rem 0 0.5rem;
-
+        svg {
+          margin-left: 2px;
+          margin-top: -6px;
+        }
         &:hover {
           svg,
           svg * {
@@ -91,7 +94,6 @@
       display: flex;
       align-items: center;
       position: relative;
-      // padding: @horizontal_padding 0;
       min-width: calc(~'20px + @{horizontal_padding}');
       height: @search_box_height;
       background: transparent;
@@ -104,31 +106,28 @@
         position: absolute;
         padding: 0;
 
-        &.btn-search {
-          left: 8px;
-          top: calc(~'(@{search_box_height} - 20px)/2');
-        }
-
         &.btn-cancel {
-          right: 8px;
+          right: 0.4rem;
           top: calc(~'(@{search_box_height} - 15px)/2');
         }
       }
 
       .search-wrapper {
-        display: none;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        width: @search_box_width;
+        height: inherit;
+        border: 1px solid fade(white, 0%);
+        .rounded-corners(2px);
+        background-color: fade(white, 20%);
+        color: @gray_white;
 
-        &.show {
-          position: relative;
-          display: flex;
-          justify-content: space-between;
-          width: @search_box_width;
-          height: inherit;
-          padding: 0 0.5rem;
-          border: 1px solid fade(white, 0%);
-          .rounded-corners(2px);
-          background-color: fade(white, 20%);
-          color: @gray_white;
+        .icon-search {
+          position: absolute;
+          left: 0.4rem;
+          top: 50%;
+          margin-top: -9px;
         }
       }
 
@@ -136,7 +135,7 @@
         position: relative;
         width: calc(~'@{search_box_width} - 1.2rem');
         height: 100%;
-        padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+        padding: 0.5rem 0.2rem 0.5rem 1.6rem;
         border: none;
         outline: none;
         background-color: transparent;
@@ -149,37 +148,26 @@
 @media screen and (max-width: 600px) {
   .header .container {
     flex-direction: column;
-    padding-top: @horizontal_padding;
+    padding-top: 12px;
   }
 
   .header .nav-wrapper {
     flex-flow: row wrap;
     justify-content: center;
-  }
 
-  .header .nav-wrapper {
-    .global-search,
-    .navigations {
-      margin-bottom: @horizontal_padding;
+    .global-search {
+      margin-bottom: 12px;
     }
-  }
 
-  .header .container .global-search .search-wrapper.show {
-    width: 13rem;
+    .navigations ul li {
+      margin: 0;
+
+      a {
+        padding: 0 4px;
+      }
+    }
   }
 }
 // iphone 5
 @media screen and (max-width: 320px) {
-  .header .nav-wrapper .navigations ul li {
-    margin: 0;
-
-    a {
-      padding-left: 4px;
-      padding-right: 4px;
-    }
-  }
-
-  .header .nav-wrapper .navigations .link-download {
-    margin: 0 4px;
-  }
 }
