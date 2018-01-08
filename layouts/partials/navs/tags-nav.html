@@ -1,13 +1,13 @@
 {{ $rss := .rss }}
 
-<div class="sidebar nav-tags">
+<div class="sidebar nav-tags" data-type="{{.type}}">
     <h2 class="title">
       {{ .title }}
       {{ if $rss }}
         <a class="rss" href="{{.rss}}" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
       {{ end }}
     </h2>
-    <a href="#" class="tag all sel">ALL ({{ len .posts }})</a>
+    <a href="#" class="tag all">ALL ({{ len .posts }})</a>
     <div class="tag-list">
       <!-- Get all posts-->
       <!-- loop all tags that you've used -->
@@ -25,7 +25,7 @@
 
           {{ if (gt $count  1) }}
             <!-- hide class for li, if less then 2 -->
-            <a href="#{{ $name }}" class="tag" data-tag="{{$name}}">
+            <a href="#{{ $name }}" class="tag {{ if in $.global.Params.tags $name }}sel{{end}}" data-tag="{{$name}}">
               {{ $name }} ({{ $count }})
             </a>
           {{ end }}

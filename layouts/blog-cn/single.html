@@ -7,8 +7,10 @@
 {{ define "main" }}
 <div class="blog">
   <div class="container">
-    {{ $blogs := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil }}
-    {{ partial "navs/date-tree-nav.html" (dict "title" "博客" "data" $blogs "rss" "/blog-cn/index.xml") }}
+    <!-- {{ $blogs := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil }}
+    {{ partial "navs/date-tree-nav.html" (dict "title" "博客" "data" $blogs "rss" "/blog-cn/index.xml") }} -->
+    {{ $posts := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil  }}
+    {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) }}
 
     <div class="archive">
       <div class="content markdown-body">

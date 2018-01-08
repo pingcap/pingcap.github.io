@@ -34,7 +34,7 @@ $(function() {
     },
   })
 
-  /* TOC for article in docs module  */
+  /* TOC for article in docs module */
   const $tocWrap = $('.article-toc')
   if ($tocWrap.length) {
     toc_run()
@@ -50,18 +50,29 @@ $(function() {
     $('.nav-tags .tag').removeClass('sel')
     $(`.nav-tags .tag[data-tag="${filter}"]`).addClass('sel')
     isAll && $('.tag.all').addClass('sel')
-    $('.article-list .article').each(function() {
-      const $this = $(this)
-      if (isAll) {
-        $this.show()
-      } else {
-        if ($this.data('tag').includes(filter)) {
+
+    const pageTpye = $('.nav-tags').data('type')
+    console.log(pageTpye)
+    if (pageTpye && pageTpye === 'single') {
+      if (isAll) window.location.href = '../'
+      else window.location.href = `../#${encodeURIComponent(filter)}`
+    } else {
+      $('.article-list .article').each(function() {
+        const $this = $(this)
+        if (isAll) {
           $this.show()
         } else {
-          $this.hide()
+          if ($this.data('tag').includes(filter)) {
+            $this.show()
+          } else {
+            $this.hide()
+          }
         }
-      }
-    })
+      })
+      if (isAll) window.location.href = `./`
+      else window.location.href = `./#${encodeURIComponent(filter)}`
+    }
+
     e.preventDefault()
     return false
   })
@@ -141,16 +152,16 @@ $(function() {
             },
             1000,
             function() {
-              // // Callback after animation
-              // // Must change focus!
+              //  Callback after animation
+              //  Must change focus!
               // var $target = $(target)
               // $target.focus()
               // if ($target.is(':focus')) {
-              //   // Checking if the target was focused
+              //    Checking if the target was focused
               //   return false
               // } else {
-              //   $target.attr('tabindex', '-1') // Adding tabindex for elements not focusable
-              //   $target.focus() // Set focus again
+              //   $target.attr('tabindex', '-1')  Adding tabindex for elements not focusable
+              //   $target.focus()  Set focus again
               // }
             }
           )
@@ -161,8 +172,28 @@ $(function() {
   // Smooth scrolling when the document is loaded and ready
   $(document).ready(function() {
     const hash = decodeURIComponent(location.hash)
+    var blogRegex = /\/blog(-cn)?\//gi
+    if (location.pathname.match(blogRegex) && hash) {
+      $('.nav-tags .tag').removeClass('sel')
+      $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
+      $('.article-list .article').each(function() {
+        const $this = $(this)
+        if ($this.data('tag').includes(hash.slice(1))) {
+          $this.show()
+        } else {
+          $this.hide()
+        }
+      })
+    } else {
+      const pageTpye = $('.nav-tags').data('type')
+      console.log(pageTpye)
+      // if (location.pathname.match(blogRegex) && pageTpye === 'list') {
+      if (pageTpye !== 'single') {
+        $('.tag.all').addClass('sel')
+      }
+    }
     const y = $('header.header').height()
-    if (hash)
+    if (hash && $(hash).offset())
       $('html, body').animate(
         {
           scrollTop: $(hash).offset().top - y,
@@ -209,11 +240,11 @@ $(function() {
       })
     })
 
-  /* hide search suggestions dropdown menue on focusout*/
+  /* hide search suggestions dropdown menue on focusout */
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
   })
-  /* show search suggestions dropdown menue on focus*/
+  /* show search suggestions dropdown menue on focus */
   $('#search-input').focus(function(e) {
     e.preventDefault()
     if (e.target && e.target.value) $('.ds-dropdown-menu').show()

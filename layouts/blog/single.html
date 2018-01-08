@@ -6,8 +6,10 @@
 {{ define "main" }}
 <div class="blog">
   <div class="container">
-    {{ $blogs := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
-    {{ partial "navs/date-tree-nav.html" (dict "title" "Blog" "data" $blogs "rss" "/blog/index.xml") }}
+    <!-- {{ $blogs := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }} -->
+    <!-- {{ partial "navs/date-tree-nav.html" (dict "title" "Blog" "data" $blogs "rss" "/blog/index.xml") }} -->
+    {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
+    {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) }}
 
     <div class="archive">
       <div class="content markdown-body">
