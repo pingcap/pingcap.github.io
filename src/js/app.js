@@ -8,21 +8,49 @@ import '../../dist/css/style.css'
 import './vendor/jquery.SimpleTree.js'
 import { run as toc_run } from './vendor/toc'
 
-$(function() {
-  /* toggle wechat qr code */
-  const showQRCode = () => {
-    $('#js_qr_code').removeClass('f-hide')
-  }
-  const hiddenQRCode = () => {
-    $('#js_qr_code').addClass('f-hide')
-  }
-  $('#wechat').mouseover(showQRCode)
-  $('#wechat').mouseout(hiddenQRCode)
-  $('#wechat').on('tap', () => {
-    $('#js_qr_code').toggleClass('f-hide')
-  })
+$(document).ready(function() {
+  // pre-loading
+  $('.loading-container').hide()
+  $('.content-container').show()
 
-  /* sidebar */
+  /* TOC for article in docs module */
+  const $tocWrap = $('.article-toc')
+  if ($tocWrap.length) {
+    toc_run()
+  }
+
+  // process tags
+  const hash = decodeURIComponent(location.hash)
+  var blogRegex = /\/blog(-cn)?\//gi
+  if (location.pathname.match(blogRegex) && hash) {
+    $('.nav-tags .tag').removeClass('sel')
+    $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
+    $('.article-list .article').each(function() {
+      const $this = $(this)
+      if ($this.data('tag').includes(hash.slice(1))) {
+        $this.show()
+      } else {
+        $this.hide()
+      }
+    })
+  } else {
+    const pageTpye = $('.nav-tags').data('type')
+
+    if (pageTpye !== 'single') {
+      $('.tag.all').addClass('sel')
+    }
+  }
+  // Smooth scrolling when the document is loaded and ready
+  const y = $('header.header').height()
+  if (hash && $(hash).offset())
+    $('html, body').animate(
+      {
+        scrollTop: $(hash).offset().top - y,
+      },
+      1000
+    )
+
+  /* tree sidebar */
   $('.st_tree').SimpleTree({
     click: a => {
       if ($(a).attr('href') != '#') {
@@ -33,12 +61,6 @@ $(function() {
       }
     },
   })
-
-  /* TOC for article in docs module */
-  const $tocWrap = $('.article-toc')
-  if ($tocWrap.length) {
-    toc_run()
-  }
 
   /* tags frontend filter */
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
@@ -73,20 +95,6 @@ $(function() {
       else window.location.href = `./#${encodeURIComponent(filter)}`
     }
 
-    e.preventDefault()
-    return false
-  })
-
-  /* show search */
-  $('.btn-search').click(function(e) {
-    $('.search-wrapper').addClass('show')
-    e.preventDefault()
-    return false
-  })
-
-  /* hide search */
-  $('.btn-cancel').click(function(e) {
-    $('.search-wrapper').removeClass('show')
     e.preventDefault()
     return false
   })
@@ -169,39 +177,6 @@ $(function() {
       }
     })
 
-  // Smooth scrolling when the document is loaded and ready
-  $(document).ready(function() {
-    const hash = decodeURIComponent(location.hash)
-    var blogRegex = /\/blog(-cn)?\//gi
-    if (location.pathname.match(blogRegex) && hash) {
-      $('.nav-tags .tag').removeClass('sel')
-      $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
-      $('.article-list .article').each(function() {
-        const $this = $(this)
-        if ($this.data('tag').includes(hash.slice(1))) {
-          $this.show()
-        } else {
-          $this.hide()
-        }
-      })
-    } else {
-      const pageTpye = $('.nav-tags').data('type')
-      console.log(pageTpye)
-      // if (location.pathname.match(blogRegex) && pageTpye === 'list') {
-      if (pageTpye !== 'single') {
-        $('.tag.all').addClass('sel')
-      }
-    }
-    const y = $('header.header').height()
-    if (hash && $(hash).offset())
-      $('html, body').animate(
-        {
-          scrollTop: $(hash).offset().top - y,
-        },
-        1000
-      )
-  })
-
   /* open first item in docs/docs-cn/weekly list page */
   const openFolder = li => {
     if (li.hasClass('has-child')) {
@@ -239,6 +214,19 @@ $(function() {
         }
       })
     })
+
+  /* toggle wechat qr code */
+  const showQRCode = () => {
+    $('#js_qr_code').removeClass('f-hide')
+  }
+  const hiddenQRCode = () => {
+    $('#js_qr_code').addClass('f-hide')
+  }
+  $('#wechat').mouseover(showQRCode)
+  $('#wechat').mouseout(hiddenQRCode)
+  $('#wechat').on('tap', () => {
+    $('#js_qr_code').toggleClass('f-hide')
+  })
 
   /* hide search suggestions dropdown menue on focusout */
   $('#search-input').focusout(function() {

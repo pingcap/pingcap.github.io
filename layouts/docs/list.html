@@ -7,32 +7,33 @@
 
 {{ define "main" }}
 <div class="doc" id='list_page'>
-    <div class="container">
-        <div class="sidebar">
-          <div class="sticky-sidebar">
-            <h2 class="title"> Document </h2>
-            <div class="st_tree nav-toc " style="display: none;">
-              {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.docs_toc "global" .) }}
-            </div>
-          </div>
+  {{ partial "pre-loading/3-column-layout.html" }}
+  <div class="container content-container" style="display: none;">
+    <div class="sidebar">
+      <div class="sticky-sidebar">
+        <h2 class="title"> Document </h2>
+        <div class="st_tree nav-toc " style="display: none;">
+          {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.docs_toc "global" .) }}
         </div>
-
-        <div class="archive">
-          <div class="content markdown-body">
-            {{ with .Site.GetPage "page" "docs/overview.md" }}{{.Content}}{{ end }}
-          </div>
-          <div class="article-toc"></div>
-
-          {{ partial "archives/operate-links.html" (dict "global" .) }}
-        </div>
-
-        <div class="sidebar-page sticky-sidebar">
-          {{ with .Site.GetPage "page" "docs/overview.md" }}
-            {{ partial "improve-doc.html" (dict "repo" "docs" "global" .) }}
-          {{ end }}
-          <p class="toc-title">What’s on this page</p>
-          <div id="smarttoc_wrapper"></div>
-        </div>
+      </div>
     </div>
+
+    <div class="archive">
+      <div class="content markdown-body">
+        {{ with .Site.GetPage "page" "docs/overview.md" }}{{.Content}}{{ end }}
+      </div>
+      <div class="article-toc"></div>
+
+      {{ partial "archives/operate-links.html" (dict "global" .) }}
+    </div>
+
+    <div class="sidebar-page sticky-sidebar">
+      {{ with .Site.GetPage "page" "docs/overview.md" }}
+        {{ partial "improve-doc.html" (dict "repo" "docs" "global" .) }}
+      {{ end }}
+      <p class="toc-title">What’s on this page</p>
+      <div id="smarttoc_wrapper"></div>
+    </div>
+  </div>
 </div>
 {{ end }}

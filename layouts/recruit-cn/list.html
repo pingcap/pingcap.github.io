@@ -8,12 +8,12 @@
 
 {{ define "main" }}
 <div class="recruit">
-    <div class="container">
-      {{ $posts := where (where .Site.Pages "Section" "recruit-cn") ".Params.title" "!=" nil  }}
+  {{ partial "pre-loading/2-column-layout.html" }}
+  <div class="container content-container" style="display: none;">
+    {{ $posts := where (where .Site.Pages "Section" "recruit-cn") ".Params.title" "!=" nil  }}
+    {{ partial "navs/tags-nav.html" (dict "title" "职位类型" "posts" $posts "global" .) }}
 
-      {{ partial "navs/tags-nav.html" (dict "title" "职位类型" "posts" $posts "global" .) }}
-
-      {{ partial "list.html" (dict "posts" $posts "global" .) }}
-    </div>
+    {{ partial "list.html" (dict "posts" $posts "global" .) }}
+   </div>
 </div>
 {{ end }}

@@ -5,29 +5,29 @@
 
 {{ define "main" }}
 <div class="recruit">
-  <div class="container">
-      <div class="sidebar">
-        <div class="sticky-sidebar">
-          <h2 class="title"> Open Jobs </h2>
-          <div class="st_tree nav-toc" style="display: none;">
-            {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.recruit_toc "global" .) }}
-          </div>
+  {{ partial "pre-loading/2-column-layout.html" }}
+  <div class="container content-container" style="display: none;">
+    <div class="sidebar">
+      <div class="sticky-sidebar">
+        <h2 class="title"> Open Jobs </h2>
+        <div class="st_tree nav-toc" style="display: none;">
+          {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.recruit_toc "global" .) }}
         </div>
       </div>
+    </div>
 
-      <div class="archive">
-          <div class="content">{{ .Content }}</div>
-          <div class="operate">
-            <div class="item">
-              <a href="mailto:hire@pingcap.com">
-                <i class="icon icon-mail">
-                  {{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 22 "height" 17 ) }}
-                </i>Join Us
-              </a>
-            </div>
-          </div>
+    <div class="archive">
+      <div class="content">{{ .Content }}</div>
+      <div class="operate">
+        <div class="item">
+          <a href="mailto:hire@pingcap.com">
+            <i class="icon icon-mail">
+              {{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 22 "height" 17 ) }}
+            </i>Join Us
+          </a>
+        </div>
       </div>
+    </div>
   </div>
 </div>
-
 {{ end }}

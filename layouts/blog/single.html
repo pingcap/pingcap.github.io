@@ -5,9 +5,8 @@
 
 {{ define "main" }}
 <div class="blog">
-  <div class="container">
-    <!-- {{ $blogs := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }} -->
-    <!-- {{ partial "navs/date-tree-nav.html" (dict "title" "Blog" "data" $blogs "rss" "/blog/index.xml") }} -->
+  {{ partial "pre-loading/2-column-layout.html" }}
+  <div class="container content-container" style="display: none;">
     {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
     {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) }}
 
