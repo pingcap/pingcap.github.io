@@ -1,13 +1,15 @@
 {
   "name": "pingcap-website",
   "version": "1.0.0",
-  "description": "PingCAP is focused on developing distributed NewSQL and is the team building TiDB, an open-source distributed NewSQL database.",
+  "description":
+    "PingCAP is focused on developing distributed NewSQL and is the team building TiDB, an open-source distributed NewSQL database.",
   "main": "app.js",
   "scripts": {
     "hugo": "gulp hugo",
     "gen-contents": "bash ./gen-nav.sh",
     "clean-build": "rm -rf dist;",
-    "build": "git submodule update --init --recursive --remote;bash ./gen-nav.sh;export NODE_ENV=prod;gulp css;./build-check-err.sh",
+    "build":
+      "git submodule update --init --recursive --remote;bash ./gen-sub-gitinfo.sh;bash ./gen-nav.sh;export NODE_ENV=prod;gulp css;./build-check-err.sh",
     "build-preview": "gulp build-preview",
     "start": "export NODE_ENV=development;gulp server",
     "lint": "eslint src"
@@ -47,16 +49,11 @@
     "whatwg-fetch": "^1.0.0"
   },
   "babel": {
-    "presets": [
-      "env"
-    ]
+    "presets": ["env"]
   },
   "eslintConfig": {
     "extends": "prettier",
-    "plugins": [
-      "prettier",
-      "import"
-    ],
+    "plugins": ["prettier", "import"],
     "parserOptions": {
       "ecmaVersion": 2016,
       "sourceType": "module",
