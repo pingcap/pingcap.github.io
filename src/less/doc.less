@@ -5,6 +5,9 @@
 @import './footer.less';
 @import './sidebar.less';
 
+// width
+@page_sidebar_width: 12rem;
+
 // color
 @text_color: #3e3e3e;
 @title_color: #142848;
@@ -16,6 +19,7 @@
 
 // animation_fadein_300
 @animation_fadein_300: fadeIn 0.3s;
+
 /** documentation list **/
 .blog,
 .doc,
@@ -38,14 +42,15 @@
 
   .sidebar,
   .sidebar-page {
-    flex: 0 0 @sidebar_width;
     min-height: calc(~'100vh - @{footer_height_pc}');
+
+    &.sidebar {
+      flex: 0 0 @sidebar_width;
+    }
   }
 
   .sidebar-page {
-    // display: flex;
-    // flex-direction: column;
-
+    flex: 0 0 @page_sidebar_width;
     .improve-doc,
     .toc-title {
       margin-bottom: 12px;
@@ -288,9 +293,11 @@
       margin-left: -5px;
     }
 
-    .sidebar-page {
-      min-height: calc(~'100vh - 280px');
-      overflow: auto;
+    &.doc {
+      .sidebar-page {
+        min-height: calc(~'100vh - 280px');
+        overflow: auto;
+      }
     }
   }
 
@@ -305,15 +312,10 @@
 
 @media (max-width: 480px) {
   .blog .sidebar,
-  .blog .sidebar-page,
   .doc .sidebar,
-  .doc .sidebar-page,
   .meetup .sidebar,
-  .meetup .sidebar-page,
   .recruit .sidebar,
-  .recruit .sidebar-page,
-  .weekly .sidebar,
-  .weekly .sidebar-page {
+  .weekly .sidebar {
     min-height: 100%;
   }
 }
