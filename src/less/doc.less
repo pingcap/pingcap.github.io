@@ -21,8 +21,8 @@
 @animation_fadein_300: fadeIn 0.3s;
 
 /** documentation list **/
-.blog,
 .doc,
+.blog,
 .meetup,
 .recruit,
 .weekly {
@@ -43,8 +43,10 @@
   .sidebar,
   .sidebar-page {
     min-height: calc(~'100vh - @{footer_height_pc}');
+  }
 
-    &.sidebar {
+  &.doc {
+    .sidebar {
       flex: 0 0 @sidebar_width;
     }
   }
@@ -75,8 +77,8 @@
     flex: 1;
     padding: 20px;
     min-height: 500px;
+    max-width: calc(~'100% - 24.5rem');
     padding: calc(~'@{header_height} + 20px') 1.2rem 1.5rem 1rem;
-    overflow-x: auto;
 
     h1,
     h2,
@@ -106,6 +108,7 @@
 
   .archive {
     .content {
+      overflow-x: auto;
       ol,
       p,
       table,
@@ -247,9 +250,12 @@
 .meetup,
 .recruit,
 .weekly {
-  .nav-tags {
+  .sidebar {
     flex: 0 0 15rem;
     max-width: 15rem;
+  }
+
+  .nav-tags {
     padding: 20px 0;
     position: relative;
     top: @header_height;
@@ -257,6 +263,7 @@
 
   .archive,
   .list {
+    max-width: calc(~'100% - 15rem');
     padding-left: 3rem;
   }
 }
@@ -277,15 +284,15 @@
 
     .archive,
     .list {
-      flex-basis: 100%;
+      max-width: 100%;
       margin: 30px 0;
-      padding-left: 5px;
-      padding-right: 5px;
+      padding: 30px 5px;
     }
 
     .sidebar {
-      flex: 100%;
       padding-top: 100px;
+      max-height: 100vh;
+      max-width: 100%;
       overflow: auto;
     }
 
@@ -293,10 +300,10 @@
       margin-left: -5px;
     }
 
-    &.doc {
-      .sidebar-page {
-        min-height: calc(~'100vh - 280px');
-        overflow: auto;
+    &.blog,
+    &.recruit {
+      .sidebar {
+        min-height: 50vh;
       }
     }
   }
@@ -305,17 +312,7 @@
   .recruit,
   .meetup {
     .nav-tags {
-      padding-top: 50px;
+      padding-top: 45px;
     }
-  }
-}
-
-@media (max-width: 480px) {
-  .blog .sidebar,
-  .doc .sidebar,
-  .meetup .sidebar,
-  .recruit .sidebar,
-  .weekly .sidebar {
-    min-height: 100%;
   }
 }
