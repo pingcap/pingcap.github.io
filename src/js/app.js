@@ -238,3 +238,15 @@ $(document).ready(function() {
     if (e.target && e.target.value) $('.ds-dropdown-menu').show()
   })
 })
+
+$('.nav-btn.nav-slider').on('click', function() {
+  $('.overlay').show()
+  $('nav').toggleClass('open')
+})
+
+$('.overlay').on('click', function() {
+  if ($('nav').hasClass('open')) {
+    $('nav').removeClass('open')
+  }
+  $(this).hide()
+})

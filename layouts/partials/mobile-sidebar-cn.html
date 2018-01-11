@@ -1,0 +1,30 @@
+{{ $nav_active := $.Scratch.Get "nav_active" }}
+
+<!-- nav -->
+<nav class="mobile-sidebar">
+  <div class="nav-header">
+    <div class="logo-wrap">
+      <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+    </div>
+
+    <!-- <div class="global-search">
+      <div class="search-wrapper">
+        <span class="icon-search">{{ partial "svgs/icon-search.svg" (dict "fill" "#fff" "width" 18 "height" 18 ) }}</span>
+        {{ partial "search/ui.html" . }}
+      </div>
+    </div> -->
+  </div>
+  <ul class="ul-base">
+    <li {{ if eq $nav_active "docs"}}class="sel"{{end}}><a href="/docs-cn/overview">文档</a></li>
+    <li {{ if eq $nav_active "blog"}}class="sel"{{end}}><a href="/blog-cn">博客</a></li>
+    <!-- <li {{ if eq $nav_active "meetup"}}class="sel"{{end}}><a href="/meetup">Meetup</a></li> -->
+    <li {{ if eq $nav_active "about"}}class="sel"{{end}}><a href="/about-cn">关于</a></li>
+    <li>
+      <a class="link-download" href="https://github.com/pingcap/tidb/releases" target="_blank">下载
+        {{ partial "svgs/icon-external-link.svg" (dict "fill" "#fff" "width" 10 "height" 10 ) }}
+      </a>
+    </li>
+  </ul>
+  <!-- TODO: footer -->
+</nav>
+<!-- @end nav -->
