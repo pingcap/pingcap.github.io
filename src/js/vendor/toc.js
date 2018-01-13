@@ -1,15 +1,13 @@
-/* eslint-disable */
-;(function() {
+/* eslint-disable */ ;
+(function() {
   'use strict'
 
   function log() {
-    if (false) {
-    }
+    if (false) {}
   }
 
   function draw(elem, color = 'red') {
-    if (false && elem) {
-    }
+    if (false && elem) {}
   }
 
   function assert(condition, error) {
@@ -62,9 +60,9 @@
 
   const getScroll = (elem, direction = 'top') => {
     if (elem === document.body) {
-      return direction === 'top'
-        ? document.documentElement.scrollTop || document.body.scrollTop
-        : document.documentElement.scrollLeft || document.body.scrollLeft
+      return direction === 'top' ?
+        document.documentElement.scrollTop || document.body.scrollTop :
+        document.documentElement.scrollLeft || document.body.scrollLeft
     } else {
       return direction === 'top' ? elem.scrollTop : elem.scrollLeft
     }
@@ -106,9 +104,9 @@
       let rect = targetElem.getBoundingClientRect()
       let endScrollTop =
         rect.top -
-        (scrollElem === document.body
-          ? 0
-          : scrollElem.getBoundingClientRect().top) +
+        (scrollElem === document.body ?
+          0 :
+          scrollElem.getBoundingClientRect().top) +
         getScroll(scrollElem) -
         topMargin
       let startScrollTop = getScroll(scrollElem)
@@ -291,21 +289,24 @@
   }
 
   var commonjsGlobal =
-    typeof window !== 'undefined'
-      ? window
-      : typeof global !== 'undefined'
-        ? global
-        : typeof self !== 'undefined' ? self : {}
+    typeof window !== 'undefined' ?
+    window :
+    typeof global !== 'undefined' ?
+    global :
+    typeof self !== 'undefined' ? self : {}
 
   function createCommonjsModule(fn, module) {
     return (
-      (module = { exports: {} }), fn(module, module.exports), module.exports
+      (module = {
+        exports: {}
+      }), fn(module, module.exports), module.exports
     )
   }
 
-  var mithril = createCommonjsModule(function(module) {
-    ;(function() {
+  var mithril = createCommonjsModule(function(module) {;
+    (function() {
       'use strict'
+
       function Vnode(tag, key, attrs0, children, text, dom) {
         return {
           tag: tag,
@@ -352,6 +353,7 @@
       var selectorParser = /(?:(^|#|\.)([^#\.\[\]]+))|(\[(.+?)(?:\s*=\s*("|'|)((?:\\["'\]]|.)*?)\5)?\])/g
       var selectorCache = {}
       var hasOwn = {}.hasOwnProperty
+
       function compileSelector(selector) {
         var match,
           tag = 'div',
@@ -367,16 +369,20 @@
             var attrValue = match[6]
             if (attrValue)
               attrValue = attrValue
-                .replace(/\\(["'])/g, '$1')
-                .replace(/\\\\/g, '\\')
+              .replace(/\\(["'])/g, '$1')
+              .replace(/\\\\/g, '\\')
             if (match[4] === 'class') classes.push(attrValue)
             else
               attrs[match[4]] = attrValue === '' ? attrValue : attrValue || true
           }
         }
         if (classes.length > 0) attrs.className = classes.join(' ')
-        return (selectorCache[selector] = { tag: tag, attrs: attrs })
+        return (selectorCache[selector] = {
+          tag: tag,
+          attrs: attrs
+        })
       }
+
       function execSelector(state, attrs, children) {
         var hasAttrs = false,
           childList,
@@ -420,6 +426,7 @@
           text
         )
       }
+
       function hyperscript(selector) {
         // Because sloppy mode sucks
         var attrs = arguments[1],
@@ -492,6 +499,7 @@
         })
         var callAsync =
           typeof setImmediate === 'function' ? setImmediate : setTimeout
+
         function handler(list, shouldAbsorb) {
           return function execute(value) {
             var then
@@ -500,7 +508,7 @@
                 shouldAbsorb &&
                 value != null &&
                 (typeof value === 'object' || typeof value === 'function') &&
-                typeof (then = value.then) === 'function'
+                typeof(then = value.then) === 'function'
               ) {
                 if (value === self)
                   throw new TypeError("Promise can't be resolved w/ itself")
@@ -512,8 +520,8 @@
                       'Possible unhandled promise rejection:',
                       value
                     )
-                  for (var i = 0; i < list.length; i++) list[i](value)
-                  ;(resolvers.length = 0), (rejectors.length = 0)
+                  for (var i = 0; i < list.length; i++) list[i](value);
+                  (resolvers.length = 0), (rejectors.length = 0)
                   instance.state = shouldAbsorb
                   instance.retry = function() {
                     execute(value)
@@ -525,8 +533,10 @@
             }
           }
         }
+
         function executeOnce(then) {
           var runs = 0
+
           function run(fn) {
             return function(value) {
               if (runs++ > 0) return
@@ -545,6 +555,7 @@
       PromisePolyfill.prototype.then = function(onFulfilled, onRejection) {
         var self = this,
           instance = self._instance
+
         function handle(callback, list, next, state) {
           list.push(function(value) {
             if (typeof callback !== 'function') next(value)
@@ -559,8 +570,8 @@
             instance.retry()
         }
         var resolveNext, rejectNext
-        var promise = new PromisePolyfill(function(resolve, reject) {
-          ;(resolveNext = resolve), (rejectNext = reject)
+        var promise = new PromisePolyfill(function(resolve, reject) {;
+          (resolveNext = resolve), (rejectNext = reject)
         })
         handle(onFulfilled, instance.resolvers, resolveNext, true),
           handle(onRejection, instance.rejectors, rejectNext, false)
@@ -587,8 +598,8 @@
             values = []
           if (list.length === 0) resolve([])
           else
-            for (var i = 0; i < list.length; i++) {
-              ;(function(i) {
+            for (var i = 0; i < list.length; i++) {;
+              (function(i) {
                 function consume(value) {
                   count++
                   values[i] = value
@@ -621,8 +632,7 @@
         if (typeof commonjsGlobal.Promise === 'undefined')
           commonjsGlobal.Promise = PromisePolyfill
         var PromisePolyfill = commonjsGlobal.Promise
-      } else {
-      }
+      } else {}
       var buildQueryString = function(object) {
         if (Object.prototype.toString.call(object) !== '[object Object]')
           return ''
@@ -631,6 +641,7 @@
           destructure(key0, object[key0])
         }
         return args.join('&')
+
         function destructure(key0, value) {
           if (Array.isArray(value)) {
             for (var i = 0; i < value.length; i++) {
@@ -645,9 +656,9 @@
           } else
             args.push(
               encodeURIComponent(key0) +
-                (value != null && value !== ''
-                  ? '=' + encodeURIComponent(value)
-                  : '')
+              (value != null && value !== '' ?
+                '=' + encodeURIComponent(value) :
+                '')
             )
         }
       }
@@ -655,11 +666,14 @@
       var _8 = function($window, Promise) {
         var callbackCount = 0
         var oncompletion
+
         function setCompletionCallback(callback) {
           oncompletion = callback
         }
+
         function finalizer() {
           var count = 0
+
           function complete() {
             if (--count === 0 && typeof oncompletion === 'function')
               oncompletion()
@@ -678,6 +692,7 @@
             return promise0
           }
         }
+
         function normalize(args, extra) {
           if (typeof args === 'string') {
             var url = args
@@ -686,6 +701,7 @@
           }
           return args
         }
+
         function request(args, extra) {
           var finalize = finalizer()
           args = normalize(args, extra)
@@ -693,16 +709,16 @@
             if (args.method == null) args.method = 'GET'
             args.method = args.method.toUpperCase()
             var useBody =
-              args.method === 'GET' || args.method === 'TRACE'
-                ? false
-                : typeof args.useBody === 'boolean' ? args.useBody : true
+              args.method === 'GET' || args.method === 'TRACE' ?
+              false :
+              typeof args.useBody === 'boolean' ? args.useBody : true
             if (typeof args.serialize !== 'function')
               args.serialize =
-                typeof FormData !== 'undefined' && args.data instanceof FormData
-                  ? function(value) {
-                      return value
-                    }
-                  : JSON.stringify
+              typeof FormData !== 'undefined' && args.data instanceof FormData ?
+              function(value) {
+                return value
+              } :
+              JSON.stringify
             if (typeof args.deserialize !== 'function')
               args.deserialize = deserialize
             if (typeof args.extract !== 'function') args.extract = extract
@@ -752,9 +768,9 @@
               if (xhr.readyState === 4) {
                 try {
                   var response =
-                    args.extract !== extract
-                      ? args.extract(xhr, args)
-                      : args.deserialize(args.extract(xhr, args))
+                    args.extract !== extract ?
+                    args.extract(xhr, args) :
+                    args.deserialize(args.extract(xhr, args))
                   if (
                     (xhr.status >= 200 && xhr.status < 300) ||
                     xhr.status === 304 ||
@@ -776,6 +792,7 @@
           })
           return args.background === true ? promise0 : finalize(promise0)
         }
+
         function jsonp(args, extra) {
           var finalize = finalizer()
           args = normalize(args, extra)
@@ -783,10 +800,10 @@
             var callbackName =
               args.callbackName ||
               '_mithril_' +
-                Math.round(Math.random() * 1e16) +
-                '_' +
-                callbackCount++
-            var script = $window.document.createElement('script')
+              Math.round(Math.random() * 1e16) +
+              '_' +
+              callbackCount++
+              var script = $window.document.createElement('script')
             $window[callbackName] = function(data) {
               script.parentNode.removeChild(script)
               resolve(cast(args.type, data))
@@ -805,6 +822,7 @@
           })
           return args.background === true ? promise0 : finalize(promise0)
         }
+
         function interpolate(url, data) {
           if (data == null) return url
           var tokens = url.match(/:[^\/]+/gi) || []
@@ -816,6 +834,7 @@
           }
           return url
         }
+
         function assemble(url, data) {
           var querystring = buildQueryString(data)
           if (querystring !== '') {
@@ -824,6 +843,7 @@
           }
           return url
         }
+
         function deserialize(data) {
           try {
             return data !== '' ? JSON.parse(data) : null
@@ -831,9 +851,11 @@
             throw new Error(data)
           }
         }
+
         function extract(xhr) {
           return xhr.responseText
         }
+
         function cast(type0, data) {
           if (typeof type0 === 'function') {
             if (Array.isArray(data)) {
@@ -859,9 +881,11 @@
           math: 'http://www.w3.org/1998/Math/MathML'
         }
         var onevent
+
         function setEventCallback(callback) {
           return (onevent = callback)
         }
+
         function getNameSpace(vnode) {
           return (vnode.attrs && vnode.attrs.xmlns) || nameSpace[vnode.tag]
         }
@@ -882,6 +906,7 @@
             }
           }
         }
+
         function createNode(parent, vnode, hooks, ns, nextSibling) {
           var tag = vnode.tag
           if (typeof tag === 'string') {
@@ -899,25 +924,26 @@
             }
           } else return createComponent(parent, vnode, hooks, ns, nextSibling)
         }
+
         function createText(parent, vnode, nextSibling) {
           vnode.dom = $doc.createTextNode(vnode.children)
           insertNode(parent, vnode.dom, nextSibling)
           return vnode.dom
         }
+
         function createHTML(parent, vnode, nextSibling) {
           var match1 = vnode.children.match(/^\s*?<(\w+)/im) || []
-          var parent1 =
-            {
-              caption: 'table',
-              thead: 'table',
-              tbody: 'table',
-              tfoot: 'table',
-              tr: 'tbody',
-              th: 'tr',
-              td: 'tr',
-              colgroup: 'table',
-              col: 'colgroup'
-            }[match1[1]] || 'div'
+          var parent1 = {
+            caption: 'table',
+            thead: 'table',
+            tbody: 'table',
+            tfoot: 'table',
+            tr: 'tbody',
+            th: 'tr',
+            td: 'tr',
+            colgroup: 'table',
+            col: 'colgroup'
+          }[match1[1]] || 'div'
           var temp = $doc.createElement(parent1)
           temp.innerHTML = vnode.children
           vnode.dom = temp.firstChild
@@ -930,6 +956,7 @@
           insertNode(parent, fragment, nextSibling)
           return fragment
         }
+
         function createFragment(parent, vnode, hooks, ns, nextSibling) {
           var fragment = $doc.createDocumentFragment()
           if (vnode.children != null) {
@@ -941,16 +968,21 @@
           insertNode(parent, fragment, nextSibling)
           return fragment
         }
+
         function createElement(parent, vnode, hooks, ns, nextSibling) {
           var tag = vnode.tag
           var attrs2 = vnode.attrs
           var is = attrs2 && attrs2.is
           ns = getNameSpace(vnode) || ns
-          var element = ns
-            ? is
-              ? $doc.createElementNS(ns, tag, { is: is })
-              : $doc.createElementNS(ns, tag)
-            : is ? $doc.createElement(tag, { is: is }) : $doc.createElement(tag)
+          var element = ns ?
+            is ?
+            $doc.createElementNS(ns, tag, {
+              is: is
+            }) :
+            $doc.createElementNS(ns, tag) :
+            is ? $doc.createElement(tag, {
+              is: is
+            }) : $doc.createElement(tag)
           vnode.dom = element
           if (attrs2 != null) {
             setAttrs(vnode, attrs2, ns)
@@ -989,6 +1021,7 @@
           }
           return element
         }
+
         function initComponent(vnode, hooks) {
           var sentinel
           if (typeof vnode.tag.view === 'function') {
@@ -1003,9 +1036,9 @@
             sentinel.$$reentrantLock$$ = true
             vnode.state =
               vnode.tag.prototype != null &&
-              typeof vnode.tag.prototype.view === 'function'
-                ? new vnode.tag(vnode)
-                : vnode.tag(vnode)
+              typeof vnode.tag.prototype.view === 'function' ?
+              new vnode.tag(vnode) :
+              vnode.tag(vnode)
           }
           vnode._state = vnode.state
           if (vnode.attrs != null) initLifecycle(vnode.attrs, vnode, hooks)
@@ -1019,6 +1052,7 @@
             )
           sentinel.$$reentrantLock$$ = null
         }
+
         function createComponent(parent, vnode, hooks, ns, nextSibling) {
           initComponent(vnode, hooks)
           if (vnode.instance != null) {
@@ -1109,109 +1143,110 @@
               var o = old[oldStart],
                 v = vnodes[start]
               if (o === v && !recycling) oldStart++, start++
-              else if (o == null) oldStart++
-              else if (v == null) start++
-              else if (o.key === v.key) {
-                var shouldRecycle =
-                  (pool != null && oldStart >= old.length - pool.length) ||
-                  (pool == null && recycling)
-                oldStart++, start++
-                updateNode(
-                  parent,
-                  o,
-                  v,
-                  hooks,
-                  getNextSibling(old, oldStart, nextSibling),
-                  shouldRecycle,
-                  ns
-                )
-                if (recycling && o.tag === v.tag)
-                  insertNode(parent, toFragment(o), nextSibling)
-              } else {
-                var o = old[oldEnd]
-                if (o === v && !recycling) oldEnd--, start++
-                else if (o == null) oldEnd--
-                else if (v == null) start++
-                else if (o.key === v.key) {
-                  var shouldRecycle =
-                    (pool != null && oldEnd >= old.length - pool.length) ||
-                    (pool == null && recycling)
-                  updateNode(
-                    parent,
-                    o,
-                    v,
-                    hooks,
-                    getNextSibling(old, oldEnd + 1, nextSibling),
-                    shouldRecycle,
-                    ns
-                  )
-                  if (recycling || start < end)
-                    insertNode(
-                      parent,
-                      toFragment(o),
-                      getNextSibling(old, oldStart, nextSibling)
-                    )
-                  oldEnd--, start++
-                } else break
-              }
+                else if (o == null) oldStart++
+                  else if (v == null) start++
+                    else if (o.key === v.key) {
+                      var shouldRecycle =
+                        (pool != null && oldStart >= old.length - pool.length) ||
+                        (pool == null && recycling)
+                      oldStart++, start++
+                      updateNode(
+                        parent,
+                        o,
+                        v,
+                        hooks,
+                        getNextSibling(old, oldStart, nextSibling),
+                        shouldRecycle,
+                        ns
+                      )
+                      if (recycling && o.tag === v.tag)
+                        insertNode(parent, toFragment(o), nextSibling)
+                    } else {
+                      var o = old[oldEnd]
+                      if (o === v && !recycling) oldEnd--, start++
+                        else if (o == null) oldEnd--
+                          else if (v == null) start++
+                            else if (o.key === v.key) {
+                              var shouldRecycle =
+                                (pool != null && oldEnd >= old.length - pool.length) ||
+                                (pool == null && recycling)
+                              updateNode(
+                                parent,
+                                o,
+                                v,
+                                hooks,
+                                getNextSibling(old, oldEnd + 1, nextSibling),
+                                shouldRecycle,
+                                ns
+                              )
+                              if (recycling || start < end)
+                                insertNode(
+                                  parent,
+                                  toFragment(o),
+                                  getNextSibling(old, oldStart, nextSibling)
+                                )
+                              oldEnd--, start++
+                            } else break
+                    }
             }
             while (oldEnd >= oldStart && end >= start) {
               var o = old[oldEnd],
                 v = vnodes[end]
               if (o === v && !recycling) oldEnd--, end--
-              else if (o == null) oldEnd--
-              else if (v == null) end--
-              else if (o.key === v.key) {
-                var shouldRecycle =
-                  (pool != null && oldEnd >= old.length - pool.length) ||
-                  (pool == null && recycling)
-                updateNode(
-                  parent,
-                  o,
-                  v,
-                  hooks,
-                  getNextSibling(old, oldEnd + 1, nextSibling),
-                  shouldRecycle,
-                  ns
-                )
-                if (recycling && o.tag === v.tag)
-                  insertNode(parent, toFragment(o), nextSibling)
-                if (o.dom != null) nextSibling = o.dom
-                oldEnd--, end--
-              } else {
-                if (!map) map = getKeyMap(old, oldEnd)
-                if (v != null) {
-                  var oldIndex = map[v.key]
-                  if (oldIndex != null) {
-                    var movable = old[oldIndex]
-                    var shouldRecycle =
-                      (pool != null && oldIndex >= old.length - pool.length) ||
-                      (pool == null && recycling)
-                    updateNode(
-                      parent,
-                      movable,
-                      v,
-                      hooks,
-                      getNextSibling(old, oldEnd + 1, nextSibling),
-                      recycling,
-                      ns
-                    )
-                    insertNode(parent, toFragment(movable), nextSibling)
-                    old[oldIndex].skip = true
-                    if (movable.dom != null) nextSibling = movable.dom
-                  } else {
-                    var dom = createNode(parent, v, hooks, ns, nextSibling)
-                    nextSibling = dom
-                  }
-                }
-                end--
-              }
+                else if (o == null) oldEnd--
+                  else if (v == null) end--
+                    else if (o.key === v.key) {
+                      var shouldRecycle =
+                        (pool != null && oldEnd >= old.length - pool.length) ||
+                        (pool == null && recycling)
+                      updateNode(
+                        parent,
+                        o,
+                        v,
+                        hooks,
+                        getNextSibling(old, oldEnd + 1, nextSibling),
+                        shouldRecycle,
+                        ns
+                      )
+                      if (recycling && o.tag === v.tag)
+                        insertNode(parent, toFragment(o), nextSibling)
+                      if (o.dom != null) nextSibling = o.dom
+                      oldEnd--, end--
+                    } else {
+                      if (!map) map = getKeyMap(old, oldEnd)
+                      if (v != null) {
+                        var oldIndex = map[v.key]
+                        if (oldIndex != null) {
+                          var movable = old[oldIndex]
+                          var shouldRecycle =
+                            (pool != null && oldIndex >= old.length - pool.length) ||
+                            (pool == null && recycling)
+                          updateNode(
+                            parent,
+                            movable,
+                            v,
+                            hooks,
+                            getNextSibling(old, oldEnd + 1, nextSibling),
+                            recycling,
+                            ns
+                          )
+                          insertNode(parent, toFragment(movable), nextSibling)
+                          old[oldIndex].skip = true
+                          if (movable.dom != null) nextSibling = movable.dom
+                        } else {
+                          var dom = createNode(parent, v, hooks, ns, nextSibling)
+                          nextSibling = dom
+                        }
+                      }
+                      end--
+                    }
               if (end < start) break
             }
             createNodes(parent, vnodes, start, end + 1, hooks, nextSibling, ns)
             removeNodes(old, oldStart, oldEnd + 1, vnodes)
           }
         }
+
         function updateNode(
           parent,
           old,
@@ -1271,18 +1306,21 @@
             createNode(parent, vnode, hooks, ns, nextSibling)
           }
         }
+
         function updateText(old, vnode) {
           if (old.children.toString() !== vnode.children.toString()) {
             old.dom.nodeValue = vnode.children
           }
           vnode.dom = old.dom
         }
+
         function updateHTML(parent, old, vnode, nextSibling) {
           if (old.children !== vnode.children) {
             toFragment(old)
             createHTML(parent, vnode, nextSibling)
-          } else (vnode.dom = old.dom), (vnode.domSize = old.domSize)
+          } else(vnode.dom = old.dom), (vnode.domSize = old.domSize)
         }
+
         function updateFragment(
           parent,
           old,
@@ -1315,6 +1353,7 @@
             if (domSize !== 1) vnode.domSize = domSize
           }
         }
+
         function updateElement(old, vnode, recycling, hooks, ns) {
           var element = (vnode.dom = old.dom)
           ns = getNameSpace(vnode) || ns
@@ -1369,6 +1408,7 @@
             )
           }
         }
+
         function updateComponent(
           parent,
           old,
@@ -1415,11 +1455,12 @@
             vnode.domSize = old.domSize
           }
         }
+
         function isRecyclable(old, vnodes) {
           if (
             old.pool != null &&
             Math.abs(old.pool.length - vnodes.length) <=
-              Math.abs(old.length - vnodes.length)
+            Math.abs(old.length - vnodes.length)
           ) {
             var oldChildrenLength =
               (old[0] && old[0].children && old[0].children.length) || 0
@@ -1440,6 +1481,7 @@
           }
           return false
         }
+
         function getKeyMap(vnodes, end) {
           var map = {},
             i = 0
@@ -1452,6 +1494,7 @@
           }
           return map
         }
+
         function toFragment(vnode) {
           var count0 = vnode.domSize
           if (count0 != null || vnode.dom == null) {
@@ -1464,17 +1507,20 @@
             return fragment
           } else return vnode.dom
         }
+
         function getNextSibling(vnodes, i, nextSibling) {
           for (; i < vnodes.length; i++) {
             if (vnodes[i] != null && vnodes[i].dom != null) return vnodes[i].dom
           }
           return nextSibling
         }
+
         function insertNode(parent, dom, nextSibling) {
           if (nextSibling && nextSibling.parentNode)
             parent.insertBefore(dom, nextSibling)
           else parent.appendChild(dom)
         }
+
         function setContentEditable(vnode) {
           var children = vnode.children
           if (
@@ -1500,6 +1546,7 @@
             }
           }
         }
+
         function removeNode(vnode, context) {
           var expected = 1,
             called = 0
@@ -1521,6 +1568,7 @@
             }
           }
           continuation()
+
           function continuation() {
             if (++called === expected) {
               onremove(vnode)
@@ -1547,10 +1595,12 @@
             }
           }
         }
+
         function removeNodeFromDOM(node) {
           var parent = node.parentNode
           if (parent != null) parent.removeChild(node)
         }
+
         function onremove(vnode) {
           if (vnode.attrs && typeof vnode.attrs.onremove === 'function')
             vnode.attrs.onremove.call(vnode.state, vnode)
@@ -1576,6 +1626,7 @@
             setAttr(vnode, key2, null, attrs2[key2], ns)
           }
         }
+
         function setAttr(vnode, key2, old, value, ns) {
           var element = vnode.dom
           if (
@@ -1656,6 +1707,7 @@
               element.setAttribute(key2 === 'className' ? 'class' : key2, value)
           }
         }
+
         function setLateAttrs(vnode) {
           var attrs2 = vnode.attrs
           if (vnode.tag === 'select' && attrs2 != null) {
@@ -1671,6 +1723,7 @@
               )
           }
         }
+
         function updateAttrs(vnode, old, attrs2, ns) {
           if (attrs2 != null) {
             for (var key2 in attrs2) {
@@ -1692,6 +1745,7 @@
             }
           }
         }
+
         function isFormAttribute(vnode, attr) {
           return (
             attr === 'value' ||
@@ -1700,6 +1754,7 @@
             (attr === 'selected' && vnode.dom === $doc.activeElement)
           )
         }
+
         function isLifecycleMethod(attr) {
           return (
             attr === 'oninit' ||
@@ -1710,6 +1765,7 @@
             attr === 'onbeforeupdate'
           )
         }
+
         function isAttribute(attr) {
           return (
             attr === 'href' ||
@@ -1719,9 +1775,11 @@
             attr === 'height'
           ) // || attr === "type"
         }
+
         function isCustomElement(vnode) {
           return vnode.attrs.is || vnode.tag.indexOf('-') > -1
         }
+
         function hasIntegrationMethods(source) {
           return (
             source != null &&
@@ -1733,7 +1791,7 @@
         }
         //style
         function updateStyle(element, old, style) {
-          if (old === style) (element.style.cssText = ''), (old = null)
+          if (old === style)(element.style.cssText = ''), (old = null)
           if (style == null) element.style.cssText = ''
           else if (typeof style === 'string') element.style.cssText = style
           else {
@@ -1752,13 +1810,13 @@
         function updateEvent(vnode, key2, value) {
           var element = vnode.dom
           var callback =
-            typeof onevent !== 'function'
-              ? value
-              : function(e) {
-                  var result = value.call(element, e)
-                  onevent.call(element, e)
-                  return result
-                }
+            typeof onevent !== 'function' ?
+            value :
+            function(e) {
+              var result = value.call(element, e)
+              onevent.call(element, e)
+              return result
+            }
           if (key2 in element)
             element[key2] = typeof value === 'function' ? callback : null
           else {
@@ -1780,10 +1838,12 @@
           if (typeof source.oncreate === 'function')
             hooks.push(source.oncreate.bind(vnode.state, vnode))
         }
+
         function updateLifecycle(source, vnode, hooks) {
           if (typeof source.onupdate === 'function')
             hooks.push(source.onupdate.bind(vnode.state, vnode))
         }
+
         function shouldNotUpdate(vnode, old) {
           var forceVnodeUpdate, forceComponentUpdate
           if (
@@ -1804,8 +1864,7 @@
               vnode,
               old
             )
-          if (
-            !(
+          if (!(
               forceVnodeUpdate === undefined &&
               forceComponentUpdate === undefined
             ) &&
@@ -1819,6 +1878,7 @@
           }
           return false
         }
+
         function render(dom, vnodes) {
           if (!dom)
             throw new Error(
@@ -1844,17 +1904,21 @@
           // document.activeElement can return null in IE https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
           if (active != null && $doc.activeElement !== active) active.focus()
         }
-        return { render: render, setEventCallback: setEventCallback }
+        return {
+          render: render,
+          setEventCallback: setEventCallback
+        }
       }
+
       function throttle(callback) {
         //60fps translates to 16.6ms, round it down since setTimeout requires int
         var time = 16
         var last = 0,
           pending = null
         var timeout =
-          typeof requestAnimationFrame === 'function'
-            ? requestAnimationFrame
-            : setTimeout
+          typeof requestAnimationFrame === 'function' ?
+          requestAnimationFrame :
+          setTimeout
         return function() {
           var now = Date.now()
           if (last === 0 || now - last >= time) {
@@ -1876,14 +1940,17 @@
           else redraw()
         })
         var callbacks = []
+
         function subscribe(key1, callback) {
           unsubscribe(key1)
           callbacks.push(key1, throttle(callback))
         }
+
         function unsubscribe(key1) {
           var index = callbacks.indexOf(key1)
           if (index > -1) callbacks.splice(index, 2)
         }
+
         function redraw() {
           for (var i = 1; i < callbacks.length; i += 2) {
             callbacks[i]()
@@ -1957,6 +2024,7 @@
         var supportsPushState = typeof $window.history.pushState === 'function'
         var callAsync0 =
           typeof setImmediate === 'function' ? setImmediate : setTimeout
+
         function normalize1(fragment0) {
           var data = $window.location[fragment0].replace(
             /(?:%[a-f89][a-f0-9])+/gim,
@@ -1966,6 +2034,7 @@
           return data
         }
         var asyncId
+
         function debounceAsync(callback0) {
           return function() {
             if (asyncId != null) return
@@ -1975,13 +2044,14 @@
             })
           }
         }
+
         function parsePath(path, queryData, hashData) {
           var queryIndex = path.indexOf('?')
           var hashIndex = path.indexOf('#')
           var pathEnd =
-            queryIndex > -1
-              ? queryIndex
-              : hashIndex > -1 ? hashIndex : path.length
+            queryIndex > -1 ?
+            queryIndex :
+            hashIndex > -1 ? hashIndex : path.length
           if (queryIndex > -1) {
             var queryEnd = hashIndex > -1 ? hashIndex : path.length
             var queryParams = parseQueryString(
@@ -1995,7 +2065,9 @@
           }
           return path.slice(0, pathEnd)
         }
-        var router = { prefix: '#!' }
+        var router = {
+          prefix: '#!'
+        }
         router.getPath = function() {
           var type2 = router.prefix.charAt(0)
           switch (type2) {
@@ -2050,10 +2122,10 @@
             for (var route0 in routes) {
               var matcher = new RegExp(
                 '^' +
-                  route0
-                    .replace(/:[^\/]+?\.{3}/g, '(.*?)')
-                    .replace(/:[^\/]+/g, '([^\\/]+)') +
-                  '/?$'
+                route0
+                .replace(/:[^\/]+?\.{3}/g, '(.*?)')
+                .replace(/:[^\/]+/g, '([^\\/]+)') +
+                '/?$'
               )
               if (matcher.test(pathname)) {
                 pathname.replace(matcher, function() {
@@ -2099,7 +2171,9 @@
           }
           var bail = function(path) {
             if (path !== defaultRoute)
-              routeService.setPath(defaultRoute, null, { replace: true })
+              routeService.setPath(defaultRoute, null, {
+                replace: true
+              })
             else
               throw new Error('Could not resolve default route ' + defaultRoute)
           }
@@ -2111,10 +2185,10 @@
                 component =
                   comp != null &&
                   (typeof comp.view === 'function' ||
-                    typeof comp === 'function')
-                    ? comp
-                    : 'div'
-                ;(attrs3 = params), (currentPath = path), (lastUpdate = null)
+                    typeof comp === 'function') ?
+                  comp :
+                  'div';
+                (attrs3 = params), (currentPath = path), (lastUpdate = null)
                 render1 = (routeResolver.render || identity).bind(routeResolver)
                 run1()
               })
@@ -2123,11 +2197,11 @@
               else {
                 if (payload.onmatch) {
                   Promise.resolve(payload.onmatch(params, path)).then(function(
-                    resolved
-                  ) {
-                    update(payload, resolved)
-                  },
-                  bail)
+                      resolved
+                    ) {
+                      update(payload, resolved)
+                    },
+                    bail)
                 } else update(payload, 'div')
               }
             },
@@ -2176,9 +2250,9 @@
         return function(e) {
           callback1.call(
             context || this,
-            attrName in e.currentTarget
-              ? e.currentTarget[attrName]
-              : e.currentTarget.getAttribute(attrName)
+            attrName in e.currentTarget ?
+            e.currentTarget[attrName] :
+            e.currentTarget.getAttribute(attrName)
           )
         }
       }
@@ -2192,8 +2266,7 @@
       m.version = '1.1.5'
       m.vnode = Vnode
       if ('object' !== 'undefined') module['exports'] = m
-      else {
-      }
+      else {}
     })()
   })
 
@@ -2210,16 +2283,26 @@
     e.redraw = false
   }
 
-  const TOC = function({ $headings, $activeHeading, onClickHeading }) {
+  const TOC = function({
+    $headings,
+    $activeHeading,
+    onClickHeading
+  }) {
     // $activeHeading.subscribe(activeIndex => {})
     const toTree = function(headings) {
       let i = 0
-      let tree = { level: 0, children: [] }
+      let tree = {
+        level: 0,
+        children: []
+      }
       let stack = [tree]
       const top = arr => arr.slice(-1)[0]
 
       while (i < headings.length) {
-        let { level, isActive } = headings[i]
+        let {
+          level,
+          isActive
+        } = headings[i]
         if (level === stack.length) {
           const node = {
             heading: headings[i],
@@ -2249,33 +2332,41 @@
       return tree
     }
 
-    const UL = (children, { isRoot = false } = {}) =>
+    const UL = (children, {
+        isRoot = false
+      } = {}) =>
       mithril(
-        'ul',
-        {
+        'ul', {
           onwheel: isRoot && restrictScroll,
           onclick: isRoot && onClickHeading
         },
         children.map(LI)
       )
 
-    const LI = ({ heading, children }, index) =>
+    const LI = ({
+        heading,
+        children
+      }, index) =>
       mithril(
-        'li',
-        { class: heading && heading.isActive ? 'active' : '', key: index },
-        [
+        'li', {
+          class: heading && heading.isActive ? 'active' : '',
+          key: index
+        }, [
           heading &&
-            mithril(
-              'a',
-              { href: `#${heading.anchor}` },
-              heading.node.textContent
-            ),
+          mithril(
+            'a', {
+              href: `#${heading.anchor}`
+            },
+            heading.node.textContent
+          ),
           children && children.length && UL(children)
         ].filter(Boolean)
       )
 
     return {
-      oncreate({ dom }) {
+      oncreate({
+        dom
+      }) {
         // scroll to heading if out of view
         $activeHeading.subscribe(index => {
           const target = [].slice.apply(dom.querySelectorAll('.active')).pop()
@@ -2302,7 +2393,9 @@
       view() {
         $headings().forEach((h, i) => (h.isActive = i === $activeHeading()))
         const tree = toTree($headings())
-        return UL(tree.children, { isRoot: true })
+        return UL(tree.children, {
+          isRoot: true
+        })
       }
     }
   }
@@ -2352,9 +2445,9 @@
       $topMargin,
       (ref, [scrollX, scrollY], [offsetX, offsetY], topMargin) => {
         let x =
-          direction === 'right'
-            ? ref.right + gap
-            : ref.left - gap - popperMetric.width
+          direction === 'right' ?
+          ref.right + gap :
+          ref.left - gap - popperMetric.width
         x = Math.min(Math.max(0, x), window.innerWidth - popperMetric.width) // restrict to visible area
         let y = Math.max(scrollableTop + topMargin, ref.top - scrollY)
         return {
@@ -2393,34 +2486,42 @@
     const testWidth = 200
     const testHeight = 400
     const leftSlotTestPoints = [
-      left - gap - testWidth,
-      left - gap - testWidth / 2,
-      left - gap
-    ]
+        left - gap - testWidth,
+        left - gap - testWidth / 2,
+        left - gap
+      ]
       .map(x => [top, top + testHeight / 2, top + testHeight].map(y => [x, y]))
       .reduce((prev, cur) => prev.concat(cur), [])
     const rightSlotTestPoints = [
-      right + gap,
-      right + gap + testWidth / 2,
-      right + gap + testWidth
-    ]
+        right + gap,
+        right + gap + testWidth / 2,
+        right + gap + testWidth
+      ]
       .map(x => [top, top + testHeight / 2, top + testHeight].map(y => [x, y]))
       .reduce((prev, cur) => prev.concat(cur), [])
     const leftDepths = leftSlotTestPoints.map(depthOfPoint).filter(Boolean)
     const rightDepths = rightSlotTestPoints.map(depthOfPoint).filter(Boolean)
-    const leftAvgDepth = leftDepths.length
-      ? leftDepths.reduce((a, b) => a + b, 0) / leftDepths.length
-      : null
-    const rightAvgDepth = rightDepths.length
-      ? rightDepths.reduce((a, b) => a + b, 0) / rightDepths.length
-      : null
+    const leftAvgDepth = leftDepths.length ?
+      leftDepths.reduce((a, b) => a + b, 0) / leftDepths.length :
+      null
+    const rightAvgDepth = rightDepths.length ?
+      rightDepths.reduce((a, b) => a + b, 0) / rightDepths.length :
+      null
 
-    if (!leftAvgDepth) return { direction: 'right' }
-    if (!rightAvgDepth) return { direction: 'left' }
+    if (!leftAvgDepth) return {
+      direction: 'right'
+    }
+    if (!rightAvgDepth) return {
+      direction: 'left'
+    }
     const spaceDiff = document.documentElement.offsetWidth - right - left
     const scoreDiff =
       spaceDiff * 1 + (rightAvgDepth - leftAvgDepth) * 9 * -10 + 20 // I do like right better
-    return scoreDiff > 0 ? { direction: 'right' } : { direction: 'left' }
+    return scoreDiff > 0 ? {
+      direction: 'right'
+    } : {
+      direction: 'left'
+    }
   }
 
   const Container = function({
@@ -2436,10 +2537,18 @@
     $topbarHeight,
     onClickHeading
   }) {
-    const toc = TOC({ $headings, $activeHeading, onClickHeading })
+    const toc = TOC({
+      $headings,
+      $activeHeading,
+      onClickHeading
+    })
     return {
-      oncreate({ dom }) {
-        const { direction } = getOptimalContainerPos(article)
+      oncreate({
+        dom
+      }) {
+        const {
+          direction
+        } = getOptimalContainerPos(article)
         this.$style = makeSticky({
           ref: article,
           scrollable: scrollable,
@@ -2455,24 +2564,27 @@
       },
       view() {
         return mithril(
-          '#smarttoc',
-          {
+          '#smarttoc', {
             class: [
-              theme || 'light',
-              $headings().filter(h => h.level <= 2).length > 50 && 'lengthy',
-              $isShow() ? '' : 'hidden'
-            ]
+                theme || 'light',
+                $headings().filter(h => h.level <= 2).length > 50 && 'lengthy',
+                $isShow() ? '' : 'hidden'
+              ]
               .filter(Boolean)
               .join(' '),
             style: this.$style && this.$style()
-          },
-          [mithril(toc)]
+          }, [mithril(toc)]
         )
       }
     }
   }
 
-  const Extender = function({ $headings, scrollable, $isShow, $relayout }) {
+  const Extender = function({
+    $headings,
+    scrollable,
+    $isShow,
+    $relayout
+  }) {
     const $extender = Stream()
     // toc: extend body height so we can scroll to the last heading
     let extender = document.createElement('DIV')
@@ -2488,12 +2600,12 @@
             document.documentElement.scrollHeight -
             (lastRect.bottom + document.documentElement.scrollTop) -
             num(extender.style.height) // in case we are there already
-          extenderHeight = isShow
-            ? Math.max(
-                window.innerHeight - lastRect.height - heightBelowLastRect,
-                0
-              )
-            : 0
+          extenderHeight = isShow ?
+            Math.max(
+              window.innerHeight - lastRect.height - heightBelowLastRect,
+              0
+            ) :
+            0
         } else {
           let scrollRect = scrollable.getBoundingClientRect()
           let heightBelowLastRect =
@@ -2502,12 +2614,12 @@
             getScroll(scrollable) - // bottom of scrollable relative to viewport
             lastRect.bottom -
             num(extender.style.height) // in case we are there already
-          extenderHeight = isShow
-            ? Math.max(
-                scrollRect.height - lastRect.height - heightBelowLastRect,
-                0
-              )
-            : 0
+          extenderHeight = isShow ?
+            Math.max(
+              scrollRect.height - lastRect.height - heightBelowLastRect,
+              0
+            ) :
+            0
         }
         $extender({
           height: extenderHeight
@@ -2529,17 +2641,13 @@
       }
 
       return Object.assign(
-        num(computed.marginLeft) || num(computed.marginRight)
-          ? {}
-          : {
-              marginLeft: 'auto',
-              marginRight: 'auto'
-            },
-        num(computed.maxWidth)
-          ? {}
-          : {
-              maxWidth: bestWidth
-            }
+        num(computed.marginLeft) || num(computed.marginRight) ? {} : {
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        },
+        num(computed.maxWidth) ? {} : {
+          maxWidth: bestWidth
+        }
       )
     }
     let oldStyle = article.style.cssText
@@ -2556,32 +2664,38 @@
   }
 
   const addAnchors = function(headings) {
-    const anchoredHeadings = headings.map(function({ node, level, anchor }) {
+    const anchoredHeadings = headings.map(function({
+      node,
+      level,
+      anchor
+    }) {
       if (!anchor) {
         anchor =
-          node.id ||
-          [].slice
-            .apply(node.children)
-            .filter(elem => elem.tagName === 'A')
-            .map(a => {
-              let href = a.getAttribute('href') || ''
-              return href.startsWith('#') ? href.substr(1) : a.id
-            })
-            .filter(Boolean)[0]
+          node.id || [].slice
+          .apply(node.children)
+          .filter(elem => elem.tagName === 'A')
+          .map(a => {
+            let href = a.getAttribute('href') || ''
+            return href.startsWith('#') ? href.substr(1) : a.id
+          })
+          .filter(Boolean)[0]
         if (!anchor) {
           anchor = node.id = unique(safe(node.textContent))
         } else {
           anchor = unique(anchor)
         }
       }
-      return { node, level, anchor }
+      return {
+        node,
+        level,
+        anchor
+      }
     })
     return anchoredHeadings
   }
 
   const getScrollParent = function(elem) {
-    const canScroll = el =>
-      ['auto', 'scroll'].includes(window.getComputedStyle(el).overflowY) &&
+    const canScroll = el => ['auto', 'scroll'].includes(window.getComputedStyle(el).overflowY) &&
       el.clientHeight + 1 < el.scrollHeight
     while (elem && elem !== document.body && !canScroll(elem)) {
       elem = elem.parentElement
@@ -2615,12 +2729,14 @@
       $headings,
       (_, headings) => {
         const scrollableTop =
-          (scrollable === document.body
-            ? 0
-            : scrollable.getBoundingClientRect().top) -
+          (scrollable === document.body ?
+            0 :
+            scrollable.getBoundingClientRect().top) -
           getScroll(scrollable, 'top')
         return headings.map(
-          ({ node }) => node.getBoundingClientRect().top - scrollableTop
+          ({
+            node
+          }) => node.getBoundingClientRect().top - scrollableTop
         )
       }
     )
@@ -2643,8 +2759,9 @@
     return $curIndex.unique()
   }
 
-  const scrollToHeading = function(
-    { node },
+  const scrollToHeading = function({
+      node
+    },
     scrollElem,
     onScrollEnd,
     topMargin = 0
@@ -2661,7 +2778,10 @@
   const getTopBarHeight = function(topElem) {
     const findFixedParent = function(elem) {
       const isFixed = elem => {
-        let { position, zIndex } = window.getComputedStyle(elem)
+        let {
+          position,
+          zIndex
+        } = window.getComputedStyle(elem)
         return position === 'fixed' && zIndex
       }
       while (elem !== document.body && !isFixed(elem)) {
@@ -2669,7 +2789,11 @@
       }
       return elem === document.body ? null : elem
     }
-    let { left, right, top } = topElem.getBoundingClientRect()
+    let {
+      left,
+      right,
+      top
+    } = topElem.getBoundingClientRect()
     let leftTopmost = document.elementFromPoint(left + 1, top + 1)
     let rightTopmost = document.elementFromPoint(right - 1, top + 1)
     if (
@@ -2695,9 +2819,9 @@
     try {
       const parseColor = str =>
         str
-          .replace(/rgba?\(/, '')
-          .replace(/\).*/, '')
-          .split(/, ?/)
+        .replace(/rgba?\(/, '')
+        .replace(/\).*/, '')
+        .split(/, ?/)
       const getBgColor = elem =>
         parseColor(window.getComputedStyle(elem)['background-color'])
       const isTransparent = ([r, g, b, a]) => a === 0
@@ -2725,7 +2849,11 @@
     return root
   }
 
-  function createTOC({ article, $headings: $headings_, userOffset = [0, 0] }) {
+  function createTOC({
+    article,
+    $headings: $headings_,
+    userOffset = [0, 0]
+  }) {
     const $headings = $headings_.map(addAnchors)
     insertCSS(tocCSS, 'smarttoc__css')
 
@@ -2736,12 +2864,12 @@
     const $isShow = Stream(true)
     const $topbarHeight = Stream()
     const $resize = Stream.combine(
-      Stream.fromEvent(window, 'resize'),
-      Stream.fromEvent(document, 'readystatechange'),
-      Stream.fromEvent(document, 'load'),
-      Stream.fromEvent(document, 'DOMContentLoaded'),
-      () => null
-    )
+        Stream.fromEvent(window, 'resize'),
+        Stream.fromEvent(document, 'readystatechange'),
+        Stream.fromEvent(document, 'load'),
+        Stream.fromEvent(document, 'DOMContentLoaded'),
+        () => null
+      )
       .filter(() => $isShow())
       .throttle()
     const $scroll = scrollStream(scrollable, $isShow)
@@ -2756,7 +2884,12 @@
     const $userOffset = Stream(userOffset)
 
     scrollable.appendChild(
-      Extender({ $headings, scrollable, $isShow, $relayout })
+      Extender({
+        $headings,
+        scrollable,
+        $isShow,
+        $relayout
+      })
     )
 
     const onScrollEnd = function(node) {
@@ -2765,7 +2898,9 @@
           $topbarHeight(getTopBarHeight(node))
           log('topBarHeight', $topbarHeight())
           if ($topbarHeight()) {
-            scrollToHeading({ node }, scrollable, null, $topbarHeight() + 10)
+            scrollToHeading({
+              node
+            }, scrollable, null, $topbarHeight() + 10)
           }
         }, 300)
       }
@@ -2848,7 +2983,9 @@
         log('dispose')
         $isShow(false)
         mithril.render(getRoot(), mithril(''))
-        return { userOffset: $userOffset() }
+        return {
+          userOffset: $userOffset()
+        }
       }
     }
   }
@@ -2909,7 +3046,10 @@
         selector: selector,
         elems: [].slice.apply(rootElement.querySelectorAll(selector))
       }))
-      .forEach(({ selector, elems }) =>
+      .forEach(({
+          selector,
+          elems
+        }) =>
         elems.forEach(elem => updateScore(elem, weights[selector]))
       )
     const sorted = [...scores].sort((a, b) => b[1] - a[1])
@@ -2918,8 +3058,11 @@
     let candicates = sorted
       .slice(0, 5)
       .filter(Boolean)
-      .map(([elem, score]) => ({ elem, score }))
-    let isTooNarrow = e => e.scrollWidth < 400 // rule out sidebars
+      .map(([elem, score]) => ({
+        elem,
+        score
+      }))
+    let isTooNarrow = e => e.scrollWidth < 320 // rule out sidebars
     candicates.forEach(c => {
       if (isTooNarrow(c.elem)) {
         c.isNarrow = true
@@ -2933,21 +3076,23 @@
     candicates = candicates.filter(c => !c.isNarrow)
 
     const reweighted = candicates
-      .map(({ elem, score }) => [
+      .map(({
+        elem,
+        score
+      }) => [
         elem,
         score *
-          Math.log(
-            elem.scrollHeight *
-              elem.scrollHeight /
-              (elem.querySelectorAll('a').length || 1)
-          ),
+        Math.log(
+          elem.scrollHeight *
+          elem.scrollHeight /
+          (elem.querySelectorAll('a').length || 1)
+        ),
         elem.scrollHeight,
         elem.querySelectorAll('a').length
       ])
       .sort((a, b) => b[1] - a[1])
     const article = reweighted.length ? reweighted[0][0] : null
-    if (false) {
-    }
+    if (false) {}
     return article
   }
 
@@ -2959,7 +3104,15 @@
       isStrongAlsoHeading(article) ? 'STRONG' : []
     )
     const tagWeight = tag =>
-      ({ H1: 4, H2: 9, H3: 9, H4: 10, H5: 10, H6: 10, STRONG: 10 }[tag])
+      ({
+        H1: 4,
+        H2: 9,
+        H3: 9,
+        H4: 10,
+        H5: 10,
+        H6: 10,
+        STRONG: 10
+      }[tag])
     const isVisible = elem => elem.offsetHeight !== 0
     const isGroupVisible = headings =>
       headings.filter(isVisible).length >= headings.length * 0.5
@@ -2977,13 +3130,14 @@
     // use document sequence
     const validTags = headingGroup.map(headings => headings.tag)
     const acceptNode = node =>
-      validTags.includes(node.tagName) && isVisible(node)
-        ? NodeFilter.FILTER_ACCEPT
-        : NodeFilter.FILTER_SKIP
+      validTags.includes(node.tagName) && isVisible(node) ?
+      NodeFilter.FILTER_ACCEPT :
+      NodeFilter.FILTER_SKIP
     const treeWalker = document.createTreeWalker(
       article,
-      NodeFilter.SHOW_ELEMENT,
-      { acceptNode }
+      NodeFilter.SHOW_ELEMENT, {
+        acceptNode
+      }
     )
     const headings = []
     while (treeWalker.nextNode()) {
@@ -2993,8 +3147,7 @@
         level: validTags.indexOf(node.tagName) + 1
       })
     }
-    if (false) {
-    }
+    if (false) {}
     return headings
   }
 
@@ -3011,7 +3164,10 @@
   const generate = function(option = {}) {
     let [article, $headings] = extract()
     if (article && $headings && $headings().length) {
-      return createTOC(Object.assign({ article, $headings }, option))
+      return createTOC(Object.assign({
+        article,
+        $headings
+      }, option))
     } else {
       return null
     }
