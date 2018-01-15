@@ -12,7 +12,7 @@ do
   cd $module
   git ls-tree -r --name-only HEAD | while read filename; do
   if [[ ${filename: -3} == ".md" ]]; then
-  msg=$(git log -1 --format="%h___%cn___%s___%ad___%H" --date=format:'%b %d %Y' -- $filename) # pick up useful info
+  msg=$(git log -1 --format="%h___%cn___%s___%ad___%H" -- $filename) # pick up useful info
   msg=`echo $msg | sed 's/"//g'` # remove extra double quotes
   # echo `printf '"%s___%s": "%b",' "$module" "$filename" "$msg"` >> $target_file # design json structure used in template
   printf "{\n" >> $target_file
