@@ -2,12 +2,108 @@
 @import './base.less';
 //height
 @footer_height_pc: 330px;
-@input_height: 36px;
+@input_height: 32px;
 @pingcap_logo_height: 1.8rem;
 
 // width
 @btn_subscribe_width: 70px;
 
+#wechat {
+  position: relative;
+}
+
+.subscribe {
+  width: 100%;
+  max-width: 12rem;
+  margin-top: 20px;
+
+  .form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .form-control {
+    width: calc(~'100% - '@btn_subscribe_width);
+    height: @input_height;
+    background-color: fade(@white, 12%);
+    border: 1px solid fade(@white, 0%);
+    .rounded-corners(0);
+    padding: 0 10px;
+    color: @gray_white;
+    font-size: 12px;
+
+    &:hover,
+    &:focus {
+      border-color: fade(@theme_blue, 50%);
+    }
+  }
+  .btn {
+    width: @btn_subscribe_width;
+    height: @input_height;
+    padding: 0 5px;
+    .rounded-corners(0);
+    border: 1px solid fade(@white, 0%);
+    background-color: @theme_blue;
+    font-size: 12px;
+    color: @white;
+    text-align: center;
+    &:hover {
+      background-color: @white;
+      border-color: @white;
+      color: @theme_blue;
+      transition: all 0.5s ease;
+    }
+  }
+}
+
+.qr_code_outer {
+  position: absolute;
+  right: 158px;
+  top: -100px;
+  text-align: center;
+  .qr_code_inner {
+    .qr_code {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 158px;
+      padding: 12px;
+      border: 1px solid #d9dadc;
+      background-color: @white;
+      word-wrap: break-word;
+      word-break: break-all;
+      p {
+        margin: 0;
+        line-height: 1.5;
+        font-size: 0.6rem;
+        color: #888;
+      }
+      .qr_code_img {
+        width: 116px;
+        height: 116px;
+      }
+    }
+  }
+}
+
+.copyright {
+  padding: 0 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: fade(@white, 70%);
+}
+
+.btn-lang {
+  font-size: 0.7rem;
+  color: @white;
+  text-decoration: underline;
+
+  &:hover {
+    color: @theme_blue;
+    transition: all 0.5s ease;
+  }
+}
 /** add ellipsis in a line **/
 .footer {
   width: 100%;
@@ -60,103 +156,6 @@
     border-left: 1px solid rgba(255, 255, 255, 0.5);
     padding-left: 40px;
   }
-
-  .subscribe {
-    width: 100%;
-    max-width: 13rem;
-    margin-top: 1.3rem;
-
-    .form-inline {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .form-control {
-      width: calc(~'100% - '@btn_subscribe_width);
-      height: @input_height;
-      background-color: fade(@white, 12%);
-      border: 1px solid fade(@white, 0%);
-      .rounded-corners(0);
-      padding: 0 10px;
-      color: @gray_white;
-      font-size: 12px;
-
-      &:hover,
-      &:focus {
-        border-color: fade(@theme_blue, 50%);
-      }
-    }
-    .btn {
-      width: @btn_subscribe_width;
-      height: @input_height;
-      padding: 0 5px;
-      .rounded-corners(0);
-      border: 1px solid fade(@white, 0%);
-      background-color: @theme_blue;
-      font-size: 12px;
-      color: @white;
-      text-align: center;
-      &:hover {
-        background-color: @white;
-        border-color: @white;
-        color: @theme_blue;
-        transition: all 0.5s ease;
-      }
-    }
-  }
-
-  #wechat {
-    position: relative;
-  }
-
-  .qr_code_outer {
-    position: absolute;
-    right: 158px;
-    top: -100px;
-    text-align: center;
-    .qr_code_inner {
-      .qr_code {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 158px;
-        padding: 12px;
-        border: 1px solid #d9dadc;
-        background-color: @white;
-        word-wrap: break-word;
-        word-break: break-all;
-        p {
-          margin: 0;
-          line-height: 1.5;
-          font-size: 0.6rem;
-          color: #888;
-        }
-        .qr_code_img {
-          width: 116px;
-          height: 116px;
-        }
-      }
-    }
-  }
-
-  .copyright {
-    padding: 0 0.75rem;
-    font-size: 0.7rem;
-    font-weight: 300;
-    color: fade(@white, 70%);
-  }
-
-  .btn-lang {
-    font-size: 0.7rem;
-    color: @white;
-    text-decoration: underline;
-
-    &:hover {
-      color: @theme_blue;
-      transition: all 0.5s ease;
-    }
-  }
 }
 
 @media (min-width: 600px) {
@@ -167,8 +166,31 @@
 
 //iPhone4、iPhone5、iPhone6
 @media (max-width: 600px) {
-  // TODO: sidebar
   .footer {
-    display: none;
+    .container,
+    .flex-list-wrap,
+    .contact-list-wrap {
+      display: block;
+      width: 100%;
+      text-align: center;
+
+      .flex-list {
+        width: 100%;
+      }
+    }
+
+    .contact-list-wrap {
+      display: none;
+      // border-left: none;
+      // padding-left: 0;
+      // .subscribe {
+      //   margin: 20px auto;
+      // }
+    }
+
+    .btn-lang,
+    .copyright {
+      display: none;
+    }
   }
 }
