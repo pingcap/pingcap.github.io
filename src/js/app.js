@@ -216,16 +216,13 @@ $(document).ready(function() {
     })
 
   /* toggle wechat qr code */
-  const showQRCode = () => {
-    $('#js_qr_code').removeClass('f-hide')
-  }
-  const hiddenQRCode = () => {
-    $('#js_qr_code').addClass('f-hide')
-  }
-  $('#wechat').mouseover(showQRCode)
-  $('#wechat').mouseout(hiddenQRCode)
-  $('#wechat').on('tap', () => {
-    $('#js_qr_code').toggleClass('f-hide')
+  $('#wechat').on('click', e => {
+    e.preventDefault()
+    $('#wechat .qr_code_outer').toggleClass('f-hide')
+  })
+  $('#wechat-mobile').on('click', e => {
+    e.preventDefault()
+    $('#wechat-mobile .qr_code_outer').toggleClass('f-hide')
   })
 
   /* hide search suggestions dropdown menue on focusout */
