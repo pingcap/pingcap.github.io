@@ -8,6 +8,10 @@
       {{ $hash := index $infos 0 }}
       {{ $msg := index $infos 2 }}
       {{ $date := index $infos 3 }}
+      {{ $date_str := split $date " " }}
+      {{ $month := index $date_str 1 }}
+      {{ $day := index $date_str 2 }}
+      {{ $year := index $date_str 4 }}
       {{ $commit_id := index $infos 4 }}
       {{ $filename := index (split $item.name "___") 1 }}
       <div class="git-info">
@@ -17,7 +21,7 @@
         {{ else }}
           was last updated
         {{ end }}
-        <span>{{ $date }}</span>:
+        <span>{{ $month }} {{ $day }} {{ $year }}</span>:
         <a class="link" href="https://github.com/pingcap/{{$.repo}}/commit/{{$commit_id}}">
           {{ $msg }}
           <span class="hash">({{ $hash }})</span>
