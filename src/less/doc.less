@@ -337,6 +337,11 @@
 */
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 3.7cm 2.6cm 3.5cm;
+  }
+
   /* 把字体设置为16px/13pt, 把背景色设为纯白、字体纯黑，这样省墨。 */
   body {
     font: 13pt Georgia, "Times New Roman", Times, serif;
@@ -358,6 +363,9 @@
   a {
     page-break-inside:avoid;
   }
+  a:after {
+    content: "(" attr(href) ")";
+  }
   blockquote {
     page-break-inside: avoid;
   }
@@ -371,6 +379,13 @@
   }
   table, pre { page-break-inside:avoid; }
   ul, ol, dl  { page-break-before:avoid; }
+  thead, tfoot {
+    display: table-row-group;
+  }
+
+  nav, aside {
+    display: none;
+  }
 
   .header,
   .footer,
