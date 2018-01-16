@@ -9,7 +9,7 @@ import './vendor/jquery.SimpleTree.js'
 import { run as toc_run } from './vendor/toc'
 
 $(document).ready(function() {
-  // pre-loading
+  /* content pre-loading */
   $('.loading-container').hide()
   $('.content-container').show()
 
@@ -19,7 +19,7 @@ $(document).ready(function() {
     toc_run()
   }
 
-  // process tags
+  /* process tags */
   const hash = decodeURIComponent(location.hash)
   var blogRegex = /\/blog(-cn)?\//gi
   if (location.pathname.match(blogRegex) && hash) {
@@ -40,7 +40,8 @@ $(document).ready(function() {
       $('.tag.all').addClass('sel')
     }
   }
-  // Smooth scrolling when the document is loaded and ready
+
+  /* Smooth scrolling when the document is loaded and ready */
   const y = $('header.header').height()
   if (hash && $(hash).offset())
     $('html, body').animate(
@@ -49,6 +50,51 @@ $(document).ready(function() {
       },
       1000
     )
+
+  /* anchor scroll */
+  // Select all links with hashes
+  $('a[href*="#"]')
+    // Remove links that don't actually link to anything
+    .not('[href="#"]')
+    .not('[href="#0"]')
+    .click(function(event) {
+      // On-page links
+      if (
+        location.pathname.replace(/^\//, '') ==
+          this.pathname.replace(/^\//, '') &&
+        location.hostname == this.hostname
+      ) {
+        // Figure out element to scroll to
+        var hash = decodeURIComponent(this.hash)
+        var target = $(hash)
+        target = target.length ? target : $('[name=' + hash.slice(1) + ']')
+        // Does a scroll target exist?
+        if (target.length) {
+          // Only prevent default if animation is actually gonna happen
+          event.preventDefault()
+          const y = $('header.header').height()
+          $('html, body').animate(
+            {
+              scrollTop: target.offset().top - y,
+            },
+            1000,
+            function() {
+              //  Callback after animation
+              //  Must change focus!
+              // var $target = $(target)
+              // $target.focus()
+              // if ($target.is(':focus')) {
+              //    Checking if the target was focused
+              //   return false
+              // } else {
+              //   $target.attr('tabindex', '-1')  Adding tabindex for elements not focusable
+              //   $target.focus()  Set focus again
+              // }
+            }
+          )
+        }
+      }
+    })
 
   /* tree sidebar */
   $('.st_tree').SimpleTree({
@@ -132,51 +178,6 @@ $(document).ready(function() {
     e.preventDefault()
   })
 
-  /* anchor scroll */
-  // Select all links with hashes
-  $('a[href*="#"]')
-    // Remove links that don't actually link to anything
-    .not('[href="#"]')
-    .not('[href="#0"]')
-    .click(function(event) {
-      // On-page links
-      if (
-        location.pathname.replace(/^\//, '') ==
-          this.pathname.replace(/^\//, '') &&
-        location.hostname == this.hostname
-      ) {
-        // Figure out element to scroll to
-        var hash = decodeURIComponent(this.hash)
-        var target = $(hash)
-        target = target.length ? target : $('[name=' + hash.slice(1) + ']')
-        // Does a scroll target exist?
-        if (target.length) {
-          // Only prevent default if animation is actually gonna happen
-          event.preventDefault()
-          const y = $('header.header').height()
-          $('html, body').animate(
-            {
-              scrollTop: target.offset().top - y,
-            },
-            1000,
-            function() {
-              //  Callback after animation
-              //  Must change focus!
-              // var $target = $(target)
-              // $target.focus()
-              // if ($target.is(':focus')) {
-              //    Checking if the target was focused
-              //   return false
-              // } else {
-              //   $target.attr('tabindex', '-1')  Adding tabindex for elements not focusable
-              //   $target.focus()  Set focus again
-              // }
-            }
-          )
-        }
-      }
-    })
-
   /* open first item in docs/docs-cn/weekly list page */
   const openFolder = li => {
     if (li.hasClass('has-child')) {
@@ -234,16 +235,17 @@ $(document).ready(function() {
     e.preventDefault()
     if (e.target && e.target.value) $('.ds-dropdown-menu').show()
   })
-})
 
-$('.nav-btn.nav-slider').on('click', function() {
-  $('.overlay').show()
-  $('nav').toggleClass('open')
-})
+  /* toggle mobile sidebar */
+  $('.nav-btn.nav-slider').on('click', function() {
+    $('.overlay').show()
+    $('nav').toggleClass('open')
+  })
 
-$('.overlay').on('click', function() {
-  if ($('nav').hasClass('open')) {
-    $('nav').removeClass('open')
-  }
-  $(this).hide()
+  $('.overlay').on('click', function() {
+    if ($('nav').hasClass('open')) {
+      $('nav').removeClass('open')
+    }
+    $(this).hide()
+  })
 })
