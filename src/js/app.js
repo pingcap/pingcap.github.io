@@ -195,24 +195,31 @@ $(document).ready(function() {
   openFolder($firstLI)
 
   /* markdown-body tag a ref */
+  function replaceHref(a) {
+    var href = $(a).attr('href')
+    var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
+      mdSuffixExp = /\.md/
+
+    var absUrlRegex = new RegExp(absUrlExp),
+      mdSuffixRegex = new RegExp(mdSuffixExp)
+
+    if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
+      // ref
+      var newHref = '../' + href.replace(/\.md/, '')
+      $(a).attr('href', newHref)
+    }
+  }
   $('.markdown-body')
     .find('a')
     .each(function() {
       var $this = $(this)
-
+      // click event
       $this.click(function(e) {
-        var href = $(this).attr('href')
-        var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
-          mdSuffixExp = /\.md/
-
-        var absUrlRegex = new RegExp(absUrlExp),
-          mdSuffixRegex = new RegExp(mdSuffixExp)
-
-        if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
-          // ref
-          var newHref = '../' + href.replace(/\.md/, '')
-          $(this).attr('href', newHref)
-        }
+        replaceHref(this)
+      })
+      // right click event for open in new window or copy link url
+      $this.contextmenu(function(e) {
+        replaceHref(this)
       })
     })
 
