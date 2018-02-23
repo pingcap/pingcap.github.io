@@ -3,7 +3,7 @@
 
 <div class="list article-list">
   {{ range .posts }}
-  <div class="article" data-tag="{{ range .Params.tags }}{{.}} {{ end }}">
+  <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
     <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
     {{ if $hasMetaData }}
     <ul class="blog-post-meta">
@@ -31,7 +31,8 @@
             {{ end }}
 
             {{ range $idx, $i := .Params.tags }}
-              <a href="#{{ $i| urlize }}" class="link anchor-tag" data-tag="{{$i}}">{{ $i }}</a> {{ if lt $idx ($.global.Scratch.Get "lastIndex")}} | {{end}}
+              {{ $tag := replace $i " " "-" }}
+              <a href="#{{ $tag | urlize }}" class="link anchor-tag" data-tag="{{$tag}}">{{ $tag }}</a> {{ if lt $idx ($.global.Scratch.Get "lastIndex")}} | {{end}}
             {{ end }}
         </div>
       </li>
