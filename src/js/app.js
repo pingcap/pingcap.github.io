@@ -8,10 +8,34 @@ import '../../dist/css/style.css'
 import './vendor/jquery.SimpleTree.js'
 import { run as toc_run } from './vendor/toc'
 
+var blogRegex = /\/blog(-cn)?\//gi
+
+function smoothScroll(hash) {
+  /* Smooth scrolling when the document is loaded and ready */
+  const y = $('header.header').height()
+  if (hash && $(hash).offset())
+    $('html, body').animate(
+      {
+        scrollTop: $(hash).offset().top - y,
+      },
+      1000
+    )
+}
+
 $(document).ready(function() {
   /* content pre-loading */
   $('.loading-container').hide()
   $('.content-container').show()
+
+  $(window).on('hashchange', function() {
+    const hash = decodeURIComponent(location.hash)
+    if (
+      location.pathname.match(blogRegex) &&
+      $('.nav-tags').data('type') !== 'single'
+    )
+      return
+    if (hash) smoothScroll(hash)
+  })
 
   /* TOC for article in docs module */
   const $tocWrap = $('.article-toc')
@@ -21,7 +45,6 @@ $(document).ready(function() {
 
   /* process tags */
   const hash = decodeURIComponent(location.hash)
-  var blogRegex = /\/blog(-cn)?\//gi
   if (location.pathname.match(blogRegex) && hash) {
     $('.nav-tags .tag').removeClass('sel')
     $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
@@ -35,66 +58,13 @@ $(document).ready(function() {
     })
   } else {
     const pageTpye = $('.nav-tags').data('type')
-
     if (pageTpye !== 'single') {
       $('.tag.all').addClass('sel')
     }
+    if (hash) {
+      smoothScroll(hash)
+    }
   }
-
-  /* Smooth scrolling when the document is loaded and ready */
-  const y = $('header.header').height()
-  if (hash && $(hash).offset())
-    $('html, body').animate(
-      {
-        scrollTop: $(hash).offset().top - y,
-      },
-      1000
-    )
-
-  /* anchor scroll */
-  // Select all links with hashes
-  $('a[href*="#"]')
-    // Remove links that don't actually link to anything
-    .not('[href="#"]')
-    .not('[href="#0"]')
-    .click(function(event) {
-      // On-page links
-      if (
-        location.pathname.replace(/^\//, '') ==
-          this.pathname.replace(/^\//, '') &&
-        location.hostname == this.hostname
-      ) {
-        // Figure out element to scroll to
-        var hash = decodeURIComponent(this.hash)
-        var target = $(hash)
-        target = target.length ? target : $('[name=' + hash.slice(1) + ']')
-        // Does a scroll target exist?
-        if (target.length) {
-          // Only prevent default if animation is actually gonna happen
-          event.preventDefault()
-          const y = $('header.header').height()
-          $('html, body').animate(
-            {
-              scrollTop: target.offset().top - y,
-            },
-            1000,
-            function() {
-              //  Callback after animation
-              //  Must change focus!
-              // var $target = $(target)
-              // $target.focus()
-              // if ($target.is(':focus')) {
-              //    Checking if the target was focused
-              //   return false
-              // } else {
-              //   $target.attr('tabindex', '-1')  Adding tabindex for elements not focusable
-              //   $target.focus()  Set focus again
-              // }
-            }
-          )
-        }
-      }
-    })
 
   /* tree sidebar */
   $('.st_tree').SimpleTree({
