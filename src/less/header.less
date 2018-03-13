@@ -6,6 +6,7 @@
 @search_box_height: 36px;
 @nav_brand_height: 32px;
 @header_height: calc(~'1rem + @{nav_height} + 3px');
+@download_button_height: 2em;
 
 // width
 @search_box_width: 12rem;
@@ -344,15 +345,26 @@ nav.mobile-sidebar {
         }
       }
 
-      .link-download {
+      a.link-download {
+        height: @download_button_height;
+        padding: 0 0.7rem;
+        margin: 0 0.3rem;
+        .rounded-corners(0.9rem);
+        text-align: center;
+        background: @theme_blue;
+
         svg {
           margin-left: 2px;
           margin-top: -6px;
         }
+
         &:hover {
+          background-color: @white;
+          color: @theme_blue;
+          transition: all 0.5s ease;
           svg,
           svg * {
-            fill: fade(white, 70%) !important;
+            fill: fade(@theme_blue, 70%) !important;
           }
         }
       }
@@ -360,16 +372,17 @@ nav.mobile-sidebar {
   }
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 880px) {
   .nav-btn {
     display: none;
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 879px) {
   .header {
     .container {
       justify-content: space-between;
+      min-height: @header_height;
     }
     .nav-brand {
       height: 28px;
