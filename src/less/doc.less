@@ -6,7 +6,7 @@
 @import './sidebar.less';
 
 // width
-@page_sidebar_width: 12rem;
+@page_sidebar_width: 12.5rem;
 
 // color
 @text_color: #3e3e3e;
@@ -77,8 +77,8 @@
     flex: 1;
     padding: 20px;
     min-height: 500px;
-    max-width: calc(~'100% - 24.5rem');
-    padding: calc(~'@{header_height} + 20px') 1.2rem 1.5rem 1rem;
+    max-width: calc(~'100% - 24rem');
+    padding: calc(~'@{header_height} + 20px') 1rem 1.5rem;
 
     h1,
     h2,
@@ -203,12 +203,18 @@
   #smarttoc {
     position: relative !important;
     left: initial !important;
+    max-width: @page_sidebar_width !important;
+    width: 100%;
     padding: 0 0 10px;
     border: none;
     border-color: transparent;
     border-left: 1px solid rgba(158, 158, 158, 0.22);
     transform: initial !important;
     z-index: auto;
+
+    &:hover {
+      max-width: @page_sidebar_width !important;
+    }
 
     ul {
       padding-left: 0.4rem;
@@ -264,7 +270,7 @@
   .archive,
   .list {
     max-width: calc(~'100% - 15rem');
-    padding-left: 3rem;
+    padding-left: 2.5rem;
   }
 }
 // smarttoc-extender global
@@ -298,6 +304,10 @@
 
     .sidebar-page {
       min-height: 100%;
+
+      #smarttoc {
+        max-width: 100% !important;
+      }
     }
 
     .sidebar .tag-list {
@@ -329,7 +339,6 @@
   }
 }
 
-
 /**
  * Print stylesheet for yourwebsite.com
 * @version         1.0
@@ -344,7 +353,7 @@
 
   /* 把字体设置为16px/13pt, 把背景色设为纯白、字体纯黑，这样省墨。 */
   body {
-    font: 13pt Georgia, "Times New Roman", Times, serif;
+    font: 13pt Georgia, 'Times New Roman', Times, serif;
     line-height: 1.3;
     background: #fff !important;
     color: #000;
@@ -354,36 +363,52 @@
     font-size: 24pt;
   }
 
-  h2, h3, h4 {
+  h2,
+  h3,
+  h4 {
     font-size: 14pt;
     margin-top: 25px;
   }
 
   /* 设置所有的分页符 */
   a {
-    page-break-inside:avoid;
+    page-break-inside: avoid;
   }
   a:after {
-    content: "(" attr(href) ")";
+    content: '(' attr(href) ')';
   }
   blockquote {
     page-break-inside: avoid;
   }
-  h1, h2, h3, h4, h5, h6 {
-    page-break-after:avoid;
-    page-break-inside:avoid;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
   }
   img {
-    page-break-inside:avoid;
-    page-break-after:avoid;
+    page-break-inside: avoid;
+    page-break-after: avoid;
   }
-  table, pre { page-break-inside:avoid; }
-  ul, ol, dl  { page-break-before:avoid; }
-  thead, tfoot {
+  table,
+  pre {
+    page-break-inside: avoid;
+  }
+  ul,
+  ol,
+  dl {
+    page-break-before: avoid;
+  }
+  thead,
+  tfoot {
     display: table-row-group;
   }
 
-  nav, aside {
+  nav,
+  aside {
     display: none;
   }
 
