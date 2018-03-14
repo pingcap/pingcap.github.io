@@ -7,12 +7,12 @@
 
 {{ define "main" }}
 <div class="blog">
-  {{ partial "pre-loading/2-column-layout.html" }}
+  {{ partial "loading/2-column-layout.html" }}
   <div class="container content-container" style="display: none;">
     {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
     {{ partial "navs/tags-nav.html" (dict "type" "list" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) }}
 
-    {{ partial "list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) }}
+    {{ partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) }}
   </div>
 </div>
 
