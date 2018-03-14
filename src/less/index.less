@@ -23,6 +23,38 @@
 #landingpage {
   .customAnimation(@animation_fadein);
 }
+.btn {
+  display: block;
+  height: @primary_button_height;
+  line-height: @primary_button_height;
+  padding: 0 1rem;
+  .rounded-corners(0.9rem);
+  font-size: 0.8rem;
+  text-align: center;
+}
+.btn-primary {
+  background: @theme_blue;
+
+  &:hover {
+    background-color: @white;
+    color: @theme_blue;
+    transition: all 0.5s ease;
+  }
+}
+
+.btn-secondary {
+  border: 1px solid @white;
+  background: transparent;
+  line-height: calc(@primary_button_height~' - 2px');
+  color: @white;
+
+  &:hover {
+    background-color: @theme_blue;
+    border: 1px solid @theme_blue;
+    color: @white;
+    transition: all 0.5s ease;
+  }
+}
 /* Section 1 */
 .landingpage-slogan-mask {
   display: flex;
@@ -72,41 +104,13 @@
     justify-content: space-between;
 
     .btn {
-      height: @primary_button_height;
-      line-height: @primary_button_height;
       width: 7.2rem;
-      padding: 0 1rem;
-      .rounded-corners(0.9rem);
       margin-top: 2.25rem;
-      font-size: 0.8rem;
-      text-align: center;
     }
 
-    .btn-primary {
-      background: @theme_blue;
-
-      &:hover {
-        background-color: @white;
-        color: @theme_blue;
-        transition: all 0.5s ease;
-      }
-    }
-
-    .btn-github {
+    .btn-secondary {
       position: relative;
       padding-left: 2.25rem;
-      border: 1px solid @white;
-      background: transparent;
-      line-height: calc(@primary_button_height~' - 2px');
-      color: @white;
-
-      &:hover {
-        background-color: @theme_blue;
-        border: 1px solid @theme_blue;
-        color: @white;
-        transition: all 0.5s ease;
-      }
-
       &:after {
         position: absolute;
         content: '';
@@ -202,9 +206,10 @@
 }
 /* Section 3 */
 .landingpage-advantages {
-  padding: calc(~'@{vertical_padding} + @{header_height}') 0 10rem;
+  padding: calc(~'@{vertical_padding} + @{header_height}') 0;
   background: url('https://download.pingcap.com/images/bg-landingpage-advantages.png')
     no-repeat center bottom @dark_blue;
+  // background-attachment: fixed;
   background-size: cover;
 
   h3 {
@@ -255,12 +260,50 @@
         text-align: right;
       }
     }
+  }
+}
 
-    &:last-child {
-      margin-bottom: calc(@advantage_row_margin * 2);
+/* cta footer */
+.cta-footer {
+  margin: 0 auto;
+  padding: 50px 15px;
+  background-color: @bg_black_with_alpha90;
+  text-align: center;
+
+  .cta-footer__headline {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 35px;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    .btn {
+      margin: 0 10px;
     }
   }
 }
+
+@media screen and (min-width: 992px) {
+  .cta-footer__headline {
+    max-width: 715px;
+    font-size: 36px;
+    line-height: 50px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .cta-footer {
+    padding: calc(~'@{vertical_padding} + @{header_height}') 0;
+    .cta-footer__headline {
+      font-size: 30px;
+      line-height: 40px;
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .landingpage-slogan-mask {
     padding: 8rem 0 0;
@@ -314,6 +357,18 @@
 
   .landingpage-advantages .row .content {
     flex-basis: 100%;
+  }
+
+  .cta-footer .buttons {
+    display: block;
+    .btn {
+      margin: 0 auto;
+      width: 200px;
+    }
+
+    .btn-primary {
+      margin-bottom: 20px;
+    }
   }
 }
 @media (max-width: 320px) {
