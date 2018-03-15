@@ -51,10 +51,6 @@ $(function() {
 
       this.find('li').click(function(e) {
         const $this = $(this)
-        $this
-          .parent()
-          .find('.active')
-          .removeClass('active')
         option.click($this.find('a')[0])
         $this.toggleClass('open')
 
