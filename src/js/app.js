@@ -72,6 +72,11 @@ $(document).ready(function() {
       if ($(a).attr('href') != '#') {
         $(a)
           .parent()
+          .parent()
+          .find('.active')
+          .removeClass('active')
+        $(a)
+          .parent()
           .addClass('active')
         window.location.href = $(a).attr('href')
       }
