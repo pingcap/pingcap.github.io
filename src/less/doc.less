@@ -4,6 +4,7 @@
 @import './header.less';
 @import './footer.less';
 @import './sidebar.less';
+@import './post-share.less';
 
 // width
 @page_sidebar_width: 12.5rem;
@@ -253,33 +254,48 @@
   }
 }
 
-.blog,
-.meetup,
-.recruit,
-.weekly {
-  .sidebar {
-    flex: 0 0 15rem;
-    max-width: 15rem;
-  }
-
-  .nav-tags {
-    padding: 20px 0;
-    position: relative;
-    top: @header_height;
-  }
-
-  .archive,
-  .list {
-    max-width: calc(~'100% - 15rem');
-    padding-left: 2.5rem;
-  }
-}
 // smarttoc-extender global
 #smarttoc-extender {
   display: none !important;
 }
 
-@media (max-width: 600px) {
+@media (min-width: 880px) {
+  .blog,
+  .meetup,
+  .recruit,
+  .weekly {
+    .sidebar {
+      flex: 0 0 14rem;
+      max-width: 14rem;
+    }
+
+    .nav-tags {
+      padding: 20px 0;
+      position: relative;
+      top: @header_height;
+    }
+
+    .archive,
+    .list {
+      max-width: calc(~'100% - 15rem');
+      padding-right: 2.5rem;
+    }
+
+    &.blog {
+      .content {
+        margin-right: 1rem;
+      }
+    }
+
+    &.weekly {
+      .archive {
+        padding-left: 3rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 879px) {
   .blog,
   .doc,
   .meetup,
@@ -293,7 +309,7 @@
     .list {
       max-width: 100%;
       margin: 20px 0;
-      padding: 25px 5px;
+      padding: 25px 5px !important;
     }
 
     .sidebar {
@@ -319,10 +335,6 @@
   .blog,
   .recruit,
   .meetup {
-    .nav-tags {
-      padding-top: 45px;
-    }
-
     .archive,
     .list {
       margin-top: 60px;
