@@ -203,7 +203,7 @@ $(document).ready(function() {
     e.preventDefault()
     $('#wechat .qr_code_outer').toggleClass('f-hide')
   })
-  $('#wechat-mobile').on('click', e => {
+  $('#wechat-mobile').on('touchstart', e => {
     e.preventDefault()
     $('#wechat-mobile .qr_code_outer').toggleClass('f-hide')
   })
