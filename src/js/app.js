@@ -27,6 +27,12 @@ $(document).ready(function() {
   $('.loading-container').hide()
   $('.content-container').show()
 
+  setTimeout(function() {
+    // list loading
+    $('.loading-item').hide()
+    $('.list-item').show()
+  }, 200)
+
   $(window).on('hashchange', function() {
     const hash = decodeURIComponent(location.hash)
     if (
