@@ -1,0 +1,12 @@
+{{ define "headtpl" }}
+  {{$.Scratch.Set "data_i18_link" "/news-cn" }}
+{{ end }}
+
+{{ define "main" }}
+  {{ $heading := "Supporting companies from the garage to the Fortune 500" }}
+  {{ $subheading := "TiDB will scale with you from your first users to your first billion." }}
+  <div class="news">
+    {{ partial "layout/hero.html" (dict "heading" $heading "subheading" $subheading) }}
+    {{ partial "news/list.html" (dict "posts" .Site.Data.news "global" .) }}
+  </div>
+{{ end }}
