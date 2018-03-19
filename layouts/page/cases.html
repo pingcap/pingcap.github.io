@@ -1,0 +1,13 @@
+{{ define "headtpl" }}
+  {{$.Scratch.Set "nav_active" "cases"}}
+  {{$.Scratch.Set "data_i18_link" "/cases-cn" }}
+{{ end }}
+
+{{ define "main" }}
+  {{ $heading := "Supporting companies from the garage to the Fortune 500" }}
+  {{ $subheading := "TiDB will scale with you from your first users to your first billion." }}
+  <div class="cases">
+    {{ partial "layout/hero.html" (dict "heading" $heading "subheading" $subheading) }}
+    {{ partial "cases/list.html" (dict "posts" .Site.Data.cases "global" .) }}
+  </div>
+{{ end }}
