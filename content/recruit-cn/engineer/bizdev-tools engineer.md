@@ -1,17 +1,18 @@
 ---
-title: Bizdev & Tools Engineer
-tags: ['engineer']
+title: TiDB 商业产品开发 - 工具方向
+tags:
+  - engineer
 ---
 
-# Bizdev & Tools Engineer
+# TiDB 商业产品开发 - 工具方向
 
-#### 岗位职责
+## 岗位职责
 
 1. TiDB 商业工具开发，完善 TiDB 的周边生态，提升用户使用体验
 
 2. 建设高度智能的自动化测试系统，进行各种破坏性测试，验证 TiDB 的可靠性
 
-#### 职位要求
+## 职位要求
 
 1. 扎实的编程能力，熟悉 C/C++/Go/Rust 其中一种编程语言
 
@@ -23,18 +24,18 @@ tags: ['engineer']
 
 5. 良好的沟通能力和技巧，以及抗压能力
 
-6. 了解  Automated Reasoning / Static Analysis 等测试方法及工具
+6. 了解 Automated Reasoning / Static Analysis 等测试方法及工具
 
-#### 加分项
+## 加分项
+
 1. 爱折腾，强烈的 Hack 精神
 
-2. TopCoder,  Codeforces 黄色以上
+2. TopCoder, Codeforces 黄色以上
 
-#### 待遇
+## 待遇
 
-20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
+20K - 40K + 期权 , 13 薪 + 奖金 , 优秀者可面议
 
-
-#### 工作地点
+## 工作地点
 
 北京，上海，广州，杭州，特别优秀可 remote

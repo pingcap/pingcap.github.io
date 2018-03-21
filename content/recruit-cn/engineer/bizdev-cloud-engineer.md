@@ -1,17 +1,18 @@
 ---
-title: Bizdev & Cloud Engineer
-tags: ['engineer']
+title: TiDB 商业产品开发 - Cloud 方向
+tags:
+  - engineer
 ---
 
-# Bizdev & Cloud Engineer
+# TiDB 商业产品开发 - Cloud 方向
 
-#### 岗位职责
+## 岗位职责
 
 1. TiDB 基于 Kubernetes 平台自动化部署运维工具的开发
 
 2. TiDB 与公有云 / 私有云平台整合
 
-#### 职位要求
+## 职位要求
 
 1. 扎实的编程能力，熟悉 C/C++/Go/Rust/Python 一种编程语言
 
@@ -27,7 +28,7 @@ tags: ['engineer']
 
 7. 良好的沟通能力和技巧
 
-#### 加分项
+## 加分项
 
 1. 熟悉 Ansible / Saltstack 等自动化部署工具
 
@@ -35,11 +36,10 @@ tags: ['engineer']
 
 3. 熟悉 BGP，Overlay 网络
 
-#### 待遇
+## 待遇
 
-20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
+20K - 40K + 期权 , 13 薪 + 奖金 , 优秀者可面议
 
-
-#### 工作地点
+## 工作地点
 
 北京，上海，广州，杭州，特别优秀可 remote
