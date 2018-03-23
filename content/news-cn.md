@@ -1,7 +1,11 @@
 ---
 type: page
 layout: news-cn
-title: 报道
+title: 新闻报道
 image: /images/pingcap-opengraph.jpg
-summary: PingCAP is focused on developing distributed NewSQL and is the team building TiDB, an open-source distributed NewSQL database.
+summary: >-
+  PingCAP is focused on developing distributed NewSQL and is the team building
+  TiDB, an open-source distributed NewSQL database.
 ---
+
+
