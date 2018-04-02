@@ -24,11 +24,11 @@
   - [PR 经理](market/pr-manager.md)
   - [市场运营](market/operation-manager.md)
 
-- I18N
+- I18N Team
 
   - [Technical Writer](i18n/technical-writer.md)
 
-- 实习生招聘
+- Intern
 
   - [Infrastructure Engineer Intern](campus/infrastructure-engineer-intern.md)
   - [HR Intern](campus/hr-intern.md)
