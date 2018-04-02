@@ -3,55 +3,21 @@
 {{ define "headtpl" }}
 {{$.Scratch.Set "nav_active" "about"}}
 {{$.Scratch.Set "data_i18_link" "/about-cn" }}
-<style type="text/css" media="screen">
-  .amap-logo,
-  .amap-copyright {
-    display: none!important;
-  }
-
-  .amap-icon img {
-    width: 100%;
-    height: 100%;
-  }
-</style>
 {{ end }}
 
-{{ define "footjs" }}
-<script type="text/javascript" src='https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init'></script>
-<script type="text/javascript">
-function init() {
-  var map = new AMap.Map('map', {
-    zoomEnable: false,
-    zoom: 15,
-    center: [-122.208896, 37.4864370753],
-    mapStyle: 'amap://styles/light' //样式URL
-  })
-  //添加点标记，并使用自己的icon
-  new AMap.Marker({
-    map: map,
-    position: [-122.208896, 37.4849425],
-    icon: new AMap.Icon({
-      size: new AMap.Size(32, 32), //图标大小
-      image: 'https://download.pingcap.com/images/location.svg'
-    })
-  })
-  map.setLang('en')
-}
-</script>
-{{ end }}
 
 {{ define "main" }}
 <section class="about-company">
   <div class="container">
     <h1 class="title">ABOUT THE COMPANY</h1>
-    <div class="desc">
+    <div class="desc f-tf" style="max-width:36rem;">
       PingCAP started in 2015 when three seasoned infrastructure engineers were sick and tired of the way databases were managed, scaled, and maintained while working at leading Internet companies.
       Seeing no good solution on the market, they decided to build one themselves--the open-source way.
       <br />
       <br />
       With the help of a first-class team and hundreds of contributors from around the globe, PingCAP is building an open source distributed NewSQL hybrid transactional and analytical processing (HTAP) database.
-      Its flagship project, TiDB, is a cloud-native distributed SQL layer with MySQL compatibility, and one of the most popular open source database projects in the world (don’t take our word for it, check it out: https://github.com/pingcap/tidb/).
-      TiDB’s sister project, TiKV, is a cloud-native distributed Key-Value store and also growing rapidly ( https://github.com/pingcap/tikv/).
+      Its flagship project, TiDB, is a cloud-native distributed SQL layer with MySQL compatibility, and one of the most popular open source database projects in the world (don’t take our word for it, check it out: <a href="https://github.com/pingcap/tidb" target="_blank">https://github.com/pingcap/tidb</a>).
+      TiDB’s sister project, TiKV, is a cloud-native distributed Key-Value store and also growing rapidly (<a href="https://github.com/pingcap/tikv" target="_blank">https://github.com/pingcap/tikv</a>).
     </div>
     <a href="https://angel.co/pingcap-1/jobs" target="_blank" class="link">OPEN JOBS {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
   </div>
@@ -61,6 +27,7 @@ function init() {
     <h2 class="title">COMMUNITY</h2>
     <div class="desc">
         Twitter: <a href="https://twitter.com/PingCAP" target="_blank">@PingCAP</a>
+        <br>GitHub: <a href="https://github.com/pingcap/tidb" target="_blank">TiDB</a>
         <br>Mailing List: <a href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank">Google Group</a>
         <br>Reddit: <a href="https://www.reddit.com/r/TiDB/" target="_blank">https://www.reddit.com/r/TiDB/</a>
         <br>Stack Overflow: <a href="https://stackoverflow.com/questions/tagged/tidb" target="_blank">https://stackoverflow.com/questions/tagged/tidb</a>
@@ -73,18 +40,24 @@ function init() {
 <section class="about-culture">
   <div class="container">
     <h2 class="title">OUR MISSION AND CULTURE</h2>
-    <div class="desc">
+    <div class="desc f-tf" style="max-width:36rem;">
       Our mission is to build a database of the future, made by developers, for developers.
       It’s an ambitious mission, and we can’t do it without curious, self-driven, and capable people...like you!
       <br />
       <br />
       So, if you love the following:
       <br />
-      <br />
-      1. Open source, open collaboration, open communication;<br />
-      2. Waking up every morning motivated to solve big, hairy problems (and have fun doing it!);<br />
-      3. Working alongside a global team of self-starters, curious learners, builders, doers;
-      <br />
+      <ol>
+        <li>
+          Open source, open collaboration, open communication;
+        </li>
+        <li>
+          Waking up every morning motivated to solve big, hairy problems (and have fun doing it!);
+        </li>
+        <li>
+          Working alongside a global team of self-starters, curious learners, builders, doers;
+        </li>
+      </ol>
       <br />
       We want to hear from you!
 
@@ -162,7 +135,7 @@ function init() {
         </div>
       </div>
     </div>
-    <div id='map' class="map" style='width: 100%; height: 340px;'></div>
+    <div class="map map-shotcut"></div>
   </div>
 </section>
 {{ end }}
