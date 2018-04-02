@@ -1,7 +1,7 @@
 ---
 title: 售前技术总监
 tags:
-  - sales
+  - Business
 ---
 
 # 售前技术总监

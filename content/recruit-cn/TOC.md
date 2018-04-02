@@ -4,20 +4,20 @@
 
 - Tech Team
 
-  - [TiKV 研发工程师](engineer/tikv-engineer.md)
-  - [PD 研发工程师](engineer/pd-engineer.md)
-  - [TiDB 研发工程师](engineer/tidb-engineer.md)
-  - [TiDB 商业产品开发 - 工具方向](engineer/bizdev-tools-engineer.md)
-  - [TiDB 商业产品开发 - Cloud 方向](engineer/bizdev-cloud-engineer.md)
-  - [TiDB 商业产品开发 - SRE 方向](engineer/bizdev-sre-engineer.md)
-  - [TiDB 商业产品开发 - 产品设计方向](engineer/bizdev-fe-engineer.md)
+  - [TiKV 研发工程师](tech/tikv-engineer.md)
+  - [PD 研发工程师](tech/pd-engineer.md)
+  - [TiDB 研发工程师](tech/tidb-engineer.md)
+  - [TiDB 商业产品开发 - 工具方向](tech/bizdev-tools-engineer.md)
+  - [TiDB 商业产品开发 - Cloud 方向](tech/bizdev-cloud-engineer.md)
+  - [TiDB 商业产品开发 - SRE 方向](tech/bizdev-sre-engineer.md)
+  - [TiDB 商业产品开发 - 产品设计方向](tech/bizdev-fe-engineer.md)
 
 - Business Team
 
-  - [行业销售负责人/总监](sales/sales-director.md)
-  - [售前技术总监](sales/presales-director.md)
-  - [渠道合作总监](sales/channel-co-director.md)
-  - [高级客户技术工程师](sales/ops-engineer.md)
+  - [行业销售负责人/总监](business/sales-director.md)
+  - [售前技术总监](business/presales-director.md)
+  - [渠道合作总监](business/channel-co-director.md)
+  - [高级客户技术工程师](business/ops-engineer.md)
 
 - MKT Team
 
@@ -30,6 +30,6 @@
 
 - Intern
 
-  - [Infrastructure Engineer Intern](campus/infrastructure-engineer-intern.md)
-  - [HR Intern](campus/hr-intern.md)
-  - [Technical Writer Intern](campus/technical-writer-intern.md)
+  - [Infrastructure Engineer Intern](intern/infrastructure-engineer-intern.md)
+  - [HR Intern](intern/hr-intern.md)
+  - [Technical Writer Intern](intern/technical-writer-intern.md)

@@ -1,7 +1,7 @@
 ---
 title: Technical Writer Intern
 tags:
-  - campus
+  - Intern
 ---
 
 # Technical Writer Intern
