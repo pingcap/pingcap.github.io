@@ -1,7 +1,7 @@
 ---
 title: TiDB 研发工程师
 tags:
-  - engineer
+  - Tech
 ---
 
 # TiDB 研发工程师

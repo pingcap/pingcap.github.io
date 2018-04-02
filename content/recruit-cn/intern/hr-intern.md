@@ -1,7 +1,7 @@
 ---
 title: 人力资源实习生
 tags:
-  - campus
+  - Intern
 ---
 
 # 人力资源实习生

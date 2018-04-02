@@ -1,7 +1,7 @@
 ---
 title: 行业销售负责人/总监
 tags:
-  - sales
+  - Business
 ---
 
 # 行业销售负责人/总监

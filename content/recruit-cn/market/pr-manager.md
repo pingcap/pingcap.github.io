@@ -1,7 +1,7 @@
 ---
 title: PR经理
 tags:
-  - market
+  - Market
 ---
 
 # PR经理
