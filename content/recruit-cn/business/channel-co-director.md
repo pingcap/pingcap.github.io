@@ -1,7 +1,7 @@
 ---
 title: 渠道合作总监
 tags:
-  - sales
+  - Business
 ---
 
 # 渠道合作总监

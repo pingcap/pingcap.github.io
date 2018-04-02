@@ -1,7 +1,7 @@
 ---
 title: 数据库开发实习生
 tags:
-  - campus
+  - Intern
 ---
 
 # 数据库开发实习生
