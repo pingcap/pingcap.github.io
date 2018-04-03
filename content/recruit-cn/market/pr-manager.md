@@ -2,9 +2,10 @@
 title: PR经理
 tags:
   - Market
+label: Market
 ---
 
-# PR经理
+# PR 经理
 
 ## 岗位职责
 

@@ -2,6 +2,7 @@
 title: TiDB 商业产品开发 - SRE 方向
 tags:
   - Tech
+label: Tech
 aliases:
   - /recruit-cn/engineer/bizdev-sre-engineer/
 ---

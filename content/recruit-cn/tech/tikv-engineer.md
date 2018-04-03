@@ -2,6 +2,7 @@
 title: TiKV 研发工程师
 tags:
   - Tech
+label: Tech
 aliases:
   - /recruit-cn/engineer/tikv-engineer/
 ---
