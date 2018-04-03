@@ -2,6 +2,8 @@
 title: PD 研发工程师
 tags:
   - Tech
+aliases:
+  - /recruit-cn/engineer/pd-engineer/
 ---
 
 # PD 研发工程师

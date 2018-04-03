@@ -2,6 +2,8 @@
 title: TiDB 商业产品开发 - 工具方向
 tags:
   - Tech
+aliases:
+  - /recruit-cn/engineer/bizdev-tools-engineer/
 ---
 
 # TiDB 商业产品开发 - 工具方向

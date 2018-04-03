@@ -2,6 +2,8 @@
 title: 高级客户支持工程师
 tags:
   - Business
+aliases:
+  - /recruit-cn/sales/ops-engineer/
 ---
 
 # 高级客户支持工程师
