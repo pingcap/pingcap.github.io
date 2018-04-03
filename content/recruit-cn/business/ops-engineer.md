@@ -4,6 +4,7 @@ tags:
   - Business
 aliases:
   - /recruit-cn/sales/ops-engineer/
+  - /recruit-cn/engineer/ops-engineer/
 ---
 
 # 高级客户支持工程师
