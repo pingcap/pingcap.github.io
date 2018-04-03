@@ -2,6 +2,7 @@
 title: Technical Writer
 tags:
   - I18N
+label: I18N
 ---
 
 # Technical Writer

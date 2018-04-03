@@ -2,6 +2,7 @@
 title: Technical Writer Intern
 tags:
   - Intern
+label: Intern
 aliases:
   - /recruit-cn/campus/technical-writer-intern/
 ---
