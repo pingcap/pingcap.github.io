@@ -2,6 +2,8 @@
 title: TiDB 商业产品开发 - 产品设计方向
 tags:
   - Tech
+aliases:
+  - /recruit-cn/engineer/bizdev-fe-engineer/
 ---
 
 # TiDB 商业产品开发 - 产品设计方向

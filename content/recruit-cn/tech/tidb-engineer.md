@@ -2,6 +2,8 @@
 title: TiDB 研发工程师
 tags:
   - Tech
+aliases:
+  - /recruit-cn/engineer/tidb-engineer/
 ---
 
 # TiDB 研发工程师

@@ -2,6 +2,8 @@
 title: 渠道合作总监
 tags:
   - Business
+aliases:
+  - /recruit-cn/sales/channel-co-director/
 ---
 
 # 渠道合作总监
