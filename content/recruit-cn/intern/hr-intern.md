@@ -2,6 +2,8 @@
 title: 人力资源实习生
 tags:
   - Intern
+aliases:
+  - /recruit-cn/campus/hr-intern/
 ---
 
 # 人力资源实习生

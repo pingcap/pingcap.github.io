@@ -2,6 +2,8 @@
 title: TiDB 商业产品开发 - Cloud 方向
 tags:
   - Tech
+aliases:
+  - /recruit-cn/engineer/bizdev-cloud-engineer/
 ---
 
 # TiDB 商业产品开发 - Cloud 方向

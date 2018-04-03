@@ -2,6 +2,8 @@
 title: 数据库开发实习生
 tags:
   - Intern
+aliases:
+  - /recruit-cn/campus/infrastructure-engineer-intern/
 ---
 
 # 数据库开发实习生
