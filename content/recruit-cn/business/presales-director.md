@@ -2,6 +2,7 @@
 title: 售前技术总监
 tags:
   - Business
+label: Business
 aliases:
   - /recruit-cn/sales/presales-director/
 ---
