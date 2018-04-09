@@ -2,7 +2,7 @@
 set -e
 
 curdir=$(cd "$(dirname $0)"; pwd -P)
-target_file="${curdir}/data/sub_git_info.json"
+target_file="${curdir}/../data/sub_git_info.json"
 
 printf "[\n" > $target_file
 
