@@ -1,16 +1,17 @@
 {{ define "headtpl" }}
-  {{$.Scratch.Set "data_i18_link" "/contact-us" }}
+  {{$.Scratch.Set "data_i18_link" "/news-cn" }}
 {{ end }}
 
 {{ define "main" }}
   {{ $heading := "Contact PingCAP" }}
-  <div>
-    <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/shell.js"></script>
-      <script>
-        hbspt.forms.create({
-      	portalId: "4466002",
-      	formId: "125bf70d-1eba-4cf8-bb1d-2e4a422a875d"
-      });
-    </script>
-  </div>
+  {{ partial "layout/hero.html" (dict "heading" $heading) }}
+    <div class="container">
+      <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/shell.js"></script>
+        <script>
+          hbspt.forms.create({
+        	portalId: "4466002",
+        	formId: "125bf70d-1eba-4cf8-bb1d-2e4a422a875d"
+        });
+      </script>
+    </div>
 {{ end }}
