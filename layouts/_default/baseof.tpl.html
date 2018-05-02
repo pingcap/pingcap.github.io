@@ -15,18 +15,62 @@
     <title>{{- block "title" . }}{{- or .Title "Home" -}}{{ end -}} | PingCAP</title>
     {{ partial "head/ga" . }}
     {{ partial "head/meta-seo" . }}
-    {{ block "headtpl" . }}{{ end }}
-    <script type="text/javascript">
-    if (location.pathname === "/") {
-      if (location.hostname === "pingcap.github.io") {
-        location.href = "/en/";
+
+    <style type="text/css" media="screen">
+      .loading-container {
+        min-height: 100vh;
       }
+      .content-container,
+      .homepage-content {
+        display: none;
+      }
+
+      .cases .list .list-item,
+      .news .list .list-item {
+        opacity: 0;
+      }
+
+      .st_tree {
+        display: none;
+      }
+
+      body.no-js .loading-container,
+      body.no-js .cases .list .loading-item,
+      body.no-js .news .list .loading-item {
+        display: none;
+      }
+
+      body.no-js .homepage-content {
+        display: block;
+      }
+
+      body.no-js .content-container {
+         display: flex;
+      }
+
+      body.no-js .cases .list .list-item,
+      body.no-js .news .list .list-item {
+         opacity: 1;
+      }
+    </style>
+
+    {{ block "headtpl" . }}{{ end }}
+
+    <script type="text/javascript">
+    if (location.pathname === '/') {
+      if (location.hostname === 'pingcap.github.io') {
+        location.href = '/en/'
+      }
+    }
+
+    window.onload = function() {
+      document.getElementsByClassName('no-js')[0].removeAttribute('class')
     }
     </script>
 </head>
 
 <!-- Todo body class extend -->
-<body>
+<body class="no-js">
   {{ $data_i18_cn := $.Scratch.Get "data_i18_cn" }}
 
   {{ if $data_i18_cn }}
