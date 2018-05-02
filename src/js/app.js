@@ -26,15 +26,17 @@ function smoothScroll(hash) {
 // enable javascript
 $(document).ready(function() {
   /* content pre-loading */
-  $(window).on('load', function() {
-    $('.loading-container').hide()
-    $('.loading-item').hide()
+  // $(window).on('load', function() {
+  //   $('.loading-container').hide()
+  //   $('.loading-item').hide()
+  //
+  //   $('.content-container').css('opacity', '1')
+  //   $('.list-item').css('opacity', '1')
+  //
+  //   $('.st_tree').fadeIn()
+  // })
 
-    $('.content-container').css('opacity', '1')
-    $('.list-item').css('opacity', '1')
-    
-    $('.st_tree').fadeIn()
-  })
+  $('.st_tree').fadeIn()
 
   $(window).on('hashchange', function() {
     const hash = decodeURIComponent(location.hash)
