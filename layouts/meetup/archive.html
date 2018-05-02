@@ -9,7 +9,6 @@
 {{ define "main" }}
 {{ $posts := where (where .Site.Pages "Section" "meetup") ".Params.title" "!=" nil  }}
 <div class="meetup">
-  <!-- {{ partial "loading/2-column-layout.html" }} -->
   <div class="container content-container" style="display: none;">
     {{ partial "navs/tags-nav.html" (dict "title" "Popular Tags" "posts" $posts "global" .) }}
     {{ partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) }}
