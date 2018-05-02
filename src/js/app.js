@@ -28,9 +28,11 @@ $(document).ready(function() {
   /* content pre-loading */
   $(window).on('load', function() {
     $('.loading-container').hide()
-    $('.content-container').show()
     $('.loading-item').hide()
+
+    $('.content-container').css('opacity', '1')
     $('.list-item').css('opacity', '1')
+    
     $('.st_tree').fadeIn()
   })
 
