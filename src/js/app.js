@@ -25,6 +25,21 @@ function smoothScroll(hash) {
 
 // enable javascript
 $(document).ready(function() {
+  if ($('.homepage')) {
+    var version = $('.release-banner').data('release')
+
+    if (typeof Storage !== 'undefined') {
+      // Code for localStorage/sessionStorage.
+      var releaseVerinStorage = localStorage.getItem(
+        `release-version-${version}`
+      )
+      if (!releaseVerinStorage) $('.homepage').addClass('banner-active')
+    } else {
+      // Sorry! No Web Storage support..
+      $('.homepage').addClass('banner-active')
+    }
+  }
+
   $(window).scroll(function() {
     var scrollVal = $(this).scrollTop(),
       y = $('header').height()
@@ -38,6 +53,11 @@ $(document).ready(function() {
 
   $('.release-banner__close').click(function(e) {
     if ($('body.banner-active')) $('body').removeAttr('class')
+    // set localStorage to record release banner version
+    if (typeof Storage !== 'undefined') {
+      var version = $('.release-banner').data('release')
+      localStorage.setItem(`release-version-${version}`, version)
+    }
     e.preventDefault()
   })
 
