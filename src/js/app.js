@@ -13,7 +13,7 @@ var recruitRegex = /\/recruit(-cn)?\//gi
 
 function smoothScroll(hash) {
   /* Smooth scrolling when the document is loaded and ready */
-  const y = $('header.header').height()
+  const y = $('header').height()
   if (hash && $(hash).offset())
     $('html, body').animate(
       {
@@ -25,16 +25,21 @@ function smoothScroll(hash) {
 
 // enable javascript
 $(document).ready(function() {
-  /* content pre-loading */
-  // $(window).on('load', function() {
-  //   $('.loading-container').hide()
-  //   $('.loading-item').hide()
-  //
-  //   $('.content-container').css('opacity', '1')
-  //   $('.list-item').css('opacity', '1')
-  //
-  //   $('.st_tree').fadeIn()
-  // })
+  $(window).scroll(function() {
+    var scrollVal = $(this).scrollTop(),
+      y = $('header').height()
+    if ($('body.banner-active') && scrollVal >= y) {
+      $('body.banner-active').addClass('banner-active--scrolled')
+    }
+    if ($('body.banner-active--scrolled') && scrollVal < y) {
+      $('body').removeClass('banner-active--scrolled')
+    }
+  })
+
+  $('.release-banner__close').click(function(e) {
+    if ($('body.banner-active')) $('body').removeAttr('class')
+    e.preventDefault()
+  })
 
   $('.st_tree').fadeIn()
 
