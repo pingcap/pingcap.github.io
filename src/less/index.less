@@ -297,7 +297,86 @@
   }
 }
 
+// release banner
+.release-banner {
+  display: none;
+  position: relative;
+  width: 100%;
+  padding: 12px @horizontal_padding;
+  z-index: 1030;
+  background: @theme_blue;
+  font-size: 16px;
+  line-height: 32px;
+  letter-spacing: 1px;
+}
+
+.release-banner__inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.release-banner__copy {
+  display: flex;
+  .party {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 30px;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.release-banner__close {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-left: 5px;
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 18px;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background: #fff;
+    transform: rotate(45deg);
+  }
+  &:after,
+  &:before {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 18px;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background: #fff;
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+}
+body.banner-active .release-banner {
+  display: block;
+}
+
 @media screen and (min-width: 992px) {
+  .release-banner__copy {
+    align-items: center;
+  }
   .cta-footer__headline {
     max-width: 715px;
     font-size: 36px;
@@ -305,6 +384,9 @@
   }
 }
 @media screen and (min-width: 769px) {
+  .release-banner__copy .party {
+    margin-right: 25px;
+  }
   .homepage-slogan-mask .buttons {
     .btn-secondary:after {
       left: 25px;

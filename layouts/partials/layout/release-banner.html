@@ -1,0 +1,26 @@
+{{ $release := .Site.Data.release}}
+{{ $data_i18_cn := $.Scratch.Get "data_i18_cn" }}
+
+
+{{ if $release.isShow }}
+  <div class="release-banner">
+    <div class="container">
+      <div class="release-banner__inner">
+        <div class="release-banner__copy">
+          <div class="party"><span>🎉</span></div>
+          <div>
+            TiDB {{ $release.version }}
+            {{ if $data_i18_cn }}
+              {{ $release.announcement.cn }}
+              <a href="{{ $release.link.cn }}">Check it out</a>.
+            {{ else }}
+              {{ $release.announcement.en }}
+              <a href="{{ $release.link.en }}">Check it out</a>!
+            {{ end }}
+          </div>
+        </div>
+        <div class="release-banner__close"></div>
+      </div>
+    </div>
+  </div>
+{{ end }}
