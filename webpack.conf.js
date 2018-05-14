@@ -73,9 +73,7 @@ export default {
               'baseof.tpl.html'
             ),
           }),
-          new ExtractTextPlugin({
-            filename: '../css/style.css',
-          }),
+          new ExtractTextPlugin('../css/style.min.css'),
           new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require('cssnano'),
@@ -119,9 +117,7 @@ export default {
               'baseof.tpl.html'
             ),
           }),
-          new ExtractTextPlugin({
-            filename: '../css/style.css',
-          }),
+          new ExtractTextPlugin('../css/style.min.css'),
           new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require('cssnano'),
