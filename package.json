@@ -1,16 +1,13 @@
 {
   "name": "pingcap-website",
   "version": "1.0.0",
-  "description":
-    "PingCAP is focused on developing distributed NewSQL and is the team building TiDB, an open-source distributed NewSQL database.",
+  "description": "PingCAP is focused on developing distributed NewSQL and is the team building TiDB, an open-source distributed NewSQL database.",
   "main": "app.js",
   "scripts": {
     "hugo": "gulp hugo",
-    "gen-contents":
-      "bash ./scripts/gen-sub-gitinfo.sh;bash ./scripts/gen-nav.sh",
+    "gen-contents": "bash ./scripts/gen-sub-gitinfo.sh;bash ./scripts/gen-nav.sh",
     "clean-build": "rm -rf dist;",
-    "build":
-      "git submodule sync;git submodule update --init --recursive --remote;bash ./scripts/gen-sub-gitinfo.sh;bash ./scripts/gen-nav.sh;export NODE_ENV=prod;gulp css;./scripts/build-check-err.sh",
+    "build": "git submodule sync;git submodule update --init --recursive --remote;bash ./scripts/gen-sub-gitinfo.sh;bash ./scripts/gen-nav.sh;export NODE_ENV=prod;gulp css;./scripts/build-check-err.sh",
     "build-preview": "gulp build-preview",
     "start": "export NODE_ENV=development;gulp server",
     "lint": "eslint src"
@@ -23,7 +20,7 @@
     "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.11.6",
-    "browser-sync": "^2.13.0",
+    "browser-sync": "^2.24.4",
     "css-loader": "^0.28.7",
     "cssnano": "^3.10.0",
     "eslint": "^4.7.2",
@@ -50,11 +47,16 @@
     "whatwg-fetch": "^1.0.0"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   },
   "eslintConfig": {
     "extends": "prettier",
-    "plugins": ["prettier", "import"],
+    "plugins": [
+      "prettier",
+      "import"
+    ],
     "parserOptions": {
       "ecmaVersion": 2016,
       "sourceType": "module",
