@@ -29,7 +29,7 @@ export default {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
-          publicPath: '../css/',
+          publicPath: '/css/',
           use: 'css-loader',
         }),
       },
