@@ -29,7 +29,7 @@ export default {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
-          publicPath: '/css/',
+          publicPath: '../css/',
           use: 'css-loader',
         }),
       },
@@ -47,7 +47,6 @@ export default {
     process.env.NODE_ENV === 'development'
       ? [
           new HtmlWebpackPlugin({
-            // hash: isDev ? false : true,
             inject: true,
             minify: {
               removeComments: true,
@@ -75,7 +74,7 @@ export default {
             ),
           }),
           new ExtractTextPlugin({
-            filename: '/css/style.css',
+            filename: '../css/style.css',
           }),
           new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
@@ -94,7 +93,6 @@ export default {
         ]
       : [
           new HtmlWebpackPlugin({
-            // hash: isDev ? false : true,
             inject: true,
             minify: {
               removeComments: true,
@@ -122,7 +120,7 @@ export default {
             ),
           }),
           new ExtractTextPlugin({
-            filename: '/css/style.css',
+            filename: '../css/style.css',
           }),
           new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
