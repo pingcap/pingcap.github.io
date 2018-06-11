@@ -9,7 +9,7 @@
 {{ define "main" }}
 <div class="blog">
   <div class="container content-container">
-    {{ $posts := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil  }}
+    {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "cases" }}
     {{ partial "navs/tags-nav.html" (dict "type" "list" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) }}
 
     {{ partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) }}
