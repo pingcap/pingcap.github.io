@@ -1,6 +1,11 @@
 {{ define "headtpl" }}
-  {{$.Scratch.Set "nav_active" "blog"}}
-  {{$.Scratch.Set "data_i18_link" "/blog" }}
+  {{ if and (isset .Params "category") (eq .Params.category "cases") }}
+    {{$.Scratch.Set "data_i18_link" "/cases" }}
+    {{$.Scratch.Set "nav_active" "cases"}}
+  {{ else }}
+    {{$.Scratch.Set "data_i18_link" "/blog" }}
+    {{$.Scratch.Set "nav_active" "blog"}}
+  {{ end }}
   {{$.Scratch.Set "data_i18_cn" true }}
 {{ end }}
 
