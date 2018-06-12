@@ -1,5 +1,5 @@
 {{ define "headtpl" }}
-  {{ if and (isset .Params "category") (eq .Params.category "cases") }}
+  {{ if and (isset .Params "category") (eq .Params.category "case") }}
     {{$.Scratch.Set "data_i18_link" "/cases" }}
     {{$.Scratch.Set "nav_active" "cases"}}
   {{ else }}
@@ -12,17 +12,17 @@
 {{ define "main" }}
 <div class="blog">
   <div class="container content-container">
-    {{ if and (isset .Params "category") (eq .Params.category "cases") }}
+    {{ if and (isset .Params "category") (eq .Params.category "case") }}
         <div class="sidebar">
             <div class="sticky-sidebar">
               <h2 class="title"> 用户案例 </h2>
               <div class="st_tree nav-toc">
-                {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.cases_cn "global" .) }}
+                {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.cases_cn_toc "global" .) }}
               </div>
             </div>
           </div>
     {{ else }}
-        {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "cases" }}
+        {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
         {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) }}
     {{ end }}
     <div class="archive">
