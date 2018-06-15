@@ -1,6 +1,7 @@
 {{ define "title" }}Meetup{{ end }}
 
 {{ define "headtpl" }}
+  <link rel="stylesheet" href="/css/vendor/github-markdown.css" />
   {{$.Scratch.Set "nav_active" "meetup"}}
   {{$.Scratch.Set "data_i18_cn" true }}
   {{$.Scratch.Set "data_i18_link" "/weekly" }}
@@ -9,7 +10,7 @@
 {{ define "main" }}
 {{ $posts := where (where .Site.Pages "Section" "meetup") ".Params.title" "!=" nil  }}
 <div class="meetup">
-  <div class="container content-container" style="display: none;">
+  <div class="container content-container">
     {{ partial "navs/tags-nav.html" (dict "title" "Popular Tags" "posts" $posts "global" .) }}
     {{ partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) }}
   </div>

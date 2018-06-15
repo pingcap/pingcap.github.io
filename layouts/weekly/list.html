@@ -1,13 +1,14 @@
 {{ define "title" }}Weekly{{ end }}
 
 {{ define "headtpl" }}
+  <link rel="stylesheet" href="/css/vendor/github-markdown.css" />
   {{$.Scratch.Set "nav_active" "weekly"}}
   <!-- TODO: change weekly to meetup -->
   {{$.Scratch.Set "data_i18_link" "/weekly" }}
 {{ end }}
 
 {{ define "main" }}
-<div class="weekly" id='list_page'>
+<div class="weekly" id="list_page">
   <div class="container content-container">
     {{ $archives := where ( where .Site.Pages "Section" "weekly" ) ".Params.title" "!=" nil }}
     {{ partial "navs/date-tree-nav.html" (dict "data" $archives "title" "Weekly" "rss" "/weekly/index.xml") }}
