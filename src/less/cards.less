@@ -1,0 +1,206 @@
+@hero_bg_color: #3d6cb9;
+
+// colour stuff
+@lightBG: #f5f7f8;
+@salmon: #f66;
+
+.cards {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 1em auto 10em;
+  max-width: 1200px;
+  background: @lightBG;
+}
+
+.card {
+  width: 30%;
+  max-width: 320px;
+  background: white;
+  margin: 30px 10px;
+  perspective: 1000;
+  position: relative;
+  text-align: left;
+  transition: all 0.3s 0s ease-in;
+  z-index: 1;
+
+  a.btn-toggle {
+    background: @hero_bg_color;
+    border-radius: 4px;
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
+    color: white;
+    display: inline-block;
+    padding: 6px 30px 8px;
+    position: relative;
+    text-decoration: none;
+    transition: all 0.1s 0s ease-out;
+  }
+
+  a.btn-toggle:hover {
+    background: lighten(@hero_bg_color, 2.5);
+    box-shadow: 0 8px 1px 0 rgba(0, 0, 0, 0.075);
+    transform: translateY(-2px);
+    transition: all 0.25s 0s ease-out;
+  }
+
+  a.btn-toggle:active,
+  a.btn-toggle:active {
+    background: darken(@hero_bg_color, 2.5);
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    transform: translate3d(0, 1px, 0);
+    transition: all 0.025s 0s ease-out;
+  }
+
+  .card__thumbnail {
+    width: 65%;
+    margin: auto;
+    height: 150px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+  }
+
+  .card__title {
+    border-top: 1px solid @lightBG;
+    background: white;
+    padding: 10px 15px;
+    position: relative;
+    min-height: 84px;
+    z-index: 0;
+
+    a.toggle-info {
+      border-radius: 32px;
+      height: 32px;
+      padding: 0;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      width: 32px;
+
+      span {
+        background: white;
+        display: block;
+        height: 2px;
+        position: absolute;
+        top: 16px;
+        transition: all 0.15s 0s ease-out;
+        width: 12px;
+      }
+
+      .left {
+        right: 14px;
+        transform: rotate(45deg);
+      }
+
+      .right {
+        left: 14px;
+        transform: rotate(-45deg);
+      }
+    }
+
+    h2 {
+      font-weight: 400;
+      letter-spacing: -0.05em;
+      margin: 0 40px 0 0;
+      padding: 0;
+      font-size: 22px;
+      line-height: 38px;
+      color: #323643;
+    }
+  }
+
+  .card__description {
+    padding: 0 15px 10px;
+    position: relative;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .card__actions {
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.075);
+    padding: 10px 15px 20px;
+    text-align: center;
+  }
+
+  .card__flap {
+    background: darken(white, 10);
+    position: absolute;
+    width: 100%;
+    transform-origin: top;
+    transform: rotateX(-90deg);
+  }
+
+  .flap1 {
+    transition: all 0.3s 0.3s ease-out;
+    z-index: -1;
+  }
+
+  .flap2 {
+    transition: all 0.3s 0s ease-out;
+    z-index: -2;
+  }
+}
+
+.cards.showing {
+  .card {
+    cursor: pointer;
+    opacity: 0.6;
+    transform: scale(0.88);
+  }
+}
+
+.cards.showing {
+  .card:hover {
+    opacity: 0.94;
+    transform: scale(0.92);
+  }
+}
+
+.card.show {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+
+  .card__title {
+    a.toggle-info {
+      background: @salmon !important;
+
+      span {
+        top: 15px;
+      }
+
+      .left {
+        right: 10px;
+      }
+
+      .right {
+        left: 10px;
+      }
+    }
+  }
+
+  .card__flap {
+    background: white;
+    transform: rotateX(0deg);
+  }
+
+  .flap1 {
+    transition: all 0.3s 0s ease-out;
+  }
+
+  .flap2 {
+    transition: all 0.3s 0.2s ease-out;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 45%;
+  }
+}
+
+@media (max-width: 500px) {
+  .card {
+    width: 80%;
+  }
+}
