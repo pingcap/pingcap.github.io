@@ -1,15 +1,57 @@
 {{ define "headtpl" }}
+  <link rel="stylesheet" type="text/css" href="/css/vendor/gridtab.min.css"/>
   {{$.Scratch.Set "nav_active" "cases"}}
   {{$.Scratch.Set "data_i18_link" "/cases" }}
   {{$.Scratch.Set "data_i18_cn" true }}
 {{ end }}
 
 {{ define "main" }}
-  {{ $heading := "创新科技力量 助力全速前行" }}
-  <div class="cases">
-    {{ partial "layout/hero.html" (dict "heading" $heading) }}
-    <div class="container">
-      {{ partial "cases/list.html" (dict "posts" .Site.Data.cases_cn "global" .) }}
+    <div class="cases">
+        <div class="banner">
+            <div class="banner__inner">
+                <h1 class="banner__slogan">Make Data Creative</h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="cases__intro">
+                <p>TiDB 现已有准生产测试用户 <strong>1000</strong> 余家，</p>
+                <p>并被 <strong>200</strong> 余家不同行业的领先企业应用在实际生产环境。</p>
+            </div>
+
+            {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "==" "case" }}
+            <div id="cases-tab">
+                {{ range $index, $toc := .Site.Data.cases_cn_toc }}
+                    <dt class="tab-{{ $index }}">{{ .name }}</dt>
+                    <dd>{{ partial "cases/tab-panel-cn.html" (dict "posts" $posts "name" .name "global" .) }}</dd>
+                {{ end }}
+            </div>
+        </div>
     </div>
-  </div>
+{{ end }}
+
+
+{{ define "footjs" }}
+    <script type="text/javascript" src="/js/vendor/gridtab.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#cases-tab').gridtab({
+                grid: 4,
+                borderWidth: 1,
+                tabPadding: 16,
+                contentPadding: 32,
+                config:{
+                    layout: 'tab',
+                    activeTab:1,
+                    scrollToTab:true
+                },
+                responsive: [{
+                    breakpoint: 320,
+                    settings: {
+                        grid: 2,
+                        contentPadding: 16
+                    }
+                }]
+            });
+        });
+    </script>
 {{ end }}
