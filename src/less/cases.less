@@ -1,12 +1,11 @@
-@import './header.less';
-@import './footer.less';
-@import './hero.less';
-@import './fb-like-loading.less';
+@import "./header.less";
+@import "./footer.less";
+@import "./hero.less";
 
 .cases,
 .news,
 .contact-us {
-  min-height: calc(~'100vh - @{footer_height_pc}');
+  min-height: calc(~"100vh - @{footer_height_pc}");
   padding-top: @header_height;
 }
 
@@ -18,8 +17,127 @@
   }
 }
 
+.cases {
+  .banner {
+    position: relative;
+    height: 320px;
+    background-color: @hero_bg_color;
+  }
+
+  .banner__inner {
+    position: relative;
+    max-width: 860px;
+    height: 100%;
+    margin: 0 auto;
+    background: url(/images/banner-cases-cn.svg) no-repeat center;
+    background-size: cover;
+  }
+
+  .banner__slogan {
+    position: absolute;
+    left: 15px;
+    bottom: 155px;
+    font-weight: 600;
+    color: #fff;
+  }
+}
+
+.cases__intro {
+  padding: @vertical_padding @horizontal_padding;
+
+  p {
+    line-height: 1.8;
+    font-size: 1.12rem;
+    color: @text_color;
+
+    strong {
+      color: @hero_bg_color;
+    }
+  }
+}
+
+#cases-tab {
+  margin: 0 1rem;
+
+  dt {
+    position: relative;
+    background-color: #fff;
+    padding-left: 3.5em;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #3d6cb9;
+
+    &.is-active {
+      border: 1px solid #ddd;
+      border-top: 2px solid #264e86;
+      border-bottom: 1px solid #fff;
+    }
+
+    &::before {
+      position: absolute;
+      content: ' ';
+      width: 2em;
+      height: 2em;
+      top: 50%;
+      margin-top: -1em;
+      left: 1em;
+    }
+
+    &.tab-0::before {
+      background: url(/images/icon-internet.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-1::before {
+      background: url(/images/icon-payment.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-2::before {
+      background: url(/images/icon-video-game.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-3::before {
+      background: url(/images/icon-industry.svg) 100% 100% no-repeat;
+    }
+  }
+
+  dd {
+    min-height: 500px;
+    border: 1px solid transparent;
+    border-top: 1px solid #ddd;
+  }
+}
+
 .contact-us {
   .contact-form {
     margin: 80px auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .cases {
+    .banner__slogan {
+      font-size: @hero_title_size_l;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .cases {
+    .banner {
+      height: 220px;
+    }
+
+    .banner__slogan {
+      bottom: 140px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .cases {
+    .banner__slogan {
+      font-size: @hero_title_size_s;
+    }
   }
 }
