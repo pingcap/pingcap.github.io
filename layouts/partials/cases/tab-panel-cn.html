@@ -1,17 +1,26 @@
-<div id="list cases-list">
+<div class="cards">
     {{ range .posts }}
         {{ if in .Params.tags $.global.name }}
-        <div class="list-item">
-            <div class="list-item__left">
-              <img class="list-item__logo" style="max-width: 95%;" src="{{ .Params.logo }}" alt="{{ .Params.customer }} logo">
+            <div class="card">
+                <div class="card__thumbnail" style="background-image: url({{.Params.logo}});"></div>
+                <div class="card__title">
+                    <a href="#" class="toggle-info btn-toggle">
+                        <span class="left"></span>
+                        <span class="right"></span>
+                    </a>
+                    <h2> {{ .Params.customer }} </h2>
+                </div>
+                <div class="card__flap flap1">
+                  <div class="card__description">
+                    {{ .Params.summary }}
+                  </div>
+                  <div class="card__flap flap2">
+                    <div class="card__actions">
+                      <a href="#" class="btn-toggle" data-url="{{ .Params.url }}">Read more</a>
+                    </div>
+                  </div>
+                </div>
             </div>
-            <div class="list-item__right">
-              <h3 class="list-item__Params.name">{{ .Params.customer }}</h3>
-              <div class="list-item__desc">{{ .Params.summary }}</div>
-              <a href="{{ .Params.url }}" class="arrow-link">read more<span class="arrow">→</span></a>
-            </div>
-        </div>
-       {{ end }}
+        {{ end }}
     {{ end }}
 </div>
-

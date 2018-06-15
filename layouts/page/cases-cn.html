@@ -1,8 +1,8 @@
 {{ define "headtpl" }}
-  <link rel="stylesheet" type="text/css" href="https://download.pingcap.com/style/gridtab.min.css"/>
-  {{$.Scratch.Set "nav_active" "cases"}}
-  {{$.Scratch.Set "data_i18_link" "/cases" }}
-  {{$.Scratch.Set "data_i18_cn" true }}
+    <link rel="stylesheet" type="text/css" href="https://download.pingcap.com/style/gridtab.min.css" />
+    {{$.Scratch.Set "nav_active" "cases"}}
+    {{$.Scratch.Set "data_i18_link" "/cases" }}
+    {{$.Scratch.Set "data_i18_cn" true }}
 {{ end }}
 
 {{ define "main" }}
@@ -14,8 +14,10 @@
         </div>
         <div class="container">
             <div class="cases__intro">
-                <p>TiDB 现已有准生产测试用户 <strong>1000</strong> 余家，</p>
-                <p>并被 <strong>200</strong> 余家不同行业的领先企业应用在实际生产环境。</p>
+                <p>TiDB 现已有准生产测试用户
+                    <strong>1000</strong> 余家，</p>
+                <p>并被
+                    <strong>200</strong> 余家不同行业的领先企业应用在实际生产环境。</p>
             </div>
 
             {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "==" "case" }}
@@ -29,20 +31,19 @@
     </div>
 {{ end }}
 
-
 {{ define "footjs" }}
     <script type="text/javascript" src="https://download.pingcap.com/js/gridtab.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#cases-tab').gridtab({
                 grid: 4,
                 borderWidth: 1,
                 tabPadding: 16,
                 contentPadding: 22,
-                config:{
+                config: {
                     layout: 'tab',
-                    activeTab:1,
-                    scrollToTab:true
+                    activeTab: 1,
+                    scrollToTab: true
                 },
                 responsive: [{
                     breakpoint: 767,
@@ -52,6 +53,62 @@
                     }
                 }]
             });
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var zIndex = 10;
+
+            $(".card").click(function (e) {
+                e.preventDefault();
+
+                var isShowing = false;
+
+                if ($(this).hasClass("show")) {
+                    isShowing = true
+                }
+
+                if ($(".cards").hasClass("showing")) {
+                    // a card is already in view
+                    $(".card.show")
+                        .removeClass("show");
+
+                    if (isShowing) {
+                        // this card was showing - reset the grid
+                        $(".cards")
+                            .removeClass("showing");
+                    } else {
+                        // this card isn't showing - get in with it
+                        $(this)
+                            .css({
+                                zIndex: zIndex
+                            })
+                            .addClass("show");
+                    }
+
+                    zIndex++;
+
+                } else {
+                    // no cards in view
+                    $(".cards")
+                        .addClass("showing");
+                    $(this)
+                        .css({
+                            zIndex: zIndex
+                        })
+                        .addClass("show");
+
+                    zIndex++;
+                }
+
+            });
+
+            $(".card__actions .btn-toggle").click(function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                if(url) location.href = url;
+            })
         });
     </script>
 {{ end }}
