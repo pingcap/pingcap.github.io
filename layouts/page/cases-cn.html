@@ -23,7 +23,7 @@
             {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "==" "case" }}
             <div id="cases-tab">
                 {{ range $index, $toc := .Site.Data.cases_cn_toc }}
-                    <dt class="tab-{{ $index }}">{{ .name }}</dt>
+                    <dt class="tab tab-{{ $index }}">{{ .name }}</dt>
                     <dd>{{ partial "cases/tab-panel-cn.html" (dict "posts" $posts "name" .name "global" .) }}</dd>
                 {{ end }}
             </div>
@@ -59,6 +59,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var zIndex = 10;
+
+            $(".tab").click(function(){
+                if ($(".cards").hasClass("showing")) {
+                    $(".cards")
+                        .removeClass("showing");
+                }
+            })
 
             $(".card").click(function (e) {
                 e.preventDefault();
