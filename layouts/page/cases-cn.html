@@ -1,5 +1,5 @@
 {{ define "headtpl" }}
-    <link rel="stylesheet" type="text/css" href="https://download.pingcap.com/style/gridtab.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/vendor/gridtab.min.css" />
     {{$.Scratch.Set "nav_active" "cases"}}
     {{$.Scratch.Set "data_i18_link" "/cases" }}
     {{$.Scratch.Set "data_i18_cn" true }}
@@ -32,7 +32,7 @@
 {{ end }}
 
 {{ define "footjs" }}
-    <script type="text/javascript" src="https://download.pingcap.com/js/gridtab.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/gridtab.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#cases-tab').gridtab({
@@ -59,6 +59,19 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var zIndex = 10;
+
+            function scrollCard(ele) {
+                var wh = $(window).height();
+                var y = ele.offset().top;
+                var h = ele.height();
+                var offset = (y + h) - wh;
+
+                if(offset > 0) {
+                    $('html, body').animate({
+                        scrollTop: y - $('header').height() - $('.card.show').height(),
+                    }, 1000);
+                 }
+            }
 
             $(".tab").click(function(){
                 if ($(".cards").hasClass("showing")) {
@@ -95,6 +108,8 @@
                                 zIndex: zIndex
                             })
                             .addClass("show");
+
+                        scrollCard($('.card.show .flap2'));
                     }
 
                     zIndex++;
@@ -108,6 +123,8 @@
                             zIndex: zIndex
                         })
                         .addClass("show");
+
+                    scrollCard($('.card.show .flap2'));
 
                     zIndex++;
                 }
