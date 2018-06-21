@@ -1,23 +1,24 @@
 /* about page */
-@import 'base.less';
-@import 'header.less';
-@import 'footer.less'; //color
+@import "base.less";
+@import "header.less";
+@import "footer.less"; //color
 @font_color: #3e3e3e;
 @purple_blue: #202884;
-@bg_gray_white: #fafafa;
+@bg_graywhite: #fafafa;
 @tidb_red: #e6002d; // width
 @video_width: 1124px; // height
-@video_height: calc(~'@{video_width}* 9/16'); // line
-@1px_hr_width: 1.9rem; // animation_fadein
+@video_height: calc(~"@{video_width}* 9/16"); // line
+@hr_width: 1.9rem; // animation_fadein
 @animation_fadein: fadeIn 0.4s;
 
-section[class^='about-'],
-section[class^='meetup-landingpage-'] {
+section[class^="about-"],
+section[class^="meetup-landingpage-"] {
   padding: @vertical_padding @horizontal_padding;
   min-height: 20rem;
   text-align: center;
 
   .container {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -30,24 +31,24 @@ section[class^='meetup-landingpage-'] {
     margin: 0.4rem auto 2rem;
     font-size: 1.1rem;
 
-    &:before {
-      content: ' ';
+    &::before {
+      content: " ";
       position: absolute;
       right: -2.5rem;
       top: 50%;
       transform: translateY(-50%);
-      width: @1px_hr_width;
+      width: @hr_width;
       height: 1px;
       background: black;
     }
 
-    &:after {
-      content: ' ';
+    &::after {
+      content: " ";
       position: absolute;
       left: -2.5rem;
       top: 50%;
       transform: translateY(-50%);
-      width: @1px_hr_width;
+      width: @hr_width;
       height: 1px;
       background: black;
     }
@@ -90,17 +91,19 @@ section[class^='meetup-landingpage-'] {
 .intro-video {
   position: relative;
   width: 100%;
-  height: calc(~'100vh - @{header_height}');
+  height: calc(~"100vh - @{header_height}");
   padding: 0;
 
   .video-wrapper {
     .f-vhc();
+
     margin-top: 30px;
     width: @video_width;
     height: @video_height;
     box-shadow: 2px 2px 22px rgba(255, 255, 255, 0.5);
-    background: transparent
-      url('https://download.pingcap.com/images/video-poster.jpg') no-repeat 0 0;
+    background:
+    transparent
+    url("https://download.pingcap.com/images/video-poster.jpg") no-repeat 0 0;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -113,24 +116,24 @@ section[class^='meetup-landingpage-'] {
       height: 100%;
     }
 
-    #video-control {
-      width: 100%;
-      height: 80%;
+    .icon {
       .f-vhc();
-
-      .icon {
-        .f-vhc();
-      }
     }
+  }
+
+  #video-control {
+    width: 100%;
+    height: 80%;
+    .f-vhc();
   }
 }
 
 .about-company {
-  background: @bg_gray_white;
+  background: @bg_graywhite;
 }
 
 .about-founders {
-  background: @white;
+  background: white;
 
   .image-wrap {
     max-width: 26rem;
@@ -144,7 +147,7 @@ section[class^='meetup-landingpage-'] {
 }
 
 .about-culture {
-  background: @bg_gray_white;
+  background: @bg_graywhite;
 
   .details {
     display: flex;
@@ -153,6 +156,18 @@ section[class^='meetup-landingpage-'] {
     flex-wrap: wrap;
     width: 100%;
     margin-top: 1.5rem;
+
+    h3 {
+      font-size: 1rem;
+      margin: 8px 0;
+      color: @purple_blue;
+    }
+
+    p {
+      max-width: 10.5rem;
+      margin: 2px auto;
+      font-weight: 400;
+    }
 
     .row {
       display: flex;
@@ -165,18 +180,6 @@ section[class^='meetup-landingpage-'] {
       flex-direction: column;
       justify-content: flex-start;
       margin-top: 3rem;
-
-      h3 {
-        font-size: 1rem;
-        margin: 8px 0;
-        color: @purple_blue;
-      }
-
-      p {
-        max-width: 10.5rem;
-        margin: 2px auto;
-        font-weight: 400;
-      }
     }
 
     .item-short {
@@ -203,7 +206,7 @@ section[class^='meetup-landingpage-'] {
 }
 
 .about-contact {
-  background: @white;
+  background: white;
 
   .info {
     padding: 0.5rem 0 2rem;
@@ -217,7 +220,6 @@ section[class^='meetup-landingpage-'] {
       margin-top: 0.5rem;
       position: relative;
       padding: 0 2rem 0 0;
-      text-align: left;
 
       h3 {
         margin: 0 0 6px;
@@ -233,8 +235,8 @@ section[class^='meetup-landingpage-'] {
         min-width: 145px;
       }
 
-      &:before {
-        content: ' ';
+      &::before {
+        content: " ";
         position: absolute;
         top: 2px;
         left: -12px;
@@ -265,7 +267,7 @@ section[class^='meetup-landingpage-'] {
 .map-shotcut {
   width: 100%;
   height: 340px;
-  background: url('https://download.pingcap.com/images/map-shotcut-pc.png');
+  background: url("https://download.pingcap.com/images/map-shotcut-pc.png");
   background-size: cover;
 }
 
@@ -280,6 +282,7 @@ section[class^='meetup-landingpage-'] {
   background-position: 50% 50%;
   z-index: -1;
 }
+
 @media (max-width: 600px) {
   .intro-video {
     .video-wrapper {
@@ -313,7 +316,7 @@ section[class^='meetup-landingpage-'] {
 
   .map-shotcut {
     height: 270px;
-    background: url('https://download.pingcap.com/images/map-shotcut-min.png');
+    background: url("https://download.pingcap.com/images/map-shotcut-min.png");
     background-size: cover;
   }
 }

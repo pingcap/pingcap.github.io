@@ -1,15 +1,31 @@
 {{ define "headtpl" }}
-  {{$.Scratch.Set "nav_active" "blog"}}
-  {{$.Scratch.Set "data_i18_link" "/blog" }}
+  <link rel="stylesheet" href="https://download.pingcap.com/style/github-markdown.css" />
+  {{ if and (isset .Params "category") (eq .Params.category "case") }}
+    {{$.Scratch.Set "data_i18_link" "/cases" }}
+    {{$.Scratch.Set "nav_active" "cases"}}
+  {{ else }}
+    {{$.Scratch.Set "data_i18_link" "/blog" }}
+    {{$.Scratch.Set "nav_active" "blog"}}
+  {{ end }}
   {{$.Scratch.Set "data_i18_cn" true }}
 {{ end }}
 
 {{ define "main" }}
 <div class="blog">
   <div class="container content-container">
-    {{ $posts := where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil  }}
-    {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) }}
-
+    {{ if and (isset .Params "category") (eq .Params.category "case") }}
+        <div class="sidebar">
+            <div class="sticky-sidebar">
+              <h2 class="title"> 用户案例 </h2>
+              <div class="st_tree nav-toc">
+                {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.cases_cn_toc "global" .) }}
+              </div>
+            </div>
+          </div>
+    {{ else }}
+        {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
+        {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) }}
+    {{ end }}
     <div class="archive">
       <div class="content markdown-body">
         <h1 class="title">{{ .Title }}</h1>
