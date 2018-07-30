@@ -1,0 +1,64 @@
+{{- define "title" -}} Q &amp; A {{- end -}}
+
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "about"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "https://angel.co/pingcap-1/jobs" }}
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/gridtab.min.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/recruit.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+<div class="recruit">
+    <div class="container">
+        <div class="section">
+            <h2 id="qa" class="title">Q &amp; A</h2>
+            <div id="qa-tabs">
+                <dt>All</dt>
+                <dd>{{- partial "recruit/qa-tab-panel.html" (dict "data" .Site.Data.about_qa "global" .) -}}</dd>
+                {{- range $index, $data := .Site.Data.about_qa -}}
+                    <dt class="tab-{{ $index }}">{{- .tag -}}</dt>
+                    <dd>{{- partial "recruit/qa-tab-panel.html" (dict "data" .Site.Data.about_qa "tag" .tag "global" .) -}}</dd>
+                {{- end -}}
+            </div>
+        </div>
+    </div>
+    {{- partial "recruit/aside-menu.html" (dict "active" "qa") -}}
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript" src="https://download.pingcap.com/js/gridtab.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#qa-tabs').gridtab({
+            grid: 7,
+            tabPadding: 12,
+            contentPadding: 0,
+            config: {
+            layout: 'tab',
+            activeTab: 1,
+            keepOpen: true,
+            },
+        })
+
+        function setHeight() {
+            $(".response").each(function(index,element){
+                var target = $(element);
+                target.removeClass("fixed-height");
+                var height = target.innerHeight();
+                target.attr("data-height", height)
+                    .addClass("fixed-height");
+            });
+        };
+
+        $("input[name=question]").on("change", function(){
+            $("p.response").removeAttr("style");
+            var target = $(this).next().next();
+            target.height(target.attr("data-height"));
+        })
+
+        setHeight();
+    })
+</script>
+{{- end -}}

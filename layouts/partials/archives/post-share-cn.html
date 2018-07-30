@@ -1,111 +1,104 @@
 <div class="ssba-wrap">
-  <div class="ssba">
-    <a class="ssba_mail_share" href="mailto:info@pingcap.com">
-      {{ partial "svgs/icon-mail.svg" (dict "width" 18 "height" 18 ) }}
-    </a>
-    <a id="wechat_share_btn" data-site="wechat" data-url="{{ .URL | absURL }}" class="ssba_wechat_share" href="javascript:void(0)" onclick="toggleBlogQRCode()">
-      {{ partial "svgs/icon-weixin.svg" (dict "width" 18 "height" 18 ) }}
-    </a>
-    <!-- TODO: weibo -->
-    <!-- <a data-site="weibo" class="ssba_weibo_share" href="http://reddit.com/submit?url={{ .URL | absURL }}&title={{ .Params.title }}" target="_blank">
-      {{ partial "svgs/icon-weibo.svg" (dict "width" 18 "height" 18 ) }}
-    </a> -->
-  </div>
+    <div class="ssba">
+        <a class="ssba_mail_share" href="mailto:info@pingcap.com">
+        {{ partial "svgs/icon-mail.svg" (dict "width" 18 "height" 18 ) }}
+        </a>
+        <a id="wechat_share_btn" data-site="wechat" data-url="{{ .URL | absURL }}" class="ssba_wechat_share" href="javascript:void(0)" onclick="toggleBlogQRCode()">
+        {{ partial "svgs/icon-weixin.svg" (dict "width" 18 "height" 18 ) }}
+        </a>
+    </div>
 </div>
 
-<style>
-  .fixed-qrcode {
-    position: fixed;
-    top: 120px;
-    right: 105px;
-    padding: 10px 15px;
-    width: 200px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background: rgba(255,255,255,0.9);
-    text-align: center;
-  }
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
 
-  .fixed-qrcode p {
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.6;
-    margin: 8px 0;
-    color: #333;
-  }
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
 
-  .fixed-qrcode #close_share_qrcode {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30px;
-    height: 30px;
-    padding: 10px;
-  }
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
 
-  .fixed-qrcode #close_share_qrcode svg {
-    display: block;
-  }
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
 
-  .f-hide #share_qrcode {
-    visibility: hidden;
-    opacity: 0;
-  }
-  .fixed-qrcode #share_qrcode {
-    visibility: visible;
-    opacity: 1;
-    height: 128px;
-    transition: visibility 0s linear 0s,opacity .3s 0s;
-    -webkit-transition: visibility 0s linear 0s,opacity .3s 0s;
-  }
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
 
-  #share_qrcode img {
-    margin: 0 auto;
-  }
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
 </style>
 <div id="share_qrcode_outer" class="f-hide">
-  <i id="close_share_qrcode">{{ partial "svgs/icon-cross.svg" (dict "width" 10 "height" 10 ) }}</i>
-  <p>
-    分享到微信
-  </p>
-  <div id="share_qrcode"></div>
-  <p>
-    打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。
-  </p>
+    <i id="close_share_qrcode">{{ partial "svgs/icon-cross.svg" (dict "width" 10 "height" 10 ) }}</i>
+    <p>分享到微信</p>
+    <div id="share_qrcode"></div>
+    <p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
 </div>
 
 <script type="text/javascript" src="/js/vendor/qrcode.min.js"></script>
 <script type="text/javascript">
-window.onload = function() {
-  var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
-  var wechat_share_btn = document.getElementById('wechat_share_btn')
-  var blog_url = wechat_share_btn.getAttribute('data-url')
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
 
-  window.pingcap_blog_qrcode = new QRCode(
-    document.getElementById('share_qrcode'),
-    {
-      text: blog_url,
-      width: 128,
-      height: 128,
-      colorDark: '#000000',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.H
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
     }
-  )
 
-  close_share_qrcode_btn.addEventListener('click', function(event) {
-    document
-      .getElementById('share_qrcode_outer')
-      .setAttribute('class', 'f-hide')
-  })
-}
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
 
-function toggleBlogQRCode() {
-  var qrcode_wrapper = document.getElementById('share_qrcode_outer')
-
-  if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
-    qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
-  } else {
-    qrcode_wrapper.setAttribute('class', 'f-hide')
-  }
-}
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
 </script>

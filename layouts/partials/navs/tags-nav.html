@@ -1,34 +1,28 @@
 {{ $rss := .rss }}
-
 <div class="sidebar nav-tags" data-type="{{.type}}">
-    <h2 class="title">
-      {{ .title }}
-      {{ if $rss }}
-        <a class="rss" href="{{.rss}}" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
-      {{ end }}
-    </h2>
+    {{- if .title -}}
+        <div class="title">
+            {{- .title -}}
+            {{- if $rss -}}
+                <a class="rss" href="{{.rss}}" title="RSS Feed">{{- partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) -}}</a>
+            {{- end -}}
+        </div>
+    {{- end -}}
     <a href="#" class="tag all">ALL ({{ len .posts }})</a>
     <div class="tag-list">
-      <!-- Get all posts-->
-      <!-- loop all tags that you've used -->
-      {{ range $name, $taxonomy := .global.Site.Taxonomies.tags }}
-        <!-- (re)set the counter to 0 -->
-        {{ $.global.Scratch.Set "tagCounter" 0 }}
-        <!-- increment counter if post contains the current tag-->
-          {{ range $.posts}}
-            {{ if in .Params.tags $name }}
-              {{ $.global.Scratch.Add "tagCounter" 1 }}
-            {{ end }}
-          {{ end }}
-
-          {{ $count := $.global.Scratch.Get "tagCounter" }}
-
-          {{ if (gt $count  1) }}
-            <!-- hide class for li, if less then 2 -->
-            <a href="#{{ replace $name " " "-"}}" class="tag {{ if in $.global.Params.tags $name }}sel{{end}}" data-tag="{{ replace $name " " "-"}}">
-              {{ replace $name " " "-"}} ({{ $count }})
-            </a>
-          {{ end }}
-      {{end}}
+        {{- range $name, $taxonomy := .global.Site.Taxonomies.tags -}}
+            {{- $.global.Scratch.Set "tagCounter" 0 -}}
+            {{- range $.posts -}}
+                {{- if in .Params.tags $name -}}
+                    {{- $.global.Scratch.Add "tagCounter" 1 -}}
+                {{- end -}}
+            {{- end -}}
+            {{- $count := $.global.Scratch.Get "tagCounter" -}}
+            {{- if (gt $count  1) -}}
+                <a href="#{{ replace $name " " "-"}}" class="tag {{ if in $.global.Params.tags $name }}sel{{end}}" data-tag="{{ replace $name " " "-"}}">
+                {{- replace $name " " "-" -}}&nbsp;({{ $count }})
+                </a>
+            {{- end -}}
+        {{end}}
     </div>
 </div>

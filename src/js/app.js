@@ -1,55 +1,87 @@
 // JS Goes here - ES6 supported
 
+// Global JS
+
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
 
-import '../../dist/css/style.css'
+// import '../../dist/css/main.css'
 
-import './vendor/jquery.SimpleTree.js'
-import { run as toc_run } from './vendor/toc'
-
-var blogRegex = /\/blog(-cn)?\//gi
-var recruitRegex = /\/recruit(-cn)?\//gi
-
+// Smooth scrolling when the document is loaded and ready
 function smoothScroll(hash) {
-  /* Smooth scrolling when the document is loaded and ready */
   const y = $('header').height()
   if (hash && $(hash).offset())
     $('html, body').animate(
       {
-        scrollTop: $(hash).offset().top - y,
+        scrollTop: $(hash).offset().top - y - 20,
       },
       1000
     )
 }
 
-// enable javascript
-$(document).ready(function() {
-  if ($('.homepage')) {
-    var version = $('.release-banner').data('release')
+// Process hash
+function processHash() {
+  const hash = decodeURIComponent(location.hash)
+  if (!hash) return
+  if ($('.nav-tags').length && $('.nav-tags').data('type') === 'list') return
 
-    if (typeof Storage !== 'undefined') {
-      // Code for localStorage/sessionStorage.
-      var releaseVerinStorage = localStorage.getItem(
-        `release-version-${version}`
-      )
-      if (!releaseVerinStorage) $('.homepage').addClass('banner-active')
-    } else {
-      // Sorry! No Web Storage support..
-      $('.homepage').addClass('banner-active')
-    }
-  }
+  smoothScroll(hash)
+}
 
-  $(window).scroll(function() {
-    var scrollVal = $(this).scrollTop(),
-      y = $('header').height()
-    if ($('body.banner-active') && scrollVal >= y) {
-      $('body.banner-active').addClass('banner-active--scrolled')
-    }
-    if ($('body.banner-active--scrolled') && scrollVal < y) {
-      $('body').removeClass('banner-active--scrolled')
-    }
+// initial algolia search
+function initialSearch() {
+  docsearch({
+    apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
+    indexName: 'pingcap',
+    inputSelector: '#search-input',
+    debug: true, // Set debug to true if you want to inspect the dropdown
+    transformData: function(hits) {
+      // filter hits
+      function isChinese(s) {
+        var pattern = /\/.*-cn\//gi
+        return pattern.exec(s)
+      }
+      // filter 404 results
+      function is404(h) {
+        var pattern = /404/gi
+        return h && h.lvl1 && pattern.exec(h.lvl1)
+      }
+      var filteredHits = hits.filter(function(hit) {
+        if ($('#search-input').data('lang') === 'en')
+          return !isChinese(hit.url) && !is404(hit.hierarchy)
+        else return isChinese(hit.url) && !is404(hit.hierarchy)
+      })
+      return filteredHits
+    },
   })
+}
+
+// process search ui
+function processSearch() {
+  initialSearch()
+  // Hide search suggestions dropdown menu on focusout
+  $('#search-input').focusout(function() {
+    $('.ds-dropdown-menu').hide()
+  })
+  // Show search suggestions dropdown menu on focus
+  $('#search-input').focus(function(e) {
+    e.preventDefault()
+    if (e.target && e.target.value) $('.ds-dropdown-menu').show()
+  })
+}
+
+// Process release banner
+function processReleaseBanner() {
+  var version = $('.release-banner').data('release')
+
+  if (typeof Storage !== 'undefined') {
+    // Code for localStorage/sessionStorage.
+    var releaseVerInStorage = localStorage.getItem(`release-version-${version}`)
+    if (!releaseVerInStorage) $('.homepage').addClass('banner-active')
+  } else {
+    // Sorry! No Web Storage support..
+    $('.homepage').addClass('banner-active')
+  }
 
   $('.release-banner__close').click(function(e) {
     if ($('body.banner-active')) $('body').removeAttr('class')
@@ -60,187 +92,11 @@ $(document).ready(function() {
     }
     e.preventDefault()
   })
+}
 
-  $('.st_tree').fadeIn()
-
-  $(window).on('hashchange', function() {
-    const hash = decodeURIComponent(location.hash)
-    if (
-      (location.pathname.match(blogRegex) ||
-        location.pathname.match(recruitRegex)) &&
-      $('.nav-tags').data('type') !== 'single'
-    )
-      return
-    if (hash) smoothScroll(hash)
-  })
-
-  /* TOC for article in docs module */
-  const $tocWrap = $('.article-toc')
-  if ($tocWrap.length) {
-    toc_run()
-  }
-
-  /* process tags */
-  const hash = decodeURIComponent(location.hash)
-  if (
-    (location.pathname.match(blogRegex) ||
-      location.pathname.match(recruitRegex)) &&
-    hash
-  ) {
-    $('.nav-tags .tag').removeClass('sel')
-    $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
-    $('.article-list .article').each(function() {
-      const $this = $(this)
-      if ($this.data('tag').includes(hash.slice(1))) {
-        $this.show()
-      } else {
-        $this.hide()
-      }
-    })
-  } else {
-    const pageTpye = $('.nav-tags').data('type')
-    if (pageTpye !== 'single') {
-      $('.tag.all').addClass('sel')
-    }
-    if (hash) {
-      smoothScroll(hash)
-    }
-  }
-
-  /* tree sidebar */
-  $('.st_tree').SimpleTree({
-    click: a => {
-      if ($(a).attr('href') != '#') {
-        $(a)
-          .parent()
-          .parent()
-          .find('.active')
-          .removeClass('active')
-        $(a)
-          .parent()
-          .addClass('active')
-        window.location.href = $(a).attr('href')
-      }
-    },
-  })
-
-  /* tags frontend filter */
-  $('.nav-tags .tag, .anchor-tag').click(function(e) {
-    const $this = $(this)
-    const isInlineTag = $this.hasClass('anchor-tag')
-    const isAll = $this.hasClass('all')
-    const filter = isInlineTag ? $this.text().trim() : $this.data('tag')
-
-    $('.nav-tags .tag').removeClass('sel')
-    $(`.nav-tags .tag[data-tag="${filter}"]`).addClass('sel')
-    isAll && $('.tag.all').addClass('sel')
-
-    const pageTpye = $('.nav-tags').data('type')
-    console.log(pageTpye)
-    if (pageTpye && pageTpye === 'single') {
-      if (isAll) window.location.href = '../'
-      else window.location.href = `../#${encodeURIComponent(filter)}`
-    } else {
-      $('.article-list .article').each(function() {
-        const $this = $(this)
-        if (isAll) {
-          $this.show()
-        } else {
-          if ($this.data('tag').includes(filter)) {
-            $this.show()
-          } else {
-            $this.hide()
-          }
-        }
-      })
-      if (isAll) window.location.href = `./`
-      else window.location.href = `./#${encodeURIComponent(filter)}`
-    }
-
-    e.preventDefault()
-    return false
-  })
-
-  /* play video */
-  // TODO: polish - use video.js
-  const playVideo = () => {
-    $('#video').attr('controls', 'controls')
-    // for safari
-    var promise = document.getElementById('video').play()
-    if (promise !== undefined) {
-      promise
-        .then(_ => {
-          // Autoplay started!
-        })
-        .catch(error => {
-          // Autoplay was prevented.
-          // Show a "Play" button so that user can start playback.
-        })
-    }
-  }
-  $('#video-control').click(function(e) {
-    const videoEl = document.getElementById('video')
-    if (videoEl.paused) {
-      $(this).css('opacity', '0')
-      playVideo()
-    } else {
-      $(this).css('opacity', '1')
-      videoEl.pause()
-    }
-    e.preventDefault()
-  })
-  $('#video').focus(function(e) {
-    $(this).attr('controls', 'controls')
-    e.preventDefault()
-  })
-
-  /* open first item in docs/docs-cn/weekly list page */
-  const openFolder = li => {
-    if (li.hasClass('has-child')) {
-      li.addClass('open')
-      const $firstUL = li.find('ul')[0]
-      const $LI = $($firstUL)
-        .attr('style', 'display: block;')
-        .find('li:first-child')
-      return openFolder($LI)
-    }
-    li.addClass('active')
-    return false
-  }
-  const $firstLI = $('#list_page .st_tree > ul > li:first-child')
-  openFolder($firstLI)
-
-  /* markdown-body tag a ref */
-  function replaceHref(a) {
-    var href = $(a).attr('href')
-    var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
-      mdSuffixExp = /\.md/
-
-    var absUrlRegex = new RegExp(absUrlExp),
-      mdSuffixRegex = new RegExp(mdSuffixExp)
-
-    if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
-      // ref
-      var newHref = '../' + href.replace(/\.md/, '')
-      $(a).attr('href', newHref)
-    }
-  }
-  $('.markdown-body')
-    .find('a')
-    .each(function() {
-      var $this = $(this)
-      // click event
-      $this.click(function(e) {
-        replaceHref(this)
-      })
-      // right click event for open in new window or copy link url
-      $this.contextmenu(function(e) {
-        replaceHref(this)
-      })
-    })
-
-  /* toggle wechat qr code */
-  $('#wechat').on('click', e => {
+// Toggle weChat qr code
+function toggleWeChatQRCode() {
+  $('#wechat').click(e => {
     e.preventDefault()
     $('#wechat .qr_code_outer').toggleClass('f-hide')
   })
@@ -248,27 +104,66 @@ $(document).ready(function() {
     e.preventDefault()
     $('#wechat-mobile .qr_code_outer').toggleClass('f-hide')
   })
+}
 
-  /* hide search suggestions dropdown menue on focusout */
-  $('#search-input').focusout(function() {
-    $('.ds-dropdown-menu').hide()
-  })
-  /* show search suggestions dropdown menue on focus */
-  $('#search-input').focus(function(e) {
-    e.preventDefault()
-    if (e.target && e.target.value) $('.ds-dropdown-menu').show()
-  })
+function handleWindowScroll() {
+  var scrollVal = $(this).scrollTop(),
+    y = $('header').height()
+  var amountScrolled = 200
 
-  /* toggle mobile sidebar */
-  $('.nav-btn.nav-slider').on('click', function() {
+  //process release banner in homepage
+  if ($('body.banner-active') && scrollVal >= y) {
+    $('body.banner-active').addClass('banner-active--scrolled')
+  }
+  if ($('body.banner-active--scrolled') && scrollVal < y) {
+    $('body').removeClass('banner-active--scrolled')
+  }
+  // process back to top button
+  if (scrollVal > amountScrolled) {
+    $('.back-to-top').addClass('show')
+  } else {
+    $('.back-to-top').removeClass('show')
+  }
+}
+
+function processMobileOverlay() {
+  $('.nav-btn.nav-slider').click(function() {
     $('.overlay').show()
     $('nav').toggleClass('open')
   })
-
-  $('.overlay').on('click', function() {
+  $('.overlay').click(function() {
     if ($('nav').hasClass('open')) {
       $('nav').removeClass('open')
     }
     $(this).hide()
+  })
+}
+
+$(document).ready(function() {
+  processHash()
+
+  // Handle hash change
+  $(window).on('hashchange', processHash)
+
+  // Handle window scroll event
+  $(window).scroll(handleWindowScroll)
+
+  if ($('.homepage').length) processReleaseBanner()
+
+  processSearch()
+
+  toggleWeChatQRCode()
+
+  processMobileOverlay()
+
+  // Handle click event on Back to top button
+  $('.back-to-top').click(function() {
+    $('html, body').animate(
+      {
+        scrollTop: 0,
+      },
+      800
+    )
+    return false
   })
 })

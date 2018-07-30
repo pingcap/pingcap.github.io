@@ -1,0 +1,26 @@
+<div class="card">
+    {{- if .link -}}
+        <a href="{{ .link }}" class="f-link"></a>
+    {{- end -}}
+
+    <div class="card__avatar">
+        {{ $avatarPath := delimit (slice (delimit (slice "/images/svgs/avatar" (.avatar | default "engineer")) "-") "svg") "." }}
+        <img src="{{- $avatarPath -}}" alt="avatar-{{- .avatar -}}" />
+    </div>
+
+    {{- if .title -}}
+        <h3 class="card__title"> {{- .title -}} </h3>
+    {{- end -}}
+
+    {{- if .location -}}
+        <div class="card__location">{{- .location -}}</div>
+    {{- end -}}
+
+    {{- if .description -}}
+        <div class="card__description">{{- .description -}}</div>
+    {{- end -}}
+
+    {{- if .link -}}
+        <span class="read-more">Read More</span>
+    {{- end -}}
+</div>
