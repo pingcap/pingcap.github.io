@@ -1,0 +1,20 @@
+<div class="chat">
+    <ul>
+        {{- range $index, $employee := .employee -}}
+            <li class="{{ if eq ( mod $index 3) 0 }}left{{ else }}right{{ end }}">
+                <a class="user" href="https://github.com/{{ .github }}" title="{{ .github }}" target="_blank">
+                    <img class="lazy" width="65" height="65" data-original="{{ .avatar }}" src="/images/svgs/loader-spinner.svg"  alt="GitHub Avatar" >
+                </a>
+                <div class="position">
+                    {{- .position -}}{{- if .location -}}&nbsp;-&nbsp;{{ .location }}{{- end -}}
+                </div>
+                <div class="message{{ if .blur }} blur{{ end }}">
+                    <div class="hider">
+                        <span>Click to read</span>
+                    </div>
+                    <p>{{- .statement -}}</p>
+                </div>
+            </li>
+        {{- end -}}
+    </ul>
+</div>

@@ -1,16 +1,15 @@
-{{ define "title" }}Meetup{{ end }}
+{{- define "title" -}} Meetup {{- end -}}
 
-{{ define "headtpl" }}
-  {{$.Scratch.Set "nav_active" "meetup"}}
-  {{$.Scratch.Set "data_i18_cn" true }}
-  {{$.Scratch.Set "data_i18_link" "/weekly" }}
-{{ end }}
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "meetup"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "/weekly" }}
+    {{- partial "head/preload-css" (dict "href" "/css/meetup.css") -}}
+{{- end -}}
 
-{{ define "main" }}
-<section class="meetup-landingpage-banner layout-text-on-hover">
-    <!-- TODO: sign up url -->
+{{- define "main" -}}
+<section class="meetup-landing-page-banner layout-text-on-hover">
     <a href="http://path/to/signup" class="link-abs" target="_blank"></a>
-    <!-- <a href="http://path/to/detail" class="link-abs" target="_blank"></a> -->
     <div class="image">
         <img src="/images/meetup-earth.png" alt="banner">
     </div>
@@ -22,10 +21,9 @@
     </div>
     <div class="text">
         <h4 class="inner-title"> 报名加入 </h4>
-        <!-- <h3 class="title"> 查看详情 </h3> -->
     </div>
 </section>
-<section class="meetup-landingpage-intro">
+<section class="meetup-landing-page-intro">
     <div class="container">
         <h1 class="title"> Infra Meetup </h1>
         <div class="desc">
@@ -33,17 +31,17 @@
         </div>
     </div>
 </section>
-<section class="meetup-landingpage-review">
+<section class="meetup-landing-page-review">
     <div class="container">
         <h2 class="title">往期回顾</h2>
         <div class="details">
             <div class="row">
-                {{ range first 3 .Data.Pages }}
+                {{- range first 3 .Data.Pages -}}
                 <div class="item">
                     <div class="layout-text-on-hover">
                         <a href="{{.URL}}" class="link-abs"></a>
                         <div class="image">
-                            <img src="{{.Params.image|default .Site.Data.meetup.default_cover}}" alt="cover">
+                            <img class="lazy" width="100%" data-original="{{.Params.image|default .Site.Data.meetup.default_cover}}" src="/images/svgs/loader-spinner.svg" alt="cover">
                         </div>
                         <div class="text">
                             <h3 class="inner-title"> {{.Date.Format "2006-01-02"}} </h3>
@@ -52,42 +50,42 @@
                     <h3>{{.Date.Format "2006-01-02"}}</h3>
                     <p>{{.Title}}</p>
                 </div>
-                {{ end }}
+                {{- end -}}
             </div>
         </div>
         <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
     </div>
 </section>
-<section class="meetup-landingpage-memoir">
+<section class="meetup-landing-page-memoir">
     <div class="container">
         <h2 class="title">分享实录</h2>
         <div class="links-group">
-          {{ range where .Data.Pages ".Params.meetup_type" "memoir" }}
+            {{- range where .Data.Pages ".Params.meetup_type" "memoir" -}}
             <a href="{{.URL}}" class="link">
-              {{.Title}} <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
+                {{.Title}} <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
             </a>
-          {{ end }}
-          <!-- TODO: remove mock data -->
-          <a href="./memoir/26-1.html" class="link">
-            NO.26: 分布式系统测试那些事儿 &#8212; 理念
-            <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
-          </a>
+            {{- end -}}
+            <a href="./memoir/26-1.html" class="link">
+                NO.26: 分布式系统测试那些事儿 &#8212; 理念
+                <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
+            </a>
         </div>
         <!-- hide memoir list this version -->
         <!-- <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
     </div>
 </section>
-<section class="meetup-landingpage-lecturer">
+<section class="meetup-landing-page-lecturer">
     <div class="container">
         <h2 class="title">大咖讲师</h2>
         <div class="details">
-            {{ range $idx, $i := .Site.Data.meetup.featured_speakers }} {{ if eq (mod $idx 5 ) 0}}
-            <div class="row">
-                {{end}}
+            {{- range $idx, $i := .Site.Data.meetup.featured_speakers -}}
+                {{- if eq (mod $idx 5) 0 -}}
+                    <div class="row">
+                {{- end -}}
                 <div class="item">
                     <div class="layout-text-on-hover">
                         <div class="image">
-                            <img src="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}" alt="lecturer">
+                            <img class="lazy" width="100%" data-original="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}" src="/images/svgs/loader-spinner.svg" alt="lecturer">
                         </div>
                         <div class="text">
                             <p>{{$i.intro}} </p>
@@ -97,16 +95,27 @@
                     <h4> {{$i.title}} </h4>
                     <p> {{$i.topic}}</p>
                 </div>
-                {{ if eq (mod $idx 5 ) 4}}
-            </div>
-            {{end}} {{end}}
+                {{- if eq (mod $idx 5) 4 -}}
+                    </div>
+                {{- end -}}
+            {{- end -}}
             <a href="http://path/to/be/lecturer" class="link link-jonin" target="_blank">成为 PingCAP Infra Meetup 讲师<i class="fa fa-long-arrow-right"></i></a>
         </div>
     </div>
 </section>
-<section class="meetup-landingpage-banner-footer">
+<section class="meetup-landing-page-banner-footer">
     <div class="container">
-        <img src="/images/meetup-tags.svg" alt="meetup tags">
+        <img src="/images/svgs/meetup-tags.svg" alt="meetup tags">
     </div>
 </section>
-{{ end }}
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+    $(".lazy").lazyload({
+    effect : "fadeIn",
+    threshold: 200
+});
+</script>
+{{- end -}}

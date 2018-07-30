@@ -1,19 +1,16 @@
 /* about page */
-@import "base.less";
-@import "header.less";
-@import "footer.less"; //color
-@font_color: #3e3e3e;
-@purple_blue: #202884;
-@bg_graywhite: #fafafa;
-@tidb_red: #e6002d; // width
-@video_width: 1124px; // height
-@video_height: calc(~"@{video_width}* 9/16"); // line
-@hr_width: 1.9rem; // animation_fadein
-@animation_fadein: fadeIn 0.4s;
+
+// import global variables
+@import "./variables.less";
+
+@videoWidth: 1124px;
+@videoHeight: calc(~"@{videoWidth}* 9/16");
+@lineWidth: 1.9rem;
+@mapWidth: 660px;
 
 section[class^="about-"],
-section[class^="meetup-landingpage-"] {
-  padding: @vertical_padding @horizontal_padding;
+section[class^="meetup-landing-page-"] {
+  padding: @verticalPadding @horizontalPadding;
   min-height: 20rem;
   text-align: center;
 
@@ -22,13 +19,13 @@ section[class^="meetup-landingpage-"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: @video_width;
+    max-width: @videoWidth;
   }
 
-  .title {
+  h2 {
     display: inline-block;
     position: relative;
-    margin: 0.4rem auto 2rem;
+    margin: 0.4rem auto 1.6rem;
     font-size: 1.1rem;
 
     &::before {
@@ -37,7 +34,7 @@ section[class^="meetup-landingpage-"] {
       right: -2.5rem;
       top: 50%;
       transform: translateY(-50%);
-      width: @hr_width;
+      width: @lineWidth;
       height: 1px;
       background: black;
     }
@@ -48,7 +45,7 @@ section[class^="meetup-landingpage-"] {
       left: -2.5rem;
       top: 50%;
       transform: translateY(-50%);
-      width: @hr_width;
+      width: @lineWidth;
       height: 1px;
       background: black;
     }
@@ -60,10 +57,9 @@ section[class^="meetup-landingpage-"] {
     margin-right: auto;
     font-size: 0.8rem;
     line-height: 1.7;
-    color: @font_color;
 
     a {
-      color: @theme_blue;
+      color: @themeBlue;
     }
   }
 
@@ -71,18 +67,17 @@ section[class^="meetup-landingpage-"] {
     display: flex;
     align-items: center;
     margin: 2rem auto 0;
-    color: @purple_blue;
-    font-size: 0.8rem;
+    color: @purpleBlue;
 
     svg {
       margin-left: 0.6rem;
     }
 
     &:hover {
-      color: @tidb_red;
+      color: @tidbRed;
 
       svg {
-        fill: @tidb_red;
+        fill: @tidbRed;
       }
     }
   }
@@ -91,45 +86,35 @@ section[class^="meetup-landingpage-"] {
 .intro-video {
   position: relative;
   width: 100%;
-  height: calc(~"100vh - @{header_height}");
+  height: calc(~"100vh - @{headerHeight}");
   padding: 0;
 
   .video-wrapper {
-    .f-vhc();
-
     margin-top: 30px;
-    width: @video_width;
-    height: @video_height;
+    width: @videoWidth;
+    height: @videoHeight;
     box-shadow: 2px 2px 22px rgba(255, 255, 255, 0.5);
     background:
     transparent
     url("https://download.pingcap.com/images/video-poster.jpg") no-repeat 0 0;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
     background-size: cover;
     z-index: auto;
-    .customAnimation(@animation_fadein);
 
     video {
       width: 100%;
       height: 100%;
     }
-
-    .icon {
-      .f-vhc();
-    }
   }
 
   #video-control {
     width: 100%;
-    height: 80%;
-    .f-vhc();
+    height: 100%;
+    background-color: transparent;
   }
 }
 
 .about-company {
-  background: @bg_graywhite;
+  background: @grayWhite;
 }
 
 .about-founders {
@@ -147,7 +132,7 @@ section[class^="meetup-landingpage-"] {
 }
 
 .about-culture {
-  background: @bg_graywhite;
+  background: @grayWhite;
 
   .details {
     display: flex;
@@ -160,7 +145,7 @@ section[class^="meetup-landingpage-"] {
     h3 {
       font-size: 1rem;
       margin: 8px 0;
-      color: @purple_blue;
+      color: @purpleBlue;
     }
 
     p {
@@ -227,10 +212,6 @@ section[class^="meetup-landingpage-"] {
         font-weight: 600;
       }
 
-      .text {
-        color: @font_color;
-      }
-
       .text-tel {
         min-width: 145px;
       }
@@ -267,9 +248,20 @@ section[class^="meetup-landingpage-"] {
 .map-shotcut {
   width: 100%;
   height: 340px;
-  background: url("https://download.pingcap.com/images/map-shotcut-pc.png");
+  background: url("https://download.pingcap.com/images/map-office-2955-campus.png");
   background-size: cover;
 }
+
+// .map-wrapper {
+//   width: 100%;
+//   max-width: @mapWidth;
+//   margin: 2em auto 1em;
+//   text-align: left;
+
+//   text[href="http://simplemaps.com"] {
+//     font: 300 10px arial, sans-serif !important;
+//   }
+// }
 
 /* ---- particles.js container ---- */
 #particles-js {
@@ -316,7 +308,7 @@ section[class^="meetup-landingpage-"] {
 
   .map-shotcut {
     height: 270px;
-    background: url("https://download.pingcap.com/images/map-shotcut-min.png");
+    background: url("https://download.pingcap.com/images/map-office-2955-campus-mobile.png");
     background-size: cover;
   }
 }

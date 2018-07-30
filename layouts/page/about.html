@@ -1,141 +1,139 @@
-{{ define "title" }}About{{ end }}
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "about"}}
+    {{$.Scratch.Set "data_i18_link" "/about-cn" }}
+    {{- partial "head/preload-css" (dict "href" "/css/about.css") -}}
+{{- end -}}
 
-{{ define "headtpl" }}
-{{$.Scratch.Set "nav_active" "about"}}
-{{$.Scratch.Set "data_i18_link" "/about-cn" }}
-{{ end }}
+{{- define "main" -}}
+    <section class="about-company">
+        <div class="container">
+            <h2 class="title">ABOUT THE COMPANY</h2>
+            <div class="desc f-tf" style="max-width: 36rem;">
+            PingCAP started in 2015 when three seasoned infrastructure engineers were sick and tired of the way databases were managed, scaled, and maintained while working at leading Internet companies.
+            Seeing no good solution on the market, they decided to build one themselves--the open-source way.
+            <br />
+            <br />
+            With the help of a first-class team and hundreds of contributors from around the globe, PingCAP is building an open source distributed NewSQL hybrid transactional and analytical processing (HTAP) database.
+            Its flagship project, TiDB, is a cloud-native distributed SQL layer with MySQL compatibility, and one of the most popular open source database projects in the world (don’t take our word for it, check it out: <a href="https://github.com/pingcap/tidb" target="_blank">https://github.com/pingcap/tidb</a>).
+            TiDB’s sister project, TiKV, is a cloud-native distributed Key-Value store and also growing rapidly (<a href="https://github.com/pingcap/tikv" target="_blank">https://github.com/pingcap/tikv</a>).
+            </div>
+            <a href="https://angel.co/pingcap-1/jobs" target="_blank" class="link">Join Us {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
+        </div>
+    </section>
+    <section class="about-founders">
+        <div class="container">
+            <h2 class="title">COMMUNITY</h2>
+            <div class="desc">
+                Twitter: <a href="https://twitter.com/PingCAP" target="_blank">@PingCAP</a>
+                <br>GitHub: <a href="https://github.com/pingcap/tidb" target="_blank">TiDB</a>
+                <br>Mailing List: <a href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank">Google Group</a>
+                <br>Reddit: <a href="https://www.reddit.com/r/TiDB/" target="_blank">https://www.reddit.com/r/TiDB/</a>
+                <br>Stack Overflow: <a href="https://stackoverflow.com/questions/tagged/tidb" target="_blank">https://stackoverflow.com/questions/tagged/tidb</a>
+            </div>
+            <div class="image-wrap">
+                <img src="https://download.pingcap.com/images/illustration-tidb.png" alt="">
+            </div>
+        </div>
+    </section>
+    <section class="about-culture">
+        <div class="container">
+            <h2 class="title">OUR MISSION AND CULTURE</h2>
+            <div class="desc f-tf" style="max-width: 36rem;">
+            Our mission is to build a database of the future, made by developers, for developers.
+            It’s an ambitious mission, and we can’t do it without curious, self-driven, and capable people...like you!
+            <br />
+            <br />
+            So, if you love the following:
+            <br />
+            <ol>
+                <li>
+                Open source, open collaboration, open communication;
+                </li>
+                <li>
+                Waking up every morning motivated to solve big, hairy problems (and have fun doing it!);
+                </li>
+                <li>
+                Working alongside a global team of self-starters, curious learners, builders, doers;
+                </li>
+            </ol>
+            <br />
+            We want to hear from you!
 
-
-{{ define "main" }}
-<section class="about-company">
-  <div class="container">
-    <h1 class="title">ABOUT THE COMPANY</h1>
-    <div class="desc f-tf" style="max-width:36rem;">
-      PingCAP started in 2015 when three seasoned infrastructure engineers were sick and tired of the way databases were managed, scaled, and maintained while working at leading Internet companies.
-      Seeing no good solution on the market, they decided to build one themselves--the open-source way.
-      <br />
-      <br />
-      With the help of a first-class team and hundreds of contributors from around the globe, PingCAP is building an open source distributed NewSQL hybrid transactional and analytical processing (HTAP) database.
-      Its flagship project, TiDB, is a cloud-native distributed SQL layer with MySQL compatibility, and one of the most popular open source database projects in the world (don’t take our word for it, check it out: <a href="https://github.com/pingcap/tidb" target="_blank">https://github.com/pingcap/tidb</a>).
-      TiDB’s sister project, TiKV, is a cloud-native distributed Key-Value store and also growing rapidly (<a href="https://github.com/pingcap/tikv" target="_blank">https://github.com/pingcap/tikv</a>).
-    </div>
-    <a href="https://angel.co/pingcap-1/jobs" target="_blank" class="link">OPEN JOBS {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
-  </div>
-</section>
-<section class="about-founders">
-  <div class="container">
-    <h2 class="title">COMMUNITY</h2>
-    <div class="desc">
-        Twitter: <a href="https://twitter.com/PingCAP" target="_blank">@PingCAP</a>
-        <br>GitHub: <a href="https://github.com/pingcap/tidb" target="_blank">TiDB</a>
-        <br>Mailing List: <a href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank">Google Group</a>
-        <br>Reddit: <a href="https://www.reddit.com/r/TiDB/" target="_blank">https://www.reddit.com/r/TiDB/</a>
-        <br>Stack Overflow: <a href="https://stackoverflow.com/questions/tagged/tidb" target="_blank">https://stackoverflow.com/questions/tagged/tidb</a>
-    </div>
-    <div class="image-wrap">
-        <img src="https://download.pingcap.com/images/illustration-tidb.png" alt="">
-    </div>
-  </div>
-</section>
-<section class="about-culture">
-  <div class="container">
-    <h2 class="title">OUR MISSION AND CULTURE</h2>
-    <div class="desc f-tf" style="max-width:36rem;">
-      Our mission is to build a database of the future, made by developers, for developers.
-      It’s an ambitious mission, and we can’t do it without curious, self-driven, and capable people...like you!
-      <br />
-      <br />
-      So, if you love the following:
-      <br />
-      <ol>
-        <li>
-          Open source, open collaboration, open communication;
-        </li>
-        <li>
-          Waking up every morning motivated to solve big, hairy problems (and have fun doing it!);
-        </li>
-        <li>
-          Working alongside a global team of self-starters, curious learners, builders, doers;
-        </li>
-      </ol>
-      <br />
-      We want to hear from you!
-
-    </div>
-    <div class="details">
-      <div class="row">
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon icon-m" src="https://download.pingcap.com/images/icon_pc.svg" alt="Office Equipment">
-          </div>
-          <h3>Office Equipment</h3>
-          <p class="desc">Excellent developers need high-end devices.</p>
+            </div>
+            <div class="details">
+            <div class="row">
+                <div class="item">
+                <div class="image-wrap">
+                    <img class="icon icon-m" src="/images/svgs/icon-pc.svg" alt="Office Equipment">
+                </div>
+                <h3>Office Equipment</h3>
+                <p class="desc">Excellent developers need high-end devices.</p>
+                </div>
+                <div class="item item-short">
+                <div class="image-wrap">
+                    <img class="icon icon-s" src="/images/svgs/icon-gym.svg" alt="Gym">
+                </div>
+                <h3>Gym</h3>
+                <p class="desc">Refresh yourself with a workout!</p>
+                </div>
+                <div class="item">
+                <div class="image-wrap">
+                    <img class="icon icon-m" src="/images/svgs/icon-tb.svg" alt="Team Building">
+                </div>
+                <h3>Team Building</h3>
+                <p class="desc">A monthly team outing to help you bond with your teammates.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="item">
+                <div class="image-wrap">
+                    <img class="icon" src="/images/svgs/icon-food.svg" alt="Food & Beverage">
+                </div>
+                <h3>Food &amp; Beverage</h3>
+                <p class="desc">A selection of food and snacks is provided in the office.</p>
+                </div>
+                <div class="item">
+                <div class="image-wrap">
+                    <img class="icon" src="/images/svgs/icon-tgif.svg" alt="TGIF">
+                </div>
+                <h3>TGIF</h3>
+                <p class="desc">Thank God It's Friday! Let's talk and share everything to stay on the same page every two weeks.</p>
+                </div>
+                <div class="item">
+                <div class="image-wrap">
+                    <img class="icon" src="/images/svgs/icon-hour.svg" alt="Flexible Work Schedule">
+                </div>
+                <h3>Flexible Work Schedule</h3>
+                <p class="desc">You are entitled to have a work-life balance by working at flexible hours of your choice or telecommuting.</p>
+                </div>
+            </div>
+            </div>
         </div>
-        <div class="item item-short">
-          <div class="image-wrap">
-            <img class="icon icon-s" src="https://download.pingcap.com/images/icon_gym.svg" alt="Gym">
-          </div>
-          <h3>Gym</h3>
-          <p class="desc">Refresh yourself with a workout!</p>
+    </section>
+    <section class="about-contact about-contact-en">
+        <div class="container">
+            <h2 class="title">CONTACT</h2>
+            <div class="info info-en">
+                <div class="row">
+                    <div class="item f-tf">
+                    <h3>Telephone</h3>
+                    <p class="text text-tel">650-542-9635</p>
+                    </div>
+                    <div class="item f-tf">
+                    <h3>General Inquiries</h3>
+                    <p class="text">info@pingcap.com</p>
+                    </div>
+                    <div class="item f-tf">
+                    <h3>Media Inquiries</h3>
+                    <p class="text">pr@pingcap.com</p>
+                    </div>
+                    <div class="item item-long f-tf">
+                    <h3>Address</h3>
+                    <p class="text">2955 Campus Drive #100, San Mateo, CA 94403</p>
+                    </div>
+                </div>
+            </div>
+            <div class="map map-shotcut"></div>
         </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon icon-m" src="https://download.pingcap.com/images/icon_tb.svg" alt="Team Building">
-          </div>
-          <h3>Team Building</h3>
-          <p class="desc">A monthly team outing to help you bond with your teammates.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon" src="https://download.pingcap.com/images/icon_food.svg" alt="Food & Beverage">
-          </div>
-          <h3>Food &amp; Beverage</h3>
-          <p class="desc">A selection of food and snacks is provided in the office.</p>
-        </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon" src="https://download.pingcap.com/images/icon_tgif.svg" alt="TGIF">
-          </div>
-          <h3>TGIF</h3>
-          <p class="desc">Thank God It's Friday! Let's talk and share everything to stay on the same page every two weeks.</p>
-        </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon" src="https://download.pingcap.com/images/icon_hour.svg" alt="Flexible Work Schedule">
-          </div>
-          <h3>Flexible Work Schedule</h3>
-          <p class="desc">You are entitled to have a work-life balance by working at flexible hours of your choice or telecommuting.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="about-contact about-contact-en">
-  <div class="container">
-    <h2 class="title">CONTACT</h2>
-    <div class="info info-en">
-      <div class="row">
-        <div class="item f-tf">
-          <h3>Telephone</h3>
-          <p class="text text-tel">650-542-9635</p>
-        </div>
-        <div class="item f-tf">
-          <h3>General Inquiries</h3>
-          <p class="text">info@pingcap.com</p>
-        </div>
-        <div class="item f-tf">
-          <h3>Media Inquiries</h3>
-          <p class="text">pr@pingcap.com</p>
-        </div>
-        <div class="item item-long f-tf">
-          <h3>Address</h3>
-          <p class="text">585 Broadway Street, Redwood City, CA, 94063</p>
-        </div>
-      </div>
-    </div>
-    <div class="map map-shotcut"></div>
-  </div>
-</section>
-{{ end }}
+    </section>
+{{- end -}}

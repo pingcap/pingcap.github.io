@@ -12,63 +12,61 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>{{- block "title" . }} {{- or .Title "Home" -}} {{ end -}} | PingCAP</title>
-    {{ partial "head/ga" . }}
-    {{ partial "head/meta-seo" . }}
-
-    <style type="text/css" media="screen">
-      .st_tree {
-        display: none;
-      }
-    </style>
-
-    {{ block "headtpl" . }}{{ end }}
-
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | PingCAP</title>
+    {{- partial "head/ga" . -}}
+    {{- partial "head/meta-seo" . -}}
+    {{- partial "head/preload-assets" . -}}
+    {{- partial "head/preload-css" (dict "href" "/css/main.css") -}}
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/docsearch.min.css") -}}
+    {{- block "headTpl" . -}}{{- end -}}
     <script type="text/javascript">
     if (location.pathname === '/') {
-      if (location.hostname === 'pingcap.github.io') {
-        location.href = '/en/'
-      }
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
     }
     </script>
 </head>
 
-{{ $homepage := $.Scratch.Get "homepage" }}
-
+{{- $homepage := $.Scratch.Get "homepage" -}}
 <body {{ if $homepage }}class="homepage"{{ end }}>
-  {{ $data_i18_cn := $.Scratch.Get "data_i18_cn" }}
+    {{- partial "loaders/page-loader.html" -}}
 
-  {{ if $homepage }}
-    {{ partial "layout/release-banner" . }}
-  {{ end }}
+    <div id="page-content" style="display: none;">
+        {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
 
-  {{ if $data_i18_cn }}
-    {{ partial "layout/header-cn" . }}
-    {{ partial "layout/mobile-sidebar-cn" . }}
-  {{ else }}
-    {{ partial "layout/header" . }}
-    {{ partial "layout/mobile-sidebar" . }}
-  {{ end }}
+        {{- if $homepage -}}
+            {{- partial "layout/release-banner" . -}}
+        {{- end -}}
 
-  {{ block "main" . }}{{ end }}
+        {{- if $data_i18_cn -}}
+            {{- partial "layout/header-cn" . -}}
+            {{- partial "layout/mobile-sidebar-cn" . -}}
+        {{- else -}}
+            {{- partial "layout/header" . -}}
+            {{- partial "layout/mobile-sidebar" . -}}
+        {{- end -}}
 
-  {{ if $data_i18_cn }}
-    {{ partial "layout/footer-cn" . }}
-  {{ else }}
-    {{ partial "layout/footer" . }}
-  {{ end }}
+        {{- block "main" . -}}{{- end -}}
 
-  <div class="overlay"></div>
+        {{- if $data_i18_cn -}}
+            {{- partial "layout/footer-cn" . -}}
+        {{- else -}}
+            {{- partial "layout/footer" . -}}
+        {{- end -}}
 
-  <script src="https://download.pingcap.com/js/jquery.min.js"></script>
-  {{ block "footjs" . }}{{ end }}
+        {{- partial "common/back-to-top.html" -}}
+    </div>
+    <script type="text/javascript">
+        document.getElementById('page-loader').style.display='none';
+        document.getElementById('page-content').style.display='block';
+    </script>
 
-  {{ if $data_i18_cn }}
-    {{ partial "search/algolia-cn-js" . }}
-  {{ else }}
-    {{ partial "search/algolia-js" . }}
-    {{ partial "tracking-code/hubspot.html" }}
-  {{ end }}
+    <div class="overlay"></div>
+
+    <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+    {{- block "footJS" . -}}{{- end -}}
+    <script type="text/javascript" src="https://download.pingcap.com/js/docsearch.min.js"></script>
 </body>
 
 </html>
