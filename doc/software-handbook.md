@@ -136,7 +136,7 @@ submodule update --init --recursive --remote` 来拉取最新子模块内容来�
   {{ block "main" . }}{{ end }}
 
   <script src="https://download.pingcap.com/js/jquery.min.js"></script>
-  {{ block "footjs" . }}{{ end }}
+  {{ block "footJS" . }}{{ end }}
 
   {{ partial "head/ga" . }}
 </body>
@@ -474,7 +474,7 @@ gulp.task('js', buildJs)
 <!-- 英文页面 -->
 {{ define "title" }} Blog {{ end }}
 
-{{ define "headtpl" }}
+{{ define "headTpl" }}
   {{$.Scratch.Set "nav_active" "blog"}}
   {{$.Scratch.Set "data_i18_link" "/blog-cn" }}
 {{ end }}
@@ -482,7 +482,7 @@ gulp.task('js', buildJs)
 <!-- 中文页面 -->
 {{ define "title" }} 博客 {{ end }}
 
-{{ define "headtpl" }}
+{{ define "headTpl" }}
   {{$.Scratch.Set "nav_active" "blog"}}
   {{$.Scratch.Set "data_i18_cn" true }}
   {{$.Scratch.Set "data_i18_link" "/blog" }}
@@ -503,6 +503,7 @@ gulp.task('js', buildJs)
   body {
     font-size: 22px;
   }
+
   .container {
     max-width: 1520px;
   }
@@ -514,6 +515,7 @@ gulp.task('js', buildJs)
   body {
     font-size: 18px;
   }
+
   .container {
     max-width: calc(~'100vw - 10px');
   }

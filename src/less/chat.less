@@ -1,0 +1,160 @@
+// import global colors
+@import "./colors.less";
+
+@fontColor: #fff;
+@fontColorLighter: @lightDimGray;
+@messageColor: @bannerBgColor;
+
+.chat {
+  max-width: 660px;
+  margin: 0 auto;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin: 45px 0 0 0;
+      font-weight: 300;
+
+      a.user {
+        margin: -30px 0 0 0;
+        display: block;
+
+        img {
+          display: block;
+          width: 65px;
+          height: 65px;
+          border-radius: 50%;
+          background-color: #f3f3f3;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      .position {
+        font-size: 14px;
+        font-weight: 400;
+        color: @fontColorLighter;
+      }
+
+      .message {
+        display: block;
+        padding: 10px;
+        position: relative;
+        color: @fontColor;
+        font-size: 15px;
+        background-color: @messageColor;
+        border-radius: 3px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+        &::before {
+          content: '';
+          position: absolute;
+          border-top: 16px solid rgba(0, 0, 0, 0.15);
+          border-left: 16px solid transparent;
+          border-right: 16px solid transparent;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          border-top: 17px solid @messageColor;
+          border-left: 17px solid transparent;
+          border-right: 17px solid transparent;
+        }
+
+        &.blur {
+          p {
+            filter: blur(3px);
+          }
+
+          .hider {
+            opacity: 1;
+            z-index: 1;
+          }
+        }
+
+        p {
+          margin: 0;
+          padding: 0;
+          transition: all 0.1s;
+        }
+
+        .hider {
+          opacity: 0;
+          z-index: -1;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          margin: -10px;
+          text-align: center;
+          cursor: pointer;
+          transform-style: preserve-3d;
+          transition: all 0.1s;
+
+          span {
+            display: block;
+            position: relative;
+            top: 50%;
+            font-size: 16px;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+
+    li.right {
+      a.user {
+        float: right;
+      }
+
+      .position {
+        float: right;
+        margin: -20px 10px 0 0;
+      }
+
+      .message {
+        margin: 0 90px 0 0;
+
+        &::before {
+          margin: -9px -16px 0 0;
+          right: 0;
+        }
+
+        &::after {
+          content: '';
+          right: 0;
+          margin: 0 -15px 0 0;
+        }
+      }
+    }
+
+    li.left {
+      a.user {
+        float: left;
+      }
+
+      .position {
+        float: left;
+        margin: -20px 0 0 10px;
+      }
+
+      .message {
+        margin: 0 0 0 90px;
+
+        &::before {
+          margin: -9px 0 0 -16px;
+          left: 0;
+        }
+
+        &::after {
+          content: '';
+          left: 0;
+          margin: 0 0 0 -15px;
+        }
+      }
+    }
+  }
+}

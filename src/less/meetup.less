@@ -1,8 +1,11 @@
 /* meetup page */
-@import 'base.less';
-@import 'about.less';
-@dark_blue: #100f2c; // animation_fadeIn
-@animation_fadeIn: fadeIn 1s;
+
+// import global variables
+@import "./variables.less";
+// TODO: abstract title style...
+@import "./about.less";
+
+@fadeInAttrs: fadeIn 1s; // fadeInAttrs
 
 .layout-text-on-hover {
   width: 100%;
@@ -22,7 +25,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      .customAnimation(@animation_fadeIn);
+      .customAnimation(@fadeInAttrs);
     }
   }
 
@@ -45,7 +48,7 @@
       right: 30px;
       opacity: 0;
       font-size: 1.6rem;
-      color: @dark_blue;
+      color: @midnightBlue;
       transform: translate3d(40%, 0, 0);
       transition: transform 0s 0.2s, opacity 0.2s;
 
@@ -57,7 +60,7 @@
         width: 100%;
         height: 10px;
         z-index: -1;
-        background-color: @tidb_red;
+        background-color: @tidbRed;
         transform-origin: 0 50%;
         transform: scaleX(0);
       }
@@ -82,18 +85,18 @@
   }
 }
 
-section[class^='meetup-landingpage-'] {
+section[class^='meetup-landing-page-'] {
   h3 {
     margin: 25px 0 16px;
     font-size: 1rem;
-    color: @purple_blue;
+    color: @purpleBlue;
   }
 
   h4 {
     margin: 10px 0;
     font-size: 0.8rem;
     font-weight: 400;
-    color: @purple_blue;
+    color: @purpleBlue;
   }
 
   p {
@@ -133,18 +136,18 @@ section[class^='meetup-landingpage-'] {
 
   .layout-text-on-hover {
     .image {
-      background: @gray_white;
+      background: @grayWhite;
     }
   }
 }
 
-.meetup-landingpage-banner {
+.meetup-landing-page-banner {
   position: relative;
   overflow: hidden;
   width: 100%;
   max-height: 26rem;
   padding: 0 !important;
-  background-color: @dark_blue !important;
+  background-color: @bannerBgColor !important;
 
   .mkdf-elements-holder-item-inner {
     position: absolute;
@@ -186,7 +189,7 @@ section[class^='meetup-landingpage-'] {
   }
 }
 
-.meetup-landingpage-review {
+.meetup-landing-page-review {
   .details {
     .item {
       flex-basis: 30%;
@@ -205,8 +208,8 @@ section[class^='meetup-landingpage-'] {
   }
 }
 
-.meetup-landingpage-memoir {
-  background: @gray_white;
+.meetup-landing-page-memoir {
+  background: @grayWhite;
   padding: 6rem 0 2.5rem;
   box-sizing: border-box;
 
@@ -231,7 +234,6 @@ section[class^='meetup-landingpage-'] {
         .arrow-right {
           opacity: 1;
           display: inline-block;
-          -webkit-transition: opacity 0.2s;
           transition: opacity 0.2s;
         }
       }
@@ -239,12 +241,12 @@ section[class^='meetup-landingpage-'] {
   }
 }
 
-.meetup-landingpage-lecturer {
+.meetup-landing-page-lecturer {
   .details {
     .item {
       min-height: 350px;
       flex-basis: 20%;
-      padding: 0 @horizontal_padding;
+      padding: 0 @horizontalPadding;
 
       .layout-text-on-hover {
         .text {
@@ -252,7 +254,7 @@ section[class^='meetup-landingpage-'] {
 
           p {
             opacity: 0;
-            color: @dark_blue;
+            color: @midnightBlue;
             font-size: 0.8rem;
             font-weight: 400;
             transform: translate3d(40%, 0, 0);
@@ -274,9 +276,9 @@ section[class^='meetup-landingpage-'] {
   }
 }
 
-.meetup-landingpage-banner-footer {
+.meetup-landing-page-banner-footer {
   background-color: white;
-  padding: 1.5rem @horizontal_padding !important;
+  padding: 1.5rem @horizontalPadding !important;
 
   img {
     display: block;
@@ -287,7 +289,7 @@ section[class^='meetup-landingpage-'] {
 }
 
 @media (max-width: 600px) {
-  section[class^='meetup-landingpage-'] .details .item {
+  section[class^='meetup-landing-page-'] .details .item {
     flex-basis: 100%;
   }
 }

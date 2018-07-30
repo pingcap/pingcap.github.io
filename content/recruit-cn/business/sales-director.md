@@ -2,7 +2,8 @@
 title: 行业销售负责人/总监
 tags:
   - Business
-label: Business
+location: 北京
+avatar: business
 aliases:
   - /recruit-cn/sales/sales-director/
 ---

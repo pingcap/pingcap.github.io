@@ -1,35 +1,37 @@
-{{ define "headtpl" }}
-  <link rel="stylesheet" href="https://download.pingcap.com/style/github-markdown.css" />
-  {{$.Scratch.Set "nav_active" "about"}}
-  {{$.Scratch.Set "data_i18_cn" true }}
-  {{$.Scratch.Set "data_i18_link" "/recruit" }}
-{{ end }}
+{{- define "headTpl" -}}
+    <style type="text/css" media="screen">
+        .st_tree {
+            display: none;
+        }
+    </style>
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/github-markdown.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{$.Scratch.Set "nav_active" "about"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "https://angel.co/pingcap-1/jobs" }}
+{{- end -}}
 
-{{ define "main" }}
-<div class="recruit">
-  <div class="container content-container">
-    <div class="sidebar">
-      <div class="sticky-sidebar">
-        <h2 class="title"> 招聘职位 </h2>
-         <div class="st_tree nav-toc" style="display: none;">
-           {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.recruit_cn_toc "global" .) }}
-         </div>
-       </div>
-    </div>
-
-    <div class="archive">
-        <div class="content">{{ .Content }}</div>
-        <!-- TODO: change to left fixed -->
-        <div class="operate">
-          <div class="item">
-            <a href="mailto:hire@pingcap.com">
-              <i class="icon icon-mail">
-                {{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 24 "height" 24 ) }}
-              </i>投个简历吧
-            </a>
-          </div>
+{{- define "main" -}}
+<div class="recruit-single">
+    <div class="container">
+        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.recruit_cn_toc "title" "招贤纳士") -}}
+        <div class="archive">
+            <div class="content">{{- .Content -}}</div>
+            <div class="operate">
+                <div class="item">
+                    <a href="mailto:hire@pingcap.com">
+                    <i class="icon icon-mail">
+                        {{ partial "svgs/icon-feedback.svg" (dict "fill" "#040000" "width" 24 "height" 24 ) }}
+                    </i>投个简历吧
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
+    {{- partial "recruit/aside-menu.html" (dict "active" "join") -}}
 </div>
-{{ end }}
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/doc.js"></script>
+{{- end -}}

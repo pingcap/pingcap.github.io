@@ -1,15 +1,15 @@
 /* header module */
-@import "./base.less";
+
+// import global variables
+@import "./variables.less";
 
 // height
-@nav_height: 2rem;
-@search_box_height: 36px;
-@nav_brand_height: 32px;
-@header_height: calc(~"1rem + @{nav_height} + 3px");
-@download_button_height: 2em;
+@searchBoxHeight: 36px;
+@brandHeight: 32px;
+@downloadBtnHeight: 2em;
 
 // width
-@search_box_width: 12rem;
+@searchBoxWidth: 12rem;
 
 .overlay {
   display: none;
@@ -53,7 +53,7 @@
 
 .nav-brand {
   display: block;
-  height: @nav_brand_height;
+  height: @brandHeight;
 
   img {
     display: block;
@@ -65,8 +65,8 @@
   display: flex;
   align-items: center;
   position: relative;
-  min-width: calc(~"20px + @{horizontal_padding}");
-  height: @search_box_height;
+  min-width: calc(~"20px + @{horizontalPadding}");
+  height: @searchBoxHeight;
   background: transparent;
   transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
 
@@ -79,7 +79,7 @@
 
     &.btn-cancel {
       right: 0.5rem;
-      top: calc(~"(@{search_box_height} - 15px)/2");
+      top: calc(~"(@{searchBoxHeight} - 15px)/2");
     }
   }
 
@@ -87,13 +87,13 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    width: @search_box_width;
+    width: @searchBoxWidth;
     height: inherit;
     border: 1px solid fade(white, 0%);
     .rounded-corners(2px);
 
     background-color: fade(white, 20%);
-    color: @gray_white;
+    color: @grayWhite;
 
     .icon-search {
       position: absolute;
@@ -105,22 +105,20 @@
 
   #search-input {
     position: relative;
-    width: @search_box_width;
+    width: @searchBoxWidth;
     height: 100%;
     padding: 0.3rem 0.5rem 0.3rem 2rem;
     border: none;
-    outline: none;
+    outline: 0;
     background-color: transparent;
-    color: @gray_white;
+    color: @grayWhite;
     font-size: 0.75rem;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none; // https://www.w3cplus.com/css3/changing-appearance-of-element-with-css3.html
   }
 }
 
 /* -----------------------------------------------------
-   Nav
+  Nav
 -------------------------------------------------------- */
 nav.mobile-sidebar {
   overflow-y: auto;
@@ -130,10 +128,14 @@ nav.mobile-sidebar {
   width: 210px;
   height: 100%;
   color: #fff;
-  background-color: @bg_black_with_alpha90;
+  background-color: @headerBgColor;
   transition: all 0.3s ease;
   opacity: 0.9;
   z-index: 1002;
+
+  h4 {
+    color: inherit;
+  }
 
   .nav-header {
     display: block;
@@ -191,7 +193,7 @@ nav.mobile-sidebar {
         display: block;
         width: 100%;
         padding: 0.3rem 0.75rem;
-        font-size: 16px;
+        font-size: @regularFontSize;
         letter-spacing: 1.5px;
       }
     }
@@ -302,25 +304,24 @@ nav.mobile-sidebar {
 body.banner-active header.fixed-top {
   position: relative;
   transition: top 0s;
-  background-color: transparent;
 }
 
 body.banner-active.banner-active--scrolled header.fixed-top {
   position: fixed;
   top: 0;
-  background-color: @bg_black_with_alpha90;
+  background-color: @headerBgColor;
 }
 
 header {
   width: 100%;
-  min-height: @header_height;
-  padding: 0 @horizontal_padding;
-  background-color: @bg_black_with_alpha90;
+  min-height: @headerHeight;
+  padding: 0 @horizontalPadding;
+  background-color: @headerBgColor;
 
   &.fixed-top {
     position: fixed;
     top: 0;
-    z-index: 99;
+    z-index: 9;
   }
 
   .container {
@@ -357,7 +358,7 @@ header {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: @nav_height;
+            height: @navHeight;
             padding: 0.5rem 0.4rem;
             letter-spacing: 1.5px;
           }
@@ -371,14 +372,14 @@ header {
       }
 
       a.link-download {
-        height: @download_button_height;
+        height: @downloadBtnHeight;
         min-width: 3.5em;
         padding: 0 1em;
         margin: 0 0.2rem;
         .rounded-corners(0.9rem);
 
         text-align: center;
-        background: @theme_blue;
+        background: @themeBlue;
 
         svg {
           margin-left: 2px;
@@ -387,12 +388,12 @@ header {
 
         &:hover {
           background-color: white;
-          color: @theme_blue;
+          color: @themeBlue;
           transition: all 0.5s ease;
 
           svg,
           svg * {
-            fill: fade(@theme_blue, 70%) !important;
+            fill: fade(@themeBlue, 70%) !important;
           }
         }
       }
@@ -410,7 +411,7 @@ header {
   header {
     .container {
       justify-content: space-between;
-      min-height: @header_height;
+      min-height: @headerHeight;
     }
 
     .nav-brand {

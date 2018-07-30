@@ -1,25 +1,65 @@
-{{ define "title" }}招聘{{ end }}
+{{- define "title" -}} 招贤纳士 {{- end -}}
 
-{{ define "headtpl" }}
-  {{$.Scratch.Set "nav_active" "about"}}
-  {{$.Scratch.Set "data_i18_link" "/recruit" }}
-  {{$.Scratch.Set "data_i18_cn" true }}
-{{ end }}
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "about"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "https://angel.co/pingcap-1/jobs" }}
+    {{- partial "head/preload-css" (dict "href" "/css/recruit.css") -}}
+    <link rel="preload" href="https://download.pingcap.com/js/typed.min.js" as="script">
+    <link rel="preload" href="/js/recruit.js" as="script">
+{{- end -}}
 
-{{ define "main" }}
+{{- define "main" -}}
 <div class="recruit">
-  <div class="container content-container">
-    {{ $posts := where (where .Site.Pages "Section" "recruit-cn") ".Params.title" "!=" nil  }}
-    {{ partial "navs/tags-nav.html" (dict "title" "职位类型" "posts" $posts "global" .) }}
-
-    <div class="list article-list">
-      {{ range ($posts.ByParam "label").Reverse }}
-        <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
-          <h1 class="title"><a href="{{ .URL }}" style="margin-right: 8px;">{{ .Title }}</a><span class="article_label">{{ .Params.label }}</span></h1>
-          <div class="article_divider"></div>
+    <div class="container">
+        <div class="section">
+            <h2 id="milestones" class="title">Milestones</h2>
+            {{- partial "recruit/typed-terminal.html" -}}
         </div>
-      {{ end }}
+        <div class="section section-culture">
+            <h2 id="hacker-culture" class="title">Hacker Culture</h2>
+            <div class="cards">
+                {{- range .Site.Data.hacker_culture -}}
+                    {{- partial "recruit/card.html" (dict "title" .title "description" .description "avatar" .avatar) -}}
+                {{- end -}}
+            </div>
+        </div>
+        <div class="section">
+            <h2 id="offices" class="title">Offices</h2>
+            <div class="desc">
+                从北京到上海再到广州、杭州，从中国到美国硅谷，我们的工作地点在不断刷新。我们信仰 Get Things Done，只要能把事情做好，工作时间和地点都是次要的，你可以选择自己舒服的方式和时间来合理进行调节，找到对自己更高效的方式。
+            </div>
+            <div class="map-wrapper">
+                {{- partial "maps/world-map.html" -}}
+            </div>
+        </div>
+        <div class="section">
+            <h2 id="collaboration" class="title">Collaboration</h2>
+            <div class="desc">
+                在 PingCAP，我们通过 GitHub 进行代码托管和日常办公，通过 Google Drive 进行远程协作，我们还探索了项目推进、市场运营、人才招聘的利器 —— Trello，当然还有 JIRA, Conflunce, Slack 等工具让我们的协作更加顺畅......
+                有了这些小助手，工作起来有趣又高效，一旦爱上就再也戒不掉了。屏幕前的你，要不要来体验一下？
+            </div>
+            <div class="logo-list">
+                <img src="/images/svgs/logo-github.svg" alt="GitHub Logo">
+                <img src="/images/svgs/logo-google-drive.svg" alt="Google Drive Logo">
+                <img src="/images/svgs/logo-trello.svg" alt="Trello Logo">
+                <img src="/images/svgs/logo-slack.svg" alt="Slack Logo">
+                <img src="/images/svgs/logo-confluence.svg" alt="Confluence Logo">
+                <img src="/images/svgs/logo-jira.svg" alt="JIRA Logo">
+            </div>
+        </div>
+        <div class="section">
+            <h2 id="meet-pingcapers" class="title">Meet PingCAPers</h2>
+            {{- partial "recruit/chat.html" (dict "employee" .Site.Data.pingcapers) -}}
+        </div>
     </div>
-   </div>
+    {{- partial "recruit/aside-menu.html" (dict "active" "working") -}}
 </div>
-{{ end }}
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="https://download.pingcap.com/js/typed.min.js"></script>
+    <script type="text/javascript" src="https://download.pingcap.com/js/worldmap.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="/js/recruit.js"></script>
+{{- end -}}

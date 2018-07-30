@@ -27,7 +27,7 @@ resolve: {
 css/styles
 npm install --save-dev css-loader extract-text-webpack-plugin
 extract it to the external file by using extract-text-webpack-plugin.
-import '../css/style.css'; // Import CSS -> ADDED IN THIS STEP
+import '../css/main.css'; // Import CSS -> ADDED IN THIS STEP
 
 // Files will get handled by css loader and then passed to the extract text plugin
 // which will write it to the file we defined above
@@ -38,7 +38,7 @@ import '../css/style.css'; // Import CSS -> ADDED IN THIS STEP
   }),
 }
 
-new ExtractTextPlugin('style.bundle.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
+new ExtractTextPlugin('main.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
 
 
 file
@@ -56,5 +56,5 @@ Prettier is an opinionated code formatter. 支持js,jsx, css/less/scs, json
 
 ## webapck 集成
 https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/581
-new ExtractTextPlugin('style.bundle.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
+new ExtractTextPlugin('main.css'), // CSS will be extracted to this bundle file -> ADDED IN THIS STEP
 同时在app.js中至少要import 一个css文件
