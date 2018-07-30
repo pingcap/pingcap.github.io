@@ -1,12 +1,15 @@
-/* base */
+/* base style */
 
-// fontface
+// import global variables
+@import "./variables.less";
+
+// font face
 @font-face {
   font-family: "Lato";
   src:
-  url("https://download.pingcap.com/fonts/lato/lato-regular-webfont.eot"),
-  url("https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf"),
-  url("https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff");
+  url("https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2") format('woff2'),
+  url("https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff") format('woff'),
+  url("https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf") format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,117 +17,72 @@
 @font-face {
   font-family: "TitilliumWeb";
   src:
-  url("https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.eot"),
-  url("https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf"),
-  url("https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff");
+  url("https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2") format('woff2'),
+  url("https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff") format('woff'),
+  url("https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf") format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
-// color
-@theme_blue: #3a59f0;
-@gray_white: #f5f5f5;
-@text_color: #3e3e3e;
-@title_color: #142848;
-@bg_black_with_alpha0: fade(white, 0%);
-@bg_black_with_alpha90: fade(black, 90%);
-
-// width
-@max_width_pc: 1288px;
-@primary_button_width: 7.5rem;
-
-// height
-@primary_button_height: 1.8rem;
-
-// box
-@box_size: border-box;
-
-//padding
-@vertical_padding: 4rem;
-@horizontal_padding: 1rem;
-
-// mixins
-// border-radius
-.rounded-corners (@radius: 3px) {
-  border-radius: @radius;
-}
-// hover
-.hover (@color: fade(white, 70%)) {
-  color: @color;
-}
-
-// animations
-.customAnimation (@animation_attrs) {
-  animation: @animation_attrs;
-}
-
-// fadeIn
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-//fadeInUp
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(1em);
-  }
-
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-// fadeInDown
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, -100%, 0);
-  }
-
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 body {
-  display: flex;
-  flex-direction: column;
-  font-family: "Lato", "Helvetica Neue", Helvetica, "PingFang SC",
-  "Hiragino Sans GB", "Noto Sans CJK SC", Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: "Lato", -apple-system, BlinkMacSystemFont, Helvetica, "Segoe UI",
+  "Hiragino Sans GB", "Noto Sans CJK SC", Arial, Ubuntu, sans-serif, "Apple Color Emoji";
+  color: @textColor;
 }
 
 html,
 body {
-  font-size: 18px;
+  font-size: @regularRemSize;
 }
 
 body,
 body * {
-  box-sizing: @box_size;
+  box-sizing: @boxSize;
   margin: 0;
   -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 input,
 button,
 select,
 textarea {
-  outline: none;
+  outline: 0;
+
+  &:focus,
+  &:hover {
+    outline: 0;
+  }
 }
 
 button,
 input[type="submit"],
 input[type="button"] {
-  -webkit-appearance: none;
+  appearance: none;
 }
 
 a,
@@ -139,8 +97,9 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "TitilliumWeb", "Helvetica Neue", Helvetica, "PingFang SC",
-  "Hiragino Sans GB", "Noto Sans CJK SC", Arial, sans-serif;
+  font-family: "TitilliumWeb", -apple-system, BlinkMacSystemFont, Helvetica, "Segoe UI",
+  "Hiragino Sans GB", "Noto Sans CJK SC", Arial, Ubuntu, sans-serif, "Apple Color Emoji";
+  color: @titleColor;
 }
 
 .link,
@@ -150,11 +109,6 @@ h4 {
 .link:link,
 .link:visited {
   transition: color 0.15s ease-in;
-}
-
-.container {
-  max-width: @max_width_pc;
-  margin: 0 auto;
 }
 
 .f-blk,
@@ -210,30 +164,35 @@ h4 {
   transform: translate(-50%, -50%);
 }
 
-/* 大屏幕 */
+.container {
+  max-width: @pcMaxWidth;
+  margin: 0 auto;
+}
+
+/* Big Screen */
 @media (min-width: 992px) {
   html,
   body {
-    font-size: 20px;
+    font-size: @largeRemSize;
   }
 }
 
-/* 超大屏幕 */
+/* Super Big Screen */
 @media (min-width: 1920px) {
   html,
   body {
-    font-size: 22px;
+    font-size: @superRemSize;
   }
 
   .container {
-    max-width: 1520px;
+    max-width: @containerMaxWidth;
   }
 }
 
-/* 小屏幕（平板，大于等于 768px） */
+/* Small Screen */
 @media (max-width: 768px) {
   html,
   body {
-    font-size: 16px;
+    font-size: @smallRemSize;
   }
 }

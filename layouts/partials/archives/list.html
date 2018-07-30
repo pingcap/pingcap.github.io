@@ -2,48 +2,49 @@
 {{ $hasBrief := .hasBrief }}
 
 <div class="list article-list">
-  {{ range .posts }}
-  <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
-    <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
-    {{ if $hasMetaData }}
-    <ul class="blog-post-meta">
-      <li class="meta-item">
-        {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
-        {{ .Date.Format "2006-01-02" }}
-      </li>
-      <li class="meta-item">
-        {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
-
-        {{ if isset .Params "author" }}
-          {{ range .Params.author }} {{ . }}  {{ end }}
-        {{ else }}
-          PingCAP
-        {{ end }}
-      </li>
-      <li class="meta-item">
-        <div>
-            {{ if isset .Params "tags" }}
-              {{ $.global.Scratch.Set "lastIndex" (sub (len .Params.tags) 1) }}
-            {{else}}
-              {{ $.global.Scratch.Set "lastIndex" 0 }}
-            {{ end }}
-
-            {{ range $idx, $i := .Params.tags }}
-              {{ $tag := replace $i " " "-" }}
-              <a href="#{{ $tag | urlize }}" class="link anchor-tag" data-tag="{{$tag}}">{{ $tag }}</a> {{ if lt $idx ($.global.Scratch.Get "lastIndex")}} | {{end}}
-            {{ end }}
+    {{- range .posts -}}
+        <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
+            <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
+            {{- if $hasMetaData -}}
+                <ul class="blog-post-meta">
+                <li class="meta-item">
+                    <img src="/images/svgs/icon-date.svg">
+                    {{- .Date.Format "2006-01-02" -}}
+                </li>
+                <li class="meta-item">
+                    <img src="/images/svgs/icon-writer.svg">
+                    {{- if isset .Params "author" -}}
+                        {{ $len := len .Params.author }}
+                        {{- range $idx, $i := .Params.author -}}
+                            {{ . }}
+                            {{- if lt $idx (sub $len 1) -}} ,&nbsp; {{- end -}}
+                        {{- end -}}
+                    {{- else -}}
+                        PingCAP
+                    {{- end -}}
+                </li>
+                <li class="meta-item">
+                    <div>
+                        {{- if isset .Params "tags" -}}
+                            {{ $len := len .Params.tags }}
+                            {{- range $idx, $i := .Params.tags -}}
+                                {{- $tag := replace $i " " "-" -}}
+                                <a href="#{{ $tag | urlize }}" class="link anchor-tag" data-tag="{{$tag}}">{{ $tag }}</a>
+                                {{- if lt $idx (sub $len 1) -}}|{{- end -}}
+                            {{- end -}}
+                        {{- end -}}
+                    </div>
+                </li>
+                </ul>
+            {{- end -}}
+            {{- if $hasBrief -}}
+                <a href="{{ .URL }}">
+                    <div class="brief">
+                        <p>{{- .Params.summary -}}</p>
+                    </div>
+                </a>
+            {{- end -}}
+            <div class="article_divider"></div>
         </div>
-      </li>
-    </ul>
-    {{ end }}
-    {{ if $hasBrief }}
-    <a href="{{ .URL }}">
-      <div class="brief">
-        <p>{{ .Params.summary }}</p>
-      </div>
-    </a>
-    {{ end }}
-    <div class="article_divider"></div>
-  </div>
-  {{ end }}
+    {{- end -}}
 </div>

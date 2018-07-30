@@ -1,27 +1,26 @@
 {{ $nav_active := $.Scratch.Get "nav_active" }}
-
 <header role="navigation" class="fixed-top">
-  <div class="container">
-    <a class="nav-brand" href="/index.html"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
-    <div class="nav-wrapper">
-      <div class="navigation">
-        <ul>
-          <li {{ if eq $nav_active "docs"}}class="sel"{{end}}><a href="/docs-cn">文档</a></li>
-          <li {{ if eq $nav_active "cases"}}class="sel"{{end}}><a href="/cases-cn">案例</a></li>
-          <li {{ if eq $nav_active "blog"}}class="sel"{{end}}><a href="/blog-cn">博客</a></li>
-          <li {{ if eq $nav_active "about"}}class="sel"{{end}}><a href="/about-cn">关于</a></li>
-          <li><a class="link-download" href="/docs-cn/QUICKSTART/">下载</a></li>
-        </ul>
-      </div>
-      <div class="global-search">
-        <div class="search-wrapper">
-          <span class="icon-search">{{ partial "svgs/icon-search.svg" (dict "fill" "#fff" "width" 18 "height" 18 ) }}</span>
-          {{ partial "search/ui.html" . }}
+    <div class="container">
+        <a class="nav-brand" href="/index.html"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        <div class="nav-wrapper">
+            <div class="navigation">
+                <ul>
+                <li {{ if eq $nav_active "docs"}}class="sel"{{end}}><a href="/docs-cn">文档</a></li>
+                <li {{ if eq $nav_active "cases"}}class="sel"{{end}}><a href="/cases-cn">案例</a></li>
+                <li {{ if eq $nav_active "blog"}}class="sel"{{end}}><a href="/blog-cn">博客</a></li>
+                <li {{ if eq $nav_active "about"}}class="sel"{{end}}><a href="/about-cn">关于</a></li>
+                <li><a class="link-download" href="/docs-cn/QUICKSTART/">下载</a></li>
+                </ul>
+            </div>
+            <div class="global-search">
+                <div class="search-wrapper">
+                <span class="icon-search">{{ partial "svgs/icon-search.svg" (dict "fill" "#fff" "width" 18 "height" 18 ) }}</span>
+                <input data-lang="cn" type="search" id="search-input" placeholder="Search...">
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="nav-btn nav-slider">
+            <i class="material-icons">{{ partial "svgs/icon-menu.svg" (dict "width" 16 "height" 16 ) }}</i>
+        </div>
     </div>
-    <div class="nav-btn nav-slider">
-      <i class="material-icons">{{ partial "svgs/icon-menu.svg" (dict "width" 16 "height" 16 ) }}</i>
-    </div>
-  </div>
 </header>

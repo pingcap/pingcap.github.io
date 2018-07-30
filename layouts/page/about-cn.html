@@ -1,283 +1,164 @@
-{{ define "title" }}关于{{ end }}
-
-{{ define "headtpl" }}
-  {{$.Scratch.Set "nav_active" "about"}}
-  {{$.Scratch.Set "data_i18_cn" true }}
-  {{$.Scratch.Set "data_i18_link" "/about" }}
-
-  <style type="text/css" media="screen">
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "about"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "/about" }}
+    {{- partial "head/preload-css" (dict "href" "/css/about.css") -}}
+    <style type="text/css">
     .amap-logo,
     .amap-copyright {
-      display: none !important;
+        display: none !important;
     }
-
     .amap-icon img {
-      width: 100%;
-      height: 100%;
+        width: 100%;
+        height: 100%;
     }
-  </style>
-{{ end }}
+    </style>
+{{- end -}}
 
-{{ define "footjs" }}
-<!-- particles -->
-<script type="text/javascript" src="https://download.pingcap.com/js/particles.js"></script>
-<script type="text/javascript">
-const particlesConfig = {
-  particles: {
-    number: {
-      value: 40,
-      density: {
-        enable: true,
-        value_area: 800
-      }
-    },
-    color: {
-      value: '#000000'
-    },
-    shape: {
-      type: 'polygon',
-      stroke: {
-        width: 0,
-        color: '#ffffff'
-      },
-      polygon: {
-        nb_sides: 5
-      },
-      image: {
-        src: 'img/github.svg',
-        width: 100,
-        height: 100
-      }
-    },
-    opacity: {
-      value: 0.5,
-      random: false,
-      anim: {
-        enable: false,
-        speed: 1,
-        opacity_min: 0.1,
-        sync: false
-      }
-    },
-    size: {
-      value: 3,
-      random: true,
-      anim: {
-        enable: false,
-        speed: 40,
-        size_min: 0.1,
-        sync: false
-      }
-    },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: '#000000',
-      opacity: 0.4,
-      width: 1
-    },
-    move: {
-      enable: true,
-      speed: 6,
-      direction: 'none',
-      random: true,
-      straight: false,
-      out_mode: 'out',
-      bounce: false,
-      attract: {
-        enable: true,
-        rotateX: 600,
-        rotateY: 1200
-      }
-    }
-  },
-  interactivity: {
-    detect_on: 'canvas',
-    events: {
-      onhover: {
-        enable: false,
-        mode: 'repulse'
-      },
-      onclick: {
-        enable: true,
-        mode: 'push'
-      },
-      resize: true
-    },
-    modes: {
-      grab: {
-        distance: 400,
-        line_linked: {
-          opacity: 1
+{{- define "footJS" -}}
+    <script type="text/javascript" src="https://download.pingcap.com/js/particles.js"></script>
+    <script type="text/javascript" src="/js/about.js"></script>
+
+    <!-- Begin bai_du map -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init"></script>
+    <script type="text/javascript">
+        function init() {
+            var map = new AMap.Map('map', {
+                zoomEnable: false,
+                zoom: 15,
+                center: [116.357273, 40.042345],
+                mapStyle: 'amap://styles/light' //样式URL
+            })
+            //添加点标记，并使用自己的icon
+            new AMap.Marker({
+                map: map,
+                position: [116.357273, 40.042345],
+                icon: new AMap.Icon({
+                    size: new AMap.Size(32, 32), //图标大小
+                    image: '/images/svgs/location.svg'
+                })
+            })
         }
-      },
-      bubble: {
-        distance: 400,
-        size: 40,
-        duration: 2,
-        opacity: 8,
-        speed: 3
-      },
-      repulse: {
-        distance: 200,
-        duration: 0.4
-      },
-      push: {
-        particles_nb: 4
-      },
-      remove: {
-        particles_nb: 2
-      }
-    }
-  },
-  retina_detect: true
-}
+    </script>
+    <!-- End bai_du map -->
+{{- end -}}
 
-particlesJS('particles-js', particlesConfig, function() {
-  console.log('callback - particles.js config loaded')
-})
-</script>
+{{- define "main" -}}
+    <section class="intro-video">
+        <div id="particles-js"></div>
+        <div class="video-wrapper f-vhc">
+            <video id="video" preload="auto" poster="https://download.pingcap.com/images/video-poster.jpg">
+                <source src="https://download.pingcap.com/videos/pingcap-intro-converted.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'
+                /> Your browser does not support the video tag.
+            </video>
+            <div id="video-control" class="f-vhc">
+                <span class="icon f-vhc">{{ partial "svgs/icon-play-button.svg" (dict "fill" "#fff" "width" 54 "height" 54 ) }}</span>
+            </div>
+        </div>
+    </section>
+    <section class="about-company">
+        <div class="container">
+            <h2 class="title">公司介绍</h2>
+            <div class="desc">
+                PingCAP 是一家开源的新型分布式数据库公司，秉承开源是基础软件的未来这一理念，PingCAP 持续扩大社区影响力，致力于前沿技术领域的创新实现。其研发的分布式关系型数据库 TiDB 项目，具备「分布式强一致性事务、在线弹性水平扩展、故障自恢复的高可用、跨数据中心多活」等核心 NewSQL 特性，是大数据时代理想的数据库集群和云数据库解决方案。目前准生产测试用户 1000 余家，并已被 200 余家不同行业的领先企业应用在实际生产环境，涉及互联网、游戏、金融、政府、电信、制造业等多个领域。
+            </div>
+            <a class="link" href="/recruit-cn/join/">Join Us {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
+        </div>
+    </section>
+    <section class="about-founders">
+        <div class="container">
+            <h2 class="title">创始团队</h2>
+            <div class="desc">
+                刘奇：PingCAP 联合创始人兼 CEO ，爱自由的 Hacker
+                <br> 黄东旭： PingCAP 联合创始人兼 CTO， 开源狂热分子
+                <br> 崔秋：PingCAP 联合创始人，重度开源爱好者
+            </div>
+            <div class="image-wrap">
+                <img src="https://download.pingcap.com/images/illustration-tidb.png" alt="">
+            </div>
+        </div>
+    </section>
+    <section class="about-culture">
+        <div class="container">
+            <h2 class="title">企业文化</h2>
+            <div class="desc">
+                PingCAP 是一个年轻开放、崇尚自由的团队，集合了一群充满好奇心、有追求、技艺高超、梦想用科技改变世界的小伙伴。他们每个人都是这个行业的佼佼者，也是 PingCAP 团队最核心的价值。为了更好的追求梦想，我们为每一位小伙伴提供了最自由且舒适的工作环境。
+            </div>
 
-<!-- baidu map -->
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init"></script>
-<script type="text/javascript">
-function init() {
-  var map = new AMap.Map('map', {
-    zoomEnable: false,
-    zoom: 15,
-    center: [116.357273, 40.042345],
-    mapStyle: 'amap://styles/light' //样式URL
-  })
-  //添加点标记，并使用自己的icon
-  new AMap.Marker({
-    map: map,
-    position: [116.357273, 40.042345],
-    icon: new AMap.Icon({
-      size: new AMap.Size(32, 32), //图标大小
-      image: 'https://download.pingcap.com/images/location.svg'
-    })
-  })
-}
-</script>
-{{ end }}
-
-{{ define "main" }}
-
-<section class="intro-video">
-  <div id="particles-js"></div>
-  <div class="video-wrapper">
-    <video id="video" preload="auto" poster="https://download.pingcap.com/images/video-poster.jpg">
-      <source src="https://download.pingcap.com/videos/pingcap-intro-converted.mp4"
-          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
-          Your browser does not support the video tag.
-    </video>
-    <div id="video-control">
-      <span class="icon">{{ partial "svgs/icon-play-button.svg" (dict "fill" "#fff" "width" 60 "height" 60 ) }}</span>
-    </div>
-  </div>
-</section>
-<section class="about-company">
-  <div class="container">
-    <h1 class="title">公司介绍</h1>
-    <div class="desc">
-        PingCAP 是一家开源的新型分布式数据库公司，秉承开源是基础软件的未来这一理念，PingCAP 持续扩大社区影响力，致力于前沿技术领域的创新实现。其研发的分布式关系型数据库 TiDB 项目，具备「分布式强一致性事务、在线弹性水平扩展、故障自恢复的高可用、跨数据中心多活」等核心 NewSQL 特性，是大数据时代理想的数据库集群和云数据库解决方案。目前准生产测试用户 1000 余家，并已被 200 余家不同行业的领先企业应用在实际生产环境，涉及互联网、游戏、金融、政府、电信、制造业等多个领域。
-    </div>
-    <a class="link" href="/recruit-cn/">OPEN JOBS {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
-  </div>
-</section>
-<section class="about-founders">
-  <div class="container">
-    <h2 class="title">创始团队</h2>
-    <div class="desc">
-      刘奇：PingCAP 联合创始人兼 CEO ，爱自由的 Hacker <br> 黄东旭： PingCAP 联合创始人兼 CTO， 开源狂热分子 <br> 崔秋：PingCAP 联合创始人，重度开源爱好者
-    </div>
-    <div class="image-wrap">
-      <img src="https://download.pingcap.com/images/illustration-tidb.png" alt="">
-    </div>
-  </div>
-</section>
-<section class="about-culture">
-  <div class="container">
-    <h2 class="title">企业文化</h2>
-    <div class="desc">
-      PingCAP 是一个年轻开放、崇尚自由的团队，集合了一群充满好奇心、有追求、技艺高超、梦想用科技改变世界的小伙伴。他们每个人都是这个行业的佼佼者，也是 PingCAP 团队最核心的价值。为了更好的追求梦想，我们为每一位小伙伴提供了最自由且舒适的工作环境。
-    </div>
-
-    <div class="details">
-      <div class="row">
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon icon-m" src="https://download.pingcap.com/images/icon_pc.svg" alt="Office Equipment">
-          </div>
-          <h3>办公设备</h3>
-          <p class="desc">顶级的代码背后，是顶尖的开发者+顶配的办公设备</p>
+            <div class="details">
+                <div class="row">
+                    <div class="item">
+                        <div class="image-wrap">
+                            <img class="icon icon-m" src="/images/svgs/icon-pc.svg" alt="Office Equipment">
+                        </div>
+                        <h3>办公设备</h3>
+                        <p class="desc">顶级的代码背后，是顶尖的开发者+顶配的办公设备</p>
+                    </div>
+                    <div class="item">
+                        <div class="image-wrap">
+                            <img class="icon icon-s" src="/images/svgs/icon-gym.svg" alt="Gym">
+                        </div>
+                        <h3>健身房</h3>
+                        <p class="desc">写不出代码的下午四点，跑步可以让我的大脑更清醒</p>
+                    </div>
+                    <div class="item">
+                        <div class="image-wrap">
+                            <img class="icon icon-m" src="/images/svgs/icon-tb.svg" alt="Team Building">
+                        </div>
+                        <h3>Team Building</h3>
+                        <p class="desc">我不知道别人家的 Team Building 什么样，反正我们是去高尔夫了......</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <div class="image-wrap">
+                            <img class="icon" src="/images/svgs/icon-food.svg" alt="Food & Beverage">
+                        </div>
+                        <h3>零食+餐</h3>
+                        <p class="desc">吃吃喝喝这种小事请直接准备好，不要问我，我只爱 coding</p>
+                    </div>
+                    <div class="item">
+                        <div class="image-wrap">
+                            <img class="icon" src="/images/svgs/icon-tgif.svg" alt="TGIF">
+                        </div>
+                        <h3>TGIF</h3>
+                        <p class="desc">Thank God It's Friday！让我们来一场无话不谈的聚会</p>
+                    </div>
+                    <div class="item">
+                        <div class="image-wrap">
+                            <img class="icon" src="/images/svgs/icon-hour.svg" alt="Flexible Work Schedule">
+                        </div>
+                        <h3>弹性工作</h3>
+                        <p class="desc">适配我最离谱的生物钟，给我最高创造力的自由</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon icon-s" src="https://download.pingcap.com/images/icon_gym.svg" alt="Gym">
-          </div>
-          <h3>健身房</h3>
-          <p class="desc">写不出代码的下午四点，跑步可以让我的大脑更清醒</p>
+    </section>
+    <section class="about-contact">
+        <div class="container">
+            <h2 class="title">联系我们</h2>
+            <div class="info">
+                <div class="row">
+                    <div class="item f-tf">
+                        <h3>电话</h3>
+                        <p class="text text-tel">＋86&nbsp;&nbsp;010-53326356</p>
+                    </div>
+                    <div class="item f-tf">
+                        <h3>技术及商务咨询</h3>
+                        <p class="text">info@pingcap.com</p>
+                    </div>
+                    <div class="item f-tf">
+                        <h3>媒体合作</h3>
+                        <p class="text">pr@pingcap.com</p>
+                    </div>
+                    <div class="item item-long f-tf">
+                        <h3>地址</h3>
+                        <p class="text">北京市海淀区西小口路 66 号东升科技园 D-3 楼 413 室</p>
+                    </div>
+                </div>
+            </div>
+            <div id="map" class="map" style="width: 100%; height: 340px;"></div>
         </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon icon-m" src="https://download.pingcap.com/images/icon_tb.svg" alt="Team Building">
-          </div>
-          <h3>Team Building</h3>
-          <p class="desc">我不知道别人家的 Team Building 什么样，反正我们是去高尔夫了......</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon" src="https://download.pingcap.com/images/icon_food.svg" alt="Food & Beverage">
-          </div>
-          <h3>零食+餐</h3>
-          <p class="desc">吃吃喝喝这种小事请直接准备好，不要问我，我只爱 coding</p>
-        </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon" src="https://download.pingcap.com/images/icon_tgif.svg" alt="TGIF">
-          </div>
-          <h3>TGIF</h3>
-          <p class="desc">Thank God It's Friday！让我们来一场无话不谈的聚会</p>
-        </div>
-        <div class="item">
-          <div class="image-wrap">
-            <img class="icon" src="https://download.pingcap.com/images/icon_hour.svg" alt="Flexible Work Schedule">
-          </div>
-          <h3>弹性工作</h3>
-          <p class="desc">适配我最离谱的生物钟，给我最高创造力的自由</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="about-contact">
-  <div class="container">
-    <h2 class="title">联系我们</h2>
-    <div class="info">
-      <div class="row">
-        <div class="item f-tf">
-          <h3>电话</h3>
-          <p class="text text-tel">＋86&nbsp;&nbsp;010-53326356</p>
-        </div>
-        <div class="item f-tf">
-          <h3>技术及商务咨询</h3>
-          <p class="text">info@pingcap.com</p>
-        </div>
-        <div class="item f-tf">
-          <h3>媒体合作</h3>
-          <p class="text">pr@pingcap.com</p>
-        </div>
-        <div class="item item-long f-tf">
-          <h3>地址</h3>
-          <p class="text">北京市海淀区西小口路 66 号东升科技园 D-3 楼 413 室</p>
-        </div>
-      </div>
-    </div>
-    <div id="map" class="map" style="width: 100%; height: 340px;"></div>
-  </div>
-</section>
-
-{{ end }}
+    </section>
+{{- end -}}

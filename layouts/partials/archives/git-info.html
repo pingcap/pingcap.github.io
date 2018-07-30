@@ -1,32 +1,27 @@
 {{ $prefix := print "content/" .repo "___"}}
 {{ $filter_name := replace .global.File.Path (print .repo "/") $prefix }}
 
-{{ range $item := .global.Site.Data.sub_git_info }}
-  {{ if and $item $item.name }}
-    {{ if eq $item.name $filter_name }}
-      {{ $infos := split $item.info "___" }}
-      {{ $hash := index $infos 0 }}
-      {{ $msg := index $infos 2 }}
-      {{ $date := index $infos 3 }}
-      {{ $date_str := split $date " " }}
-      {{ $month := index $date_str 1 }}
-      {{ $day := index $date_str 2 }}
-      {{ $year := index $date_str 4 }}
-      {{ $commit_id := index $infos 4 }}
-      {{ $filename := index (split $item.name "___") 1 }}
-      <div class="git-info">
-        <a class="link" href="https://github.com/pingcap/{{$.repo}}/blob/master/{{$filename}}">"{{ $.global.Page.Title }}"</a>
-        {{ if $.isCn }}
-          更新于
-        {{ else }}
-          was last updated
-        {{ end }}
-        <span>{{ $month }} {{ $day }} {{ $year }}</span>:
-        <a class="link" href="https://github.com/pingcap/{{$.repo}}/commit/{{$commit_id}}">
-          {{ $msg }}
-          <span class="hash">({{ $hash }})</span>
-        </a>
-      </div>
-    {{ end }}
-  {{ end}}
-{{ end }}
+{{- range $item := .global.Site.Data.sub_git_info -}}
+    {{- if and $item $item.name -}}
+        {{- if eq $item.name $filter_name -}}
+            {{- $infos := split $item.info "___" -}}
+            {{- $hash := index $infos 0 -}}
+            {{- $msg := index $infos 2 -}}
+            {{- $date := index $infos 3 -}}
+            {{- $date_str := split $date " " -}}
+            {{- $month := index $date_str 1 -}}
+            {{- $day := index $date_str 2 -}}
+            {{- $year := index $date_str 4 -}}
+            {{- $commit_id := index $infos 4 -}}
+            {{- $filename := index (split $item.name "___") 1 -}}
+            <div class="git-info">
+                <a class="link" href="https://github.com/pingcap/{{$.repo}}/blob/master/{{$filename}}">"{{ $.global.Page.Title }}"</a>
+                {{ if $.isCn }}更新于{{ else }}was last updated{{ end }}
+                <span>{{ $month }} {{ $day }} {{ $year }}</span>:
+                <a class="link" href="https://github.com/pingcap/{{$.repo}}/commit/{{$commit_id}}">
+                    {{ $msg }} <span class="hash">({{ $hash }})</span>
+                </a>
+            </div>
+        {{- end -}}
+    {{- end -}}
+{{- end -}}

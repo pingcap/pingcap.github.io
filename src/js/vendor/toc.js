@@ -2841,10 +2841,10 @@
   }
 
   const getRoot = function() {
-    let root = document.getElementById('smarttoc_wrapper')
+    let root = document.getElementById('smart_toc_wrapper')
     if (!root) {
       root = document.body.appendChild(document.createElement('DIV'))
-      root.id = 'smarttoc_wrapper'
+      root.id = 'smart_toc_wrapper'
     }
     return root
   }

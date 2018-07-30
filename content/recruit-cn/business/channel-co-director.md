@@ -2,7 +2,8 @@
 title: 渠道合作总监
 tags:
   - Business
-label: Business
+location: 北京
+avatar: business
 aliases:
   - /recruit-cn/sales/channel-co-director/
 ---

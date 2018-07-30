@@ -1,18 +1,22 @@
-{{ define "title" }} Blog {{ end }}
+{{- define "title" -}} Blog {{- end -}}
 
-{{ define "headtpl" }}
-  {{$.Scratch.Set "nav_active" "blog"}}
-  {{$.Scratch.Set "data_i18_link" "/blog-cn" }}
-{{ end }}
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "blog"}}
+    {{$.Scratch.Set "data_i18_link" "/blog-cn" }}
+    {{- partial "head/preload-css" (dict "href" "/css/list.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+{{- end -}}
 
-{{ define "main" }}
-<div class="blog">
-  <div class="container content-container">
-    {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
-    {{ partial "navs/tags-nav.html" (dict "type" "list" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) }}
+{{- define "main" -}}
+    <div class="blog">
+        <div class="container">
+        {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
+        {{- partial "navs/tags-nav.html" (dict "type" "list" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) -}}
+        {{- partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+        </div>
+    </div>
+{{- end -}}
 
-    {{ partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) }}
-  </div>
-</div>
-
-{{ end }}
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/doc.js"></script>
+{{- end -}}

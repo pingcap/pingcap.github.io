@@ -1,0 +1,13 @@
+<div class="cards">
+    {{- if .name -}}
+        {{- range .posts -}}
+            {{- if in .Params.tags $.global.name -}}
+                {{- partial "recruit/card.html" (dict "avatar" .Params.avatar "title" .Params.title "location" .Params.location "link" .URL) -}}
+            {{- end -}}
+        {{- end -}}
+    {{- else -}}
+        {{- range .posts -}}
+            {{- partial "recruit/card.html" (dict "avatar" .Params.avatar "title" .Params.title "location" .Params.location "link" .URL) -}}
+        {{- end -}}
+    {{- end -}}
+</div>
