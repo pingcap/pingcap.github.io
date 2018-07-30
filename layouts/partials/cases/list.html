@@ -1,17 +1,17 @@
 <div class="list cases-list">
-  {{ range .posts }}
-    <div class="list-item">
-      <div class="list-item__left">
-        <img class="list-item__logo" style="max-width: 95%;" src="{{ .logo }}" alt="{{ .name }} logo">
-      </div>
-      <div class="list-item__right">
-        <h3 class="list-item__name">{{ .name }}</h3>
-        {{ if .industry }}
-          <h4 class="list-item__industry">Industry: {{ .industry }}</h4>
-        {{ end }}
-        <div class="list-item__desc">{{ .description }}</div>
-        <a href="{{ .link }}" class="arrow-link" target="_blank">read more<span class="arrow">→</span></a>
-      </div>
-    </div>
-  {{ end }}
+    {{- range .posts -}}
+        <div class="list-item">
+        <div class="list-item__left">
+            <img class="lazy" width="90%" data-original="{{ .logo }}" src="/images/svgs/loader-spinner.svg" alt="{{ .name }} logo">
+        </div>
+        <div class="list-item__right">
+            <h2 class="list-item__name">{{- .name -}}</h2>
+            {{- if .industry -}}
+            <h3 class="list-item__industry">Industry: {{ .industry }}</h3>
+            {{- end -}}
+            <div class="list-item__desc">{{- .description -}}</div>
+            <a href="{{ .link }}" class="arrow-link" target="_blank">read more<span class="arrow">→</span></a>
+        </div>
+        </div>
+    {{- end -}}
 </div>

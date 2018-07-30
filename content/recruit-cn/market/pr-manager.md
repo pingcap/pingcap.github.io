@@ -1,8 +1,9 @@
 ---
 title: PR经理
 tags:
-  - Market
-label: Market
+  - MKT
+location: 北京
+avatar: marketing
 ---
 
 # PR 经理

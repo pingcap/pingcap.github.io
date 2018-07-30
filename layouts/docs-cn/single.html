@@ -1,39 +1,39 @@
-{{ define "headtpl" }}
-  <link rel="stylesheet" href="https://download.pingcap.com/style/github-markdown.css" />
-  {{$.Scratch.Set "nav_active" "docs"}}
-  {{$.Scratch.Set "data_i18_cn" true }}
-  {{$v0 := (strings.TrimPrefix "docs-cn/" .File.Path )}}
-  {{$v1 := (strings.TrimSuffix ".md" $v0 )}}
-  {{$v := (printf "%s%s" "/docs/" $v1)}}
-  {{$.Scratch.Set "data_i18_link" $v }}
-{{ end }}
+{{- define "headTpl" -}}
+    <style type="text/css" media="screen">
+        .st_tree {
+            display: none;
+        }
+    </style>
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/github-markdown.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{$.Scratch.Set "nav_active" "docs"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$v0 := (strings.TrimPrefix "docs-cn/" .File.Path )}}
+    {{$v1 := (strings.TrimSuffix ".md" $v0 )}}
+    {{$v := (printf "%s%s" "/docs/" $v1)}}
+    {{$.Scratch.Set "data_i18_link" $v }}
+{{- end -}}
 
-{{ define "main" }}
+{{- define "main" -}}
 <div class="doc">
-  <div class="container content-container">
-    <div class="sidebar">
-      <div class="sticky-sidebar">
-        <h2 class="title"> 文档 </h2>
-        <div class="st_tree nav-toc">
-          {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.docs_cn_toc "global" .) }}
+    <div class="container">
+        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_toc "title" "文档") -}}
+
+        <div class="archive">
+            <div class="content markdown-body"> {{- .Content -}} </div>
+            <div class="article-toc"></div>
+            {{- partial "archives/git-info.html" (dict "repo" "docs-cn" "isCn" "true" "global" .) -}}
         </div>
-      </div>
-    </div>
 
-    <div class="archive">
-      <div class="content markdown-body">
-        {{ .Content }}
-      </div>
-      <div class="article-toc"></div>
-      {{ partial "archives/git-info.html" (dict "repo" "docs-cn" "isCn" "true" "global" .) }}
+        <div class="sidebar-page sticky-sidebar">
+            {{- partial "archives/improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") -}}
+            <p class="toc-title">本页导航</p>
+            <div id="smart_toc_wrapper"></div>
+        </div>
     </div>
-
-    <div class="sidebar-page sticky-sidebar">
-      {{ partial "archives/improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") }}
-      <p class="toc-title">本页导航</p>
-      <div id="smarttoc_wrapper"></div>
-    </div>
-  </div>
 </div>
+{{- end -}}
 
-{{ end }}
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/doc.js"></script>
+{{- end -}}

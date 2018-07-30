@@ -2,7 +2,8 @@
 title: Technical Writer
 tags:
   - I18N
-label: I18N
+location: 北京
+avatar: writer
 ---
 
 # Technical Writer

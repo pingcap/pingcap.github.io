@@ -1,14 +1,25 @@
-{{ define "headtpl" }}
-  {{$.Scratch.Set "data_i18_cn" true }}
-  {{$.Scratch.Set "data_i18_link" "/news" }}
-{{ end }}
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "/news" }}
+    {{- partial "head/preload-css" (dict "href" "/css/cases.css") -}}
+{{- end -}}
 
-{{ define "main" }}
-  {{ $heading := "PingCAP 新闻报道" }}
-  <div class="news">
-    {{ partial "layout/hero.html" (dict "heading" $heading) }}
-    <div class="container">
-      {{ partial "news/list.html" (dict "posts" .Site.Data.news_cn "global" .) }}
+{{- define "main" -}}
+    {{ $heading := "PingCAP 新闻报道" }}
+    <div class="news">
+        {{ partial "layout/hero.html" (dict "heading" $heading) }}
+        <div class="container">
+            {{- partial "news/list.html" (dict "posts" .Site.Data.news_cn "global" .) -}}
+        </div>
     </div>
-  </div>
-{{ end }}
+{{- end -}}
+
+{{ define "footJS"}}
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+    $(".lazy").lazyload({
+        threshold: 200,
+        effect : "fadeIn"
+    });
+</script>
+{{- end -}}

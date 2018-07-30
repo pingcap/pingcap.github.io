@@ -1,0 +1,64 @@
+// import global colors
+@import "./colors.less";
+
+.collapses-wrapper {
+  width: 100%;
+  margin: 2em auto;
+}
+
+.animate {
+  transition: all 0.3s;
+}
+
+input[name="question"] {
+  display: none;
+}
+
+input[name="question"] + label {
+  position: relative;
+  display: block;
+  padding: 20px 20px;
+  font-size: 17px;
+  cursor: pointer;
+  background: rgba(246, 246, 246, 1);
+  color: @bannerBgColor;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.response {
+  position: relative;
+  background: @bannerBgColor;
+  color: @bannerBgColor;
+  padding: 10px 20px;
+  transform: translate3d(0, -40px, 0) rotate(-0.5deg);
+  z-index: 1;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+input[name="question"]:checked + label {
+  background: @grayWhite;
+  color: @bannerBgColor;
+}
+
+input[name="question"]:checked + label + .response {
+  opacity: 1;
+  visibility: visible;
+  padding: 10px 20px;
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  filter: blur(0);
+  margin-bottom: 20px;
+  color: white;
+}
+
+.fixed-height {
+  height: 50px;
+  max-height: 360px;
+  overflow-y: auto;
+  opacity: 1 !important;
+}

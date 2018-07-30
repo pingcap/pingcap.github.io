@@ -1,20 +1,22 @@
-@import "./header.less";
-@import "./footer.less";
+
+// import global variables
+@import "./variables.less";
+// import partials
+@import "./flap-cards.less";
 @import "./hero.less";
-@import "./cards.less";
+@import "./list.less";
 
 .cases,
 .news,
 .contact-us {
-  min-height: calc(~"100vh - @{footer_height_pc}");
-  padding-top: @header_height;
+  padding-top: @headerHeight;
 }
 
 .cases,
 .news {
   .list {
     width: 100%;
-    padding: 3rem @horizontal_padding;
+    padding: 3rem @horizontalPadding;
   }
 }
 
@@ -22,7 +24,7 @@
   .banner {
     position: relative;
     height: 320px;
-    background-color: @hero_bg_color;
+    background-color: @bannerBgColor;
   }
 
   .banner__inner {
@@ -30,7 +32,7 @@
     max-width: 872px;
     height: 100%;
     margin: 0 auto;
-    background: url(/images/banner-cases-cn.svg) no-repeat center;
+    background: url(/images/svgs/banner-cases-cn.svg) no-repeat center;
     background-size: cover;
   }
 
@@ -44,38 +46,45 @@
 }
 
 .cases__intro {
-  padding: @vertical_padding @horizontal_padding;
+  padding: @verticalPadding @horizontalPadding;
   text-align: center;
 
   p {
     line-height: 1.8;
     font-size: 1.12rem;
-    color: @title_color;
+    color: @titleColor;
 
     strong {
-      color: @hero_bg_color;
+      color: @bannerBgColor;
     }
   }
 }
 
-#cases-tab {
+#cases-tabs {
   max-width: 1024px;
   margin: 0 auto;
 
   dt {
     position: relative;
+    display: inline-block;
     width: auto;
-    background-color: #fff;
-    padding-left: 3em;
+    margin: 8px;
+    padding: 2px 12px 2px 2.8em;
     border: 1px solid transparent;
+    border-radius: 16px;
+    background-color: @silverWhite;
     cursor: pointer;
-    font-size: 16px;
-    color: #3d6cb9;
+    font-size: 15px;
+    line-height: 1.8;
+    color: @bannerBgColor;
 
     &.is-active {
-      border: 1px solid #ddd;
-      border-top: 2px solid #264e86;
-      border-bottom: 1px solid #fff;
+      background: @bannerBgColor;
+      color: white;
+    }
+
+    &.is-active::after {
+      height: 0;
     }
 
     &::before {
@@ -89,47 +98,56 @@
     }
 
     &.tab-0::before {
-      background: url(/images/icon-internet.svg) 100% 100% no-repeat;
+      background: url(/images/svgs/icon-internet.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-0.is-active::before {
+      background: url(/images/svgs/icon-internet-white.svg) 100% 100% no-repeat;
     }
 
     &.tab-1::before {
-      background: url(/images/icon-video-game.svg) 100% 100% no-repeat;
+      background: url(/images/svgs/icon-video-game.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-1.is-active::before {
+      background: url(/images/svgs/icon-video-game-white.svg) 100% 100% no-repeat;
     }
 
     &.tab-2::before {
-      background: url(/images/icon-payment.svg) 100% 100% no-repeat;
+      background: url(/images/svgs/icon-payment.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-2.is-active::before {
+      background: url(/images/svgs/icon-payment-white.svg) 100% 100% no-repeat;
     }
 
     &.tab-3::before {
-      background: url(/images/icon-industry.svg) 100% 100% no-repeat;
+      background: url(/images/svgs/icon-industry.svg) 100% 100% no-repeat;
+    }
+
+    &.tab-3.is-active::before {
+      background: url(/images/svgs/icon-industry-white.svg) 100% 100% no-repeat;
     }
   }
 
   dd {
     min-height: 500px;
     border: 1px solid transparent;
-    border-top: 1px solid #ddd;
-  }
-}
-
-.contact-us {
-  .contact-form {
-    margin: 80px auto;
   }
 }
 
 @media (min-width: 992px) {
   .cases {
     .banner__slogan {
-      font-size: @hero_title_size_l;
+      font-size: @heroLTitleSize;
     }
   }
 }
 
 @media (min-width: 600px) {
-  #cases-tab {
+  #cases-tabs {
     dt {
-      min-width: 100px;
+      min-width: 10px;
     }
   }
 }
@@ -149,8 +167,18 @@
 @media (max-width: 500px) {
   .cases {
     .banner__slogan {
-      font-size: @hero_title_size_s;
+      font-size: @heroSTitleSize;
       left: 1rem;
     }
+  }
+
+  #cases-tabs dt {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 320px) {
+  .cases__intro p {
+    font-size: 15px;
   }
 }

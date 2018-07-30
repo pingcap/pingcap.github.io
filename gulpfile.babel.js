@@ -2,10 +2,9 @@ import gulp from 'gulp'
 import { spawn } from 'child_process'
 import hugoBin from 'hugo-bin'
 import gutil from 'gulp-util'
-import postcss from 'gulp-postcss'
 import less from 'gulp-less'
-import cssImport from 'postcss-import'
-import cssnext from 'postcss-cssnext'
+import autoprefixer from 'gulp-autoprefixer'
+import cleanCSS from 'gulp-clean-css'
 import BrowserSync from 'browser-sync'
 import webpack from 'webpack'
 import webpackConfig from './webpack.conf'
@@ -31,7 +30,7 @@ gulp.task('build-preview', ['css', 'js'], cb =>
   buildSite(cb, hugoArgsPreview, 'production')
 )
 
-// Compile CSS with PostCSS
+// Compile CSS with PostCSS and Minify CSS
 const buildCss = () => {
   gulp
     .src('./src/less/*.less')
@@ -40,7 +39,13 @@ const buildCss = () => {
         paths: [path.join(__dirname, 'less', 'includes')],
       })
     )
-    .pipe(postcss([cssImport({ from: './src/css/main.css' }), cssnext()]))
+    .pipe(
+      autoprefixer({
+        browsers: ['last 2 versions'],
+        cascade: false,
+      })
+    )
+    .pipe(cleanCSS({ compatibility: 'ie8' }))
     .pipe(gulp.dest('./dist/css'))
     .pipe(browserSync.stream())
 }
@@ -69,7 +74,7 @@ gulp.task('js', buildJs)
 const jsTask = isDev ? ['js'] : ['js', 'hugo']
 const styleTask = isDev ? ['css'] : ['css', 'hugo']
 gulp.task('server', ['hugo', 'css', 'js'], () => {
-  // 初次启动的时候运行 js/css 和build site，避免脏数据
+  // 初次启动的时候运行 js/css 和 build site，避免脏数据
   buildJs(buildSite)
   buildCss()
   browserSync.init({

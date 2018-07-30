@@ -1,12 +1,13 @@
 /* list page */
-@import "base.less";
-@import "header.less";
-@import "footer.less";
+
+// import global variables
+@import "./variables.less";
+
+// TODO: refactor
 
 .blog,
 .weekly,
-.meetup,
-.recruit {
+.meetup {
   .list {
     .article {
       position: relative;
@@ -32,11 +33,11 @@
         font-size: 14px;
         list-style: none;
 
-        svg {
-          width: 18px;
-          height: 18px;
-          margin-top: -3px;
-          margin-right: 5px;
+        img {
+          display: inline-block;
+          height: 16px;
+          margin-top: -2px;
+          margin-right: 6px;
           vertical-align: middle;
         }
 
@@ -48,7 +49,7 @@
           .tag {
             position: relative;
             margin-right: 16px;
-            color: @theme_blue;
+            color: @themeBlue;
           }
 
           .tag:hover {
@@ -70,7 +71,7 @@
       .brief {
         font-family: "Lato";
         font-weight: 400;
-        font-size: 16px;
+        font-size: @regularFontSize;
         line-height: 1.8;
         color: #37434e;
       }
@@ -88,7 +89,7 @@
         left: 0;
         display: block;
         width: 100%;
-        border-bottom: 3px solid @theme_blue;
+        border-bottom: 3px solid @themeBlue;
         transform: scale(0);
         transform-origin: left center;
         transition: transform 0.3s;
@@ -99,30 +100,8 @@
       }
 
       .link {
-        margin: 0 2px;
+        margin: 0 4px;
         text-decoration: underline;
-      }
-    }
-  }
-}
-
-.recruit {
-  .list {
-    .article {
-      .title {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-
-      .article_label {
-        display: inline-block;
-        padding: 2px 6px;
-        border-radius: 3px;
-        background-color: @theme_blue;
-        color: #fff;
-        font-size: 12px;
-        line-height: 16px;
       }
     }
   }
@@ -143,15 +122,15 @@
         padding: 0 15px;
         text-align: center;
 
-        .list-item__logo {
-          max-width: 135px;
-        }
+        // .list-item__logo {
+        //   max-width: 135px;
+        // }
 
         .list-item__name {
           width: 180px;
           margin: 0 auto;
           font-size: 1.2rem;
-          color: @title_color;
+          color: @titleColor;
           word-wrap: break-word;
         }
       }
@@ -162,25 +141,26 @@
 
         .list-item__name {
           margin-bottom: 8px;
+          font-size: 1.2rem;
         }
 
         .list-item__industry {
           font-size: 1rem;
-          color: @title_color;
+          color: @titleColor;
           margin-bottom: 20px;
         }
 
         .list-item__desc {
           margin-bottom: 20px;
-          color: @text_color;
-          font-size: 16px;
+          color: @textColor;
+          font-size: @regularFontSize;
           line-height: 28px;
         }
 
         .arrow-link {
-          color: @theme_blue;
+          color: @themeBlue;
           text-transform: uppercase;
-          font-size: 16px;
+          font-size: @regularFontSize;
           font-weight: 500;
           letter-spacing: 1.5px;
 
@@ -198,7 +178,7 @@
           margin-top: 10px;
           font-size: 1rem;
           line-height: 1.7;
-          color: @theme_blue;
+          color: @themeBlue;
 
           &:hover {
             color: #202884;
@@ -206,7 +186,7 @@
         }
 
         .list-item__date {
-          font-size: 16px;
+          font-size: @regularFontSize;
         }
       }
     }
@@ -234,7 +214,6 @@
 @media screen and (max-width: 600px) {
   .blog .list .article .title,
   .meetup .list .article .title,
-  .recruit .list .article .title,
   .weekly .list .article .title {
     font-size: 20px;
   }
@@ -248,7 +227,8 @@
         .list-item__left {
           text-align: left;
 
-          .list-item__logo,
+          // .list-item__logo,
+          .lazy,
           .list-item__name {
             margin: 0 0 20px;
           }
