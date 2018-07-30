@@ -1,0 +1,49 @@
+[
+  {
+    "tag": "技术",
+    "list": [
+      {
+        "Q": "网上搜了很多的文章，最开始说 TiDB 是 NewSQL，最近好像又开始叫 HTAP，这个是什么原因呢？",
+        "A": "说到这个问题，得从最开始创业开始，15 年 4 月份出来创业的时候，我们一开始的想法是是解决 MySQL 扩展性问题，提供一个更好的 MySQL Cluster,来替换 MySQL 分库分表等中间件的解决方案，当时 NoSQL 概念也比较火，MongoDB，HBase，C* 关注度也很高，后来我们看到 Big Data Lanscape 里面正好也有介绍到 NewSQL，在 Wikipedia 里面的描述是 “NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system”，也比较切合当时的产品理念，就是 Old SQL + NoSQL，让传统的 MySQL 具有 Scale 的能力。当然在这个基础上我们给 MySQL 增加了很多其他的东西，比如 Online DDL，Raft Replication，Auto Failover 等等，特别是随着我们分布式 SQL Engine 和 SQL Optimizer 的发展，使得这种分布式数据库在大数据的复杂查询场景里面也可以很方便地帮助用户解决很多分析问题，也就是在 NewSQL 基础上，又增加了 OLAP 的能力。为了让 TiDB 具有更好的辨识度，我们采用了 Distributed Hybrid Transactional/Analytical Processing (HTAP) Database 的说法，也更贴切和生动！在整个开源领域，其实可以看到，HTAP 数据库一直没有一个事实标准，这应该是整个基础软件领域缺失的最后一块版图，早晚会有一到两家(MySQL 阵营肯定有一家，PostgreSQL 阵营也有可能一家)，目前来看，TiDB (OLTP + OLAP + Scale)看的更远，走的也更远，当然也更有希望是最独特的这一个。"
+      },
+      {
+        "Q": "现在大数据，云计算, AI, 区块链之类的技术都比较火，在技术上 TiDB 今后会不会也会探索这些方向呢？",
+        "A": "TiDB 其实本身就是一个分布式数据库。TiDB 的分布式应该是开源业界最优雅的分布式方案，不仅是存储，包括计算都是弹性可伸缩的。如果比较关注 TiDB 的话，都知道 TiDB 本身是产品名，又是工程名，从技术架构来看，包括 上层的 SQL 层，也就是 TiDB，这个大概认为是计算层，因为很多复杂的 SQL Query 都会拉到 TiDB 这层来做计算。还有就是下层的存储层，也就是 TiKV，基于 Raft 算法做一致性的数据复制和自动故障恢复等等。正是 TiDB 和 TiKV 这种存储和计算分离的架构，可以非常方便地实现 TiDB(此处是产品) 的弹性伸缩。从技术角度来说，在大数据领域，可以用 TiDB 作为数据源存储，然后利用 TiDB 自己本身的分布式计算能力提供大数据查询的需求，毕竟 TiDB 是 MySQL 协议兼容的，这个 SQL 大家都会用，用着也顺手，所以不是那种特别特别复杂的，用这个就足够了。然后对于更复杂的查询怎么办呢？正好说下马老师最近撸了一个叫 TiSpark 的项目，https://github.com/pingcap/tispark，可以用 Spark 来对接 TiDB，相当于数据还在 TiDB，但是计算层换成了 Spark 了，就相当于用 Spark 的计算能力了。还有一些 Spark 也搞不定？那还有最后一个办法，TiDB 本身还提供数据的离线和在线导出工具，可以把 TiDB 作为数据同步的镜像数据源，通过 TiDB Dump 和 TiDB Binlog 做数据同步，导入到新的分析引擎进行计算。目前基本上是这样的，TiDB 本身也在探索新的 OLAP 的存储引擎，而且分布式的 SQL Optimizer 也在快速改进，以后的体验会越来越好。对于云计算来说，不管是公有云，私有云还是混合云，其中最主要的一个诉求都是任何服务都是可以弹性扩展的，对于应用层，因为无状态，所以很好做到。缓存层，现在 Redis 3.0 或者之前我们搞的 Codis 都可以很好地做弹性伸缩，这层也不难。唯一麻烦的就是数据存储这一层，特别是数据库，毕竟数据库是各个企业的核心命脉。最近 Cloud TiDB 也陆陆续续在腾讯云和 Ucloud 落地了，其他的云也在密切开发中，所以可以认为 TiDB 其实已经和云厂商进行深度的产品整合，下一步就是把 Cloud TiDB 打造的更好，推到国外更大更广阔的 Cloud 上去。"
+      }
+    ]
+  },
+  {
+    "tag": "工作",
+    "list": [
+      {
+        "Q": "之前在实验室和实习的时候没有接触过太多开源的事情，不知道你们是怎么做开源项目的呢？",
+        "A": "你来 PingCAP，这个问题你自然就了解了：）有两篇文章建议来读一读，一个是申老师 (Shen Li, TiDB Tech Leader，这个只是文章之一哦) 最近写的一篇介绍开源的文章，http://mp.weixin.qq.com/s/5zeSuUXD6XPp51U9MVElRg ，还有一篇文章是社区小伙伴写的如何参与开源项目，http://mp.weixin.qq.com/s/jJDm-aT8Z9YrAH8GxZ9kOQ。这两个不同的视角可以大概地了解一下，当然更直接的方式还是来 PingCAP 工作一段时间，不管是 Intern 还是 Full time，你都会体验的非常深刻。"
+      },
+      {
+        "Q": "之前在实验室和实习的时候没有接触过太多开源的事情，不知道你们是怎么做开源项目的呢？",
+        "A": "有两篇文章建议来读一读，一个是申老师 (Shen Li, TiDB Tech Leader，这个只是文章之一哦) 最近写的一篇介绍开源的文章，http://mp.weixin.qq.com/s/5zeSuUXD6XPp51U9MVElRg ，还有一篇文章是社区小伙伴写的如何参与开源项目，http://mp.weixin.qq.com/s/jJDm-aT8Z9YrAH8GxZ9kOQ。这两个不同的视角可以大概地了解一下，当然更直接的方式还是来 PingCAP 工作一段时间，不管是 Intern 还是 Full time，你都会体验的非常深刻。"
+      }
+    ]
+  },
+  {
+    "tag": "商业",
+    "list": [
+      {
+        "Q": "之前在实验室和实习的时候没有接触过太多开源的事情，不知道你们是怎么做开源项目的呢？",
+        "A": "你来 PingCAP，这个问题你自然就了解了：）"
+      }
+    ]
+  },
+  {
+    "tag": "八卦",
+    "list": []
+  },
+  {
+    "tag": "福利待遇",
+    "list": []
+  },
+  {
+    "tag": "职业规划",
+    "list": []
+  }
+]

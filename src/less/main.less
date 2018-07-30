@@ -1,0 +1,126 @@
+@import "./base.less";
+@import "./header.less";
+@import "./footer.less";
+
+// fadeInAttrs300
+@fadeInAttrs300: fadeIn 0.3s;
+
+#page-content {
+  .customAnimation(@fadeInAttrs300);
+}
+
+// rewrite List of search results
+.algolia-autocomplete .ds-dropdown-menu {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d9d9d9;
+  margin: 4 0 4 0;
+  background: #fafafa;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.algolia-autocomplete .ds-dropdown-menu [class^="ds-dataset-"] {
+  border: none !important;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion {
+  padding: 0 4px !important;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--wrapper {
+  padding: 4px 0 0!important;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion .algolia-docsearch-suggestion--category-header {
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+  padding: 6px 8px;
+  text-transform: uppercase;
+  color: #3a59f0;
+  font-size: 0.9em;
+}
+
+.algolia-docsearch-suggestion.algolia-docsearch-suggestion__secondary .algolia-docsearch-suggestion--subcategory-column {
+  font-size: 0.7em;
+  background: none;
+}
+
+@media (max-width: 600px) {
+  .global-search .algolia-autocomplete .ds-dropdown-menu {
+      min-width: 372px !important;
+  }
+
+  .global-search .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+      right: -45px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .global-search .algolia-autocomplete .ds-dropdown-menu {
+      min-width: 350px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .global-search .algolia-autocomplete .ds-dropdown-menu {
+      min-width: 308px !important;
+  }
+
+  .global-search .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+      right: -40px !important;
+  }
+}
+
+// back to top button
+.back-to-top {
+  display: block;
+  height: 0;
+  width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 48px;
+  visibility: hidden;
+  position: fixed;
+  right: 48px;
+  bottom: 72px;
+  cursor: pointer;
+  z-index: 99;
+  transition: all 0.3s ease-in-out;
+
+  svg {
+    width: 0;
+    height: 0;
+    fill: transparent;
+  }
+
+  &.show {
+    display: block;
+    background: #666;
+    right: 24px;
+    bottom: 48px;
+    height: 48px;
+    width: 48px;
+    opacity: 0.7;
+    visibility: visible;
+    box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.25);
+
+    &:active,
+    &:hover,
+    &:focus {
+      opacity: 1;
+      background: #282634;
+      box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.25);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+    }
+  }
+}

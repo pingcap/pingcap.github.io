@@ -1,50 +1,53 @@
 /* homepage */
-@import "./base.less";
-@import "./header.less";
-@import "./footer.less";
+
+// import global variables
+@import "./variables.less";
+
 // width
-@logo_width: 10.5rem;
+@logoWidth: 10.5rem;
 // height
-@logo_height: 4rem;
+@logoHeight: 4rem;
 
 // margin
-@advantage_row_margin: 4rem;
+@advantageRowMargin: 4rem;
 // color
-@dark_blue: #0d0b1e;
+@homepageBgColor: #080713;
 // font
-@font_weight_300: 300;
-@font_weight_400: 400;
-@text_size: 0.8rem;
+@textSize: 0.8rem;
 // others
-@line_height: 1.8;
-// animation_fadein
-@animation_fadein: fadeIn 0.6s;
+@textLineHeight: 1.8;
 
-.homepage-container {
-  .customAnimation(@animation_fadein);
+.homepage {
+  background-color: @homepageBgColor;
+  color: #fff;
+
+  p {
+    font-weight: 300;
+  }
 }
 
 .btn {
   display: inline-block;
-  min-width: @primary_button_width;
-  height: @primary_button_height;
-  line-height: @primary_button_height;
+  min-width: @primaryBtnWidth;
+  height: @primaryBtnHeight;
+  line-height: @primaryBtnHeight;
   padding: 0 1rem;
   .rounded-corners(0.9rem);
 
   font-size: 0.8rem;
   text-align: center;
 }
+
 // mixin
-.btn-theme-switch (@bgcolor: @theme_blue, @color: white) {
-  background: @bgcolor;
-  border: 1px solid @bgcolor;
-  line-height: calc(@primary_button_height~" - 2px");
+.btn-theme-switch (@bg_color: @themeBlue, @color: white) {
+  background: @bg_color;
+  border: 1px solid @bg_color;
+  line-height: calc(@primaryBtnHeight~" - 2px");
 
   &:hover {
     background-color: @color;
     border: 1px solid @color;
-    color: @bgcolor;
+    color: @bg_color;
     transition: all 0.5s ease;
   }
 }
@@ -54,7 +57,7 @@
 }
 
 .btn-secondary {
-  .btn-theme-switch(white, @theme_blue);
+  .btn-theme-switch(white, @themeBlue);
 
   background: transparent;
 
@@ -69,10 +72,10 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 100vh;
-  padding: @vertical_padding 0;
+  height: 100%;
+  padding: calc(~"@{verticalPadding} + @{headerHeight}") 0;
   background:
-  url("https://download.pingcap.com/images/bg-landingpage-slogan.png")
+  url("https://download.pingcap.com/images/bg-homepage-banner.jpg")
   no-repeat center top;
   background-attachment: fixed;
   background-size: cover;
@@ -80,12 +83,12 @@
   .container {
     display: flex;
     flex-direction: column;
-    padding: 0 @horizontal_padding;
+    padding: 0 @horizontalPadding;
   }
 
   .logo {
-    width: @logo_width;
-    height: @logo_height;
+    width: @logoWidth;
+    height: @logoHeight;
   }
 
   .slogan {
@@ -103,8 +106,8 @@
 
   .desc {
     max-width: 70%;
-    font-size: @text_size;
-    line-height: @line_height;
+    font-size: @textSize;
+    line-height: @textLineHeight;
   }
 
   .buttons {
@@ -129,7 +132,7 @@
         width: 14px;
         height: 14px;
         margin-top: -8px;
-        background: url("/images/icon-github.svg");
+        background: url("/images/svgs/icon-github.svg");
         background-size: 14px 14px;
       }
     }
@@ -138,9 +141,9 @@
 
 /* Section 2 */
 .homepage-features {
-  padding: calc(~"@{vertical_padding} + @{header_height}") 0;
+  padding: calc(~"@{verticalPadding} + @{headerHeight}") 0;
   background:
-  url("https://download.pingcap.com/images/bg-landingpage-features.png")
+  url("https://download.pingcap.com/images/bg-homepage-features.png")
   no-repeat center top;
   background-attachment: fixed;
   background-size: cover;
@@ -152,7 +155,7 @@
   }
 
   .container {
-    padding: 0 @horizontal_padding;
+    padding: 0 @horizontalPadding;
   }
 
   .row {
@@ -171,8 +174,8 @@
       max-width: 12rem;
       margin-left: auto;
       margin-right: auto;
-      font-size: @text_size;
-      line-height: @line_height;
+      font-size: @textSize;
+      line-height: @textLineHeight;
     }
   }
 
@@ -203,19 +206,19 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    border: 2px solid white;
+    border: 1px solid white;
     border-radius: 50% 50%;
 
     .icon {
-      width: 1.7rem;
-      height: 1.7rem;
+      width: 1.8rem;
+      height: 1.8rem;
       display: flex;
       align-items: center;
       justify-content: center;
     }
   }
 
-  .image-wrap-noborder {
+  .image-wrap-no-border {
     border: none;
 
     .icon {
@@ -227,11 +230,8 @@
 
 /* Section 3 */
 .homepage-advantages {
-  padding: calc(~"@{vertical_padding} + @{header_height}") 0;
-  background:
-  url("https://download.pingcap.com/images/bg-landingpage-advantages.png")
-  no-repeat center bottom @dark_blue;
-  background-size: cover;
+  padding: calc(~"@{verticalPadding} + @{headerHeight}") 0 0;
+  background: #080713;
 
   h3 {
     font-size: 1.1rem;
@@ -239,21 +239,27 @@
   }
 
   h4 {
-    color: @theme_blue;
+    color: @themeBlue;
     font-size: 0.9rem;
     margin-bottom: 0.6rem;
-    font-weight: @font_weight_400;
+    font-weight: 400;
+  }
+
+  .bottom {
+    height: 320px;
+    background: url('/images/svgs/polygon.svg') no-repeat center top;
+    background-size: cover;
   }
 
   .container {
-    padding: 0 @horizontal_padding;
+    padding: 0 @horizontalPadding;
   }
 
   .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: @advantage_row_margin;
+    margin-bottom: @advantageRowMargin;
 
     .image-wrap {
       margin: 1rem 0;
@@ -268,8 +274,8 @@
       padding: 0 0.5rem;
 
       .text {
-        font-size: @text_size;
-        line-height: @line_height;
+        font-size: @textSize;
+        line-height: @textLineHeight;
       }
     }
 
@@ -287,7 +293,7 @@
 .cta-footer {
   margin: 0 auto;
   padding: 50px 15px;
-  background-color: @bg_black_with_alpha90;
+  background-color: @headerBgColor;
   text-align: center;
 
   .cta-footer__headline {
@@ -296,6 +302,7 @@
     font-weight: 600;
     font-size: 21px;
     line-height: 35px;
+    color: #fff;
   }
 
   .buttons {
@@ -313,10 +320,10 @@
   display: none;
   position: relative;
   width: 100%;
-  padding: 12px @horizontal_padding;
+  padding: 12px @horizontalPadding;
   z-index: 1030;
-  background: @theme_blue;
-  font-size: 16px;
+  background: @themeBlue;
+  font-size: @regularFontSize;
   line-height: 32px;
   letter-spacing: 1px;
 }
@@ -400,10 +407,6 @@ body.banner-active .release-banner {
 }
 
 @media screen and (min-width: 769px) {
-  .banner-active .homepage-slogan-mask {
-    height: calc(~"100vh - @{header_height} - 64px");
-  }
-
   .release-banner__copy .party {
     margin-right: 25px;
   }
@@ -435,9 +438,6 @@ body.banner-active .release-banner {
   }
 
   .homepage-slogan-mask {
-    height: auto;
-    min-height: 100vh;
-
     .container {
       align-items: center;
       text-align: center;

@@ -1,0 +1,177 @@
+// import global variables
+@import "./colors.less";
+
+.cases-carousel * {
+  box-sizing: border-box;
+}
+
+.cases-carousel {
+  background: #fff;
+  overflow: hidden;
+}
+
+.cases-carousel .background {
+  padding: 100px 0 200px;
+  overflow: hidden;
+  background: @themeBlue;
+  color: #fff;
+}
+
+.cases-carousel .background-bottom {
+  height: 150px;
+  background: #fff;
+  padding-bottom: 50px;
+}
+
+.cases-carousel .section-header {
+  max-width: 900px;
+  padding: 0 15px;
+  margin: 0 auto 80px;
+}
+
+.cases-carousel .section-header h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.cases-carousel .carousel {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  margin-top: -200px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.cases-carousel label {
+  position: relative;
+  min-height: 320px;
+  width: 100%;
+  padding: 30px;
+  background: #fff;
+  background-size: cover;
+  color: #142848;
+  transition: transform 400ms ease-out;
+  z-index: 1;
+}
+
+.cases-carousel input {
+  position: absolute;
+  appearance: none;
+}
+
+.cases-carousel input:nth-of-type(1):checked ~ label:nth-of-type(1),
+.cases-carousel input:nth-of-type(2):checked ~ label:nth-of-type(2),
+.cases-carousel input:nth-of-type(3):checked ~ label:nth-of-type(3),
+.cases-carousel input:nth-of-type(4):checked ~ label:nth-of-type(4) {
+  z-index: 0;
+}
+
+.cases-carousel input:nth-of-type(1):checked ~ label {
+  transform: translate3d(0, 0, 0);
+}
+
+.cases-carousel input:nth-of-type(2):checked ~ label {
+  transform: translate3d(-100%, 0, 0);
+}
+
+.cases-carousel input:nth-of-type(3):checked ~ label {
+  transform: translate3d(-200%, 0, 0);
+}
+
+.cases-carousel label::before,
+.cases-carousel label::after {
+  color: @themeBlue;
+  display: block;
+  background: transparent;
+  position: absolute;
+  padding: 1rem;
+  font-size: 2rem;
+  height: 10rem;
+  vertical-align: middle;
+  line-height: 10rem;
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  cursor: pointer;
+}
+
+.cases-carousel label::before {
+  content: "\276D";
+  right: 100%;
+}
+
+.cases-carousel label::after {
+  content: "\276C";
+  left: 100%;
+}
+
+.cases-carousel label.carousel-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-shrink: 0;
+}
+
+.carousel-item .carousel-item__left {
+  flex-basis: 35%;
+  text-align: center;
+}
+
+.carousel-item .carousel-item__logo {
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.carousel-item .carousel-item__name {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #142848;
+  word-wrap: break-word;
+}
+
+.carousel-item .carousel-item__right {
+  flex-basis: 60%;
+}
+
+.carousel-item .carousel-item__industry {
+  font-size: 1rem;
+  color: #142848;
+  margin-bottom: 20px;
+}
+
+.carousel-item .carousel-item__desc {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.carousel-item .arrow-link {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.8rem;
+  color: @themeBlue;
+}
+
+@media screen and (max-width: 600px) {
+  .cases-carousel .section-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .cases-carousel label.carousel-item {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 200px;
+    padding: 30px 48px;
+  }
+
+  .carousel-item .carousel-item__left {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+}

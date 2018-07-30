@@ -1,35 +1,36 @@
 {{ $rss := .rss }}
-
 <div class="sidebar">
-  <div class="sticky-sidebar">
-    <h2 class="title">
-      {{ .title }}
-      {{ if $rss }}
-        <a class="rss" href="{{.rss}}" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
-      {{ end}}
-    </h2>
-    <div class="st_tree">
-      <ul>
-          {{ range .data.GroupByDate "2006" }}
-            <li class="level-1 year-item has-child">
-              <a href="#"><i class="icon"></i>{{ .Key }} ({{ len .Pages }})</a>
-              <ul>
-                  {{ range .Pages.GroupByDate "2006-01" }}
-                  <li class="level-2 month-item has-child">
-                    <a href="#"><i class="icon"></i>{{ .Key }} ({{ len .Pages }})</a>
-                    <ul>
-                        {{ range .Pages }}
-                        <li class="leaf-child">
-                          <a href="{{ .URL }}">{{ partial "svgs/icon-file.svg" (dict "fill" "#000" "width" 14 "height" 14 ) }}{{ .Title }}</a>
-                        </li>
-                        {{ end }}
-                    </ul>
-                  </li>
-                  {{ end }}
-              </ul>
-            </li>
-         {{ end }}
-      </ul>
+    <div class="sticky-sidebar">
+        {{- if .title -}}
+            <div class="title">
+            {{- .title -}}
+            {{- if $rss -}}
+                <a class="rss" href="{{.rss}}" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
+            {{- end -}}
+            </div>
+        {{- end -}}
+        <div class="st_tree">
+        <ul>
+            {{- range .data.GroupByDate "2006" -}}
+                <li class="level-1 year-item has-child">
+                <a href="#"><i class="icon-arrow"></i>{{- .Key -}} ({{- len .Pages -}})</a>
+                <ul>
+                    {{- range .Pages.GroupByDate "2006-01" -}}
+                    <li class="level-2 month-item has-child">
+                        <a href="#"><i class="icon-arrow"></i>{{- .Key -}} ({{- len .Pages -}})</a>
+                        <ul>
+                            {{- range .Pages -}}
+                            <li class="leaf-child">
+                                <a href="{{ .URL }}"><i class="icon-file"></i>{{- .Title -}}</a>
+                            </li>
+                            {{- end -}}
+                        </ul>
+                    </li>
+                    {{- end -}}
+                </ul>
+                </li>
+            {{- end -}}
+        </ul>
+        </div>
     </div>
-  </div>
 </div>

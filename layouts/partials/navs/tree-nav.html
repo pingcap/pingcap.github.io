@@ -1,13 +1,13 @@
 <ul>
-  {{range .tree}}
-    {{ if isset . "children" }}
-      <li class="has-child"><a href="#">{{ .name }}<i class="icon"></i></a>
-        {{ partial "navs/tree-nav.html" (dict "tree" .children "global" $) }}
-      </li>
-    {{else}}
-    <li class="leaf-child">
-      <a href="{{ .link }}">{{ .name }}</a>
-    </li>
-    {{end}}
-  {{end}}
+    {{- range .tree -}}
+        {{- if isset . "children" -}}
+            <li class="has-child"><a href="#">{{- .name -}}<i class="icon-arrow"></i></a>
+                {{- partial "navs/tree-nav.html" (dict "tree" .children "global" $) -}}
+            </li>
+        {{- else -}}
+            <li class="leaf-child">
+                <a href="{{ .link }}">{{- .name -}}</a>
+            </li>
+        {{- end -}}
+    {{- end -}}
 </ul>

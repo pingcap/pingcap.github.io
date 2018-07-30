@@ -1,55 +1,54 @@
-{{ define "headtpl" }}
-  <link rel="stylesheet" href="https://download.pingcap.com/style/github-markdown.css" />
-  {{ if and (isset .Params "category") (eq .Params.category "case") }}
-    {{$.Scratch.Set "data_i18_link" "/cases" }}
-    {{$.Scratch.Set "nav_active" "cases"}}
-  {{ else }}
-    {{$.Scratch.Set "data_i18_link" "/blog" }}
-    {{$.Scratch.Set "nav_active" "blog"}}
-  {{ end }}
-  {{$.Scratch.Set "data_i18_cn" true }}
-{{ end }}
+{{- define "headTpl" -}}
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/github-markdown.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{- if and (isset .Params "category") (eq .Params.category "case") -}}
+        {{$.Scratch.Set "data_i18_link" "/cases" }}
+        {{$.Scratch.Set "nav_active" "cases"}}
+    {{- else -}}
+        {{$.Scratch.Set "data_i18_link" "/blog" }}
+        {{$.Scratch.Set "nav_active" "blog"}}
+    {{- end -}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+{{- end -}}
 
-{{ define "main" }}
-<div class="blog">
-  <div class="container content-container">
-    {{ if and (isset .Params "category") (eq .Params.category "case") }}
-        <div class="sidebar">
-            <div class="sticky-sidebar">
-              <h2 class="title"> 用户案例 </h2>
-              <div class="st_tree nav-toc">
-                {{ partial "navs/tree-nav.html" (dict "tree" .Site.Data.cases_cn_toc "global" .) }}
-              </div>
+{{- define "main" -}}
+    <div class="blog">
+        <div class="container">
+            {{- if and (isset .Params "category") (eq .Params.category "case") -}}
+                {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.cases_cn_toc "title" "用户案例") -}}
+            {{- else -}}
+                {{- $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" -}}
+                {{- partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) -}}
+            {{- end -}}
+            <div class="archive">
+                <div class="content markdown-body">
+                    <h1 class="title">{{- .Title -}}</h1>
+                    <ul class="blog-post-meta">
+                        <li class="meta-item">
+                            <img src="/images/svgs/icon-date.svg">
+                            {{- .Date.Format "Mon, Jan 2, 2006" -}}
+                        </li>
+                        <li class="meta-item">
+                            <img src="/images/svgs/icon-writer.svg">
+                            {{- if .Params.author -}}
+                                {{ $len := len .Params.author }}
+                                {{- range $idx, $i := .Params.author -}}
+                                    {{ . }}
+                                    {{- if lt $idx (sub $len 1) -}} ,&nbsp; {{- end -}}
+                                {{- end -}}
+                            {{- else -}}
+                                PingCAP
+                            {{- end -}}
+                        </li>
+                    </ul>
+                    <div class="blog-text">{{- .Content -}}</div>
+                </div>
+                {{- partial "archives/post-share-cn.html" . -}}
             </div>
-          </div>
-    {{ else }}
-        {{ $posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
-        {{ partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $posts "rss" "/blog-cn/index.xml" "global" .) }}
-    {{ end }}
-    <div class="archive">
-      <div class="content markdown-body">
-        <h1 class="title">{{ .Title }}</h1>
-        <ul class="blog-post-meta">
-          <li class="meta-item">
-            {{ partial "svgs/icon-date.svg" (dict "fill" "#040000" "width" 14 "height" 16 ) }}
-            {{ .Date.Format "Mon, Jan 2, 2006" }}
-          </li>
-          <li class="meta-item">
-            {{ partial "svgs/icon-author.svg" (dict "fill" "#040000" "width" 18 "height" 18 ) }}
-            {{ if .Params.author }}
-              {{ range .Params.author }} {{ . }}  {{ end }}
-            {{ else }}
-              PingCAP
-            {{ end }}
-          </li>
-        </ul>
-        <div class="blog-text">{{ .Content }}</div>
-     </div>
-     {{ partial "archives/post-share-cn.html" . }}
+        </div>
     </div>
-  </div>
-</div>
+{{- end -}}
 
-{{ end }}
-
-{{ define "footjs" }} {{ end }}
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/doc.js"></script>
+{{- end -}}

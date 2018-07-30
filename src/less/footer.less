@@ -1,12 +1,14 @@
 /* footer module */
-@import "./base.less";
+
+// import global variables
+@import "./variables.less";
+
 //height
-@footer_height_pc: 350px;
-@input_height: 32px;
-@pingcap_logo_height: 1.8rem;
+@inputHeight: 32px;
+@logoHeight: 1.8rem;
 
 // width
-@btn_subscribe_width: 70px;
+@subscribeBtnWidth: 70px;
 
 #wechat {
   position: relative;
@@ -24,38 +26,38 @@
   }
 
   .form-control {
-    width: calc(~"100% - "@btn_subscribe_width);
-    height: @input_height;
+    width: calc(~"100% - "@subscribeBtnWidth);
+    height: @inputHeight;
     background-color: fade(white, 12%);
     border: 1px solid fade(white, 0%);
     .rounded-corners(0);
 
     padding: 0 10px;
-    color: @gray_white;
+    color: @grayWhite;
     font-size: 12px;
 
     &:hover,
     &:focus {
-      border-color: fade(@theme_blue, 50%);
+      border-color: fade(@themeBlue, 50%);
     }
   }
 
   .btn {
-    min-width: @btn_subscribe_width;
-    height: @input_height;
-    line-height: @input_height;
+    min-width: @subscribeBtnWidth;
+    height: @inputHeight;
+    line-height: @inputHeight;
     padding: 0 5px;
     .rounded-corners(0);
 
     border: 1px solid fade(white, 0%);
-    background-color: @theme_blue;
+    background-color: @themeBlue;
     font-size: 12px;
     color: white;
 
     &:hover {
       background-color: white;
       border-color: white;
-      color: @theme_blue;
+      color: @themeBlue;
       transition: all 0.5s ease;
     }
   }
@@ -63,14 +65,14 @@
 
 .qr_code_outer {
   position: absolute;
-  right: 158px;
+  right: 12em;
   top: -100px;
 
   .qr_code {
     position: absolute;
     top: 0;
     left: 0;
-    width: 158px;
+    width: 12em;
     padding: 12px 15px;
     border: 1px solid #d9dadc;
     background-color: white;
@@ -118,7 +120,7 @@
   text-decoration: underline;
 
   &:hover {
-    color: @theme_blue;
+    color: @themeBlue;
     transition: all 0.5s ease;
   }
 }
@@ -128,7 +130,7 @@ footer {
   width: 100%;
   padding: 1.5rem 0;
   border-top: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: @bg_black_with_alpha90;
+  background-color: @headerBgColor;
   color: white;
 
   .container {
@@ -140,6 +142,7 @@ footer {
     h4 {
       margin-bottom: 20px;
       font-size: 18px;
+      color: #fff;
     }
 
     ul {
@@ -154,6 +157,7 @@ footer {
         font-weight: 300;
 
         a {
+          width: 9em;
           color: inherit;
           font-weight: inherit;
 
@@ -230,7 +234,7 @@ footer {
 
 @media (min-width: 880px) {
   footer {
-    height: @footer_height_pc;
+    height: @pcFooterHeight;
   }
 }
 

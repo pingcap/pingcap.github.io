@@ -1,205 +1,69 @@
-@hero_bg_color: #3d6cb9;
-
-// colour stuff
-@lightBG: #f5f7f8;
-@salmon: #f66;
+// import global variables
+@import "./variables.less";
 
 .cards {
   display: flex;
   flex-flow: row wrap;
-  margin: 1.5em auto 12.5em;
-  padding: 0 8px;
-  max-width: 964px;
+  align-items: flex-start;
+  margin: 1em auto;
 }
 
 .card {
-  max-width: 300px;
-  flex-basis: 31%;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 10px 20px -2px;
-  background: white;
-  margin: 30px 8px;
-  perspective: 1000;
   position: relative;
-  text-align: left;
+  width: 30%;
+  max-width: 300px;
+  margin: 20px 1.6%;
+  padding: 1em;
+  border-radius: 6px;
+  box-shadow: @cardBoxShadow;
+  transform: translateZ(0);
   transition: all 0.3s 0s ease-in;
-  z-index: 1;
 
-  a.btn-toggle {
-    background: @hero_bg_color;
-    border-radius: 4px;
-    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
-    color: white;
-    display: inline-block;
-    padding: 6px 30px 8px;
-    position: relative;
-    text-decoration: none;
-    font-size: 16px;
-    transition: all 0.1s 0s ease-out;
+  &:hover {
+    box-shadow: @cardHoverBoxShadow;
+    transform: translate(0, -4px);
   }
 
-  a.btn-toggle:hover {
-    background: lighten(@hero_bg_color, 2.5);
-    box-shadow: 0 8px 1px 0 rgba(0, 0, 0, 0.075);
-    transform: translateY(-2px);
-    transition: all 0.25s 0s ease-out;
-  }
-
-  a.btn-toggle:active,
-  a.btn-toggle:active {
-    background: darken(@hero_bg_color, 2.5);
-    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
-    transform: translate3d(0, 1px, 0);
-    transition: all 0.025s 0s ease-out;
-  }
-
-  .card__thumbnail {
-    width: 55%;
-    margin: auto;
-    height: 120px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: white;
-  }
-
-  .card__title {
-    border-top: 1px solid @lightBG;
-    background: white;
-    padding: 15px;
-    position: relative;
-    z-index: 0;
-
-    a.toggle-info {
-      border-radius: 26px;
-      height: 26px;
-      width: 26px;
-      padding: 0;
-      position: absolute;
-      right: 15px;
-      top: 15px;
-
-      span {
-        background: white;
-        display: block;
-        height: 2px;
-        position: absolute;
-        top: 13px;
-        transition: all 0.15s 0s ease-out;
-        width: 9px;
-      }
-
-      .left {
-        right: 11px;
-        transform: rotate(45deg);
-      }
-
-      .right {
-        left: 11px;
-        transform: rotate(-45deg);
-      }
-    }
-
-    h2 {
-      font-weight: 400;
-      letter-spacing: -0.05em;
-      margin: 0 32px 0 0;
-      padding: 0;
-      font-size: 16px;
-      line-height: 26px;
-      color: lighten(#323643, 30%);
-    }
-  }
-
-  .card__description {
-    padding: 10px 15px;
-    position: relative;
-    font-size: 14px;
-    line-height: 24px;
-  }
-
-  .card__actions {
-    box-shadow: 0 10px 20px -2px rgba(0, 0, 0, .1);
-    padding: 15px;
-    text-align: center;
-  }
-
-  .card__flap {
-    background: darken(white, 10);
-    position: absolute;
-    width: 100%;
-    transform-origin: top;
-    transform: rotateX(-90deg);
-  }
-
-  .flap1 {
-    transition: all 0.3s 0.3s ease-out;
-    z-index: -1;
-  }
-
-  .flap2 {
-    transition: all 0.3s 0s ease-out;
-    z-index: -2;
+  .read-more {
+    display: block;
+    margin-top: 20px;
+    font-size: 15px;
+    color: @themeBlue;
   }
 }
 
-.cards.showing {
-  .card {
-    cursor: pointer;
-    opacity: 0.6;
-    transform: scale(0.88);
+.card__avatar {
+  height: 54px;
+  width: 54px;
+  margin: auto;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  background: @silverWhite;
+  font-size: 0.5em;
 
-    &:hover {
-      opacity: 0.94;
-      transform: scale(0.92);
-    }
+  img {
+    display: block;
+    width: 32px;
   }
 }
 
-.card.show {
-  opacity: 1 !important;
-  transform: scale(1) !important;
+h3.card__title {
+  margin: 12px 0;
+  font-size: 18px !important;
+  line-height: 1.6;
+}
 
-  .card__title {
-    a.toggle-info {
-      background: @salmon !important;
-
-      span {
-        width: 10px;
-        top: 12px;
-      }
-
-      span.left {
-        right: 8px;
-      }
-
-      span.right {
-        left: 8px;
-      }
-    }
-  }
-
-  .card__flap {
-    background: white;
-    transform: rotateX(0deg);
-  }
-
-  .flap1 {
-    transition: all 0.3s 0s ease-out;
-  }
-
-  .flap2 {
-    transition: all 0.3s 0.2s ease-out;
-  }
+.card__location,
+.card__description {
+  color: @lightDimGray;
+  font-size: 15px;
 }
 
 @media (max-width: 767px) {
   .card {
-    flex-basis: 100%;
-  }
-}
-
-@media (max-width: 693px) {
-  .cards {
-    justify-content: center;
+    width: 100%;
+    max-width: 100%;
   }
 }
