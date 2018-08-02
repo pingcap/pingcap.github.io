@@ -84,7 +84,7 @@ function processReleaseBanner() {
   }
 
   $('.release-banner__close').click(function(e) {
-    if ($('body.banner-active')) $('body').removeAttr('class')
+    if ($('body.banner-active')) $('body').removeClass('banner-active')
     // set localStorage to record release banner version
     if (typeof Storage !== 'undefined') {
       var version = $('.release-banner').data('release')
