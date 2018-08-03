@@ -38,11 +38,11 @@ aliases:
 
 2. 为 Docker/Kubernetes 贡献过代码；
 
-3. 熟悉 BGP，Overlay 网络。
+3. 熟悉 BGP、Overlay 网络。
 
 **待遇：**
 
-20K - 40K + 期权, 13薪 + 奖金，优秀者可面议
+20K - 40K + 期权，13薪 + 奖金，优秀者可面议
 
 **工作地点：**
 
