@@ -28,7 +28,7 @@ aliases:
 
 5. 熟悉 React/Angular/Vue 等现代 Web 前端框架使用和实现原理；
 
-6. 熟悉富应用 SPA 开发模式，如单向数据流 Flux/Redux，响应式编程 rxjs/cyclejs.
+6. 熟悉富应用 SPA 开发模式，如单向数据流 Flux/Redux，响应式编程 rxjs/cyclejs。
 
 **加分项：**
 
@@ -40,7 +40,7 @@ aliases:
 
 **待遇：**
 
-20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
+20K - 40K + 期权，13薪 + 奖金，优秀者可面议
 
 **工作地点：**
 

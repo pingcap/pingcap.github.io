@@ -34,11 +34,11 @@ aliases:
 
 1. 爱折腾，强烈的 Hack 精神；
 
-2. TopCoder，Codeforces 黄色以上。
+2. TopCoder、Codeforces 黄色以上。
 
 **待遇：**
 
-20K - 40K + 期权, 13薪 + 奖金, 优秀者可面议
+20K - 40K + 期权，13薪 + 奖金，优秀者可面议
 
 **工作地点：**
 
