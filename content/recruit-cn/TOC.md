@@ -27,3 +27,4 @@
 - General & Administrative
   - [出纳](general-administrative/cashier.md)
   - [招聘主管](general-administrative/hr-manager.md)
+  - [行政前台](general-administrative/administrative-receptionist.md)
