@@ -1,7 +1,7 @@
 ---
 title: PD 研发工程师
 tags:
-  - Tech
+  - Engineering
 location: 北京，上海，广州，杭州
 avatar: database
 aliases:

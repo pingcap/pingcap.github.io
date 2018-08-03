@@ -1,7 +1,7 @@
 ---
 title: TiDB 商业产品开发 - Cloud 方向
 tags:
-  - Tech
+  - Engineering
 location: 北京, 上海, 广州, 杭州, Remote
 avatar: cloud
 aliases:

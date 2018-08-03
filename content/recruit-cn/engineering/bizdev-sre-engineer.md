@@ -1,7 +1,7 @@
 ---
 title: TiDB 商业产品开发 - SRE 方向
 tags:
-  - Tech
+  - Engineering
 avatar: sre
 location: 北京，上海，广州，杭州，Remote
 aliases:
