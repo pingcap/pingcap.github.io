@@ -1,12 +1,15 @@
 /* doc page */
 
 // import global variables
-@import "./variables.less";
+@import './variables.less';
 
 // import partials
-@import "./sidebar.less";
-@import "./post-share.less";
-@import "./aside-menu.less";
+@import './sidebar.less';
+@import './post-share.less';
+@import './aside-menu.less';
+
+// fontawsome
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
 // width
 @pageSidebarWidth: 12.5rem;
@@ -30,13 +33,13 @@
   }
 
   .sidebar {
-    min-height: calc(~"100vh - @{pcFooterHeight}");
+    min-height: calc(~'100vh - @{pcFooterHeight}');
   }
 
   .archive,
   .list {
     flex: 1;
-    max-width: calc(~"100% - 24rem");
+    max-width: calc(~'100% - 24rem');
 
     h1,
     h2,
@@ -132,6 +135,69 @@
     }
   }
 
+  .tabs {
+    min-width: 320px;
+    max-width: 100%;
+    margin: 2em auto;
+    background: #fff;
+
+    section {
+      display: none;
+      padding: 20px 0;
+      border-top: 1px solid #ddd;
+    }
+
+    input {
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      margin: 0 0 -1px;
+      padding: 15px 25px;
+      font-weight: 600;
+      text-align: center;
+      color: #bbb;
+      border: 1px solid transparent;
+    }
+
+    label::before {
+      font-family: fontawesome;
+      font-weight: normal;
+      margin-right: 10px;
+    }
+
+    label[for*='MacOS']::before {
+      content: '\f179';
+    }
+
+    label[for*='Linux']::before {
+      content: '\f17c';
+    }
+
+    label[for*='Windows']::before {
+      content: '\f17a';
+    }
+
+    label:hover {
+      color: #888;
+      cursor: pointer;
+    }
+
+    input:checked + label {
+      color: #555;
+      border: 1px solid #ddd;
+      border-top: 2px solid @bannerBgColor;
+      border-bottom: 1px solid #fff;
+    }
+
+    #tabMacOS:checked ~ #macOSContent,
+    #tabLinux:checked ~ #linuxContent,
+    #tabWindows:checked ~ #windowsContent {
+      display: block;
+    }
+  }
+
   .error {
     color: @themeBlue;
     line-height: 1.7;
@@ -147,7 +213,7 @@
 
   .sidebar-page {
     flex: 0 0 @pageSidebarWidth;
-    min-height: calc(~"100vh - @{pcFooterHeight}");
+    min-height: calc(~'100vh - @{pcFooterHeight}');
 
     .improve-doc,
     .pdf-link,
@@ -170,7 +236,7 @@
     }
 
     .toc-title {
-      margin: calc(~"@{tocLineMargin} * 2") 0 @tocLineMargin;
+      margin: calc(~'@{tocLineMargin} * 2') 0 @tocLineMargin;
     }
   }
 
@@ -206,7 +272,7 @@
     ul ul a:active,
     ul ul a:hover,
     ul ul li.active > a {
-      padding-left: calc(~"1.2rem - 2px");
+      padding-left: calc(~'1.2rem - 2px');
     }
   }
 
@@ -257,8 +323,8 @@
   .doc {
     .archive,
     .list {
-      padding: calc(~"@{headerHeight} + 20px") 1rem 1.5rem;
-      min-height: calc(~"100vh - @{pcFooterHeight}");
+      padding: calc(~'@{headerHeight} + 20px') 1rem 1.5rem;
+      min-height: calc(~'100vh - @{pcFooterHeight}');
     }
   }
 
@@ -272,13 +338,13 @@
     }
 
     .nav-tags {
-      padding: calc(~"@{headerHeight} + 20px") 0 20px;
+      padding: calc(~'@{headerHeight} + 20px') 0 20px;
     }
 
     .archive,
     .list {
-      max-width: calc(~"100% - 15rem");
-      padding: calc(~"@{headerHeight} + 20px") 2.5rem 1.5rem;
+      max-width: calc(~'100% - 15rem');
+      padding: calc(~'@{headerHeight} + 20px') 2.5rem 1.5rem;
     }
   }
 
@@ -335,6 +401,20 @@
   }
 }
 
+@media (max-width: 500px) {
+  .blog,
+  .doc,
+  .meetup,
+  .weekly,
+  .recruit-single {
+    .tabs {
+      label {
+        padding: 10px;
+      }
+    }
+  }
+}
+
 /**
 * Print style sheet
 * @version         1.0
@@ -349,7 +429,7 @@
 
   /* 把字体设置为16px/13pt, 把背景色设为纯白、字体纯黑，这样省墨。 */
   body {
-    font: 13pt Georgia, "Times New Roman", Times, serif;
+    font: 13pt Georgia, 'Times New Roman', Times, serif;
     line-height: 1.3;
     background: #fff !important;
     color: #000;
@@ -372,7 +452,7 @@
   }
 
   a::after {
-    content: "(" attr(href) ")";
+    content: '(' attr(href) ')';
   }
 
   blockquote {
