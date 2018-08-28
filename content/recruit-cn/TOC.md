@@ -1,3 +1,7 @@
+---
+draft: true
+---
+
 # PingCAP 招聘
 
 ## 目录
