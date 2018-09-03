@@ -2,7 +2,7 @@
 title: Marketing Specialist
 season: 2019 校招 
 tags:
-  -  campus
+  - Campus
 location: 北京
 avatar: marketing
 ---
