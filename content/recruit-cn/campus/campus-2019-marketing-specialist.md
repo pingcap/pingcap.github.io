@@ -1,12 +1,13 @@
 ---
-title:  【2019 校招】Marketing Specialist
+title: Marketing Specialist
+season: 2019 校招 
 tags:
   -  campus
 location: 北京
 avatar: marketing
 ---
 
-# 【2019 校招】市场专员
+# 市场专员
 
 **岗位职责：**
 

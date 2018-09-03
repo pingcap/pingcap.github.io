@@ -1,5 +1,6 @@
 ---
-title: 【2019 校招】 HR Management Trainee
+title: HR Management Trainee
+season: 2019 校招 
 tags:
   - Campus
 location: 北京
@@ -8,7 +9,7 @@ aliases:
   - /recruit-cn/campus/campus-2019-hr-management-trainee/
 ---
 
-# 【2019 校招】人力资源管培生
+# 人力资源管培生
 
 **岗位职责：**
 

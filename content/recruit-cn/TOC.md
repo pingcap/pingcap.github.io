@@ -20,11 +20,11 @@
 - I18N
   - [Technical Writer](i18n/technical-writer.md)
 - Campus
-  - [【2019 校招】Infrastructure Engineer](campus/campus-2019-infrastructure-engineer.md)
-  - [【2019 校招】Technical Writer](campus/campus-2019-technical-writer.md)
-  - [【2019 校招】Marketing Specicalist](campus/campus-2019-marketing-specialist.md)
-  - [【2019 校招】OPS Engineer](campus/campus-2019-ops-engineer.md)
-  - [【2019 校招】HR Management Trainee](campus/campus-2019-hr-management-trainee.md)
+  - [Infrastructure Engineer](campus/campus-2019-infrastructure-engineer.md)
+  - [Technical Writer](campus/campus-2019-technical-writer.md)
+  - [Marketing Specicalist](campus/campus-2019-marketing-specialist.md)
+  - [OPS Engineer](campus/campus-2019-ops-engineer.md)
+  - [HR Management Trainee](campus/campus-2019-hr-management-trainee.md)
   - [Infrastructure Engineer Intern](campus/infrastructure-engineer-intern.md)
   - [HR Intern](campus/hr-intern.md)
   - [Technical Writer Intern](campus/technical-writer-intern.md)

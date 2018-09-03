@@ -1,5 +1,6 @@
 ---
-title: 【2019 校招】OPS Engineer
+title: OPS Engineer
+season: 2019 校招 
 tags:
   - Campus
 location: 北京
@@ -8,7 +9,7 @@ aliases:
   - /recruit-cn/campus/campus-2019-ops-engineer/
 ---
 
-# 【2019 校招】数据库工程师
+# 数据库工程师
 
 **岗位职责:**
 

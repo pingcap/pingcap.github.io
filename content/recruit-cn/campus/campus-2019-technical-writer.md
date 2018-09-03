@@ -1,5 +1,6 @@
 ---
-title: 【2019 校招】Technical Writer
+title: Technical Writer
+season: 2019 校招 
 tags:
   - Campus
 location: 北京
@@ -8,7 +9,7 @@ aliases:
   - /recruit-cn/campus/campus-2019-technical-writer/
 ---
 
-# 【2019 校招】Technical Writer
+# Technical Writer
 
 **Qualifications:**
 
