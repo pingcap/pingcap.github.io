@@ -1,17 +1,22 @@
-<div class="list cases-list">
+<div class="cards">
     {{- range .posts -}}
-        <div class="list-item">
-        <div class="list-item__left">
-            <img class="lazy" width="90%" data-original="{{ .logo }}" src="/images/svgs/loader-spinner.svg" alt="{{ .name }} logo">
+      <div class="card-en">
+        <div class="card__thumbnail-en">
+          <div style="width: 100%; height: 100%;">
+            <div class="image lazy" data-original="{{ .logo }}" style="background-image: url('/images/svgs/loader-spinner.svg'); width: 55%; height: 230px;"></div>
+          </div>
+      
+          <div class="card__summary">
+            <p class="start-quotation-mark">“</p>
+            <p class="quote-text">{{ .summary }}</p>  
+          </div>      
         </div>
-        <div class="list-item__right">
-            <h2 class="list-item__name">{{- .name -}}</h2>
-            {{- if .industry -}}
-            <h3 class="list-item__industry">Industry: {{ .industry }}</h3>
-            {{- end -}}
-            <div class="list-item__desc">{{- .description -}}</div>
-            <a href="{{ .link }}" class="arrow-link" target="_blank">read more<span class="arrow">→</span></a>
+        <div class="card__companyName">{{ .name }}</div>
+        <div class="card__readMore">
+          {{- if .link -}}
+          <a href="{{ .link }}" data-url="{{ .link }}">Read More ></a>
+          {{- end -}}
         </div>
-        </div>
+      </div>
     {{- end -}}
 </div>
