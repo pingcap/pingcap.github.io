@@ -9,12 +9,12 @@
   margin-left: 2%;
   border-radius: 5px;
   transition: all 0.3s 0s ease-in;
-  min-height: 280px;
+  min-height: 200px;
 
   .card__thumbnail-en {
     position: relative;
     width: 100%;
-    height: 90%;
+    margin-top: 10px;
 
     .image {
       margin: 0 auto;
@@ -22,58 +22,68 @@
       background-repeat: no-repeat;
       background-position: center;
       background-color: white;
-    }
+    } 
 
-    .card__summary {
+    .card__cover {
       position: absolute;
       font-size: 13px;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 90%;
       padding: 30px;
       background-color: white;
       box-sizing: border-box;
       opacity: 0;
-      overflow: auto;
       transition: opacity 0.5s;
 
-      .start-quotation-mark {
-        display: inline-block;
-        margin-top: -20px;
-        height: 30px;
-        font-weight: bold;
-        font-size: 50px;
-        color: @bannerBgColor;
-        font-family: "Times New Roman", Georgia, Serif;
+      .card__companyName {
+        position: absolute;
+        top: 0;
+        left: 30;
+        font-size: 20px;
+        opacity: 1;
+        color: @bannerBgColor;   
       }
-
+      
       .quote-text {
+        position: absolute;
         display: inline;
         color: #8b8d8e;
         line-height: 1.5em;
+        height: 75%;
+        width: 88%;
+        left: 30px;
+        overflow: auto;
         font-size: 14px;
+
+        &::after {
+          content: ' ';
+          position: absolute;
+          bottom: 10%;
+          left: 0;
+          width: 100%;
+          height: 10px;
+          z-index: -1;
+          background-color: @tidbRed;
+          transform-origin: 0 50%;
+          transform: scaleX(0);
+        }
       }
     }
   }
-
-  .card__companyName {
-    bottom: 20px;
-    text-align: center;
-    font-size: 16px;
-  } 
 
   .card__readMore {
     position: absolute;
     bottom: 20px;
     right: 20px;
     font-size: 14px;
-    color: @bannerBgColor;
     opacity: 0;
+    color: @bannerBgColor;
   }
 
   &:hover {
-    .card__summary {
+    .card__cover {
       opacity: 1;
 
       .start-quotation-mark {
@@ -97,20 +107,8 @@
           transform: scaleX(1);
         }
       }
-    }
 
-    .card__companyName {
-      opacity: 0;
-      transform: translate3d(0, 0, 0);
-      transition: transform 0.35s cubic-bezier(0.15, 0.7, 0.54, 0.99), opacity 0.4s;
-
-      &::before {
-        transition: transform 0.35s cubic-bezier(0.15, 0.7, 0.54, 0.99) 0.2s;
-        transform: scaleX(1);
-      }
-    }
-
-    .card__readMore {
+      .card__companyName {
       opacity: 1;
       transform: translate3d(0, 0, 0);
       transition: transform 0.35s cubic-bezier(0.15, 0.7, 0.54, 0.99), opacity 0.4s;
@@ -120,6 +118,20 @@
         transform: scaleX(1);
       }
     }
+    }
+
+    
+
+    .card__readMore {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.35s cubic-bezier(0.15, 0.7, 0.54, 0.99), opacity 0.4s;
+
+        &::before {
+          transition: transform 0.35s cubic-bezier(0.15, 0.7, 0.54, 0.99) 0.2s;
+          transform: scaleX(1);
+        }
+      }
   }
 }
 
