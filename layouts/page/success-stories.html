@@ -1,0 +1,47 @@
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "cases"}}
+    {{$.Scratch.Set "data_i18_link" "/cases-cn" }}
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/gridtab.min.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/cases.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+    {{ $heading := "World's Most Innovative Businesses Trust PingCAP" }}
+    <div class="cases">
+        {{ partial "layout/hero.html" (dict "heading" $heading) }}
+        <div class="container">
+          <div class="cases__intro">
+            <p><strong>10+</strong> Petabytes in <strong>200+ </strong>Companies</p>
+          </div>
+            <div id="cases-tabs">
+                {{- range $index, $stories := .Site.Data.success_stories -}}
+                    <dt class="tab tab-{{ $index }}">{{- .name -}}</dt>
+                    <dd>{{- partial "cases/tab-panel-en.html" (dict "posts" .children "name" .name "global" .) -}}</dd>
+                {{- end -}}
+            </div>
+        </div>
+    </div>
+{{- end -}}
+
+{{ define "footJS"}}
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript" src="https://download.pingcap.com/js/gridtab.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#cases-tabs').gridtab({
+        grid: 3,
+        tabPadding: 12,
+        contentPadding: 0,
+        config: {
+            layout: 'tab',
+            activeTab: 1,
+            keepOpen: true,
+        },
+    });
+});
+$(".lazy").lazyload({
+    effect : "fadeIn",
+    threshold: 200
+});
+</script>
+{{- end -}}

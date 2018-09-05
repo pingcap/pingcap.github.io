@@ -10,22 +10,28 @@
         <input type="radio" name="fancy" value="case-0" id="case-0" />
         <input type="radio" name="fancy" value="case-1" id="case-1" />
         <input type="radio" name="fancy" value="case-2" id="case-2" />
-        {{- range $index, $post := (first 3 .posts) -}}
-            <label class="carousel-item" for="case-{{ $index }}">
-                <div class="carousel-item__left">
-                    <img class="carousel-item__logo lazy" width="95%" data-original="{{ .logo }}" src="/images/svgs/loader-spinner.svg" alt="{{ .name }} Cover">
-                </div>
-                <div class="carousel-item__right">
-                    <h3 class="carousel-item__name">{{ .name }}</h3>
-                    {{- if .industry -}}
-                    <h4 class="carousel-item__industry">Industry: {{ .industry }}</h4>
-                    {{- end -}}
-                    <div class="carousel-item__desc">{{ .description }}</div>
-                    <a href="{{ .link }}" class="arrow-link" target="_blank">read more
-                        <span class="arrow">→</span>
-                    </a>
-                </div>
-            </label>
+        {{ $.global.Scratch.Set "count" 0 }}
+        {{- range $index, $category := .stories -}}
+            {{- range $idx, $item := .children -}}
+                {{- if .isCarousel -}}
+                    <label class="carousel-item" for="case-{{ $.global.Scratch.Get "count" }}">
+                        <div class="carousel-item__left">
+                            <img class="carousel-item__logo lazy" width="95%" data-original="{{ .logo }}" src="/images/svgs/loader-spinner.svg" alt="{{ .name }} Cover">
+                        </div>
+                        <div class="carousel-item__right">
+                            <h3 class="carousel-item__name">{{ .name }}</h3>
+                            {{- if .industry -}}
+                            <h4 class="carousel-item__industry">Industry: {{ .industry }}</h4>
+                            {{- end -}}
+                            <div class="carousel-item__desc">{{ .summary }}</div>
+                            <a href="{{ .link }}" class="arrow-link" target="_blank">read more
+                                <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </label>
+                    {{ $.global.Scratch.Add "count" 1 }}
+                {{- end -}}
+            {{- end -}}
         {{- end -}}
     </form>
     <div class="background-bottom"></div>

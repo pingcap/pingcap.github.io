@@ -1,0 +1,25 @@
+<div class="cards">
+    {{- range .posts -}}
+      <div class="card-en">
+
+        <div class="card__thumbnail-en">
+          <div style="width: 100%; height: 100%;">
+            <div class="image lazy" data-original="{{ .logo }}" style="background-image: url('/images/svgs/loader-spinner.svg'); width: 55%; height: 230px;"></div>
+          </div>
+
+          <div class="card__cover">
+            <div class="card__companyName">
+              <a href="{{ .websiteLink }}" data-url="{{ .websiteLink }}">{{ .name }}</a>
+            </div>
+            <p class="quote-text">{{ .summary }}</p>  
+          </div>
+          
+          <div class="card__readMore">
+            {{- if .link -}}
+            <a href="{{ .link }}" data-url="{{ .link }}">Read More ></a>
+            {{- end -}}
+          </div>
+        </div>    
+      </div>
+    {{- end -}}
+</div>
