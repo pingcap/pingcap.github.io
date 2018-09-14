@@ -16,13 +16,24 @@
     <title>{{ block "title" . }}{{- .Title -}}{{ end }} | TiDB Planet</title>
     {{- partial "head/ga" . -}}
     {{- partial "head/meta-seo" . -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
 </head>
 
 <body>
-    <div>
-        TiDB Robot
-    </div>
-    <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+      <div>
+          {{- partial "tidb-planet/nav" . -}}
+          {{- partial "tidb-planet/modal" (dict "type" "video") -}}
+          {{- partial "tidb-planet/space" . -}}
+
+          <div class="tidb-planet">
+            <div class="element-robot"></div>
+            <div class="element-qrCode"></div>
+            <div class="element-qrCodeFrame"></div>
+          </div>
+      </div>
+      <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+      <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
+      <script src="/js/tidb_planet.js"></script>
 </body>
 
 </html>
