@@ -110,12 +110,12 @@ const convert2image = () => {
   var shareContent = document.body
   var width = shareContent.offsetWidth
   var height = shareContent.offsetHeight
-  var scale = 2
+  var scale = 3
   var canvas = document.createElement('canvas')
 
   canvas.width = width * scale
   canvas.height = height * scale
-  canvas.getContext('2d').scale(scale, scale)
+  canvas.getContext('2d').scale(scale, scale) //获取context,设置scale
 
   var opts = {
     scale: scale,
@@ -124,20 +124,31 @@ const convert2image = () => {
     logging: true,
     width: width,
     height: height,
-    imageTimeout: 0,
   }
+
   html2canvas(shareContent, opts).then(function(canvas) {
     $('.share-section').remove()
 
     var context = canvas.getContext('2d')
 
-    var img = Canvas2Image.convertToImage(canvas, canvas.width, canvas.height)
+    // 【重要】关闭抗锯齿
+    context.mozImageSmoothingEnabled = false
+    context.webkitImageSmoothingEnabled = false
+    context.msImageSmoothingEnabled = false
+    context.imageSmoothingEnabled = false
+
+    // convert to PNG by default
+    // var img = Canvas2Image.convertToImage(canvas, canvas.width, canvas.height)
+    // convert to JPEG
+    // 安卓版微信中所生成的图片尽管能长按唤出保存图片的菜单，但是无法正确保存到本地相册。
+    // 解决方案：设置canvas2img的生成图片格式配置项为 JPEG 即可。
+    var img = Canvas2Image.convertToJPEG(canvas, canvas.width, canvas.height)
 
     $('.j-capture-image').html(img)
 
     $(img).css({
-      width: canvas.width / 2 * 0.8 + 'px',
-      height: canvas.height / 2 * 0.8 + 'px',
+      width: canvas.width / scale * 0.8 + 'px',
+      height: canvas.height / scale * 0.8 + 'px',
     })
   })
 }
@@ -272,6 +283,8 @@ $(function() {
     // open capture overlay
     $('.j-capture-overlay').fadeIn()
     $('.j-capture-overlay, .modal').addClass('active')
+
+    // TODO: need to remove all animations before convert to image
     convert2image()
   })
 })
