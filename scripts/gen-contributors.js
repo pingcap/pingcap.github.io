@@ -2,8 +2,8 @@
 const octokit = require('@octokit/rest')()
 // https://github.com/octokit/rest.js
 
-const key = process.env.GITHUB_OAUTH_CLIENT_ID || ''
-const secret = process.env.GITHUB_OAUTH_CLIENT_SECRET || ''
+const key = process.env.GITHUB_OAUTH_CLIENT_ID
+const secret = process.env.GITHUB_OAUTH_CLIENT_SECRET
 
 console.log(key)
 console.log(secret)

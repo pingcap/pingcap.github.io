@@ -7,9 +7,9 @@ import './vendor/jquery-dateformat.js'
 
 const prefix = '_tidb_planet_'
 const cookiesKeyMap = {
-  CONTRIBUTOR_NUM: `${prefix}contributor_num`,
-  ISSUE_DATE: `${prefix}issue_date`,
+  CONTRIBUTIONS_RANK: `${prefix}contributions_rank`,
   USERNAME: `${prefix}username`,
+  DATE: `${prefix}date`,
 }
 
 const getCookies = () => {
@@ -21,7 +21,7 @@ const getCookies = () => {
   return cookiesValMap
 }
 
-const isAuthContributor = () => getCookies()['CONTRIBUTOR_NUM']
+const isAuthContributor = () => getCookies()['CONTRIBUTIONS_RANK']
 
 const usernameValidation = name => {
   var githubUsernameRegex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i
@@ -34,31 +34,17 @@ const authenticateContributor = name => {
     window.tidbContributors = $('.j-login').data('contributors')
   }
 
-  if (window.tidbContributors[name]) {
-    // success: is a contributor
-    // sort by commit date
-    const sortedContributors = _.toArray(window.tidbContributors).sort(
-      (a, b) => {
-        var dateA = a.first_commit_date.toLowerCase() // ignore upper and lowercase
-        var dateB = b.first_commit_date.toLowerCase() // ignore upper and lowercase
-        if (dateA < dateB) {
-          return -1
-        }
-        if (dateA > dateB) {
-          return 1
-        }
-        return 0
-      }
-    )
+  const _index = window.tidbContributors.findIndex( c => c.login === name )
 
-    const cNum = sortedContributors.indexOf(window.tidbContributors[name]) + 1
-    const issueDate = window.tidbContributors[name].first_commit_date
-    Cookies.set(cookiesKeyMap['CONTRIBUTOR_NUM'], cNum)
-    Cookies.set(cookiesKeyMap['ISSUE_DATE'], issueDate)
+  if (_index > -1) {
+    // success: is a contributor
+    const _date = window.tidbContributors[_index].date
+    Cookies.set(cookiesKeyMap['CONTRIBUTIONS_RANK'], _index + 1)
+    Cookies.set(cookiesKeyMap['DATE'], _date)
     console.log(
       `Congratulations! You are the ${
-        cNum
-      }th landing on TiDB Planet! Issue Date: ${issueDate}`
+        _index + 1
+      }th landing on TiDB Planet! Issue Date: ${_date}`
     )
   } else {
     // failed: is a visitor
@@ -82,11 +68,11 @@ const showUserInfo = type => {
   if (type === 'contributor') {
     $('.j-contributor').fadeIn()
     // fill contributor num
-    const cNum = getCookies()['CONTRIBUTOR_NUM']
-    $('.j-contributor-num').text(`${cNum}${ordinalAbbr(cNum)}`)
+    const rank = getCookies()['CONTRIBUTIONS_RANK']
+    $('.j-contributor-rank').text(`${rank}${ordinalAbbr(rank)}`)
     // fill issue date
-    const issueDate = getCookies()['ISSUE_DATE']
-    $('.j-issue-date').text($.format.date(issueDate, 'MMM / dd / yyyy'))
+    const _date = getCookies()['DATE']
+    $('.j-date').text($.format.date(_date, 'MMM / dd / yyyy'))
 
     // fill residence card No.
     // pad number with specific value
@@ -95,9 +81,9 @@ const showUserInfo = type => {
       n = n + ''
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     }
-    // console.log(pad(cNum, 4))
+    // console.log(pad(rank, 4))
     $('.j-rcard-id').text(
-      `R${$.format.date(issueDate, 'MMddyyyy')}${pad(cNum, 4)}`
+      `R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`
     )
   } else {
     $('.j-visitor').fadeIn()
