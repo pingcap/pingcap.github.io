@@ -5,6 +5,15 @@ import Cookies from './vendor/js.cookie.js'
 import './vendor/jquery-dateformat.js'
 // https://github.com/phstc/jquery-dateFormat
 
+// server endpoint api
+// const url = 'http://localhost:5000/api/contributors'
+$.ajax({
+  url: `/api/contributors`,
+  crossDomain: true,
+  success: function(data) {
+  console.log(data)
+}})
+
 const prefix = '_tidb_planet_'
 const cookiesKeyMap = {
   CONTRIBUTIONS_RANK: `${prefix}contributions_rank`,
