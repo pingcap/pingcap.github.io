@@ -5,14 +5,14 @@ import Cookies from './vendor/js.cookie.js'
 import './vendor/jquery-dateformat.js'
 // https://github.com/phstc/jquery-dateFormat
 
-// server endpoint api
+// TODO: host server endpoint api
 // const url = 'http://localhost:5000/api/contributors'
-$.ajax({
-  url: `/api/contributors`,
-  crossDomain: true,
-  success: function(data) {
-  console.log(data)
-}})
+// $.ajax({
+//   url: `/api/contributors`,
+//   crossDomain: true,
+//   success: function(data) {
+//   console.log(data)
+// }})
 
 const prefix = '_tidb_planet_'
 const cookiesKeyMap = {
@@ -43,7 +43,7 @@ const authenticateContributor = name => {
     window.tidbContributors = $('.j-login').data('contributors')
   }
 
-  const _index = window.tidbContributors.findIndex( c => c.login === name )
+  const _index = window.tidbContributors.findIndex(c => c.login === name)
 
   if (_index > -1) {
     // success: is a contributor
@@ -51,9 +51,8 @@ const authenticateContributor = name => {
     Cookies.set(cookiesKeyMap['CONTRIBUTIONS_RANK'], _index + 1)
     Cookies.set(cookiesKeyMap['DATE'], _date)
     console.log(
-      `Congratulations! You are the ${
-        _index + 1
-      }th landing on TiDB Planet! Issue Date: ${_date}`
+      `Congratulations! You are the ${_index +
+        1}th landing on TiDB Planet! Issue Date: ${_date}`
     )
   } else {
     // failed: is a visitor
@@ -91,9 +90,7 @@ const showUserInfo = type => {
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     }
     // console.log(pad(rank, 4))
-    $('.j-rcard-id').text(
-      `R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`
-    )
+    $('.j-rcard-id').text(`R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`)
   } else {
     $('.j-visitor').fadeIn()
     $('.j-vcard-id').text(`R${$.format.date(_.now(), 'MMddyyyyhhmm')}`)
