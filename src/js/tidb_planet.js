@@ -5,7 +5,7 @@ import Cookies from './vendor/js.cookie.js'
 import './vendor/jquery-dateformat.js'
 // https://github.com/phstc/jquery-dateFormat
 
-// TODO: host server endpoint api
+// TODO: host server endpoint api with nodejs
 // const url = 'http://localhost:5000/api/contributors'
 // $.ajax({
 //   url: `/api/contributors`,
@@ -139,8 +139,8 @@ const convert2image = () => {
     $('.j-capture-image').html(img)
 
     $(img).css({
-      width: canvas.width / scale * 0.8 + 'px',
-      height: canvas.height / scale * 0.8 + 'px',
+      width: canvas.width / scale * 0.6 + 'px',
+      height: canvas.height / scale * 0.6 + 'px',
     })
   })
 }
