@@ -1,3 +1,5 @@
+{{ $d := (div (len .contributors) 5) }}
+{{ $order := .order }}
 <div class="modal-content">
     <div class="modal-header">
         <div class="github-logo">
@@ -5,50 +7,17 @@
         </div>
         <div class="header-text">Thank you for your contribution!</div>
     </div>
-
     <div class="contributor-lists">
-        {{- range $elem_key, $elem_val := .contributors -}}
-            <div class="contributor-item">
-                {{- range $c_key, $c_val := $elem_val -}}
-                    {{- if eq $c_key "avatar_url" -}}
-                        <div class="github-avatar">
-                            <img src="{{ $c_val }}" width="36px" height="36px"/>
-                        </div>
-                    {{- end -}}
+        {{- range $elem_index, $elem_val := .contributors -}}
+            {{- if lt $order 4 -}}
+                {{- if and (ge $elem_index (mul $order $d)) (lt $elem_index (mul (add 1 $order) $d)) -}}
+                    {{- partial "tidb-planet/contributor-item" (dict "contributor" $elem_val) -}}
+                {{- end -}}  
+            {{- else -}}
+                {{- if ge $elem_index (mul $order $d) -}}
+                    {{- partial "tidb-planet/contributor-item" (dict "contributor" $elem_val) -}}      
                 {{- end -}}
-                
-                <div class="contributor-info">
-                    <div class="contributor-name"><a href="https://github.com/{{$elem_key}}">{{ $elem_key }}</a></div>
-                    <div class="contribution-degree">
-                        {{- range $c_key, $c_val := $elem_val -}}
-                            {{- if and (eq $c_key "contributions") (gt $c_val 0) (or (lt $c_val 10) (eq (string $c_val) (string 10))) -}}
-                                <div style="width: 10px; height: 10px; background: #D6E588; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8D8D8D; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8D8D8D; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8D8D8D; border-radius: 50%; display: inline-block;"></div>
-                            {{- end -}}
-                            {{- if and (eq $c_key "contributions") (gt $c_val 10) (or (lt $c_val 50) (eq (string $c_val) (string 50))) -}}
-                                <div style="width: 10px; height: 10px; background: #D6E588; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8BC669; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8D8D8D; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8D8D8D; border-radius: 50%; display: inline-block;"></div>
-                            {{- end -}}
-                            {{- if and (eq $c_key "contributions") (gt $c_val 50) (or (lt $c_val 100) (eq (string $c_val) (string 100))) -}}
-                                <div style="width: 10px; height: 10px; background: #D6E588; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8BC669; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #3EA541; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8D8D8D; border-radius: 50%; display: inline-block;"></div>
-                            {{- end -}}
-                            {{- if and (eq $c_key "contributions") (gt $c_val 100) -}}
-                                <div style="width: 10px; height: 10px; background: #D6E588; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #8BC669; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #3EA541; border-radius: 50%; display: inline-block;"></div>
-                                <div style="width: 10px; height: 10px; background: #1C6825; border-radius: 50%; display: inline-block;"></div>
-                            {{- end -}}
-                        {{- end -}}
-                    </div>
-                </div>    
-            </div>         
+            {{- end -}}
         {{- end -}}
     </div>
 </div>

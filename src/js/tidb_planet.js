@@ -204,10 +204,12 @@ $(function() {
     e.preventDefault()
   })
   // show contributor list button
-  $('.j-contributors-btn').on('click', function(e) {
+  $('.j-open-dorm').on('click', function(e) {
     $('.nav__submenu').fadeOut()
-    $('.j-contributors-overlay').fadeIn()
-    $('.j-contributors-overlay, .modal').addClass('active')
+    const index = $(this).data('index')
+    console.log(index)
+    $(`.j-contributors${index}-overlay`).fadeIn()
+    $(`.j-contributors${index}-overlay, .modal`).addClass('active')
     e.preventDefault()
   })
   // play video button
