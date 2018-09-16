@@ -173,6 +173,11 @@ $(function() {
   // show nav in every pages
   $('.nav').fadeIn()
 
+  // fade out popup
+  setTimeout(()=>{
+    $('.popup').fadeOut("slow")
+  }, 3000)
+
   // buttons control
   // close modal button
   $('.close-modal').on('click', function(e) {
@@ -210,6 +215,17 @@ $(function() {
     $('.nav__submenu').fadeOut()
     $('.j-video-overlay').fadeIn()
     $('.j-video-overlay, .modal').addClass('active')
+    e.preventDefault()
+  })
+  // close popup button
+  $('.j-close-popup').on('click', function(e) {
+    $('.popup').fadeOut()
+    e.preventDefault()
+  })
+
+  // close popup button
+  $('.j-open-popup').on('click', function(e) {
+    $('.popup').fadeIn()
     e.preventDefault()
   })
 
