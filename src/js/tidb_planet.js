@@ -19,6 +19,8 @@ const cookiesKeyMap = {
   CONTRIBUTIONS_RANK: `${prefix}contributions_rank`,
   USERNAME: `${prefix}username`,
   DATE: `${prefix}date`,
+  AVATAR: `${prefix}avatar_url`,
+  CONTRIBUTIONS: `${prefix}contributions`
 }
 
 const getCookies = () => {
@@ -47,13 +49,11 @@ const authenticateContributor = name => {
 
   if (_index > -1) {
     // success: is a contributor
-    const _date = window.tidbContributors[_index].date
+    const c = window.tidbContributors[_index]
     Cookies.set(cookiesKeyMap['CONTRIBUTIONS_RANK'], _index + 1)
-    Cookies.set(cookiesKeyMap['DATE'], _date)
-    console.log(
-      `Congratulations! You are the ${_index +
-        1}th landing on TiDB Planet! Issue Date: ${_date}`
-    )
+    Cookies.set(cookiesKeyMap['DATE'], c.date)
+    Cookies.set(cookiesKeyMap['CONTRIBUTIONS'], c.contributions)
+    Cookies.set(cookiesKeyMap['AVATAR'], c.avatar_url)
   } else {
     // failed: is a visitor
     console.log('Welcome to the TiDB planet, join us now! www.pingcap.com')
@@ -78,10 +78,13 @@ const showUserInfo = type => {
     // fill contributor num
     const rank = getCookies()['CONTRIBUTIONS_RANK']
     $('.j-contributor-rank').text(`${rank}${ordinalAbbr(rank)}`)
-    // fill issue date
+    // fill contributions
+    $('.j-contributions').text(getCookies()['CONTRIBUTIONS'])
+    // fill date
     const _date = getCookies()['DATE']
     $('.j-date').text($.format.date(_date, 'MMM / dd / yyyy'))
-
+    // set avatar url
+    $('.j-avatar').attr("src", getCookies()['AVATAR'])
     // fill residence card No.
     // pad number with specific value
     function pad(n, width, z) {
@@ -89,10 +92,10 @@ const showUserInfo = type => {
       n = n + ''
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     }
-    // console.log(pad(rank, 4))
     $('.j-rcard-id').text(`R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`)
   } else {
     $('.j-visitor').fadeIn()
+    $('.j-date').text($.format.date(_.now(), 'MMM / dd / yyyy'))
     $('.j-vcard-id').text(`R${$.format.date(_.now(), 'MMddyyyyhhmm')}`)
   }
 }
