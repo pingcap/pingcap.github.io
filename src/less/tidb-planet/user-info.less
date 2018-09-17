@@ -12,7 +12,7 @@
   height: 400px;
   position: fixed;
   z-index: 1000;
-  right: -142px;
+  left: -142px;
   bottom: -142px;
   visibility: visible;
   transition: visibility 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
@@ -85,8 +85,9 @@
     padding: 12px;
     position: fixed;
     top: 6em;
-    left: 3em;
+    right: 3em;
     color: #fff;
+    text-align: right;
   }
 
   .html2image-tip .text {
@@ -146,7 +147,7 @@
   position: absolute;
   top: 10%;
   left: 50%;
-  margin-left: calc(10.6875em / 2 + 3em);
+  margin-left: calc(10.6875em / 2 + 2em);
   width: 24.6875em;
 
   h2 {
@@ -155,13 +156,22 @@
   }
 
   .card {
+    width: 24em;
     height: 14em;
+    margin: 0 auto;
 
     .card-content {
+      width: 100%;
       height: 11em;
       display: flex;
+      flex-flow: row wrap;
       justify-content: space-between;
-      padding: 0.8em 2em;
+      align-items: flex-start;
+      padding: 1em;
+
+      .card-profile {
+        width: 6.125em;
+      }
 
       .avatar {
         display: block;
@@ -175,14 +185,14 @@
       }
 
       .content-info {
-        margin-left: 2em;
+        width: 14em;
 
         .number {
-          font-size: 12px;
+          font-size: 0.85em;
         }
 
         .info {
-          width: 12.5em;
+          width: 100%;
           padding: 0;
           list-style: none;
 
@@ -191,10 +201,10 @@
             align-items: center;
             width: 100%;
             height: 1.8em;
-            margin: 0.5em 0;
-            padding: 0 0.5em;
+            margin: 0.4em 0;
+            padding: 0 0.4em;
             border: 1px solid;
-            font-size: 12px;
+            font-size: 0.85em;
             font-weight: 200;
             overflow-x: auto;
 
@@ -215,12 +225,14 @@
 
       .content-header {
         display: flex;
-        height: 2em;
-        margin-bottom: 0.5em;
+        height: 2.4em;
+        align-items: center;
+        margin-bottom: 0.2em;
 
         svg {
           width: 1.625em;
         }
+
         .sep {
           display: block;
           width: 2px;
@@ -232,31 +244,22 @@
     }
 
     .card-footer {
+      width: 100%;
       height: 3em;
       display: flex;
+      flex-flow: row wrap;
       align-items: center;
       justify-content: space-between;
-      padding: 0 2em;
+      padding: 0 1em;
       color: #1E2969;
       font-weight: 600;
     }
 
     &.residence-card {
-      width: 23.4375em;
-      margin: auto;
       border-radius: 2px;
       background: #E25E51;
 
-      .card-content {
-        padding: 0.8em 1em;
-
-        .info {
-          width: 13.5em;
-        }
-      }
-
       .card-footer {
-        padding: 0 1em;
         background: #fff;
         border-radius: 0 0 2px 2px;
       }
@@ -267,9 +270,8 @@
     }
 
     &.pass-card {
-      height: 14em;
       background: url('/images/tidb-planet/pass-bg.svg') no-repeat;
-      background-size: contain;
+      background-size: 100% 100%;
 
       .card-footer {
         border-top: 1px dashed;
@@ -289,7 +291,6 @@
     left: 50%;
     margin-left: calc(~"-17em / 2 - 14em");
     width: 17em;
-    font-weight: 200;
     line-height: 1.5;
   }
 }
@@ -297,18 +298,37 @@
 /**
  * Mobile  Styling
  */
- @media only screen and (max-width: 769px) {
+@media only screen and (max-width: 769px) {
   .tidb-planet {
     .text-greetings {
-      top: -8.5em;
-      margin-left: calc(~"-12em / 2 - 7em");
-      width: 12em;
-      font-size: 0.8em;
+      top: -5.5em;
+      margin-left: calc(~"-14em / 2 - 3em");
+      width: 14em;
+      font-size: 1.2em;
+    }
+
+    .element-flag {
+      left: 58%;
+      top: 3em;
+    }
+
+    .element-astronaut {
+      left: 58%;
+      top: -5em;
     }
   }
 
   .user-info-container {
-    top: 1em;
+    top: 3em;
     margin-left: calc(~"-24.6875em / 2");
   }
- }
+}
+
+// iPhone 4
+@media only screen and (max-width: 320px) {
+  .tidb-planet {
+    .text-greetings {
+      top: -5em;
+    }
+  }
+}

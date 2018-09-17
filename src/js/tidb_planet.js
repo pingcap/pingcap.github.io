@@ -20,7 +20,8 @@ const cookiesKeyMap = {
   USERNAME: `${prefix}username`,
   DATE: `${prefix}date`,
   AVATAR: `${prefix}avatar_url`,
-  CONTRIBUTIONS: `${prefix}contributions`
+  CONTRIBUTIONS: `${prefix}contributions`,
+  FIRST_ACCESS: `${prefix}first_access`,
 }
 
 const getCookies = () => {
@@ -75,28 +76,34 @@ const showUserInfo = type => {
 
   if (type === 'contributor') {
     $('.j-contributor').fadeIn()
-    // fill contributor num
-    const rank = getCookies()['CONTRIBUTIONS_RANK']
-    $('.j-contributor-rank').text(`${rank}${ordinalAbbr(rank)}`)
     // fill contributions
     $('.j-contributions').text(getCookies()['CONTRIBUTIONS'])
     // fill date
     const _date = getCookies()['DATE']
     $('.j-date').text($.format.date(_date, 'MMM / dd / yyyy'))
     // set avatar url
-    $('.j-avatar').attr("src", getCookies()['AVATAR'])
-    // fill residence card No.
+    $('.j-avatar').attr('src', getCookies()['AVATAR'])
+
     // pad number with specific value
     function pad(n, width, z) {
       z = z || '0'
       n = n + ''
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     }
+    // fill residence card No.
+    const rank = getCookies()['CONTRIBUTIONS_RANK']
     $('.j-rcard-id').text(`R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`)
+    // fill contributions rank
+    $('.j-greetings').text(
+      `Congratulation! You rank ${rank}${ordinalAbbr(rank)} on TiDB Planet!`
+    )
   } else {
     $('.j-visitor').fadeIn()
     $('.j-date').text($.format.date(_.now(), 'MMM / dd / yyyy'))
     $('.j-vcard-id').text(`R${$.format.date(_.now(), 'MMddyyyyhhmm')}`)
+    $('.j-greetings').text(
+      'Welcome to the TiDB planet, join us now! www.pingcap.com'
+    )
   }
 }
 
@@ -153,15 +160,20 @@ $(function() {
   const username = getCookies()['USERNAME']
   if (!username) {
     // is a new user, not login
-    console.log('Welcome to TiDB Planet! You are not logged in yet.')
+    // TODO: only show login in mobile
     // show login button in every pages
     $('.j-login').show()
 
+    // TiDB Planet welcome page
     if ($('body').hasClass('welcome-page')) {
-      // TiDB Planet welcome page
       // TODO: open video modal and playing video
       // TODO: after playing video, show login modal and login button
     }
+    // User info page
+    if ($('body').hasClass('user-info-page'))
+      $('.j-greetings').text(
+        'Hope you enjoy our journey together and may the open source be with you!'
+      )
   } else if (isAuthContributor()) {
     // is a contributor
     if ($('body').hasClass('user-info-page')) showUserInfo('contributor')
@@ -174,8 +186,8 @@ $(function() {
   $('.nav').fadeIn()
 
   // fade out popup
-  setTimeout(()=>{
-    $('.popup').fadeOut("slow")
+  setTimeout(() => {
+    $('.popup').fadeOut('slow')
   }, 3000)
 
   // buttons control
