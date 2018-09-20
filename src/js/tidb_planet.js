@@ -156,9 +156,7 @@ const convert2image = () => {
 }
 
 // TODO: fisrt access
-const isFirstAccess = () => {
-  return true
-}
+const isFirstAccess = () => !getCookies()['FIRST_ACCESS']
 
 const resetLogin = () => {
   $('.input-container .inner').removeClass('error')
@@ -202,17 +200,19 @@ $(function() {
 
     // is first time accessing TiDB Planet welcome page
     if ($('body').hasClass('welcome-page') && isFirstAccess()) {
-      // TODO: open video modal and playing video
+      // show use guide mask
+      Cookies.set(cookiesKeyMap['FIRST_ACCESS'], "-1")
+      $('body').append('<div class="mask j-mask"></div>')
+
+      // open video modal and playing video
       openVideoModal()
 
-      // TODO: after playing video, show login modal and login button
+      // after playing video, show login modal and login button
       $('#video').on('ended', function() {
         console.log('Video has ended!')
         closeVideoModal()
         openLoginModal()
       })
-
-      // TODO: show first time use guide
     }
     // User info page
     if ($('body').hasClass('user-info-page')) {
@@ -290,6 +290,13 @@ $(function() {
   // redamore click handler
   $('.j-readmore').on('click', function(e) {
     location.href = $(this).attr('href')
+    e.preventDefault()
+    e.stopPropagation()
+  })
+
+  // close mask
+  $('.j-mask').on('click', function(e) {
+    $(this).hide()
     e.preventDefault()
     e.stopPropagation()
   })

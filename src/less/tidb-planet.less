@@ -50,6 +50,26 @@ div[class^="element-"] {
   height: 100%;
 }
 
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+
+  &::before {
+    content: 'Start!';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-left: 18em;
+    font-size: 1.2em;
+    color: #fff;
+    animation: bounce 2s linear infinite;
+  }
+}
+
 /**
  * Mobile Only Styling
  */
@@ -76,6 +96,10 @@ div[class^="element-"] {
   .tidb-planet {
     background-position: center;
   }
+
+  .mask::before {
+    margin-left: 7.5em;
+  }
 }
 
 // x-small screen
@@ -84,5 +108,9 @@ div[class^="element-"] {
   body {
     font-size: 12px;
     overflow: hidden;
+  }
+
+  .mask::before {
+    top: 42%;
   }
 }
