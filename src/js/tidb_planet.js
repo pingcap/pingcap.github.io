@@ -155,25 +155,76 @@ const convert2image = () => {
   })
 }
 
+// TODO: fisrt access
+const isFirstAccess = () => {
+  return true
+}
+
+const resetLogin = () => {
+  $('.input-container .inner').removeClass('error')
+  $('.input-container .inner').remove()
+  $('.form__input').val(null)
+}
+
+const openLoginModal = () => {
+  $('.j-login-overlay').fadeIn()
+  $('.j-login-overlay, .modal').addClass('active')
+}
+
+const closeLoginModal = () => {
+  $('.j-login-overlay').fadeOut()
+  $('.j-login-overlay, .modal').removeClass('active')
+  // reset login
+  resetLogin()
+}
+
+const openVideoModal = () => {
+  $('.j-video-overlay').fadeIn()
+  $('.j-video-overlay, .modal').addClass('active')
+  // play video
+  setTimeout(() => {
+    $('#video')[0].play()
+  }, 600)
+}
+
+const closeVideoModal = () => {
+  $('.j-video-overlay').fadeOut()
+  $('.j-video-overlay, .modal').removeClass('active')
+}
+
 $(function() {
   // get username in cookie
   const username = getCookies()['USERNAME']
   if (!username) {
     // is a new user, not login
-    // TODO: only show login in mobile
-    // show login button in every pages
+    // show login button in every pages (PC only)
     $('.j-login').show()
 
-    // TiDB Planet welcome page
-    if ($('body').hasClass('welcome-page')) {
+    // is first time accessing TiDB Planet welcome page
+    if ($('body').hasClass('welcome-page') && isFirstAccess()) {
       // TODO: open video modal and playing video
+      openVideoModal()
+
       // TODO: after playing video, show login modal and login button
+      $('#video').on('ended', function() {
+        console.log('Video has ended!')
+        closeVideoModal()
+        openLoginModal()
+      })
+
+      // TODO: show first time use guide
     }
     // User info page
-    if ($('body').hasClass('user-info-page'))
-      $('.j-greetings').text(
-        'Hope you enjoy our journey together and may the open source be with you!'
-      )
+    if ($('body').hasClass('user-info-page')) {
+      // open login modal
+      openLoginModal()
+      // make astronaut clickable
+      $('.element-astronaut').addClass('j-login j-click')
+    }
+
+    // $('.j-greetings').text(
+    //   'Hope you enjoy our journey together and may the open source be with you!'
+    // )
   } else if (isAuthContributor()) {
     // is a contributor
     if ($('body').hasClass('user-info-page')) showUserInfo('contributor')
@@ -182,8 +233,8 @@ $(function() {
     if ($('body').hasClass('user-info-page')) showUserInfo('visitor')
   }
 
-  // show nav in every pages
-  $('.nav').fadeIn()
+  // only show nav in PC pages
+  if ($('body')[0].offsetWidth > 768) $('.nav').fadeIn()
 
   // fade out popup
   setTimeout(() => {
@@ -193,42 +244,35 @@ $(function() {
   // buttons control
   // close modal button
   $('.close-modal').on('click', function(e) {
+    const modalType = $('.modal-overlay.active').data('type')
     $('.modal-overlay').fadeOut()
     $('.modal-overlay, .modal').removeClass('active')
     // reset login
-    resetLogin()
+    if (modalType === 'login') resetLogin()
+    // pause video
+    if (modalType === 'video') $('#video')[0].pause()
     e.preventDefault()
   })
   // login button
   $('.j-login').on('click', function(e) {
-    $('.nav__submenu').fadeOut()
-    $('.j-login-overlay').fadeIn()
-    $('.j-login-overlay, .modal').addClass('active')
+    openLoginModal()
     e.preventDefault()
   })
   // later button
   $('.j-later').on('click', function(e) {
-    $('.nav__submenu').fadeOut()
-    $('.j-login-overlay').fadeOut()
-    $('.j-login-overlay, .modal').removeClass('active')
-    // reset login
-    resetLogin()
+    closeLoginModal()
     e.preventDefault()
   })
   // show contributor list button
   $('.j-open-dorm').on('click', function(e) {
-    $('.nav__submenu').fadeOut()
     const index = $(this).data('index')
-    console.log(index)
     $(`.j-contributors${index}-overlay`).fadeIn()
     $(`.j-contributors${index}-overlay, .modal`).addClass('active')
     e.preventDefault()
   })
   // play video button
   $('.j-video-btn').on('click', function(e) {
-    $('.nav__submenu').fadeOut()
-    $('.j-video-overlay').fadeIn()
-    $('.j-video-overlay, .modal').addClass('active')
+    openVideoModal()
     e.preventDefault()
   })
   // close popup button
@@ -236,24 +280,9 @@ $(function() {
     $('.popup').fadeOut()
     e.preventDefault()
   })
-
-  // close popup button
+  // open popup button
   $('.j-open-popup').on('click', function(e) {
     $('.popup').fadeIn()
-    e.preventDefault()
-  })
-
-  const resetLogin = () => {
-    $('.input-container .inner').removeClass('error')
-    $('.input-container .inner').remove()
-    $('.form__input').val(null)
-  }
-
-  // menu control
-  $('.j-menu').on('click', function(e) {
-    if ($('.nav__submenu').css('display') === 'none')
-      $('.nav__submenu').fadeIn()
-    else $('.nav__submenu').fadeOut()
     e.preventDefault()
   })
 
