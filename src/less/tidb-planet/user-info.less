@@ -1,5 +1,7 @@
 // user info page
 
+@import "./variables.less";
+
 .html2image-section {
   width: 100vw;
   height: 100vh;
@@ -198,26 +200,38 @@
 
           li {
             display: flex;
+            flex-flow: row nowrap;
             align-items: center;
+            position: relative;
             width: 100%;
             height: 1.8em;
             margin: 0.4em 0;
-            padding: 0 0.4em;
             border: 1px solid;
             font-size: 0.85em;
-            font-weight: 200;
             overflow-x: auto;
 
-            .label {
-              font-weight: 600;
+            &::before {
+              content: "";
+              position: absolute;
+              height: 100%;
+              width: 1px;
+              background: #fff;
+              left: 6.4em;
+              top: 0;
             }
 
-            .sep {
-              display: inline-block;
-              width: 1px;
-              height: 100%;
-              margin: 0 0.5em;
-              background: #fff;
+            .label {
+              display: block;
+              width: 6.5em;
+              padding: 0 0.5em;
+              font-family: "Roboto Condensed Bold";
+            }
+
+            .value {
+              display: block;
+              width: 9.5em;
+              padding-left: 0.5em;
+              text-align: center;
             }
           }
         }
@@ -240,6 +254,10 @@
           margin: 0 0.875em;
           background: #fff;
         }
+
+        .title {
+          letter-spacing: 1px;
+        }
       }
     }
 
@@ -251,34 +269,51 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 1em;
-      color: #1E2969;
-      font-weight: 600;
-    }
+      color: #1e2969;
 
-    &.residence-card {
-      border-radius: 2px;
-      background: #E25E51;
-
-      .card-footer {
-        background: #fff;
-        border-radius: 0 0 2px 2px;
+      .id-container {
+        font-family: "Roboto Condensed Bold";
+        font-size: 0.9em;
+        line-height: 1.2;
       }
 
       .barcode {
-        width: 12.625em;
+        width: 14em;
+      }
+    }
+
+    &.residence-card {
+      border-radius: 5px;
+      background: #e25e51;
+
+      .card-footer {
+        background: #fff;
+        border-radius: 0 0 5px 5px;
       }
     }
 
     &.pass-card {
-      background: url('/images/tidb-planet/pass-bg.svg') no-repeat;
+      background: url("/images/tidb-planet/pass-bg.svg") no-repeat;
       background-size: 100% 100%;
+
+      .card-content {
+        .content-info {
+          .info {
+            li {
+              &::before {
+                left: 5.8em;
+              }
+
+              .label {
+                width: 5.8em;
+              }
+            }
+          }
+        }
+      }
 
       .card-footer {
         border-top: 1px dashed;
-      }
-
-      .barcode {
-        width: 12.375em;
       }
     }
   }
@@ -293,27 +328,45 @@
     width: 17em;
     line-height: 1.5;
   }
+
+  .element-astronaut {
+    top: -14em;
+    left: 50%;
+    margin-left: calc(~"-10.6875em / 2");
+    width: 10.6875em;
+    height: 21.875em;
+  }
+
+  .element-flag {
+    top: -6em;
+    left: 50%;
+    margin-left: calc(~"-13.6875em / 2 - 12em / 2 - 1.2em");
+    width: 7.6785em;
+    height: 13.6875em;
+  }
 }
 
 /**
  * Mobile  Styling
  */
-@media only screen and (max-width: 769px) {
+@media only screen and (max-width: 768px) {
   .tidb-planet {
     .text-greetings {
-      top: -5.5em;
+      top: -6em;
       margin-left: calc(~"-14em / 2 - 3em");
       width: 14em;
       font-size: 1.2em;
     }
 
     .element-flag {
-      left: 58%;
-      top: 3em;
+      top: -4em;
+      margin-left: 7em;
+      width: 4em;
+      height: 7.2em;
     }
 
     .element-astronaut {
-      left: 58%;
+      // left: 58%;
       top: -5em;
     }
   }
