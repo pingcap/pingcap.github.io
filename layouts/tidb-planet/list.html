@@ -15,10 +15,42 @@
     <title>{{ block "title" . }}{{- .Title -}}{{ end }} | TiDB Planet</title>
     {{- partial "head/ga" . -}}
     {{- partial "head/meta-seo" . -}}
+    <style>
+        .loading-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(#172d72, #120e34) center no-repeat;
+            z-index: 999;
+        }
+        .loading-container .rocket {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            margin-top: -50px;
+            margin-left: -50px;
+        }
+        .loading-container .rocket svg {
+            fill: #fff;
+        }
+        .loading-container .rocket svg .fire {
+            stroke: #fff;
+        }
+    </style>
     {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
 </head>
 
 <body class="welcome-page">
+    <div class="loading-container j-loading">
+        <div class="rocket">
+            {{- partial "svgs/illustration-rocket.svg" -}}
+        </div>
+    </div>
+
     {{- partial "tidb-planet/nav" . -}}
     {{- partial "tidb-planet/modal" (dict "type" "video") -}}
     {{- partial "tidb-planet/space" . -}}
@@ -40,6 +72,9 @@
     <script src="https://download.pingcap.com/js/jquery.min.js"></script>
     <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
     <script src="/js/tidb_planet.js"></script>
+    <script>
+        $('.j-loading').hide()
+    </script>
 </body>
 
 </html>

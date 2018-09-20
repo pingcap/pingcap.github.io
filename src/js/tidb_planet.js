@@ -345,6 +345,7 @@ $(function() {
   // capture picture button
   $('.j-capture').on('click ', function() {
     // add share section
+    // TODO: replace qr code
     $('.html2image-section').append(
       '<div class="share-section"><div class="text">Scan the QR Code to explore more about TiDB!</div><img src="/images/qrcode-min.jpg" alt="" /></div>'
     )
