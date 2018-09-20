@@ -155,7 +155,6 @@ const convert2image = () => {
   })
 }
 
-// TODO: fisrt access
 const isFirstAccess = () => !getCookies()['FIRST_ACCESS']
 
 const resetLogin = () => {
@@ -353,7 +352,6 @@ $(function() {
     $('.j-capture-overlay').fadeIn()
     $('.j-capture-overlay, .modal').addClass('active')
 
-    // TODO: need to remove all animations before convert to image
     convert2image()
   })
 })
