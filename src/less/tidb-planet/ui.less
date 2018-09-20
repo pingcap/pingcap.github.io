@@ -66,7 +66,7 @@ input[type="button"] {
   border-radius: @borderRadius;
   padding: 0;
   background-color: #fff;
-  color: @themeBlue;
+  color: #1E2969;
   cursor: pointer;
   font-size: 1em;
   text-decoration: none;
@@ -75,7 +75,7 @@ input[type="button"] {
   transition: all 300ms ease-in-out;
 
   &:hover {
-    background-color: @themeBlue;
+    background-color: #1E2969;
     color: #fff;
   }
 }
@@ -138,51 +138,53 @@ nav {
   position: absolute;
   top: 2em;
   left: 2em;
-  width: 17.5em;
   display: none;
   z-index: 99;
 
-  a.button {
-    display: block;
-    width: 8.4375em;
-    height: 2.75em;
-    line-height: 2.75em;
-  }
-
-  .nav__menu {
-    display: flex;
-    justify-content: space-between;
-
-    .nav__menu-item {
-      display: inline-block;
+  .nav__menu-item {
+    .button {
+      display: block;
       position: relative;
+      width: 5.875em;
+      height: 2.5em;
+      line-height: 2.5em;
+      
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0.6em;
+        top: 50%;
+      }
     }
-  }
 
-  .nav__submenu {
-    width: 8.4375em;
-    height: 12rem;
-    margin-top: 0.75em;
-    position: absolute;
-    background-color: #fff;
+    .button-login {
+      padding-left: 1.8em;
 
-    .nav__submenu-item {
-      a {
-        display: block;
-        padding-left: 14px;
-        height: 2rem;
-        line-height: 2rem;
-        font-size: 0.75em;
-        text-decoration: none;
-        color: #1e2969;
+      &::before {
+        width: 1.2em;
+        height: 1.4em;
+        margin-top: calc(~"-1.4em / 2");
+        background: url('/images/tidb-planet/icon-lock.svg') no-repeat;
       }
 
-      &:hover {
-        background: @themeBlue;
+      &:hover::before {
+        background: url('/images/tidb-planet/icon-lock-white.svg') no-repeat;
+      }
+    }
 
-        a {
-          color: #fff;
-        }
+    .button-home {
+      padding-left: 2.1em;
+      
+      &::before {
+        width: 1.5em;
+        height: 1.5em;
+        margin-top: calc(~"-1.5em / 2");
+        background: url('/images/tidb-planet/icon-home.svg') no-repeat;
+      }
+
+      &:hover::before {
+        background: url('/images/tidb-planet/icon-home-white.svg') no-repeat;
       }
     }
   }
