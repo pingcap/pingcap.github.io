@@ -7,12 +7,14 @@ import './vendor/jquery-dateformat.js'
 
 // TODO: host server endpoint api with nodejs
 // const url = 'http://localhost:5000/api/contributors'
-// $.ajax({
-//   url: `/api/contributors`,
-//   crossDomain: true,
-//   success: function(data) {
-//   console.log(data)
-// }})
+const url = `/api/contributors`
+$.ajax({
+  url,
+  crossDomain: true,
+  success: function(res) {
+    window.tidbContributors = res.data
+    console.log(res)
+}})
 
 const prefix = '_tidb_planet_'
 const cookiesKeyMap = {
@@ -41,6 +43,7 @@ const usernameValidation = name => {
 }
 
 const authenticateContributor = name => {
+  // TODO: remove this
   // load contributors json data
   if (!window.tidbContributors) {
     window.tidbContributors = $('.j-login').data('contributors')

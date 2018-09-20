@@ -19,9 +19,21 @@ server.use(bodyParser.json());
 // 暴露 contributors list
 const fs = require('fs')
 
-const contributorsData = JSON.parse(fs.readFileSync(`data/contributors.json`, 'utf8'))
+let contributorsData
+
+fs.stat(`data/contributors.json`, (err, stats)=>{
+  if(err)
+    console.log(err)
+  else
+    contributorsData = JSON.parse(fs.readFileSync(`data/contributors.json`, 'utf8'))
+})
+
+
 server.get('/api/contributors', (req, res)=>{
-  res.json(contributorsData)
+  if(contributorsData)
+    res.json({code: 200, data: contributorsData})
+  else
+    res.json({code: 500, data: null})
 })
 
 //启动服务，并监听5000端口
