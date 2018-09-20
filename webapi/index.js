@@ -25,7 +25,7 @@ fs.stat(`data/contributors.json`, (err, stats)=>{
   if(err)
     console.log(err)
   else
-    contributorsData = JSON.parse(fs.readFileSync(`data/contributors.json`, 'utf8'))
+    contributorsData = JSON.parse(fs.readFileSync(`${__dirname}/../data/contributors.json`, 'utf8'))
 })
 
 
