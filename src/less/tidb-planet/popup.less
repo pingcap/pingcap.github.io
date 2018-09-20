@@ -3,8 +3,8 @@
   width: 22em;
   min-height: 3em;
   left: 50%;
-  top: -22em;
-  margin-left: 11em;
+  top: -6em;
+  margin-left: -11em;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
@@ -12,11 +12,27 @@
   &::before {
     content: '';
     position: absolute;
-    left: -14px;
-    top: 1.2em;
-    border-style: solid;
-    border-width: 10px 14px 10px 0;
-    border-color: rgba(0, 0, 0, 0) #fff rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+    background: #fff;
+    height: 16px;
+    width: 16px;
+    transform: rotate(45deg);
+  }
+
+  &.top {
+    text-align: center;
+    &::before {
+      bottom: -8px;
+      left: 50%;
+      margin-left: -8px;
+    }
+  }
+
+  &.left {
+    &::before {
+      right: -8px;
+      margin-top: -8px;
+      top: 50%;
+    }
   }
 
   .close {
@@ -58,15 +74,54 @@
   }
 }
 
+.element-rider {
+  .popup {
+    top: -14em;
+    text-align: left;
+  }
+}
+
+.element-rocket {
+  .popup {
+    top: -8em;
+    text-align: left;
+  }
+}
+
+.element-astronaut {
+  .popup {
+    width: 14em;
+    top: 0;
+    left: 0;
+    margin-left: -14em;
+
+    .popup-content {
+      padding: 1em;
+    }
+  }
+}
+
 /**
  * Mobile  Styling
  */
 @media only screen and (max-width: 768px) {
-  .popup {
-    margin-left: -11em;
+  .element-robot {
+    .popup {
+      margin-left: -5em;
+    }
+  }
 
-    &::before {
-      display: none;
+  .element-radar {
+    .popup {
+      margin-left: -15em;
+    }
+  }
+  
+  .element-astronaut {
+    .popup {
+      width: 11em;
+      margin-left: -10em;
+      font-size: 85%;
     }
   }
 }

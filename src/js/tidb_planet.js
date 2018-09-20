@@ -220,11 +220,10 @@ $(function() {
       openLoginModal()
       // make astronaut clickable
       $('.element-astronaut').addClass('j-login j-click')
+      $('.j-greetings').text(
+        'Hope you enjoy our journey together and may the open source be with you!'
+      )
     }
-
-    // $('.j-greetings').text(
-    //   'Hope you enjoy our journey together and may the open source be with you!'
-    // )
   } else if (isAuthContributor()) {
     // is a contributor
     if ($('body').hasClass('user-info-page')) showUserInfo('contributor')
@@ -238,7 +237,7 @@ $(function() {
 
   // fade out popup
   setTimeout(() => {
-    $('.popup').fadeOut('slow')
+    $('.j-fadeOutSlowly').fadeOut('slow')
   }, 3000)
 
   // buttons control
@@ -276,14 +275,23 @@ $(function() {
     e.preventDefault()
   })
   // close popup button
-  $('.j-close-popup').on('click', function(e) {
+  $('.j-popup').on('click', function(e) {
     $('.popup').fadeOut()
     e.preventDefault()
+    e.stopPropagation();
   })
   // open popup button
   $('.j-open-popup').on('click', function(e) {
     $('.popup').fadeIn()
     e.preventDefault()
+    e.stopPropagation()
+  })
+
+  // redamore click handler
+  $('.j-readmore').on('click', function(e) {
+    location.href = $(this).attr('href')
+    e.preventDefault()
+    e.stopPropagation()
   })
 
   // input validation
