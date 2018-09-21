@@ -14,7 +14,8 @@ $.ajax({
   success: function(res) {
     window.tidbContributors = res.data
     console.log(res)
-}})
+  },
+})
 
 const prefix = '_tidb_planet_'
 const cookiesKeyMap = {
@@ -203,7 +204,7 @@ $(function() {
     // is first time accessing TiDB Planet welcome page
     if ($('body').hasClass('welcome-page') && isFirstAccess()) {
       // show use guide mask
-      Cookies.set(cookiesKeyMap['FIRST_ACCESS'], "-1")
+      Cookies.set(cookiesKeyMap['FIRST_ACCESS'], '-1')
       $('body').append('<div class="mask j-mask"></div>')
 
       // open video modal and playing video
@@ -280,7 +281,7 @@ $(function() {
   $('.j-popup').on('click', function(e) {
     $('.popup').fadeOut()
     e.preventDefault()
-    e.stopPropagation();
+    e.stopPropagation()
   })
   // open popup button
   $('.j-open-popup').on('click', function(e) {
@@ -358,4 +359,32 @@ $(function() {
 
     convert2image()
   })
+
+  //generate meteors
+  var meteors = document.getElementById('meteors')
+  var meteor = document.getElementsByClassName('meteor')
+
+  // js generate meteor randomly
+  for (var j = 0; j < 2; j++) {
+    var newMeteor = document.createElement('div')
+    newMeteor.className = 'meteor'
+    newMeteor.style.top = randomDistance(60, -30) + 'px'
+    newMeteor.style.left = randomDistance(150, 20) + 'px'
+    meteors.appendChild(newMeteor)
+  }
+
+  // generate top and left distance randomly
+  function randomDistance(max, min) {
+    var distance = Math.floor(Math.random() * (max - min + 1) * 10 + min)
+    return distance
+  }
+
+  // add animation delay for meteors
+  for (var i = 0, len = meteor.length; i < len; i++) {
+    if (i % 6 == 0) {
+      meteor[i].style.animationDelay = '0s'
+    } else {
+      meteor[i].style.animationDelay = i * 0.8 + 's'
+    }
+  }
 })
