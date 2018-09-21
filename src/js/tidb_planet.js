@@ -13,7 +13,6 @@ $.ajax({
   crossDomain: true,
   success: function(res) {
     window.tidbContributors = res.data
-    console.log(res)
   },
 })
 
@@ -44,12 +43,6 @@ const usernameValidation = name => {
 }
 
 const authenticateContributor = name => {
-  // TODO: remove this
-  // load contributors json data
-  if (!window.tidbContributors) {
-    window.tidbContributors = $('.j-login').data('contributors')
-  }
-
   const _index = window.tidbContributors.findIndex(c => c.login === name)
 
   if (_index > -1) {
