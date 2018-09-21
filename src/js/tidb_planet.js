@@ -111,57 +111,6 @@ const showUserInfo = type => {
   }
 }
 
-// convert html to canvas, then convert canvas to image
-const convert2image = () => {
-  var shareContent = document.body
-  var width = shareContent.offsetWidth
-  var height = shareContent.offsetHeight
-  var scale = 3
-  var canvas = document.createElement('canvas')
-
-  shareContent.style.fontFeatureSettings = '"liga" 0'
-
-  canvas.width = width * scale
-  canvas.height = height * scale
-  canvas.getContext('2d').scale(scale, scale) //获取context,设置scale
-
-  var opts = {
-    scale: scale,
-    canvas: canvas,
-    useCORS: true,
-    logging: true,
-    letterRendering: true,
-    width: width,
-    height: height,
-  }
-
-  html2canvas(shareContent, opts).then(function(canvas) {
-    $('.share-section').remove()
-
-    var context = canvas.getContext('2d')
-
-    // 【重要】关闭抗锯齿
-    context.mozImageSmoothingEnabled = false
-    context.webkitImageSmoothingEnabled = false
-    context.msImageSmoothingEnabled = false
-    context.imageSmoothingEnabled = false
-
-    // convert to PNG by default
-    // var img = Canvas2Image.convertToImage(canvas, canvas.width, canvas.height)
-    // convert to JPEG
-    // 安卓版微信中所生成的图片尽管能长按唤出保存图片的菜单，但是无法正确保存到本地相册。
-    // 解决方案：设置canvas2img的生成图片格式配置项为 JPEG 即可。
-    var img = Canvas2Image.convertToJPEG(canvas, canvas.width, canvas.height)
-
-    $('.j-capture-image').html(img)
-
-    $(img).css({
-      width: canvas.width / scale * 0.6 + 'px',
-      height: canvas.height / scale * 0.6 + 'px',
-    })
-  })
-}
-
 const isFirstAccess = () => !getCookies()['FIRST_ACCESS']
 
 const resetLogin = () => {
@@ -194,6 +143,38 @@ const openVideoModal = () => {
 const closeVideoModal = () => {
   $('.j-video-overlay').fadeOut()
   $('.j-video-overlay, .modal').removeClass('active')
+}
+
+// set meteors
+
+const setMeteors = () => {
+  //generate meteors
+  var meteors = document.getElementById('meteors')
+  var meteor = document.getElementsByClassName('meteor')
+
+  // js generate meteor randomly
+  for (var j = 0; j < 2; j++) {
+    var newMeteor = document.createElement('div')
+    newMeteor.className = 'meteor'
+    newMeteor.style.top = randomDistance(60, -30) + 'px'
+    newMeteor.style.left = randomDistance(150, 20) + 'px'
+    meteors.appendChild(newMeteor)
+  }
+
+  // generate top and left distance randomly
+  function randomDistance(max, min) {
+    var distance = Math.floor(Math.random() * (max - min + 1) * 10 + min)
+    return distance
+  }
+
+  // add animation delay for meteors
+  for (var i = 0, len = meteor.length; i < len; i++) {
+    if (i % 6 == 0) {
+      meteor[i].style.animationDelay = '0s'
+    } else {
+      meteor[i].style.animationDelay = i * 0.8 + 's'
+    }
+  }
 }
 
 $(function() {
@@ -293,7 +274,7 @@ $(function() {
     e.stopPropagation()
   })
 
-  // redamore click handler
+  // read more click handler
   $('.j-readmore').on('click', function(e) {
     location.href = $(this).attr('href')
     e.preventDefault()
@@ -343,51 +324,5 @@ $(function() {
     e.preventDefault()
   })
 
-  // camera button
-  $('.j-camera').on('click', function() {
-    if ($('.html2image-container').hasClass('show'))
-      $('.html2image-container').removeClass('show')
-    else $('.html2image-container').addClass('show')
-  })
-  // capture picture button
-  $('.j-capture').on('click ', function() {
-    // add share section
-    // TODO: replace qr code
-    $('.html2image-section').append(
-      '<div class="share-section"><div class="text">Scan the QR Code to explore more about TiDB!</div><img src="/images/qrcode-min.jpg" alt="" /></div>'
-    )
-    // open capture overlay
-    $('.j-capture-overlay').fadeIn()
-    $('.j-capture-overlay, .modal').addClass('active')
-
-    convert2image()
-  })
-
-  //generate meteors
-  var meteors = document.getElementById('meteors')
-  var meteor = document.getElementsByClassName('meteor')
-
-  // js generate meteor randomly
-  for (var j = 0; j < 2; j++) {
-    var newMeteor = document.createElement('div')
-    newMeteor.className = 'meteor'
-    newMeteor.style.top = randomDistance(60, -30) + 'px'
-    newMeteor.style.left = randomDistance(150, 20) + 'px'
-    meteors.appendChild(newMeteor)
-  }
-
-  // generate top and left distance randomly
-  function randomDistance(max, min) {
-    var distance = Math.floor(Math.random() * (max - min + 1) * 10 + min)
-    return distance
-  }
-
-  // add animation delay for meteors
-  for (var i = 0, len = meteor.length; i < len; i++) {
-    if (i % 6 == 0) {
-      meteor[i].style.animationDelay = '0s'
-    } else {
-      meteor[i].style.animationDelay = i * 0.8 + 's'
-    }
-  }
+  setMeteors()
 })
