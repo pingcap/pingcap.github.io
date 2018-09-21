@@ -168,6 +168,68 @@ const setMeteors = () => {
   }
 }
 
+// set contributor item dom
+const setItem = item => {
+  const getDegree = n => {
+    if (n >= 0 && n <= 5) return 1
+    if (n >= 6 && n <= 10) return 2
+    if (n >= 11 && n <= 20) return 3
+    else return 4
+  }
+  const contributorItemEl = `\
+  <div class="contributor-item">\
+    <div class="github-avatar">\
+      <img src="${item.avatar_url}" width="36px" height="36px"/>\
+    </div>\
+    <div class="contributor-info">\
+      <div class="contributor-name"><a href="https://github.com/${
+        item.login
+      }">${item.login}</a></div>\
+      <div class="contribution-degree" data-degree="${getDegree(
+        item.contributions
+      )}">\
+        <span class="dot dot-1"></span>\
+        <span class="dot dot-2"></span>\
+        <span class="dot dot-3"></span>\
+        <span class="dot dot-4"></span>\
+      </div>\
+    </div>\
+  </div> `
+  $('#contributors').append(contributorItemEl)
+}
+// process contributor list modal
+const setContributorsList = index => {
+  let contributors = window.tidbContributors
+  // sort by name
+  contributors.sort(function(a, b) {
+    var nameA = a.login.toUpperCase() // ignore upper and lowercase
+    var nameB = b.login.toUpperCase() // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1
+    }
+    if (nameA > nameB) {
+      return 1
+    }
+
+    // names must be equal
+    return 0
+  })
+  const d = _.floor(contributors.length / 5)
+  let innerList = []
+
+  contributors.forEach((value, key) => {
+    if (index < 4) {
+      if (key >= index * d && key < (index + 1) * d) innerList.push(value)
+    } else {
+      if (key >= index * d) innerList.push(value)
+    }
+  })
+
+  innerList.forEach(value => {
+    setItem(value)
+  })
+}
+
 $(function() {
   // get username in cookie
   const username = getCookies()['USERNAME']
@@ -218,39 +280,50 @@ $(function() {
     $('.j-fadeOutSlowly').fadeOut('slow')
   }, 3000)
 
-  // buttons control
   // close modal button
-  $('.close-modal').on('click', function(e) {
-    const modalType = $('.modal-overlay.active').data('type')
-    $('.modal-overlay').fadeOut()
-    $('.modal-overlay, .modal').removeClass('active')
-    // reset login
-    if (modalType === 'login') resetLogin()
-    // pause video
-    if (modalType === 'video') $('#video')[0].pause()
-    e.preventDefault()
-  })
+  $('.close-modal')
+    .off('click')
+    .on('click', function(e) {
+      const modalType = $('.modal-overlay.active').data('type')
+      $('.modal-overlay').fadeOut()
+      $('.modal-overlay, .modal').removeClass('active')
+      // reset login
+      if (modalType === 'login') resetLogin()
+      // pause video
+      if (modalType === 'video') $('#video')[0].pause()
+      // reset contributor list dom
+      if (modalType === 'contributors') $('#contributors').html('')
+      e.preventDefault()
+      e.stopPropagation()
+    })
   // login button
   $('.j-login').on('click', function(e) {
     openLoginModal()
     e.preventDefault()
+    e.stopPropagation()
   })
   // later button
   $('.j-later').on('click', function(e) {
     closeLoginModal()
     e.preventDefault()
+    e.stopPropagation()
   })
   // show contributor list button
-  $('.j-open-dorm').on('click', function(e) {
-    const index = $(this).data('index')
-    $(`.j-contributors${index}-overlay`).fadeIn()
-    $(`.j-contributors${index}-overlay, .modal`).addClass('active')
-    e.preventDefault()
-  })
+  $('.j-open-dorm')
+    .off('click')
+    .on('click', function(e) {
+      const index = $(this).data('index')
+      setContributorsList(index)
+      $(`.j-contributors-overlay`).fadeIn()
+      $(`.j-contributors-overlay, .modal`).addClass('active')
+      e.preventDefault()
+      e.stopPropagation()
+    })
   // play video button
   $('.j-video-btn').on('click', function(e) {
     openVideoModal()
     e.preventDefault()
+    e.stopPropagation()
   })
   // close popup button
   $('.j-popup').on('click', function(e) {
