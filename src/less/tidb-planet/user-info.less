@@ -175,14 +175,14 @@
         width: 6.125em;
       }
 
-      .avatar {
-        display: block;
+      img.avatar {
         width: 6.125em;
         height: 6.125em;
         border: 3px solid #fff;
       }
 
-      .signature {
+      img.signature {
+        width: 100%;
         margin-top: 1em;
       }
 
@@ -244,8 +244,7 @@
         justify-content: flex-start;
         margin-bottom: 0.2em;
 
-        svg {
-          display: block;
+        img.logo-tidb {
           width: 1.8em;
           height: auto;
         }
@@ -282,7 +281,7 @@
         line-height: 1.2;
       }
 
-      .barcode {
+      img.barcode {
         width: 14em;
       }
     }
@@ -298,7 +297,7 @@
     }
 
     &.pass-card {
-      background: url("/images/tidb-planet/pass-bg.svg") no-repeat;
+      background: url("/images/tidb-planet/pass-bg.png") no-repeat;
       background-size: 100% 100%;
 
       .card-content {
@@ -324,13 +323,22 @@
   }
 }
 
-.tidb-planet {
+.user-info-page {
+  img {
+    display: block;
+  }
+
   .element-astronaut {
     top: -14em;
     left: 50%;
     margin-left: calc(~"-10.6875em / 2");
     width: 10.6875em;
     height: 21.875em;
+
+    img {
+      width: inherit;
+      height: inherit;
+    }
   }
 
   .element-flag {
@@ -339,14 +347,53 @@
     margin-left: calc(~"-13.6875em / 2 - 12em / 2 - 1.2em");
     width: 7.6785em;
     height: 13.6875em;
+
+    img {
+      width: inherit;
+      height: inherit;
+    }
   }
+}
+
+// capture-overlay
+.j-capture-overlay {
+  &.active::before {
+    content: 'Save to the camera roll and share to your friends!';
+    position: absolute;
+    top: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12em;
+    padding: 0.5em;
+    border: 2px dashed;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1.25;
+    z-index: 100000000;
+    text-align: center;
+  }
+}
+
+// capture modal
+.modal-capture {
+  width: 60%;
+  height: auto;
+  overflow: hidden;
+  background: transparent;
+  transform: scale(1.2);
 }
 
 /**
  * Mobile  Styling
  */
 @media only screen and (max-width: 768px) {
-  .tidb-planet {
+  .user-info-page {
+    .tidb-planet {
+      background: url('/images/tidb-planet/grey-planet.png') no-repeat center;
+      background-size: cover;
+    }
+
     .element-flag {
       top: -4em;
       margin-left: 8em;
@@ -363,6 +410,10 @@
   .user-info-container {
     top: 3em;
     margin-left: calc(~"-24.6875em / 2");
+  }
+
+  .modal-capture {
+    transform: scale(1.1);
   }
 }
 
