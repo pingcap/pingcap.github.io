@@ -39,10 +39,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # generate contributors data
-      - run: export GITHUB_OAUTH_CLIENT_ID="${GITHUB_OAUTH_CLIENT_ID}";export GITHUB_OAUTH_CLIENT_SECRET="${GITHUB_OAUTH_CLIENT_SECRET}"
-      - run: node scripts/gen-contributors.js
-
       - run: npm run build
 
       # notice netlify to deploy preview branch
