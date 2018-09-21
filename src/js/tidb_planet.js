@@ -362,4 +362,32 @@ $(function() {
 
     convert2image()
   })
+
+  //generate meteors
+  var meteors = document.getElementById('meteors')
+  var meteor = document.getElementsByClassName('meteor')
+
+  // js generate meteor randomly
+  for (var j = 0; j < 2; j++) {
+    var newMeteor = document.createElement('div')
+    newMeteor.className = 'meteor'
+    newMeteor.style.top = randomDistance(60, -30) + 'px'
+    newMeteor.style.left = randomDistance(150, 20) + 'px'
+    meteors.appendChild(newMeteor)
+  }
+
+  // generate top and left distance randomly
+  function randomDistance(max, min) {
+    var distance = Math.floor(Math.random() * (max - min + 1) * 10 + min)
+    return distance
+  }
+
+  // add animation delay for meteors
+  for (var i = 0, len = meteor.length; i < len; i++) {
+    if (i % 6 == 0) {
+      meteor[i].style.animationDelay = '0s'
+    } else {
+      meteor[i].style.animationDelay = i * 0.8 + 's'
+    }
+  }
 })
