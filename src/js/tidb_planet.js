@@ -14,7 +14,8 @@ $.ajax({
   success: function(res) {
     window.tidbContributors = res.data
     console.log(res)
-}})
+  },
+})
 
 const prefix = '_tidb_planet_'
 const cookiesKeyMap = {
@@ -118,6 +119,8 @@ const convert2image = () => {
   var scale = 3
   var canvas = document.createElement('canvas')
 
+  shareContent.style.fontFeatureSettings = '"liga" 0'
+
   canvas.width = width * scale
   canvas.height = height * scale
   canvas.getContext('2d').scale(scale, scale) //获取context,设置scale
@@ -127,6 +130,7 @@ const convert2image = () => {
     canvas: canvas,
     useCORS: true,
     logging: true,
+    letterRendering: true,
     width: width,
     height: height,
   }
@@ -203,7 +207,7 @@ $(function() {
     // is first time accessing TiDB Planet welcome page
     if ($('body').hasClass('welcome-page') && isFirstAccess()) {
       // show use guide mask
-      Cookies.set(cookiesKeyMap['FIRST_ACCESS'], "-1")
+      Cookies.set(cookiesKeyMap['FIRST_ACCESS'], '-1')
       $('body').append('<div class="mask j-mask"></div>')
 
       // open video modal and playing video
@@ -280,7 +284,7 @@ $(function() {
   $('.j-popup').on('click', function(e) {
     $('.popup').fadeOut()
     e.preventDefault()
-    e.stopPropagation();
+    e.stopPropagation()
   })
   // open popup button
   $('.j-open-popup').on('click', function(e) {
