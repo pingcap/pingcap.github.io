@@ -5,9 +5,7 @@ import Cookies from './vendor/js.cookie.js'
 import './vendor/jquery-dateformat.js'
 // https://github.com/phstc/jquery-dateFormat
 
-// TODO: host server endpoint api with nodejs
-// const url = 'http://localhost:5000/api/contributors'
-const url = `/api/contributors`
+const url = 'https://pingcap.com/api/contributors'
 $.ajax({
   url,
   crossDomain: true,
