@@ -246,13 +246,6 @@ $(function() {
 
       // open video modal and playing video
       openVideoModal()
-
-      // after playing video, show login modal and login button
-      $('#video').on('ended', function() {
-        console.log('Video has ended!')
-        closeVideoModal()
-        openLoginModal()
-      })
     }
     // User info page
     if ($('body').hasClass('user-info-page')) {
@@ -279,6 +272,12 @@ $(function() {
   setTimeout(() => {
     $('.j-fadeOutSlowly').fadeOut('slow')
   }, 3000)
+
+  // after playing video
+  $('#video').on('ended', function() {
+    console.log('Video has ended!')
+    closeVideoModal()
+  })
 
   // close modal button
   $('.close-modal')
