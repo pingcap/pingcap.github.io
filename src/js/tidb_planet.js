@@ -89,8 +89,10 @@ const showUserInfo = type => {
     const rank = getCookies()['CONTRIBUTIONS_RANK']
     $('.j-rcard-id').text(`R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`)
     // fill contributions rank
-    $('.j-greetings').text(
-      `Congratulation! You rank ${rank}${ordinalAbbr(rank)} on TiDB Planet!`
+    $('.j-greetings').html(
+      `Congratulation!<br />You rank ${rank}${ordinalAbbr(
+        rank
+      )} on TiDB Planet!`
     )
   } else {
     $('.j-visitor').fadeIn()
@@ -271,7 +273,7 @@ $(function() {
   // fade out popup
   setTimeout(() => {
     $('.j-fadeOutSlowly').fadeOut('slow')
-  }, 3000)
+  }, 5000)
 
   // after playing video
   $('#video').on('ended', function() {
