@@ -339,7 +339,8 @@ $(function() {
 
   // read more click handler
   $('.j-readmore').on('click', function(e) {
-    location.href = $(this).attr('href')
+    // location.href = $(this).attr('href')
+    window.open($(this).attr('href'))
     e.preventDefault()
     e.stopPropagation()
   })
