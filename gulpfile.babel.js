@@ -33,7 +33,7 @@ gulp.task('build-preview', ['css', 'js'], cb =>
 // Compile CSS with PostCSS and Minify CSS
 const buildCss = () => {
   gulp
-    .src('./src/less/*.less')
+    .src('./src/less/**/*.less')
     .pipe(
       less({
         paths: [path.join(__dirname, 'less', 'includes')],

@@ -1,0 +1,263 @@
+@import "./variables.less";
+@import "./keyframes.less";
+
+/**
+ * Overlay
+ */
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999998;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  backface-visibility: hidden;
+  transition: opacity @speed @easing, visibility @speed @easing;
+
+  .close-modal {
+    position: absolute;
+    cursor: pointer;
+    top: 5px;
+    right: 20px;
+    opacity: 0;
+    backface-visibility: hidden;
+    transition: opacity @speed @easing, transform @speed @easing;
+    transition-delay: @delay;
+
+    svg {
+      width: 2em;
+      height: 2em;
+    }
+  }
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+
+    .close-modal {
+      transform: translateY(10px);
+      opacity: 1;
+
+      svg {
+        fill: rgba(255, 255, 255, 0.5);
+      }
+
+      &:hover {
+        svg {
+          fill: #fff;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Modal
+ */
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+  background-color: #fff;
+  max-width: 960px;
+  max-height: 80vh;
+  border-radius: @borderRadius;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  overflow: hidden;
+  // overflow-y: auto;
+  visibility: hidden;
+  backface-visibility: hidden;
+  // transform: scale(1.2);
+  transition: all @speed @easing;
+  z-index: 99999999;
+
+  &.active {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+
+    .modal__content {
+      opacity: 1;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.modal__content {
+  opacity: 0;
+  backface-visibility: hidden;
+  transition: opacity @speed @easing;
+  transition-delay: @delay;
+}
+
+// login modal
+.modal-login {
+  width: 280px !important;
+  height: 178px !important;
+  padding: 43px 23px 16px;
+  overflow: hidden;
+  transform: scale(1.2);
+
+  .rocket {
+    display: none;
+  }
+
+  .form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 92px;
+  }
+
+  .form__input,
+  .form__button {
+    display: block;
+    width: 227px;
+    height: 34px;
+    border-radius: @borderRadius;
+    // text-align: center;
+    font-size: 13px;
+  }
+
+  .form__input {
+    margin-bottom: calc(92px - 34px * 2);
+    border: 1px solid @themeBlue;
+    color: @lightBlue;
+
+    &::placeholder {
+      color: @lightBlue;
+    }
+  }
+
+  .form__button {
+    position: relative;
+    border: none;
+    background-color: @themeBlue;
+    color: #fff;
+
+    &::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      opacity: 0;
+      transform: scale(0.2);
+      transition: all 0.25s ease-in;
+    }
+
+    &:hover::after {
+      transform: scale(1);
+      opacity: 0.6;
+      transition: transform 0.25s ease-out;
+    }
+  }
+
+  .inner {
+    padding: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    color: #e6e6e6;
+    font-size: 14px;
+    white-space: nowrap;
+    position: absolute;
+    bottom: -100%;
+    left: 50%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%);
+    transition: 0.3s linear;
+    pointer-events: none;
+
+    &::before {
+      content: "";
+      background-color: #323232;
+      height: 250px;
+      width: 250px;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      visibility: hidden;
+      z-index: -1;
+      transform: translate(-50%, -50%) scale(0.1);
+      transition: all 0.3s linear;
+    }
+  }
+
+  .inner.error {
+    bottom: 105%;
+    opacity: 1;
+    visibility: visible;
+
+    &::before {
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+      transition: all 0.3s linear;
+    }
+  }
+
+  .link {
+    padding-top: 12px;
+    color: @lightBlue;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+      color: @themeBlue;
+    }
+  }
+}
+
+.modal-login.landing {
+  .login {
+    animation: scale-out-tl 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+  }
+
+  .rocket {
+    display: block;
+    animation: scale-in-center 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+  }
+}
+
+// video modal
+.modal-video {
+  width: 90%;
+  height: auto;
+  background: transparent;
+  transform: scale(1.2);
+
+  video {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/**
+ * Mobile styling
+ */
+@media only screen and (max-width: 768px) {
+  .modal-login,
+  .modal-video {
+    transform: scale(1.1);
+  }
+
+  .modal-overlay .close-modal {
+    top: 0;
+    right: 10px;
+  }
+}

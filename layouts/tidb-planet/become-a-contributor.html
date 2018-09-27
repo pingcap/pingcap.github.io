@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | TiDB Planet</title>
+    {{- partial "head/ga" . -}}
+    {{- partial "head/meta-seo" . -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
+</head>
+
+<body>
+    <div>
+        {{- partial "tidb-planet/nav" . -}}
+        {{- partial "tidb-planet/space" . -}}
+
+        <div class="tidb-planet">
+            <div class="element-rider j-open-popup j-click">
+                <div class="popup top f-tl j-popup j-fadeOutSlowly">
+                    <div class="popup-content clearfix">
+                        <p>If a PR (Pull Request) submitted to the TiDB is approved and merged, then you become a TiDB contributor.</p>
+                        <a class="link f-fr j-readmore" href="https://github.com/pingcap/tidb/blob/master/CONTRIBUTING.md" title="How to become a contributor">Read More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="element-tank j-open-popup j-click"></div>
+            <div class="element-ufo j-open-popup j-click"></div>
+        </div>
+    {{- partial "tidb-planet/arrow-link" (dict "pre" "/tidb-planet/milestones" "next" "/tidb-planet/release-note") -}}
+    <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
+    <script src="/js/tidb_planet.js"></script>
+</body>
+
+</html>

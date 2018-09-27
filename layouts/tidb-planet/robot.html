@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | TiDB Planet</title>
+    {{- partial "head/ga" . -}}
+    {{- partial "head/meta-seo" . -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
+</head>
+
+<body>
+    <div>
+        {{- partial "tidb-planet/nav" . -}}
+        {{- partial "tidb-planet/modal" (dict "type" "video") -}}
+        {{- partial "tidb-planet/space" . -}}
+
+        <div class="tidb-planet">
+            <div class="element-robot j-open-popup j-click">
+                <div class="popup top f-tl j-popup j-fadeOutSlowly">
+                    <div class="popup-content">
+                        <p>This is the last stop, hope you had a pleasant trip on TiDB planet. Scan the QR code to know more about us!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="element-qrCodeFrame">
+                <img class="element-qrCode" src="/images/tidb-planet/robot-qrcode.jpeg" />
+            </div>
+        </div>
+    </div>
+    {{- partial "tidb-planet/arrow-link" (dict "pre" "/tidb-planet/release-note" "next" "/tidb-planet/") -}}
+    <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
+    <script src="/js/tidb_planet.js"></script>
+</body>
+
+</html>
