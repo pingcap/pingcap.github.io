@@ -197,9 +197,9 @@ $(function() {
       // open video modal and playing video
       openVideoModal()
     }
-    if ($('body').hasClass('milestones-page')) openVideoModal()
   }
 
+  if ($('body').hasClass('milestones-page')) openVideoModal()
   // only show nav and next forward animation in PC pages
   if ($('body')[0].offsetWidth > 768) {
     $('.nav').fadeIn()
