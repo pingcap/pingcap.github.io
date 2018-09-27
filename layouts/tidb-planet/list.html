@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | TiDB Planet</title>
+    {{- partial "head/ga" . -}}
+    {{- partial "head/meta-seo" . -}}
+    <style>
+        .loading-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(#172d72, #120e34) center no-repeat;
+            z-index: 999;
+        }
+        .loading-container .rocket {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            margin-top: -50px;
+            margin-left: -50px;
+            text-align: center;
+        }
+        .loading-container .rocket svg {
+            fill: #fff;
+        }
+        .loading-container .rocket svg .fire {
+            stroke: #fff;
+        }
+    </style>
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
+</head>
+
+<body class="welcome-page">
+    <div class="loading-container j-loading">
+        <div class="rocket">
+            {{- partial "svgs/illustration-rocket.svg" -}}
+        </div>
+    </div>
+
+    {{- partial "tidb-planet/nav" . -}}
+    {{- partial "tidb-planet/modal" (dict "type" "video") -}}
+    {{- partial "tidb-planet/space" . -}}
+
+    <div class="tidb-planet">
+        <div class="element-radar-list"></div>
+        <div class="element-rocket-list"><a class="block-link" href="/tidb-planet/release-note/"></a></div>
+        <div class="element-flag-list"></div>
+        <div class="element-dorm5-list"><a class="block-link" href="/tidb-planet/village/"></a></div>
+        <div class="element-telescope-list"></div>
+        <div class="element-player-list"><a class="block-link" href="/tidb-planet/milestones/"></a></div>
+        <div class="element-ufo-list"></div>
+        <div class="element-rider-list"><a class="block-link" href="/tidb-planet/become-a-contributor/"></a></div>
+        <div class="element-astro-list"></div>
+        <div class="element-astronaut-list"><a class="block-link" href="/tidb-planet/user/"></a></div>
+        <div class="element-robot-list"><a class="block-link" href="/tidb-planet/robot/"></a></div>
+    </div>
+    {{- partial "tidb-planet/arrow-link" (dict "pre" "/tidb-planet/robot" "next" "/tidb-planet/user") -}}
+    <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
+    <script src="/js/tidb_planet.js"></script>
+    <script>
+        $('.j-loading').hide()
+    </script>
+</body>
+
+</html>

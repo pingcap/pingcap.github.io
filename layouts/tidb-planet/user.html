@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | TiDB Planet</title>
+    {{- partial "head/ga" . -}}
+    {{- partial "head/meta-seo" . -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css//tidb-planet/user-info.css") -}}
+</head>
+
+<body class="user-info-page">
+    <div class="html2image-section">
+        {{- partial "tidb-planet/nav" . -}}
+        {{- partial "tidb-planet/space" . -}}
+
+        <div class="user-info-container j-visitor" style="display: none;">
+            <div class="card card-pass">
+                <div class="card__content">
+                    <div class="card__profile">
+                        <img class="avatar" src="/images/tidb-planet/avatar-visitor.png">
+                        <img class="signature" src="/images/tidb-planet/sig-blue.png">
+                    </div>
+                    <div class="card__info">
+                        <div class="card__header">
+                            <img class="logo-tidb" src="/images/tidb-planet/logo-tidb.png">
+                            <span class="sep"></span>
+                            <div class="title">TiDB PLANET <br> VISITOR PASS</div>
+                        </div>
+                        <div class="number">No.<span class="j-vcard-id"></span></div>
+                        <ul class="info">
+                            <li class="info__name"><span class="label f-tc">Username</span><span class="j-username value f-tc"></span></li>
+                            <li class="info__date"><span class="label f-tc">Date</span><span class="j-date value f-tc"></span></li>
+                            <li class="info__destination"><span class="label f-tc">Destination</span><span class="value f-tc">TiDB Planet</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card__footer">
+                    <div class="id-container">
+                        <div>TiDB PLANET</div>
+                        <div class="j-vcard-id"></div>
+                    </div>
+                    <img src="/images/tidb-planet/code-visitor.png" class="barcode" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="user-info-container j-contributor" style="display: none;">
+            <div class="card card-residence">
+                <div class="card__content">
+                    <div class="card__profile">
+                        <img class="avatar j-avatar" src="">
+                        <img class="signature" src="/images/tidb-planet/sig-red.png">
+                    </div>
+                    <div class="card__info">
+                        <div class="card__header">
+                            <img class="logo-tidb" src="/images/tidb-planet/logo-tidb.png">
+                            <span class="sep"></span>
+                            <div class="title">TiDB PLANET <br> RESIDENCE CARD</div>
+                        </div>
+                        <div class="number">ID No.<span class="j-rcard-id"></span></div>
+                        <ul class="info">
+                            <li class="info__name"><span class="label f-tc">Username</span><span class="j-username value f-tc"></span></li>
+                            <li class="info__date"><span class="label f-tc">Date</span><span class="j-date value f-tc"></span></li>
+                            <li class="info__contributions"><span class="label f-tc">Contributions</span><span class="j-contributions value f-tc"></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card__footer">
+                    <div class="id-container">
+                        <div>TiDB PLANET</div>
+                        <div class="j-rcard-id"></div>
+                    </div>
+                    <img src="/images/tidb-planet/code-resident.png" class="barcode" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="tidb-planet">
+            <div class="element-flag"><img src="/images/tidb-planet/flag.png"></div>
+            <div class="element-astronaut">
+                <img src="/images/tidb-planet/astronaut.png">
+                <div class="popup left j-popup">
+                    <div class="popup-content">
+                        <p class="j-greetings"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{- partial "tidb-planet/html2image.html" . -}}
+    {{- partial "tidb-planet/modal" (dict "type" "capture") -}}
+    {{- partial "tidb-planet/arrow-link" (dict "pre" "/tidb-planet" "next" "/tidb-planet/village") -}}
+
+    <script src="https://download.pingcap.com/js/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
+    <script src="https://download.pingcap.com/js/html2canvas.min.js"></script>
+    <script src="https://download.pingcap.com/js/canvas2image.min.js"></script>
+    <script src="/js/tidb_planet.js"></script>
+    <script src="/js/tidb_planet_user.js"></script>
+</body>
+
+</html>
