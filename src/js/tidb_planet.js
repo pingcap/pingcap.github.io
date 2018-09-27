@@ -182,6 +182,13 @@ const autoPlayVideoInWeXin = () => {
 }
 
 $(function() {
+  if ($('body').hasClass('welcome-page') && !isFirstAccess()) {
+    // show guide tip
+    $('body').append(
+      '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
+    )
+  }
+
   // get username in cookie
   const username = getCookies()['USERNAME']
   if (!username) {
@@ -197,13 +204,6 @@ $(function() {
       // open video modal and playing video
       openVideoModal()
     }
-  }
-
-  if ($('body').hasClass('welcome-page') && !isFirstAccess()) {
-    // show guide tip
-    $('body').append(
-      '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
-    )
   }
 
   if ($('body').hasClass('milestones-page')) openVideoModal()
