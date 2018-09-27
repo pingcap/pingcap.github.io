@@ -2,18 +2,6 @@
 
 @import "./variables.less";
 
-/**
- * Include Roboto Condensed web font
- */
-
-/* Bold */
-@font-face {
-	font-family: "Roboto Condensed Bold";
-	font-style: normal;
-	font-weight: 600;
-	src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url("https://download.pingcap.com/fonts/RobotoCondensed/RobotoCondensed-Bold.ttf") format('truetype');
-}
-
 .html2image-section {
   width: 100vw;
   height: 100vh;
@@ -173,164 +161,193 @@
     width: 24em;
     height: 14em;
     margin: 0 auto;
+  }
 
-    .card-content {
+  .card__content {
+    width: 100%;
+    height: 11em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1em;
+
+    img.avatar {
+      width: 6.125em;
+      height: 6.125em;
+      border: 3px solid #fff;
+    }
+
+    img.signature {
       width: 100%;
-      height: 11em;
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 1em;
+      margin-top: 1em;
+    }
+  }
 
-      .card-profile {
-        width: 6.125em;
-      }
+  .card__profile {
+    width: 6.125em;
+  }
 
-      img.avatar {
-        width: 6.125em;
-        height: 6.125em;
-        border: 3px solid #fff;
-      }
+  .card__info {
+    width: 14em;
 
-      img.signature {
-        width: 100%;
-        margin-top: 1em;
-      }
+    .number {
+      font-size: 0.85em;
+      font-weight: 600;
+    }
 
-      .content-info {
-        width: 14em;
+    .info {
+      width: 100%;
+      padding: 0;
+      list-style: none;
 
-        .number {
-          font-size: 0.85em;
-        }
-
-        .info {
-          width: 100%;
-          padding: 0;
-          list-style: none;
-
-          li {
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
-            position: relative;
-            width: 100%;
-            height: 1.8em;
-            margin: 0.4em 0;
-            border: 1px solid;
-            font-size: 0.85em;
-            overflow-x: auto;
-
-            &::before {
-              content: "";
-              position: absolute;
-              height: 100%;
-              width: 1px;
-              background: #fff;
-              left: 6.4em;
-              top: 0;
-            }
-
-            .label {
-              display: block;
-              width: 6.5em;
-              padding: 0 0.5em;
-              font-family: "Roboto Condensed Bold", Helvetica, Arial, sans-serif;
-            }
-
-            .value {
-              display: block;
-              width: 9.5em;
-              padding-left: 0.5em;
-              text-align: center;
-            }
-          }
-        }
-      }
-
-      .content-header {
+      li {
         display: flex;
-        height: 2.4em;
+        flex-flow: row nowrap;
         align-items: center;
-        justify-content: flex-start;
-        margin-bottom: 0.2em;
+        position: relative;
+        width: 100%;
+        height: 1.8em;
+        margin: 0.4em 0;
+        border: 1px solid;
+        font-size: 0.85em;
+        overflow-x: auto;
 
-        img.logo-tidb {
-          width: 1.8em;
-          height: auto;
-        }
-
-        .sep {
-          display: block;
-          width: 2px;
-          height: 1.875em;
-          margin: 0 0.875em;
+        &::before {
+          content: "";
+          position: absolute;
+          height: 100%;
+          width: 1px;
           background: #fff;
+          left: 7em;
+          top: 0;
         }
 
-        .title {
-          width: 10em;
-          font-size: 0.85em;
+        .label {
+          display: block;
+          // width: 7em;
+          padding: 0 0.5em;
+          // font-size: 80%;
+          font-weight: 600;
         }
-      }
-    }
 
-    .card-footer {
-      width: 100%;
-      height: 3em;
-      display: flex;
-      flex-flow: row wrap;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1em;
-      color: #1e2969;
-
-      .id-container {
-        width: 8em;
-        font-family: "Roboto Condensed Bold", Helvetica, Arial, sans-serif;
-        font-size: 0.9em;
-        line-height: 1.2;
-      }
-
-      img.barcode {
-        width: 14em;
-      }
-    }
-
-    &.residence-card {
-      border-radius: 5px;
-      background: #e25e51;
-
-      .card-footer {
-        background: #fff;
-        border-radius: 0 0 5px 5px;
-      }
-    }
-
-    &.pass-card {
-      background: url("/images/tidb-planet/pass-bg.png") no-repeat;
-      background-size: 100% 100%;
-
-      .card-content {
-        .content-info {
-          .info {
-            li {
-              &::before {
-                left: 5.8em;
-              }
-
-              .label {
-                width: 5.8em;
-              }
-            }
-          }
+        .value {
+          display: block;
+          // width: 9em;
+          padding-left: 0.5em;
+          // font-size: 85%;
+          // text-align: center;
         }
       }
 
-      .card-footer {
-        border-top: 1px dashed;
+      li.info__name,
+      li.info__destination {
+        &::before {
+          left: 7em;
+        }
+
+        .label {
+          width: 7em;
+        }
+
+        .value {
+          width: 9em;
+        }
       }
+
+      li.info__date {
+        &::before {
+          left: 4em;
+        }
+
+        .label {
+          width: 4em;
+        }
+
+        .value {
+          width: 12em;
+        }
+      }
+
+      li.info__contributions {
+        &::before {
+          left: 8em;
+        }
+
+        .label {
+          width: 8em;
+        }
+
+        .value {
+          width: 8em;
+        }
+      }
+    }
+  }
+
+  .card__header {
+    display: flex;
+    height: 2.4em;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 0.2em;
+
+    img.logo-tidb {
+      width: 1.8em;
+      height: auto;
+    }
+
+    .sep {
+      display: block;
+      width: 2px;
+      height: 1.875em;
+      margin: 0 0.875em;
+      background: #fff;
+    }
+
+    .title {
+      width: 10em;
+      font-size: 0.85em;
+    }
+  }
+
+  .card__footer {
+    width: 100%;
+    height: 3em;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+    color: #1e2969;
+
+    .id-container {
+      width: 8em;
+      font-size: 0.9em;
+      line-height: 1.2;
+    }
+
+    img.barcode {
+      width: 14em;
+    }
+  }
+
+  .card-residence {
+    border-radius: 5px;
+    background: #e25e51;
+
+    .card__footer {
+      background: #fff;
+      border-radius: 0 0 5px 5px;
+    }
+  }
+
+  .card-pass {
+    background: url("/images/tidb-planet/pass-bg.png") no-repeat;
+    background-size: 100% 100%;
+
+    .card__footer {
+      border-top: 1px dashed;
     }
   }
 }
@@ -372,7 +389,7 @@
   background-color: rgba(0, 0, 0, 0.8);
 
   &.active::before {
-    content: 'Long press the photo to save it and share with your friends!';
+    content: "Long press the photo to save it and share with your friends!";
     position: absolute;
     top: 4.5vh;
     left: 50%;
@@ -404,7 +421,8 @@
 @media only screen and (max-width: 768px) {
   .user-info-page {
     .tidb-planet {
-      background: url('/images/tidb-planet/grey-planet.png') no-repeat center;
+      top: 63%;
+      background: url("/images/tidb-planet/grey-planet.png") no-repeat center;
       background-size: cover;
     }
 
