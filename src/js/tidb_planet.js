@@ -199,8 +199,10 @@ $(function() {
         // open video modal and playing video
         openVideoModal()
       } else {
-        // show tip
-        console.log('show tip')
+        // show guide tip
+        $('body').append(
+          '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
+        )
       }
     }
   }
