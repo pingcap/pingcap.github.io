@@ -129,7 +129,7 @@ const setItem = item => {
     <div class="contributor-info">\
       <div class="contributor-name"><a href="https://github.com/${
         item.login
-      }">${item.login}</a></div>\
+      }" target="_blank">${item.login}</a></div>\
       <div class="contribution-degree" data-degree="${getDegree(
         item.contributions
       )}">\
