@@ -122,7 +122,7 @@ const setItem = item => {
     else return 4
   }
   const contributorItemEl = `\
-  <div class="contributor-item">\
+  <div class="list__item">\
     <div class="github-avatar">\
       <img src="${item.avatar_url}" width="36px" height="36px"/>\
     </div>\
@@ -189,13 +189,19 @@ $(function() {
     // show login button in every pages (PC only)
     $('.j-login').show()
 
-    // is first time accessing TiDB Planet welcome page
-    if ($('body').hasClass('welcome-page') && isFirstAccess()) {
-      // show use guide mask
-      setCookies('FIRST_ACCESS', '-1')
-      $('body').append('<div class="mask j-mask"></div>')
-      // open video modal and playing video
-      openVideoModal()
+    // TiDB Planet welcome page
+    if ($('body').hasClass('welcome-page')) {
+      // is first time accessing
+      if (isFirstAccess()) {
+        // show use guide mask
+        setCookies('FIRST_ACCESS', '-1')
+        $('body').append('<div class="mask j-mask"></div>')
+        // open video modal and playing video
+        openVideoModal()
+      } else {
+        // show tip
+        console.log('show tip')
+      }
     }
   }
 

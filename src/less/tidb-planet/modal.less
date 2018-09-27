@@ -80,24 +80,24 @@
   transition: all @speed @easing;
   z-index: 99999999;
 
-  .modal-content {
-    opacity: 0;
-    backface-visibility: hidden;
-    transition: opacity @speed @easing;
-    transition-delay: @delay;
-  }
-
   &.active {
     visibility: visible;
     opacity: 1;
     transform: none;
 
-    .modal-content {
+    .modal__content {
       opacity: 1;
       width: 100%;
       height: 100%;
     }
   }
+}
+
+.modal__content {
+  opacity: 0;
+  backface-visibility: hidden;
+  transition: opacity @speed @easing;
+  transition-delay: @delay;
 }
 
 // login modal
@@ -156,14 +156,14 @@
       height: 100%;
       background: #fff;
       opacity: 0;
-      transform: scale(.2);
-      transition: all .25s ease-in;
+      transform: scale(0.2);
+      transition: all 0.25s ease-in;
     }
 
     &:hover::after {
       transform: scale(1);
-      opacity: .6;
-      transition: transform .25s ease-out;
+      opacity: 0.6;
+      transition: transform 0.25s ease-out;
     }
   }
 
@@ -180,11 +180,11 @@
     opacity: 0;
     visibility: hidden;
     transform: translateX(-50%);
-    transition: .3s linear;
+    transition: 0.3s linear;
     pointer-events: none;
 
     &::before {
-      content: '';
+      content: "";
       background-color: #323232;
       height: 250px;
       width: 250px;
@@ -195,7 +195,7 @@
       visibility: hidden;
       z-index: -1;
       transform: translate(-50%, -50%) scale(0.1);
-      transition: all .3s linear;
+      transition: all 0.3s linear;
     }
   }
 
@@ -207,7 +207,7 @@
     &::before {
       visibility: visible;
       transform: translate(-50%, -50%) scale(1);
-      transition: all .3s linear;
+      transition: all 0.3s linear;
     }
   }
 
