@@ -181,6 +181,19 @@ const autoPlayVideoInWeXin = () => {
   })
 }
 
+const closeModal = () => {
+  const modalType = $('.modal-overlay.active').data('type')
+  $('.modal-overlay').fadeOut()
+  $('.modal-overlay, .modal').removeClass('active')
+  // reset login
+  if (modalType === 'login') resetLogin()
+  // pause video
+  if (modalType === 'video') $('#video')[0].pause()
+  // reset contributor list dom
+  if (modalType === 'contributors') $('#contributors').html('')
+  if (modalType === 'capture') $('.html2image-container').removeClass('show')
+}
+
 $(function() {
   if ($('body').hasClass('welcome-page') && !isFirstAccess()) {
     // show guide tip
@@ -202,7 +215,7 @@ $(function() {
       setCookies('FIRST_ACCESS', '-1')
       $('body').append('<div class="mask j-mask"></div>')
       // open video modal and playing video
-      openVideoModal()
+      // openVideoModal()
     }
   }
 
@@ -228,18 +241,32 @@ $(function() {
   $('.close-modal')
     .off('click')
     .on('click', function(e) {
-      const modalType = $('.modal-overlay.active').data('type')
-      $('.modal-overlay').fadeOut()
-      $('.modal-overlay, .modal').removeClass('active')
-      // reset login
-      if (modalType === 'login') resetLogin()
-      // pause video
-      if (modalType === 'video') $('#video')[0].pause()
-      // reset contributor list dom
-      if (modalType === 'contributors') $('#contributors').html('')
+      // const modalType = $('.modal-overlay.active').data('type')
+      // $('.modal-overlay').fadeOut()
+      // $('.modal-overlay, .modal').removeClass('active')
+      // // reset login
+      // if (modalType === 'login') resetLogin()
+      // // pause video
+      // if (modalType === 'video') $('#video')[0].pause()
+      // // reset contributor list dom
+      // if (modalType === 'contributors') $('#contributors').html('')
+      // if (modalType === 'capture')
+      //   $('.html2image-container').removeClass('show')
+      closeModal()
       e.preventDefault()
       e.stopPropagation()
     })
+
+  $('.modal-overlay').on('click', function(e) {
+    if ($(this).hasClass('active')) {
+      // const _target = e.target
+      // console.log('current target', e.target)
+      // console.log('current delegateTarget', e.delegateTarget)
+      if (_.isEqual(e.target, e.delegateTarget)) closeModal()
+      // e.preventDefault()
+      // e.stopPropagation()
+    }
+  })
 
   // login button
   $('.j-login').on('click', function(e) {
@@ -291,12 +318,12 @@ $(function() {
     e.stopPropagation()
   })
 
-  // close mask
-  $('.j-mask').on('click', function(e) {
-    $(this).hide()
-    e.preventDefault()
-    e.stopPropagation()
-  })
+  // close mask - disabled
+  // $('.j-mask').on('click', function(e) {
+  //   $(this).hide()
+  //   e.preventDefault()
+  //   e.stopPropagation()
+  // })
 
   // input validation
   $('.form__input').blur(function() {

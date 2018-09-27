@@ -102,6 +102,11 @@ const showUserInfo = type => {
   }
 }
 
+const openCaptureLayer = () => {
+  if ($('body')[0].offsetWidth < 768)
+    $('.html2image-container').addClass('show')
+}
+
 $(function() {
   if (!getCookies()['USERNAME']) {
     // new user
@@ -116,9 +121,11 @@ $(function() {
   } else if (getCookies()['CONTRIBUTIONS_RANK']) {
     // is a contributor
     showUserInfo('contributor')
+    openCaptureLayer()
   } else {
     // is a visitor
     showUserInfo('visitor')
+    openCaptureLayer()
   }
 
   // login button
