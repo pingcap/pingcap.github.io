@@ -1,3 +1,7 @@
+import { getCookies } from './cookies.js'
+import './vendor/jquery-dateformat.js'
+// https://github.com/phstc/jquery-dateFormat
+
 // convert html to canvas, then convert canvas to image
 const convert2image = () => {
   var shareContent = document.body
@@ -50,7 +54,74 @@ const convert2image = () => {
   })
 }
 
+// generate numerical order abbr.
+const ordinalAbbr = number => {
+  var b = number % 10
+  return ~~((number % 100) / 10) === 1
+    ? 'th'
+    : b === 1 ? 'st' : b === 2 ? 'nd' : b === 3 ? 'rd' : 'th'
+}
+
+// process user info page
+const showUserInfo = type => {
+  // fill username
+  $('.j-username').text(getCookies()['USERNAME'])
+
+  if (type === 'contributor') {
+    $('.j-contributor').fadeIn()
+    // fill contributions
+    $('.j-contributions').text(getCookies()['CONTRIBUTIONS'])
+    // fill date
+    const _date = getCookies()['DATE']
+    $('.j-date').text($.format.date(_date, 'MMM / dd / yyyy'))
+    // set avatar url
+    $('.j-avatar').attr('src', getCookies()['AVATAR'])
+
+    // pad number with specific value
+    function pad(n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    }
+    // fill residence card No.
+    const rank = getCookies()['CONTRIBUTIONS_RANK']
+    $('.j-rcard-id').text(`R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`)
+    // fill contributions rank
+    $('.j-greetings').html(
+      `Congratulation!<br />You rank ${rank}${ordinalAbbr(
+        rank
+      )} on TiDB Planet!`
+    )
+  } else {
+    $('.j-visitor').fadeIn()
+    $('.j-date').text($.format.date(_.now(), 'MMM / dd / yyyy'))
+    $('.j-vcard-id').text(`R${$.format.date(_.now(), 'MMddyyyyhhmm')}`)
+    $('.j-greetings').text(
+      'Welcome to the TiDB planet, join us now! www.pingcap.com'
+    )
+  }
+}
+
 $(function() {
+  if (!getCookies()['USERNAME']) {
+    // new user
+    // User info page
+    // open login modal
+    $('.j-login-overlay').fadeIn()
+    $('.j-login-overlay, .modal').addClass('active')
+    // make astronaut clickable
+    $('.element-astronaut').addClass('j-login j-click')
+    $('.j-greetings').text(
+      'Hope you enjoy our journey together and may the open source be with you!'
+    )
+  } else if (getCookies()['CONTRIBUTIONS_RANK']) {
+    // is a contributor
+    showUserInfo('contributor')
+  } else {
+    // is a visitor
+    showUserInfo('visitor')
+  }
+
   // camera button
   $('.j-camera').on('click', function() {
     if ($('.html2image-container').hasClass('show'))

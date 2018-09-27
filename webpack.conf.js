@@ -15,7 +15,9 @@ export default {
     about: [path.join(__dirname, 'src', 'js', 'about')],
     recruit: [path.join(__dirname, 'src', 'js', 'recruit')],
     tidb_planet: [path.join(__dirname, 'src', 'js', 'tidb_planet')],
-    convert2image: [path.join(__dirname, 'src', 'js', 'convert2image')],
+    tidb_planet_user: [
+      path.join(__dirname, 'src', 'js', 'tidb_planet_user'),
+    ],
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),
