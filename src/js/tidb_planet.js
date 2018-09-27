@@ -189,22 +189,21 @@ $(function() {
     // show login button in every pages (PC only)
     $('.j-login').show()
 
-    // TiDB Planet welcome page
-    if ($('body').hasClass('welcome-page')) {
-      // is first time accessing
-      if (isFirstAccess()) {
-        // show use guide mask
-        setCookies('FIRST_ACCESS', '-1')
-        $('body').append('<div class="mask j-mask"></div>')
-        // open video modal and playing video
-        openVideoModal()
-      } else {
-        // show guide tip
-        $('body').append(
-          '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
-        )
-      }
+    // is first time accessing TiDB Planet welcome page
+    if ($('body').hasClass('welcome-page') && isFirstAccess()) {
+      // show use guide mask
+      setCookies('FIRST_ACCESS', '-1')
+      $('body').append('<div class="mask j-mask"></div>')
+      // open video modal and playing video
+      openVideoModal()
     }
+  }
+
+  if (!isFirstAccess()) {
+    // show guide tip
+    $('body').append(
+      '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
+    )
   }
 
   if ($('body').hasClass('milestones-page')) openVideoModal()
@@ -241,6 +240,7 @@ $(function() {
       e.preventDefault()
       e.stopPropagation()
     })
+
   // login button
   $('.j-login').on('click', function(e) {
     openLoginModal()

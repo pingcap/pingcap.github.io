@@ -105,12 +105,11 @@ const showUserInfo = type => {
 $(function() {
   if (!getCookies()['USERNAME']) {
     // new user
-    // User info page
+    // make astronaut clickable
+    $('.element-astronaut').addClass('j-login j-click')
     // open login modal
     $('.j-login-overlay').fadeIn()
     $('.j-login-overlay, .modal').addClass('active')
-    // make astronaut clickable
-    $('.element-astronaut').addClass('j-login j-click')
     $('.j-greetings').text(
       'Hope you enjoy our journey together and may the open source be with you!'
     )
@@ -121,6 +120,14 @@ $(function() {
     // is a visitor
     showUserInfo('visitor')
   }
+
+  // login button
+  $('.j-login').on('click', function(e) {
+    $('.j-login-overlay').fadeIn()
+    $('.j-login-overlay, .modal').addClass('active')
+    e.preventDefault()
+    e.stopPropagation()
+  })
 
   // camera button
   $('.j-camera').on('click', function() {
