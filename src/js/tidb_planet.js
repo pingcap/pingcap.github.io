@@ -199,7 +199,7 @@ $(function() {
     }
   }
 
-  if (!isFirstAccess()) {
+  if ($('body').hasClass('welcome-page') && !isFirstAccess()) {
     // show guide tip
     $('body').append(
       '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
