@@ -52,7 +52,7 @@
 
 ## Usage
 
-./scripts/gen-nav.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，
+./scripts/gen-content.sh 从 recruit/docs zh/en repo 的 readme 生成 data json 目录，
 用于页面渲染 ./scripts/process-docs.sh 用于 copy_images_from_media_to_src 和
 replace_dist_html_link，在构建 prod 时候使用（图片路径和 html 中 url 绝对路径
 src：前端代码如 css/js，可通过构建工具来编译，如使用 babel 和 css 预处理器等，实

@@ -1,0 +1,207 @@
+@import "./variables.less";
+@import "./keyframes.less";
+
+// reset
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+input,
+button {
+  outline: 0;
+  appearance: none;
+
+  &:focus,
+  &:hover {
+    outline: 0;
+    appearance: none;
+  }
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer;
+}
+
+.clearfix::after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+.f-fr {
+  float: right;
+}
+
+.f-fl {
+  float: left;
+}
+
+.f-tc {
+  text-align: center !important;
+}
+
+.f-tl {
+  text-align: left !important;
+}
+
+.f-tr {
+  text-align: right !important;
+}
+
+// Basic Button Style
+.button {
+  display: block;
+  border: none;
+  border-radius: @borderRadius;
+  padding: 0;
+  background-color: #fff;
+  color: #1e2969;
+  cursor: pointer;
+  font-size: 1em;
+  text-decoration: none;
+  text-align: center;
+  text-transform: capitalize;
+  transition: all 300ms ease-in-out;
+
+  &:hover {
+    background-color: #1e2969;
+    color: #fff;
+  }
+}
+
+.form {
+  transform-origin: 0 50%;
+  transition: transform 500ms, opacity 500ms;
+}
+
+// rocket animation
+.rocket {
+  width: 200px;
+  top: 25%;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  animation: vibrate 0.3s ease infinite;
+
+  svg {
+    width: 80px;
+    fill: @lightBlue;
+
+    .fire {
+      transition: all ease-in-out 1s;
+      stroke: @lightBlue;
+
+      &.first {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 0;
+        animation: dash 0.2s ease infinite;
+      }
+
+      &.second {
+        stroke-dasharray: 200;
+        stroke-dashoffset: 0;
+        animation: dash2 0.2s ease infinite;
+      }
+
+      &.third {
+        stroke-dasharray: 85;
+        stroke-dashoffset: 0;
+        animation: dash 0.2s ease infinite;
+      }
+    }
+  }
+}
+
+nav {
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.nav {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+  display: none;
+  z-index: 9;
+
+  .button {
+    // display: block;
+    position: relative;
+    width: 5.875em;
+    height: 2.5em;
+    line-height: 2.5em;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0.6em;
+      top: 50%;
+    }
+  }
+
+  .button-login {
+    padding-left: 1.8em;
+
+    &::before {
+      width: 1.2em;
+      height: 1.4em;
+      margin-top: calc(~"-1.4em / 2");
+      background: url('/images/tidb-planet/icon-lock.svg') no-repeat;
+    }
+
+    &:hover::before {
+      background: url('/images/tidb-planet/icon-lock-white.svg') no-repeat;
+    }
+  }
+
+  .button-home {
+    padding-left: 2.1em;
+    background-color: #1e2969;
+    color: #fff;
+
+    &::before {
+      width: 1.5em;
+      height: 1.5em;
+      margin-top: calc(~"-1.5em / 2");
+      background: url('/images/tidb-planet/icon-home-white.svg') no-repeat;
+    }
+
+    &:hover {
+      background-color: #fff;
+      color: #1e2969;
+    }
+
+    &:hover::before {
+      background: url('/images/tidb-planet/icon-home.svg') no-repeat;
+    }
+  }
+}

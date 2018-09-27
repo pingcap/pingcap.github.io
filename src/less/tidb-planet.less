@@ -1,0 +1,147 @@
+// TiDB Planet Pages
+
+@import "./tidb-planet/variables.less";
+@import "./tidb-planet/ui.less";
+@import "./tidb-planet/elements.less";
+@import "./tidb-planet/modal.less";
+@import "./tidb-planet/popup.less";
+
+body {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(#172d72, #120e34) center no-repeat;
+  color: #fff;
+  font-size: 16px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+body,
+body * {
+  box-sizing: @boxSize;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.j-click {
+  cursor: pointer;
+}
+
+.space,
+.tidb-planet,
+div[class^="element-"] {
+  position: absolute;
+}
+
+.tidb-planet {
+  width: 120%;
+  height: 120%;
+  top: 60%;
+  left: -10%;
+  background: url('/images/tidb-planet/grey-planet.svg') no-repeat;
+  background-size: cover;
+}
+
+.space {
+  width: 100%;
+  height: 100%;
+}
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+
+  &::before {
+    content: 'Start!';
+    position: absolute;
+    top: calc(~"60% - 1.5em - 1.5em");
+    left: 50%;
+    margin-left: calc(11.875em / 2 - 4em);
+    font-size: 1.2em;
+    color: #fff;
+    animation: bounce 2s linear infinite;
+  }
+}
+
+// .text-end {
+//   position: absolute;
+//   left: 50%;
+//   top: 6em;
+//   margin-left: -9em;
+//   width: 18em;
+//   padding: 1em;
+//   line-height: 2;
+//   color: #120e34;
+//   // text-align: center;
+// }
+
+.guide-again {
+  position: absolute;
+  width: 13em;
+  top: 36%;
+  left: 50%;
+  margin-left: calc(18em / 2);
+  line-height: 1.8;
+  animation: scale-in-center 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+}
+
+/**
+ * Mobile Only Styling
+ */
+@media only screen and (min-width: 769px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/**
+ * Mobile  Styling
+ */
+@media only screen and (max-width: 768px) {
+  html,
+  body {
+    font-size: 14px;
+    overflow: hidden;
+    -webkit-text-size-adjust: none;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .tidb-planet {
+    background-position: center;
+  }
+
+  .mask::before {
+    top: calc(~"60% - 5.5em - 1em");
+    margin-left: calc(6.875em / 2 - .5em);
+  }
+
+  // .text-end {
+  //   top: 5em;
+  //   background-color: rgba(255,255,255,0.5);
+  // }
+
+  .guide-again {
+    // width: 11em;
+    top: 50%;
+    left: 50%;
+    margin-top: -15em;
+    margin-left: -6.5em;
+  }
+}
+
+// x-small screen
+@media only screen and (max-width: 320px) {
+  html,
+  body {
+    font-size: 12px;
+    overflow: hidden;
+  }
+}
