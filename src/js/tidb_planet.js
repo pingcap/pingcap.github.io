@@ -12,6 +12,10 @@ $.ajax({
   crossDomain: true,
   success: function(res) {
     window.tidbContributors = res.data
+    if (res.data) {
+      $('.j-amount').text(res.data.length)
+      $('.j-show').show()
+    }
   },
 })
 
@@ -198,7 +202,7 @@ $(function() {
   if ($('body').hasClass('welcome-page') && !isFirstAccess()) {
     // show guide tip
     $('body').append(
-      '<div class="guide-again">Try to click these elements and explore the planet again!</div>'
+      '<div class="guide-again scale-in-center">Click these elements and explore the planet again!</div>'
     )
   }
 
