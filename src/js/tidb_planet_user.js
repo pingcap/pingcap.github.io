@@ -73,7 +73,7 @@ const showUserInfo = type => {
     $('.j-contributions').text(getCookies()['CONTRIBUTIONS'])
     // fill date
     const _date = getCookies()['DATE']
-    $('.j-date').text($.format.date(_date, 'MMM / dd / yyyy'))
+    $('.j-date').text($.format.date(_date, 'dd / MMM / yyyy'))
     // set avatar url
     $('.j-avatar').attr('src', getCookies()['AVATAR'])
 
@@ -85,19 +85,19 @@ const showUserInfo = type => {
     }
     // fill residence card No.
     const rank = getCookies()['CONTRIBUTIONS_RANK']
-    $('.j-rcard-id').text(`R${$.format.date(_date, 'MMddyyyy')}${pad(rank, 4)}`)
+    $('.j-rcard-id').text(`R${$.format.date(_date, 'ddMMyyyy')}${pad(rank, 4)}`)
     // fill contributions rank
     $('.j-greetings').html(
-      `Congratulation!<br />You rank ${rank}${ordinalAbbr(
+      `Congratulations!<br />You rank <strong style="font-size:1.1em;">${
         rank
-      )} on TiDB Planet!`
+      }${ordinalAbbr(rank)}</strong> on TiDB Planet!`
     )
   } else {
     $('.j-visitor').fadeIn()
-    $('.j-date').text($.format.date(_.now(), 'MMM / dd / yyyy'))
-    $('.j-vcard-id').text(`R${$.format.date(_.now(), 'MMddyyyyhhmm')}`)
+    $('.j-date').text($.format.date(_.now(), 'dd / MMM / yyyy'))
+    $('.j-vcard-id').text(`R${$.format.date(_.now(), 'ddMMyyyyhhmm')}`)
     $('.j-greetings').text(
-      'Welcome to the TiDB planet, join us now! www.pingcap.com'
+      'Welcome to the TiDB Planet. Join us now! www.pingcap.com'
     )
   }
 }

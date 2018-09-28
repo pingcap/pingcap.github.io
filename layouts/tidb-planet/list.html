@@ -25,6 +25,7 @@
             background: radial-gradient(#172d72, #120e34) center no-repeat;
             z-index: 999;
         }
+
         .loading-container .rocket {
             position: absolute;
             top: 50%;
@@ -35,23 +36,38 @@
             margin-left: -50px;
             text-align: center;
         }
+
         .loading-container .rocket svg {
             fill: #fff;
         }
+
         .loading-container .rocket svg .fire {
             stroke: #fff;
+        }
+
+        .guide-again {
+            position: absolute;
+            width: 12em;
+            top: 36%;
+            left: 50%;
+            margin-left: calc(18em / 2);
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .guide-again {
+                top: 50%;
+                left: 50%;
+                margin-top: -14em;
+                margin-left: -5em;
+            }
         }
     </style>
     {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
 </head>
 
 <body class="welcome-page">
-    <div class="loading-container j-loading">
-        <div class="rocket">
-            {{- partial "svgs/illustration-rocket.svg" -}}
-        </div>
-    </div>
-
     {{- partial "tidb-planet/nav" . -}}
     {{- partial "tidb-planet/space" . -}}
 
@@ -69,6 +85,12 @@
         <div class="element-robot-list"><a class="block-link" href="/tidb-planet/robot/"></a></div>
     </div>
     {{- partial "tidb-planet/arrow-link" (dict "pre" "/tidb-planet/robot" "next" "/tidb-planet/user") -}}
+
+    <div class="loading-container j-loading">
+        <div class="rocket">
+            {{- partial "svgs/illustration-rocket.svg" -}}
+        </div>
+    </div>
     <script src="https://download.pingcap.com/js/jquery.min.js"></script>
     <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>
     <script src="/js/tidb_planet.js"></script>
