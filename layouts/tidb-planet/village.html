@@ -18,21 +18,37 @@
     {{- partial "head/meta-seo" . -}}
     {{- partial "head/preload-css" (dict "href" "/css/tidb-planet.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/tidb-planet/contributor-list.css") -}}
+    <style>
+    .text-village {
+        position: absolute;
+        display: none;
+        width: 24em;
+        left: 50%;
+        top: -22em;
+        margin-left: -12em;
+        line-height: 1.5;
+        text-align: center;
+        animation-delay: 0.3s;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .text-village {
+            top: -14em;
+        }
+    }
+    </style>
 </head>
 
 <body>
     {{- partial "tidb-planet/nav" . -}}
     {{- partial "tidb-planet/space" . -}}
     {{- partial "tidb-planet/modal" (dict "type" "contributors") -}}
+
     <div class="tidb-planet">
+        <div class="text text-village scale-in-center j-show">Thanks to the community, we have <strong class="j-amount"></strong> contributors now. Check these names in the capsules below!</div>
         <div class="element-dorm1 j-open-dorm j-click" data-index="0"></div>
         <div class="element-dorm2 j-open-dorm j-click" data-index="1"></div>
         <div class="element-dorm3 j-open-dorm j-click" data-index="2">
-            <div class="popup top j-popup j-fadeOutSlowly">
-                <div class="popup-content">
-                    <p>Check out the contributor list here!</p>
-                </div>
-            </div>
         </div>
         <div class="element-dorm4 j-open-dorm j-click" data-index="3"></div>
         <div class="element-dorm5 j-open-dorm j-click" data-index="4"></div>
