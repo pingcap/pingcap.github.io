@@ -6,6 +6,7 @@
   - [TiKV 研发工程师](engineering/tikv-engineer.md)
   - [PD 研发工程师](engineering/pd-engineer.md)
   - [TiDB 研发工程师](engineering/tidb-engineer.md)
+  - [分布式系统工程师](engineering/olap-engineer.md)
   - [TiDB 商业产品开发 - 工具方向](engineering/bizdev-tools-engineer.md)
   - [TiDB 商业产品开发 - Cloud 方向](engineering/bizdev-cloud-engineer.md)
   - [TiDB 商业产品开发 - SRE 方向](engineering/bizdev-sre-engineer.md)
