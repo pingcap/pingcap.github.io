@@ -30,7 +30,7 @@ You are prohibited from sharing your username and/or password with any other per
 
 ## Privacy
 
-We respect the privacy of the users of our Site. Our Site Privacy Policy can be viewed here: [pingcap.com/privacy-policy](pingcap.com/privacy-policy).
+We respect the privacy of the users of our Site. Our Site Privacy Policy can be viewed here: [pingcap.com/privacy-policy](/privacy-policy).
 
 ## Modifications to, or Discontinuation of, the Site
 
