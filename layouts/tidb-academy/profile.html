@@ -3,6 +3,12 @@
     {{- partial "head/preload-css" (dict "href" "/css/tidb-academy.css") -}}
 {{- end -}}
 
+<script>
+  if(window.location.pathname == '/tidb-academy/profile/' && !localStorage.getItem('access_token')) {
+    window.location.pathname = '/tidb-academy/'
+  }
+</script>
+
 {{- define "main" -}}
 {{- partial "tidb-academy/navbar.html" -}}
 <div class="profile">

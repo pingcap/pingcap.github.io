@@ -12,12 +12,15 @@
     {{$v1 := (strings.TrimSuffix ".md" $v0) }}
 <script>
   // if the user has not logged in, he will be redirect to intro page
-  if(location.href.search('#access_token') == -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
-      !localStorage.getItem('access_token')) {
+if(location.href.search('#access_token') == -1 && location.pathname == '/tidb-academy/' &&
+    localStorage.getItem('access_token')) {
+      window.location.pathname = '/tidb-academy/mysql_dbas/introduction/course-overview/'
+} else if(location.href.search('#access_token') == -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
+    !localStorage.getItem('access_token')) {
       window.location.pathname = '/tidb-academy/'
 } else if(location.href.search('#access_token') != -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
-localStorage.getItem('access_token')) {
-  window.location.hash = ''
+    localStorage.getItem('access_token')) {
+      window.location.hash = ''
 }
 </script>
 {{- end -}}
@@ -28,7 +31,7 @@ localStorage.getItem('access_token')) {
 <div class="doc">  
 <div class="container" style="padding-top: 114px;">
         {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.tidb_academy_toc) -}}
-        <div class="archive academy-archive" style="max-width: 100%;">
+        <div class="archive academy-archive" style="max-width: 80%;">
           <div class="content markdown-body">{{- .Content -}}</div>
         </div>
     </div>

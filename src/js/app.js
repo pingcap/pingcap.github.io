@@ -126,22 +126,6 @@ function handleWindowScroll() {
   }
 }
 
-function isExpired() {
-  // Check whether the current time is past the
-  // access token's expiry time
-  if (localStorage.getItem('expires_at')) {
-    var expiresAt = JSON.parse(localStorage.getItem('expires_at'))
-    if (new Date().getTime() > expiresAt) {
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('id_token')
-      localStorage.removeItem('expires_at')
-      return true
-    }
-  } else {
-    return false
-  }
-}
-
 function processMobileOverlay() {
   $('.nav-btn.nav-slider').click(function() {
     $('.overlay').show()
@@ -181,16 +165,5 @@ $(document).ready(function() {
       800
     )
     return false
-  })
-
-  // handle tidb academy login authentication
-  $('.tidb-academy').click(function(e) {
-    e.preventDefault() // 阻止页面跳转，先做 auth0 判断
-    if (!localStorage.access_token || isExpired()) {
-      location.pathname = '/tidb-academy'
-    } else {
-      location.pathname =
-        '/tidb-academy/mysql_dbas/introduction/course-overview'
-    }
   })
 })

@@ -12,6 +12,16 @@
     margin: 80px auto;
   }
 </style>
+
+<script>
+  // check if user has been logged in, if true, redirect to course page; 
+  // otherwise, stay at welcome page
+    if(location.href.search('#access_token') == -1 && location.pathname == '/tidb-academy/' &&
+      localStorage.getItem('access_token')) {
+      console.log('1')
+      window.location.pathname = '/tidb-academy/mysql_dbas/introduction/course-overview/'
+    }
+</script>
 {{- end -}}
 
 {{- define "main" -}}
