@@ -25,7 +25,14 @@ $('document').ready(function() {
   // process logout
   $('#qsLogoutBtn').click(function(e) {
     e.preventDefault();
-    localStorage.clear()
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
+    localStorage.removeItem('sub')
+    localStorage.removeItem('username')
+    localStorage.removeItem('nickname')
+    localStorage.removeItem('avatar')
+    localStorage.removeItem('email')
     webAuth.logout({
       returnTo: AUTH0_LOGOUT_URL,
       client_id: AUTH0_CLIENT_ID
