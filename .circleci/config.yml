@@ -38,7 +38,10 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
+      - add_ssh_keys:
+          fingerprints:
+            - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
+        
       - run: npm run build
 
       # notice netlify to deploy preview branch
