@@ -1,0 +1,51 @@
+{{- define "title" -}} TiDB Academy {{- end -}}
+{{- define "headTpl" -}}
+<style type="text/css" media="screen">
+  .st_tree {
+    display: none;
+  }
+</style>
+{{$.Scratch.Set "nav_active" "academy" }}
+{{- partial "head/preload-css" (dict "href" "/css/tidb-academy.css") -}}
+<style type="text/css">
+  .contact-us .contact-form {
+    margin: 80px auto;
+  }
+</style>
+
+<script>
+  // check if user has been logged in, if true, redirect to course page; 
+  // otherwise, stay at welcome page
+    if(location.href.search('#access_token') == -1 && location.pathname == '/tidb-academy/' &&
+      localStorage.getItem('access_token')) {
+      console.log('1')
+      window.location.pathname = '/tidb-academy/mysql_dbas/introduction/course-overview/'
+    }
+</script>
+{{- end -}}
+
+{{- define "main" -}}
+{{ $heading := "Welcome to TiDB Academy !" }}
+{{ $tips := "Please log in to view the courses." }}
+{{ $headinglogo := "/images/tidb-academy-logo.png" }}
+{{ $signinbnt := "Log In / Sign Up" }}
+<div class="contact-us">
+{{- partial "layout/hero.html" (dict "heading" $heading "headinglogo" $headinglogo "signinbnt" $signinbnt "tips" $tips) -}}
+  <div class="container" style="padding: 0 1rem; min-height: 600px;">
+    <div id="tidb-intro-video" style="text-align: center; margin-top: 100px;">
+        <iframe src="https://player.vimeo.com/video/294639491" width="640" height="360" frameborder="0" webkitallowfullscreen
+        mozallowfullscreen allowfullscreen></iframe>
+    </div>
+    <div style="text-align: center; margin-top: 50px;">
+        <button id="qsLoginBtn" class="hero__signin_bnt">Log In / Sign Up</button>
+    </div>
+  </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/auth0-variables.js"></script>
+    <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/vendor/login.js"></script>
+{{- end -}}
