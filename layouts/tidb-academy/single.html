@@ -1,0 +1,51 @@
+{{- define "headTpl" -}}
+    <style type="text/css" media="screen">
+        .st_tree {
+          display: none;
+        }
+    </style>
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/github-markdown.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css")}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-academy.css")}}
+    {{$.Scratch.Set "nav_active" "academy"}}
+    {{$v0 := (strings.TrimPrefix "private-tidb-academy/" .File.Path )}}
+    {{$v1 := (strings.TrimSuffix ".md" $v0) }}
+<script>
+  // if the user has not logged in, he will be redirect to intro page
+if(location.href.search('#access_token') == -1 && location.pathname == '/tidb-academy/' &&
+    localStorage.getItem('access_token')) {
+      window.location.pathname = '/tidb-academy/mysql_dbas/introduction/course-overview/'
+} else if(location.href.search('#access_token') == -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
+    !localStorage.getItem('access_token')) {
+      window.location.pathname = '/tidb-academy/'
+} else if(location.href.search('#access_token') != -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
+    localStorage.getItem('access_token')) {
+      window.location.hash = ''
+}
+</script>
+{{- end -}}
+
+{{- define "main" -}}
+{{- partial "tidb-academy/navbar.html" -}}
+
+<div class="doc">  
+<div class="container" style="padding-top: 100px;">
+        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.tidb_academy_toc) -}}
+        <div class="archive academy-archive" style="max-width: 80%;">
+          <div class="content markdown-body">{{- .Content -}}</div>
+        </div>
+    </div>
+</div>
+{{- end -}}
+{{- define "footJS" -}}
+    <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/auth0-variables.js"></script>
+    <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/vendor/login.js"></script>
+    <script type="text/javascript">
+        if(localStorage.avatar) {
+            $('#j-username').text(localStorage.username)
+            $('.j-avatar').attr('src', localStorage.avatar)
+        }
+    </script>
+{{- end -}}

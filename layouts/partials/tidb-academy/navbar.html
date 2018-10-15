@@ -1,0 +1,31 @@
+<div class="navbar-wrapper">
+    <nav>
+        <ul class="container container-navbar">
+            <li class="navbar__item navbar__item-logo" >
+        <img src="/images/tidb-academy-logo.png" alt="TiDB Academy">
+            </li>
+            <li class="navbar__item">
+        <img class="avatar j-avatar" src="/images/svgs/icon-avatar.svg" alt="avatar" /><span id="j-username" class="username"></span>
+            </li>
+        </ul>
+    </nav>
+    <div class="dropdown container j-dropdown">
+        <ul>
+            <!-- <li class="dropdown__item"><a href="">My Courses</a></li> -->
+            <li class="dropdown__item"><a href="/tidb-academy/profile/">Academy Profile</a></li>
+            <li class="dropdown__item"><a href="javascript:void(0)" id="qsLogoutBtn">Sign Out</a></li>
+        </ul>
+    </div>
+</div>
+
+{{- define "footJS" -}}
+<script type="text/javascript">
+  if (localStorage.getItem('access_token')) {
+    $('#j-username').text(localStorage.username)
+    $('.j-avatar').attr('src', localStorage.avatar)
+  }
+</script>
+{{- end -}}
+
+
+
