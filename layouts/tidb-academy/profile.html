@@ -1,0 +1,93 @@
+{{- define "title" -}} TiDB Academy {{- end -}}
+{{- define "headTpl" -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-academy.css") -}}
+    <script>
+        if(window.location.pathname == '/tidb-academy/profile/' && !localStorage.getItem('access_token')) {
+            window.location.pathname = '/tidb-academy/'
+        }
+    </script>
+{{- end -}}
+
+{{- define "main" -}}
+{{- partial "tidb-academy/navbar.html" -}}
+<div class="profile">
+    <div class="container profile-form">
+        <div class="profile__avatar">
+          <img id="p-avatar" src="/images/svgs/icon-avatar.svg" alt="avatar" />
+        </div>
+        <h1 class="profile__title">TiDB Academy Profile</h1>
+
+        <form class="form" id="tidb-academy-form">
+          <div class="form__item form__item-one">
+            <label for="username">User Name</label>
+              <input type="text" name="username" value="" id="p-username" disabled />
+          </div>
+          <div class="form__item form__item-two" style="display: none;">
+            <label for="user-email">Email</label>
+            <input type="user-email" name="user-email" id="user-email" value="" disabled />
+          </div>
+          <div class="form__item form__item-three" style="display: none;">
+            <label for="i-provider">Identify Provider</label>
+            <input type="text" name="i-provider" id="i-provider" value="linked" disabled />
+          </div>
+          <div class="form__item form__item-four" style="display: none;">
+            <label for="pw">Password</label>
+            <input type="password" name="pw" id="pw" value="000000000" disabled />
+          </div>
+          <div class="form__submit" style="display: none;">
+            <button class="submit-button j-change-pw">Change Password</button>
+            <p class="tip">You’ll receive a confirmation link to change your password.</p>
+          </div>
+        </form>
+    </div>
+
+    <div class="container emailsent" style="display: none;">
+        <div class="emailsent__status">
+            <p class="profile__title">Successed !</p>
+            <div class="emailsent__content">
+              <p class="emailsent__content_welcome">Hi <span id="emailsent__username"><span></p>
+              <p class="emailsent__content_tip">Your changing password request has been sent to <span id="emailsent__email"></span>
+                Please check your email to reset the password.</p>
+            </div>
+            <div class="form__submit emailsent__submit">
+                <button class="submit-button emailsent__submit-button j-go-back">Go Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript" src="/js/vendor/login.js"></script>
+<script src="https://cdn.auth0.com/js/lock/11.6.1/lock.min.js"></script>
+<script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
+<script type="text/javascript" src="/js/vendor/auth0-variables.js"></script>
+<script type="text/javascript">
+    if(localStorage.getItem('access_token')) {
+      var sub = localStorage.sub.split('|')[0]
+      // if user login using indentify provider
+      if(sub != 'auth0') {
+        $('.form__item-three').css('display','flex')
+        $('#i-provider').attr('value', sub)
+      } else {
+        $('.form__item-two').css('display', 'flex')
+        $('.form__submit').css('display', 'flex')
+        $('.form__item-four').css('display', 'flex')
+        $('#emailsent__username').css('color', "#3a59f0")
+        $('#emailsent__email').css('color', "#3a59f0")
+        $('#user-email').attr('value', localStorage.email)
+        $('#emailsent__username').text(localStorage.nickname + ',')
+        $('#emailsent__email').text(localStorage.email)
+      }
+      $('.form__item-one').css('display', 'flex')
+      $('#p-username').attr('value', localStorage.nickname)
+      $('#p-avatar').attr('src', localStorage.avatar)
+      $('#j-username').text(localStorage.username)
+      $('.j-avatar').attr('src', localStorage.avatar)
+    }
+    $('.j-go-back').click(function() {
+        $('.emailsent').hide()
+        $('.profile-form').show()
+    })
+</script>
+{{- end -}}

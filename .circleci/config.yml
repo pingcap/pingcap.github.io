@@ -38,12 +38,15 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - add_ssh_keys:
+          fingerprints:
+            - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
 
       - run: npm run build
 
       # notice netlify to deploy preview branch
       # when be triggered by webhook from submodule
-      - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5a0d79c4a6188f210c6d455e
+      - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5b5fee2867610c0fa51bbf43
 
       - deploy:
           name: "Publish Website"
