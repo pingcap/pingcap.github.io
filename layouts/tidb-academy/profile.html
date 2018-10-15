@@ -1,13 +1,12 @@
 {{- define "title" -}} TiDB Academy {{- end -}}
 {{- define "headTpl" -}}
     {{- partial "head/preload-css" (dict "href" "/css/tidb-academy.css") -}}
+    <script>
+        if(window.location.pathname == '/tidb-academy/profile/' && !localStorage.getItem('access_token')) {
+            window.location.pathname = '/tidb-academy/'
+        }
+    </script>
 {{- end -}}
-
-<script>
-  if(window.location.pathname == '/tidb-academy/profile/' && !localStorage.getItem('access_token')) {
-    window.location.pathname = '/tidb-academy/'
-  }
-</script>
 
 {{- define "main" -}}
 {{- partial "tidb-academy/navbar.html" -}}
@@ -36,7 +35,7 @@
             <input type="password" name="pw" id="pw" value="123" disabled />
           </div>
           <div class="form__submit" style="display: none;">
-            <button class="submit-button">Change Password</button>
+            <button class="submit-button j-change-pw">Change Password</button>
             <p class="tip">You’ll receive a confirmation link to change your password.</p>
           </div>
         </form>
@@ -51,7 +50,7 @@
                 Please check your email to reset the password.</p>
             </div>
             <div class="form__submit emailsent__submit">
-                <button class="submit-button emailsent__submit-button">Go Back</button>
+                <button class="submit-button emailsent__submit-button j-go-back">Go Back</button>
             </div>
         </div>
     </div>
@@ -64,7 +63,7 @@
 <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
 <script type="text/javascript" src="/js/vendor/auth0-variables.js"></script>
 <script type="text/javascript">
-    if(localStorage) {
+    if(localStorage.getItem('access_token')) {
       var sub = localStorage.sub.split('|')[0]
       // if user login using indentify provider
       if(sub != 'auth0') {
@@ -86,9 +85,9 @@
       $('#j-username').text(localStorage.username)
       $('.j-avatar').attr('src', localStorage.avatar)
     }
-    $('.emailsent__submit-button').click(function() {
-        $('.emailsent').css('display', 'none')
-        $('.profile-form').css('display', 'inline')
+    $('.j-go-back').click(function() {
+        $('.emailsent').hide()
+        $('.profile-form').show()
     })
 </script>
 {{- end -}}

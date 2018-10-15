@@ -52,7 +52,7 @@ $('document').ready(function() {
     })
   }
 
-  $('.submit-button').click(function(e) {
+  $('.j-change-pw').click(function(e) {
     e.preventDefault()
     $.ajax({
       async: true,
@@ -67,11 +67,12 @@ $('document').ready(function() {
         client_id: AUTH0_CLIENT_ID,
         email: localStorage.email,
         connection: "Username-Password-Authentication"
-      })
-    }).done(function (response) {
-      $('.profile-form').css('display', 'none')
-      $('.emailsent').css('display', 'inline')
-    });
+      }),
+      success: function(res) {
+        $('.profile-form').hide()
+        $('.emailsent').show()
+      }
+    })
   })
 
   // Check whether the current time is past the
