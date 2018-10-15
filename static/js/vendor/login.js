@@ -1,4 +1,4 @@
-$('document').ready(function () {
+$('document').ready(function() {
 
   var webAuth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
@@ -12,18 +12,18 @@ $('document').ready(function () {
   var userProfile
 
   // proccess login
-  $('#qsLoginBtn').click(function (e) {
+  $('#qsLoginBtn').click(function(e) {
     e.preventDefault();
     webAuth.authorize();
   });
 
-  $('#topLoginBtn').click(function (e) {
+  $('#topLoginBtn').click(function(e) {
       e.preventDefault();
       webAuth.authorize();
     });
 
   // process logout
-  $('#qsLogoutBtn').click(function (e) {
+  $('#qsLogoutBtn').click(function(e) {
     e.preventDefault();
     localStorage.clear()
     webAuth.logout({
@@ -69,8 +69,8 @@ $('document').ready(function () {
         connection: "Username-Password-Authentication"
       })
     }).done(function (response) {
-      $('.tip').text('Email Sent !')
-      $('.tip').css('color', '#4BB543')
+      $('.profile-form').css('display', 'none')
+      $('.emailsent').css('display', 'inline')
     });
   })
 
