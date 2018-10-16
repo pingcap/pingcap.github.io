@@ -25,7 +25,9 @@ function processHash() {
   if (!hash) return
   if ($('.nav-tags').length && $('.nav-tags').data('type') === 'list') return
 
-  smoothScroll(hash)
+  if (!location.href.search('#access_token')) {
+    smoothScroll(hash)
+  }
 }
 
 // initial algolia search
