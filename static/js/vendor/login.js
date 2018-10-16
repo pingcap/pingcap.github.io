@@ -11,13 +11,14 @@ $('document').ready(function() {
   var authResult
   var userProfile
 
-  // proccess login
-  $('#qsLoginBtn').click(function(e) {
+  // proccess top login button cick
+  $('#topLoginBtn').click(function(e) {
     e.preventDefault();
     webAuth.authorize();
   });
 
-  $('#topLoginBtn').click(function(e) {
+  // process bottom login button cick
+  $('#bottomLoginBtn').click(function(e) {
       e.preventDefault();
       webAuth.authorize();
     });
