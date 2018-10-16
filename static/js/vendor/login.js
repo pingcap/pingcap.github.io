@@ -106,7 +106,7 @@ $('document').ready(function() {
     });
   }
 
-  $('.navbar__item').click(function(e) {
+  $('.j-dropdown').click(function (e) {
     if ($('.dropdown').css('display') == 'none') {
       $('.dropdown').css('display', 'block')
       $('.dropdown').fadeIn()
