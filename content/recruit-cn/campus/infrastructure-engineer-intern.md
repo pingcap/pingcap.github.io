@@ -2,7 +2,7 @@
 title: 数据库开发实习生
 tags:
   - Campus
-location: 北京，上海，广州，杭州
+location: 北京，上海，广州，杭州，成都
 avatar: database
 aliases:
   - /recruit-cn/campus/infrastructure-engineer-intern/
@@ -41,4 +41,4 @@ hire@pingcap.com
 
 **工作地点**
 
-北京，上海，广州，杭州
+北京，上海，广州，杭州，成都

@@ -2,7 +2,7 @@
 title: PD 研发工程师
 tags:
   - Engineering
-location: 北京，上海，广州，杭州
+location: 北京，上海，广州，杭州，成都，Remote
 avatar: database
 aliases:
   - /recruit-cn/engineer/pd-engineer/
@@ -44,4 +44,4 @@ aliases:
 
 **工作地点：**
 
-北京，上海，广州，杭州
+北京，上海，广州，杭州，成都，特别优秀可 Remote
