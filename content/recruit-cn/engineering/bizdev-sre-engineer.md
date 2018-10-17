@@ -3,7 +3,7 @@ title: TiDB 商业产品开发 - SRE 方向
 tags:
   - Engineering
 avatar: sre
-location: 北京，上海，广州，杭州，Remote
+location: 北京，上海，广州，杭州，成都，Remote
 aliases:
   - /recruit-cn/engineer/bizdev-sre-engineer/
 ---
@@ -47,4 +47,4 @@ aliases:
 
 **工作地点：**
 
-北京，上海，广州，杭州，特别优秀可 Remote
+北京，上海，广州，杭州，成都，特别优秀可 Remote
