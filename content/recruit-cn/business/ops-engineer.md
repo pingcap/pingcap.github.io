@@ -2,7 +2,7 @@
 title: 高级数据库支持工程师
 tags:
   - Business
-location: 北京，上海，广州，杭州，深圳 
+location: 北京，上海，广州，杭州，深圳，成都 
 avatar: support
 aliases:
   - /recruit-cn/sales/ops-engineer/
@@ -43,4 +43,4 @@ aliases:
 
 **工作地点：**
 
-北京，上海，杭州，广州，深圳
+北京，上海，杭州，广州，深圳，成都

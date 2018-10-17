@@ -2,7 +2,7 @@
 title: TiDB 商业产品开发 - Cloud 方向
 tags:
   - Engineering
-location: 北京, 上海, 广州, 杭州, Remote
+location: 北京，上海，广州，杭州，成都，Remote
 avatar: cloud
 aliases:
   - /recruit-cn/engineer/bizdev-cloud-engineer/
@@ -46,4 +46,4 @@ aliases:
 
 **工作地点：**
 
-北京，上海，广州，杭州，特别优秀可 Remote
+北京，上海，广州，杭州，成都，特别优秀可 Remote

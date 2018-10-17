@@ -3,7 +3,7 @@ title: Infrastructure Engineer
 season: 2019 校招 
 tags:
   - Campus
-location: 北京，上海，广州，杭州、深圳、成都
+location: 北京，上海，广州，杭州，深圳，成都
 avatar: database
 aliases:
   - /recruit-cn/campus/hr-intern/campus-2019-infrastructure-engineer/
@@ -49,4 +49,4 @@ hire@pingcap.com
 
 **工作地点：**
 
-北京，上海，广州，杭州、深圳、成都
+北京，上海，广州，杭州，深圳，成都
