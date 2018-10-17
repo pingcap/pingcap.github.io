@@ -2,7 +2,7 @@
 title: 资深售前技术总监
 tags:
   - Business
-location: 北京，上海，杭州，广州，深圳
+location: 北京，上海，杭州，广州，深圳，成都
 avatar: business
 aliases:
   - /recruit-cn/sales/presales-director/
@@ -38,6 +38,6 @@ aliases:
 
 Base 25K - 35K，13薪 + 期权 + 丰厚的业绩奖金，优秀者可面议
 
-## 工作地点
+**工作地点：**
 
-北京，上海，杭州，广州，深圳
+北京，上海，杭州，广州，深圳，成都
