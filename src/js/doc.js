@@ -68,36 +68,36 @@ function processTags() {
 }
 
 // Replace the relative href in markdown-body
-function replaceHref(a) {
-  var href = $(a).attr('href')
-  var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
-    mdSuffixExp = /\.md/
+// function replaceHref(a) {
+//   var href = $(a).attr('href')
+//   var absUrlExp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi,
+//     mdSuffixExp = /\.md/
 
-  var absUrlRegex = new RegExp(absUrlExp),
-    mdSuffixRegex = new RegExp(mdSuffixExp)
+//   var absUrlRegex = new RegExp(absUrlExp),
+//     mdSuffixRegex = new RegExp(mdSuffixExp)
 
-  if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
-    var newHref = '../' + href.replace(/\.md/, '')
-    $(a).attr('href', newHref)
-  }
-}
+//   if (!href.match(absUrlRegex) && href.match(mdSuffixRegex)) {
+//     var newHref = '../' + href.replace(/\.md/, '')
+//     $(a).attr('href', newHref)
+//   }
+// }
 
 // Process links in markdown content
-function processLinksInMarkdown() {
-  $('.markdown-body')
-    .find('a')
-    .each(function() {
-      var $this = $(this)
-      // click event
-      $this.click(function(e) {
-        replaceHref(this)
-      })
-      // right click event for open in new window or copy link url
-      $this.contextmenu(function(e) {
-        replaceHref(this)
-      })
-    })
-}
+// function processLinksInMarkdown() {
+//   $('.markdown-body')
+//     .find('a')
+//     .each(function() {
+//       var $this = $(this)
+//       // click event
+//       $this.click(function(e) {
+//         replaceHref(this)
+//       })
+//       // right click event for open in new window or copy link url
+//       $this.contextmenu(function(e) {
+//         replaceHref(this)
+//       })
+//     })
+// }
 
 // Process dom elements after loaded
 $(document).ready(function() {
@@ -108,7 +108,13 @@ $(document).ready(function() {
   // Create TOC for article in docs module
   if ($('.article-toc').length) toc_run()
 
-  processLinksInMarkdown()
+  // processLinksInMarkdown()
+
+  // process image: lazy load and add fade in effect
+  $('.lazy').lazyload({
+    threshold: 200,
+    effect: 'fadeIn',
+  })
 
   // Handle tags click: Filter tags on frontend
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
