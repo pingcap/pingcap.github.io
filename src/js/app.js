@@ -25,7 +25,7 @@ function processHash() {
   if (!hash) return
   if ($('.nav-tags').length && $('.nav-tags').data('type') === 'list') return
 
-  if (!location.href.search('#access_token')) {
+  if (location.href.search('#access_token') < 0) {
     smoothScroll(hash)
   }
 }
