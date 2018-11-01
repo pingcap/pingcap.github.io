@@ -1,0 +1,77 @@
+{{- define "title" -}} TiDB Cloud {{- end -}}
+
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "cloud"}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-cloud.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+    {{ $headingLogo := "/images/tidb-cloud-logo.png" }}
+    <div class="main">
+        {{- partial "layout/hero.html" (dict "headingLogo" $headingLogo) -}}
+        <div class="container" style="padding: 0 1rem;">
+            <table class="table-fill">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><h2>Marketplace TiDB Cloud</h2></th>
+                        <th><h2>PingCAP Managed TiDB Cloud</h2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="td-label">Available Platform</td>
+                        <td>GCP Marketplace <br> (other marketplaces coming soon)</td>
+                        <td>Any public or private cloud environment</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Pricing Scheme</td>
+                        <td>See Marketplace listing for more details</td>
+                        <td>Pay per usage: calculated based on a combination of computing resources and storage capacity</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Elastic Horizontal Scaling</td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Rolling Upgrades, Updates and Patching (no downtime)</td>
+                        <td><span class="icon-minus-mark"></span></td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Managed Backup & Restore</td>
+                        <td><span class="icon-minus-mark"></span></td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Cluster and Cost Management Dashboard</td>
+                        <td><span class="icon-minus-mark"></span></td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Data Migration Support</td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                        <td>{{- partial "svgs/icon-check-mark.svg" -}}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">Uptime SLA</td>
+                        <td><span class="icon-minus-mark"></span></td>
+                        <td>99.99</td>
+                    </tr>
+                    <tr>
+                        <td class="td-label">PingCAP Enterprise Support SLA</td>
+                        <td>See Marketplace listing for more details</td>
+                        <td>24 hours response time; email + instant message + phone <br> (Support package with shorter response time available for additional cost)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="actions">
+                <div class="column"></div>
+                <div class="column" style="flex: 1;"><a class="actions__button" href="https://console.cloud.google.com/marketplace/details/pingcap-public/pingcap-tidb-operator" target="_blank">Sign Up</a></div>
+                <div class="column"><a class="actions__button" href="/tidb-cloud/sign-up/">Sign Up</a></div>
+            </div>
+        </div>
+    </div>
+{{- end -}}

@@ -25,50 +25,51 @@
 {{- end -}}
 
 {{- define "main" -}}
-{{ $heading := "Welcome to TiDB Academy!" }}
+{{ $headingLogo := "/images/tidb-academy-logo.png" }}
+{{ $subheading := "Welcome to TiDB Academy!" }}
+{{ $actions := "Log In / Sign Up" }}
 {{ $tips := "Please log in to view the courses." }}
-{{ $headinglogo := "/images/tidb-academy-logo.png" }}
-{{ $signinbnt := "Log In / Sign Up" }}
-<div class="contact-us">
-{{- partial "layout/hero.html" (dict "heading" $heading "headinglogo" $headinglogo "signinbnt" $signinbnt "tips" $tips) -}}
-  <div class="container" style="padding: 0 1rem; min-height: 600px;">
-    <div id="tidb-intro-video" style="text-align: center; margin-top: 100px;">
-        <iframe src="https://player.vimeo.com/video/294639491" width="640" style="max-width: 100%;" height="360" frameborder="0" webkitallowfullscreen
-        mozallowfullscreen allowfullscreen></iframe>
-    </div>
-    <div class="tidb-intro-content">
-        <div class="hero__welcome_heading">Who this course is designed for</div>
-        <div class="academy_intro-content">This is an accelerated introduction course on TiDB targeted for those with a strong
-          MySQL background. In many cases we will explain TiDB concepts by using a direct comparison to MySQL.</div>
-        <div class="hero__welcome_heading">Format</div>
-        <div class="academy_intro-content">This course uses a combination of videos and hands-on exercises. Students may study
-          at their own pace, with an instructor
-              available to reach out to at any point. Completion typically takes 20-30 hours.</div>
-        <div class="hero__welcome_heading">What you will learn</div>
-        <div class="academy_intro-content">Students who successfully complete this course will be able to deploy TiDB in a
-          production environment and perform common DBA tasks, such as backup & recovery, capacity planning and monitoring.</div>
-        <div class="hero__welcome_heading">Prerequisites</div>
-        <div class="academy_intro-content">
-          <ul>
-            <li>
-                This course assumes students have 3-5+ years experience using MySQL in a DBA or Architect role.
-            </li>
-            <li>
-                Students should be comfortable typing commands in a bash shell and MySQL command line client.
-            </li>
-            <li>
-            Previous exposure to Cloud technologies (i.e. Kubernetes) is beneficial but not required.
-            </li>
-          </ul>
+
+<div class="main">
+    {{- partial "layout/hero.html" (dict "subheading" $subheading "headingLogo" $headingLogo "actions" $actions "tips" $tips) -}}
+    <div class="container" style="padding: 0 1rem; min-height: 600px;">
+        <div id="tidb-intro-video" style="text-align: center; margin-top: 100px;">
+            <iframe src="https://player.vimeo.com/video/294639491" width="640" style="max-width: 100%;" height="360" frameborder="0" webkitallowfullscreen
+            mozallowfullscreen allowfullscreen></iframe>
         </div>
-        <div class="hero__welcome_heading">Tuition Fees</div>
-        <div class="academy_intro-content">This course is available free of charge!</div>
+        <div class="tidb-intro-content">
+            <div class="welcome-heading">Who this course is designed for</div>
+            <div class="academy_intro-content">This is an accelerated introduction course on TiDB targeted for those with a strong
+            MySQL background. In many cases we will explain TiDB concepts by using a direct comparison to MySQL.</div>
+            <div class="welcome-heading">Format</div>
+            <div class="academy_intro-content">This course uses a combination of videos and hands-on exercises. Students may study
+            at their own pace, with an instructor
+                available to reach out to at any point. Completion typically takes 20-30 hours.</div>
+            <div class="welcome-heading">What you will learn</div>
+            <div class="academy_intro-content">Students who successfully complete this course will be able to deploy TiDB in a
+            production environment and perform common DBA tasks, such as backup & recovery, capacity planning and monitoring.</div>
+            <div class="welcome-heading">Prerequisites</div>
+            <div class="academy_intro-content">
+            <ul>
+                <li>
+                    This course assumes students have 3-5+ years experience using MySQL in a DBA or Architect role.
+                </li>
+                <li>
+                    Students should be comfortable typing commands in a bash shell and MySQL command line client.
+                </li>
+                <li>
+                Previous exposure to Cloud technologies (i.e. Kubernetes) is beneficial but not required.
+                </li>
+            </ul>
+            </div>
+            <div class="welcome-heading">Tuition Fees</div>
+            <div class="academy_intro-content">This course is available free of charge!</div>
+        </div>
+
+        <div style="text-align: center; padding: 0 0 2em 0;">
+            <button id="bottomLoginBtn" class="hero__signin_bnt" style="margin: 0em;">Log In / Sign Up</button>
+        </div>
     </div>
-    
-      <div style="text-align: center; padding: 0 0 2em 0;">
-          <button id="bottomLoginBtn" class="hero__signin_bnt" style="margin: 0em;">Log In / Sign Up</button>
-      </div>
-  </div>
 </div>
 {{- end -}}
 
