@@ -1,19 +1,15 @@
 <div class="hero">
-  <div class="hero__container">
-    {{- if .headinglogo -}}
-    <div class="hero__inner_academy f-tc">
-      <div class="hero__logo_wrap"><img class="image" src="/images/tidb-academy-logo.png"></div>
-      <h1 class="hero__welcome_heading">{{ .heading }}</h1>
-      <button id="topLoginBtn" class="hero__signin_bnt">{{ .signinbnt }}</button>
-      <p class="hero__tips">{{ .tips }}</p>
+    <div class="hero__container">
+        <div class="hero__inner f-tc">
+            {{- if .headingLogo -}}
+                <div class="hero__logo_wrap"><img class="image" src="{{.headingLogo}}"></div>
+            {{- end -}}
+            {{- if .heading -}}<h1 class="hero__heading">{{ .heading }}</h1>{{- end -}}
+            {{- if .subheading -}}<h2 class="hero__subheading">{{ .subheading }}</h2>{{- end -}}
+            {{- if .actions -}}
+                <button id="topLoginBtn" class="hero__signin_bnt">{{ .actions }}</button>
+                <p class="hero__tips">{{ .tips }}</p>
+            {{- end -}}
+        </div>
     </div>
-    {{- else -}}
-    <div class="hero__inner f-tc">
-      <h1 class="hero__heading">{{ .heading }}</h1>
-      {{- if .subheading -}}
-      <h2 class="hero__subheading">{{ .subheading }}</h2>
-      {{- end -}}
-    </div>
-    {{- end -}}
-  </div>
 </div>
