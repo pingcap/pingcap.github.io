@@ -1,11 +1,13 @@
 {{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "cloud"}}
     {{- partial "head/preload-css" (dict "href" "/css/cases.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
-    {{ $heading := "TiDB Cloud – Sign Up" }}
-    <div class="contact-us">
-        {{- partial "layout/hero.html" (dict "heading" $heading) -}}
+    {{ $headingLogo := "/images/tidb-cloud-logo.png" }}
+    {{ $subheading := "Sign Up" }}
+    <div class="main contact-us">
+        {{- partial "layout/hero.html" (dict "headingLogo" $headingLogo "subheading" $subheading) -}}
         <div class="container" style="padding: 0 1rem; min-height: 700px;">
           <div class="desc">
               To sign up for TiDB Cloud, managed as a service by PingCAP, please fill out the form below. A member from our customer

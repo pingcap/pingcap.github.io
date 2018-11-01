@@ -1,0 +1,174 @@
+// import global variables
+@import "./colors.less";
+
+// import partials
+@import "./hero.less";
+
+@tdColor: #172D72;
+
+.main {
+  padding-top: @headerHeight;
+}
+
+/*** Table Styles **/
+
+.table-fill {
+  background: white;
+  border-radius: 12px;
+  border-collapse: collapse;
+  margin: 3em auto 1em;
+  max-width: 42em;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+}
+
+th {
+  background: #5cc7fd;
+  padding: 0.5em 0.8em;
+  color: #fff;
+  text-align: left;
+  vertical-align: baseline;
+
+  h2 {
+    font-size: 1.1em;
+    color: inherit;
+  }
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+  border-right: none;
+}
+
+tr {
+  border-top: 1px solid #e4e3eb;
+  border-bottom: 1px solid #e4e3eb;
+  color: @tdColor;
+}
+
+tr:first-child {
+  border-top: none;
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+td {
+  background: #fff;
+  padding: 0.5em 0.8em;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 400;
+  font-size: 0.8em;
+  line-height: 1.5;
+  border-right: 1px solid #e4e3eb;
+
+  svg,
+  .icon-minus-mark {
+    display: block;
+    width: 4.2em;
+    height: 4.2em;
+    position: relative;
+  }
+
+  .icon-minus-mark::after {
+    content: '';
+    position: absolute;
+    width: 1.8em;
+    height: 3px;
+    left: 50%;
+    top: 50%;
+    margin-top: -1.5px;
+    margin-left: -0.9em;
+    background: #394a7e;
+  }
+}
+
+td.td-label {
+  width: 12.6em;
+  font-weight: 600;
+  color: @tdColor;
+}
+
+td:last-child {
+  width: 20em;
+  border-right: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 42em;
+  margin: 0 auto 3em;
+
+  div:first-child {
+    width: 12.6em;
+    font-size: 0.8em;
+  }
+
+  div:last-child {
+    width: 16em;
+  }
+
+  .column {
+    padding: 0.5em 0.8em;
+  }
+
+  .actions__button {
+    display: block;
+    width: 6em;
+    height: 2em;
+    margin: 0 auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0,0,0,0.24);
+    line-height: 2em;
+    text-align: center;
+    border-radius: 1em;
+    background-color: @themeBlue;
+    font-size: 0.85em;
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(.25, .8, .25, 1);
+
+    &:hover {
+      box-shadow: 0 5px 5px rgba(0,0,0,0.5), 0 5px 5px rgba(0,0,0,0.22);
+      background: #556AFF;
+    }
+  }
+}
+
+// x-small screen
+@media only screen and (max-width: 40em) {
+  td.td-label,
+  td:last-child {
+    width: 36%;
+  }
+
+  .actions div:first-child,
+  .actions div:last-child {
+    width: 36%;
+  }
+}
+
+// x-small screen
+@media only screen and (max-width: 320px) {
+  html,
+  body {
+    font-size: 12px;
+  }
+}
