@@ -11,9 +11,7 @@
 {{- end -}}
 
 {{- if isset .Params "title" -}}
-    {{ $.Scratch.Add "title" .Params.title }}
-{{- else -}}
-    {{ $.Scratch.Add "title" .Title }}
+    {{- $.Scratch.Add "metaTitle" .Params.title -}}
 {{- end -}}
 
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -25,7 +23,7 @@
 <meta name="keywords" content="SQL, HTAP, Open Source, Cloud-Native, NewSQL">
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="{{ $.Scratch.Get "title" }}">
+<meta property="og:title" content="{{ $.Scratch.Get "metaTitle" }}">
 <meta property="og:description" content="{{ $.Scratch.Get "summary" }}">
 <meta property="og:url" content="{{ .Page.URL | absURL }}">
 <meta property="og:site_name" content="PingCAP">
@@ -33,7 +31,7 @@
 <meta property="og:image:secure_url" content="{{ $.Scratch.Get "image" }}">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:description" content="{{ $.Scratch.Get "summary" }}">
-<meta name="twitter:title" content="{{ $.Scratch.Get "title" }}">
+<meta name="twitter:title" content="{{ $.Scratch.Get "metaTitle" }}">
 <meta name="twitter:site" content="@pingcap">
 <meta name="twitter:image:src" content="{{ $.Scratch.Get "image" }}">
 <meta name="twitter:creator" content="@pingcap">
