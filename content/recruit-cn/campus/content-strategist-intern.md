@@ -1,12 +1,14 @@
 ---
-title: Technical Writer
+title: Content Strategist Intern
 tags:
-  - I18N
+  - Campus
 location: 北京
 avatar: writer
+aliases:
+  - /recruit-cn/campus/content-strategist-intern/
 ---
 
-# Technical Writer
+# Content Strategist Intern
 
 **Qualifications:**
 
@@ -34,7 +36,7 @@ avatar: writer
 
 **待遇：**
 
-10K -30K，13薪 + 奖金，优秀者可面议
+200 元/天，餐补，零食水果，生日会，Team Building
 
 **联系方式：**
 
