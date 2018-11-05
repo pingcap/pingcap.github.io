@@ -1,15 +1,14 @@
 ---
-title: Technical Writer
-season: 2019 校招 
+title: Content Strategist Intern
 tags:
   - Campus
 location: 北京
 avatar: writer
 aliases:
-  - /recruit-cn/campus/campus-2019-technical-writer/
+  - /recruit-cn/campus/technical-writer-intern/
 ---
 
-# Technical Writer
+# Content Strategist Intern
 
 **Qualifications:**
 
@@ -37,7 +36,7 @@ aliases:
 
 **待遇：**
 
-8K - 15K，13薪 + 奖金，优秀者可面议
+200 元/天，餐补，零食水果，生日会，Team Building
 
 **联系方式：**
 
