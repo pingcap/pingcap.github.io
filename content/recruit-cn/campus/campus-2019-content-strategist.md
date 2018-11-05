@@ -6,7 +6,7 @@ tags:
 location: 北京
 avatar: writer
 aliases:
-  - /recruit-cn/campus/campus-2019-technical-writer/
+  - /recruit-cn/campus/campus-2019-content-strategist/
 ---
 
 # Content Strategist
