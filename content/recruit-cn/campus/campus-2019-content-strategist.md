@@ -1,12 +1,15 @@
 ---
-title: Technical Writer
+title: Content Strategist
+season: 2019 校招 
 tags:
-  - I18N
+  - Campus
 location: 北京
 avatar: writer
+aliases:
+  - /recruit-cn/campus/campus-2019-technical-writer/
 ---
 
-# Technical Writer
+# Content Strategist
 
 **Qualifications:**
 
@@ -34,7 +37,7 @@ avatar: writer
 
 **待遇：**
 
-10K -30K，13薪 + 奖金，优秀者可面议
+8K - 15K，13薪 + 奖金，优秀者可面议
 
 **联系方式：**
 
