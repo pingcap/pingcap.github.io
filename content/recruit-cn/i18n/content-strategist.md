@@ -1,14 +1,12 @@
 ---
-title: Content Strategist Intern
+title: Content Strategist
 tags:
-  - Campus
+  - I18N
 location: 北京
 avatar: writer
-aliases:
-  - /recruit-cn/campus/content-strategist-intern/
 ---
 
-# Content Strategist Intern
+# Content Strategist
 
 **Qualifications:**
 
@@ -36,7 +34,7 @@ aliases:
 
 **待遇：**
 
-200 元/天，餐补，零食水果，生日会，Team Building
+10K -30K，13薪 + 奖金，优秀者可面议
 
 **联系方式：**
 
