@@ -160,6 +160,7 @@
     }
 
     label {
+      position: relative;
       display: inline-block;
       margin: 0 0 -1px;
       padding: 15px 25px;
@@ -167,6 +168,10 @@
       text-align: center;
       color: #bbb;
       border: 1px solid transparent;
+    }
+
+    .label__png {
+      padding: 15px 25px 15px 50px;
     }
 
     label::before {
@@ -187,6 +192,33 @@
       content: '\f17a';
     }
 
+    label[for*='Google']::before {
+      position: absolute;
+      // content: url('https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/apple-icon.png');
+      background-image: url('https://cloud.google.com/_static/images/cloud/icons/favicons/onecloud/apple-icon.png');
+      background-size: 20px 20px;
+      display: inline-block;
+      width: 20px; 
+      top: 50%;
+      margin-top: -10px;
+      left: 1.3em;
+      height: 20px;
+      content: '';
+    }
+
+    label[for*='Local']::before {
+      content: '';
+      position: absolute;
+      background-image: url('https://avatars1.githubusercontent.com/u/13629408?s=400&v=4');
+      background-size: 20px 20px;
+      display: inline-block;
+      width: 20px; 
+      top: 50%;
+      margin-top: -10px;
+      left: 1.3em;
+      height: 20px;
+    }
+
     label:hover {
       color: #888;
       cursor: pointer;
@@ -201,8 +233,44 @@
 
     #tabMacOS:checked ~ #macOSContent,
     #tabLinux:checked ~ #linuxContent,
+    #tabGoogle:checked ~ #GoogleContent,
+    #tabLocal:checked ~ #LocalContent,
     #tabWindows:checked ~ #windowsContent {
       display: block;
+    }
+
+    .continue__arrow {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .continue__arrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      border-top: 2px solid #3a59f0;
+      border-right: 2px solid #3a59f0;
+      display: block;
+      top: 50%;
+      left: .6em;
+      position: absolute;
+      margin-top: -2px;
+    }
+
+    .continue__arrow::after {
+      content: '';
+      width: 10px;
+      height: 2px;
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      background: #3a59f0;
+      margin-top: 1px;
     }
   }
 
