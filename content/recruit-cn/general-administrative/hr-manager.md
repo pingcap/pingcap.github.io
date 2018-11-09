@@ -2,7 +2,7 @@
 title: 招聘主管
 tags:
   -  'General & Administrative'
-location: 北京
+location: 北京，上海，广州，杭州，成都
 avatar: hr
 ---
 
@@ -46,4 +46,4 @@ hire@pingcap.com
 
 **工作地点：**
 
-北京
+北京，上海，广州，杭州，成都
