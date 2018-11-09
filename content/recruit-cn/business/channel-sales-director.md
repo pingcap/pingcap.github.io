@@ -5,7 +5,7 @@ tags:
 location: 北京
 avatar: business
 aliases:
-  - /recruit-cn/sales/channel-co-director/
+  - /recruit-cn/sales/channel-sales-director/
 ---
 
 # 资深渠道合作总监
