@@ -25,7 +25,7 @@
 - Campus
   - [Infrastructure Engineer](campus/campus-2019-infrastructure-engineer.md)
   - [Content Strategist](campus/campus-2019-content-strategist.md)
-  - [Marketing Specicalist](campus/campus-2019-marketing-specialist.md)
+  - [Marketing Specialist](campus/campus-2019-marketing-specialist.md)
   - [OPS Engineer](campus/campus-2019-ops-engineer.md)
   - [HR Management Trainee](campus/campus-2019-hr-management-trainee.md)
   - [Infrastructure Engineer Intern](campus/infrastructure-engineer-intern.md)
