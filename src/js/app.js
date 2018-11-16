@@ -168,7 +168,7 @@ $(document).ready(function() {
 
   processMobileOverlay()
 
-  tabCheckedInDocs()
+  if ($('.tabs').length) tabCheckedInDocs()
 
   // Handle click event on Back to top button
   $('.back-to-top').click(function() {
