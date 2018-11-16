@@ -53,12 +53,25 @@ function processTags() {
 
   if (!hash) $('.tag.all').addClass('sel')
 
+  // Handle article filter if list type is blog-cn list
   if (pageType === 'list' && hash) {
     $('.nav-tags .tag').removeClass('sel')
     $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
     $('.article-list .article').each(function() {
       const $this = $(this)
       if ($this.data('tag').includes(hash.slice(1))) {
+        $this.show()
+      } else {
+        $this.hide()
+      }
+    })
+  }
+
+  // Handle article filter if list type is blog list
+  if (pageType === 'blog-list' && hash) {
+    $('.article-list .blog__article').each(function() {
+      const $this = $(this)
+      if ($this.data('category').includes(hash.slice(1))) {
         $this.show()
       } else {
         $this.hide()
@@ -133,18 +146,35 @@ $(document).ready(function() {
       if (isAll) window.location.href = '../'
       else window.location.href = `../#${encodeURIComponent(filter)}`
     } else {
-      $('.article-list .article').each(function() {
-        const $this = $(this)
-        if (isAll) {
-          $this.show()
-        } else {
-          if ($this.data('tag').includes(filter)) {
+      // filter articles if the list type is blog list
+      if (pageType === 'blog-list') {
+        $('.article-list .blog__article').each(function() {
+          const $this = $(this)
+          if (isAll) {
             $this.show()
           } else {
-            $this.hide()
+            if ($this.data('category').includes(filter)) {
+              $this.show()
+            } else {
+              $this.hide()
+            }
           }
-        }
-      })
+        })
+      } else {
+        // filter articles if the list type is blog-cn list
+        $('.article-list .article').each(function() {
+          const $this = $(this)
+          if (isAll) {
+            $this.show()
+          } else {
+            if ($this.data('tag').includes(filter)) {
+              $this.show()
+            } else {
+              $this.hide()
+            }
+          }
+        })
+      }
       if (isAll) window.location.href = `./`
       else window.location.href = `./#${encodeURIComponent(filter)}`
     }

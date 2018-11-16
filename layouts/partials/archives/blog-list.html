@@ -1,0 +1,23 @@
+{{ $hasMetaData := .hasMetaData }}
+{{ $hasBrief := .hasBrief }}
+
+<div class="list article-list">
+    {{- range .posts -}}
+    <div class="blog__article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
+        <div class="logo">
+            <!-- <img src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e1dcfcaa6dafa547aa5381b603296c94&auto=format&fit=crop&w=800&q=60"></div> -->
+        </div>
+        <div class="abstract clearfix">
+            <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
+            {{- if $hasBrief -}}
+            <a href="{{ .URL }}">
+              <div class="brief">
+                <p>{{- .Params.summary -}}</p>
+              </div>
+            </a>
+            {{- end -}}
+            <div class="article_divider"></div>
+        </div>
+    </div>
+    {{- end -}}
+</div>

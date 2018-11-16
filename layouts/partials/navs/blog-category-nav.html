@@ -1,0 +1,27 @@
+<div class="nav-tags" data-type="{{.type}}">
+    {{- range $name, $taxonomy := .global.Site.Taxonomies.categories -}}
+        <div class="category">
+            <a href="#{{ replace $name " " "-"}}" class="tag {{ if in $.global.Params.categories $name }}sel{{end}}" data-tag="{{ replace $name " " "-"}}">
+                <div class="category__icon"></div>
+                <div class="category__content">
+                    <div class="title">
+                      {{- $.global.Scratch.Set "tagCounter" 0 -}}
+                      {{- range $.posts -}}
+                          {{- if in .Params.categories $name -}}
+                              {{- $.global.Scratch.Add "tagCounter" 1 -}}
+                          {{- end -}}
+                      {{- end -}}
+                      {{- $count := $.global.Scratch.Get "tagCounter" -}}
+                      {{- if (gt $count 1) -}}
+                          {{- $name -}}&nbsp;({{ $count }})
+                      {{- end -}}
+                    </div>
+                    <div class="summary">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+                    </div>
+                </div>
+            </a>
+        </div>
+    {{end}}
+</div>

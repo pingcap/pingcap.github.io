@@ -7,15 +7,23 @@
     {{$.Scratch.Set "nav_active" "blog"}}
     {{$.Scratch.Set "data_i18_link" "/blog-cn" }}
     {{- partial "head/preload-css" (dict "href" "/css/list.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
     <div class="blog">
-        <div class="container">
-        {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
-        {{- partial "navs/tags-nav.html" (dict "type" "list" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) -}}
-        {{- partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+      <div class="blog__container">
+        {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
+        <div class="blog__hugeTitle">
+          <h1>PingCAP Blog</h1>
+        </div>
+
+        <div class="tutorial-platform">
+          <div class="guide">See TiDB Deployment Tutoirals for: </div>
+          <div class="opts"><a href="#">Google Cloud</a> <span> | </span> <a href="#">Docker </a><span> | </span> <a href="#">Kubernetes</a></div>
+        </div>
+        {{- partial "navs/blog-category-nav.html" (dict "type" "blog-list" "posts" $posts "global" .) -}}
+        {{- partial "archives/blog-list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
         </div>
     </div>
 {{- end -}}
