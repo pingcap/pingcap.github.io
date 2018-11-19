@@ -5,18 +5,57 @@
     {{- range .posts -}}
     <div class="blog__article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
         <div class="logo">
-            <!-- <img src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e1dcfcaa6dafa547aa5381b603296c94&auto=format&fit=crop&w=800&q=60"></div> -->
+          {{- if .Params.image}}
+              {{ $landingImg := .Params.image}}
+              <img src="{{- $landingImg -}}" />
+          {{- else -}}
+              <img src="https://images.unsplash.com/photo-1491472253230-a044054ca35f?ixlib=rb-0.3.5&s=b730cb6bde7914ca9fd49502f8f0cacd&auto=format&fit=crop&w=800&q=60"/>
+          {{- end -}}
         </div>
         <div class="abstract clearfix">
             <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
-            {{- if $hasBrief -}}
-            <a href="{{ .URL }}">
-              <div class="brief">
-                <p>{{- .Params.summary -}}</p>
-              </div>
-            </a>
+            {{- if $hasMetaData -}}
+                <ul class="blog-post-meta">
+                    <li class="meta-item">
+                        <img src="/images/svgs/icon-date.svg">
+                        {{- .Date.Format "2006-01-02" -}}
+                    </li>
+                    <li class="meta-item">
+                        <img src="/images/svgs/icon-writer.svg">
+                        {{- if isset .Params "author" -}}
+                            {{ $len := len .Params.author }}
+                            {{- range $idx, $i := .Params.author -}}
+                                {{ . }}
+                                {{- if lt $idx (sub $len 1) -}} ,&nbsp; {{- end -}}
+                            {{- end -}}
+                        {{- else -}}
+                            PingCAP
+                        {{- end -}}
+                    </li>
+                    <li class="meta-item">
+                        <div>
+                          {{- if isset .Params "categories" -}}
+                              {{- range $idx, $i := .Params.categories}}
+                                  {{ $i }}
+                              {{- end -}}
+                          {{- end -}}
+                        </div>
+
+                    </li>
+                </ul>
             {{- end -}}
-            <div class="article_divider"></div>
+            {{- if $hasBrief -}}
+                <a href="{{ .URL }}">
+                    <div class="brief">
+                        <p>{{- .Params.summary -}}</p>
+                    </div>
+                </a>
+            {{- end -}}
+            <div class="readMore">
+                <a href="{{ .URL }}">
+                    <p>Read More</p>
+                </a>
+            </div>
         </div>
     </div>
     {{- end -}}

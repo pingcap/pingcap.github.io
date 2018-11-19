@@ -80,6 +80,21 @@ function processTags() {
   }
 }
 
+// function processTextOverflow() {
+//   console.log('proccessing text overflow')
+//   const briefContainers = document.querySelectorAll('.brief')
+//   Array.prototype.forEach.call(briefContainers, container => {
+//     // Loop through each container
+//     var p = container.querySelector('p')
+//     var divh = container.clientHeight
+//     console.log('divh is : ', divh)
+//     while (p.offsetHeight > divh) {
+//       // Check if the paragraph's height is taller than the container's height. If it is:
+//       p.textContent = p.textContent.replace(/\W*\s(\S)*$/, '...') // add an ellipsis at the last shown space
+//     }
+//   })
+// }
+
 // Replace the relative href in markdown-body
 // function replaceHref(a) {
 //   var href = $(a).attr('href')
@@ -120,6 +135,8 @@ $(document).ready(function() {
 
   // Create TOC for article in docs module
   if ($('.article-toc').length) toc_run()
+
+  // if ($('.brief').length) processTextOverflow()
 
   // processLinksInMarkdown()
 
