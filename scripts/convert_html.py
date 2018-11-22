@@ -41,7 +41,7 @@ for img in soup.find_all('img'):
             img['src'] = '/images/svgs/loader-spinner.svg'
             img['class'] = 'lazy'
 
-# print (soup.prettify())
+# print (unicode(soup))
 # write html
 with open(sys.argv[1], 'w') as f:
-    f.write(soup.prettify())
+    f.write(unicode(soup))
