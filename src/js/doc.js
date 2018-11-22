@@ -47,7 +47,7 @@ function processStickyTree() {
 }
 
 // Process tags
-function processTags() {
+function processTags(showMoreList) {
   const hash = decodeURIComponent(location.hash)
   const pageType = $('.nav-tags').data('type')
 
@@ -69,6 +69,10 @@ function processTags() {
 
   // Handle article filter if list type is blog list
   if (pageType === 'blog-list' && hash) {
+    $('.nav-tags .category').removeClass('catesel')
+    $(`.nav-tags .category[data-tag="${hash.slice(1)}"]`).addClass('catesel')
+    $('.nav-tags .tag').removeClass('sel')
+    $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
     $('.article-list .blog__article').each(function() {
       const $this = $(this)
       if ($this.data('category').includes(hash.slice(1))) {
@@ -136,7 +140,11 @@ $(document).ready(function() {
   // Create TOC for article in docs module
   if ($('.article-toc').length) toc_run()
 
-  // if ($('.brief').length) processTextOverflow()
+  // processShowMoreBlogList()
+  // $('#showMore').click(function() {
+  //   var showMore = false
+  //   processTags(!showMore)
+  // })
 
   // processLinksInMarkdown()
 
@@ -198,5 +206,16 @@ $(document).ready(function() {
 
     e.preventDefault()
     return false
+  })
+
+  $('.subscription-nav').click(function() {
+    console.log('hello from subscription')
+    console.log('height: ', $('html, body').scrollTop())
+    $('html, body').animate(
+      {
+        scrollTop: $('.subscription').offset().top,
+      },
+      10
+    )
   })
 })

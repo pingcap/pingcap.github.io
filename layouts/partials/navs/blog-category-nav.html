@@ -1,7 +1,7 @@
 <div class="nav-tags" data-type="{{.type}}">
     {{- range $name, $taxonomy := .global.Site.Taxonomies.categories -}}
-        <div class="category">
-            <a href="#{{ replace $name " " "-"}}" class="tag {{ if in $.global.Params.categories $name }}sel{{end}}" data-tag="{{ replace $name " " "-"}}">
+        <div class="category" data-tag="{{ replace $name " " "-"}}">
+            <a href="#{{ replace $name " " "-"}}" class="tag" data-tag="{{ replace $name " " "-"}}">
                 <div class="category__icon"></div>
                 <div class="category__content">
                     <div class="title">
@@ -13,7 +13,7 @@
                       {{- end -}}
                       {{- $count := $.global.Scratch.Get "tagCounter" -}}
                       {{- if (gt $count 1) -}}
-                          {{- $name -}}&nbsp;({{ $count }})
+                          {{- $name -}}
                       {{- end -}}
                     </div>
                     <div class="summary">
