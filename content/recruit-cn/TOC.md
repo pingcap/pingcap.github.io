@@ -11,6 +11,7 @@
   - [TiDB 商业产品开发 - Cloud 方向](engineering/bizdev-cloud-engineer.md)
   - [TiDB 商业产品开发 - SRE 方向](engineering/bizdev-sre-engineer.md)
   - [TiDB 商业产品开发 - 产品方向](engineering/bizdev-fe-engineer.md)
+  - [TiDB 产品经理](engineering/product-manager.md)
 - Business
   - [资深行业销售总监](business/sales-director.md)
   - [资深售前技术总监](business/presales-director.md)
@@ -32,6 +33,5 @@
   - [HR Intern](campus/hr-intern.md)
   - [Content Strategist Intern](campus/content-strategist-intern.md)
 - General & Administrative
-  - [出纳](general-administrative/cashier.md)
   - [招聘主管](general-administrative/hr-manager.md)
-  - [行政前台](general-administrative/administrative-receptionist.md)
+  - [分公司行政主管](general-administrative/office-admin.md)
