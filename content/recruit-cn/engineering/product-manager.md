@@ -1,7 +1,7 @@
 ---
 title: TiDB 产品经理
 tags:
-  -  ' Engineering'
+  - Engineering
 location: 北京，上海，广州，杭州，成都，深圳
 avatar: 
 ---
