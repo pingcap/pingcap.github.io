@@ -3,60 +3,59 @@
 
 <div class="list article-list">
     {{- range .posts -}}
-    <div class="blog__article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
-        <div class="logo">
-          {{- if .Params.image}}
-              {{ $landingImg := .Params.image}}
-              <img src="{{- $landingImg -}}" />
-          {{- else -}}
-              <img src="https://images.unsplash.com/photo-1491472253230-a044054ca35f?ixlib=rb-0.3.5&s=b730cb6bde7914ca9fd49502f8f0cacd&auto=format&fit=crop&w=800&q=60"/>
-          {{- end -}}
-        </div>
-        <div class="abstract clearfix">
-            <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
-            {{- if $hasMetaData -}}
-                <ul class="blog-post-meta">
-                    <li class="meta-item">
-                        <img src="/images/svgs/icon-date.svg">
-                        {{- .Date.Format "2006-01-02" -}}
-                    </li>
-                    <li class="meta-item">
-                        <img src="/images/svgs/icon-writer.svg">
-                        {{- if isset .Params "author" -}}
-                            {{ $len := len .Params.author }}
-                            {{- range $idx, $i := .Params.author -}}
-                                {{ . }}
-                                {{- if lt $idx (sub $len 1) -}} ,&nbsp; {{- end -}}
-                            {{- end -}}
-                        {{- else -}}
-                            PingCAP
-                        {{- end -}}
-                    </li>
-                    <li class="meta-item">
-                        <div>
-                          {{- if isset .Params "categories" -}}
-                              {{- range $idx, $i := .Params.categories}}
-                                  {{ $i }}
+    <a href="{{ .URL }}">
+      <div class="blog__article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
+          <div class="logo">
+            {{- if .Params.image}}
+                {{ $landingImg := .Params.image}}
+                <img src="{{- $landingImg -}}" />
+            {{- else -}}
+                <img src="https://images.unsplash.com/photo-1491472253230-a044054ca35f?ixlib=rb-0.3.5&s=b730cb6bde7914ca9fd49502f8f0cacd&auto=format&fit=crop&w=800&q=60"/>
+            {{- end -}}
+          </div>
+          <div class="abstract clearfix">
+              <h1 class="title">{{ .Title }}</h1>
+              {{- if $hasMetaData -}}
+                  <ul class="blog-post-meta">
+                      <li class="meta-item">
+                          <img src="/images/svgs/icon-date.svg">
+                          {{- .Date.Format "2006-01-02" -}}
+                      </li>
+                      <li class="meta-item">
+                          <img src="/images/svgs/icon-writer.svg">
+                          {{- if isset .Params "author" -}}
+                              {{ $len := len .Params.author }}
+                              {{- range $idx, $i := .Params.author -}}
+                                  {{ . }}
+                                  {{- if lt $idx (sub $len 1) -}} ,&nbsp; {{- end -}}
                               {{- end -}}
+                          {{- else -}}
+                              PingCAP
                           {{- end -}}
-                        </div>
+                      </li>
+                      <li class="meta-item">
+                          <div>
+                            {{- if isset .Params "categories" -}}
+                                {{- range $idx, $i := .Params.categories}}
+                                    {{ $i }}
+                                {{- end -}}
+                            {{- end -}}
+                          </div>
 
-                    </li>
-                </ul>
-            {{- end -}}
-            {{- if $hasBrief -}}
-                <a href="{{ .URL }}">
-                    <div class="brief">
-                        <p>{{- .Params.summary -}}</p>
-                    </div>
-                </a>
-            {{- end -}}
-            <!-- <div class="readMore">
-                <a href="{{ .URL }}">
-                    <p>Read More</p>
-                </a>
-            </div> -->
-        </div>
-    </div>
+                      </li>
+                  </ul>
+              {{- end -}}
+              {{- if $hasBrief -}}
+                  <div class="brief">
+                      <p class="briefParagragh">{{- .Params.summary -}}</p>
+                      <div class="hideExtraWords">.</div>
+                  </div>
+              {{- end -}}
+              <div class="readMore">
+                  <p>Read More</p>
+              </div>
+          </div>
+      </div>
+    </a>
     {{- end -}}
 </div>

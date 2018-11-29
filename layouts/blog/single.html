@@ -10,23 +10,22 @@
         <div class="blogArticle__container">
             {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
             <div class="archive">
-                {{- range $idx, $i := .Params.categories -}}
-                    <div class="articel-nav">
+                <!-- {{- range $idx, $i := .Params.categories -}}
+                    <div class="article-nav">
                         <a href="/blog/#{{ replace $i " " "-"}}">BLOG HOME</a> <span> > </span>{{- $i -}}
                         <span class="subscription-nav">SUBSCRIBE US</span>
                   </div>
-                {{- end -}}
-
-                <div class="content markdown-body">
-                    <div class="article-head-img">
+                {{- end -}} -->
+                <div class="article-head-img">
                     {{- if .Params.image}}
-                        {{ $landingImg := .Params.image}}
+                    {{ $landingImg := .Params.image}}
                         <img src="{{- $landingImg -}}" />
                     {{- else -}}
                         <img src="/images/blog-article/default.png" />
                     {{- end -}}
-                    </div>
-                    <div class="title">{{ .Title }}</div>
+                </div>
+                <div class="content markdown-body">
+                    <h1 class="title">{{ .Title }}</h1>
                     <ul class="blog-post-meta">
                         <li class="meta-item">
                             <img src="/images/svgs/icon-date.svg">
@@ -47,7 +46,7 @@
                     </ul>
                     <div class="blog-text">{{- .Content -}}</div>
                 </div>
-                {{- partial "archives/subscription.html" . -}}
+                <!-- {{- partial "archives/subscription.html" . -}} -->
                 {{- partial "archives/post-share.html" . -}}
             </div>
         </div>
