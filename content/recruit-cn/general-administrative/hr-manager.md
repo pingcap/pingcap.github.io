@@ -1,7 +1,7 @@
 ---
 title: 招聘主管
 tags:
-  -  'General & Administrative'
+  - 'General & Administrative'
 location: 北京，上海，广州，杭州，成都
 avatar: hr
 ---
@@ -38,7 +38,7 @@ avatar: hr
 
 **待遇：**
 
-10K -30K，13薪 + 奖金，优秀者可面议
+10K - 30K，13薪 + 奖金，优秀者可面议
 
 **联系方式：**
 
