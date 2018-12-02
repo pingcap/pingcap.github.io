@@ -15,9 +15,11 @@
 {{- end -}}
 
 {{- define "main" -}}
+{{- $versions := .Site.Params.versions.docs.all }}
+{{- $latest   := .Site.Params.versions.docs.latest }}
 <div class="doc">
     <div class="container">
-        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_toc "title" "Documentation") -}}
+        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_toc "title" "Documentation" "versions" $version "latest" $latest) -}}
 
         <div class="archive">
             <div class="content markdown-body">{{- .Content -}}</div>
