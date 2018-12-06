@@ -8,6 +8,31 @@
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
 {{- end -}}
 
+{{- define "footJS" -}}
+    <!-- Begin bai_du map -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init"></script>
+    <script type="text/javascript">
+      function init() {
+        var map = new AMap.Map('map', {
+          zoomEnable: false,
+          zoom: 15,
+          center: [116.436266,39.980987],
+          mapStyle: 'amap://styles/light' //样式URL
+        })
+        //添加点标记，并使用自己的icon
+        new AMap.Marker({
+          map: map,
+          position: [116.436266,39.980987],
+          icon: new AMap.Icon({
+            size: new AMap.Size(32, 32), //图标大小
+            image: '/images/svgs/location.svg'
+          })
+        })
+      }
+    </script>
+    <!-- End bai_du map -->
+{{- end -}}
+
 {{- define "main" -}}
 <div class="devCon">
     <div class="devCon__container">
@@ -31,41 +56,57 @@
             </div>
         </div> -->
         <div class="agenda__container">
-          <div class="agenda">
-              <h1 class="title">会议日程</h1>
-                <table class="agenda__table" border="0" cellspacing="0" cellpadding="0">
-                  <tr><th>开始</th><th>结束</th><th>活动内容</th></tr>
-                  <tr><td>8:40 am </td><td>9:30 am</td><td>入场签到 领取签到礼包</td></tr>
-                  <tr><td>9:30 am </td><td>9:50 am</td><td>开场 by 刘奇</td></tr>
-                  <tr><td>9:50 am </td><td>10:10 am</td><td>Talk 1 by 海外讲师 1</td></tr>                  
-                  <tr><td>10:10 am </td><td>11:10 am</td><td>社区实践 1</td></tr>
-                  <tr><td>8:40 am </td><td>9:30 am</td><td>入场签到 领取签到礼包</td></tr>
-                  <tr><td>8:40 am </td><td>9:30 am</td><td>入场签到 领取签到礼包</td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 2 美团</li></ul></td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 3 北京银行</li></ul></td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 4 小米</li></ul></td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 5 华为</li></ul></td></tr>
-                  <tr><td>11:10 am</td><td>11:50 am</td><td>Talk 6 申砾    // 技术特性 + Roadmap</td></tr>
-                  <tr><td>11:30 am</td><td>13:30 pm</td><td>午餐</td></tr>
-                  <tr><td>13:20 pm </td><td>14:00 pm</td><td>Talk 7 by 崔秋    // 社区 + 荣誉时刻 （团队 or 个人）</td></tr>
-                  <tr><td>14:00 pm </td><td>15:00 pm</td><td>Talk 1 by 海外讲师 1</td></tr>                  
-                  <tr><td>10:10 am </td><td>11:10 am</td><td>社区实践 2</td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 8 微众银行</li></ul></td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 9 格力</li></ul></td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 10 转转</li></ul></td></tr>
-                  <tr><td></td><td></td><td><ul><li>Talk 11 天翼支付</li></ul></td></tr>
-                  <tr><td>15:00 pm</td><td>15:20 pm</td><td>休息</td></tr>
-                  <tr><td>15:20 pm </td><td>16:20 pm</td><td>Demo Show</td></tr>
-                  <tr><td>16:20 pm </td><td>16:40 pm</td><td>Talk 12 by 海外讲师 2</td></tr>                  
-                  <tr><td>16:40 am </td><td>17:00 am</td><td>收尾 Talk by 黄东旭</td></tr>
-                </table>
-          </div>
+            <h1 class="title">会议日程</h1>
+            <table class="agenda__table" border="0" cellspacing="0" cellpadding="0">
+              <tr><th>开始</th><th>结束</th><th>活动内容</th></tr>
+              <tr><td>8:40 am </td><td>9:30 am</td><td>入场签到 领取签到礼包</td></tr>
+              <tr><td>9:30 am </td><td>9:50 am</td><td>开场 by 刘奇</td></tr>
+              <tr><td>9:50 am </td><td>10:10 am</td><td>Talk 1 by 海外讲师 1</td></tr>                  
+              <tr><td>10:10 am </td><td>11:10 am</td><td>社区实践 1</td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 2 美团</li></ul></td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 3 小米</li></ul></td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 4 新东方</li></ul></td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 5 华为</li></ul></td></tr>
+              <tr><td>11:10 am</td><td>11:50 am</td><td>Talk 6 申砾</td></tr>
+              <tr><td>11:30 am</td><td>13:30 pm</td><td>午餐</td></tr>
+              <tr><td>13:20 pm </td><td>14:00 pm</td><td>社区荣誉时刻</td></tr>
+              <tr><td>14:00 pm </td><td>15:00 pm</td><td>社区实践 2</td></tr>   
+              <tr><td></td><td></td><td><ul><li>Talk 8 北京银行</li></ul></td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 9 微众银行</li></ul></td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 10 B站</li></ul></td></tr>
+              <tr><td></td><td></td><td><ul><li>Talk 11 中证登</li></ul></td></tr>
+              <tr><td>15:00 pm</td><td>15:20 pm</td><td>休息</td></tr>
+              <tr><td>15:20 pm </td><td>16:20 pm</td><td>Demo Show （3 - 4 个）</td></tr>
+              <tr><td>16:20 pm </td><td>16:40 pm</td><td>Talk 12 by 海外讲师 2</td></tr>                  
+              <tr><td>16:40 am </td><td>17:00 am</td><td>Talk by 黄东旭</td></tr>
+            </table>
         </div>
 
         <div class="instructors__container">
-          this is instructor list
+            <div class="instructors">
+                <h1 class="title">讲师介绍</h1>
+                <div class="instructors__list">
+                    {{- range $idx, $i := .Site.Data.devcon2019.instructors -}}
+                        <!-- {{ printf "%#v" $i}} -->
+                        <div class="instructor">
+                          <div class="avatar">
+                              <img src="{{ $i.image}}" />
+                              <!-- <div class="overlay"></div> -->
+                              <div class="intro">{{ $i.intro }}</div>
+                          </div>
+                          <div class="name">{{ $i.name}}</div>
+                          <div class="company">{{ $i.company}} | {{ $i.title }}</div>
+                          <!-- <div class="position"></div> -->
+                          <!-- <div class="intro">{{ $i.intro }}</div> -->
+                        </div>
+                    {{- end -}}
+                </div>
+            </div>
         </div>
-        
+
+        <div class="contact__container">
+            <div id="map" class="map" style="width: 100%; height: 340px;"></div>
+        </div>
     </div>
 </div>
 {{- end -}}
