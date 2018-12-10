@@ -10,10 +10,16 @@
         <div class="blogArticle__container">
             {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
             <div class="archive">
-                {{- range $idx, $i := .Params.categories -}}
+                {{- if (isset .Params "categories") -}}
+                    {{- range $idx, $i := .Params.categories -}}
+                        <div class="article-nav">
+                            <a href="/blog/#{{ replace $i " " "-"}}">BLOG HOME</a> <span> > </span>{{- $i -}}
+                        </div>
+                    {{- end -}}
+                {{- else -}}
                     <div class="article-nav">
-                        <a href="/blog/#{{ replace $i " " "-"}}">BLOG HOME</a> <span> > </span>{{- $i -}}
-                  </div>
+                        <a href="/blog">BLOG HOME</a>
+                    </div>
                 {{- end -}}
                 <div class="article-head-img">
                     {{- if .Params.image}}
