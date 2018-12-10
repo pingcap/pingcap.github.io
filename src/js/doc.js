@@ -243,15 +243,4 @@ $(document).ready(function() {
     e.preventDefault()
     return false
   })
-
-  $('.subscription-nav').click(function() {
-    console.log('hello from subscription')
-    console.log('height: ', $('html, body').scrollTop())
-    $('html, body').animate(
-      {
-        scrollTop: $('.subscription').offset().top,
-      },
-      10
-    )
-  })
 })
