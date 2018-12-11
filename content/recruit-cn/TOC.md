@@ -11,13 +11,15 @@
   - [TiDB 商业产品开发 - Cloud 方向](engineering/bizdev-cloud-engineer.md)
   - [TiDB 商业产品开发 - SRE 方向](engineering/bizdev-sre-engineer.md)
   - [TiDB 商业产品开发 - 产品方向](engineering/bizdev-fe-engineer.md)
+  - [TiDB 产品经理](engineering/product-manager.md)
 - Business
   - [资深行业销售总监](business/sales-director.md)
   - [资深售前技术总监](business/presales-director.md)
   - [资深渠道合作总监](business/channel-sales-director.md)
   - [资深互联网架构师](business/internet-architect.md)
-  - [资深/高级/中级 TiDB DBA ](business/tidb-dba.md)
-  - [资深/高级/中级 TiDB 交付 DBA ](business/tidb-delivery-dba.md)
+  - [资深/高级/中级 TiDB DBA](business/tidb-dba.md)
+  - [资深/高级/中级 TiDB 交付 DBA](business/tidb-delivery-dba.md)
+  - [高级大数据平台工程师](business/olap-ops-engineer.md)
 - MKT
   - [社区运营](market/community-operation.md)
 - I18N
@@ -32,6 +34,5 @@
   - [HR Intern](campus/hr-intern.md)
   - [Content Strategist Intern](campus/content-strategist-intern.md)
 - General & Administrative
-  - [出纳](general-administrative/cashier.md)
   - [招聘主管](general-administrative/hr-manager.md)
-  - [行政前台](general-administrative/administrative-receptionist.md)
+  - [分公司行政主管](general-administrative/office-admin.md)
