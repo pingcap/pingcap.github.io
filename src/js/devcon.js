@@ -11,6 +11,7 @@ function handleWebsiteNavDisplay() {
   } else {
     $('header').show()
     $('.devcon-nav').css('top', y)
+    $('.devCon').css('padding-top', 2 * y)
   }
 }
 
