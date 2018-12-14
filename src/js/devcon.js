@@ -44,19 +44,48 @@ function smoothScroll() {
 }
 
 function calcBtnPosition() {
+  console.log('hei')
   if (window.matchMedia('(max-width: 1100px)').matches) {
     console.log('mobile')
+    $('.banner button').css('left', 'auto')
+    $('.banner button').css('top', 'auto')
     $('.banner .image img').attr(
       'src',
       '/images/community/devcon-banner-mobile.png'
     )
+    console.log('height:', $('.banner, .image img').height())
+    // var wd = $('.banner, .image img').width() * 0.127 // 74 * W / 1368
+    var hd = $('.banner, .image img').height() * 0.734 // 781* H / 573
+    // var btnTop = hd + 30
+    // //
+    // $('.banner p').css('left', wd)
+    // $('.banner p').css('top', hd)
+    $('.banner button').css('right', '1rem')
+    $('.banner button').css('top', hd)
   } else {
     console.log('pc')
     $('.banner .image img').attr(
       'src',
       '/images/community/devcon-banner-pc.png'
     )
+    var wd = $('.banner, .image img').width() * 0.127 // 74 * W / 1368
+    var hd = $('.banner, .image img').height() * 0.689 // 424* H / 615
+    var btnTop = hd + 30
+    // //
+    // $('.banner p').css('left', wd)
+    // $('.banner p').css('top', hd)
+    $('.banner button').css('left', wd)
+    $('.banner button').css('top', btnTop)
   }
+
+  // console.log('h: ', $('.banner, .image img').height())
+  // console.log('w:', $('.banner, .image img').width())
+  // var btnTop = hd + 30
+  // // //
+  // // $('.banner p').css('left', wd)
+  // // $('.banner p').css('top', hd)
+  // $('.banner button').css('left', wd)
+  // $('.banner button').css('top', btnTop)
 }
 // calculate the positions of address and button in banner
 // function calcBtnPosition() {
@@ -204,7 +233,22 @@ $(document).ready(function() {
     $('.devCon').css('padding-top', 2 * header_H)
   }
 
+  // if (window.matchMedia('(max-width: 1100px)').matches) {
+  //   console.log('m')
+  //   $('.banner .image img').attr(
+  //     'src',
+  //     '/images/community/devcon-banner-mobile.png'
+  //   )
+  //   calcBtnPosition()
+  // } else {
+  //   console.log('p')
+  //   $('.banner .image img').attr(
+  //     'src',
+  //     '/images/community/devcon-banner-pc.png'
+  //   )
+  //   console.log($('.banner .image img').height())
   calcBtnPosition()
+  // }
 
   // handle window scrolls
   $(window).scroll(handleWebsiteNavDisplay)
