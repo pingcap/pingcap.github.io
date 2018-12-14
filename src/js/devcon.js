@@ -33,7 +33,7 @@ function smoothScroll() {
       break
   }
 
-  console.log('$(sectionName).offset().top', $(sectionName).offset().top)
+  // console.log('$(sectionName).offset().top', $(sectionName).offset().top)
   var extraH = 0
   if ($('header').length && !$('header').is(':hidden')) {
     extraH = 2 * $('header').height()
