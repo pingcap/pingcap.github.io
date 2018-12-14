@@ -106,8 +106,6 @@ $(document).ready(function() {
     var el = $(this)
       .find('.intro')
       .css('opacity', '1')
-    // .attr('style', 'opacity: 1;')
-    // console.log('hello clicked')
   })
 
   $('.instructor').hover(function() {
@@ -116,23 +114,16 @@ $(document).ready(function() {
     var el = $(this)
       .find('.intro')
       .css('opacity', '1')
-    // .attr('style', 'opacity: 1;')
-    // console.log('hello clicked')
   })
 
   $('.section-burger').click(function() {
     // $('.dropdown-btns').css('opacity', '0')
-    // val el = $(this).find('.dropdown-btns').css('opacity', '1')
+    console.log('dropdown clicked')
+    // val el = $(this).find('.dropdown-btns').css('display', '1')
     // if ($('.dropdown-btns').attr('opacity')) {
     // }
     // console.log('attr: ', $('.dropdown-btns').attr('opacity'))
-    $(this).css('opacity', '0.5')
-    console.log('burger clicked')
-  })
-
-  $('.section-burger').hover(function() {
-    $('.dropdown-btns').css('opacity', '0')
-    $(this).css('opacity', '0.5')
-    console.log('burger clicked')
+    // $(this).css('opacity', '0.5')
+    // console.log('burger clicked')
   })
 })
