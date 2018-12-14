@@ -100,4 +100,23 @@ $(document).ready(function() {
   $('.contact-btn').click(smoothScroll)
 
   $('.signup-btn').click(smoothScroll)
+
+  $('.instructor').click(function() {
+    $('.intro').css('opacity', '0')
+    var el = $(this)
+      .find('.intro')
+      .css('opacity', '1')
+    // .attr('style', 'opacity: 1;')
+    console.log('hello clicked')
+  })
+
+  $('.instructor').hover(function() {
+    $('.intro').css('opacity', '0')
+
+    var el = $(this)
+      .find('.intro')
+      .css('opacity', '1')
+    // .attr('style', 'opacity: 1;')
+    console.log('hello clicked')
+  })
 })
