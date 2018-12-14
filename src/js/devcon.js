@@ -119,4 +119,16 @@ $(document).ready(function() {
     // .attr('style', 'opacity: 1;')
     console.log('hello clicked')
   })
+
+  $('.section-burger').click(function() {
+    $('.dropdown-btns').css('opacity', '0')
+    $(this).css('opacity', '0.5')
+    console.log('burger clicked')
+  })
+
+  $('.section-burger').hover(function() {
+    $('.dropdown-btns').css('opacity', '0')
+    $(this).css('opacity', '0.5')
+    console.log('burger clicked')
+  })
 })
