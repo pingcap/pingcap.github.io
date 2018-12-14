@@ -118,13 +118,10 @@ $(document).ready(function() {
   })
 
   $('.section-burger').click(function() {
-    // $('.dropdown-btns').css('opacity', '0')
-    console.log('dropdown clicked')
-    // val el = $(this).find('.dropdown-btns').css('display', '1')
-    // if ($('.dropdown-btns').attr('opacity')) {
-    // }
-    // console.log('attr: ', $('.dropdown-btns').attr('opacity'))
-    // $(this).css('opacity', '0.5')
-    // console.log('burger clicked')
+    if ($('.dropdown-btns').css('display') == 'block') {
+      $('.dropdown-btns').css('display', 'none')
+    } else {
+      $('.dropdown-btns').css('display', 'block')
+    }
   })
 })
