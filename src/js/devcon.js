@@ -33,7 +33,6 @@ function smoothScroll() {
       break
   }
 
-  // console.log('$(sectionName).offset().top', $(sectionName).offset().top)
   var extraH = 0
   if ($('header').length && !$('header').is(':hidden')) {
     extraH = 2 * $('header').height()
@@ -49,31 +48,16 @@ function smoothScroll() {
 }
 
 function calcBtnPosition() {
-  // console.log('hei')
   if (window.matchMedia('(max-width: 1100px)').matches) {
-    // console.log('mobile')
-    // $('.banner button').css('left', 'auto')
-    // $('.banner button').css('top', 'auto')
     $('.banner .image img').attr(
       'src',
       '/images/community/devcon-banner-mobile.png'
     )
-    // console.log('height:', $('.banner, .image img').height())
-    // var hd = $('.banner, .image img').height() * 0.734 // 781* H / 573
-    // $('.banner button').css('right', '1rem')
-    // $('.banner button').css('top', hd)
   } else {
-    // console.log('pc')
     $('.banner .image img').attr(
       'src',
       '/images/community/devcon-banner-pc.png'
     )
-    // var wd = $('.banner, .image img').width() * 0.127 // 74 * W / 1368
-    // var hd = $('.banner, .image img').height() * 0.689 // 424* H / 615
-    // var btnTop = hd + 30
-
-    // $('.banner button').css('left', wd)
-    // $('.banner button').css('top', btnTop)
   }
 }
 
