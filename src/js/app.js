@@ -130,6 +130,7 @@ function handleWindowScroll() {
 
 function processMobileOverlay() {
   $('.nav-btn.nav-slider').click(function() {
+    console.log('clicked')
     $('.overlay').show()
     $('nav').toggleClass('open')
   })

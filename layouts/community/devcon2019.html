@@ -1,0 +1,244 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "DevCon2019" }}
+    Devcon2019
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
+    <style type="text/css">
+      .amap-logo,
+      .amap-copyright {
+        display: none !important;
+      }
+
+      .amap-icon img {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+    </style>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="/js/devcon.js"></script>
+    <!-- Begin gao_de map -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init"></script>
+    <script type="text/javascript">
+      function init() {
+        var map = new AMap.Map('map', {
+          zoomEnable: false,
+          zoom: 15,
+          center: [116.436266,39.980987],
+          mapStyle: 'amap://styles/light' //样式URL
+        })
+        //添加点标记，并使用自己的icon
+        new AMap.Marker({
+          map: map,
+          position: [116.436266,39.980987],
+          tooltip: '中关村时尚产业创新园',
+          icon: new AMap.Icon({
+            size: new AMap.Size(32, 32), //图标大小
+            image: '/images/svgs/location.svg'
+          })
+        })
+      }
+    </script>
+    <!-- End bai_du map -->
+{{- end -}}
+
+{{- define "main" -}}
+{{- partial "layout/devcon-nav.html" . -}}
+<div class="devCon">
+    <div class="devCon__container">
+        <div class="banner">
+            <div class="image">
+                <img src="/images/community/devcon-banner-pc.png" />
+            </div>
+        </div>
+
+        <div class="agenda__container">
+            <div class="content">
+                <p>
+                  TiDB DevCon 是 PingCAP 团队面向 TiDB 社区推出的技术会议。
+                  本届 TiDB DevCon 2019 以 “Powered By Contributors” 为主题，聚焦 TiDB 项目核心技术的最新进展和未来规划，以及来自社区一线用户的最佳实践经验，展示 TiDB
+                  在海内外的最新动态。旨在帮助社区更好的理解 TiDB 的技术理念，汇总用户从技术选型到应用落地各阶段的实操中总结出的经验和坑，挖掘 TiDB 场景适配的更多可能性。
+                </p>
+            </div>
+            <h1 class="title agenda-title">会议日程</h1>
+            <table class="agenda__table" border-top="border-bottom: 1px solid #DDDDDD;" cellspacing="0" cellpadding="0">
+              <tr><td>8:40 - 9:30</td><td>入场签到</td><td></td></tr>
+              <tr><td>9:30 - 9:50</td><td>Opening Keynote</td><td>刘奇</td></tr>
+              <tr><td>9:50 - 10:10</td><td>The Global Scale of TiDB</td><td>Morgan Tocker</td></tr>                  
+              <tr><td>10:10 - 11:10</td><td>社区实践专场 1</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li> - 美团点评</li></ul></td><td>赵应钢</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li> - 小米</li></ul></td><td>潘友飞</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li> - 新东方</li></ul></td><td>傅少峰</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li>- 北京银行</li></ul></td><td>于振华</td></tr>
+              <tr><td>11:10 - 11:50</td><td>The Way to TiDB 3.0</td><td>申砾</td></tr>
+              <tr><td>11:30 - 13:20</td><td>午餐</td><td></td></tr>
+              <tr><td>13:20 - 14:00</td><td>社区荣誉时刻</td><td>崔秋</td></tr>
+              <tr><td>14:00 - 15:00</td><td>社区实践专场 2</td></tr>   
+              <tr><td></td><td><ul style="list-style: none;"><li> - 微众银行</li></ul></td><td>胡盼盼</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li> - 转转</li></ul></td><td>孙玄</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li> - 小红书</li></ul></td><td>张俊骏</td></tr>
+              <tr><td></td><td><ul style="list-style: none;"><li> - 某金融机构</li></ul></td><td>潘迪</td></tr>
+              <tr><td>15:00 - 15:20</td><td>茶歇</td><td></td></tr>
+              <tr><td>15:20 - 15:40</td><td>TiKV - A Strong Foundation</td><td>Ana Hobden</td></tr>
+              <tr><td>15:40 - 16:40</td><td>Demo Session</td><td>黄东旭</td></tr>                  
+              <tr><td>16:40 - 17:00</td><td>The Future of Database</td><td>黄东旭</td></tr>
+            </table>
+        </div>
+
+        <div class="instructors__container">
+            <div class="instructors">
+                <h1 class="title">讲师介绍</h1>
+                <div class="instructors__list">
+                    {{- range $idx, $i := .Site.Data.devcon2019.instructors -}}
+                        <!-- {{ printf "%#v" $i}} -->
+                        <div class="instructor">
+                          <div class="avatar">
+                              <img src="{{ $i.image}}" />
+                              <!-- <div class="overlay"></div> -->
+                              <div class="intro"><p>{{ $i.intro }}</p></div>
+                          </div>
+                          <div class="name">{{ $i.name}}</div>
+                          <div class="company">{{ $i.company}} | {{ $i.title }}</div>
+                          <!-- <div class="position"></div> -->
+                          <!-- <div class="intro">{{ $i.intro }}</div> -->
+                        </div>
+                    {{- end -}}
+                </div>
+            </div>
+        </div>
+
+        <div class="sponsor__container">
+          <div class="sponsors">
+            <h1 class="title">支持媒体</h1>
+            <div class="sponsors__list">
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/geek.png" />
+                </div>
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/csdn.jpeg" />
+                </div>
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/kaiyuanzhongguo.jpeg" />
+                </div>
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/segmentfault.jpeg" />
+                </div>
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/51cto.jpeg" />
+                </div>
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/juejin.jpeg" />
+                </div>
+                <div class="sponsor">
+                  <img src="/images/community/sponsors/dbaplus.jpeg" />
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact__container">
+            <div class="contact">
+                <h1 class="title">参会地址</h1>
+                <div class="address__guide">
+                    <div class="guide">地址 
+                        <div class="guide-detail">北京市 朝阳区 樱花园东街甲 2 号 北京服装学院内 中关村时尚产业创新园 二层</div>
+                    </div>
+                    <div class="guide">驾车路线
+                        <div class="guide-detail">导航搜索 “北京服装学院北 1 门”   校区内有<strong>收费</strong>停车场，停车位充足</div>
+                    </div>
+                    <div class="guide">地铁路线
+                        <div class="guide-detail">13 号线 / 10 号线 芍药居站 A 西口出  步行 900 米，至北京服装学院北 1 门进入</div>
+                    </div>
+                    <div class="guide">提示
+                        <div class="guide-detail">校区大门有门禁，需要刷身份证入场，请大家携带好个人身份证</div>
+                    </div>
+                </div>
+                <div id="map" class="map" style="width: clac(100% - 20px); height: 340px;"></div>
+            </div>
+        </div>
+
+        <div class="volunteer__container">
+            <div class="volunteers">
+                <h1 class="title">志愿者招募</h1>
+                <div class="recruit">
+                    本次大会面向社区技术爱好者，开放志愿者申请通道，参与活动现场支持。如果你想近距离接触技术大咖，体验会议氛围，那就联系 TiDB Robot (<span>微信号：tidbai</span>) 报名吧～
+                    志愿者还可以获得 TiDB DevCon 2019 定制帽衫哦！
+                </div>
+                <div class="image">
+                   <img src="/images/community/volunteer.jpeg" />
+                </div>
+            </div>
+        </div>
+
+        <div class="signup__container">
+            <div class="signup">
+                <h1></h1>
+                <div class="ticket-table">
+                    <iframe class="hdx-ticket" frameborder="0" style="width:100%; min-height:28rem;" allowtransparency="true" enableviewstate="true"
+                      src="http://www.huodongxing.com/event/1470535653600?view=widget3" data-color="#3a58f0 ">
+                      <script src='https://nscdn.huodongxing.com/Content/v2.0/dist/js/widget/widget.js'></script>
+                    </iframe>
+                  <div class="tips__container">
+                    <h1>温馨提示</h1>
+                    <ol>
+                      <li>我们为教职人员和在校学生提供学术优惠票（票价 ¥499）：
+                        <ul>
+                          <li>申请材料：
+                            <ul>
+                              <li style="list-style: none;">- 教职人员：校园网站个人信息页截图（或教师资格证） + 本人身份证扫描件</li>
+                              <li style="list-style: none;">- 在校学生：本人有效学生证 + 本人身份证扫描件</li>
+                            </ul>
+                          </li>
+                          <li>请将申请材料发送到 <a href="mailto: langyuemeng@pingcap.com" style="color: #3A58F0;">langyuemeng@pingcap.com</a>，审核结果将通过邮件通知</li>
+                          <li>截止时间 1 月 17 日 18:00。</li>
+                        </ul>
+                      </li>
+                      <li>TiDB 社区贡献者注册注意事项：
+                        <ul>
+                          <li>我们已经将社区贡献者专属【验证码】发送到大家在 GitHub 上的预留个人邮箱，请注意查收。如果没有收到，请联系 TiDB Robot（微信号：tidbai）。</li>
+                          <li>填写报名表单时，务必填写 GitHub ID 和验证码，否则无法审核通过。</li>
+                          <li>即日起至 1 月 17 日 18:00 时间段内的新晋 TiDB Contributors 也可以注册。</li>
+                          <li>TiDB 社区贡献者即 GitHub 上以下 15 个 Repositories 的代码贡献者：
+                            <div class="githubRepo">
+                              <span><a href="https://github.com/pingcap/docs-cn">docs-cn</a></span>
+                              <span><a href="https://github.com/pingcap/docs">docs</a></span>
+                              <span><a href="https://github.com/pingcap/grpc-rs">grpc-rs</a></span>
+                              <span><a href="https://github.com/pingcap/jepsen">jepsen</a></span>
+                              <span><a href="https://github.com/pingcap/parser">parser</a> </span>
+                              <span><a href="https://github.com/pingcap/pd">pd</a></span>
+                              <span><a href="https://github.com/pingcap/tidb-ansible">tidb-ansible</a></span>
+                              <span><a href="https://github.com/pingcap/tidb-bench">tidb-bench</a></span>
+                              <span><a href="https://github.com/pingcap/tidb-docker-compose">tidb-docker-compose</a></span>
+                              <span><a href="https://github.com/pingcap/tidb-operator">tidb-operator</a></span>
+                              <span><a href="https://github.com/pingcap/tidb">tidb</a></span>
+                              <span><a href="https://github.com/pingcap/tidb-tools">tidb-tools</a></span>
+                              <span><a href="https://github.com/pingcap/tikv">tikv</a></span>
+                              <span><a href="https://github.com/pingcap/tipb">tipb</a></span>
+                              <span><a href="https://github.com/pingcap/tispark">tispark</a></span>
+                            </div>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>发票说明：
+                        <ul>
+                          <li>如有发票需求，请发送申请邮件至 <a href="mailto: langyuemeng@pingcap.com" style="color: #3A58F0;">langyuemeng@pingcap.com</a>，我们将在会议结束后根据发票申请的时间顺序进行处理。如有特殊需求，请在邮件正文中注明。</li>
+                          <li>邮件主题格式：【DevCon 发票申请】姓名-手机号（注意：姓名和手机号务必与报名时填写的信息一致）。</li>
+                          <li>发票申请截止时间为 1 月 25 日 18:00。</li>
+                        </ul>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+{{- end -}}
