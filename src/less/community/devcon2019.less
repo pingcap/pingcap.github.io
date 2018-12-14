@@ -1,0 +1,748 @@
+@import '../variables.less';
+
+.devcon-nav {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  padding: 0 12px;
+  height: @headerHeight;
+  color: white;
+  background-color: @headerBgColor;
+  // background-color: #666; 
+  z-index: 3;
+
+  .devcon-nav__container {
+    position: relative;
+    line-height: 3rem;
+    font-size: 0.8rem;
+  }
+
+  .activity-name {
+    // padding: 0rem ;
+    display: inline-block;
+    // width: 20%;
+    font-size: 1rem;
+  }
+
+  .section-btns,
+  .section-burger {
+    position: absolute;
+    display: inline-block;
+    right: calc(~'5.5rem + 4rem');
+    color: white;
+
+    span {
+      padding-left: 2rem;
+
+      &:hover {
+        cursor: pointer;
+        color: #B2BFFF;
+      }
+    }
+  }
+
+  .section-burger {
+    width: 20px;
+    cursor: pointer;
+    right: calc(~'5.5rem + 1rem');
+    line-height: 3.5rem;
+    display: none;
+
+    .dropdown-btns {
+      position: absolute;
+      // top: -80px;
+      top: @headerHeight;
+      opacity: 0;
+      right: -2rem;
+      width: 5rem;
+      text-align: center;
+      display: block;
+      background-color: @headerBgColor;
+      line-height: 2rem;
+
+      p {
+        cursor: pointer;
+
+        &:hover {
+          color: #B2BFFF;
+        }
+      }
+    }
+
+    &:hover {
+      .dropdown-btns {
+        top: @headerHeight;
+        display: block;
+        transition: all 0.2s ease;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .dropdown-btns {
+    position: absolute;
+    top: -80px;
+    right: 4rem;
+    width: 5rem;
+    text-align: center;
+    display: none;
+    background-color: @headerBgColor;
+    // opacity: 0;
+    line-height: 2rem;
+
+    p {
+      cursor: pointer;
+
+      &:hover {
+        color: #B2BFFF;
+      }
+    }
+
+    &.open {
+      top: @headerHeight;
+      transition: all 0.1s;
+      opacity: 0.5;
+    }
+
+    &:hover {
+      top: @headerHeight;
+      // transition: all 0.1s;
+      // opacity: 0.5;
+      display: block;
+    }
+  }
+
+  .signup-btn {
+    position: absolute;
+    right: 0;
+    display: inline-block;
+
+    button {
+      cursor: pointer;
+      padding: 0.5rem;
+      background: #3A58F0;
+      color: #fff;
+      height: 2rem;
+      font-size: 0.8rem;
+      width: 5.5rem;
+      border: none;
+      border-radius: 2px;
+
+      &:hover {
+        background: #12C0C7;
+      }
+    }
+  }
+}
+
+.devCon {
+  // padding-top: @headerHeight;
+  // margin-top: 138px;
+
+  .devCon__container {
+    width: 100%;
+  }
+
+  .banner {
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+
+    .image {
+      position: relative;
+      width: 100%;
+      height: auto;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .devcon-title {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 10rem;
+      }
+    }
+
+    button {
+      position: absolute;
+      cursor: pointer;
+      padding: 0.5rem;
+      background: #3A58F0;
+      color: #fff;
+      height: 2rem;
+      font-size: 0.8rem;
+      width: 5.5rem;
+      border: none;
+      border-radius: 2px;
+
+      &:hover {
+        background: #12C0C7;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0, 0.1);
+      }
+    }
+  
+  }
+
+  .agenda__container {
+    position: relative;
+    max-width: 1048px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 1rem 0;
+
+    .content {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0, 1);;
+      position: absolute;
+      top: -4rem;
+      background: #053DA6;
+      text-align: center;
+      border-radius: 3px;
+      margin: 0 10px;
+      color: white;
+
+      p {
+        padding: 2rem 4rem;
+        font-size: 0.8rem;
+        line-height: 1.9;
+      }
+    }
+  }
+
+  .title {
+    color: #053DA6;
+    font-size: 1rem;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .agenda-title {
+    margin-top: 7rem;
+  }
+
+  .title::after {
+    content: '';
+    border-top: 3px solid #053DA6;
+    width: 40px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+    bottom: 1.2rem;
+  }
+
+  .agenda__table {
+    padding: 10px 10px 2rem;
+    width: 100%;
+    color: #1A237E;
+    font-size: 0.8rem;
+
+    tr {
+      text-align: left;
+      padding: 3rem 0;
+      line-height: 1.7rem;
+    }
+
+    td {
+     padding: 0.2rem;
+    }
+
+    tr:nth-child(1),
+    tr:nth-child(10),
+    tr:nth-child(17) {
+      text-align: left;
+      color: white;
+      background-color: #1A237E;
+      padding: 2rem;
+
+      td:nth-child(1) {
+        color: white;
+      }
+    }
+
+    td:nth-child(1) {
+      min-width: 1rem;
+      max-width: 6rem;
+      width: 14rem;
+      padding-left: 3rem;
+      color: #12C0C7;
+    }
+
+    td:nth-child(2) {
+      min-width: 1rem;
+      max-width: 7rem;
+      width: 14rem;
+    }
+
+    td:nth-child(3) {
+      font-style: italic;
+    }
+  }
+
+  .signup__container,
+  .instructors__container,
+    .contact__container, {
+    background-color: #F5F5F5;
+
+    .address__guide {
+      width: 100%;
+      min-height: 4rem;
+      display: flex;
+      flex-flow: row wrap;
+      padding: 0 10px;
+      justify-content: space-between;
+      color: #151E6E;
+
+      .guide {
+        position: relative;
+        width: 25%;
+        padding: 0 25px;
+        text-align: left;
+        font-size: 0.8rem;
+
+        .guide-detail {
+          padding: 10px 0 0;
+          font-size: 0.6rem;
+          line-height: 1.7;
+        }
+      }
+
+      .guide::before {
+        content: '';
+        position: absolute;
+        display: inline-block;
+        height: 100%;
+        border-right: 3px solid #1A237E;
+        left: 0;
+      }
+    }
+
+    .map {
+      margin: 2rem 0;
+      width: 100%;
+      height: 100%;
+      padding: 0 10px;
+    }
+  }
+
+  .ticket-table {
+    margin-top: 1rem;
+  }
+
+  .instructors,
+  .volunteers,
+  .contact,
+  .signup,
+  .sponsors {
+    min-height: 10rem;
+    max-width: 1124px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 1rem 1rem 2rem;
+
+    .image {
+      padding: 2rem 0;
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .instructors__list,
+  .sponsors__list {
+    margin: 0 auto;
+    max-width: 1380px;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .sponsor {
+    // width: 12%;
+    margin: 1.5rem 2rem 1.5rem 0;
+    height: auto;
+
+    img {
+      width: 150px;
+      height: auto;
+    }
+  }
+
+  .instructor {
+    position: relative;
+    display: block;
+    margin: 20px;
+    border-radius: 2px;
+    width: calc(~"100% / 4 - 2rem");
+    // wdi
+    // height: 0;
+    // padding-bottom: calc(27%);
+    // box-shadow: 5px 5px 20px #DDDDDD;
+    height: auto;
+    color: #666;
+    cursor: pointer;
+    justify-content: space-between;
+    box-shadow: 0 2px 9px 0 #DDDDDD;
+    line-height: 1rem;
+
+    .avatar {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        // object-fit: cover;
+        position: relative;
+      }
+
+      .intro {
+        color: white;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        background-color: rgba(26,35,126, 0.9);
+        transition: opacity 0.5s;
+        font-size: 0.6rem;
+        padding: 1rem;
+        text-align: left;
+        overflow: auto;
+        line-height: 0.9rem;
+
+        p {
+          display: table-cell;
+          vertical-align: middle;
+        }
+        // overflow: scroll;
+      }
+    }
+
+    .name {
+      color: #3C3C3C;
+      padding: 0.7rem 0 0;
+      font-size: 0.8rem;
+    }
+
+    .company,
+    .position {
+      color: #6c6c6c;
+      font-size: .6rem;
+      padding: 0.5rem 1rem;
+    }
+
+    &:hover {
+      box-shadow: 5px 5px 20px #DDDDDD;
+      transition: box-shadow 0.2s ease-in-out;
+
+      .avatar {
+        .intro {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .recruit {
+    margin: 0 5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #3C3C3C;
+    padding: 0 4rem;
+    line-height: 1.9;
+
+    span {
+      color: #D04E43;
+    }
+  }
+
+  .sponsor__container,
+  .volunteer__container {
+    max-width: 1124px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 1rem 1rem 2rem;
+  }
+
+  .tips__container {
+    text-align: left;
+    font-size: 0.7rem;
+    line-height: 1.7;
+
+    h1 {
+      color: #3A58F0;
+      font-size: 0.8rem;
+      margin: 1rem;
+    }
+
+    .githubRepo {
+      padding: 0.5rem;
+      align-items: center;
+      color: #3A58F0;
+
+      span {
+        margin-right: 1rem;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .devCon {
+    .instructor {
+      width: calc(~"100% / 3 - 40px");
+      height: auto;
+
+      .name {
+        padding: 0.7rem 0 0;
+      }
+    }
+
+    .agenda-title {
+      margin-top: 8em;
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  .devCon {
+    .agenda-title {
+      margin-top: 8em;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .devCon {
+    .instructor {
+      width: calc(~"100% / 2  - 4rem");
+      height: auto;
+
+      .avatar {
+         .intro {
+          font-size: 0.8rem;
+          line-height: 1.3rem;
+          padding: 2rem;
+        }
+      }
+
+      .name {
+        padding: 0.7rem 0 0;
+      }
+    }
+
+    .agenda__container {
+      .content {
+        top: 2rem;
+        background: #fff;
+        color: black;
+      }
+    }
+
+    .agenda-title {
+      margin-top: 12em;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .devCon {
+    .agenda__container {
+      .content {
+        p {
+          padding: 1rem 2rem;
+        }
+      }
+    }
+
+    .contact__container {
+      max-width: 100%;
+      width: 100%;
+
+      .address__guide {
+        .guide {
+          width: 50%;
+          margin-bottom: 2rem;
+        }
+      }
+    }
+
+    .agenda-title {
+      margin-top: 13em;
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .devcon-nav {
+    .section-btns {
+      display: none;
+    }
+
+    .section-burger {
+      display: inline-block;
+    }
+  }
+
+  .devCon {
+    .instructor {
+      width: calc(~"100%  - 5rem");
+      height: auto;
+
+      .avatar .intro {
+        padding: 3rem 2rem;
+      }
+
+      .name {
+        padding: 0.8rem 0 0;
+      }
+
+      .company {
+        font-size: 0.8rem;
+        padding: 1rem 0.5rem 1rem;
+      }
+    }
+
+    .banner {
+      .banner__content {
+        button {
+          margin-top: 0.5rem;
+        }
+      } 
+    }
+
+    .recruit {
+      margin: 0;
+      padding: 0 1rem;
+    }
+
+    .sponsor {
+      // width: 30%;
+      margin: 1rem;
+
+      img {
+        width: 100px;
+        height: auto;
+      }
+    }
+  }
+}
+
+@media (min-width: 650px) {
+  .devcon-nav {
+    .section-burger {
+      display: none;
+    }
+  }
+
+  // .
+}
+
+@media (max-width: 550px) {
+  .devCon {
+     .agenda__table {
+      td:nth-child(1) {
+        width: 10rem;
+        padding-left: 1rem;
+      }
+
+      td:nth-child(2) {
+        width: 14rem;
+        padding-left: 1rem;
+      }
+    }
+
+
+    .instructor {
+      width: calc(~"100%  - 7rem");
+      height: auto;
+    }
+
+    .agenda-title {
+      margin-top: 15rem;
+    }
+
+    .instructor .avatar .intro {
+      padding: 1rem;
+    }
+  }
+}
+
+@media (max-width: 430px) and (min-width: 400px) {
+  .devCon {
+    .instructor {
+      width: calc(~"100%  - 8rem");
+      height: auto;
+
+      .company {
+        padding: 1rem;
+        line-height: 1.6rem;
+      }
+    }
+
+    .banner {
+      .banner__content {
+        button {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    .agenda__container .content p {
+      font-size: 0.9rem;
+    }
+
+    .agenda-title {
+      margin-top: 16rem;
+    }
+  }
+}
+
+@media (max-width: 365px) {
+    .devCon {
+      .instructor {
+        width: calc(~"100%  - 4rem"); 
+      }
+    }
+}
+
+@media (max-width: 330px) {
+  .devCon {
+    .instructors {
+      padding: 0.5rem 0.5rem 2rem;
+    }
+
+    .instructor {
+      width: calc(~"100%");
+      height: auto;
+
+      .name {
+        padding: 1rem 0 0;
+      }
+
+      .company {
+        padding: 1rem 0;
+      }
+    }
+
+    .agenda__container .content p{
+      padding: 1rem 0.5rem;
+    }
+
+    .agenda-title {
+      margin-top: 16rem;
+    }
+  }
+}
