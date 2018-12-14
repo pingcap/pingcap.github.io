@@ -16,6 +16,7 @@ function handleWebsiteNavDisplay() {
 }
 
 function smoothScroll() {
+  console.log('scroll')
   var btnName = $(this)[0].className
   var sectionName
   switch (btnName) {
