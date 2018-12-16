@@ -5,6 +5,7 @@
 
 {{- define "headTpl" -}}
     {{ $.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "nav_active" "devcon2019"}}
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
     <style type="text/css">
       .amap-logo,
@@ -37,12 +38,18 @@
         new AMap.Marker({
           map: map,
           position: [116.436266,39.980987],
-          tooltip: '中关村时尚产业创新园',
           icon: new AMap.Icon({
             size: new AMap.Size(32, 32), //图标大小
             image: '/images/svgs/location.svg'
           })
         })
+
+        var info = []
+        info.push('<div style="font-size: 13px;">中关村时尚产业创新园</div>')
+        infoWindow= new AMap.InfoWindow({
+          content: info.join('<br/>')
+				});
+				infoWindow.open(map, [116.437266,39.981987]);
       }
     </script>
     <!-- End bai_du map -->
