@@ -64,7 +64,6 @@ function calcBtnPosition() {
 
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
-  // console.log('window size changed')
   if ($('header').length && !$('header').is(':hidden')) {
     var header_H = $('header').height()
     $('.devcon-nav').css('top', header_H)
@@ -90,8 +89,8 @@ $(document).ready(function() {
   $(window).scroll(handleWebsiteNavDisplay)
 
   //handle window resize
-  $(window).resize(handleWindowResize, calcBtnPosition)
-  // $(window).resize(handleWindowResize)
+  $(window).resize(handleWindowResize)
+  $(window).resize(calcBtnPosition)
 
   // smmooth scroll
   $('.schedule-btn').click(smoothScroll)
