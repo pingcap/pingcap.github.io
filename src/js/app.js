@@ -152,6 +152,13 @@ function tabCheckedInDocs() {
   })
 }
 
+function addCopy(element) {
+  var copy = document.createElement('button')
+  copy.className = 'copy'
+  copy.textContent = 'Copy'
+  element.append(copy)
+}
+
 $(document).ready(function() {
   processHash()
 
@@ -180,5 +187,29 @@ $(document).ready(function() {
       800
     )
     return false
+  })
+
+  // Copy to Clipboard
+  var $code = document.querySelectorAll('.highlight')
+
+  for (let i = 0; i < $code.length; i++) {
+    addCopy($code[i])
+  }
+
+  var clipboard = new ClipboardJS('.copy', {
+    target: function(trigger) {
+      if (trigger.previousElementSibling) {
+        console.log('sibling trigger is:', trigger.previousElementSibling)
+        console.log('this: ', trigger.className)
+        trigger.innerText = 'Coppied'
+        // $(trigger.className).css('color', 'green')
+        return trigger.previousElementSibling
+      }
+    },
+  })
+
+  // remove text highlight from the selected target text
+  clipboard.on('success', function(e) {
+    e.clearSelection()
   })
 })
