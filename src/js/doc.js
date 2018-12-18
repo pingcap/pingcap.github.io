@@ -183,7 +183,5 @@ $(document).ready(function() {
   // remove text highlight from the selected target text
   clipboard.on('success', function(e) {
     e.clearSelection()
-    // e.trigger.innerText = ''
-    // e.trigger.innerText = 'Coppied'
   })
 })
