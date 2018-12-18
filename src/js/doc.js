@@ -99,6 +99,14 @@ function processTags() {
 //     })
 // }
 
+//  create copy button
+function addCopy(element) {
+  var copy = document.createElement('button')
+  copy.className = 'copy'
+  copy.textContent = 'Copy'
+  element.append(copy)
+}
+
 // Process dom elements after loaded
 $(document).ready(function() {
   if ($('.st_tree').length) processStickyTree()
@@ -151,5 +159,26 @@ $(document).ready(function() {
 
     e.preventDefault()
     return false
+  })
+
+  // Copy to Clipboard
+  var $code = document.querySelectorAll('.highlight')
+
+  for (let i = 0; i < $code.length; i++) {
+    addCopy($code[i])
+  }
+
+  var clipboard = new ClipboardJS('.copy', {
+    target: function(trigger) {
+      $('.copy').text('Copy')
+      trigger.innerText = 'Coppied'
+      return trigger.previousElementSibling
+      // }
+    },
+  })
+
+  // remove text highlight from the selected target text
+  clipboard.on('success', function(e) {
+    e.clearSelection()
   })
 })
