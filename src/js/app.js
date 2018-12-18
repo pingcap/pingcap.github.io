@@ -154,9 +154,12 @@ function tabCheckedInDocs() {
 
 function addCopy(element) {
   var copy = document.createElement('button')
+  // var icon = document.createElement('i')
+  // icon.className = 'fas fa-clone'
   copy.className = 'copy'
   copy.textContent = 'Copy'
   element.append(copy)
+  // element.append(icon)
 }
 
 $(document).ready(function() {
@@ -198,13 +201,10 @@ $(document).ready(function() {
 
   var clipboard = new ClipboardJS('.copy', {
     target: function(trigger) {
-      if (trigger.previousElementSibling) {
-        console.log('sibling trigger is:', trigger.previousElementSibling)
-        console.log('this: ', trigger.className)
-        trigger.innerText = 'Coppied'
-        // $(trigger.className).css('color', 'green')
-        return trigger.previousElementSibling
-      }
+      $('.copy').text('Copy')
+      trigger.innerText = 'Coppied'
+      return trigger.previousElementSibling
+      // }
     },
   })
 
