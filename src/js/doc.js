@@ -101,9 +101,11 @@ function processTags() {
 
 //  create copy button
 function addCopy(element) {
+  console.log('element: ', element)
   var copy = document.createElement('button')
   copy.className = 'copy'
   copy.textContent = 'Copy'
+  console.log('copy: ', copy)
   element.append(copy)
 }
 
@@ -172,6 +174,7 @@ $(document).ready(function() {
     target: function(trigger) {
       $('.copy').text('Copy')
       trigger.innerText = 'Coppied'
+      console.log('trigger: ', trigger)
       return trigger.previousElementSibling
       // }
     },
