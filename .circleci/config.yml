@@ -19,6 +19,7 @@ jobs:
     branches:
       only:
         - src
+        - preview
 
     steps:
       - checkout
@@ -42,7 +43,7 @@ jobs:
           fingerprints:
             - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
 
-      - run: npm run build
+      - run: rm -rf dist && npm run build
 
       # notice netlify to deploy preview branch
       # when be triggered by webhook from submodule
