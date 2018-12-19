@@ -64,13 +64,14 @@ function calcBtnPosition() {
 
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
+  var header_H = $('header').height()
   if ($('header').length && !$('header').is(':hidden')) {
-    var header_H = $('header').height()
     $('.devcon-nav').css('top', header_H)
     $('.devcon-nav').css('height', header_H)
     $('.devCon').css('padding-top', 2 * header_H)
   } else {
     $('.devcon-nav').css('top', 0)
+    $('.devcon-nav').css('height', header_H)
   }
 }
 
