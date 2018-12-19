@@ -167,7 +167,7 @@ function addCopy(element) {
   copy.className = 'copy'
   copy.textContent = 'Copy'
   console.log('copy: ', copy)
-  element.append(copy)
+  $(copy).insertBefore(element)
 }
 
 // Process dom elements after loaded
@@ -264,10 +264,10 @@ $(document).ready(function() {
   var clipboard = new ClipboardJS('.copy', {
     target: function(trigger) {
       $('.copy').text('Copy')
-      trigger.innerText = 'Coppied'
-      console.log('trigger: ', trigger)
-      return trigger.previousElementSibling
-      // }
+      $('.copy').css('color', '#94a3ea')
+      trigger.innerText = 'Copied'
+      $(trigger).css('color', 'rgb(231, 234, 148)')
+      return trigger.nextElementSibling
     },
   })
 
