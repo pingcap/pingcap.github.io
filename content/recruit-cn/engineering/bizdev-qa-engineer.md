@@ -3,9 +3,7 @@ title: TiDB 商业产品开发 - 测试开发工程师
 tags:
   - Engineering
 location: 北京，上海，广州，杭州，成都，Remote
-avatar: qa
-aliases:
-  - /recruit-cn/engineer/bizdev-qa-engineer/
+avatar: database
 ---
 
 # TiDB 商业产品开发 - 测试开发工程师
