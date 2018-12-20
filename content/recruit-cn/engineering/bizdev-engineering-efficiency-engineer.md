@@ -3,7 +3,7 @@ title: TiDB 商业产品开发 - 工程效率研发工程师
 tags:
   - Engineering
 location: 北京，上海，广州，杭州，成都，Remote
-avatar: database
+avatar: engineer
 ---
 
 # TiDB 商业产品开发 - 工程效率研发工程师
