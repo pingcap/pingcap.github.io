@@ -28,6 +28,10 @@ function processHash() {
   if (location.href.search('#access_token') < 0) {
     smoothScroll(hash)
   }
+
+  if ($('.tabs'.length)) {
+    tabCheckedInDocs()
+  }
 }
 
 // initial algolia search
@@ -143,11 +147,57 @@ function processMobileOverlay() {
 }
 
 function tabCheckedInDocs() {
-  var contentTabID = $('input:checked').val()
+  const hash = decodeURIComponent(location.hash)
+  var contentTabID
+  if (hash) {
+    switch (hash) {
+      case '#google':
+        $('input:radio[name=tabs]')
+          .filter('[value=GoogleContent]')
+          .prop('checked', true)
+        break
+      case '#aws':
+        $('input:radio[name=tabs]')
+          .filter('[value=AWSContent]')
+          .prop('checked', true)
+        break
+      case '#local':
+        $('input:radio[name=tabs]')
+          .filter('[value=LocalContent]')
+          .prop('checked', true)
+        break
+    }
+  } else {
+    contentTabID = $('input:checked').val()
+    switch (contentTabID) {
+      case 'GoogleContent':
+        window.location.href = `./#google`
+        break
+      case 'AWSContent':
+        window.location.href = `./#aws`
+        break
+      case 'LocalContent':
+        window.location.href = `./#local`
+        break
+    }
+  }
+  contentTabID = $('input:checked').val()
+  $('section').hide()
   $('#' + contentTabID).show()
   $('input').on('click', function() {
+    contentTabID = $('input:checked').val()
+    switch (contentTabID) {
+      case 'GoogleContent':
+        window.location.href = `./#google`
+        break
+      case 'AWSContent':
+        window.location.href = `./#aws`
+        break
+      case 'LocalContent':
+        window.location.href = `./#local`
+        break
+    }
     $('section').hide()
-    var contentTabID = $('input:checked').val()
     $('#' + contentTabID).show()
   })
 }
