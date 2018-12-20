@@ -1,5 +1,5 @@
 ---
-title: 分布式系统工程师
+title: TiSpark 研发工程师
 tags:
   - Engineering
 location: 北京，上海，广州，杭州，成都，Remote
@@ -8,7 +8,7 @@ aliases:
   - /recruit-cn/engineer/olap-engineer/
 ---
 
-# 分布式系统工程师
+# TiSpark 研发工程师
 
 **岗位职责：**
 
