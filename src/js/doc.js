@@ -177,7 +177,6 @@ $(document).ready(function() {
       trigger.innerText = 'Copied'
       $(trigger).css('color', 'rgb(231, 234, 148)')
       return trigger.nextElementSibling
-      // }
     },
   })
 
