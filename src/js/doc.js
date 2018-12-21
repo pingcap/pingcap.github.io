@@ -106,7 +106,6 @@ function addCopy(element) {
   copy.className = 'copy'
   copy.textContent = 'Copy'
   console.log('copy: ', copy)
-  // element.append(copy)
   $(copy).insertBefore(element)
 }
 
