@@ -6,7 +6,7 @@
   - [TiKV 研发工程师](engineering/tikv-engineer.md)
   - [PD 研发工程师](engineering/pd-engineer.md)
   - [TiDB 研发工程师](engineering/tidb-engineer.md)
-  - [TiSpark 研发工程师](engineering/olap-engineer.md)
+  - [OLAP 引擎研发工程师](engineering/olap-engineer.md)
   - [TiDB 商业产品开发 - Tools 研发工程师](engineering/bizdev-tools-engineer.md)
   - [TiDB 商业产品开发 - Cloud 研发工程师](engineering/bizdev-cloud-engineer.md)
   - [TiDB 商业产品开发 - 前端开发工程师](engineering/bizdev-fe-engineer.md)

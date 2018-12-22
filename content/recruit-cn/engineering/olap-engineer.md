@@ -1,5 +1,5 @@
 ---
-title: TiSpark 研发工程师
+title: OLAP 引擎研发工程师
 tags:
   - Engineering
 location: 北京，上海，广州，杭州，成都，Remote
@@ -8,7 +8,7 @@ aliases:
   - /recruit-cn/engineer/olap-engineer/
 ---
 
-# TiSpark 研发工程师
+# OLAP 引擎研发工程师
 
 **岗位职责：**
 
