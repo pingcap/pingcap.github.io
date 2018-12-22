@@ -193,6 +193,14 @@ $(document).ready(function() {
     effect: 'fadeIn',
   })
 
+  //  create copy button
+  function addCopy(element) {
+    var copy = document.createElement('button')
+    copy.className = 'copy'
+    copy.textContent = 'Copy'
+    $(copy).insertBefore(element)
+  }
+
   // Handle tags click: Filter tags on frontend
   $('.nav-tags .tag, .anchor-tag').click(function(e) {
     const $this = $(this)
