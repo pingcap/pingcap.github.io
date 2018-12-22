@@ -9,19 +9,47 @@
 
 {{- define "main" -}}
 <div class="community">
-    <div class="banner__container">
+    <div class="banner__section">
         <img class="banner" src="/images/community/community-banner.jpg"/>
-        <div class="content__con">
-            <div class="container">
-                <img src="/images/community/TiDB+Community.svg" />
+        <div class="content__container">
+            <div class="content">
+              <div class="title-image">
+                  <img src="/images/community/TiDB+Community.svg" />
+              </div>
+              <div class="intro">
+                 「如果你有正确的态度，有趣的事情自然会找到你。」我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。
+              </div>
+
+              <div class="btns">
+                <button>了解社区</button>
+                <button>成为 Contributor </button>
+                <button>成为 Committer </button>
+              </div>
             </div>
         </div>
     </div>
-    <div class="container" style="padding: 0 1rem; min-height: 300px;">
-        <div class="desc community-desc">
-            This is the dedicated TiDB Community page, where you can find the most up to date information on the latest events,
-            meetups, conferences, and other activities related to TiDB. Please check back again soon, as we build out the content
-            for this page.
+    <div class="activity__container">
+        <div class="container">
+            <h1 class="title">活动社区</h1>
+        </div>
+    </div>
+
+    <div class="reading__container">
+        <div class="container">
+            <h1 class="title">社区阅读</h1>
+            <div class="intro">这个板块将实时更新源码阅读系列以及社区小伙伴撰写的新手指南。
+            源码系列将从整体架构到重要模块抽丝剥茧，深入浅出的为大家解析 TiDB 设计思路。新手指南则会手把手教你成为 TiDB contributor。
+            ​感谢社区成员对系列教程的大力支持。
+            </div>
+            <div>
+            {{ $communityTag := "社区" }}
+            {{ range first 1 (where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case") }}
+              {{ .Title }}
+            {{ end }} 
+            </div>
+            <div class="readMoreBtn">
+              <a href="/blog-cn/#社区"><button>更多文章</button></a>
+            </div>
         </div>
     </div>
 </div>
