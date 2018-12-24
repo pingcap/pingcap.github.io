@@ -1,6 +1,15 @@
 @import '../variables.less';
 @import '../colors.less';
-@import './devcon2019.less';
+
+// fontawsome
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.reading__section,
+.activity__section {
+  .container {
+    max-width: 1124px;
+  }
+}
 
 .banner__section {
   padding-top: @headerHeight;
@@ -15,14 +24,14 @@
   }
 }
 
-.title {
+.section-title {
   color: #053DA6;
   font-size: 1rem;
   padding: 1.5rem;
   position: relative;
 }
 
-.title::after {
+.section-title::after {
   content: '';
   border-top: 3px solid #053DA6;
   width: 40px;
@@ -59,7 +68,7 @@
 
     .intro,
     .btns button {
-      font-size: 0.8rem;
+      font-size: 17px;
       line-height: 1.7;
     }
 
@@ -79,19 +88,118 @@
   }
 }
 
-.activity__container {
+.activity__section {
   text-align: center;
+
+  .current-activity {
+    padding: 2rem 0;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .signable {
+      width: 66%;
+      height: 280px;
+      overflow: hidden;
+
+      .picture {
+        width: 100%;
+        height: auto;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .calendar {
+      width: 32%;
+    }
+  }
+
+  .activities__list {
+    display: flex;
+    flex: row wrap;
+    width: 100%;
+    padding: 1rem 0 4rem;
+    justify-content: space-between;
+
+    .activity {
+      box-shadow: 0 2px 9px 0 #DDDDDD;
+      width: 32%;
+      height: auto;
+
+      .picture {
+        width: 100%;
+        height: auto;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .name {
+        padding: 1rem 0 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .summary {
+        padding: 1rem;
+        font-size: 0.7rem;
+      }
+
+      &:hover {
+        box-shadow: 5px 5px 20px #DDDDDD;
+        transition: box-shadow 0.2s ease-in-out;
+      }
+    }
+  }
 }
 
-.reading__container {
+.reading__section {
   text-align: center;
   background-color: #F5F5F5;
 
+  .list .blog__article {
+    background: white;
+  }
+
   .intro {
-    padding: 1rem;
+    padding: 2rem 1rem;
     max-width: 800px;
     margin: 0 auto;
     font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .reading-list {
+    text-align: left;
+  }
+
+  .readMoreBtn {
+    button {
+      cursor: pointer;
+      background: transparent;
+      color: #6C6C6C;
+      font-size: 16px;
+      padding: 0.6rem 1rem;
+      margin: 1rem 0 6rem;
+
+      &:hover {
+        margin: 0.5rem 0 6.5rem;
+        // transform: 
+      }
+    }
+
+    // button::before {
+    //   font-family: 'FontAwesome';
+    //   content: '/f061';
+    //   display: inline-block;
+    // }
   }
 }
 

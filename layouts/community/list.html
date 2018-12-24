@@ -5,6 +5,22 @@
 
 {{- define "headTpl" -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/clndr.css") -}}
+{{- end -}}
+
+{{- define "footJS"}}
+    <script type="text/javascript" src="/js/community.js"></script>
+    <!-- <script type="text/javascript" src="/js/vendor/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/vendor/clndr.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <!-- <script src="../src/clndr.js"></script> -->
+    <script type="text/javascript" src="/js/vendor/clndr.js"></script>
+    <!-- <script src="demo.js"></script> -->
 {{- end -}}
 
 {{- define "main" -}}
@@ -28,24 +44,64 @@
             </div>
         </div>
     </div>
-    <div class="activity__container">
+    <div class="activity__section">
         <div class="container">
-            <h1 class="title">活动社区</h1>
+            <h1 class="section-title">活动社区</h1>
+            <div class="current-activity">
+                {{- range $idx, $i := .Site.Data.community_activities.activities -}}
+                    {{- if .active -}}
+                        <div class="signable">
+                            <div class="picture">
+                                <img src="{{ $i.image}}" />
+                            </div>
+                        </div>
+
+                        <div class="calendar">
+                        <div class="cal2">
+                            <script type="text/template" id="template-calendar">
+                                <div class="clndr-controls">
+                                    <div class="clndr-previous-button">&lsaquo;</div>
+                                    <!-- <div class="month"><%= intervalStart.format('M/DD') + ' &mdash; ' + intervalEnd.format('M/DD') %></div> -->
+<div>
+  <% Response.Write("<h2>You can use HTML tags to format the text!</h2>") %>
+</div>
+                                    <div class="clndr-next-button">&rsaquo;</div>
+                                </div>
+
+                                <div class="clndr-today-button">Today</div>
+                            </script>
+                        </div>
+                    </div>
+                    {{- end -}}
+                {{- end -}}
+          </div>
+            <div class="activities__list">
+                {{- range $idx, $i := .Site.Data.community_activities.activities -}}
+                    {{- if not .active -}}
+                      <div class="activity">
+                        <div class="picture">
+                            <img src="{{ $i.image}}" />
+                        </div>
+                        <div class="name">{{ $i.name}}</div>
+                        <div class="summary"><p>{{ $i.summary }}</p></div>
+                    </div>
+                    {{- end -}}
+                {{- end -}}
+            </div>
         </div>
     </div>
 
-    <div class="reading__container">
+    <div class="reading__section">
         <div class="container">
-            <h1 class="title">社区阅读</h1>
+            <h1 class="section-title">社区阅读</h1>
             <div class="intro">这个板块将实时更新源码阅读系列以及社区小伙伴撰写的新手指南。
             源码系列将从整体架构到重要模块抽丝剥茧，深入浅出的为大家解析 TiDB 设计思路。新手指南则会手把手教你成为 TiDB contributor。
             ​感谢社区成员对系列教程的大力支持。
             </div>
-            <div>
-            {{ $communityTag := "社区" }}
-            {{ range first 1 (where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case") }}
-              {{ .Title }}
-            {{ end }} 
+            <div class="reading-list">
+              {{ $communityTag := "社区" }}
+                {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
+              {{- partial "archives/blog-list.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
             </div>
             <div class="readMoreBtn">
               <a href="/blog-cn/#社区"><button>更多文章</button></a>
@@ -53,9 +109,4 @@
         </div>
     </div>
 </div>
-{{- end -}}
-
-
-{{- define "footJS"}}
-    <script type="text/javascript" src="/js/community.js"></script>
 {{- end -}}
