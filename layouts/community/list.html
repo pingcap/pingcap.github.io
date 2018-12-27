@@ -6,6 +6,7 @@
 {{- define "headTpl" -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
     {{- partial "head/preload-css" (dict "href" "/css/vendor/calendar.css") -}}
 {{- end -}}
 
@@ -19,7 +20,7 @@
     <div class="banner__section">
         <img class="banner" src="/images/community/community-banner-pc.jpg" />
         <div class="content__container">
-            <button class="gitHub">GitHub</button>
+            <a href="https://github.com/pingcap/tidb"><button class="gitHub">GitHub</button></a>
             <div class="content">
               <div class="title-image">
                   <img src="/images/community/TiDB+Community.svg" />
@@ -45,6 +46,10 @@
                         <div class="signable">
                             <div class="picture">
                                 <img src="{{ $i.image}}" />
+                            </div>
+                            <div class="current-activity-content">
+                              <h1 clas="current-activity-name">{{ $i.name }}</h1>
+                              <div class="current-activity-summary">{{ $i.summary }}</div>
                             </div>
                         </div>
 
@@ -92,7 +97,7 @@
             <div class="readMoreBtn">
                 <a href="/blog-cn/#社区">
                     <button>
-                        <!-- <span><img src="/images/svgs/arrow.svg" /></span> -->
+                        <span><img src="/images/svgs/arrow.svg" /></span>
                         <span class="inner-text">更多文章</span>
                     </button>
                 </a>

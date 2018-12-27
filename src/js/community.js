@@ -6,7 +6,7 @@ function handleWindowResize() {
 }
 
 function calcBannerTitleImg() {
-  if (window.matchMedia('(max-width: 1100px)').matches) {
+  if (window.matchMedia('(max-width: 850px)').matches) {
     $('.banner__section .banner').attr(
       'src',
       '/images/community/community-banner-mobile.jpg'
