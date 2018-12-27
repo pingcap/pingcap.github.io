@@ -6,28 +6,20 @@
 {{- define "headTpl" -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/community/clndr.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/vendor/calendar.css") -}}
 {{- end -}}
 
 {{- define "footJS"}}
     <script type="text/javascript" src="/js/community.js"></script>
-    <!-- <script type="text/javascript" src="/js/vendor/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" src="/js/vendor/clndr.min.js"></script> -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-    <!-- <script src="../src/clndr.js"></script> -->
-    <script type="text/javascript" src="/js/vendor/clndr.js"></script>
-    <!-- <script src="demo.js"></script> -->
+    <script type="text/javascript" src="/js/vendor/calendar.js"></script>
 {{- end -}}
 
 {{- define "main" -}}
 <div class="community">
     <div class="banner__section">
-        <img class="banner" src="/images/community/community-banner.jpg"/>
+        <img class="banner" src="/images/community/community-banner-pc.jpg" />
         <div class="content__container">
+            <button class="gitHub">GitHub</button>
             <div class="content">
               <div class="title-image">
                   <img src="/images/community/TiDB+Community.svg" />
@@ -56,22 +48,16 @@
                             </div>
                         </div>
 
-                        <div class="calendar">
-                        <div class="cal2">
-                            <script type="text/template" id="template-calendar">
-                                <div class="clndr-controls">
-                                    <div class="clndr-previous-button">&lsaquo;</div>
-                                    <!-- <div class="month"><%= intervalStart.format('M/DD') + ' &mdash; ' + intervalEnd.format('M/DD') %></div> -->
-<div>
-  <% Response.Write("<h2>You can use HTML tags to format the text!</h2>") %>
-</div>
-                                    <div class="clndr-next-button">&rsaquo;</div>
-                                </div>
-
-                                <div class="clndr-today-button">Today</div>
-                            </script>
+                        <div id="calendar">
+                            <div class="event-list">
+                                <div class="event-banner">Events</div>
+                                <a class="close-icon">
+                                    <svg viewBox="0 0 20 20">
+                                        <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
-                    </div>
                     {{- end -}}
                 {{- end -}}
           </div>
@@ -104,7 +90,12 @@
               {{- partial "archives/blog-list.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
             </div>
             <div class="readMoreBtn">
-              <a href="/blog-cn/#社区"><button>更多文章</button></a>
+                <a href="/blog-cn/#社区">
+                    <button>
+                        <!-- <span><img src="/images/svgs/arrow.svg" /></span> -->
+                        <span class="inner-text">更多文章</span>
+                    </button>
+                </a>
             </div>
         </div>
     </div>

@@ -47,8 +47,22 @@
   width: 100%;
   top: @headerHeight;
 
+  .gitHub {
+    position: absolute;
+    top: 0;
+    right: 3rem;
+    border: 2px solid #3A58F0;
+    cursor: pointer;
+    background: transparent;
+    color: #3A58F0;
+    font-size: 16px;
+    padding: .6rem 1rem;
+    margin: 1rem 0 6rem;
+  }
+
   .content {
     text-align: center;
+    position: relative;
     max-width: 800px;
     margin: 0 auto;
     padding: 0 1rem;
@@ -68,7 +82,7 @@
 
     .intro,
     .btns button {
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1.7;
     }
 
@@ -80,9 +94,9 @@
         background-color: #3351FF;
         border: none;
         color: white;
-        padding: 0.3rem 0;
+        padding: 0.5rem 0;
         width: 183px;
-        border-radius: 2px;
+        // border-radius: 2px;
       }
     }
   }
@@ -115,8 +129,63 @@
       }
     }
 
-    .calendar {
+    #calendar {
+      font-size: 17px;
       width: 32%;
+      height: 280px;
+      position: relative;
+      box-shadow: 0 2px 9px 0 #DDDDDD;
+    }
+
+    .event-list {
+      height: 240px;
+      width: 100%;
+      // background: #F5F5F5;
+      position: absolute;
+      top: 39px;
+      display: none;
+      // border: 1px solid #ddd;
+
+      .event-banner {
+        width: 100%;
+        height: 30px;
+        background: #6780FF;
+        color: white;
+        padding-top: 0.3rem;
+      }
+
+      .close-icon {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.3rem;
+
+        svg {
+          width: 1.2em;
+          height: 1.2em;
+
+          path {
+            fill: #F5F5F5;
+          }
+        }
+      }
+
+      .event {
+        // background: #6C6C6C;
+        width: 100%;
+        // height: 30px;
+        padding: 0.5rem 0.3rem 0.5rem 1rem;
+        text-align: left;
+
+        &:hover {
+          background: #f5F5F5;
+        }
+      }
+
+      .evnet::after {
+        content: '';
+        display: inline-block;
+        border-top: 1px solid #F5f5f5;
+      }
     }
   }
 
@@ -130,11 +199,14 @@
     .activity {
       box-shadow: 0 2px 9px 0 #DDDDDD;
       width: 32%;
+      // width: 350px;
+      // height: 409px;
       height: auto;
 
       .picture {
         width: 100%;
         height: auto;
+        overflow: hidden;
 
         img {
           width: 100%;
@@ -143,12 +215,14 @@
       }
 
       .name {
-        padding: 1rem 0 0.5rem;
+        padding: 0.7rem 0 0.5rem;
         font-size: 1.1rem;
+        position: relative;
       }
 
+
       .summary {
-        padding: 1rem;
+        padding: .5rem 0.5rem 1rem;
         font-size: 0.7rem;
       }
 
@@ -182,31 +256,197 @@
 
   .readMoreBtn {
     button {
+      color: #3A58F0;
       cursor: pointer;
+      position: relative;
       background: transparent;
-      color: #6C6C6C;
       font-size: 16px;
-      padding: 0.6rem 1rem;
+      padding: .6rem 1rem;
       margin: 1rem 0 6rem;
+      border-color: #3A58F0;
+
+      img {
+        display: none;
+        width: 25px;
+        height: 14px;
+      }
+
+      // .inner-text {
+      // }
 
       &:hover {
-        margin: 0.5rem 0 6.5rem;
-        // transform: 
+        img {
+          display: inline-block;
+        }
+
+        box-shadow: 5px 5px 20px #DDDDDD;
+
+        .inner-text {
+          color: #3A58F0;
+          width: 100px;
+          transform: translateX(10px);
+          transition: all .25s ease;
+        }
       }
     }
-
-    // button::before {
-    //   font-family: 'FontAwesome';
-    //   content: '/f061';
-    //   display: inline-block;
-    // }
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 1550px) {
   .content__container {
-    .content .title {
-      padding: 1.5rem 5rem 0;
+    .gitHub {
+      right: 3rem;
+    }
+
+    .content {
+      padding: 0 1rem;
+
+      .title-image {
+        padding: 3.5rem 2.5rem 0;
+      }
+
+      .intro,
+      button {
+        padding: 3rem 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .content__container {
+    .content {
+      text-align: center;
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 5rem;
+
+
+      .title-image {
+        padding: 6.8rem 0 0;
+
+        img {
+          height: auto;
+        }
+      }
+
+      .intro,
+      button {
+        padding: 3rem 0;
+      }
+
+      .intro,
+      .btns button {
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      .btns {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+          background-color: #3351FF;
+          border: none;
+          color: white;
+          padding: 0.3rem 0;
+          width: 183px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 450px) and (min-width: 400px) {
+  .content__container {
+    .gitHub {
+      right: 1rem;
+    }
+
+    .content {
+      padding: 0 1rem;
+
+      .title-image {
+        padding: 3.5rem 2.5rem 0;
+      }
+
+      .intro,
+      button {
+        padding: 1rem 0;
+      }
+
+      .intro {
+        font-size: 14px;
+      }
+
+      .btns button {
+        padding: 0.5rem .1rem;
+        width: 117px;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+@media (max-width: 399px) {
+  .content__container {
+    .gitHub {
+      margin: 0.6rem 0;
+      border-color: #3351FF;
+      right: 0.5rem;
+      font-size: 14px;
+      padding: .4rem 0.5rem;
+    }
+
+    .content {
+      padding: 0 1rem;
+
+      .title-image {
+        padding: 1.5rem 4rem 0;
+      }
+
+      .intro,
+      button {
+        padding: 1rem 0;
+      }
+
+      .intro {
+        font-size: 14px;
+      }
+
+      .btns button {
+        padding: .5rem .1rem;
+        width: 106px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 349px) {
+  .content__container {
+    .gitHub {
+      padding: .4rem .3rem;
+    }
+
+    .content {
+      padding: 0.3rem;
+
+      .title-image {
+        padding: 1.5rem 4rem 0;
+      }
+
+      .intro {
+        font-size: 13px;
+        padding: 0.5rem;
+      }
+
+      .btns button {
+        padding: .4rem .1rem;
+        width: 100px;
+        font-size: 12px;
+      }
     }
   }
 }
