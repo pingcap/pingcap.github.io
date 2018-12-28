@@ -5,14 +5,16 @@
     {{- range .posts -}}
     <a href="{{ .URL }}">
       <div class="blog__article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
-          <!-- <div class="logo">
-            {{- if .Params.image}}
-                {{ $landingImg := .Params.image}}
-                <img class="lazy" src="{{- $landingImg -}}" />
-            {{- else -}}
-                <img class="lazy" src="/images/blog-article/default.png" />
-            {{- end -}}
-          </div> -->
+          {{- if ne nav_active "blog" -}}
+              <div class="logo">
+                {{- if .Params.image}}
+                    {{ $landingImg := .Params.image}}
+                    <img class="lazy" src="{{- $landingImg -}}" />
+                {{- else -}}
+                    <img class="lazy" src="/images/blog-article/default.png" />
+                {{- end -}}
+              </div>
+          {{- end -}}
           <div class="abstract clearfix">
               <h1 class="title">{{ .Title }}</h1>
               {{- if $hasMetaData -}}
@@ -47,8 +49,8 @@
               {{- end -}}
               {{- if $hasBrief -}}
                   <div class="brief">
-                      <p>{{- .Params.summary -}}</p>
-                      <div class="hideExtraWords">.</div>
+                      {{- .Params.summary -}}
+                      <!-- <div class="hideExtraWords">.</div> -->
                   </div>
               {{- end -}}
               <div class="readMore">
