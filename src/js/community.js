@@ -9,12 +9,12 @@ function calcBannerTitleImg() {
   if (window.matchMedia('(max-width: 850px)').matches) {
     $('.banner__section .banner').attr(
       'src',
-      '/images/community/community-banner-mobile.jpg'
+      '/images/community/community-banner-mobile.png'
     )
   } else {
     $('.banner__section .banner').attr(
       'src',
-      '/images/community/community-banner-pc.jpg'
+      '/images/community/community-banner-pc.png'
     )
   }
 }
