@@ -63,6 +63,7 @@ $(document).ready(function() {
   var settings = {
     test: 'testme',
   }
+
   var element = document.getElementById('calendar')
   calendar(element, events, settings)
 
@@ -88,5 +89,15 @@ $(document).ready(function() {
     $('.cld-labels').show()
     $('.event-list').hide()
     $('.event').remove()
+  })
+
+  $('.signable').click(function() {
+    if ($('.overlayCover').css('display') == 'block') {
+      $('.overlayCover').hide()
+      $('.current-activity-content').hide()
+    } else {
+      $('.overlayCover').show()
+      $('.current-activity-content').show()
+    }
   })
 })
