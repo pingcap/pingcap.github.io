@@ -62,6 +62,14 @@ function calcBtnPosition() {
   }
 }
 
+function createDetailBlock(el) {
+  console.log('el: ', el)
+  var detailEle = document.createElement('div')
+  detailEle.className = 'detail-bock'
+  el.after(detailEle)
+  console.log('detail:', detailEle)
+}
+
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
   var header_H = $('header').height()
@@ -123,5 +131,10 @@ $(document).ready(function() {
     } else {
       $('.dropdown-btns').css('display', 'block')
     }
+  })
+
+  $('.agenda__table tr').click(function() {
+    console.log('tr clicked')
+    createDetailBlock($(this))
   })
 })
