@@ -62,6 +62,14 @@ function calcBtnPosition() {
   }
 }
 
+function createDetailBlock(el) {
+  console.log('el: ', el)
+  var detailEle = document.createElement('div')
+  detailEle.className = 'detail-bock'
+  el.after(detailEle)
+  console.log('detail:', detailEle)
+}
+
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
   var header_H = $('header').height()
@@ -83,6 +91,8 @@ $(document).ready(function() {
     $('.devcon-nav').css('height', header_H)
     $('.devCon').css('padding-top', 2 * header_H)
   }
+
+  $('.detail-block').hide()
 
   calcBtnPosition()
 
@@ -122,6 +132,34 @@ $(document).ready(function() {
       $('.dropdown-btns').css('display', 'none')
     } else {
       $('.dropdown-btns').css('display', 'block')
+    }
+  })
+
+  // handle devcon agenda talk title click, performing like collapse
+  var selEle
+
+  $('.agenda__table .collapsable').click(function() {
+    if (window.matchMedia('(min-width: 550px)').matches) {
+      if (selEle) {
+        selEle.removeClass('selected-bg')
+        selEle.children()[3].innerText = '+'
+      }
+
+      $(this).addClass('selected-bg')
+      if ($(this).next()[0].style.display == 'none') {
+        $('.detail-block').hide()
+        $(this)
+          .next()
+          .show()
+        $(this).children('td')[3].innerText = '-'
+      } else {
+        $(this)
+          .next()
+          .hide()
+        $(this).children('td')[3].innerText = '+'
+      }
+
+      selEle = $(this)
     }
   })
 })
