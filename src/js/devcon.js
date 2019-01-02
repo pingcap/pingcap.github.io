@@ -156,6 +156,7 @@ $(document).ready(function() {
         $(this)
           .next()
           .hide()
+        $(this).removeClass('selected-bg')
         $(this).children('td')[3].innerText = '+'
       }
 
