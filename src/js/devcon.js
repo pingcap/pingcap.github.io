@@ -92,6 +92,10 @@ $(document).ready(function() {
     $('.devCon').css('padding-top', 2 * header_H)
   }
 
+  // $('.detail-block-active').hide()
+
+  $('body').removeClass('detail-bock')
+
   calcBtnPosition()
 
   // handle window scrolls
@@ -133,8 +137,17 @@ $(document).ready(function() {
     }
   })
 
-  $('.agenda__table tr').click(function() {
+  $('.agenda__table .collapsable').click(function() {
     console.log('tr clicked')
-    createDetailBlock($(this))
+    console.log('next', $(this).next()[0])
+    // $('.detail-block-active').remove()
+    // createDetailBlock($(this))
+    // $(this)
+    //   .next()[0]
+    //   .css('display', 'block')
+    $(this).next()[0].style.display = 'block'
+    $(this).next()[0].className = 'detail-block-active'
+    console.log('next', $(this).next()[0])
+    console.log('next', $(this).next()[0].style.display)
   })
 })
