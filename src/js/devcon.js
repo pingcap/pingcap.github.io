@@ -113,7 +113,7 @@ $(document).ready(function() {
   $('.signup-btn').click(smoothScroll)
 
   $('.instructor').click(function() {
-    if (window.matchMedia('(max-width: 550px)').matches) {
+    if (window.matchMedia('(max-width: 1024px)').matches) {
       console.log('yes')
       $('.intro').css('opacity', '0')
       var el = $(this)
