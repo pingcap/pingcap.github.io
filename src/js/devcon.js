@@ -92,9 +92,7 @@ $(document).ready(function() {
     $('.devCon').css('padding-top', 2 * header_H)
   }
 
-  // $('.detail-block-active').hide()
-
-  $('body').removeClass('detail-bock')
+  $('.detail-block').hide()
 
   calcBtnPosition()
 
@@ -137,17 +135,31 @@ $(document).ready(function() {
     }
   })
 
+  // handle devcon agenda talk title click, performing like collapse
+  var selEle
+
   $('.agenda__table .collapsable').click(function() {
-    console.log('tr clicked')
-    console.log('next', $(this).next()[0])
-    // $('.detail-block-active').remove()
-    // createDetailBlock($(this))
-    // $(this)
-    //   .next()[0]
-    //   .css('display', 'block')
-    $(this).next()[0].style.display = 'block'
-    $(this).next()[0].className = 'detail-block-active'
-    console.log('next', $(this).next()[0])
-    console.log('next', $(this).next()[0].style.display)
+    if (window.matchMedia('(min-width: 550px)').matches) {
+      if (selEle) {
+        selEle.removeClass('selected-bg')
+        selEle.children()[3].innerText = '+'
+      }
+
+      $(this).addClass('selected-bg')
+      if ($(this).next()[0].style.display == 'none') {
+        $('.detail-block').hide()
+        $(this)
+          .next()
+          .show()
+        $(this).children('td')[3].innerText = '-'
+      } else {
+        $(this)
+          .next()
+          .hide()
+        $(this).children('td')[3].innerText = '+'
+      }
+
+      selEle = $(this)
+    }
   })
 })
