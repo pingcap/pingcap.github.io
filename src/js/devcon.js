@@ -16,7 +16,6 @@ function handleWebsiteNavDisplay() {
 }
 
 function smoothScroll() {
-  console.log('scroll')
   var btnName = $(this)[0].className
   var sectionName
   switch (btnName) {
@@ -84,6 +83,8 @@ $(document).ready(function() {
     $('.devCon').css('padding-top', 2 * header_H)
   }
 
+  $('.detail-block').hide()
+
   calcBtnPosition()
 
   // handle window scrolls
@@ -122,6 +123,35 @@ $(document).ready(function() {
       $('.dropdown-btns').css('display', 'none')
     } else {
       $('.dropdown-btns').css('display', 'block')
+    }
+  })
+
+  // handle devcon agenda talk title click, performing like collapse
+  var selEle
+
+  $('.agenda__table .collapsable').click(function() {
+    if (window.matchMedia('(min-width: 550px)').matches) {
+      if (selEle) {
+        selEle.removeClass('selected-bg')
+        selEle.children()[3].innerText = '+'
+      }
+
+      $(this).addClass('selected-bg')
+      if ($(this).next()[0].style.display == 'none') {
+        $('.detail-block').hide()
+        $(this)
+          .next()
+          .show()
+        $(this).children('td')[3].innerText = '-'
+      } else {
+        $(this)
+          .next()
+          .hide()
+        $(this).removeClass('selected-bg')
+        $(this).children('td')[3].innerText = '+'
+      }
+
+      selEle = $(this)
     }
   })
 })
