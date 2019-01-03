@@ -55,7 +55,7 @@ function processTags(showMoreList) {
 
   if (!hash && pageType === 'blog-list') {
     var listIdx = 0
-    $('.article-list .blog__article').each(function() {
+    $('.article-list .article').each(function() {
       const $this = $(this)
       if (showMoreList) {
         $this.show()
@@ -90,15 +90,18 @@ function processTags(showMoreList) {
   if (pageType === 'blog-list' && hash) {
     var listIdx = 0
     $('#showMore').css('display', 'none')
-    $('.nav-tags .category').removeClass('catesel')
-    $(`.nav-tags .category[data-tag="${hash.slice(1)}"]`).addClass('catesel')
     $('.nav-tags .tag').removeClass('sel')
     $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
-    $('.article-list .blog__article').each(function() {
+    $('.nav-tags .category').removeClass('catesel')
+    $(`.nav-tags .category[data-tag="${hash.slice(1)}"]`).addClass('catesel')
+    $('.article-list .article').each(function() {
       const $this = $(this)
       if (showMoreList && $this.data('category').includes(hash.slice(1))) {
         $this.show()
-      } else if (!showMoreList) {
+      } else if (
+        !showMoreList &&
+        $this.data('category').includes(hash.slice(1))
+      ) {
         if (listIdx < 4) {
           $this.show()
           listIdx++
@@ -204,9 +207,10 @@ $(document).ready(function() {
     } else {
       // filter articles if the list type is blog list
       if (pageType === 'blog-list') {
+        console.log('blog list')
         var listIdx = 0
         $('#showMore').css('display', 'none')
-        $('.article-list .blog__article').each(function() {
+        $('.article-list .article').each(function() {
           const $this = $(this)
           if ($this.data('category').includes(filter)) {
             // $this.show()
