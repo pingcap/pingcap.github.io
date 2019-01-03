@@ -104,19 +104,21 @@ $(document).ready(function() {
   $('.signup-btn').click(smoothScroll)
 
   $('.instructor').click(function() {
-    $('.intro').css('opacity', '0')
-    var el = $(this)
-      .find('.intro')
-      .css('opacity', '1')
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      $('.intro').css('opacity', '0')
+      var el = $(this)
+        .find('.intro')
+        .css('opacity', '1')
+    }
   })
 
-  $('.instructor').hover(function() {
-    $('.intro').css('opacity', '0')
+  // $('.instructor').hover(function() {
+  //   $('.intro').css('opacity', '0')
 
-    var el = $(this)
-      .find('.intro')
-      .css('opacity', '1')
-  })
+  //   var el = $(this)
+  //     .find('.intro')
+  //     .css('opacity', '1')
+  // })
 
   $('.section-burger').click(function() {
     if ($('.dropdown-btns').css('display') == 'block') {
