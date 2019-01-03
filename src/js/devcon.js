@@ -16,7 +16,6 @@ function handleWebsiteNavDisplay() {
 }
 
 function smoothScroll() {
-  console.log('scroll')
   var btnName = $(this)[0].className
   var sectionName
   switch (btnName) {
@@ -60,14 +59,6 @@ function calcBtnPosition() {
       '/images/community/devcon-banner-pc.png'
     )
   }
-}
-
-function createDetailBlock(el) {
-  console.log('el: ', el)
-  var detailEle = document.createElement('div')
-  detailEle.className = 'detail-bock'
-  el.after(detailEle)
-  console.log('detail:', detailEle)
 }
 
 // handle positions of devcon navbar and website navbar when resize window
