@@ -14,7 +14,7 @@ function calcBannerTitleImg() {
   } else {
     $('.banner__section .banner').attr(
       'src',
-      '/images/community/community-banner-pc.png'
+      '/images/community/community-banner-pc.svg'
     )
   }
 }
@@ -29,6 +29,16 @@ function createEventListConsole(eventTitles, eventLinks) {
     event.innerHTML =
       '<a href="' + eventLinks[i] + '">' + eventTitles[i] + '</a>'
     $('.event-list').append(event)
+  }
+}
+
+function setClndrHeight() {
+  if (window.matchMedia('(min-width: 700px)').matches) {
+    var active_img_H = $('.picture img').height()
+    console.log('height: ', active_img_H)
+    $('#calendar').css('height', active_img_H)
+  } else {
+    $('#calendar').css('height', '280px')
   }
 }
 
@@ -69,8 +79,10 @@ $(document).ready(function() {
 
   console.log('width: ', $(window).width())
 
+  setClndrHeight()
   calcBannerTitleImg()
   $(window).resize(calcBannerTitleImg)
+  $(window).resize(setClndrHeight)
 
   $('.eventday').click(function() {
     var el = $(this)
