@@ -1,0 +1,34 @@
+<div class="nav-tags" data-type="{{.type}}">
+    {{- range $name, $taxonomy := .global.Site.Taxonomies.categories -}}
+        <div class="category" data-tag="{{ replace $name " " "-"}}">
+            <a href="#{{ replace $name " " "-"}}" class="tag" data-tag="{{ replace $name " " "-"}}">
+                <div class="category__icon"></div>
+                <div class="category__content">
+                    <div class="title">
+                      {{- $name -}}
+                    </div>
+                    {{- if eq $name "Engineering" -}}
+                        <div class="summary">
+                            Deep dive blog posts on TiDB’s design, inner workings, testing framework, and technical innovation.
+                        </div>
+                    {{- end -}}
+                    {{- if eq $name "HTAP" -}}
+                        <div class="summary">
+                            How TiDB’s modular design enables a Hybrid Transactional and Analytical Processing (HTAP) architecture.
+                        </div>
+                    {{- end -}}
+                    {{- if eq $name "MySQL Scalability" -}}
+                        <div class="summary">
+                            Sharing our experience building TiDB’s MySQL compatible layer from scratch and its ongoing evolution.
+                        </div>
+                    {{- end -}}
+                    {{- if eq $name "Open Source Community" -}}
+                        <div class="summary">
+                            Activities, events, and stories about the TiDB open source community.
+                        </div>
+                    {{- end -}}
+                </div>
+            </a>
+        </div>
+    {{end}}
+</div>

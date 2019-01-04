@@ -47,12 +47,32 @@ function processStickyTree() {
 }
 
 // Process tags
-function processTags() {
+function processTags(showMoreList) {
   const hash = decodeURIComponent(location.hash)
   const pageType = $('.nav-tags').data('type')
 
   if (!hash) $('.tag.all').addClass('sel')
 
+  if (!hash && pageType === 'blog-list') {
+    var listIdx = 0
+    $('.article-list .article').each(function() {
+      const $this = $(this)
+      if (showMoreList) {
+        $this.show()
+        $('#showMore').css('display', 'none')
+      } else {
+        if (listIdx < 4) {
+          $this.show()
+          listIdx++
+        } else {
+          $('#showMore').css('display', 'block')
+          $this.hide()
+        }
+      }
+    })
+  }
+
+  // Handle article filter if list type is blog-cn list
   if (pageType === 'list' && hash) {
     $('.nav-tags .tag').removeClass('sel')
     $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
@@ -65,7 +85,51 @@ function processTags() {
       }
     })
   }
+
+  // Handle article filter if list type is blog list
+  if (pageType === 'blog-list' && hash) {
+    var listIdx = 0
+    $('#showMore').css('display', 'none')
+    $('.nav-tags .tag').removeClass('sel')
+    $(`.nav-tags .tag[data-tag="${hash.slice(1)}"]`).addClass('sel')
+    $('.nav-tags .category').removeClass('catesel')
+    $(`.nav-tags .category[data-tag="${hash.slice(1)}"]`).addClass('catesel')
+    $('.article-list .article').each(function() {
+      const $this = $(this)
+      if (showMoreList && $this.data('category').includes(hash.slice(1))) {
+        $this.show()
+      } else if (
+        !showMoreList &&
+        $this.data('category').includes(hash.slice(1))
+      ) {
+        if (listIdx < 4) {
+          $this.show()
+          listIdx++
+        } else {
+          $('#showMore').css('display', 'block')
+          $this.hide()
+        }
+      } else {
+        $this.hide()
+      }
+    })
+  }
 }
+
+// function processTextOverflow() {
+//   console.log('proccessing text overflow')
+//   const briefContainers = document.querySelectorAll('.brief')
+//   Array.prototype.forEach.call(briefContainers, container => {
+//     // Loop through each container
+//     var p = container.querySelector('p')
+//     var divh = container.clientHeight
+//     console.log('divh is : ', divh)
+//     while (p.offsetHeight > divh) {
+//       // Check if the paragraph's height is taller than the container's height. If it is:
+//       p.textContent = p.textContent.replace(/\W*\s(\S)*$/, '...') // add an ellipsis at the last shown space
+//     }
+//   })
+// }
 
 // Replace the relative href in markdown-body
 // function replaceHref(a) {
@@ -101,12 +165,18 @@ function processTags() {
 
 // Process dom elements after loaded
 $(document).ready(function() {
+  var showMore = false
   if ($('.st_tree').length) processStickyTree()
 
-  if ($('.nav-tags').length) processTags()
+  if ($('.nav-tags').length) processTags(showMore)
 
   // Create TOC for article in docs module
   if ($('.article-toc').length) toc_run()
+
+  // processShowMoreBlogList()
+  $('#showMore').click(function() {
+    processTags(!showMore)
+  })
 
   // processLinksInMarkdown()
 
@@ -133,6 +203,8 @@ $(document).ready(function() {
 
     $('.nav-tags .tag').removeClass('sel')
     $(`.nav-tags .tag[data-tag="${filter}"]`).addClass('sel')
+    $('.nav-tags .category').removeClass('catesel')
+    $(`.nav-tags .category[data-tag="${filter}"]`).addClass('catesel')
     isAll && $('.tag.all').addClass('sel')
 
     const pageType = $('.nav-tags').data('type')
@@ -141,18 +213,41 @@ $(document).ready(function() {
       if (isAll) window.location.href = '../'
       else window.location.href = `../#${encodeURIComponent(filter)}`
     } else {
-      $('.article-list .article').each(function() {
-        const $this = $(this)
-        if (isAll) {
-          $this.show()
-        } else {
-          if ($this.data('tag').includes(filter)) {
-            $this.show()
+      // filter articles if the list type is blog list
+      if (pageType === 'blog-list') {
+        console.log('blog list')
+        var listIdx = 0
+        $('#showMore').css('display', 'none')
+        $('.article-list .article').each(function() {
+          const $this = $(this)
+          if ($this.data('category').includes(filter)) {
+            // $this.show()
+            if (listIdx < 4) {
+              $this.show()
+              listIdx++
+            } else {
+              $this.hide()
+              $('#showMore').css('display', 'block')
+            }
           } else {
             $this.hide()
           }
-        }
-      })
+        })
+      } else {
+        // filter articles if the list type is blog-cn list
+        $('.article-list .article').each(function() {
+          const $this = $(this)
+          if (isAll) {
+            $this.show()
+          } else {
+            if ($this.data('tag').includes(filter)) {
+              $this.show()
+            } else {
+              $this.hide()
+            }
+          }
+        })
+      }
       if (isAll) window.location.href = `./`
       else window.location.href = `./#${encodeURIComponent(filter)}`
     }
