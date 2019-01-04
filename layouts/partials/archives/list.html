@@ -1,9 +1,14 @@
 {{ $hasMetaData := .hasMetaData }}
 {{ $hasBrief := .hasBrief }}
+{{ $listType := .listType }}
 
 <div class="list article-list">
     {{- range .posts -}}
+    {{- if eq $listType "blog" -}}
+        <div class="article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
+    {{- else -}}
         <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
+    {{- end -}}
             <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
             {{- if $hasMetaData -}}
                 <ul class="blog-post-meta">
@@ -24,6 +29,15 @@
                     {{- end -}}
                 </li>
                 <li class="meta-item">
+                    {{- if eq $listType "blog" -}}
+                    <div class="meta-category">
+                        {{- if isset .Params "categories" -}}
+                        {{- range $idx, $i := .Params.categories}}
+                        {{ $i }}
+                        {{- end -}}
+                        {{- end -}}
+                      </div>
+                    {{- else -}}
                     <div>
                         {{- if isset .Params "tags" -}}
                             {{ $len := len .Params.tags }}
@@ -34,6 +48,7 @@
                             {{- end -}}
                         {{- end -}}
                     </div>
+                    {{- end -}}
                 </li>
                 </ul>
             {{- end -}}
