@@ -6,17 +6,50 @@
 // }
 
 function calcBannerTitleImg() {
-  if (window.matchMedia('(max-width: 850px)').matches) {
+  // change banner depending on the window size
+  if (window.matchMedia('(max-width: 700px)').matches) {
     $('.banner__section .banner').attr(
       'src',
       '/images/community/community-banner-mobile.png'
     )
+
+    $('.signable .picture img').attr(
+      'src',
+      '/images/community/activities/mobileDevCon.png'
+    )
+
+    $('.relationship').show()
   } else {
     $('.banner__section .banner').attr(
       'src',
       '/images/community/community-banner-pc.svg'
     )
+    $('.signable .picture img').attr(
+      'src',
+      '/images/community/activities/PCdevCon.png'
+    )
+    $('.relationship').hide()
   }
+
+  // calculate the margin of div activity container
+  if (window.matchMedia('(min-width: 1351px)').matches) {
+    var activity_container_margin =
+      document.getElementsByClassName('signable')[0].offsetLeft - 100
+  } else if (window.matchMedia('(min-width: 1250px)').matches) {
+    var activity_container_margin =
+      document.getElementsByClassName('signable')[0].offsetLeft - 50
+  } else if (window.matchMedia('(min-width: 701px)').matches) {
+    var activity_container_margin = document.getElementsByClassName(
+      'signable'
+    )[0].offsetLeft
+  } else {
+    var activity_container_margin = 0
+  }
+
+  $('.content__container .content').css(
+    'margin-left',
+    activity_container_margin
+  )
 }
 
 function createEventListConsole(eventTitles, eventLinks) {
@@ -32,40 +65,34 @@ function createEventListConsole(eventTitles, eventLinks) {
   }
 }
 
-function setClndrHeight() {
-  if (window.matchMedia('(min-width: 700px)').matches) {
-    var active_img_H = $('.picture img').height()
-    console.log('height: ', active_img_H)
-    $('#calendar').css('height', active_img_H)
-  } else {
-    $('#calendar').css('height', '280px')
-  }
-}
+// function setClndrHeight() {
+
+// }
 
 $(document).ready(function() {
   var events = [
     {
-      Date: new Date(2018, 12, 24),
+      Date: new Date(2019, 1, 24),
       Title: 'Christmas Eve - Beijing',
       Link: 'https://pingcap.com',
     },
     {
-      Date: new Date(2018, 12, 22),
+      Date: new Date(2019, 1, 2),
       Title: '第 N 期 Meetup - 上海',
       Link: 'https://pingcap.com/community/devcon2019',
     },
     {
-      Date: new Date(2018, 12, 18),
+      Date: new Date(2019, 1, 4),
       Title: '第 N 期 Meetup - 上海',
       Link: 'https://pingcap.com/community/devcon2019',
     },
     {
-      Date: new Date(2018, 12, 18),
+      Date: new Date(2019, 1, 4),
       Title: '第 N 期 Meetup - beijing',
       Link: 'https://pingcap.com/community/devcon2019',
     },
     {
-      Date: new Date(2018, 12, 3),
+      Date: new Date(2019, 1, 3),
       Title: '25 year anniversary',
       Link: 'https://www.google.com.au',
     },
@@ -77,12 +104,9 @@ $(document).ready(function() {
   var element = document.getElementById('calendar')
   calendar(element, events, settings)
 
-  console.log('width: ', $(window).width())
-
-  setClndrHeight()
+  // setClndrHeight()
   calcBannerTitleImg()
   $(window).resize(calcBannerTitleImg)
-  $(window).resize(setClndrHeight)
 
   $('.eventday').click(function() {
     var el = $(this)
@@ -92,7 +116,6 @@ $(document).ready(function() {
       eventTitles.push(el[0].childNodes[i].innerText)
       eventLinks.push(el[0].childNodes[i].childNodes[0].href)
     }
-    console.log('eventtitles: ', eventTitles)
     createEventListConsole(eventTitles, eventLinks)
   })
 
@@ -104,12 +127,14 @@ $(document).ready(function() {
   })
 
   $('.signable').click(function() {
-    if ($('.overlayCover').css('display') == 'block') {
-      $('.overlayCover').hide()
-      $('.current-activity-content').hide()
-    } else {
-      $('.overlayCover').show()
-      $('.current-activity-content').show()
+    if (window.matchMedia('(max-width: 700px)').matches) {
+      if ($('.overlayCover').css('display') == 'block') {
+        $('.overlayCover').hide()
+        $('.current-activity-content').hide()
+      } else {
+        $('.overlayCover').show()
+        $('.current-activity-content').show()
+      }
     }
   })
 })

@@ -35,7 +35,6 @@ var Calendar = function(model, options, date){
   
 
   this.Selected = this.Today
-  console.log('this.selected', this.Selected)
   this.Today.Month = this.Today.getMonth();
   this.Today.Year = this.Today.getFullYear();
   if(date){this.Selected = date}
@@ -214,44 +213,28 @@ function createCalendar(calendar, element, adjuster){
       var number = DayNumber(i+1);
       // Check Date against Event Dates
       for(var n = 0; n < calendar.Model.length; n++){
-        // console.log('calendar model: ', calendar.Model[n].Date.getMonth())
         if (calendar.Model[n].Date.getMonth() == 0) {
-          // console.log(calendar.Model[n].Date.getMonth())
           var tempYear = calendar.Model[n].Date.getFullYear() - 1
           var tempMonth = 11
           var tempDate = calendar.Model[n].Date.getDate()
         } else {
-          // console.log('not 0')
           var tempYear = calendar.Model[n].Date.getFullYear()
           var tempMonth = calendar.Model[n].Date.getMonth() - 1
           var tempDate = calendar.Model[n].Date.getDate()
         }
-        // console.log('hh: ', tempYear, tempMonth, tempDate)
-        // console.log('test: ', new Date(tempYear, tempMonth, tempDate))
         var evDate = new Date(tempYear, tempMonth, tempDate)
         var toDate = new Date(calendar.Selected.Year, calendar.Selected.Month, (i+1));
-        // console.log('toDate: ', toDate)
-        // console.log('evdategettime: ', evDate.getTime())
-        // console.log('todategettime: ', toDate.getTime())
         if(evDate.getTime() == toDate.getTime()){
-          // console.log('equal')
-          // console.log('evDate: ', toDate)
-          // console.log('toDate: ', evDate)
-          // console.log('evdategettime: ', evDate.getTime())
-          // console.log('todategettime: ', toDate.getTime())
-          // console.log('number: ', number.classList.contains('eventday'))
           if (!number.classList.contains('eventday')) {
             number.className += " eventday";
           }
           var title = document.createElement('span');
-          // console.log('title is:', title)
           title.className += "cld-title";
-          // console.log('calendar eventclick: ', calendar.Options)
           if(typeof calendar.Model[n].Link == 'function' || calendar.Options.EventClick){
             var a = document.createElement('a');
             a.setAttribute('href', '#');
             a.innerHTML += calendar.Model[n].Title;
-            console.log('a is', a)
+            // console.log('a is', a)
             if(calendar.Options.EventClick){
               var z = calendar.Model[n].Link;
               if(typeof calendar.Model[n].Link != 'string'){
@@ -276,7 +259,6 @@ function createCalendar(calendar, element, adjuster){
             }
             title.appendChild(a);
           }else{
-            // console.log('hello')
             title.innerHTML += '<a href="' + calendar.Model[n].Link + '">' + calendar.Model[n].Title + '</a>';
           }
           number.appendChild(title);
@@ -338,6 +320,5 @@ function createCalendar(calendar, element, adjuster){
 
 function calendar(el, data, settings){
   var obj = new Calendar(data, settings);
-  console.log('obj', obj)
   createCalendar(obj, el);
 }
