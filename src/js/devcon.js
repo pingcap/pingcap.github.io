@@ -74,6 +74,44 @@ function handleWindowResize() {
   }
 }
 
+// handle pr-content collapse
+function handlePRConCollapse() {
+  if ($('.guide-content').css('display') == 'block') {
+    $('.subtitle-guide').css('color', '#3e3e3e')
+    $('.guide-content').hide()
+    $('#guide-collapse')[0].innerText = '+'
+  }
+
+  if ($('.pr-content').css('display') == 'block') {
+    $('.subtitle-pr').css('color', '#3e3e3e')
+    $('.pr-content').hide()
+    $('#pr-collapse')[0].innerText = '+'
+  } else {
+    $('.subtitle-pr').css('color', '#3A58F0')
+    $('.pr-content').show()
+    $('#pr-collapse')[0].innerText = '-'
+  }
+}
+
+// handle guide-content collapse
+function handleGuideConCollapse() {
+  if ($('.pr-content').css('display') == 'block') {
+    $('.subtitle-pr').css('color', '#3e3e3e')
+    $('.pr-content').hide()
+    $('#pr-collapse')[0].innerText = '+'
+  }
+
+  if ($('.guide-content').css('display') == 'block') {
+    $('.subtitle-guide').css('color', '#3e3e3e')
+    $('.guide-content').hide()
+    $('#guide-collapse')[0].innerText = '+'
+  } else {
+    $('.subtitle-guide').css('color', '#3A58F0')
+    $('.guide-content').show()
+    $('#guide-collapse')[0].innerText = '-'
+  }
+}
+
 $(document).ready(function() {
   // set devcon navbar and devcon container positioon
   if ($('header').length) {
@@ -112,14 +150,6 @@ $(document).ready(function() {
     }
   })
 
-  // $('.instructor').hover(function() {
-  //   $('.intro').css('opacity', '0')
-
-  //   var el = $(this)
-  //     .find('.intro')
-  //     .css('opacity', '1')
-  // })
-
   $('.section-burger').click(function() {
     if ($('.dropdown-btns').css('display') == 'block') {
       $('.dropdown-btns').css('display', 'none')
@@ -155,5 +185,27 @@ $(document).ready(function() {
 
       selEle = $(this)
     }
+  })
+
+  $('.subtitle-pr').click(handlePRConCollapse)
+
+  $('.subtitle-guide').click(handleGuideConCollapse)
+
+  $('.committer').click(function() {
+    $('html, body').animate(
+      {
+        scrollTop: $('.committer__detail').offset().top - 80,
+      },
+      1000
+    )
+  })
+
+  $('.contributor').click(function() {
+    $('html, body').animate(
+      {
+        scrollTop: $('.contributor__detail').offset().top - 70,
+      },
+      1000
+    )
   })
 })
