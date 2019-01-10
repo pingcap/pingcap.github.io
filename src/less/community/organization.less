@@ -66,8 +66,8 @@
 
   .intro {
     max-width: 33rem;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    padding: 0 1.5rem;
     font-size: .8rem;
     line-height: 1.7;
   }
@@ -88,12 +88,14 @@
     .committer-members {
       display: flex;
       flex-flow: row wrap;
-      justify-content: space-between;
+      justify-content: space-around;
+      align-items: left;
       margin: 1rem 0 2rem;
 
       .c-member {
         width: 180px;
-        height: auto;
+        // height: auto;
+        height: 230px;
         box-shadow: 0 2px 5px #DDDDDD;
         margin: 0.5rem;
 
@@ -105,8 +107,8 @@
 
         .name {
           margin: 0.2rem;
-          // font-size: 0.8rem;
-          font-size: 15px;
+          font-size: 0.75rem;
+          // font-size: 15px;
           line-height: 1.7;
           text-align: center;
         }
@@ -114,8 +116,8 @@
         .company {
           text-align: center;
           margin: 0.2rem;
-          // font-size: 0.7rem;
-          font-size: 13px;
+          font-size: 0.65rem;
+          // font-size: 13px;
           line-height: 1.7;
         }
       }
@@ -123,7 +125,7 @@
   }
 
   .contributor__detail {
-    margin: 6rem 0 0 0;
+    margin: 6rem 0 2rem 0;
     text-align: left;
   }
 
@@ -179,8 +181,9 @@
 .architecture {
   width: 100%;
   height: auto;
-  margin: 100px 0 150px 0;
-  padding: 0 4rem;
+  // margin: 100px 0 150px 0;
+  // padding: 0 4rem;
+  padding: 100px 50px;
   position: relative;
 
   img {
@@ -202,13 +205,12 @@
     background: white;
     font-size: .8rem;
     position: absolute;
-    left: 50%;
-    padding: 15px 15px 15px 45px;
+    padding: 14px 14px 14px 45px;
 
     span {
       position: absolute;
       top: 50%;
-      left: 14px;
+      left: 11px;
       margin-top: -10px;
 
       img {
@@ -220,56 +222,49 @@
 
   .developer-group,
   .head-node {
-    padding: 15px;
-  }
-
-  .head-node {
-    top: -46px;
-    margin-left: -100px;
-  }
-
-  .pmc,
-  .developer-group,
-  .committee {
-    top: 50%;
-    margin-top: -48px;
+    padding: 0.7rem;
+    left: 50%;
   }
 
   .pmc,
   .maintainer {
-    margin-left: -520px;
-  }
-
-  .developer-group {
-    margin-left: -95px;
+    left: 10px;
   }
 
   .committee,
   .member {
-    margin-left: 380px;
+    right: 10px;
   }
 
   .maintainer,
-  .committer,
-  .contributor,
   .member {
-    top: 50%;
-    margin-top: 145px;
+    bottom: 0;
+    // right: ;
   }
 
   .committer {
-    margin-left: -230px;
+    // margin-left: -230px;
     background: #3a58f0;
     color: white;
     cursor: pointer;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 3px 8px rgb(167, 167, 167);
+    }
   }
 
   .contributor {
-    margin-left: 80px;
+    // margin-left: 80px;
     background: #D04E43;
     border: #D04E43;
     color: white;
     cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 3px 8px rgb(167, 167, 167);
+    }
   }
 
   .tooltip {
@@ -365,11 +360,11 @@
     text-align: left;
     max-width: 700px;
     margin: 0 auto;
-    padding: 1.5rem 0 2rem;
+    padding: 1.5rem 1.5rem 2rem;
 
     .image {
-      width: 400px;
-      height: 280px;
+      width: 355px;
+      height: 250px;
       display: inline-block;
 
       img {
@@ -379,15 +374,15 @@
     }
 
     .content {
-      width: calc(~'100% - 400px');
-      height: 280px;
+      width: calc(~'100% - 355px');
+      height: 250px;
       background: #1A237E;
       color: white;
       display: inline-block;
       float: right;
       padding: 1.5rem;
       line-height: 1.7;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
   }
 }
@@ -400,52 +395,134 @@
     button {
       border: 1px solid #3a5af0;
       color: #3a5af0;
-      width: 280px;
+      width: 260px;
       font-size: 0.8rem;
-      // padding: 14px 13px;
-      padding: 14px 5px 14px 20px;
+      padding: 14px;
       margin-top: 3rem;
       background: none;
       position: relative;
+      cursor: pointer;
 
-      span {
-        // position: absolute;
-        // top: 0;
-        // left: 0;
+      .arrow {
+        width: 16px;
+        position: absolute;
+        opacity: 0;
+        top: 50%;
+        left: 2px;
+        margin-top: -0.4rem;
+        transition: all 0.3s ease;
+      }
+
+      .content {
+        transition: all 0.3s ease;
       }
 
       &:hover {
-        span {
-          padding: 14px 5px 14px 20px;
+        .arrow {
+          opacity: 1;
+          left: 16px;
+        }
+
+        .content {
+          padding: 14px 0 14px 20px;
         }
       }
     }
   }
 
   .planet-banner {
-    width: 60%;
-    height: auto;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 700px;
+    margin: 2.5rem auto 4rem;
+    padding: 0 1.5rem;
     text-align: center;
     border: none;
-    padding: 3rem 0;
     position: relative;
 
     img {
-      // position: absolute;
-      // top: 0;
-      // left: 0;
       width: 100%;
-      height: 100%;
+      height: auto;
+      transition: all 0.2s ease;
+    }
 
-      &:hover {
-        box-shadow: 0 2px 9px 0 #DDDDDD;
-        // border-radius: 10px;
-        cursor: pointer;
-        // margin-top: -2px;
-        // padding: -2px 0;
-        transition: all 0.2s ease-in-out;
+    &:hover {
+      img {
+        box-shadow: 0 0 12px 0 rgb(184, 184, 184);
+        transform: translateY(-2px);
       }
+      }
+  }
+}
+
+@media (max-width: 768px) {
+  .organization__section {
+    .committer__detail,
+    .contributor__detail,
+    .be__committer {
+      display: block;
+
+      .c-title {
+        margin: 2rem 0;
+        font-size: 0.9rem;
+      }
+    }
+
+    .committer-btn,
+    .contributor-btn {
+      margin: 2rem;
+
+      button {
+        width: 120px;
+        padding: 10px 0 10px 30px;
+
+        span {
+          left: 10px;
+        }
+      }
+    }
+  }
+
+  .c-content,
+  .pr-content,
+  .guide-content {
+    padding: 0 1.5rem;
+  }
+
+  .appreciation__section {
+    .appreciation__content {
+      margin: 0 1.5rem;
+      padding: 1.5rem 0 2rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .appreciation__section {
+    .appreciation__content {
+      margin: 0 1.5rem;
+      padding: 1.5rem 0 2rem;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+
+      .image {
+        width: 100%;
+        height: auto;
+      }
+
+      .content {
+        min-width: 140px;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  .contributor__section .goPlanet button {
+    width: 220px;
+
+    .arrow {
+      width: 12px;
     }
   }
 }

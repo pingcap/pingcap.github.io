@@ -47,7 +47,20 @@ function smoothScroll() {
   )
 }
 
-function calcBtnPosition() {
+// handle positions of devcon navbar and website navbar when resize window
+function handleWindowResize() {
+  // calculate devcon nav bar height
+  var header_H = $('header').height()
+  if ($('header').length && !$('header').is(':hidden')) {
+    $('.devcon-nav').css('top', header_H)
+    $('.devcon-nav').css('height', header_H)
+    $('.devCon').css('padding-top', 2 * header_H)
+  } else {
+    $('.devcon-nav').css('top', 0)
+    $('.devcon-nav').css('height', header_H)
+  }
+
+  // switch banner between pc and mobile
   if (window.matchMedia('(max-width: 1100px)').matches) {
     $('.banner .image img').attr(
       'src',
@@ -59,19 +72,45 @@ function calcBtnPosition() {
       '/images/community/devcon-banner-pc.png'
     )
   }
-}
 
-// handle positions of devcon navbar and website navbar when resize window
-function handleWindowResize() {
-  var header_H = $('header').height()
-  if ($('header').length && !$('header').is(':hidden')) {
-    $('.devcon-nav').css('top', header_H)
-    $('.devcon-nav').css('height', header_H)
-    $('.devCon').css('padding-top', 2 * header_H)
-  } else {
-    $('.devcon-nav').css('top', 0)
-    $('.devcon-nav').css('height', header_H)
-  }
+  // calculate architecture buttons positions
+  var w = $('.architecture img').width()
+  var h = w / 3.17
+  $('.head-node').css('top', -(h * 0.18) + 110)
+  $('.head-node').css('margin-left', -($('button.head-node').width() / 2) - 14)
+
+  $('.developer-group').css('top', h * 0.36 + 95)
+  $('.developer-group').css(
+    'margin-left',
+    -($('button.developer-group').width() / 2) - 14
+  )
+
+  $('.pmc').css('top', h * 0.36 + 95)
+  // $('.pmc').css('margin-left', -$('.pmc').width() / 2 + 25)
+
+  $('.committee').css('top', h * 0.36 + 95)
+  // $('.committee').css('margin-right', -($('.committee').width() / 2 + 35))
+
+  $('.maintainer').css('bottom', -$('.maintainer').height() + 75)
+  // $('.maintainer').css('margin-left', -$('.maintainer').width() / 2 + 25)
+
+  $('.committer').css('bottom', -$('.committer').height() + 75)
+  $('.committer').css(
+    'margin-left',
+    -w * 0.167 - $('.committer').width() / 2 - 25
+  )
+
+  $('.contributor').css('bottom', -$('.contributor').height() + 76)
+  $('.contributor').css(
+    'right',
+    w * 0.33 + 50 - $('.contributor').width() / 2 - 20
+  )
+
+  $('.member').css('bottom', -$('.member').height() + 75)
+  // $('.member').css('margin-right', -$('.member').width() / 2 - 35)
+  // $('.committer').css('bottom')
+
+  console.log('.width()', $('button.head-node').width())
 }
 
 // handle pr-content collapse
@@ -123,14 +162,14 @@ $(document).ready(function() {
 
   $('.detail-block').hide()
 
-  calcBtnPosition()
+  handleWindowResize()
 
   // handle window scrolls
   $(window).scroll(handleWebsiteNavDisplay)
 
   //handle window resize
   $(window).resize(handleWindowResize)
-  $(window).resize(calcBtnPosition)
+  // $(window).resize(calcBtnPosition)
 
   // smmooth scroll
   $('.schedule-btn').click(smoothScroll)
