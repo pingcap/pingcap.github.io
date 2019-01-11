@@ -55,17 +55,30 @@ function handleWindowResize() {
       'src',
       '/images/community/organization/lines-mobilei5.svg'
     )
+    $('.banner__section img').attr(
+      'src',
+      '/images/community/organization/community-banner-mobile.jpg'
+    )
   } else if (window.matchMedia('(max-width: 700px)').matches) {
     console.log('mobile')
     $('.architecture .skeleton').attr(
       'src',
       '/images/community/organization/lines-mobilei7.svg'
     )
+
+    $('.banner__section img').attr(
+      'src',
+      '/images/community/organization/community-banner-mobile.jpg'
+    )
   } else {
     console.log('pc')
     $('.architecture .skeleton').attr(
       'src',
       '/images/community/organization/lines-pc.svg'
+    )
+    $('.banner__section img').attr(
+      'src',
+      '/images/community/organization/community-banner-pc.jpg'
     )
   }
 }
