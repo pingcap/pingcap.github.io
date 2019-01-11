@@ -50,7 +50,7 @@ function smoothScroll() {
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
   if (window.matchMedia('(max-width: 360px)').matches) {
-    console.log('mobile')
+    console.log('mobile 360')
     $('.architecture .skeleton').attr(
       'src',
       '/images/community/organization/lines-mobilei5.svg'
@@ -60,7 +60,7 @@ function handleWindowResize() {
       '/images/community/organization/community-banner-mobile.jpg'
     )
   } else if (window.matchMedia('(max-width: 700px)').matches) {
-    console.log('mobile')
+    console.log('mobile 700')
     $('.architecture .skeleton').attr(
       'src',
       '/images/community/organization/lines-mobilei7.svg'
@@ -128,8 +128,7 @@ function handleWindowResize() {
     var h = w / 3.17
     var vertical_line_H_rattio = 0.18
   }
-  // var h = w / 3.17
-  console.log('ar: ', w, h)
+
   var paddingR = parseInt($('.architecture').css('padding-right'))
   var paddingL = parseInt($('.architecture').css('padding-left'))
   var paddingT = parseInt($('.architecture').css('padding-top'))
@@ -142,12 +141,7 @@ function handleWindowResize() {
       $('.head-node').height() -
       2 * parseInt($('.head-node').css('padding-top'))
   )
-  console.log(
-    'head node tp: ',
-    paddingT,
-    parseInt($('.head-node').css('padding-top')),
-    $('.head-node').height()
-  )
+
   $('.head-node').css(
     'margin-left',
     -(
