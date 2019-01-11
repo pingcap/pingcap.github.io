@@ -48,6 +48,19 @@ function smoothScroll() {
 }
 
 // handle positions of devcon navbar and website navbar when resize window
+// function handleWindowResize() {
+
+// }
+
+function createDetailBlock(el) {
+  console.log('el: ', el)
+  var detailEle = document.createElement('div')
+  detailEle.className = 'detail-bock'
+  el.after(detailEle)
+  console.log('detail:', detailEle)
+}
+
+// handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
   if (window.matchMedia('(max-width: 360px)').matches) {
     console.log('mobile 360')
@@ -81,18 +94,7 @@ function handleWindowResize() {
       '/images/community/organization/community-banner-pc.jpg'
     )
   }
-}
 
-function createDetailBlock(el) {
-  console.log('el: ', el)
-  var detailEle = document.createElement('div')
-  detailEle.className = 'detail-bock'
-  el.after(detailEle)
-  console.log('detail:', detailEle)
-}
-
-// handle positions of devcon navbar and website navbar when resize window
-function handleWindowResize() {
   var header_H = $('header').height()
   if ($('header').length && !$('header').is(':hidden')) {
     $('.devcon-nav').css('top', header_H)
