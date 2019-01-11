@@ -49,6 +49,25 @@ function smoothScroll() {
 
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
+  if (window.matchMedia('(max-width: 360px)').matches) {
+    console.log('mobile')
+    $('.architecture .skeleton').attr(
+      'src',
+      '/images/community/organization/lines-mobilei5.svg'
+    )
+  } else if (window.matchMedia('(max-width: 700px)').matches) {
+    console.log('mobile')
+    $('.architecture .skeleton').attr(
+      'src',
+      '/images/community/organization/lines-mobilei7.svg'
+    )
+  } else {
+    console.log('pc')
+    $('.architecture .skeleton').attr(
+      'src',
+      '/images/community/organization/lines-pc.svg'
+    )
+  }
   // calculate devcon nav bar height
   var header_H = $('header').height()
   if ($('header').length && !$('header').is(':hidden')) {
@@ -75,42 +94,143 @@ function handleWindowResize() {
 
   // calculate architecture buttons positions
   var w = $('.architecture img').width()
-  var h = w / 3.17
-  $('.head-node').css('top', -(h * 0.18) + 110)
-  $('.head-node').css('margin-left', -($('button.head-node').width() / 2) - 14)
+  if (window.matchMedia('(max-width: 360px)').matches) {
+    var h = w * 0.47
+    var vertical_line_H_rattio = 0.11
+  } else if (window.matchMedia('(max-width: 700px)').matches) {
+    var h = w * 0.51
+    var vertical_line_H_rattio = 0.11
+  } else {
+    var h = w / 3.17
+    var vertical_line_H_rattio = 0.18
+  }
+  // var h = w / 3.17
+  console.log('ar: ', w, h)
+  var paddingR = parseInt($('.architecture').css('padding-right'))
+  var paddingL = parseInt($('.architecture').css('padding-left'))
+  var paddingT = parseInt($('.architecture').css('padding-top'))
+  var paddingB = parseInt($('.architecture').css('padding-bottom'))
 
-  $('.developer-group').css('top', h * 0.36 + 95)
+  // if()
+  $('.head-node').css(
+    'top',
+    paddingT -
+      $('.head-node').height() -
+      2 * parseInt($('.head-node').css('padding-top'))
+  )
+  console.log(
+    'head node tp: ',
+    paddingT,
+    parseInt($('.head-node').css('padding-top')),
+    $('.head-node').height()
+  )
+  $('.head-node').css(
+    'margin-left',
+    -(
+      $('.head-node').width() +
+      2 * parseInt($('.head-node').css('padding-left'))
+    ) / 2
+  )
+
+  $('.developer-group').css('top', h * vertical_line_H_rattio * 2 + paddingT)
   $('.developer-group').css(
     'margin-left',
-    -($('button.developer-group').width() / 2) - 14
+    -(
+      $('.developer-group').width() +
+      2 * parseInt($('.developer-group').css('padding-left'))
+    ) / 2
   )
 
-  $('.pmc').css('top', h * 0.36 + 95)
-  // $('.pmc').css('margin-left', -$('.pmc').width() / 2 + 25)
+  $('.pmc').css('top', h * vertical_line_H_rattio * 2 + paddingT)
+  $('.pmc').css(
+    'left',
+    paddingL -
+      ($('.pmc').width() +
+        parseInt($('.pmc').css('padding-left')) +
+        parseInt($('.pmc').css('padding-right'))) /
+        2
+  )
 
-  $('.committee').css('top', h * 0.36 + 95)
-  // $('.committee').css('margin-right', -($('.committee').width() / 2 + 35))
+  $('.committee').css('top', h * vertical_line_H_rattio * 2 + paddingT)
+  $('.committee').css(
+    'margin-right',
+    paddingR -
+      ($('.committee').width() +
+        parseInt($('.committee').css('padding-left')) +
+        parseInt($('.committee').css('padding-right'))) /
+        2
+  )
 
-  $('.maintainer').css('bottom', -$('.maintainer').height() + 75)
-  // $('.maintainer').css('margin-left', -$('.maintainer').width() / 2 + 25)
+  $('.maintainer').css(
+    'top',
+    // paddingB -
+    //   $('.maintainer').height() -
+    //   parseInt($('.maintainer').css('padding-top') * 2) +
+    //   5
+    paddingT + h
+  )
 
-  $('.committer').css('bottom', -$('.committer').height() + 75)
+  $('.maintainer').css(
+    'margin-left',
+    paddingL -
+      ($('.maintainer').width() +
+        parseInt($('.maintainer').css('padding-left')) +
+        parseInt($('.maintainer').css('padding-right'))) /
+        2
+  )
+
+  $('.committer').css(
+    'top',
+    // paddingB -
+    //   $('.committer').height() -
+    //   parseInt($('.committer').css('padding-top') * 2) +
+    //   5
+    paddingT + h
+  )
+
   $('.committer').css(
     'margin-left',
-    -w * 0.167 - $('.committer').width() / 2 - 25
+    paddingL +
+      w / 3 -
+      ($('.committer').width() +
+        parseInt($('.committer').css('padding-left')) +
+        parseInt($('.committer').css('padding-right'))) /
+        2
   )
 
-  $('.contributor').css('bottom', -$('.contributor').height() + 76)
   $('.contributor').css(
-    'right',
-    w * 0.33 + 50 - $('.contributor').width() / 2 - 20
+    'top',
+    // paddingB -
+    //   $('.contributor').height() -
+    //   parseInt($('.contributor').css('padding-top') * 2) +
+    //   5
+    paddingT + h
+  )
+  $('.contributor').css(
+    'margin-right',
+    paddingR +
+      w / 3 -
+      ($('.contributor').width() +
+        parseInt($('.contributor').css('padding-left')) +
+        parseInt($('.contributor').css('padding-right'))) /
+        2
   )
 
-  $('.member').css('bottom', -$('.member').height() + 75)
-  // $('.member').css('margin-right', -$('.member').width() / 2 - 35)
-  // $('.committer').css('bottom')
-
-  console.log('.width()', $('button.head-node').width())
+  $('.member').css(
+    'top',
+    // paddingB -
+    //   $('.member').height() -
+    //   parseInt($('.member').css('padding-top') * 2)
+    paddingT + h
+  )
+  $('.member').css(
+    'margin-right',
+    paddingR -
+      ($('.member').width() +
+        parseInt($('.member').css('padding-left')) +
+        parseInt($('.member').css('padding-right'))) /
+        2
+  )
 }
 
 // handle pr-content collapse

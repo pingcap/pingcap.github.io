@@ -95,7 +95,7 @@
       .c-member {
         width: 180px;
         // height: auto;
-        height: 230px;
+        height: 240px;
         box-shadow: 0 2px 5px #DDDDDD;
         margin: 0.5rem;
 
@@ -183,12 +183,113 @@
   height: auto;
   // margin: 100px 0 150px 0;
   // padding: 0 4rem;
-  padding: 100px 50px;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  padding-right: 120px;
+  padding-left: 100px;
   position: relative;
 
   img {
     width: 100%;
     height: 100%;
+  }
+
+  .pmc,
+  .maintainer {
+    // cursor: pointer;
+
+    .tooltiptext {
+      visibility: hidden;
+      width: 250px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      // top: 0;
+      font-size: 0.7rem;
+      line-height: 1.7;
+      bottom: 125%;
+      left: 2%;
+      // margin-left: -20px;
+      opacity: 0;
+      -webkit-transition: opacity .3s;
+      transition: opacity .3s;
+    }
+
+    .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 20%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+     &:hover {
+      .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      background: #DADFF5;
+    }
+
+    // &:hover .tooltiptext {
+    //   visibility: visible;
+    //   opacity: 1;
+    // }
+  }
+
+  .member,
+  .committee {
+    // cursor: pointer;
+
+    .rightSide {
+      visibility: hidden;
+      width: 250px;
+      font-size: 0.7rem;
+      line-height: 1.7;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      // top: 0;
+      bottom: 125%;
+      // left: 50%;
+      // margin-left: -200px;
+      right: 2%;
+      opacity: 0;
+      -webkit-transition: opacity .3s;
+      transition: opacity .3s;
+    }
+
+    .rightSide::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      right: 20%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    &:hover {
+      .rightSide {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      background: #DADFF5;
+    }
   }
 
   .head-node,
@@ -205,45 +306,65 @@
     background: white;
     font-size: .8rem;
     position: absolute;
-    padding: 14px 14px 14px 45px;
+    // padding: 14px 14px 14px 45px;
+  }
 
-    span {
-      position: absolute;
-      top: 50%;
-      left: 11px;
-      margin-top: -10px;
+  .btnLogo {
+    display: inline-block;
+    // margin: auto 10px;
+    position: absolute;
+    top: 50%;
+    left: 11px;
+    margin-top: -10px;
 
-      img {
-        width: 20px;
-        height: 20px;
-      }
+    img {
+      width: 20px;
+      height: 20px;
     }
   }
 
   .developer-group,
   .head-node {
-    padding: 0.7rem;
+    padding: 14px;
     left: 50%;
   }
 
   .pmc,
   .maintainer {
-    left: 10px;
+    left: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 45px;
+    padding-right: 14px;
   }
 
   .committee,
   .member {
-    right: 10px;
+    // right: 10px;
+    right: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 45px;
+    padding-right: 14px;
   }
 
   .maintainer,
   .member {
-    bottom: 0;
-    // right: ;
+    // bottom: 0;
+    // right: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 45px;
+    padding-right: 14px;
   }
 
   .committer {
     // margin-left: -230px;
+    left: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 45px;
+    padding-right: 14px;
     background: #3a58f0;
     color: white;
     cursor: pointer;
@@ -255,43 +376,22 @@
   }
 
   .contributor {
+    right: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 45px;
+    padding-right: 14px;
     // margin-left: 80px;
     background: #D04E43;
     border: #D04E43;
     color: white;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: box-shadow 0.2s ease;
 
     &:hover {
       box-shadow: 0 3px 8px rgb(167, 167, 167);
     }
   }
-
-  .tooltip {
-    position: absolute;
-    top: 50%;
-    margin-top: -60px;
-    background: black;
-    opacity: .75;
-    padding: .5rem;
-    left: 50%;
-    font-size: 13px;
-    max-width: 12rem;
-    color: #fff;
-    margin-left: -430px;
-    // border-radius: 10px;
-  }
-
-  // .tooltip::before {
-  //   // position: absolute;
-  //   width: 20px;
-  //   height: 20px;
-  //   transform: rotate(45deg);
-  //   background: white;
-  //   opacity: 0.9;
-  //   bottom: -50px;
-  //   z-index: 100;
-  // }
 
   .arrow {
     position: absolute;
@@ -450,7 +550,27 @@
         box-shadow: 0 0 12px 0 rgb(184, 184, 184);
         transform: translateY(-2px);
       }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .architecture {
+    .pmc,
+    .maintainer {
+      &:hover .tooltiptext {
+        visibility: hidden;
+        opacity: 0;
       }
+    }
+
+    .member,
+    .committee {
+      &:hover .rightSide {
+        visibility: hidden;
+        opacity: 1;
+      }
+    }
   }
 }
 
@@ -482,6 +602,10 @@
     }
   }
 
+  // .architecture {
+  //   padding: 100px 10px;
+  // }
+
   .c-content,
   .pr-content,
   .guide-content {
@@ -493,6 +617,31 @@
       margin: 0 1.5rem;
       padding: 1.5rem 0 2rem;
     }
+  }
+
+  .contributor__section {
+    .goPlanet button {
+      .content {
+        transition: none;
+      }
+
+      &:hover {
+        .arrow {
+          opacity: 0;
+        }
+
+        .content {
+          padding: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .architecture {
+    padding-right: 90px;
+    padding-left: 70px;
   }
 }
 
@@ -523,6 +672,282 @@
 
     .arrow {
       width: 12px;
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .architecture {
+    padding-right: 50px;
+    padding-left: 50px;
+
+    .head-node {
+      padding: 9px;
+    }
+
+    .pmc {
+      padding: 5px;
+      width: 84px;
+      height: 84px;
+      // position: relative;
+
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 37px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -15px;
+      }
+    }
+
+    .maintainer,
+    .committer {
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 37px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -33px;
+      }
+    }
+
+    .contributor {
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 37px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -34px;
+      }
+    }
+
+    .committee,
+    .member {
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 31px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -39px;
+      }
+    }
+
+    .committee,
+    .maintainer,
+    .committer,
+    .contributor,
+    .member,
+    .developer-group {
+      padding: 5px;
+      width: 84px;
+      height: 84px;
+    }
+
+    .btnLogo {
+      display: block;
+      position: absolute;
+      padding: 5px;
+      margin-top: 0;
+      top: 7px;
+      left: 50%;
+      margin-left: -13px;
+
+      img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 370px) {
+  .architecture {
+    padding-right: 50px;
+    padding-left: 50px;
+
+    .head-node {
+      padding: 9px;
+    }
+
+    .pmc {
+      padding: 5px;
+      width: 80px;
+      height: 70px;
+      // position: relative;
+
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 29px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -13px;
+      }
+    }
+
+    .committee {
+      padding: 5px;
+      width: 80px;
+      height: 70px;
+
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 20px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -35px;
+      }
+    }
+
+    .maintainer,
+    .committer {
+      padding: 5px;
+      width: 80px;
+      height: 84px;
+
+      p {
+        margin-left: -31px;
+      }
+    }
+
+    .contributor {
+      padding: 5px;
+      width: 80px;
+      height: 84px;
+
+      p {
+        margin-left: -35px;
+      }
+    }
+
+    .member {
+      padding: 5px;
+      width: 80px;
+      height: 84px;
+
+      p {
+        margin-left: -37px;
+      }
+    }
+
+    .developer-group {
+      padding: 5px;
+      width: 81px;
+      height: 70px;
+    }
+
+    .btnLogo {
+      display: block;
+      position: absolute;
+      padding: 3px;
+      margin-top: 0;
+      top: 7px;
+      left: 50%;
+      margin-left: -13px;
+
+      img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .architecture {
+    padding-right: 44px;
+    padding-left: 44px;
+
+    .head-node {
+      padding: 9px;
+    }
+
+    .pmc {
+      padding: 5px;
+      width: 60px;
+      height: 60px;
+      // position: relative;
+
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 29px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -13px;
+      }
+    }
+
+    .committee {
+      padding: 5px;
+      width: 80px;
+      height: 60px;
+
+      p {
+        position: absolute;
+        top: 0;
+        margin-top: 20px;
+        left: 50%;
+        padding: 7px 0;
+        margin-left: -35px;
+      }
+    }
+
+    .maintainer,
+    .committer {
+      padding: 5px;
+      width: 70px;
+      height: 84px;
+
+      p {
+        margin-left: -31px;
+      }
+    }
+
+    .contributor {
+      padding: 5px;
+      width: 75px;
+      height: 84px;
+
+      p {
+        margin-left: -35px;
+      }
+    }
+
+    .member {
+      padding: 5px;
+      width: 75px;
+      height: 84px;
+
+      p {
+        margin-left: -37px;
+      }
+    }
+
+    .developer-group {
+      padding: 5px;
+      width: 81px;
+      height: 60px;
+    }
+
+    .btnLogo {
+      display: block;
+      position: absolute;
+      padding: 3px;
+      margin-top: 0;
+      top: 7px;
+      left: 50%;
+      margin-left: -13px;
+
+      img {
+        width: 16px;
+        height: 16px;
+      }
     }
   }
 }
