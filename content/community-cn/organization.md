@@ -1,4 +1,4 @@
 ---
-type: community
+type: community-cn
 layout: organization
 ---

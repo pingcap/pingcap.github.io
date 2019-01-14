@@ -1,10 +1,12 @@
 // handle wethear display website navbar
 function handleWebsiteNavDisplay() {
-  // console.log('scrolling...')
   var scrollVal = $(this).scrollTop(),
     h = $('header').height()
 
-  if (scrollVal > 0) {
+  console.log('devconnav', $('.devcon-nav').length != 0)
+
+  if (scrollVal > 0 && $('.devcon-nav').length != 0) {
+    console.log('scrolling...')
     $('header').hide()
     $('.devcon-nav').css('top', '0')
     $('.devCon').css('padding-top', h)
@@ -34,7 +36,11 @@ function smoothScroll() {
   }
 
   var extraH = 0
-  if ($('header').length && !$('header').is(':hidden')) {
+  if (
+    $('header').length &&
+    !$('header').is(':hidden') &&
+    $('.devcon-nav').length != 0
+  ) {
     extraH = 2 * $('header').height()
   } else {
     extraH = $('header').height()
@@ -49,61 +55,67 @@ function smoothScroll() {
 
 // handle positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
-  if (window.matchMedia('(max-width: 360px)').matches) {
-    console.log('mobile 360')
-    $('.architecture .skeleton').attr(
-      'src',
-      '/images/community/organization/lines-mobilei5.svg'
-    )
-    $('.banner__section img').attr(
-      'src',
-      '/images/community/organization/community-banner-mobile.jpg'
-    )
-  } else if (window.matchMedia('(max-width: 700px)').matches) {
-    console.log('mobile 700')
-    $('.architecture .skeleton').attr(
-      'src',
-      '/images/community/organization/lines-mobilei7.svg'
-    )
+  // if (window.matchMedia('(max-width: 360px)').matches) {
+  //   console.log('mobile 360')
+  //   $('.architecture .skeleton').attr(
+  //     'src',
+  //     '/images/community/organization/lines-mobilei5.svg'
+  //   )
+  //   // $('.banner__section img').attr(
+  //   //   'src',
+  //   //   '/images/community/organization/community-banner-mobile.jpg'
+  //   // )
+  // } else if (window.matchMedia('(max-width: 700px)').matches) {
+  //   console.log('mobile 700')
+  //   $('.architecture .skeleton').attr(
+  //     'src',
+  //     '/images/community/organization/lines-mobilei7.svg'
+  //   )
 
-    $('.banner__section img').attr(
-      'src',
-      '/images/community/organization/community-banner-mobile.jpg'
-    )
-  } else {
-    console.log('pc')
-    $('.architecture .skeleton').attr(
-      'src',
-      '/images/community/organization/lines-pc.svg'
-    )
-    $('.banner__section img').attr(
-      'src',
-      '/images/community/organization/community-banner-pc.jpg'
-    )
-  }
+  //   // $('.banner__section img').attr(
+  //   //   'src',
+  //   //   '/images/community/organization/community-banner-mobile.jpg'
+  //   // )
+  // } else {
+  //   console.log('pc')
+  //   $('.architecture .skeleton').attr(
+  //     'src',
+  //     '/images/community/organization/lines-pc.svg'
+  //   )
+  //   // $('.banner__section img').attr(
+  //   //   'src',
+  //   //   '/images/community/organization/community-banner-pc.jpg'
+  //   // )
+  // }
   // calculate devcon nav bar height
   var header_H = $('header').height()
-  if ($('header').length && !$('header').is(':hidden')) {
+  if (
+    $('header').length &&
+    !$('header').is(':hidden') &&
+    $('.devcon-nav').length != 0
+  ) {
+    console.log('he')
     $('.devcon-nav').css('top', header_H)
     $('.devcon-nav').css('height', header_H)
     $('.devCon').css('padding-top', 2 * header_H)
   } else {
+    console.log('hh')
     $('.devcon-nav').css('top', 0)
     $('.devcon-nav').css('height', header_H)
   }
 
   // switch banner between pc and mobile
-  if (window.matchMedia('(max-width: 1100px)').matches) {
-    $('.banner .image img').attr(
-      'src',
-      '/images/community/devcon-banner-mobile.png'
-    )
-  } else {
-    $('.banner .image img').attr(
-      'src',
-      '/images/community/devcon-banner-pc.png'
-    )
-  }
+  // if (window.matchMedia('(max-width: 1100px)').matches) {
+  //   $('.banner .image img').attr(
+  //     'src',
+  //     '/images/community/devcon-banner-mobile.png'
+  //   )
+  // } else {
+  //   $('.banner .image img').attr(
+  //     'src',
+  //     '/images/community/devcon-banner-pc.png'
+  //   )
+  // }
 
   // calculate architecture buttons positions
   var w = $('.architecture img').width()
@@ -280,7 +292,8 @@ function handleGuideConCollapse() {
 
 $(document).ready(function() {
   // set devcon navbar and devcon container positioon
-  if ($('header').length) {
+  console.log($('.devcon-nav').length != 0, $('header').length)
+  if ($('header').length && $('.devcon-nav').length != 0) {
     var header_H = $('header').height()
     $('.devcon-nav').css('top', header_H)
     $('.devcon-nav').css('height', header_H)
