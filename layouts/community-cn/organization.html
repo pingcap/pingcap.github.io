@@ -8,14 +8,10 @@
     {{- partial "head/preload-css" (dict "href" "/css/community/organization.css") -}}
 {{- end -}}
 
-{{- define "footJS" -}}
-    <script type="text/javascript" src="/js/devcon.js"></script>
-{{- end -}}
-
 {{- define "main" -}}
 <div class="contact-us">
     <div class="banner__section">
-        <img class="banner" src="/images/community/organization/community-banner-pc.jpg"/>
+        <!-- <img class="banner" src="/images/community/organization/community-banner-pc.jpg"/> -->
         <div class="content__container">
             <div class="content"> TiDB 社区组织架构</div>
         </div>
@@ -75,22 +71,30 @@
                       目前，TiDB 项目已有 4 位 Committer，感谢他们为 TiDB 性能提升做出的贡献。</p>
                   <div class="committer-members">
                       <div class="c-member">
-                        <div class="avatar"><img src="/images/community/organization/yubai.jpg"></div>
+                        <div class="avatar">
+                          <img class="lazy" data-original="/images/community/organization/yubai.jpg" style="background-image: url('/images/svgs/loader-spinner.svg');">
+                        </div>
                         <div class="name">李凯（知乎 ID 郁白）</div>
                         <div class="company">摩拜 | 基础架构技术总监</div>
                       </div>
                       <div class="c-member">
-                        <div class="avatar"><img src="/images/community/organization/wudi.jpg"></div>
+                        <div class="avatar">
+                          <img class="lazy" width="100%" data-original="/images/community/organization/wudi.jpg" style="background-image: url('/images/svgs/loader-spinner.svg');">
+                        </div>
                         <div class="name">吴镝</div>
                         <div class="company">今日头条 | 数据库中间件/分布式数据库负责人</div>
                       </div>
                       <div class="c-member">
-                        <div class="avatar"><img src="/images/community/organization/liyulai.jpeg"></div>
+                        <div class="avatar">
+                          <img class="lazy" data-original="/images/community/organization/liyulai.jpeg" style="background-image: url('/images/svgs/loader-spinner.svg');">
+                          </div>
                         <div class="name">李雨来</div>
                         <div class="company">SpeedyCloud | 架构师</div>
                       </div>
                       <div class="c-member">
-                        <div class="avatar"><img src="/images/community/organization/duchuan.jpeg"></div>
+                        <div class="avatar">
+                          <img class="lazy" data-original="/images/community/organization/duchuan.jpeg" style="background-image: url('/images/svgs/loader-spinner.svg');">
+                        </div>
                         <div class="name">杜川</div>
                         <div class="company">腾讯云 | 高级工程师</div>
                       </div>
@@ -155,7 +159,7 @@
             <div class="section-title">致谢</div>
             <div class="appreciation__content">
                 <div class="image">
-                    <img src="/images/community/organization/appreciate.jpg">
+                    <img class="lazy" data-original="/images/community/organization/appreciate.jpg" style="background-image: url('/images/svgs/loader-spinner.svg');">
                 </div>
                 <div class="content">当你的一个 PR 被合并之后你就正式成为 TiDB Contributor 了。我们为每一个 contributor 都准备了纪念马克杯，感谢你们踏出了第一步！在 TiDB 星球里，你们的名字也将一直闪耀。</div>
             </div>
@@ -166,17 +170,57 @@
             <div class="goPlanet">
                 <a href="/tidb-planet">
                   <button>
-                    <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
+                    <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg"/></span>
                     <span class="content">TiDB Contributor 完整名单</span>
                   </button>
                 </a>
             </div>
             <div class="planet-banner">
                 <a href="/tidb-planet">
-                    <img src="/images/community/organization/tidb-planet.jpg" />
+                    <img class="lazy" data-original="/images/community/organization/tidb-planet.jpg" style="background-image: url('/images/svgs/loader-spinner.svg');"/>
                 </a>
             </div>
         </div>
     </div>
 </div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript">
+      function lines() {
+        if (window.matchMedia('(max-width: 360px)').matches) {
+          console.log('mobile 360')
+          $('.architecture .skeleton').attr(
+            'src',
+            '/images/community/organization/lines-mobilei5.svg'
+          )
+        } else if (window.matchMedia('(max-width: 700px)').matches) {
+          console.log('mobile 700')
+          $('.architecture .skeleton').attr(
+            'src',
+            '/images/community/organization/lines-mobilei7.svg'
+          )
+        } else {
+          console.log('pc')
+          $('.architecture .skeleton').attr(
+            'src',
+            '/images/community/organization/lines-pc.svg'
+          )
+        }
+      }
+
+      $(document).ready(function() {
+        lines()
+        $(window).resize(lines)
+      })
+        
+    </script>
+    <script type="text/javascript" src="/js/devcon.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
 {{- end -}}
