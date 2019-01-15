@@ -18,7 +18,24 @@ if(key && secret)
 const fs = require('fs')
 const _ = require('lodash')
 
-const repos = ['tidb', 'tikv', 'pd', 'tispark', 'docs', 'docs-cn', 'tidb-ansible', 'tidb-operator', 'rust-rocksdb', 'raft-rs', 'grpc-rs', 'rust-prometheus']
+const repos = [
+  'docs-cn',
+  'docs',
+  'grpc-rs',
+  'jepsen',
+  'parser',
+  'pd',
+  'tidb-ansible',
+  'tidb-bench',
+  'tidb-docker-compose',
+  'tidb-operator',
+  'tidb',
+  'tidb-tools',
+  'tikv',
+  'tipb',
+  'tispark'
+]
+
 const owner = 'pingcap'
 const per_page = 100
 
