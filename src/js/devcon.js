@@ -1,12 +1,10 @@
-// handle wethear display website navbar
+// handles devcon page wethear display website navbar or not
 function handleWebsiteNavDisplay() {
   var scrollVal = $(this).scrollTop(),
     h = $('header').height()
 
-  console.log('devconnav', $('.devcon-nav').length != 0)
-
   if (scrollVal > 0 && $('.devcon-nav').length != 0) {
-    console.log('scrolling...')
+    // console.log('scrolling...')
     $('header').hide()
     $('.devcon-nav').css('top', '0')
     $('.devCon').css('padding-top', h)
@@ -17,6 +15,7 @@ function handleWebsiteNavDisplay() {
   }
 }
 
+// smoothly scrolls to specific section
 function smoothScroll() {
   var btnName = $(this)[0].className
   var sectionName
@@ -35,6 +34,7 @@ function smoothScroll() {
       break
   }
 
+  // calculates devcon nav bar top padding
   var extraH = 0
   if (
     $('header').length &&
@@ -53,69 +53,22 @@ function smoothScroll() {
   )
 }
 
-// handle positions of devcon navbar and website navbar when resize window
+// handles positions of devcon navbar and website navbar when resize window
 function handleWindowResize() {
-  // if (window.matchMedia('(max-width: 360px)').matches) {
-  //   console.log('mobile 360')
-  //   $('.architecture .skeleton').attr(
-  //     'src',
-  //     '/images/community/organization/lines-mobilei5.svg'
-  //   )
-  //   // $('.banner__section img').attr(
-  //   //   'src',
-  //   //   '/images/community/organization/community-banner-mobile.jpg'
-  //   // )
-  // } else if (window.matchMedia('(max-width: 700px)').matches) {
-  //   console.log('mobile 700')
-  //   $('.architecture .skeleton').attr(
-  //     'src',
-  //     '/images/community/organization/lines-mobilei7.svg'
-  //   )
-
-  //   // $('.banner__section img').attr(
-  //   //   'src',
-  //   //   '/images/community/organization/community-banner-mobile.jpg'
-  //   // )
-  // } else {
-  //   console.log('pc')
-  //   $('.architecture .skeleton').attr(
-  //     'src',
-  //     '/images/community/organization/lines-pc.svg'
-  //   )
-  //   // $('.banner__section img').attr(
-  //   //   'src',
-  //   //   '/images/community/organization/community-banner-pc.jpg'
-  //   // )
-  // }
-  // calculate devcon nav bar height
+  // calculates devcon nav bar height
   var header_H = $('header').height()
   if (
     $('header').length &&
     !$('header').is(':hidden') &&
     $('.devcon-nav').length != 0
   ) {
-    console.log('he')
     $('.devcon-nav').css('top', header_H)
     $('.devcon-nav').css('height', header_H)
     $('.devCon').css('padding-top', 2 * header_H)
   } else {
-    console.log('hh')
     $('.devcon-nav').css('top', 0)
     $('.devcon-nav').css('height', header_H)
   }
-
-  // switch banner between pc and mobile
-  // if (window.matchMedia('(max-width: 1100px)').matches) {
-  //   $('.banner .image img').attr(
-  //     'src',
-  //     '/images/community/devcon-banner-mobile.png'
-  //   )
-  // } else {
-  //   $('.banner .image img').attr(
-  //     'src',
-  //     '/images/community/devcon-banner-pc.png'
-  //   )
-  // }
 
   // calculate architecture buttons positions
   var w = $('.architecture img').width()
@@ -135,7 +88,6 @@ function handleWindowResize() {
   var paddingT = parseInt($('.architecture').css('padding-top'))
   var paddingB = parseInt($('.architecture').css('padding-bottom'))
 
-  // if()
   $('.head-node').css(
     'top',
     paddingT -
@@ -180,14 +132,7 @@ function handleWindowResize() {
         2
   )
 
-  $('.maintainer').css(
-    'top',
-    // paddingB -
-    //   $('.maintainer').height() -
-    //   parseInt($('.maintainer').css('padding-top') * 2) +
-    //   5
-    paddingT + h
-  )
+  $('.maintainer').css('top', paddingT + h)
 
   $('.maintainer').css(
     'margin-left',
@@ -198,14 +143,7 @@ function handleWindowResize() {
         2
   )
 
-  $('.committer').css(
-    'top',
-    // paddingB -
-    //   $('.committer').height() -
-    //   parseInt($('.committer').css('padding-top') * 2) +
-    //   5
-    paddingT + h
-  )
+  $('.committer').css('top', paddingT + h)
 
   $('.committer').css(
     'margin-left',
@@ -217,14 +155,7 @@ function handleWindowResize() {
         2
   )
 
-  $('.contributor').css(
-    'top',
-    // paddingB -
-    //   $('.contributor').height() -
-    //   parseInt($('.contributor').css('padding-top') * 2) +
-    //   5
-    paddingT + h
-  )
+  $('.contributor').css('top', paddingT + h)
   $('.contributor').css(
     'margin-right',
     paddingR +
@@ -235,13 +166,7 @@ function handleWindowResize() {
         2
   )
 
-  $('.member').css(
-    'top',
-    // paddingB -
-    //   $('.member').height() -
-    //   parseInt($('.member').css('padding-top') * 2)
-    paddingT + h
-  )
+  $('.member').css('top', paddingT + h)
   $('.member').css(
     'margin-right',
     paddingR -
@@ -255,17 +180,17 @@ function handleWindowResize() {
 // handle pr-content collapse
 function handlePRConCollapse() {
   if ($('.guide-content').css('display') == 'block') {
-    $('.subtitle-guide').css('color', '#3e3e3e')
+    $('.subtitle-guide').removeClass('subtitle-selected-bg')
     $('.guide-content').hide()
     $('#guide-collapse')[0].innerText = '+'
   }
 
   if ($('.pr-content').css('display') == 'block') {
-    $('.subtitle-pr').css('color', '#3e3e3e')
+    $('.subtitle-pr').removeClass('subtitle-selected-bg')
     $('.pr-content').hide()
     $('#pr-collapse')[0].innerText = '+'
   } else {
-    $('.subtitle-pr').css('color', '#3A58F0')
+    $('.subtitle-pr').addClass('subtitle-selected-bg')
     $('.pr-content').show()
     $('#pr-collapse')[0].innerText = '-'
   }
@@ -274,25 +199,44 @@ function handlePRConCollapse() {
 // handle guide-content collapse
 function handleGuideConCollapse() {
   if ($('.pr-content').css('display') == 'block') {
-    $('.subtitle-pr').css('color', '#3e3e3e')
+    $('.subtitle-pr').removeClass('subtitle-selected-bg')
     $('.pr-content').hide()
     $('#pr-collapse')[0].innerText = '+'
   }
 
   if ($('.guide-content').css('display') == 'block') {
-    $('.subtitle-guide').css('color', '#3e3e3e')
+    $('.subtitle-guide').removeClass('subtitle-selected-bg')
     $('.guide-content').hide()
     $('#guide-collapse')[0].innerText = '+'
   } else {
-    $('.subtitle-guide').css('color', '#3A58F0')
+    $('.subtitle-guide').addClass('subtitle-selected-bg')
     $('.guide-content').show()
     $('#guide-collapse')[0].innerText = '-'
   }
 }
 
 $(document).ready(function() {
-  // set devcon navbar and devcon container positioon
-  console.log($('.devcon-nav').length != 0, $('header').length)
+  // scrolls to specific section smoothly
+  const hash = decodeURIComponent(location.hash)
+  if (hash) {
+    if (hash == '#contributor') {
+      $('html, body').animate(
+        {
+          scrollTop: $('.contributor__detail').offset().top - 250,
+        },
+        1000
+      )
+    } else {
+      $('html, body').animate(
+        {
+          scrollTop: $('.committer__detail').offset().top - 250,
+        },
+        1000
+      )
+    }
+  }
+
+  // sets devcon navbar and devcon container position
   if ($('header').length && $('.devcon-nav').length != 0) {
     var header_H = $('header').height()
     $('.devcon-nav').css('top', header_H)
@@ -304,14 +248,13 @@ $(document).ready(function() {
 
   handleWindowResize()
 
-  // handle window scrolls
+  // handles window scroll
   $(window).scroll(handleWebsiteNavDisplay)
 
-  //handle window resize
+  // handles window resize
   $(window).resize(handleWindowResize)
-  // $(window).resize(calcBtnPosition)
 
-  // smmooth scroll
+  // scrolls to specific section smoothly
   $('.schedule-btn').click(smoothScroll)
 
   $('.instructor-btn').click(smoothScroll)
@@ -337,7 +280,7 @@ $(document).ready(function() {
     }
   })
 
-  // handle devcon agenda talk title click, performing like collapse
+  // handles devcon agenda talk title click, performing like collapse
   var selEle
 
   $('.agenda__table .collapsable').click(function() {
