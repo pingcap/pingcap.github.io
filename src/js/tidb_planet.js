@@ -317,6 +317,10 @@ $(function() {
   // read more click handler
   $('.j-readmore').on('click', function(e) {
     // location.href = $(this).attr('href')
+    const lang = navigator.language
+    if (lang.substring(0, 2) == 'zh') {
+      $(this).attr('href', 'https://pingcap.com/docs-cn/releases/2.0.11/')
+    }
     window.open($(this).attr('href'))
     e.preventDefault()
     e.stopPropagation()
