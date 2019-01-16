@@ -226,10 +226,18 @@ $(document).ready(function() {
         },
         1000
       )
-    } else {
+    } else if (hash == '#committer') {
       $('html, body').animate(
         {
           scrollTop: $('.committer__detail').offset().top - 250,
+        },
+        1000
+      )
+    } else if (hash == '#architecture') {
+      console.log('architecture')
+      $('html, body').animate(
+        {
+          scrollTop: $('.architecture').offset().top - 250,
         },
         1000
       )
