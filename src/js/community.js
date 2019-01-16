@@ -1,18 +1,6 @@
-// function handleWindowResize() {
-//   console.log('handling window resize...')
-//   var BW = $('.banner__container').width()
-//   console.log('bw is: ', BW, $('.banner__container').css('height', BW / 2.67))
-//   $('.banner__container').css('height', BW / 2.67)
-// }
-
 function calcBannerTitleImg() {
   // change banner depending on the window size
   if (window.matchMedia('(max-width: 700px)').matches) {
-    $('.banner__section .banner').attr(
-      'src',
-      '/images/community/community-banner-mobile.png'
-    )
-
     $('.signable .picture img').attr(
       'src',
       '/images/community/activities/mobileDevCon.png'
@@ -20,10 +8,6 @@ function calcBannerTitleImg() {
 
     $('.relationship').show()
   } else {
-    $('.banner__section .banner').attr(
-      'src',
-      '/images/community/community-banner-pc.svg'
-    )
     $('.signable .picture img').attr(
       'src',
       '/images/community/activities/PCdevCon.png'
@@ -65,36 +49,12 @@ function createEventListConsole(eventTitles, eventLinks) {
   }
 }
 
-// function setClndrHeight() {
-
-// }
-
 $(document).ready(function() {
   var events = [
     {
       Date: new Date(2019, 1, 24),
       Title: 'Christmas Eve - Beijing',
       Link: 'https://pingcap.com',
-    },
-    {
-      Date: new Date(2019, 1, 2),
-      Title: '第 N 期 Meetup - 上海',
-      Link: 'https://pingcap.com/community/devcon2019',
-    },
-    {
-      Date: new Date(2019, 1, 4),
-      Title: '第 N 期 Meetup - 上海',
-      Link: 'https://pingcap.com/community/devcon2019',
-    },
-    {
-      Date: new Date(2019, 1, 4),
-      Title: '第 N 期 Meetup - beijing',
-      Link: 'https://pingcap.com/community/devcon2019',
-    },
-    {
-      Date: new Date(2019, 1, 3),
-      Title: '25 year anniversary',
-      Link: 'https://www.google.com.au',
     },
   ]
   var settings = {
@@ -108,6 +68,7 @@ $(document).ready(function() {
   calcBannerTitleImg()
   $(window).resize(calcBannerTitleImg)
 
+  // displays events in this selected day
   $('.eventday').click(function() {
     var el = $(this)
     var eventTitles = []

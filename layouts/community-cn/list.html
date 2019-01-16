@@ -10,15 +10,10 @@
     {{- partial "head/preload-css" (dict "href" "/css/vendor/calendar.css") -}}
 {{- end -}}
 
-{{- define "footJS"}}
-    <script type="text/javascript" src="/js/community.js"></script>
-    <script type="text/javascript" src="/js/vendor/calendar.js"></script>
-{{- end -}}
-
 {{- define "main" -}}
 <div class="community">
     <div class="banner__section">
-        <img class="banner" src="/images/community/community-banner-pc.svg" />
+        <!-- <img class="banner" src="/images/community/community-banner-pc.svg" /> -->
         <div class="content__container">
             <a href="https://github.com/pingcap/tidb"><button class="gitHub">GitHub</button></a>
             <div class="content">
@@ -41,9 +36,6 @@
                       <span class="arrow"><img src="/images/svgs/white-right-arrow.svg"/></span>
                       <span class="btn-text">成为 Committer</span>
                   </button>
-                  <!-- <a href="/community-cn/organization/#architecture"><button id="get-to-community">了解社区</button></a>
-                  <a href="/community-cn/organization/#contributor"><button id="be-contributor">成为 Contributor</button></a>
-                  <a href="/community-cn/organization/#contributor"><button id="be-committer">成为 Committer</button></a> -->
               </div>
               <div class="relationship" style="display: none;">
                   <img src="/images/community/community-banner-side-img.png">
@@ -59,7 +51,7 @@
                     {{- if .active -}}
                         <div class="signable">
                             <div class="picture">
-                                <img src="{{ $i.image}}" />
+                                <img class="lazy" height="65" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.image}}"/>
                             </div>
                             <div class="overlayCover"></div>
                             <div class="current-activity-content">
@@ -85,7 +77,7 @@
                     {{- if not .active -}}
                       <div class="activity">
                         <div class="picture">
-                            <img src="{{ $i.image}}" />
+                            <img class="lazy" height="65" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.image}}"/>
                         </div>
                         <div class="name">{{ $i.name}}</div>
                         <div class="summary"><p>{{ $i.summary }}</p></div>
@@ -111,8 +103,6 @@
             <div class="readMoreBtn">
                 <a href="/blog-cn/#社区">
                     <button class="readMore-btn">
-                        <!-- <span><img src="/images/svgs/blue-right-arrow.svg" /></span>
-                        <span class="inner-text">更多文章</span> -->
                         <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg"/></span>
                         <span class="btn-text">更多文章</span>
                     </button>
@@ -131,4 +121,16 @@
       </div>
     </div>
 </div>
+{{- end -}}
+
+{{- define "footJS"}}
+    <script type="text/javascript" src="/js/community.js"></script>
+    <script type="text/javascript" src="/js/vendor/calendar.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
 {{- end -}}
