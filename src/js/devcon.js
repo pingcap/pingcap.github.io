@@ -221,7 +221,7 @@ $(document).ready(function() {
   var extraH_contributor
   var extraH_arch
   if (window.matchMedia('(max-width: 500px)').matches) {
-    extraH_contributor = -50
+    extraH_contributor = 60
     extraH_arch = 60
   } else {
     extraH_contributor = 250
