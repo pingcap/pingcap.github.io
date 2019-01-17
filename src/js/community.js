@@ -52,9 +52,9 @@ function createEventListConsole(eventTitles, eventLinks) {
 $(document).ready(function() {
   var events = [
     {
-      Date: new Date(2019, 1, 24),
-      Title: 'Christmas Eve - Beijing',
-      Link: 'https://pingcap.com',
+      Date: new Date(2019, 1, 19),
+      Title: 'TiDB DevCon 2019',
+      Link: 'https://pingcap.com/community-cn/devcon2019',
     },
   ]
   var settings = {
@@ -87,15 +87,15 @@ $(document).ready(function() {
     $('.event').remove()
   })
 
-  $('.signable').click(function() {
-    if (window.matchMedia('(max-width: 700px)').matches) {
-      if ($('.overlayCover').css('display') == 'block') {
-        $('.overlayCover').hide()
-        $('.current-activity-content').hide()
-      } else {
-        $('.overlayCover').show()
-        $('.current-activity-content').show()
-      }
-    }
-  })
+  // $('.signable').click(function() {
+  //   if (window.matchMedia('(max-width: 700px)').matches) {
+  //     if ($('.overlayCover').css('display') == 'block') {
+  //       $('.overlayCover').hide()
+  //       $('.current-activity-content').hide()
+  //     } else {
+  //       $('.overlayCover').show()
+  //       $('.current-activity-content').show()
+  //     }
+  //   }
+  // })
 })
