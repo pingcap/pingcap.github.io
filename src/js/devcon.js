@@ -218,26 +218,40 @@ function handleGuideConCollapse() {
 $(document).ready(function() {
   // scrolls to specific section smoothly
   const hash = decodeURIComponent(location.hash)
+  var extraH_contributor
+  var extraH_arch
+  if (window.matchMedia('(max-width: 500px)').matches) {
+    extraH_contributor = -50
+    extraH_arch = 60
+  } else {
+    extraH_contributor = 250
+    extraH_arch = 60
+  }
   if (hash) {
     if (hash == '#contributor') {
+      console.log('contributor', extraH_contributor)
       $('html, body').animate(
         {
-          scrollTop: $('.contributor__detail').offset().top - 250,
+          scrollTop:
+            $('.contributor__detail').offset().top - extraH_contributor,
         },
         1000
       )
     } else if (hash == '#committer') {
+      console.log('committer', extraH_contributor)
       $('html, body').animate(
         {
-          scrollTop: $('.committer__detail').offset().top - 250,
+          scrollTop: $('.committer__detail').offset().top - extraH_contributor,
         },
         1000
       )
     } else if (hash == '#architecture') {
-      console.log('architecture')
+      console.log('architecture', extraH_arch)
       $('html, body').animate(
         {
-          scrollTop: $('.architecture').offset().top - 250,
+          scrollTop:
+            $('.organization__section .section-title').offset().top -
+            extraH_arch,
         },
         1000
       )
