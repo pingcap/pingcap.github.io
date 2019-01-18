@@ -16,6 +16,7 @@ export default {
     recruit: [path.join(__dirname, 'src', 'js', 'recruit')],
     tidb_planet: [path.join(__dirname, 'src', 'js', 'tidb_planet')],
     devcon: [path.join(__dirname, 'src', 'js', 'devcon')],
+    community: [path.join(__dirname, 'src', 'js', 'community')],
     tidb_planet_user: [path.join(__dirname, 'src', 'js', 'tidb_planet_user')],
   },
   output: {
