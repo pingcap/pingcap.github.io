@@ -1,16 +1,34 @@
 {{- define "headTpl" -}}
     {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/github-markdown.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
     {{$.Scratch.Set "nav_active" "blog"}}
     {{$.Scratch.Set "data_i18_link" "/blog-cn" }}
 {{- end -}}
 
 {{- define "main" -}}
     <div class="blog">
-        <div class="container">
+        <div class="blogArticle__container">
             {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil  }}
-            {{- partial "navs/tags-nav.html" (dict "type" "single" "title" "Popular Tags" "posts" $posts "rss" "/blog/index.xml" "global" .) -}}
             <div class="archive">
+                {{- if (isset .Params "categories") -}}
+                    {{- range $idx, $i := .Params.categories -}}
+                        <div class="article-nav">
+                            <a href="/blog/#{{ replace $i " " "-"}}">BLOG HOME</a> <span> > </span>{{- $i -}}
+                        </div>
+                    {{- end -}}
+                {{- else -}}
+                    <div class="article-nav">
+                        <a href="/blog">BLOG HOME</a>
+                    </div>
+                {{- end -}}
+                <!-- <div class="article-head-img">
+                    {{- if .Params.image}}
+                    {{ $landingImg := .Params.image}}
+                        <img class="lazy" src="{{- $landingImg -}}" />
+                    {{- else -}}
+                        <img class="lazy"src="/images/blog-article/default.png" />
+                    {{- end -}}
+                </div> -->
                 <div class="content markdown-body">
                     <h1 class="title">{{ .Title }}</h1>
                     <ul class="blog-post-meta">
@@ -33,6 +51,7 @@
                     </ul>
                     <div class="blog-text">{{- .Content -}}</div>
                 </div>
+                <!-- {{- partial "archives/subscription.html" . -}} -->
                 {{- partial "archives/post-share.html" . -}}
             </div>
         </div>

@@ -1,18 +1,22 @@
 {{ $hasMetaData := .hasMetaData }}
 {{ $hasBrief := .hasBrief }}
+{{ $listType := .listType }}
 
 <div class="list article-list">
     {{- range .posts -}}
     <a href="{{ .URL }}">
       <div class="blog__article" data-category="{{ range .Params.categories }}{{ replace . " " "-" }} {{ end }}">
-          <div class="logo">
-            {{- if .Params.image}}
-                {{ $landingImg := .Params.image}}
-                <img class="lazy" src="{{- $landingImg -}}" />
-            {{- else -}}
-                <img class="lazy" src="/images/blog-article/default.jpg" />
-            {{- end -}}
-          </div>
+          <!-- {{ printf "%#v" $listType }} -->
+          {{- if ne $listType "blog" -}}
+              <div class="logo">
+                {{- if .Params.image}}
+                    {{ $landingImg := .Params.image}}
+                    <img class="lazy" src="{{- $landingImg -}}" />
+                {{- else -}}
+                    <img class="lazy" src="/images/blog-article/default.png" />
+                {{- end -}}
+              </div>
+          {{- end -}}
           <div class="abstract clearfix">
               <h1 class="title">{{ .Title }}</h1>
               {{- if $hasMetaData -}}
@@ -41,7 +45,6 @@
                                 {{- end -}}
                             {{- end -}}
                           </div>
-
                       </li>
                   </ul>
               {{- end -}}
