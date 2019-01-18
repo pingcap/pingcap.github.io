@@ -1,20 +1,4 @@
 function calcBannerTitleImg() {
-  // change banner depending on the window size
-  if (window.matchMedia('(max-width: 700px)').matches) {
-    $('.signable .picture img').attr(
-      'src',
-      '/images/community/activities/mobileDevCon.png'
-    )
-
-    $('.relationship').show()
-  } else {
-    $('.signable .picture img').attr(
-      'src',
-      '/images/community/activities/PCdevCon.png'
-    )
-    $('.relationship').hide()
-  }
-
   // calculate the margin of div activity container
   if (window.matchMedia('(min-width: 1351px)').matches) {
     var activity_container_margin =
