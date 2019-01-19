@@ -1,4 +1,15 @@
 function calcBannerTitleImg() {
+  if (window.matchMedia('(max-width: 700px)').matches) {
+    $('.signable img').attr(
+      'src',
+      'https://download.pingcap.com/images/mobileDevCon.png'
+    )
+  } else {
+    $('.signable img').attr(
+      'src',
+      'https://download.pingcap.com/images/PCdevCon.png'
+    )
+  }
   // calculate the margin of div activity container
   if (window.matchMedia('(min-width: 1351px)').matches) {
     var activity_container_margin =
