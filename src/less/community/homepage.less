@@ -1,0 +1,1082 @@
+@import '../variables.less';
+@import '../colors.less';
+
+// fontawsome
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.reading__section,
+.activity__section {
+  .container {
+    max-width: 1124px;
+  }
+}
+
+.banner__section {
+  // padding-top: @headerHeight;
+  // width: 100%;
+  // height: auto;
+  // position: relative;
+
+  // .banner {
+  //   width: 101%;
+  //   height: 100%;
+  //   margin-top: -1px;
+  // }
+
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 43%;
+  background: url('https://download.pingcap.com/images/community-banner-pc.svg') no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.section-title {
+  color: #3351FF;
+  font-size: 1.1rem;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  border-top: 3px solid #3351FF;
+  width: 40px;
+  display: block;
+  position: absolute;
+  left: 50%;
+  margin-left: -20px;
+  bottom: 1.2rem;
+}
+
+.content__container {
+  position: absolute;
+  width: 100%;
+  top: @headerHeight;
+
+  .gitHub {
+    position: absolute;
+    top: 0;
+    right: 3rem;
+    border: 2px solid white;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    padding: .6rem 1rem;
+    margin: 1rem 0 6rem;
+    transition: all 0.2s ease;
+    z-index: 2;
+
+    &:hover {
+      border: 2px solid #3351FF;
+      background-color: #3351FF;
+    }
+  }
+
+  .content {
+    text-align: center;
+    position: relative;
+    max-width: 800px;
+
+    .title-image {
+      padding: 8rem 4rem 0 0;
+
+      img {
+        height: auto;
+      }
+    }
+
+    .intro {
+      padding: 3.5rem 2rem 3rem 0;
+      font-size: 18px;
+      text-align: left;
+      line-height: 1.7;
+      color: white;
+    }
+
+    .relationship {
+      display: none;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      padding-right: 3rem;
+
+      .community-btns {
+        border: 1px solid white;
+        color: white;
+        width: 190px;
+        font-size: 0.8rem;
+        padding: 14px;
+        margin-top: 3rem;
+        background: none;
+        position: relative;
+        cursor: pointer;
+
+        .arrow {
+          width: 16px;
+          position: absolute;
+          opacity: 0;
+          top: 50%;
+          left: 2px;
+          margin-top: -0.4rem;
+          transition: all 0.3s ease;
+        }
+
+        .btn-text {
+          transition: all 0.3s ease;
+        }
+
+        &:hover {
+          .arrow {
+            opacity: 1;
+            left: 12px;
+          }
+
+          .btn-text {
+            padding: 14px 0 14px 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.activity__section {
+  text-align: center;
+
+  .current-activity {
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .signable {
+      width: 66%;
+      position: relative;
+      overflow: hidden;
+      // background: url('https://download.pingcap.com/images/PCdevCon.png') no-repeat;
+      // background-size: cover;
+      // background-position: center;
+
+      .overlayCover {
+        background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+        // background: linear-gradient(rgba(0,0,0,1), blue);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 40%;
+        width: 100%;
+      }
+
+      .picture {
+        width: 100%;
+        height: auto;
+        // height: 100%;
+        // opacity: 0.5;
+
+        img {
+          width: 100%;
+          // height: 100%;
+          // object-fit: cover;
+        }
+      }
+
+      .current-activity-content {
+        position: absolute;
+        left: 1.5rem;
+        font-size: 0.7rem;
+        text-align: left;
+        right: 1rem;
+        line-height: 1.7;
+        bottom: 0.3rem;
+        color: white;
+      }
+    }
+
+    #calendar {
+      font-size: 17px;
+      width: 32%;
+      // margin-top: -3px;
+      // height: 280px;
+      position: relative;
+      box-shadow: 0 2px 9px 0 #DDDDDD;
+    }
+
+    .event-list {
+      height: 240px;
+      width: 100%;
+      // background: #F5F5F5;
+      position: absolute;
+      top: 39px;
+      display: none;
+      // border: 1px solid #ddd;
+
+      .event-banner {
+        width: 100%;
+        background: #3351FF;
+        color: white;
+        padding: 10px 5px;
+      }
+
+      .close-icon {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.3rem;
+
+        svg {
+          width: 1.2em;
+          height: 1.2em;
+
+          path {
+            fill: #F5F5F5;
+          }
+        }
+      }
+
+      .event {
+        width: 100%;
+        padding: 0.5rem 0.3rem 0.5rem 1.7rem;
+        text-align: left;
+        font-size: 0.8rem;
+        position: relative;
+
+        &:hover {
+          background: #f5F5F5;
+          color: #3351FF;
+        }
+      }
+
+      .event::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        border: 1px solid black;
+        background: black;
+        left: 0.7rem;
+        position: absolute;
+        top: 50%;
+        margin-top: -3px;
+      }
+
+      .event:hover::before {
+        background: #3351FF;
+        border: 1px solid #3351FF;
+      }
+    }
+  }
+
+  .activities__list {
+    display: flex;
+    flex: row wrap;
+    width: 100%;
+    padding: 1rem 2rem 4rem;
+    justify-content: space-between;
+
+    .activity {
+      box-shadow: 0 2px 9px 0 #DDDDDD;
+      width: 32%;
+      // width: 350px;
+      // height: 409px;
+      height: auto;
+
+      .picture {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .name {
+        padding: 0.7rem 0 0.5rem;
+        font-size: 1rem;
+        position: relative;
+      }
+
+
+      .summary {
+        padding: .5rem .9rem 1rem;
+        font-size: 0.7rem;
+        line-height: 1.7;
+      }
+
+      &:hover {
+        box-shadow: 5px 5px 20px #DDDDDD;
+        transition: box-shadow 0.2s ease-in-out;
+      }
+    }
+  }
+}
+
+.reading__section {
+  text-align: center;
+  background-color: #F5F5F5;
+
+  .list .blog__article {
+    background: white;
+
+    h1 {
+      font-size: 0.9rem;
+    }
+
+    .abstract .brief {
+      overflow: auto;
+      font-size: 0.7rem;
+    }
+  }
+
+  .intro {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+
+  .reading-list {
+    padding: 0 2rem;
+    text-align: left;
+  }
+
+  .readMoreBtn {
+    .readMore-btn {
+        border: 1px solid #3351FF;
+        color: #3351FF;
+        width: 140px;
+        font-size: 0.8rem;
+        padding: 14px;
+        margin-top: 3rem;
+        background: none;
+        position: relative;
+        cursor: pointer;
+        margin-bottom: 3rem;
+
+        .arrow {
+          width: 16px;
+          position: absolute;
+          opacity: 0;
+          top: 50%;
+          left: 2px;
+          margin-top: -0.4rem;
+          transition: all 0.3s ease;
+        }
+
+        .btn-text {
+          transition: all 0.3s ease;
+        }
+
+        &:hover {
+          .arrow {
+            opacity: 1;
+            left: 12px;
+          }
+
+          .btn-text {
+            padding: 14px 0 14px 20px;
+          }
+        }
+      }
+  }
+}
+
+.tidb-planet-robot {
+  position: fixed;
+  bottom: 46px;
+  left: 45px;
+  width: 80px;
+  height: auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.tooltiptext {
+  width: 150px;
+  background-color: #3351FF;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  z-index: 1;
+  font-size: 0.6rem;
+  line-height: 1.7;
+  bottom: 120px;
+  border-radius: 5px 5px 5px 0;
+  left: 140px;
+  opacity: 1;
+  -webkit-transition: opacity .3s;
+  transition: opacity .3s;
+}
+
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #3351FF #3351FF transparent;
+}
+
+.tidb-robot-qrCode {
+  width: 80px;
+  margin: 0 auto;
+  padding-top: 11px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 1700px) {
+  .activity__section {
+    .current-activity {
+      .signable {
+        .current-activity-content {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .content__container {
+    .content {
+      .title-image {
+        padding: 6rem 5rem 0 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 1550px) {
+  .activity__section {
+    .current-activity .signable .current-activity-content {
+      left: 1.7rem;
+      right: 1rem;
+      bottom: 0.3rem;
+      font-size: 0.8rem;
+    }
+
+    .activities__list {
+      .activity {
+        .name {
+          font-size: 1.1rem;
+        }
+
+        .summary {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .content__container {
+    .content {
+      .title-image {
+        padding: 4.5rem 5rem 0 0;
+      }
+
+      .intro {
+        padding: 3.5rem 2rem 3.5rem 0;
+      }
+
+      .btns {
+        button {
+          font-size: 16px;
+          padding: 0.5rem 0;
+          width: 160px;
+        }
+      }
+    }
+  }
+
+  .reading__section {
+    .intro {
+      font-size: 0.9rem;
+    }
+  }
+
+  .list .blog__article .abstract {
+    h1 {
+      font-size: 0.95rem;
+    }
+
+    .brief {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (max-width: 1450px) {
+  .content__container {
+    .content {
+      .title-image {
+        padding: 4rem 5rem 0 0;
+      }
+
+      .intro {
+        padding: 3.5rem 2rem 1.5rem 0;
+      }
+
+      // .btns {
+      //   button {
+      //     font-size: 16px;
+      //     padding: 0.5rem 0;
+      //     width: 160px;
+      //   }
+      // }
+
+      .btns {
+        .community-btns {
+          width: 180px;
+          font-size: 0.8rem;
+
+          .arrow {
+            width: 16px;
+            position: absolute;
+            top: 50%;
+            left: 2px;
+            margin-top: -0.4rem;
+          }
+
+          &:hover {
+            .arrow {
+              opacity: 1;
+              left: 12px;
+            }
+
+            .btn-text {
+              padding: 14px 0 14px 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1400px) {
+  .content__container {
+    .content {
+      .title-image {
+        padding: 4rem 5rem 0 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 1350px) {
+  .content__container {
+    .content {
+      .title-image {
+        padding: 4rem 9rem 0 0;
+      }
+
+      .intro {
+        padding: 2.5rem 7rem 0 0;
+      }
+
+      .btns {
+        padding-right: 9rem;
+
+        .community-btns {
+          width: 180px;
+          font-size: 0.8rem;
+
+          .arrow {
+            width: 16px;
+            position: absolute;
+            top: 50%;
+            left: 2px;
+            margin-top: -0.4rem;
+          }
+
+          &:hover {
+            .arrow {
+              opacity: 1;
+              left: 12px;
+            }
+
+            .btn-text {
+              padding: 14px 0 14px 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1250px) {
+  .content__container {
+    .content {
+      .title-image {
+        padding: 2.5rem 13rem 0 0;
+      }
+
+      .intro {
+        font-size: 17px;
+      }
+
+      .btns {
+        padding-right: 10rem;
+
+        .community-btns {
+          margin-top: 1rem;
+          width: 175px;
+          font-size: 0.8rem;
+          padding: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .content__container {
+    .content {
+      .intro {
+        padding: 2rem 8rem 2.5rem 0;
+        font-size: 15px;
+      }
+
+      .title-image {
+        padding: 3rem 13rem 0 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .content__container {
+    .gitHub {
+      font-size: 15px;
+      padding: .4rem 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .content {
+      .intro {
+        padding: 2rem 12rem 2.5rem 0;
+        font-size: 15px;
+      }
+
+      .title-image {
+        padding: 3.5rem 17rem 0 0;
+      }
+
+      .btns {
+        padding-right: 13rem;
+
+        .community-btns {
+          margin-top: 1rem;
+          width: 164px;
+          font-size: 0.8rem;
+          padding: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 970px) {
+  .banner__section {
+    padding-top: 47%;
+  }
+
+  .content__container {
+    .content {
+      .intro {
+        padding: 2rem 19rem 2rem 0;
+        font-size: 14px;
+      }
+
+      .title-image {
+        padding: 2.5rem 20rem 0 0;
+      }
+
+     .btns {
+        padding-right: 15rem;
+
+        .community-btns {
+          width: 156px;
+          font-size: 0.8rem;
+          padding: 12px;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  .activity__section .current-activity .signable .current-activity-content {
+    left: 1.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .activity__section .current-activity {
+    .signable .current-activity-content {
+      left: 1.3rem;
+      bottom: 0.1rem;
+    }
+
+    .event-list {
+      .event-banner {
+        padding: 15px 5px 7px;
+        font-size: 14px;
+      }
+
+      .close-icon {
+        top: 0.9rem;
+      }
+    }
+
+  }
+
+  .banner__section {
+    padding-top: 50%;
+  }
+
+  .content__container {
+    .gitHub {
+      right: 1rem;
+    }
+
+    .content {
+      .intro {
+        padding: 1.5rem 19rem 1.5rem 0;
+        font-size: 14px;
+      }
+
+      .title-image {
+        padding: 2.5rem 22rem 0 0;
+      }
+
+      .btns {
+        padding-right: 18rem;
+
+        .community-btns {
+          margin-top: 1rem;
+          width: 119px;
+          font-size: 0.8rem;
+          padding: 9px;
+
+          .arrow {
+            display: none;
+          }
+
+          .btn-text {
+            transition: none;
+          }
+
+          &:hover {
+            .btn-text {
+              padding: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .banner__section {
+    padding-top: 155%;
+    background: url('https://download.pingcap.com/images/community-banner-mobile.svg') no-repeat;
+  }
+
+  .content__container {
+    .gitHub {
+      padding: .5rem 1.5rem;
+      font-size: 12px;
+      right: 50%;
+      top: 8.5rem;
+      margin-right: -48px;
+    }
+
+    .content {
+      padding: 0 0.5rem;
+
+      .title-image {
+        padding: 2.5rem 3rem 0;
+      }
+
+      .intro {
+        font-size: 14px;
+        padding: 1rem 1rem 3rem;
+        margin-top: 7rem;
+      }
+
+      .btns {
+        padding-right: 0;
+      }
+
+      .relationship {
+        display: block;
+        position: relative;
+        width: 90%;
+        height: auto;
+        margin: 3rem auto auto;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .reading__section {
+    .intro {
+      font-size: 14px;
+    }
+
+    .list .blog__article {
+      background: none;
+
+      .abstract {
+        padding: 0;
+
+        h1 {
+          font-size: 1rem;
+        }
+
+        .blog-post-meta {
+          font-size: 13px;
+        }
+
+        .brief {
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .readMoreBtn button {
+      margin: 0 0 3rem;    
+      font-size: 14px;
+      width: 96px;
+
+      .arrow {
+        display: none;
+      }
+
+      .inner-text {
+        margin-top: -10px;
+      }
+    }
+  }
+
+  .activity__section {
+    .current-activity {
+      padding: 0;
+      width: 100%;
+      max-width: 286px;
+      margin: 1rem auto;
+
+      .event-list {
+        top: 29px;
+
+        .event {
+          font-size: 0.9rem;
+        }
+      }
+
+      .signable {
+        width: 100%;
+        height: 100%;
+        // height: 189px;
+        // background: url('https://download.pingcap.com/images/mobileDevCon.png') no-repeat;
+        // position: relative;
+        // overflow: hidden;
+        // background-size: cover;
+
+        .current-activity-content {
+          display: none;
+        }
+      }
+
+      #calendar {
+        width: 100%;
+        margin-top: -6px;
+        height: 254px;
+        box-shadow: 0 2px 4px 0 #DDDDDD;
+      }
+    }
+
+    .activities__list {
+      display: block;
+      flex: none;
+      width: 100%;
+      padding: 0 0 4rem;
+      justify-content: none;
+      text-align: center;
+
+      .activity {
+        box-shadow: 0 2px 9px 0 #DDDDDD;
+        width: 100%;
+        max-width: 286px;
+        height: auto;
+        margin: 2rem auto;
+
+        .picture {
+          width: 100%;
+          height: auto;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .name {
+          padding: 0.7rem 0 0.5rem;
+          font-size: 1.1rem;
+          position: relative;
+        }
+
+
+        .summary {
+          padding: .5rem .9rem 1rem;
+          font-size: 0.8rem;
+        }
+
+        &:hover {
+          box-shadow: 5px 5px 20px #DDDDDD;
+          transition: box-shadow 0.2s ease-in-out;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .banner__section {
+    padding-top: 166%;
+  }
+}
+
+@media (max-width: 550px) {
+  .banner__section {
+    padding-top: 180%;
+  }
+
+  .content__container {
+    .gitHub {
+      top: 5.5rem;
+    }
+
+    .content {
+      .intro {
+        margin-top: 5rem;
+      }
+    }
+  }
+
+  .tidb-planet-robot {
+    left: 20px;
+    width: 53px;
+  }
+
+  .tooltiptext {
+    bottom: 97px;
+    left: 87px;
+    padding: 5px;
+    width: 120px;
+  }
+}
+
+@media (max-width: 450px) {
+  .banner__section {
+    padding-top: 200%;
+  }
+
+  .reading__section {
+    .intro {
+      padding: 2rem 0;
+      max-width: 287px;
+    }
+
+    .reading-list {
+      padding: 0;
+      margin: 0 auto;
+      max-width: 287px;
+    }
+  }
+
+
+}
+
+@media (max-width: 400px) {
+  .content__container {
+    .content {
+      .intro {
+        padding: 1rem;
+      }
+
+      .btns {
+        padding-right: 0;
+
+        .community-btns {
+          margin-top: 1rem;
+          width: 111px;
+          font-size: .78rem;
+          padding: 10px 0;
+        }
+      }
+
+      .relationship {
+        margin: 2rem auto auto;
+      }
+    }
+  }
+}
+
+@media (max-width: 349px) {
+  .banner__section {
+    padding-top: 220%;
+  }
+
+  .content__container {
+    .gitHub {
+      top: 4rem;
+    }
+
+    .content {
+      padding: 0.3rem;
+
+      .title-image {
+        padding: 1.5rem 3rem 0;
+      }
+
+      .intro {
+        margin-top: 4rem;
+        font-size: 13px;
+      }
+
+      .btns {
+        .community-btns {
+          line-height: 1.7;
+          margin-top: 1rem;
+          width: 90px;
+          font-size: .78rem;
+          padding: 10px 0;
+        }
+      }
+    }
+  }
+}

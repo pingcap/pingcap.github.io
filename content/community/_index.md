@@ -1,4 +1,4 @@
 ---
 type: community
-layout: devcon2019
+layout: list
 ---
