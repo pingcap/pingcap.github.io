@@ -10,25 +10,6 @@ function calcBannerTitleImg() {
       'https://download.pingcap.com/images/PCdevCon.png'
     )
   }
-  // calculate the margin of div activity container
-  if (window.matchMedia('(min-width: 1351px)').matches) {
-    var activity_container_margin =
-      document.getElementsByClassName('signable')[0].offsetLeft - 100
-  } else if (window.matchMedia('(min-width: 1250px)').matches) {
-    var activity_container_margin =
-      document.getElementsByClassName('signable')[0].offsetLeft - 50
-  } else if (window.matchMedia('(min-width: 701px)').matches) {
-    var activity_container_margin = document.getElementsByClassName(
-      'signable'
-    )[0].offsetLeft
-  } else {
-    var activity_container_margin = 0
-  }
-
-  $('.content__container .content').css(
-    'margin-left',
-    activity_container_margin
-  )
 }
 
 function createEventListConsole(eventTitles, eventLinks) {
@@ -81,16 +62,4 @@ $(document).ready(function() {
     $('.event-list').hide()
     $('.event').remove()
   })
-
-  // $('.signable').click(function() {
-  //   if (window.matchMedia('(max-width: 700px)').matches) {
-  //     if ($('.overlayCover').css('display') == 'block') {
-  //       $('.overlayCover').hide()
-  //       $('.current-activity-content').hide()
-  //     } else {
-  //       $('.overlayCover').show()
-  //       $('.current-activity-content').show()
-  //     }
-  //   }
-  // })
 })
