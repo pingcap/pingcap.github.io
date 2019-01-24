@@ -27,7 +27,9 @@ const usernameValidation = name => {
 }
 
 const authenticateContributor = name => {
-  const _index = window.tidbContributors.findIndex(c => c.login === name)
+  const _index = window.tidbContributors.findIndex(
+    c => c.login.toLowerCase() === name.toLowerCase()
+  )
 
   if (_index > -1) {
     // success: is a contributor
