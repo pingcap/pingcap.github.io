@@ -224,10 +224,12 @@ $(function() {
   }
 
   if ($('body').hasClass('milestones-page')) openVideoModal()
-  // only show nav and next forward animation in PC pages
+  $('.nav').fadeIn()
+  // only show login button and next forward animation in PC pages
   if ($('body')[0].offsetWidth > 768) {
-    $('.nav').fadeIn()
     $('.j-forward').addClass('animation-forward_arrow')
+  } else {
+    $('.j-login').css('display', 'none')
   }
 
   // fade out popup
@@ -319,7 +321,7 @@ $(function() {
     // location.href = $(this).attr('href')
     const lang = navigator.language
     if (lang.substring(0, 2) == 'zh') {
-      $(this).attr('href', 'https://pingcap.com/docs-cn/releases/2.0.11/')
+      $(this).attr('href', 'https://pingcap.com/docs-cn/releases/3.0beta/')
     }
     window.open($(this).attr('href'))
     e.preventDefault()
