@@ -38,6 +38,10 @@
   text-align: center;
 }
 
+.banner-container {
+  display: none;
+}
+
 // mixin
 .btn-theme-switch (@bg_color: @themeBlue, @color: white) {
   background: @bg_color;
@@ -84,11 +88,17 @@
     display: flex;
     flex-direction: column;
     padding: 0 @horizontalPadding;
+    position: relative;
   }
 
   .logo {
     width: @logoWidth;
     height: @logoHeight;
+  }
+
+  .logo-cn {
+    width: 37%;
+    height: auto;
   }
 
   .slogan {
@@ -104,10 +114,37 @@
     color: white;
   }
 
+  .tagline-cn {
+    margin-top: 2.5rem;
+  }
+
   .desc {
     max-width: 70%;
     font-size: @textSize;
     line-height: @textLineHeight;
+  }
+
+  .desc-cn {
+    max-width: 37%;
+  }
+
+  .tidb-planet-banner-pc {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    margin-right: 0.5rem;
+    width: 50%;
+    transition: top 0.2s ease-in-out;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+      top: 0.3rem;
+    }
   }
 
   .buttons {
@@ -437,16 +474,39 @@ body.banner-active .release-banner {
     min-width: 180px;
   }
 
+  .banner-container {
+    display: block;
+    width: 100%;
+    height: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .homepage-slogan-mask-cn-mobile {
+    padding: 4rem 0;
+  }
+
   .homepage-slogan-mask {
     .container {
       align-items: center;
       text-align: center;
     }
 
+    .logo-cn {
+      width: 90%;
+    }
+
     .buttons {
       .btn-secondary::after {
         left: 48px;
       }
+    }
+
+    .tidb-planet-banner-pc {
+      display: none;
     }
 
     .tagline {
@@ -456,6 +516,10 @@ body.banner-active .release-banner {
 
     .desc {
       max-width: 100%;
+    }
+
+    .desc-cn {
+      padding: 0 1rem;
     }
   }
 
@@ -501,12 +565,18 @@ body.banner-active .release-banner {
 }
 
 @media (max-width: 320px) {
-  .homepage-slogan-mask .buttons {
-    flex-direction: column;
-    align-items: center;
+  .homepage-slogan-mask {
+    .buttons {
+      flex-direction: column;
+      align-items: center;
 
-    .btn {
-      margin-top: 1.2rem;
+      .btn {
+        margin-top: 1.2rem;
+      }
+    }
+
+    .desc-cn {
+      padding: 0 0.6rem;
     }
   }
 }
