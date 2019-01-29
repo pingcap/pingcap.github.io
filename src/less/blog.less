@@ -10,75 +10,57 @@
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
 .blog {
-  padding: 0 @horizontalPadding;
+  // padding: 0 @horizontalPadding;
   margin-top: @headerHeight;
+
+  .blog__hugeTitle {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+    background: #F2F2F2;
+
+    h1 {
+      color: #3C3C3C;
+      font-size: 54px;
+    }
+
+    .guide {
+      margin-top: 2.5rem;
+      font-size: 24px;
+    }
+
+    .tutorial-platform {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+
+      .PLogo {
+        margin: 2.5rem 50px 0;
+        height: 80px;
+        transition: margin-top 0.2s ease-in-out;
+
+        img {
+          height: 100%;
+        }
+
+        &:hover {
+          margin-top: 2.2rem;
+        }
+      }
+    }
+  }
 
   .blog__container {
     margin: 0 auto;
-    max-width: 1700px;
+    max-width: 1300px;
     padding: 0 4rem;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
   }
 
-  .blog__hugeTitle {
-    width: 100%;
-    padding: 2rem;
-    text-align: center;
-
-    h1 {
-      color: #3C3C3C;
-    }
-  }
-
-  .tutorial-platform {
-    width: 100%;
-    // padding: 0.3rem;
-    min-height: 50px;
-    text-align: center;
-    background: #F2F2F2;
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    line-height: 1.8;
-    justify-content: center;
-    font-weight: 600;
-
-    .guide {
-      color: #3C3C3C;
-      margin-right: 15px;
-    }
-
-    span {
-      padding: 0 3px;
-
-      a {
-        img {
-          width: 23px;
-          height: auto;
-        }
-
-        .special-img {
-          width: 18px;
-        }
-      }
-
-      &:hover {
-        a {
-          img {
-            padding: 2px 0;
-            transition: padding 0.15s ease-in-out;
-          }
-        }
-      }
-    }
-
-    .divider {
-        // color: #3C3C3C;
-      color: #DDDDDD;
-      margin: 0 5px;
-    }
+  .blog__list {
+    margin: 0 1rem;
   }
 
   .nav-tags {
@@ -86,72 +68,31 @@
     display: flex;
     flex-flow: row wrap;
     line-height: 1.8;
-    justify-content: center;
-    padding: 9rem 0 5rem;
-
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar:horizontal {
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      border-radius: 6px;
-      background-color: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      border-radius: 6px;
-      background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(255, 255, 255, 0.5);;
-    }
-
-    .category:nth-child(1) {
-      .category__icon {
-        background-image: url('/images/svgs/engineering-icon.svg');
-      }
-    }
-
-    .category:nth-child(2) {
-      .category__icon {
-        background-image: url('/images/svgs/htap-icon.svg');
-      }
-    }
-
-    .category:nth-child(3) {
-      .category__icon {
-        background-image: url('/images/svgs/scalability-icon.svg');
-      }
-    }
-
-    .category:nth-child(4) {
-      .category__icon {
-        background-image: url('/images/svgs/open-source-icon.svg');
-      }
-    }
+    justify-content: space-evenly;
+    padding: 4rem 0;
 
     .category {
       text-align: center;
       display: inline;
-      width: 25%;
+      width: 23%;
       height: auto;
       line-height: 1.8;
-      padding: 0 1.7rem;
+      padding: 0 1rem;
+      // margin: 0 15px;
       position: relative;
+      border: 1px solid #DDDDDD;
 
       .category__icon {
-        position: absolute;
-        width: 75%;
         height: 6rem;
-        bottom: 100%;
-        padding: 1rem 0;
+        margin-top: 1rem;
         background-repeat: no-repeat;
         background-position: center;
+
+        img {
+          height: 100%;
+          margin-top: 0.3rem;
+          transition: margin-top 0.2s ease-in-out;
+        }
       }
 
       .category__content {
@@ -171,7 +112,7 @@
         }
 
         .summary {
-          padding-top: 0.7rem;
+          padding: 0.7rem 0;
           font-weight: normal;
           font-size: 18px;
           text-align: left;
@@ -180,9 +121,12 @@
       }
 
       &:hover {
+        box-shadow: 0 2px 9px 0 #DDDDDD;
+
         .category__icon {
-          bottom: 102%;
-          transition: bottom 0.3s ease-in-out;
+          img {
+            margin-top: 0;
+          }
         }
       }
     }
@@ -194,10 +138,10 @@
         }
       }
 
-      .category__icon {
-        bottom: 100%;
-        transition: bottom 0.3s ease-in-out;
-      }
+      // .category__icon {
+      //   bottom: 100%;
+      //   transition: bottom 0.3s ease-in-out;
+      // }
     }
   }
 }
@@ -567,6 +511,25 @@
 
 @media (max-width: 900px) {
   .blog {
+    .blog__hugeTitle {
+      .guide {
+        font-size: 18px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .tutorial-platform {
+        justify-content: space-around;
+
+        .PLogo {
+          margin: 2.5rem 0 0;
+          height: 50px;
+        }
+      }
+    }
+
     .tutorial-platform {
       background: none;
       font-weight: 600;
@@ -574,70 +537,44 @@
     }
 
     .nav-tags {
-      height: 300px;
       padding: 0;
       margin: 1rem 0 2rem;
 
       .category {
-        width: 47%;
-        height: 47%;
-        margin: 0 1%;
-        background: #F2F2F2;
+        width: 46%;
+        margin-bottom: 10px;
+        position: relative;
+        border: 1px solid #DDDDDD;
 
         .category__icon {
-          position: relative;
-          width: 100%;
-          height: 3rem;
-          margin-top: 1rem;
+          height: 4rem;
         }
 
         .category__content {
-          margin-top: 0.5rem;
-
-          .title {
-            font-weight: 600;
-            font-size: 1rem;
-            color:#3C3C3C;
+          &::before {
+            content: '';
+            margin: 1rem 0;
+            width: 100%;
+            border-top: 2px solid #DDDDDD;
+            display: inline-block;
           }
 
           .summary {
-            display: none;
-          }
-
-          &::before {
-            display: none;
-          }
-        }
-      }
-
-      a.sel {
-        .category__content {
-          &::before {
-            display: none;
+            padding: 0.5rem 0;
+            font-size: 13px;
+            text-align: left;
+            line-height: 1.7;
           }
         }
-      }
 
-      .catesel {
-        background: #1E2969;
-        padding: 0 10px;
-        overflow: auto;
+        &:hover {
+          box-shadow: 0 2px 9px 0 #DDDDDD;
 
-        .category__icon {
-          display: none;
-        }
-
-        .category__content .title {
-          color: white;
-          text-align: left;
-        }
-
-        .category__content .summary {
-          display: block;
-          color: white;
-          line-height: 1.5;
-          font-weight: 400;
-          font-size: 15px;
+          .category__icon {
+            img {
+              margin-top: 0;
+            }
+          }
         }
       }
     }
@@ -684,41 +621,19 @@
   }
 }
 
-@media (max-width: 850px) {
-  .list {
-    // .blog__article {
-    //   height: 150px;
-
-    //   .logo {
-    //     width: 225px;
-    //     height: 150px;
-    //   }
-
-    //   .abstract {
-    //     width: calc(~"100% - 225px");
-    //     height: 150px;
-
-    //     // .brief {
-    //     //   display: none;
-    //     // }
-    //   }
-    // }
-  }
-}
-
 @media (max-width: 700px) {
   .blog {
     padding: 0;
 
     .blog__container {
-      padding: 0 12px;
+      padding: 0 0;
     }
 
     .blog__hugeTitle {
-      padding: 1rem 0;
-
-      h1 {
-        font-size: 1.7rem;
+      .tutorial-platform {
+        .PLogo {
+          height: 30px;
+        }
       }
     }
   }

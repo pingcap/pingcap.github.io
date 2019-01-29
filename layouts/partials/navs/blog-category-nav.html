@@ -2,7 +2,20 @@
     {{- range $name, $taxonomy := .global.Site.Taxonomies.categories -}}
         <div class="category" data-tag="{{ replace $name " " "-"}}">
             <a href="#{{ replace $name " " "-"}}" class="tag" data-tag="{{ replace $name " " "-"}}">
-                <div class="category__icon"></div>
+                <div class="category__icon">
+                    {{- if eq $name "Engineering" -}}
+                        <img src="/images/svgs/engineering-icon.svg" />
+                    {{- end -}}
+                    {{- if eq $name "HTAP" -}}
+                        <img src="/images/svgs/htap-icon.svg" />
+                    {{- end -}}
+                    {{- if eq $name "MySQL Scalability" -}}
+                        <img src="/images/svgs/scalability-icon.svg" />
+                    {{- end -}}
+                    {{- if eq $name "Open Source Community" -}}
+                        <img src="/images/svgs/open-source-icon.svg" />
+                    {{- end -}}
+                </div>
                 <div class="category__content">
                     <div class="title">
                       {{- $name -}}
