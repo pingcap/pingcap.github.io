@@ -146,21 +146,41 @@ section[class^='meetup-landing-page-'] {
   overflow: hidden;
   width: 100%;
   max-height: 26rem;
-  padding: 0 !important;
-  background-color: @bannerBgColor !important;
+  margin-top: @headerHeight;
+  // padding: 0 !important;
+  // padding-top: 50%;
+  // background-color: @bannerBgColor !important;
+  background: url('/images/community/meetup-banner-pc.jpeg') no-repeat;
+  background-position: center;
+  background-size: cover;
 
   .mkdf-elements-holder-item-inner {
     position: absolute;
     right: 4rem;
     bottom: 5rem;
-    z-index: 99;
     text-align: right;
     color: white;
 
     h2 {
       margin-right: -4px;
+      margin-bottom: 1.4rem;
       font-size: 2rem;
       color: white;
+    }
+
+    h2::before {
+      display: none;
+    }
+
+    h2::after {
+      transform: none;
+      right: 0;
+      left: auto;
+      margin-top: 40px;
+      border-top: 1px solid white;
+      bottom: 0;
+      width: 80%;
+      background: none;
     }
 
     h3 {
@@ -189,7 +209,49 @@ section[class^='meetup-landing-page-'] {
   }
 }
 
+.readMore-btn {
+  border: 1px solid #3351FF;
+  color: #3351FF;
+  width: 140px;
+  font-size: 0.8rem;
+  padding: 14px;
+  margin-top: 3rem;
+  background: none;
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 3rem;
+
+  .arrow {
+    width: 16px;
+    position: absolute;
+    opacity: 0;
+    top: 50%;
+    left: 2px;
+    margin-top: -0.4rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-text {
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    .arrow {
+      opacity: 1;
+      left: 12px;
+    }
+
+    .btn-text {
+      padding: 14px 0 14px 20px;
+    }
+  }
+}
+
+
 .meetup-landing-page-intro {
+  padding: 4rem 12px 0 !important;
+  min-height: 0 !important;
+
   .desc {
     margin-top: 2rem;
   }
@@ -257,10 +319,13 @@ section[class^='meetup-landing-page-'] {
       .layout-text-on-hover {
         .text {
           padding: 40px 20px;
+          background-color: #3351FF;
 
           p {
             opacity: 0;
-            color: @midnightBlue;
+            // color: @midnightBlue;
+            color: white;
+            line-height: 1.4;
             font-size: 0.8rem;
             font-weight: 400;
             transform: translate3d(40%, 0, 0);
@@ -294,8 +359,97 @@ section[class^='meetup-landing-page-'] {
   }
 }
 
+.carousel-indicators {
+  position: relative;
+}
+
+.carousel-indicators li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.carousel-bullet {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.carousel-bullet:hover {
+  background: white;
+}
+
+// #carousel-1:checked~.carousel-indicators li:nth-child(1) .carousel-bullet,
+// #carousel-2:checked~.carousel-indicators li:nth-child(2) .carousel-bullet,
+// #carousel-3:checked~.carousel-indicators li:nth-child(3) .carousel-bullet {
+//   background: white;
+// }
+
+// #carousel-1:checked {
+
+// }
+
+.meetup-carousel {
+    position: relative;
+    margin-top: 1rem;
+
+    .carousel-inner {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .carousel-open:checked + .carousel-item {
+        position: static;
+        margin-top: 0.5rem;
+        opacity: 100;
+    }
+
+    .carousel-item {
+        position: absolute;
+        opacity: 0;
+        // -webkit-transition: opacity 0.6s ease-out;
+        // transition: opacity 3s ease-out;
+
+        p {
+          font-size: 1rem;
+          font-weight: 600;
+          letter-spacing: 1px;
+        }
+
+        .address,
+        .date {
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-top: 0.7rem;
+          letter-spacing: 1px;
+        }
+    }
+
+    // .carousel-item img {
+    //     display: block;
+    //     height: auto;
+    //     max-width: 100%;
+    // }
+}
+
 @media (max-width: 600px) {
   section[class^='meetup-landing-page-'] .details .item {
     flex-basis: 100%;
+  }
+
+  .meetup-landing-page-banner {
+    background: url('/images/community/meetup-banner-mobile.jpeg') no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    .mkdf-elements-holder-item-inner {
+      h2::after {
+        display: none;
+      }
+    }
   }
 }

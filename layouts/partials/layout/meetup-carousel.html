@@ -1,0 +1,22 @@
+<ol class="carousel-indicators">
+  {{- range $index, $item := .Site.Data.meetup.next_meetup -}}
+  <!-- {{ printf "%#v"  $index}} -->
+  <li>
+    <label for="carousel-{{ add $index 1}}" class="carousel-bullet"></label>
+  </li>
+  {{- end -}}
+</ol>
+
+<div class="meetup-carousel">
+  <div class="carousel-inner">
+      {{- range $idx, $i := .Site.Data.meetup.next_meetup -}}
+        <!-- {{ printf "%#v" $idx }} -->
+        <input class="carousel-open" type="radio" id="carousel-{{ add $idx 1 }}" name="carousel" aria-hidden="true" hidden="" checked="checked">
+        <div class="carousel-item">
+          <p>{{ $i.topic }}</p>
+          <div class="address">{{ $i.addr }}</div>
+          <div class="date">{{ $i.date }}</div>
+        </div>
+      {{- end -}}
+  </div>
+</div>
