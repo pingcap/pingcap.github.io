@@ -9,7 +9,9 @@
     {{$.Scratch.Set "data_i18_link" "/weekly" }}
     {{- partial "head/preload-css" (dict "href" "/css/meetup.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css")}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css")}}
     {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
@@ -19,7 +21,8 @@
         <img src="/images/meetup-earth.png" alt="banner">
     </div> -->
     <div class="mkdf-elements-holder-item-inner">
-        <h2>PingCAP Infra Meetup</h2>
+        <h2 class="title-divider">PingCAP Infra Meetup</h2>
+        <!-- <div class="title-divider"></div> -->
         {{- partial "layout/meetup-carousel.html" . -}}
     </div>
     <!-- <div class="text">
@@ -68,30 +71,20 @@
 <section class="meetup-landing-page-memoir">
     <div class="container">
         <h2 class="section-title">分享实录</h2>
-        <!-- <div class="links-group"> -->
-            <!-- {{ $meetup_posts := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir" }}
-            {{ $blog_cn_posts := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir" }}
-            {{ $total_posts := $meetup_posts | union $blog_cn_posts }} -->
             {{ $meetup_memoir := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
-            <!-- {{- range $meetup_memoir -}} -->
-            <!-- <a href="{{.URL}}" class="link"> -->
-                <!-- {{.Title}} <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i> -->
-                {{- partial "archives/blog-list.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
-            <!-- </a> -->
-            <!-- {{- end -}} -->
-            <!-- <a href="./memoir/26-1.html" class="link">
-                NO.26: 分布式系统测试那些事儿 &#8212; 理念
-                <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
-            </a> -->
-        <!-- </div> -->
-        <!-- hide memoir list this version -->
-        <!-- <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
+            {{- partial "archives/blog-list.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
     </div>
 </section>
 <section class="meetup-landing-page-lecturer">
     <div class="container">
-        <h2 class="section-title">大咖讲师</h2>
-        <div class="details">
+       <div class="instructors">
+          <h1 class="section-title">大咖讲师</h1>
+          {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}}
+      </div>
+        <!-- <h2 class="section-title">大咖讲师</h2>
+
+        {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}} -->
+        <!-- <div class="details">
             {{- range $idx, $i := .Site.Data.meetup.featured_speakers -}}
                 {{- if eq (mod $idx 5) 0 -}}
                     <div class="row">
@@ -113,8 +106,7 @@
                     </div>
                 {{- end -}}
             {{- end -}}
-            <!-- <a href="http://path/to/be/lecturer" class="link link-jonin" target="_blank">成为 PingCAP Infra Meetup 讲师<i class="fa fa-long-arrow-right"></i></a> -->
-        </div>
+        </div> -->
     </div>
 </section>
 <section class="meetup-landing-page-banner-footer">
@@ -125,11 +117,13 @@
 {{- end -}}
 
 {{- define "footJS" -}}
-<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
-<script type="text/javascript">
-    $(".lazy").lazyload({
-    effect : "fadeIn",
-    threshold: 200
-});
-</script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/carousel.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
 {{- end -}}

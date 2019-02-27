@@ -369,18 +369,7 @@
         <div class="instructors__container">
             <div class="instructors">
                 <h1 class="title">讲师介绍</h1>
-                <div class="instructors__list">
-                    {{- range $idx, $i := .Site.Data.devcon2019.instructors -}}
-                        <div class="instructor">
-                          <div class="avatar">
-                              <img src="{{ $i.image}}" />
-                              <div class="intro"><p>{{ $i.intro }}</p></div>
-                          </div>
-                          <div class="name">{{ $i.name}}</div>
-                          <div class="company">{{ $i.company}} | {{ $i.title }}</div>
-                        </div>
-                    {{- end -}}
-                </div>
+                {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.devcon2019.instructors "type" "devcon") -}}
             </div>
         </div>
 
