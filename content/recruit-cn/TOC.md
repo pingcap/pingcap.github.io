@@ -13,6 +13,7 @@
   - [TiDB 商业产品开发 - 测试开发工程师](engineering/bizdev-qa-engineer.md)
   - [TiDB 商业产品开发 - 工程效率研发工程师](engineering/bizdev-engineering-efficiency-engineer.md)
   - [TiDB 产品经理](engineering/product-manager.md)
+  - [运维工程师](engineering/bizdev-sa-engineer.md)
 - Business
   - [资深行业销售总监](business/sales-director.md)
   - [资深售前技术总监](business/presales-director.md)
