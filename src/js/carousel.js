@@ -8,5 +8,7 @@ $(document).ready(function() {
       el: '.swiper-pagination',
       clickable: true,
     },
+    slidesPerView: 'auto',
+    autoplayDisableOnInteraction: false,
   })
 })

@@ -17,17 +17,11 @@
 {{- define "main" -}}
 <section class="meetup-landing-page-banner">
     <a href="http://path/to/signup" class="link-abs" target="_blank"></a>
-    <!-- <div class="image">
-        <img src="/images/meetup-earth.png" alt="banner">
-    </div> -->
     <div class="mkdf-elements-holder-item-inner">
-        <h2 class="title-divider">PingCAP Infra Meetup</h2>
-        <!-- <div class="title-divider"></div> -->
+        <h2>PingCAP Infra Meetup</h2>
+        <div class="title-divider"></div>
         {{- partial "layout/meetup-carousel.html" . -}}
     </div>
-    <!-- <div class="text">
-        <h4 class="inner-title"> 报名加入 </h4>
-    </div> -->
 </section>
 <section class="meetup-landing-page-intro">
     <div class="container">
@@ -54,7 +48,7 @@
                         </div>
                     </div>
                     <h3>{{.Date.Format "2006-01-02"}}</h3>
-                    <p>{{.Title}}</p>
+                    <p class="meetup-review-title">{{.Title}}</p>
                 </div>
                 {{- end -}}
             </div>
@@ -68,52 +62,28 @@
       </a>
     </div>
 </section>
-<section class="meetup-landing-page-memoir">
+<section class="meetup-landing-page-memoir reading__section">
     <div class="container">
         <h2 class="section-title">分享实录</h2>
+        <div class="reading-list">
             {{ $meetup_memoir := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
             {{- partial "archives/blog-list.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+        </div>
     </div>
 </section>
 <section class="meetup-landing-page-lecturer">
     <div class="container">
-       <div class="instructors">
+       <div class="instructors meetup-instructors">
           <h1 class="section-title">大咖讲师</h1>
           {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}}
       </div>
-        <!-- <h2 class="section-title">大咖讲师</h2>
-
-        {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}} -->
-        <!-- <div class="details">
-            {{- range $idx, $i := .Site.Data.meetup.featured_speakers -}}
-                {{- if eq (mod $idx 5) 0 -}}
-                    <div class="row">
-                {{- end -}}
-                <div class="item">
-                    <div class="layout-text-on-hover">
-                        <div class="image">
-                            <img class="lazy" width="100%" data-original="{{$i.image}}" src="/images/svgs/loader-spinner.svg" alt="lecturer">
-                        </div>
-                        <div class="text">
-                            <p>{{$i.intro}} </p>
-                        </div>
-                    </div>
-                    <h3> {{$i.name}} </h3>
-                    <h4> {{$i.title}} </h4>
-                    <p> {{$i.topic}}</p>
-                </div>
-                {{- if eq (mod $idx 5) 4 -}}
-                    </div>
-                {{- end -}}
-            {{- end -}}
-        </div> -->
     </div>
 </section>
-<section class="meetup-landing-page-banner-footer">
+<!-- <section class="meetup-landing-page-banner-footer">
     <div class="container">
         <img src="/images/svgs/meetup-tags.svg" alt="meetup tags">
     </div>
-</section>
+</section> -->
 {{- end -}}
 
 {{- define "footJS" -}}
