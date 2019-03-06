@@ -66,7 +66,7 @@
         <h2 class="section-title">分享实录</h2>
         <div class="reading-list">
             {{ $meetup_memoir := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
-            {{- partial "archives/blog-list.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+            {{- partial "archives/blog-list.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "memoir") -}}
         </div>
     </div>
 
