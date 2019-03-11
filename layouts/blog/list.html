@@ -13,25 +13,27 @@
 {{- define "main" -}}
     <div class="blog">
       <div class="blog__hugeTitle">
-        <h1>PingCAP Blog</h1>
+        <h1>PingCAP Blog
+            <a class="rss" href="/blog/index.xml" title="RSS Feed">{{ partial "svgs/icon-rss.svg" (dict "fill" "#3A59F0" "width" 13 "height" 17 ) }}</a>
+        </h1>
         <div class="guide">See TiDB Deployment Tutorials for: </div>
         <div class="tutorial-platform">
-          <div class="PLogo"><a href="/docs/op-guide/kubernetes/#google"><img src="/images/svgs/google-cloud.svg" /></a> </div>
-          <div class="PLogo"><a href="/docs/op-guide/docker-deployment/"><img src="/images/svgs/docker.svg" /> </a> </div>  
-          <div class="PLogo"><a href="/docs/op-guide/kubernetes/#local"><img src="/images/svgs/kubernetes.svg" /></a> </div> 
-          <div class="PLogo"><a href="/docs/op-guide/kubernetes/#aws"><img src="/images/aws.png" /></a></div>  
-          <div class="PLogo"><a href="/docs/op-guide/ansible-deployment"><img src="/images/svgs/ansible.svg" /></a> </div>
+            <div class="PLogo"><a href="/docs/op-guide/kubernetes/#google"><img src="/images/svgs/google-cloud.svg" /></a> </div>
+            <div class="PLogo"><a href="/docs/op-guide/docker-deployment/"><img src="/images/svgs/docker.svg" /> </a> </div>  
+            <div class="PLogo"><a href="/docs/op-guide/kubernetes/#local"><img src="/images/svgs/kubernetes.svg" /></a> </div> 
+            <div class="PLogo"><a href="/docs/op-guide/kubernetes/#aws"><img src="/images/aws.png" /></a></div>  
+            <div class="PLogo"><a href="/docs/op-guide/ansible-deployment"><img src="/images/svgs/ansible.svg" /></a> </div>
         </div>
       </div>
       <div class="blog__container">
-        {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
-        {{- partial "navs/blog-category-nav.html" (dict "type" "blog-list" "posts" $posts "global" .) -}}
-        <div class="blog__list">
-            {{- partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "blog") -}}
-        </div>
-        <div id="showMore">
-            <p>- Show More Articles -</p>
-        </div>
+          {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
+          {{- partial "navs/blog-category-nav.html" (dict "type" "blog-list" "posts" $posts "global" .) -}}
+          <div class="blog__list">
+              {{- partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "blog") -}}
+          </div>
+          <div id="showMore">
+              <p>- Show More Articles -</p>
+          </div>
         <!-- {{- partial "archives/subscription.html" . -}} -->
       </div>
     </div>
