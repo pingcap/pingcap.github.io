@@ -19,6 +19,9 @@ export default {
     community: [path.join(__dirname, 'src', 'js', 'community')],
     tidb_planet_user: [path.join(__dirname, 'src', 'js', 'tidb_planet_user')],
     carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
+    multi_slides_carousel: [
+      path.join(__dirname, 'src', 'js', 'multi_slides_carousel'),
+    ],
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),
