@@ -36,6 +36,7 @@ replace_dist_html_link "$en_tmp_docs_path" docs
 cn_tmp_blogs_path="dist/blog-cn"
 en_tmp_blogs_path="dist/blog"
 replace_dist_html_link "$cn_tmp_blogs_path" blog-cn
+replace_dist_html_link "dist/cases-cn" blog-cn
 replace_dist_html_link "$en_tmp_blogs_path" blog
 replace_dist_html_link "dist/success-stories" blog
 
