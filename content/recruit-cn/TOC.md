@@ -22,6 +22,8 @@
   - [资深/高级/中级 TiDB DBA](business/tidb-dba.md)
   - [资深/高级/中级 TiDB 交付 DBA](business/tidb-delivery-dba.md)
   - [高级大数据平台工程师](business/olap-ops-engineer.md)
+  - [PingCAP University 培训专家](business/tidb-training-expert.md)
+  - [用户生态技术运营](business/user-ecosystem-technical-operations.md)
 - MKT
   - [社区运营](market/community-operation.md)
 - I18N
