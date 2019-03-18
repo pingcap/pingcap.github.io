@@ -294,6 +294,27 @@ $(document).ready(function() {
     }
   })
 
+  $('.team-bg').click(function() {
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      $('.middle-overlay').css('opacity', '0')
+      var el = $(this)
+        .find('.middle-overlay')
+        .css('opacity', '1')
+      var el = $(this)
+        .find('.middle-cover, .award-info')
+        .css('opacity', '0')
+    }
+  })
+
+  $('.project').click(function() {
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      $('.project-desc').css('opacity', '0')
+      var el = $(this)
+        .find('.project-desc')
+        .css('opacity', '1')
+    }
+  })
+
   $('.section-burger').click(function() {
     if ($('.dropdown-btns').css('display') == 'block') {
       $('.dropdown-btns').css('display', 'none')
