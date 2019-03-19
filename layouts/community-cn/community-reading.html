@@ -1,0 +1,20 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Community" }}
+    Community
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+    <div class="blog__container">
+        {{ $posts := where (where .Site.Pages "Section" "blog") ".Params.title" "!=" nil }}
+        {{- partial "navs/blog-category-nav.html" (dict "type" "blog-list" "posts" $posts "global" .) -}}
+        <div class="blog__list">
+            {{- partial "archives/list.html" (dict "posts" $posts.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "blog") -}}
+        </div>
+    </div>
+{{- end -}}
