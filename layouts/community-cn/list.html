@@ -6,7 +6,7 @@
 {{- define "headTpl" -}}
     {{$.Scratch.Set "nav_active" "community"}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/article-reading-card.css") -}}
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{- partial "head/preload-css" (dict "href" "/css/vendor/calendar.css") -}}
 {{- end -}}
@@ -116,7 +116,7 @@
             <div class="reading-list">
               {{ $communityTag := "社区" }}
                 {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
-              {{- partial "archives/blog-list.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+              {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
             </div>
             <div class="readMoreBtn">
                 <a href="/blog-cn/#社区">
