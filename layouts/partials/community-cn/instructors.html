@@ -1,29 +1,16 @@
+{{ $type := .type }}
+
 <div class="instructors__list">
-    {{- if eq .type "devcon" -}}
-        {{- range $idx, $i := .instructors -}}
-        <div class="instructor">
-            <div class="intro">
-                <p>{{ $i.intro }}</p>
-            </div>
-            <div class="avatar">
-                <img src="{{ $i.image}}" />
-            </div>
-            <div class="name">{{ $i.name}}</div>
-            <div class="company">{{ $i.company}} | {{ $i.title }}</div>
+    {{- range $idx, $i := .instructors -}}
+    <div class="instructor {{ if eq $type "meetup" }}card-dark-bg{{ end }}">
+        <div class="intro">
+            <p>{{ $i.intro }}</p>
         </div>
-        {{- end -}}
-    {{- else -}}
-        {{- range $idx, $i := .instructors -}}
-        <div class="instructor meetup-speakers">
-            <div class="intro">
-                <p>{{ $i.intro }}</p>
-            </div>
-            <div class="avatar">
-                <img src="{{ $i.image}}" />
-            </div>
-            <div class="name">{{ $i.name}}</div>
-            <div class="personal-title">{{ $i.title }}</div>
+        <div class="avatar">
+            <img src="{{ $i.image}}" />
         </div>
-        {{- end -}}
+        <div class="name">{{ $i.name}}</div>
+        <div class="company">{{ $i.company }} | {{ $i.title }}</div>
+    </div>
     {{- end -}}
 </div>
