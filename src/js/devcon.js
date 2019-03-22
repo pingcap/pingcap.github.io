@@ -21,16 +21,16 @@ function smoothScroll() {
   var sectionName
   switch (btnName) {
     case 'schedule-btn':
-      sectionName = '.agenda__container h1'
+      sectionName = '.agenda__section h1'
       break
     case 'instructor-btn':
-      sectionName = '.instructors__container h1'
+      sectionName = '.instructors__section h1'
       break
     case 'contact-btn':
-      sectionName = '.contact__container h1'
+      sectionName = '.contact__section h1'
       break
     case 'signup-btn':
-      sectionName = '.signup__container'
+      sectionName = '.signup__section'
       break
   }
 

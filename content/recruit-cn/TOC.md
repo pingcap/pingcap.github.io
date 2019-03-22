@@ -17,11 +17,13 @@
 - Business
   - [资深行业销售总监](business/sales-director.md)
   - [资深售前技术总监](business/presales-director.md)
-  - [资深渠道合作总监](business/channel-sales-director.md)
   - [资深互联网架构师](business/internet-architect.md)
+  - [用户生态技术运营](business/user-ecosystem-technical-operations.md)
+  - [PingCAP University 培训专家](business/tidb-training-expert.md)
   - [资深/高级/中级 TiDB DBA](business/tidb-dba.md)
   - [资深/高级/中级 TiDB 交付 DBA](business/tidb-delivery-dba.md)
   - [高级大数据平台工程师](business/olap-ops-engineer.md)
+  - [资深渠道合作总监](business/channel-sales-director.md)
 - MKT
   - [社区运营](market/community-operation.md)
 - I18N

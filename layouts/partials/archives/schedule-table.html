@@ -1,0 +1,69 @@
+{{ $schedule := .schedule }}
+
+<table class="agenda__table" cellspacing="0" cellpadding="0">
+    {{- range $idx, $i := $schedule }}
+        {{- if $i.highlight_bg -}}
+            <tr class="highlight-bg">
+                <td style="color: white;">{{ $i.time }}</td>
+                <td>{{ $i.talk_title }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        {{- else if and (not $i.talk_detail) (not $i.sub_talk) -}}
+            <tr>
+                <td>{{ $i.time }}</td>
+                <td>{{ $i.talk_title }}</td>
+                <td>{{ $i.speaker }}</td>
+                <td></td>
+            </tr>
+        {{- else if $i.talk_detail -}}
+            <tr class="collapsable">
+                <td>{{ $i.time }}</td>
+                <td>{{ $i.talk_title }} </td>
+                <td>{{ $i.speaker }}</td>
+                <td class="collapse"> + </td>
+            </tr>
+            <tr class="detail-block">
+                <td></td>
+                    <td colspan="2">
+                        <ul style="list-style: none;">
+                            {{- range $idx2, $i2 := $i.talk_detail -}}
+                                <li class="pagraphList">{{ $i2 }}</li>
+                            {{- end -}}
+                        </ul>
+                    </td>
+                <td></td>
+            </tr>
+        {{- else if $i.sub_talk -}}
+            <tr>
+                <td>{{ $i.time }}</td>
+                <td>{{ $i.talk_title }}</td>
+                <td>{{ $i.speaker }}</td>
+                <td></td>
+            </tr>
+            {{- range $idx3, $i3 := $i.sub_talk}}
+            <tr class="collapsable">
+                <td></td>
+                <td>
+                    <ul style="list-style: none;">
+                        <li> - {{ $i3.talk_title}}</li>
+                    </ul>
+                </td>
+                <td>{{ $i3.company }}<span> - {{ $i3.speaker }}</span></td>
+                <td class="collapse"> + </td>
+            </tr>
+            <tr class="detail-block">
+                <td></td>
+                <td colspan="2">
+                    <ol class="ol-padding">
+                      {{- range $idx4, $i4 := $i3.talk_detail -}}
+                          <li>{{ $i4 }}</li>
+                      {{- end }}
+                    </ol>
+                </td>
+                <td></td>
+            </tr>
+            {{- end -}}
+        {{- end -}}
+    {{- end }}
+</table>

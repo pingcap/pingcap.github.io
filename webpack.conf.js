@@ -21,6 +21,7 @@ export default {
     multi_slides_carousel: [
       path.join(__dirname, 'src', 'js', 'multi_slides_carousel'),
     ],
+    carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),

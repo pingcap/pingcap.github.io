@@ -8,27 +8,23 @@
     {{$.Scratch.Set "data_i18_cn" true }}
     {{$.Scratch.Set "data_i18_link" "/weekly" }}
     {{- partial "head/preload-css" (dict "href" "/css/meetup.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css")}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css")}}
+    {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
-<section class="meetup-landing-page-banner layout-text-on-hover">
+<section class="meetup-landing-page-banner">
     <a href="http://path/to/signup" class="link-abs" target="_blank"></a>
-    <div class="image">
-        <img src="/images/meetup-earth.png" alt="banner">
-    </div>
     <div class="mkdf-elements-holder-item-inner">
         <h2>PingCAP Infra Meetup</h2>
-        <h3>{{.Site.Data.meetup.next_meetup.topic}}</h3>
-        <h4><i class="fa fa-map-marker"></i>&nbsp;&nbsp;北京 . 海淀</h4>
-        <p>{{.Site.Data.meetup.next_meetup.date}}</p>
-    </div>
-    <div class="text">
-        <h4 class="inner-title"> 报名加入 </h4>
+        {{- partial "layout/meetup-carousel.html" . -}}
     </div>
 </section>
 <section class="meetup-landing-page-intro">
     <div class="container">
-        <h1 class="title"> Infra Meetup </h1>
+        <h1 class="section-title"> Infra Meetup </h1>
         <div class="desc">
             PingCAP 希望能为国内真正关注技术本身的 Hackers 打造一个自由分享的平台。在这里，我们会定期邀请业内大牛与大家深度探讨基础架构领域的前瞻性技术思考与经验。希望通过提供一个高水准的前沿技术讨论空间，让大家在这里能够真正感受到自由的开源精神魅力。
         </div>
@@ -36,7 +32,7 @@
 </section>
 <section class="meetup-landing-page-review">
     <div class="container">
-        <h2 class="title">往期回顾</h2>
+        <h2 class="section-title">往期回顾</h2>
         <div class="details">
             <div class="row">
                 {{- range first 3 .Data.Pages -}}
@@ -51,74 +47,59 @@
                         </div>
                     </div>
                     <h3>{{.Date.Format "2006-01-02"}}</h3>
-                    <p>{{.Title}}</p>
+                    <p class="meetup-review-title">{{.Title}}</p>
                 </div>
                 {{- end -}}
             </div>
         </div>
-        <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a>
+        <a href="/meetup/list">
+          <button class="readMore-btn">
+            <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
+            <span class="btn-text">查看更多</span>
+          </button>
+        </a>
     </div>
 </section>
-<section class="meetup-landing-page-memoir">
+<section class="meetup-landing-page-memoir reading__section">
     <div class="container">
-        <h2 class="title">分享实录</h2>
-        <div class="links-group">
-            {{- range where .Data.Pages ".Params.meetup_type" "memoir" -}}
-            <a href="{{.URL}}" class="link">
-                {{.Title}} <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
-            </a>
-            {{- end -}}
-            <a href="./memoir/26-1.html" class="link">
-                NO.26: 分布式系统测试那些事儿 &#8212; 理念
-                <i class="arrow-right">{{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</i>
-            </a>
+        <h2 class="section-title">分享实录</h2>
+        <div class="reading-list">
+            {{ $meetup_memoir := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
+            {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "memoir") -}}
         </div>
-        <!-- hide memoir list this version -->
-        <!-- <a href="./memoir/list.html" class="link">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
     </div>
+
+    <a href="/blog-cn/#Meetup-实录">
+        <button class="readMore-btn">
+            <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
+            <span class="btn-text">更多文章</span>
+        </button>
+    </a>
 </section>
 <section class="meetup-landing-page-lecturer">
     <div class="container">
-        <h2 class="title">大咖讲师</h2>
-        <div class="details">
-            {{- range $idx, $i := .Site.Data.meetup.featured_speakers -}}
-                {{- if eq (mod $idx 5) 0 -}}
-                    <div class="row">
-                {{- end -}}
-                <div class="item">
-                    <div class="layout-text-on-hover">
-                        <div class="image">
-                            <img class="lazy" width="100%" data-original="{{if isset $i " image "}}{{$i.image}}{{else}}http://lorempixel.com/480/480/people/{{$idx}}{{end}}" src="/images/svgs/loader-spinner.svg" alt="lecturer">
-                        </div>
-                        <div class="text">
-                            <p>{{$i.intro}} </p>
-                        </div>
-                    </div>
-                    <h3> {{$i.name}} </h3>
-                    <h4> {{$i.title}} </h4>
-                    <p> {{$i.topic}}</p>
-                </div>
-                {{- if eq (mod $idx 5) 4 -}}
-                    </div>
-                {{- end -}}
-            {{- end -}}
-            <a href="http://path/to/be/lecturer" class="link link-jonin" target="_blank">成为 PingCAP Infra Meetup 讲师<i class="fa fa-long-arrow-right"></i></a>
-        </div>
+       <div class="instructors">
+          <h1 class="section-title">大咖讲师</h1>
+          {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}}
+      </div>
     </div>
 </section>
 <section class="meetup-landing-page-banner-footer">
     <div class="container">
-        <img src="/images/svgs/meetup-tags.svg" alt="meetup tags">
+        <img src="/images/meetup/meetup-footer-image.svg" alt="meetup tags">
     </div>
 </section>
 {{- end -}}
 
 {{- define "footJS" -}}
-<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
-<script type="text/javascript">
-    $(".lazy").lazyload({
-    effect : "fadeIn",
-    threshold: 200
-});
-</script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/carousel.js"></script>
+    <script type="text/javascript" src="/js/devcon.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
 {{- end -}}
