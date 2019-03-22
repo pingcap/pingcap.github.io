@@ -1,0 +1,121 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Hackathon 2018" }}
+    Hackathon 2018
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "community"}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/hackathon2018.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+{{- end -}}
+
+{{- define "main" -}}
+<div class="hackathon-2018">
+    <section class="banner"></section>
+    <section class="about-hackathon">
+        <div class="container">
+            <h2 class="section-title">关于 TiDB Hackathon</h2>
+            <p class="hackathon-intro">TiDB Hackathon 是由 PingCAP 举办的黑客马拉松大赛，选手需围绕整个 TiDB 生态做出一个完整的作品并由评审最终评选出获奖者。赛制参考了国内外知名的 Hackathon 举办模式，参赛队伍需在规定时间（48 小时）内完成作品并展示。</p>
+            <p class="hackathon-date">比赛时间：2018.12.01 至 12.02</p>
+        </div>
+    </section>
+
+    <section class="awarded-projects">
+        <div class="container">
+            <h2 class="section-title hackathon-section-title">赛事奖项归属</h2>
+            <div class="awarded-list">
+                {{- range $idx, $i := .Site.Data.hackathon2018.winners -}}
+                    <div class="team">
+                        <div class="team-info">
+                            <img class="team-bg" src="{{ $i.image}}" />
+                            <div class="middle-cover">
+                                <img class="award-icon" src="/images/community/award-icon.svg" />
+                            </div>
+                            <div class="middle-overlay">
+                                <p class="project-desc">{{ $i.intro }}</p>
+                            </div>
+                            <div class="award-info">
+                                <div class="award">{{ $i.award }}</div>
+                                <p>{{ $i.name }}</p>
+                                <p>{{ $i.bonus }}</p>
+                            </div>
+                        </div>
+                        <a href="{{ $i.github_repo }}"><button class="awarded-github-btn">GitHub Repo</button></a>
+                    </div>
+                {{- end -}}
+            </div>
+        </div>
+    </section>
+
+    <section class="total-projects">
+        <div class="container">
+            <h2 class="section-title">完赛项目展示</h2>
+            <div class="project-list">
+                {{- range $idx, $i := .Site.Data.hackathon2018.projects -}}
+                    <div class="project">
+                        <div class="project-thumbnail">
+                            <img class="project-img" src="/images/community/project-bg.jpg" />
+                            <div class="project-desc">
+                                {{ $i.intro}}
+                            </div>
+                        </div>
+                        <div class="project-name">{{ $i.name }}</div>
+                        <div class="project-github">
+                            <a href="{{ $i.github_repo }}"><button class="project-github-btn">GitHub Repo</button></a>
+                        </div>
+                    </div>
+                {{- end -}}
+            </div>
+        </div>
+    </section>
+
+    <section class="tutor-members">
+        <div class="container">
+            <h2 class="section-title hackathon-section-title">导师团成员</h2>
+            <div class="tutor-list">
+                {{- range $idx, $i := .Site.Data.hackathon2018.tutors}}
+                    <div class="project tutor">
+                        <img class="tutor-avatar" src="{{ $i.avatar }}" />
+                        <div class="tutor-name">{{ $i.name }}</div>
+                        <div class="tutor-title">{{ $i.title }}</div>
+                    </div>
+                {{- end -}}
+            </div>
+        </div>
+    </section>
+
+    <section class="hackathon-moments">
+        <div class="container">
+            <h2 class="section-title">精彩瞬间</h2>
+            {{- partial "layout/multi_slides_carousel.html" . -}}
+        </div>
+    </section>
+
+    <section class="hackathon-review">
+        <div class="container">
+            <h2 class="section-title">往期回顾</h2>
+            {{- range $idx, $i := .Site.Data.hackathon2018.reviews -}}
+                <a href="{{ $i.link}}">
+                    <div class="review-card">
+                        <div class="review-thumbnail">
+                            <img src="/images/blog-article/default.jpg">
+                        </div>
+                        
+                        <div class="review-content">
+                            <div class="review-title">{{ $i.title}}</div>
+                            <div class="review-desc">{{ $i.desc }}</div>
+                        </div>
+                      </div>
+                  </a>
+              {{- end -}}
+        </div>
+    </section>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
+{{- end -}}

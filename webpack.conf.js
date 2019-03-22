@@ -18,6 +18,9 @@ export default {
     devcon: [path.join(__dirname, 'src', 'js', 'devcon')],
     community: [path.join(__dirname, 'src', 'js', 'community')],
     tidb_planet_user: [path.join(__dirname, 'src', 'js', 'tidb_planet_user')],
+    multi_slides_carousel: [
+      path.join(__dirname, 'src', 'js', 'multi_slides_carousel'),
+    ],
     carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
   },
   output: {
