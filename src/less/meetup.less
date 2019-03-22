@@ -89,7 +89,8 @@ section[class^='meetup-landing-page-'] {
   h3 {
     margin: 25px 0 16px;
     font-size: 1rem;
-    color: @purpleBlue;
+    color: #3C3C3C;
+    text-align: left;
   }
 
   h4 {
@@ -105,21 +106,28 @@ section[class^='meetup-landing-page-'] {
     font-size: 0.8rem;
   }
 
+  .meetup-review-title {
+    text-align: left;
+  }
+
   .details {
     display: flex;
-    flex-direction: column;
+    // flex-direction: column;
+    flex-flow: row wrap;
+    width: 100%;
 
     .row {
       display: flex;
       flex-flow: row wrap;
       align-items: flex-start;
       justify-content: space-between;
+      width: 100%;
     }
 
     .item {
       position: relative;
-      display: flex;
-      flex-direction: column;
+      // display: flex;
+      // flex-direction: column;
       align-items: center;
       margin-bottom: 2rem;
 
@@ -145,22 +153,30 @@ section[class^='meetup-landing-page-'] {
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-height: 26rem;
-  padding: 0 !important;
-  background-color: @bannerBgColor !important;
+  // max-height: 26rem;
+  height: 30rem;
+  margin-top: @headerHeight;
+  // padding: 0 !important;
+  // padding-top: 50%;
+  // background-color: @bannerBgColor !important;
+  background: url('/images/community/meetup-banner-pc.svg') no-repeat;
+  background-position: center;
+  background-size: cover;
 
   .mkdf-elements-holder-item-inner {
     position: absolute;
-    right: 4rem;
-    bottom: 5rem;
-    z-index: 99;
+    right: 10rem;
+    bottom: 10rem;
     text-align: right;
     color: white;
 
     h2 {
-      margin-right: -4px;
       font-size: 2rem;
       color: white;
+    }
+
+    h2::before {
+      display: none;
     }
 
     h3 {
@@ -189,21 +205,75 @@ section[class^='meetup-landing-page-'] {
   }
 }
 
+.readMore-btn {
+  border: 1px solid #3351FF;
+  color: #3351FF;
+  width: 140px;
+  font-size: 0.8rem;
+  padding: 14px;
+  margin: 3rem 0 0;
+  background: none;
+  position: relative;
+  cursor: pointer;
+
+  .arrow {
+    width: 16px;
+    position: absolute;
+    opacity: 0;
+    top: 50%;
+    left: 2px;
+    margin-top: -0.4rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-text {
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    .arrow {
+      opacity: 1;
+      left: 12px;
+    }
+
+    .btn-text {
+      padding: 14px 0 14px 20px;
+    }
+  }
+}
+
+.meetup-landing-page-intro {
+  padding: 4rem 12px 0 !important;
+  min-height: 0 !important;
+
+  .desc {
+    margin-top: 2rem;
+  }
+}
+
 .meetup-landing-page-review {
   .details {
+     justify-content: space-between;
+     padding: 1rem 2rem 0;
+
     .item {
-      flex-basis: 30%;
+      min-height: 380px;
+      // width: 32%;
+      width: 310px;
     }
 
     .layout-text-on-hover {
-      // TODO: fix width/height ratio
       .image {
-        padding-bottom: calc(100% / (4 / 3)); // 1x1 by default
+        padding-bottom: calc(100% / (3 / 2)); // 1x1 by default
       }
 
       .text {
         padding: 30px 10px;
       }
+    }
+
+    p {
+      font-size: 16px;
     }
   }
 }
@@ -244,17 +314,21 @@ section[class^='meetup-landing-page-'] {
 .meetup-landing-page-lecturer {
   .details {
     .item {
-      min-height: 350px;
+      min-height: 300px;
       flex-basis: 20%;
       padding: 0 @horizontalPadding;
 
       .layout-text-on-hover {
         .text {
           padding: 40px 20px;
+          background-color: #3351FF;
 
           p {
             opacity: 0;
-            color: @midnightBlue;
+            // color: @midnightBlue;
+            overflow: auto;
+            color: white;
+            line-height: 1.4;
             font-size: 0.8rem;
             font-weight: 400;
             transform: translate3d(40%, 0, 0);
@@ -282,14 +356,262 @@ section[class^='meetup-landing-page-'] {
 
   img {
     display: block;
-    width: 95%;
+    width: 60%;
     height: auto;
-    margin: 0 auto;
+    margin: 0 auto 5rem;
+  }
+}
+
+.carousel-indicators {
+  position: relative;
+}
+
+.carousel-indicators li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.carousel-bullet {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.swiper-container {
+  width: 300px;
+  height: auto;
+  padding-top: 10px;
+  margin-right: 0 !important;
+}
+
+.swiper-pagination {
+  position: relative !important;
+  text-align: right !important;
+}
+
+.swiper-pagination-bullets {
+  top: 0 !important;
+}
+
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: transparent !important;
+  border: 1px solid white;
+  opacity: 1 !important;
+  margin: 0 5px !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: white !important;
+}
+
+.swiper-wrapper {
+  margin-top: 25px;
+}
+
+.swiper-slide {
+  .topic {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .address,
+  .date {
+    font-size: 0.85rem;
+    margin-top: 0.8rem;
+    letter-spacing: 1px;
+  }
+}
+
+.meetup-register {
+  border: 1px solid white;
+  font-size: 0.85rem;
+  padding: .6rem 1.1rem;
+  background: transparent;
+  margin-top: 1rem;
+  color: white;
+
+  &:hover {
+    color: #1187B6;
+    background: white;
+  }
+}
+
+.meetup-carousel {
+    position: relative;
+    // margin-top: 1rem;
+}
+
+.meetup-instructors {
+  padding: 0 !important;
+}
+
+.meetup-speakers {
+  background: #F2F2F2 !important;
+  // height: 254px !important;
+  // margin: 20px 15px !important;
+  // width: 240px !important;
+}
+
+@media (max-width: 1024px) {
+  .meetup-landing-page-banner {
+    height: 23rem;
+
+    .mkdf-elements-holder-item-inner {
+      right: 5rem;
+      bottom: auto;
+    }
+  }
+
+  .meetup-landing-page-review {
+    .details .item {
+      min-height: 350px;
+    }
   }
 }
 
 @media (max-width: 600px) {
-  section[class^='meetup-landing-page-'] .details .item {
-    flex-basis: 100%;
+  section[class^=meetup-landing-page-] {
+    padding: 2rem 12px !important;
+
+    h3 {
+      text-align: center;
+    }
+  }
+
+  .meetup-landing-page-lecturer .details .item {
+    flex-basis: 50%;
+  }
+
+  .meetup-landing-page-review {
+    // padding: 2rem 12px !important;
+
+    .details .item {
+      flex-basis: 100%;
+      max-width: 287px;
+      min-height: auto;
+      margin: 0 auto;
+
+      p {
+        margin: 2px 20px;
+        text-align: center;
+      }
+    }
+
+    .layout-text-on-hover {
+      // display: none;
+      .text {
+        display: none;
+      }
+    }
+  }
+
+  .meetup-speakers {
+    height: 230px !important;
+    margin: 20px 5px !important;
+    width: 183px !important;
+
+    .company {
+      padding: 0.5rem !important;
+    }
+  }
+
+  .meetup-landing-page-banner {
+    background: url('/images/community/meetup-banner-mobile.svg') no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 1rem !important;
+    height: 33rem;
+
+
+    .mkdf-elements-holder-item-inner {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      text-align: center;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .meetup-landing-page-banner-footer {
+    img {
+      display: block;
+      width: 85%;
+      height: auto;
+      margin: 0;
+    }
+  }
+
+
+  .meetup-carousel {
+    margin-top: 0;
+  }
+
+  .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .swiper-pagination {
+    text-align: center !important;
+  }
+
+  .swiper-wrapper {
+    margin-top: 12px;
+  }
+
+  .swiper-container {
+    width: auto;
+    margin: 0 auto !important;
+  }
+
+  .swiper-slide {
+    // width: 320px !important;
+    .topic {
+      margin-bottom: 10px;
+    }
+
+    .address,
+    .date {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      display: inline;
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  .meetup-speakers {
+    width: 165px !important;
+    height: 202px !important;
+
+    .name {
+      font-size: 0.9rem !important;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .meetup-speakers {
+    width: 158px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .meetup-landing-page-banner {
+    height: 31rem;
+  }
+
+  .meetup-speakers {
+    height: 240px !important;
+    width: 215px !important;
   }
 }
