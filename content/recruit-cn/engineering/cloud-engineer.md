@@ -1,14 +1,15 @@
 ---
-title: TiDB 商业产品开发 - Cloud 研发工程师
+title: Cloud 研发工程师
 tags:
   - Engineering
-location: 北京，上海，广州，杭州，成都，Remote
+location: 北京，上海，广州，深圳，杭州，成都，Remote
 avatar: cloud
 aliases:
   - /recruit-cn/engineer/bizdev-cloud-engineer/
+  - /recruit-cn/engineering/bizdev-cloud-engineer/
 ---
 
-# TiDB 商业产品开发 - Cloud 研发工程师
+# Cloud 研发工程师
 
 **岗位职责：**
 
@@ -23,7 +24,7 @@ aliases:
 
 1. 优秀的发现和解决问题能力，良好的沟通能力和团队合作精神；
 
-2. 扎实的编程能力，熟悉 C/C++/Rust/Go/Python 中至少一种；
+2. 三年以上相关领域开发经验，扎实的编程能力，熟悉 C/C++/Rust/Go/Python 中至少一种；
 
 3. 了解各种常见网络协议原理和虚拟化技术；
 
@@ -53,4 +54,4 @@ aliases:
 
 **工作地点：**
 
-北京，上海，广州，杭州，成都，特别优秀可 Remote
+北京，上海，广州，深圳，杭州，成都，特别优秀可 Remote
