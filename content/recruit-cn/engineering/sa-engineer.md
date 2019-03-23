@@ -4,6 +4,8 @@ tags:
   - Engineering
 location: 北京
 avatar: engineer
+aliases:
+  - /recruit-cn/engineering/bizdev-sa-engineer/
 ---
 
 # 运维工程师

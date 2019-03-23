@@ -4,6 +4,8 @@ tags:
   - Engineering
 location: 北京，上海，广州，杭州，成都，Remote
 avatar: engineer
+aliases:
+  - /recruit-cn/engineering/bizdev-qa-engineer/
 ---
 
 # QA 研发工程师

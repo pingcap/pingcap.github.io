@@ -4,6 +4,8 @@ tags:
   - Engineering
 location: 北京，上海，广州，深圳，杭州，成都，Remote
 avatar: engineer
+aliases:
+  - /recruit-cn/engineering/bizdev-engineering-efficiency-engineer/
 ---
 
 # 工程效率研发工程师

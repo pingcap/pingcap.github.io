@@ -6,6 +6,7 @@ location: 北京，上海，广州，深圳，杭州，成都，Remote
 avatar: tools
 aliases:
   - /recruit-cn/engineer/bizdev-tools-engineer/
+  - /recruit-cn/engineering/bizdev-tools-engineer/
 ---
 
 # Tools 研发工程师

@@ -6,6 +6,7 @@ location: 北京
 avatar: fe
 aliases:
   - /recruit-cn/engineer/bizdev-fe-engineer/
+  - /recruit-cn/engineering/bizdev-fe-engineer/
 ---
 
 # 前端开发工程师

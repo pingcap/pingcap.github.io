@@ -6,6 +6,7 @@ location: 北京，上海，广州，深圳，杭州，成都，Remote
 avatar: cloud
 aliases:
   - /recruit-cn/engineer/bizdev-cloud-engineer/
+  - /recruit-cn/engineering/bizdev-cloud-engineer/
 ---
 
 # Cloud 研发工程师
