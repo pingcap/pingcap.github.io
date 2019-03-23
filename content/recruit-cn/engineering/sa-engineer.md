@@ -26,7 +26,7 @@ avatar: engineer
 
 1. 能独立完成从 IDC 硬件上架、设计网络、初始化系统到监控报警配置等一系列流程；
 
-2. 熟悉 VPN 配置和维护，如 IPSec/OpenVPN/EasyConnect 等；
+2. 三年以上相关领域开发经验，熟悉 VPN 配置和维护，如 IPSec/OpenVPN/EasyConnect 等；
 
 3. 喜欢尝试 DevOps 等自动化运维相关领域的新技术新产品；
 
