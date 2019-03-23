@@ -1,21 +1,23 @@
 ---
-title: TiDB 商业产品开发 - 前端开发工程师
+title: 前端开发工程师
 tags:
   - Engineering
 location: 北京
 avatar: fe
 aliases:
   - /recruit-cn/engineer/bizdev-fe-engineer/
+  - /recruit-cn/engineering/bizdev-fe-engineer/
 ---
 
-# TiDB 商业产品开发 - 前端开发工程师
+# 前端开发工程师
 
 **岗位职责：**
 
 1. 负责 TiDB 商业产品前端研发，构建功能丰富且流畅易用的 UI 系统，持续提升产品的用户体验；
 
 2. 前端组件设计和开发，框架定制和保证快速迭代的效率和质量
-探索前端开发新规范和模式。
+
+3. 探索前端开发新规范和模式。
 
 
 **任职要求：**
@@ -28,8 +30,9 @@ aliases:
 
 4. 精通 Webpack 构建，Node 脚本开发和常用 Prettier、ESLint、Babel 等配置；
 
-5. 熟悉 React/Angular/Vue 等现代 Web 前端框架使用和实现原理
-熟悉富应用 SPA 开发模式，如单向数据流 Flux/Redux，响应式编程 rxjs/cyclejs。
+5. 熟悉 React/Angular/Vue 等现代 Web 前端框架使用和实现原理；
+
+6. 熟悉富应用 SPA 开发模式，如单向数据流 Flux/Redux，响应式编程 rxjs/cyclejs。
 
 **加分项：**
 
