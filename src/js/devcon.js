@@ -21,16 +21,16 @@ function smoothScroll() {
   var sectionName
   switch (btnName) {
     case 'schedule-btn':
-      sectionName = '.agenda__container h1'
+      sectionName = '.agenda__section h1'
       break
     case 'instructor-btn':
-      sectionName = '.instructors__container h1'
+      sectionName = '.instructors__section h1'
       break
     case 'contact-btn':
-      sectionName = '.contact__container h1'
+      sectionName = '.contact__section h1'
       break
     case 'signup-btn':
-      sectionName = '.signup__container'
+      sectionName = '.signup__section'
       break
   }
 
@@ -290,6 +290,27 @@ $(document).ready(function() {
       $('.intro').css('opacity', '0')
       var el = $(this)
         .find('.intro')
+        .css('opacity', '1')
+    }
+  })
+
+  $('.team-bg').click(function() {
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      $('.middle-overlay').css('opacity', '0')
+      var el = $(this)
+        .find('.middle-overlay')
+        .css('opacity', '1')
+      var el = $(this)
+        .find('.middle-cover, .award-info')
+        .css('opacity', '0')
+    }
+  })
+
+  $('.project').click(function() {
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      $('.project-desc').css('opacity', '0')
+      var el = $(this)
+        .find('.project-desc')
         .css('opacity', '1')
     }
   })

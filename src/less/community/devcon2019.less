@@ -1,5 +1,11 @@
 @import '../variables.less';
 
+@import './common-style.less';
+
+@import './agenda.less';
+
+@import './instructors.less';
+
 .devcon-nav {
   position: fixed;
   left: 0;
@@ -88,537 +94,178 @@
   }
 }
 
-.devCon {
-  .devCon__container {
+.banner {
+  width: 100%;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+  padding-top: 45%;
+  background: url('https://download.pingcap.com/images/new-devcon-banner-pc.png') no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.contact__section {
+  .address__guide {
     width: 100%;
-  }
-
-  .banner {
-    width: 100%;
-    height: auto;
-    position: relative;
-    overflow: hidden;
-
-    // width: 100%;
-    padding-top: 45%;
-    background: url('https://download.pingcap.com/images/new-devcon-banner-pc.png') no-repeat;
-    // position: relative;
-    background-size: cover;
-    background-position: center;
-  }
-
-  .agenda__container {
-    position: relative;
-    max-width: 1048px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 1rem 0;
-
-    .content {
-      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0, 1);
-      position: absolute;
-      top: -4rem;
-      background: #053DA6;
-      text-align: center;
-      border-radius: 3px;
-      margin: 0 10px;
-      color: white;
-
-      p {
-        padding: 2rem 4rem;
-        font-size: 0.8rem;
-        line-height: 1.9;
-      }
-    }
-
-    .video__section {
-      text-align: center;
-
-      .video-wrapper {
-        padding: 9rem 10px 0;
-
-        video {
-          width: 100%;
-          height: 100%;
-        }
-      }
-
-      p {
-        font-size: 0.8rem;
-        margin-top: 2rem;
-      }
-    }
-  }
-
-  .title {
-    color: #053DA6;
-    font-size: 1rem;
-    padding: 1.5rem;
-    position: relative;
-  }
-
-  .agenda-title {
-    margin-top: 3rem;
-  }
-
-  .title::after {
-    content: '';
-    border-top: 3px solid #053DA6;
-    width: 40px;
-    display: block;
-    position: absolute;
-    left: 50%;
-    margin-left: -20px;
-    bottom: 1.2rem;
-  }
-
-  .agenda__table {
-    padding: 10px 10px 2rem;
-    width: 100%;
-    font-size: 0.8rem;
-
-    .highlight-bg {
-      background: #053da6 !important;
-      color: white !important;
-    }
-
-    tr {
-      text-align: left;
-      padding: 3rem 0;
-      line-height: 1.7rem;
-      position: relative;
-
-      &:hover {
-        background-color: #f2f2f2;
-        color: #053DA6;
-      }
-    }
-
-    td {
-      padding: 0.2rem;
-      vertical-align: top;
-      // border-bottom: 1px solid #DDDDDD;
-    }
-
-    td:nth-child(1) {
-      min-width: 1rem;
-      max-width: 6rem;
-      width: 14rem;
-      padding-left: 3rem;
-      color: #053DA6;
-    }
-
-    td:nth-child(2) {
-      min-width: 1rem;
-      max-width: 7rem;
-      width: 19rem;
-    }
-
-    td:nth-child(3) {
-      min-width: 1rem;
-      max-width: 5rem;
-    }
-
-    td:nth-child(4) {
-      min-width: 1rem;
-      max-width: 5rem;
-    }
-
-    .collapsable {
-      cursor: pointer;
-    }
-
-    .selected-bg {
-      background-color: #f2f2f2;
-      color: #053da6;
-    }
-
-    .detail-block {
-      display: none;
-      background-color: #f2f2f2;
-      font-size: 0.7rem;
-      // color: #053da6;
-
-      .ol-padding {
-        padding-inline-start: 85px;
-      }
-
-      &:hover {
-        color: #3e3e3e;
-      }
-
-      li {
-        padding-left: 0.5rem;
-      }
-
-      .pagraphList {
-        padding-left: 0;
-        margin-left: -40px;
-        margin-bottom: 0.7rem;
-        line-height: 1.5rem;
-      }
-    }
-
-    // tr:nth-child(1),
-    // tr:nth-child(10),
-    // tr:nth-child(17) {
-    //   text-align: left;
-    //   color: white;
-    //   // background-color: #053DA6;
-    //   padding: 2rem;
-
-    //   td:nth-child(1) {
-    //     color: white;
-    //   }
-
-    //   td:nth-child(4) {
-    //     color: #053DA6;
-    //   }
-    // }
-
-    // td:nth-child(1) {
-    //   min-width: 1rem;
-    //   max-width: 6rem;
-    //   width: 14rem;
-    //   padding-left: 3rem;
-    //   color: #053DA6;
-    // }
-
-    // td:nth-child(2) {
-    //   min-width: 1rem;
-    //   max-width: 7rem;
-    //   width: 19rem;
-    // }
-
-    // td:nth-child(3) {
-    //   min-width: 1rem;
-    //   max-width: 5rem;
-    // }
-
-    // td:nth-child(4) {
-    //   min-width: 1rem;
-    //   max-width: 5rem;
-    // }
-  }
-
-  // .signup__container,
-  .instructors__container,
-  .contact__container, {
-    background-color: #F5F5F5;
-
-    .address__guide {
-      width: 100%;
-      min-height: 4rem;
-      display: flex;
-      flex-flow: row wrap;
-      padding: 0 10px;
-      justify-content: space-between;
-      color: #053DA6;
-
-      .guide {
-        position: relative;
-        width: 25%;
-        padding: 0 25px;
-        text-align: left;
-        font-size: 0.8rem;
-
-        .guide-detail {
-          padding: 10px 0 0;
-          font-size: 0.6rem;
-          line-height: 1.7;
-        }
-      }
-
-      .guide::before {
-        content: '';
-        position: absolute;
-        display: inline-block;
-        height: 100%;
-        border-right: 3px solid #053DA6;
-        left: 0;
-      }
-    }
-
-    .map {
-      margin: 2rem 0;
-      width: 100%;
-      height: 100%;
-      padding: 0 10px;
-    }
-  }
-
-  .ticket-table {
-    margin-top: 1rem;
-
-    .signupEndBtns {
-      margin-top: 1rem;
-
-      button {
-        font-family: Lato,-apple-system,BlinkMacSystemFont,Helvetica,"Segoe UI","Hiragino Sans GB","Noto Sans CJK SC",Arial,Ubuntu,sans-serif,"Apple Color Emoji";
-        position: relative;
-        width: 300px;
-        background-color: #aaa;
-        color: #fff;
-        font-size: 0.8rem;
-        padding: 1rem 1rem;
-        border-radius: 4px;
-        border: none;
-
-        // &:hover {
-        //   box-shadow: 0 1px 4px #666;
-        // }
-      }
-    }
-
-    .signupBtns {
-      margin-top: 1rem;
-
-      button {
-        font-family: Lato,-apple-system,BlinkMacSystemFont,Helvetica,"Segoe UI","Hiragino Sans GB","Noto Sans CJK SC",Arial,Ubuntu,sans-serif,"Apple Color Emoji";
-        position: relative;
-        width: 300px;
-        background-color: #053DA6;
-        color: #fff;
-        font-size: 0.8rem;
-        padding: 1rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        border: none;
-
-        &:hover {
-          box-shadow: 0 1px 4px #666;
-        }
-      }
-    }
-  }
-
-  .instructors,
-  .volunteers,
-  .contact,
-  .signup,
-  .sponsors {
-    min-height: 10rem;
-    max-width: 1124px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 1rem 1rem 2rem;
-
-    .image {
-      padding: 2rem 0;
-      width: 100%;
-      height: 100%;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-
-  .instructors__list,
-  .sponsors__list {
-    margin: 0 auto;
-    max-width: 1380px;
-    width: 100%;
+    min-height: 4rem;
     display: flex;
     flex-flow: row wrap;
-    justify-content: center;
-  }
-
-  .sponsor {
-    margin: 1.5rem 2rem 1.5rem 0;
-    height: auto;
-
-    img {
-      width: 150px;
-      height: auto;
-    }
-  }
-
-  .instructor {
-    position: relative;
-    display: block;
-    margin: 20px;
-    border-radius: 2px;
-    width: 230px;
-    height: 271px;
-    color: #666;
-    cursor: pointer;
+    padding: 0 10px;
     justify-content: space-between;
-    box-shadow: 0 2px 9px 0 #DDDDDD;
-    line-height: 1rem;
+    color: #053DA6;
 
-    .avatar {
+    .guide {
       position: relative;
-      width: 100%;
-      overflow: hidden;
+      width: 25%;
+      padding: 0 25px;
+      text-align: left;
+      font-size: 0.8rem;
 
-      img {
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-
-      .intro {
-        color: white;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        background-color: rgba(5,61,166, 0.9);
-        transition: opacity 0.5s;
+      .guide-detail {
+        padding: 10px 0 0;
         font-size: 0.6rem;
-        padding: 1rem;
-        text-align: left;
-        overflow: auto;
-        line-height: 0.9rem;
-
-        p {
-          display: table-cell;
-          vertical-align: middle;
-        }
-        // overflow: scroll;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        border-radius: 6px;
-        background-color: rgba(256,256,256,.7);
+        line-height: 1.7;
       }
     }
 
-    .name {
-      color: #3C3C3C;
-      padding: 0.7rem 0 0;
+    .guide::before {
+      content: '';
+      position: absolute;
+      display: inline-block;
+      height: 100%;
+      border-right: 3px solid #053DA6;
+      left: 0;
+    }
+  }
+
+  .map {
+    margin: 2rem 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+  }
+}
+
+.ticket-table {
+  margin-top: 1rem;
+
+  .signupEndBtns {
+    margin-top: 1rem;
+
+    button {
+      font-family: Lato,-apple-system,BlinkMacSystemFont,Helvetica,"Segoe UI","Hiragino Sans GB","Noto Sans CJK SC",Arial,Ubuntu,sans-serif,"Apple Color Emoji";
+      position: relative;
+      width: 300px;
+      background-color: #aaa;
+      color: #fff;
       font-size: 0.8rem;
-    }
+      padding: 1rem 1rem;
+      border-radius: 4px;
+      border: none;
 
-    .company,
-    .position {
-      color: #6c6c6c;
-      font-size: .6rem;
-      padding: 0.5rem 1rem;
-    }
-
-    &:hover {
-      box-shadow: 5px 5px 20px #DDDDDD;
-      transition: box-shadow 0.2s ease-in-out;
-
-      .avatar {
-        .intro {
-          opacity: 1;
-        }
-      }
+      // &:hover {
+      //   box-shadow: 0 1px 4px #666;
+      // }
     }
   }
 
-  .recruit {
-    margin: 0 5rem;
-    text-align: center;
-    font-size: 0.8rem;
-    color: #3C3C3C;
-    padding: 0 4rem;
-    line-height: 1.9;
+  .signupBtns {
+    margin-top: 1rem;
 
-    span {
-      color: #D04E43;
-    }
-  }
-
-  .sponsor__container,
-  .volunteer__container {
-    max-width: 1124px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 1rem 1rem 2rem;
-  }
-
-  .tips__container {
-    margin-top: 5rem;
-    text-align: left;
-    font-size: 0.7rem;
-    line-height: 1.7;
-
-    h1 {
-      color: #053DA6;
+    button {
+      font-family: Lato,-apple-system,BlinkMacSystemFont,Helvetica,"Segoe UI","Hiragino Sans GB","Noto Sans CJK SC",Arial,Ubuntu,sans-serif,"Apple Color Emoji";
+      position: relative;
+      width: 300px;
+      background-color: #053DA6;
+      color: #fff;
       font-size: 0.8rem;
-      margin: 1rem;
-    }
+      padding: 1rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
 
-    .githubRepo {
-      padding: 0.5rem;
-      align-items: center;
-      color: #053DA6;
-
-      span {
-        margin-right: 1rem;
-        text-decoration: underline;
+      &:hover {
+        box-shadow: 0 1px 4px #666;
       }
     }
   }
 }
 
-@media (max-width: 800px) {
-  .devCon {
-    .instructor {
-      .avatar .intro {
-        font-size: 0.8rem;
-        line-height: 1.3rem;
-      }
+.sponsors__list {
+  margin: 0 auto;
+  max-width: 1380px;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
 
-      .name {
-        font-size: 1rem;
-      }
+.sponsor {
+  margin: 1.5rem 2rem 1.5rem 0;
+  height: auto;
 
-      .company {
-        font-size: .8rem;
-        padding: 1rem;
-      }
-    }
+  img {
+    width: 150px;
+    height: auto;
+  }
+}
 
-    .agenda__container {
-      .content {
-        top: 2rem;
-        background: #fff;
-        color: black;
-      }
+.recruit {
+  margin: 0 5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #3C3C3C;
+  padding: 0 4rem;
+  line-height: 1.9;
 
-      .video__section .video-wrapper {
-        padding: 15rem 10px 0;
-      }
-    }
+  span {
+    color: #D04E43;
+  }
+}
 
-    .agenda-title {
-      margin-top: 3rem;
+.sponsor__section,
+.volunteer__section {
+  max-width: 1124px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1rem 1rem 2rem;
+}
+
+.tips__container {
+  margin-top: 5rem;
+  text-align: left;
+  font-size: 0.7rem;
+  line-height: 1.7;
+
+  h1 {
+    color: #053DA6;
+    font-size: 0.8rem;
+    margin: 1rem;
+  }
+
+  .githubRepo {
+    padding: 0.5rem;
+    align-items: center;
+    color: #053DA6;
+
+    span {
+      margin-right: 1rem;
+      text-decoration: underline;
     }
   }
 }
 
 @media (max-width: 700px) {
-  .devCon {
-    .agenda__container {
-      .content {
-        p {
-          padding: 1rem 2rem;
-        }
+  .contact__section {
+    max-width: 100%;
+    width: 100%;
+
+    .address__guide {
+      .guide {
+        width: 50%;
+        margin-bottom: 2rem;
       }
-    }
-
-    .contact__container {
-      max-width: 100%;
-      width: 100%;
-
-      .address__guide {
-        .guide {
-          width: 50%;
-          margin-bottom: 2rem;
-        }
-      }
-    }
-
-    .agenda-title {
-      margin-top: 13em;
     }
   }
 }
@@ -634,98 +281,30 @@
     }
   }
 
-  .devCon {
-    .instructor .company {
-      font-size: 0.8rem;
-      padding: 1rem;
-    }
+  .recruit {
+    margin: 0;
+    padding: 0 1rem;
+  }
 
-    .agenda__container .video__section .video-wrapper {
-      padding: 17rem 10px 0;
-    }
+  .sponsor {
+    margin: 1rem;
 
-    .recruit {
-      margin: 0;
-      padding: 0 1rem;
-    }
-
-    .sponsor {
-      margin: 1rem;
-
-      img {
-        width: 100px;
-        height: auto;
-      }
+    img {
+      width: 100px;
+      height: auto;
     }
   }
 }
 
 @media (max-width: 550px) {
-  .devCon {
-    .banner {
-      width: 100%;
-      height: auto;
-      position: relative;
-      overflow: hidden;
-      padding-top: 67%;
-      background: url('https://download.pingcap.com/images/devcon-banner-mobile.jpeg') no-repeat;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .agenda__table {
-      td:nth-child(1) {
-        width: 7rem;
-        padding-left: 1rem;
-      }
-
-      td:nth-child(2) {
-        width: 11rem;
-      }
-
-      ul {
-        margin-block-start: 0;
-        padding-inline-start: 0;
-      }
-
-      span {
-        display: none;
-      }
-
-      .collapse {
-        display: none;
-      }
-    }
-
-    .agenda-title {
-      margin-top: 3rem;
-    }
-
-    .instructor .avatar .intro {
-      padding: 1rem;
-    }
-  }
-}
-
-@media (max-width: 430px) and (min-width: 400px) {
-  .devCon {
-    .instructor {
-      .company {
-        padding: 1rem;
-        line-height: 1.6rem;
-      }
-    }
-
-    .agenda__container .content p {
-      font-size: 0.9rem;
-    }
-  }
-}
-
-@media (max-width: 330px) {
-  .devCon {
-    .agenda__container .content p {
-      padding: 1rem 0.5rem;
-    }
+  .banner {
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    padding-top: 67%;
+    background: url('https://download.pingcap.com/images/devcon-banner-mobile.jpeg') no-repeat;
+    background-size: cover;
+    background-position: center;
   }
 }

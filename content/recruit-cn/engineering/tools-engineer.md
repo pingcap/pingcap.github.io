@@ -1,14 +1,15 @@
 ---
-title: TiDB 商业产品开发 - Tools 研发工程师
+title: Tools 研发工程师
 tags:
   - Engineering
-location: 北京，上海，广州，杭州，成都，Remote
+location: 北京，上海，广州，深圳，杭州，成都，Remote
 avatar: tools
 aliases:
   - /recruit-cn/engineer/bizdev-tools-engineer/
+  - /recruit-cn/engineering/bizdev-tools-engineer/
 ---
 
-# TiDB 商业产品开发 - Tools 研发工程师
+# Tools 研发工程师
 
 **岗位职责：**
 
@@ -18,7 +19,7 @@ aliases:
 
 **任职要求：**
 
-1. 扎实的编程能力，熟悉 C/C++/Go/Rust 其中一种编程语言；
+1. 三年以上相关领域开发经验，扎实的编程能力，熟悉 C/C++/Go/Rust 其中一种编程语言；
 
 2. 熟悉大型分布式系统，具备冷静分析复杂问题能力；
 
@@ -42,4 +43,4 @@ aliases:
 
 **工作地点：**
 
-北京，上海，广州，杭州，成都，特别优秀可 Remote
+北京，上海，广州，深圳，杭州，成都，特别优秀可 Remote

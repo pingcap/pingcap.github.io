@@ -1,12 +1,14 @@
 ---
-title: TiDB 商业产品开发 - 工程效率研发工程师
+title: 工程效率研发工程师
 tags:
   - Engineering
-location: 北京，上海，广州，杭州，成都，Remote
+location: 北京，上海，广州，深圳，杭州，成都，Remote
 avatar: engineer
+aliases:
+  - /recruit-cn/engineering/bizdev-engineering-efficiency-engineer/
 ---
 
-# TiDB 商业产品开发 - 工程效率研发工程师
+# 工程效率研发工程师
 
 **岗位职责：**
 
@@ -22,7 +24,7 @@ avatar: engineer
 
 1. 具有探索精神，有强烈的责任感及合作精神，具备优秀的学习能力和创新能力；
 
-2. 有 2 年以上运维开发或内部工程效率工具开发相关领域经验；
+2. 三年以上运维开发或内部工程效率工具开发相关领域经验；
 
 3. 熟悉 go/python 一种编程语言，熟悉 shell 和 linux 常用操作；
 
@@ -32,7 +34,7 @@ avatar: engineer
 
 6. 对并发编程有较深入的理解；
 
-7. 熟悉 docker 原理及 docker 的常规操作。
+7. 熟悉 Docker 原理及 Docker 的常规操作。
 
 
 **加分项：**
@@ -41,7 +43,7 @@ avatar: engineer
 
 2. 有云平台如 AWS/Azure 等的开发经验；
 
-3. 熟悉 k8s/docker 代码。
+3. 熟悉 k8s/Docker 代码。
 
 **待遇：**
 
@@ -49,4 +51,4 @@ avatar: engineer
 
 **工作地点：**
 
-北京，上海，广州，杭州，成都，特别优秀可 Remote
+北京，上海，广州，深圳，杭州，成都，特别优秀可 Remote
