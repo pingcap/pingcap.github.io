@@ -15,8 +15,14 @@
 <div class="meetup">
     <div class="container">
         <!-- category: memoir/ record -->
-        {{ $blogs := where (where .Site.Pages "Section" "meetup") ".Params.title" "!=" nil }}
-        {{- partial "navs/date-tree-nav.html" (dict "title" "Meetup" "data" $blogs ) -}}
+        {{ if in .Permalink "meetup/recording" }}
+            {{ $meetup_articles := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
+            {{- partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $meetup_articles "global" .) -}}
+        {{ else }}
+            {{ $meetup := where (where .Site.Pages "Section" "meetup") ".Params.title" "!=" nil }}
+            {{- partial "navs/date-tree-nav.html" (dict "title" "Meetup" "data" $meetup ) -}}
+        {{ end }}
+
 
         <div class="archive">
             <div class="content markdown-body">
@@ -45,5 +51,6 @@
 {{- define "footJS" -}}
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
     <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
 {{- end -}}
 

@@ -1,0 +1,27 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Meetup" }}
+    Meetup
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "community"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/list.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+    <div class="blog">
+        <div class="container">
+        {{ $meetup_memoir := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
+        {{- partial "navs/tags-nav.html" (dict "type" "list" "title" "热门标签" "posts" $meetup_memoir "global" .) -}}
+        {{- partial "archives/list.html" (dict "posts" $meetup_memoir.ByDate.Reverse "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+        </div>
+    </div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
+{{- end -}}

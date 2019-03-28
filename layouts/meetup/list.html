@@ -52,6 +52,7 @@
                 {{- end -}}
             </div>
         </div>
+        <!-- <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
         <a href="/meetup/list">
           <button class="readMore-btn">
             <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
@@ -64,12 +65,12 @@
     <div class="container">
         <h2 class="section-title">分享实录</h2>
         <div class="reading-list">
-            {{ $meetup_memoir := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
-            {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "memoir") -}}
+            {{ $meetup_memoir := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
+            {{- partial "archives/blog-list.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "memoir") -}}
         </div>
     </div>
 
-    <a href="/blog-cn/#Meetup-实录">
+    <a href="/meetup/recording">
         <button class="readMore-btn">
             <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
             <span class="btn-text">更多文章</span>
