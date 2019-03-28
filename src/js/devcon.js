@@ -275,7 +275,7 @@ $(document).ready(function() {
     }
   }
 
-  processMeetupDate()
+  if ($('.meetup-landing-page-banner').length) processMeetupDate()
 
   // sets devcon navbar and devcon container position
   if ($('header').length && $('.devcon-nav').length != 0) {
