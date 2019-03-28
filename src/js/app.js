@@ -53,9 +53,10 @@ function initialSearch() {
         return h && h.lvl1 && pattern.exec(h.lvl1)
       }
       var filteredHits = hits.filter(function(hit) {
-        if ($('#search-input').data('lang') === 'en')
-          return !isChinese(hit.url) && !is404(hit.hierarchy)
-        else return isChinese(hit.url) && !is404(hit.hierarchy)
+        // if ($('#search-input').data('lang') === 'en')
+        //   return !isChinese(hit.url) && !is404(hit.hierarchy)
+        // else return isChinese(hit.url) && !is404(hit.hierarchy)
+        return !is404(hit.hierarchy)
       })
       return filteredHits
     },
