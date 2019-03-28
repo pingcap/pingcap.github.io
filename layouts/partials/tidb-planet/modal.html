@@ -1,3 +1,4 @@
+
 <div class="modal-overlay j-{{ .type }}-overlay {{ if ne .type "contributors" }}modal-overlay-transition{{ end }}" data-type="{{ .type }}" style="display: none;">
     {{- if ne .type "contributors" -}}
         <a class="close-modal">
@@ -13,9 +14,20 @@
 
         {{- if eq .type "video" -}}
             <div class="modal__content">
-                <video id="video" preload="auto" controls webkit-playsinline="true" playsinline="true">
-                    <source src="https://download.pingcap.com/videos/contributors.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
-                </video>
+                {{- if .video_src -}}
+                    <video id="video" preload="auto" controls webkit-playsinline="true" playsinline="true">
+                        <source src="{{ .video_src }}"
+                          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
+                    </video>
+                    <!-- <video id="video" preload="auto" controls webkit-playsinline="true" playsinline="true">
+                      <source src="https://download.pingcap.com/videos/contributors.mp4"
+                        type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
+                    </video> -->
+                {{- else -}}
+                    <video id="video" preload="auto" controls webkit-playsinline="true" playsinline="true">
+                        <source src="https://download.pingcap.com/videos/contributors.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
+                    </video>
+                {{- end -}}
             </div>
         {{- end -}}
 

@@ -6,11 +6,15 @@
                 <div class="swiper-slide">
                     <p class="topic">{{ $i.topic }}</p>
                     <div class="address">{{ $i.addr }}</div>
-                    <div class="date">{{ $i.date }}</div>
+                    <div class="meetup-date">{{ $i.date }}</div>
                     <div>
-                        <a href="{{ $i.link }}">
+                        <a href="{{ if $i.review_link }}{{ $i.review_link }}{{ else }}{{ $i.signup_link }}{{ end }}">
                             <button class="meetup-register">
-                              报名加入
+                                {{- if $i.signup_link -}}
+                                    报名加入 
+                                {{- else if and (not $i.singup_link) $i.review_link -}} 
+                                    活动回顾 
+                                {{- end -}}
                             </button>
                         </a>
                     </div>
