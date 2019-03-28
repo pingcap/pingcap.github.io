@@ -35,27 +35,22 @@ function processHash() {
 }
 
 // initial algolia search
-function initialSearch() {
+function initialSearch(lang) {
   docsearch({
     apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
     indexName: 'pingcap',
     inputSelector: '#search-input',
+    algoliaOptions: {
+      facetFilters: ['tags:' + lang],
+    },
     debug: true, // Set debug to true if you want to inspect the dropdown
     transformData: function(hits) {
-      // filter hits
-      function isChinese(s) {
-        var pattern = /\/.*-cn\//gi
-        return pattern.exec(s)
-      }
       // filter 404 results
       function is404(h) {
         var pattern = /404/gi
         return h && h.lvl1 && pattern.exec(h.lvl1)
       }
       var filteredHits = hits.filter(function(hit) {
-        // if ($('#search-input').data('lang') === 'en')
-        //   return !isChinese(hit.url) && !is404(hit.hierarchy)
-        // else return isChinese(hit.url) && !is404(hit.hierarchy)
         return !is404(hit.hierarchy)
       })
       return filteredHits
@@ -65,7 +60,7 @@ function initialSearch() {
 
 // process search ui
 function processSearch() {
-  initialSearch()
+  initialSearch($('#search-input').data('lang'))
   // Hide search suggestions dropdown menu on focusout
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
