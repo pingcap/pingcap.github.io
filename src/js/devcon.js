@@ -215,6 +215,23 @@ function handleGuideConCollapse() {
   }
 }
 
+// users cannot register meetup if the time passes 10PM of the day before meetup-date
+function processMeetupDate() {
+  $('.swiper-slide').each(function() {
+    const $this = $(this)
+    var meetup_date = $this.find('.meetup-date')[0]
+    var endTime =
+      new Date(meetup_date.innerText).setHours(0, 0, 0, 0) - 60 * 60 * 1000 * 5
+    if (
+      endTime < new Date() &&
+      $this.find('.meetup-register')[0].innerText !== '活动回顾'
+    ) {
+      $this.find('.meetup-register').text('报名结束')
+      $this.find('.meetup-register').addClass('unclickable-btn')
+    }
+  })
+}
+
 $(document).ready(function() {
   // scrolls to specific section smoothly
   const hash = decodeURIComponent(location.hash)
@@ -257,6 +274,8 @@ $(document).ready(function() {
       )
     }
   }
+
+  if ($('.meetup-landing-page-banner').length) processMeetupDate()
 
   // sets devcon navbar and devcon container position
   if ($('header').length && $('.devcon-nav').length != 0) {
