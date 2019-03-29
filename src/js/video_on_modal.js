@@ -3,12 +3,6 @@ const openVideoModal = () => {
   $('.j-video-overlay, .modal').addClass('active')
 }
 
-// const autoPlayVideoInWeXin = () => {
-//   document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-//     $('#video-on-modal')[0].play()
-//   })
-// }
-
 const closeModal = () => {
   $('.modal-overlay').fadeOut()
   $('.modal-overlay, .modal').removeClass('active')
@@ -17,13 +11,20 @@ const closeModal = () => {
 
 $(function() {
   $('.j-video-btn').on('click', function(e) {
-    var theModal = $(this).data('target')
     var videoSRC = $(this).attr('data-video')
     openVideoModal()
-    $('#video-on-modal').attr('src', videoSRC)
+
+    $('#video-on-modal')
+      .get(0)
+      .pause()
     $('#video-on-modal source').attr('src', videoSRC)
-    $('#video-on-modal')[0].play()
-    // autoPlayVideoInWeXin()
+    $('#video-on-modal')
+      .get(0)
+      .load()
+    $('#video-on-modal')
+      .get(0)
+      .play()
+
     e.preventDefault()
     e.stopPropagation()
   })
