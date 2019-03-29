@@ -66,8 +66,8 @@ function processSearch() {
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
   })
-  // Show search suggestions dropdown menu on focus
-  $('#search-input').focus(function(e) {
+  // Show search suggestions dropdown menu on change
+  $('#search-input').change(function(e) {
     e.preventDefault()
     if (e.target && e.target.value) $('.ds-dropdown-menu').show()
   })
