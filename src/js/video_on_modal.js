@@ -3,11 +3,11 @@ const openVideoModal = () => {
   $('.j-video-overlay, .modal').addClass('active')
 }
 
-const autoPlayVideoInWeXin = () => {
-  document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-    $('#video-on-modal')[0].play()
-  })
-}
+// const autoPlayVideoInWeXin = () => {
+//   document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+//     $('#video-on-modal')[0].play()
+//   })
+// }
 
 const closeModal = () => {
   $('.modal-overlay').fadeOut()
@@ -22,7 +22,7 @@ $(function() {
     openVideoModal()
     $('#video-on-modal').attr('src', videoSRC)
     $('#video-on-modal')[0].play()
-    autoPlayVideoInWeXin()
+    // autoPlayVideoInWeXin()
     e.preventDefault()
     e.stopPropagation()
   })
