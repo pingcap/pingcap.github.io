@@ -1,19 +1,19 @@
 function calcBannerTitleImg() {
   if (window.matchMedia('(max-width: 700px)').matches) {
-    // $('.signable img').attr('src', '/images/community/activities/meetup.svg')
-    $('.signable img').attr(
-      'src',
-      'https://download.pingcap.com/images/mobileDevCon.png'
-    )
-  } else {
+    $('.signable img').attr('src', '/images/community/activities/meetup.svg')
     // $('.signable img').attr(
     //   'src',
-    //   '/images/community/activities/meetup-active-img.jpg'
+    //   'https://download.pingcap.com/images/mobileDevCon.png'
     // )
+  } else {
     $('.signable img').attr(
       'src',
-      'https://download.pingcap.com/images/PCdevCon.png'
+      '/images/community/activities/meetup-active-img.jpg'
     )
+    // $('.signable img').attr(
+    //   'src',
+    //   'https://download.pingcap.com/images/PCdevCon.png'
+    // )
   }
 }
 
@@ -36,6 +36,16 @@ $(document).ready(function() {
       Date: new Date(2019, 1, 19),
       Title: 'TiDB DevCon 2019',
       Link: 'https://pingcap.com/community-cn/devcon2019',
+    },
+    {
+      Date: new Date(2019, 3, 30),
+      Title: 'Infra Meetup No.94 上海',
+      Link: 'https://www.huodongxing.com/event/9485633962000',
+    },
+    {
+      Date: new Date(2019, 3, 30),
+      Title: 'Infra Meetup No.95 成都',
+      Link: 'https://www.huodongxing.com/event/8485635374300',
     },
   ]
   var settings = {
