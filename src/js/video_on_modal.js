@@ -12,11 +12,12 @@ const closeModal = () => {
 $(function() {
   $('.j-video-btn').on('click', function(e) {
     var screenWidth = $(window).width()
-    var videoSRC = $(this).attr('data-video')
 
     if (screenWidth < 800) {
+      var videoSRC = $(this).attr('data-tencent-video')
       window.location.href = videoSRC
     } else {
+      var videoSRC = $(this).attr('data-video')
       openVideoModal()
 
       $('#video-on-modal')
