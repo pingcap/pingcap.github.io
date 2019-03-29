@@ -11,19 +11,25 @@ const closeModal = () => {
 
 $(function() {
   $('.j-video-btn').on('click', function(e) {
+    var screenWidth = $(window).width()
     var videoSRC = $(this).attr('data-video')
-    openVideoModal()
 
-    $('#video-on-modal')
-      .get(0)
-      .pause()
-    $('#video-on-modal source').attr('src', videoSRC)
-    $('#video-on-modal')
-      .get(0)
-      .load()
-    $('#video-on-modal')
-      .get(0)
-      .play()
+    if (screenWidth < 800) {
+      window.location.href = videoSRC
+    } else {
+      openVideoModal()
+
+      $('#video-on-modal')
+        .get(0)
+        .pause()
+      $('#video-on-modal source').attr('src', videoSRC)
+      $('#video-on-modal')
+        .get(0)
+        .load()
+      $('#video-on-modal')
+        .get(0)
+        .play()
+    }
 
     e.preventDefault()
     e.stopPropagation()
