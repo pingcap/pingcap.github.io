@@ -313,15 +313,18 @@ $(document).ready(function() {
     }
   })
 
-  $('.team-bg').click(function() {
+  $('.team').click(function() {
     if (window.matchMedia('(max-width: 1024px)').matches) {
       $('.middle-overlay').css('opacity', '0')
+      $('.middle-cover').css('opacity', '1')
+      $('.award-info').css('opacity', '1')
       var el = $(this)
         .find('.middle-overlay')
         .css('opacity', '1')
-      var el = $(this)
+
+      var el2 = $(this)
         .find('.middle-cover, .award-info')
-        .css('opacity', '0')
+        .css('opacity', 0)
     }
   })
 
