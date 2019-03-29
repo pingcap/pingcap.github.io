@@ -1,29 +1,43 @@
 {{- range $idx, $i := .recordings -}}
 <div class="recording">
-    <div class="thumbnail">
-        {{- if $i.video -}}
-            <img class="j-video-btn cursor-pointer" src="{{ $i.poster }}" data-video="{{ $i.video }}"/>
-            <div class="play-icon j-video-btn" data-video="{{ $i.video }}"></div>
-        {{- else if $i.image -}}
-            <img src="{{ $i.image }}" />
-        {{- end -}}
-    </div>
-
-    <div class="right-text">
-        {{- if $i.video }}
-            <div class="rt-title j-video-btn cursor-pointer" data-video="{{ $i.video }}">
-              {{ $i.title }}</div>
-        {{- else -}}
-            <div class="rt-title">{{ $i.title }}</div>
-        {{- end -}}
-        <div class="rt-content">{{ $i.intro }}</div>
-    </div>
-
-    {{- if $i.extend_reading -}}
-        <div class="extend-reading-btn">
-          <a href="{{ $i.extend_reading }}">延展阅读</a>
-        </div>
+  <div class="thumbnail">
+    {{- if $i.video -}}
+    <img
+      class="j-video-btn cursor-pointer"
+      src="{{ $i.poster }}"
+      data-video="{{ $i.video }}"
+      data-tencent-video="{{ $i.tencent_video }}"
+    />
+    <div
+      class="play-icon j-video-btn"
+      data-video="{{ $i.video }}"
+      data-tencent-video="{{ $i.tencent_video }}"
+    ></div>
+    {{- else if $i.image -}}
+    <img src="{{ $i.image }}" />
     {{- end -}}
+  </div>
+
+  <div class="right-text">
+    {{- if $i.video }}
+    <div
+      class="rt-title j-video-btn cursor-pointer"
+      data-video="{{ $i.video }}"
+      data-tencent-video="{{ $i.tencent_video }}"
+    >
+      {{ $i.title }}
+    </div>
+    {{- else -}}
+    <div class="rt-title">{{ $i.title }}</div>
+    {{- end -}}
+    <div class="rt-content">{{ $i.intro }}</div>
+  </div>
+
+  {{- if $i.extend_reading -}}
+  <div class="extend-reading-btn">
+    <a href="{{ $i.extend_reading }}">延展阅读</a>
+  </div>
+  {{- end -}}
 </div>
 {{- end -}}
 
