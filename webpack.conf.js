@@ -22,6 +22,8 @@ export default {
       path.join(__dirname, 'src', 'js', 'multi_slides_carousel'),
     ],
     carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
+    video_on_modal: [path.join(__dirname, 'src', 'js', 'video_on_modal')],
+    carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),

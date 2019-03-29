@@ -8,6 +8,7 @@
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{- partial "head/preload-css" (dict "href" "/css/community/hackathon2018.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/multi-slides-carousel.css") -}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
@@ -89,7 +90,7 @@
     <section class="hackathon-moments">
         <div class="container">
             <h2 class="section-title">精彩瞬间</h2>
-            {{- partial "layout/multi_slides_carousel.html" . -}}
+            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.hackathon2018.moments) -}}
         </div>
     </section>
 
@@ -111,6 +112,14 @@
                   </a>
               {{- end -}}
         </div>
+    </section>
+
+    <section class="back-to-community-section">
+        <a href="/community-cn/#activities">
+            <button class="back-to-community">
+              更多社区活动
+            </button>
+        </a>
     </section>
 </div>
 {{- end -}}

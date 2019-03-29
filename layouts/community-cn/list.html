@@ -18,7 +18,7 @@
             <a href="https://github.com/pingcap/tidb"><button class="gitHub">GitHub</button></a>
             <div class="content">
               <div class="title-image">
-                  <img src="/images/community/TiDB+Community.svg" />
+                  <img src="/images/community/banners/TiDB+Community.svg" />
               </div>
               <div class="intro">
                  「如果你有正确的态度，有趣的事情自然会找到你。」我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。
@@ -44,20 +44,12 @@
                   </a>
               </div>
               <div class="relationship">
-                  <img src="/images/community/community-banner-side-img.svg">
+                  <img src="/images/community/banners/community-banner-side-img.svg">
               </div>
             </div>
         </div>
     </div>
-    <div class="video__section">
-      <div class="container">
-          <div class="video-wrapper">
-            <video id="video" preload="auto" controls webkit-playsinline="true"  poster="https://download.pingcap.com/images/community-poster.jpg" playsinline="true">
-                <source src="https://download.pingcap.com/videos/community-video.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
-            </video>
-          </div>
-      </div>
-    </div>
+
     <div class="activity__section">
         <div class="container">
             <h1 class="section-title">社区活动</h1>
@@ -65,9 +57,9 @@
                 {{- range $idx, $i := .Site.Data.community_activities.activities -}}
                     {{- if .active -}}
                         <div class="signable">
-                            <a href="/community-cn/devcon2019">
+                            <a href="{{ $i.link }}">
                                 <div class="picture">
-                                    <img src="{{ $i.image}}" />
+                                    <img src="{{ $i.active_image }}" />
                                 </div>
                                 <div class="current-activity-content">
                                     <div class="current-activity-summary">{{ $i.summary }}</div>
@@ -91,13 +83,15 @@
             <div class="activities__list">
                 {{- range $idx, $i := .Site.Data.community_activities.activities -}}
                     {{- if not .active -}}
-                      <div class="activity">
-                        <div class="picture">
-                            <img class="lazy" height="65" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.image}}"/>
+                        <div class="activity">
+                            <!-- <a href="{{ $i.link }}"> -->
+                              <div class="picture">
+                                  <img class="lazy" height="65" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.image}}"/>
+                              </div>
+                              <div class="name">{{ $i.name}}</div>
+                              <div class="summary"><p>{{ $i.summary }}</p></div>
+                            <!-- </a> -->
                         </div>
-                        <div class="name">{{ $i.name}}</div>
-                        <div class="summary"><p>{{ $i.summary }}</p></div>
-                    </div>
                     {{- end -}}
                 {{- end -}}
             </div>
@@ -125,6 +119,18 @@
                 </a>
             </div>
         </div>
+    </div>
+
+    <div class="video__section">
+      <div class="container">
+        <div class="video-wrapper">
+          <video id="video" preload="auto" controls webkit-playsinline="true"
+            poster="https://download.pingcap.com/images/community-poster.jpg" playsinline="true">
+            <source src="https://download.pingcap.com/videos/community-video.mp4"
+              type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
     </div>
 
     <div class="tidb-planet-robot">
