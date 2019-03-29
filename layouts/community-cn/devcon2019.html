@@ -5,6 +5,7 @@
 
 {{- define "headTpl" -}}
     {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "nav_active" "community" }}
     {{ $.Scratch.Set "nav_active" "devcon2019" }}
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
     <style type="text/css">
@@ -62,7 +63,7 @@
         <div class="banner">
         </div>
         
-        <div class="agenda__section">
+        <section class="agenda__section">
             <div class="content">
                 <p>
                   TiDB DevCon 是 PingCAP 团队面向 TiDB 社区推出的技术会议。
@@ -84,16 +85,16 @@
             </div>
             <h1 class="section-title agenda-title">会议日程</h1>
             {{- partial "archives/schedule-table.html" (dict "schedule" .Site.Data.devcon_schedules.schedule2019 "global" .) -}}
-        </div>
+        </section>
 
-        <div class="instructors__section section-dark-bg">
+        <section class="instructors__section section-dark-bg">
             <div class="instructors section-container">
                 <h1 class="section-title">讲师介绍</h1>
                 {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.devcon2019.instructors "type" "devcon") -}}
             </div>
-        </div>
+        </section>
 
-        <div class="sponsor__section">
+        <section class="sponsor__section">
           <div class="sponsors section-container">
             <h1 class="section-title">支持媒体</h1>
             <div class="sponsors__list">
@@ -123,9 +124,9 @@
                 </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="contact__section section-dark-bg">
+        <section class="contact__section section-dark-bg">
             <div class="contact section-container">
                 <h1 class="section-title">参会地址</h1>
                 <div class="address__guide">
@@ -144,7 +145,7 @@
                 </div>
                 <div id="map" class="map" style="width: clac(100% - 20px); height: 340px;"></div>
             </div>
-        </div>
+        </section>
 
         <section class="back-to-community-section">
             <a href="/community-cn/#activities">
