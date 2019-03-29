@@ -1,10 +1,18 @@
 function calcBannerTitleImg() {
   if (window.matchMedia('(max-width: 700px)').matches) {
-    $('.signable img').attr('src', '/images/community/activities/meetup.svg')
-  } else {
+    // $('.signable img').attr('src', '/images/community/activities/meetup.svg')
     $('.signable img').attr(
       'src',
-      '/images/community/activities/meetup-active-img.jpg'
+      'https://download.pingcap.com/images/mobileDevCon.png'
+    )
+  } else {
+    // $('.signable img').attr(
+    //   'src',
+    //   '/images/community/activities/meetup-active-img.jpg'
+    // )
+    $('.signable img').attr(
+      'src',
+      'https://download.pingcap.com/images/PCdevCon.png'
     )
   }
 }
