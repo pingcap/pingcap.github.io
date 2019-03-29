@@ -1,159 +1,190 @@
 {{- define "title" -}}
-    {{ $.Scratch.Set "metaTitle" "Community"}}
-    Community
+{{ $.Scratch.Set "metaTitle" "Community"}}
+Community
 {{- end -}}
 
 {{- define "headTpl" -}}
-    {{$.Scratch.Set "nav_active" "community"}}
-    {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/article-reading-card.css") -}}
-    {{ $.Scratch.Set "data_i18_cn" true }}
-    {{- partial "head/preload-css" (dict "href" "/css/vendor/calendar.css") -}}
+{{$.Scratch.Set "nav_active" "community"}}
+{{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
+{{- partial "head/preload-css" (dict "href" "/css/article-reading-card.css") -}}
+{{ $.Scratch.Set "data_i18_cn" true }}
+{{- partial "head/preload-css" (dict "href" "/css/vendor/calendar.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
 <div class="community">
-    <div class="banner__section">
-        <div class="content__container">
-            <a href="https://github.com/pingcap/tidb"><button class="gitHub">GitHub</button></a>
-            <div class="content">
-              <div class="title-image">
-                  <img src="/images/community/banners/TiDB+Community.svg" />
-              </div>
-              <div class="intro">
-                 「如果你有正确的态度，有趣的事情自然会找到你。」我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。
-              </div>
-               <div class="btns">
-                 <a href="/community-cn/organization/#architecture">
-                  <button class="community-btns">
-                      <span class="arrow"><img src="/images/svgs/white-right-arrow.svg"/></span>
-                      <span class="btn-text">了解社区</span>
-                  </button>
-                  </a>
-                  <a href="/community-cn/organization/#contributor">
-                  <button class="community-btns">
-                      <span class="arrow"><img src="/images/svgs/white-right-arrow.svg"/></span>
-                      <span class="btn-text">成为 Contributor</span>
-                  </button>
-                  </a>
-                  <a href="/community-cn/organization/#committer">
-                  <button class="community-btns">
-                      <span class="arrow"><img src="/images/svgs/white-right-arrow.svg"/></span>
-                      <span class="btn-text">成为 Committer</span>
-                  </button>
-                  </a>
-              </div>
-              <div class="relationship">
-                  <img src="/images/community/banners/community-banner-side-img.svg">
-              </div>
-            </div>
+  <div class="banner__section">
+    <div class="content__container">
+      <a href="https://github.com/pingcap/tidb"
+        ><button class="gitHub">GitHub</button></a
+      >
+      <div class="content">
+        <div class="title-image">
+          <img src="/images/community/banners/TiDB+Community.svg" />
         </div>
+        <div class="intro">
+          「如果你有正确的态度，有趣的事情自然会找到你。」我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入
+          TiDB 社区，和我们一起开启一段精彩的旅程。
+        </div>
+        <div class="btns">
+          <a href="/community-cn/organization/#architecture">
+            <button class="community-btns">
+              <span class="arrow"
+                ><img src="/images/svgs/white-right-arrow.svg"
+              /></span>
+              <span class="btn-text">了解社区</span>
+            </button>
+          </a>
+          <a href="/community-cn/organization/#contributor">
+            <button class="community-btns">
+              <span class="arrow"
+                ><img src="/images/svgs/white-right-arrow.svg"
+              /></span>
+              <span class="btn-text">成为 Contributor</span>
+            </button>
+          </a>
+          <a href="/community-cn/organization/#committer">
+            <button class="community-btns">
+              <span class="arrow"
+                ><img src="/images/svgs/white-right-arrow.svg"
+              /></span>
+              <span class="btn-text">成为 Committer</span>
+            </button>
+          </a>
+        </div>
+        <div class="relationship">
+          <img src="/images/community/banners/community-banner-side-img.svg" />
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="activity__section">
-        <div class="container">
-            <h1 class="section-title">社区活动</h1>
-            <div class="current-activity">
-                {{- range $idx, $i := .Site.Data.community_activities.activities -}}
-                    {{- if .active -}}
-                        <div class="signable">
-                            <a href="{{ $i.link }}">
-                                <div class="picture">
-                                    <img src="{{ $i.active_image }}" />
-                                </div>
-                                <div class="current-activity-content">
-                                    <div class="current-activity-summary">{{ $i.summary }}</div>
-                                </div>
-                            </a>
-                        </div>
+  <div class="activity__section">
+    <div class="container">
+      <h1 class="section-title">社区活动</h1>
+      <div class="current-activity">
+        {{- range $idx, $i := .Site.Data.community_activities.activities -}}
+        {{- if .active -}}
+        <div class="signable">
+          <a href="{{ $i.link }}">
+            <div class="picture">
+              <img src="{{ $i.active_image }}" />
+            </div>
+            <div class="current-activity-content">
+              <div class="current-activity-summary">{{ $i.summary }}</div>
+            </div>
+          </a>
+        </div>
 
-                        <div id="calendar">
-                            <div class="event-list">
-                                <div class="event-banner">Events</div>
-                                <a class="close-icon">
-                                    <svg viewBox="0 0 20 20">
-                                        <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    {{- end -}}
-                {{- end -}}
+        <div id="calendar">
+          <div class="event-list">
+            <div class="event-banner">Events</div>
+            <a class="close-icon">
+              <svg viewBox="0 0 20 20">
+                <path
+                  d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"
+                ></path>
+              </svg>
+            </a>
           </div>
-            <div class="activities__list">
-                {{- range $idx, $i := .Site.Data.community_activities.activities -}}
-                    {{- if not .active -}}
-                        <div class="activity">
-                            <!-- <a href="{{ $i.link }}"> -->
-                              <div class="picture">
-                                  <img class="lazy" height="65" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.image}}"/>
-                              </div>
-                              <div class="name">{{ $i.name}}</div>
-                              <div class="summary"><p>{{ $i.summary }}</p></div>
-                            <!-- </a> -->
-                        </div>
-                    {{- end -}}
-                {{- end -}}
-            </div>
         </div>
-    </div>
-
-    <div class="reading__section">
-        <div class="container">
-            <h1 class="section-title">社区阅读</h1>
-            <div class="intro">这个板块将实时更新源码阅读系列以及社区小伙伴撰写的新手指南。
-            源码系列将从整体架构到重要模块抽丝剥茧，深入浅出的为大家解析 TiDB 设计思路。新手指南则会手把手教你成为 TiDB contributor。
-            ​感谢社区成员对系列教程的大力支持。
+        {{- end -}}
+        {{- end -}}
+      </div>
+      <div class="activities__list">
+        {{- range $idx, $i := .Site.Data.community_activities.activities -}}
+        {{- if not .active -}}
+        <div class="activity">
+          <a href="{{ $i.link }}">
+            <div class="picture">
+              <img
+                class="lazy"
+                height="65"
+                src="/images/svgs/loader-spinner.svg"
+                data-original="{{ $i.image }}"
+              />
             </div>
-            <div class="reading-list">
-              {{ $communityTag := "社区" }}
-                {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
-              {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+            <div class="name">{{ $i.name }}</div>
+            <div class="summary">
+              <p>{{ $i.summary }}</p>
             </div>
-            <div class="readMoreBtn">
-                <a href="/blog-cn/#社区">
-                    <button class="readMore-btn">
-                        <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg"/></span>
-                        <span class="btn-text">更多文章</span>
-                    </button>
-                </a>
-            </div>
+          </a>
         </div>
-    </div>
-
-    <div class="video__section">
-      <div class="container">
-        <div class="video-wrapper">
-          <video id="video" preload="auto" controls webkit-playsinline="true"
-            poster="https://download.pingcap.com/images/community-poster.jpg" playsinline="true">
-            <source src="https://download.pingcap.com/videos/community-video.mp4"
-              type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
-          </video>
-        </div>
+        {{- end -}}
+        {{- end -}}
       </div>
     </div>
+  </div>
 
-    <div class="tidb-planet-robot">
-      <img src="/images/tidb-planet/robot.svg" />
-    </div>
-
-    <div class="tooltiptext f-hide">
-        欢迎加入 TiDB 社区～
-        <div class="tidb-robot-qrCode">
-        <img src="/images/community/tidb-robot-qrCode.jpg" />
-            </div>
+  <div class="reading__section">
+    <div class="container">
+      <h1 class="section-title">社区阅读</h1>
+      <div class="intro">
+        这个板块将实时更新源码阅读系列以及社区小伙伴撰写的新手指南。
+        源码系列将从整体架构到重要模块抽丝剥茧，深入浅出的为大家解析 TiDB
+        设计思路。新手指南则会手把手教你成为 TiDB contributor。
+        ​感谢社区成员对系列教程的大力支持。
       </div>
+      <div class="reading-list">
+        {{ $communityTag := "社区" }}
+        {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
+        {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
+      </div>
+      <div class="readMoreBtn">
+        <a href="/blog-cn/#社区">
+          <button class="readMore-btn">
+            <span class="arrow"
+              ><img src="/images/svgs/blue-right-arrow.svg"
+            /></span>
+            <span class="btn-text">更多文章</span>
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="video__section">
+    <div class="container">
+      <div class="video-wrapper">
+        <video
+          id="video"
+          preload="auto"
+          controls
+          webkit-playsinline="true"
+          poster="https://download.pingcap.com/images/community-poster.jpg"
+          playsinline="true"
+        >
+          <source
+            src="https://download.pingcap.com/videos/community-video.mp4"
+            type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'
+          />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <div class="tidb-planet-robot">
+    <img src="/images/tidb-planet/robot.svg" />
+  </div>
+
+  <div class="tooltiptext f-hide">
+    欢迎加入 TiDB 社区～
+    <div class="tidb-robot-qrCode">
+      <img src="/images/community/tidb-robot-qrCode.jpg" />
+    </div>
+  </div>
 </div>
 {{- end -}}
 
 {{- define "footJS" -}}
-    <script type="text/javascript" src="/js/community.js"></script>
-    <script type="text/javascript" src="/js/vendor/calendar.js"></script>
-    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
-    <script type="text/javascript">
-        $(".lazy").lazyload({
-            effect : "fadeIn",
-            threshold: 200
-        });
-    </script>
+<script type="text/javascript" src="/js/community.js"></script>
+<script type="text/javascript" src="/js/vendor/calendar.js"></script>
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+  $('.lazy').lazyload({
+    effect: 'fadeIn',
+    threshold: 200
+  })
+</script>
 {{- end -}}
