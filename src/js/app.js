@@ -41,9 +41,10 @@ function initialSearch(lang) {
     indexName: 'pingcap',
     inputSelector: '#search-input',
     algoliaOptions: {
+      hitsPerPage: 50,
       facetFilters: ['tags:' + lang],
     },
-    debug: true, // Set debug to true if you want to inspect the dropdown
+    debug: false, // Set debug to true if you want to inspect the dropdown
     transformData: function(hits) {
       // filter 404 results
       function is404(h) {
