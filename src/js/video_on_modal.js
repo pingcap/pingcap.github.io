@@ -21,6 +21,7 @@ $(function() {
     var videoSRC = $(this).attr('data-video')
     openVideoModal()
     $('#video-on-modal').attr('src', videoSRC)
+    $('#video-on-modal source').attr('src', videoSRC)
     $('#video-on-modal')[0].play()
     // autoPlayVideoInWeXin()
     e.preventDefault()
