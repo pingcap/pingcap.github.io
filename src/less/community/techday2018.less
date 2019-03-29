@@ -1,0 +1,139 @@
+@import './instructors.less';
+@import './common-style.less';
+@import '../variables.less';
+@import '../colors.less';
+
+.banner {
+  width: 100%;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+  background: url('/images/community/banners/techday2018-pc.jpg') no-repeat;
+  padding-top: 37%;
+  background-size: cover;
+  background-position: center;
+  margin-top: @headerHeight;
+}
+
+.recording {
+  margin: 1rem 0;
+  position: relative;
+}
+
+.recording::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  border-top: 1px solid #ddd;
+}
+
+.thumbnail {
+  position: relative;
+  width: 350px;
+  height: auto;
+  display: inline-block;
+  background-color: black;
+
+  video,
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0.8;
+  }
+
+  &:hover {
+    .play-icon {
+      background: url('/images/community/video-landing-img/state-hover.png');
+      background-size: cover;
+      background-position: center;
+    }
+  }
+}
+
+.play-icon {
+  position: absolute;
+  background: url('/images/community/video-landing-img/state-org.png');
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+.extend-reading-btn {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  color: @sectionTitleColor;
+  font-size: 16px;
+}
+
+.right-text {
+  display: inline-block;
+  float: right;
+  width: calc(~"100% - 350px");
+  padding: 0 2rem;
+  text-align: left;
+  overflow: auto;
+  max-height: 180px;
+}
+
+.rt-title {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.rt-content {
+  font-size: 16px;
+  line-height: 1.7;
+  overflow: auto;
+}
+
+@media (max-width: 600px) {
+  .banner {
+    background: url('/images/community/banners/techday2018-mobile.jpg') no-repeat;
+    padding-top: 37%;
+    padding-top: 62%;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .thumbnail {
+    display: block;
+    width: 100%;
+  }
+
+  .right-text {
+    display: block;
+    width: 100%;
+    float: none;
+    padding: 1rem 0;
+    text-align: left;
+    overflow: auto;
+    max-height: none;
+  }
+
+  .rt-title {
+    font-size: 16px;
+  }
+
+  .rt-content {
+    font-size: 14px;
+  }
+
+  .extend-reading-btn {
+    bottom: 10px;
+    font-size: 14px;
+    right: 0;
+  }
+}

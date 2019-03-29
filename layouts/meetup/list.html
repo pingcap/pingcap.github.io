@@ -52,6 +52,7 @@
                 {{- end -}}
             </div>
         </div>
+        <!-- <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
         <a href="/meetup/list">
           <button class="readMore-btn">
             <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
@@ -64,12 +65,12 @@
     <div class="container">
         <h2 class="section-title">分享实录</h2>
         <div class="reading-list">
-            {{ $meetup_memoir := where (where (where .Site.Pages "Section" "blog-cn") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
+            {{ $meetup_memoir := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
             {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $meetup_memoir.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" . "listType" "memoir") -}}
         </div>
     </div>
 
-    <a href="/blog-cn/#Meetup-实录">
+    <a href="/meetup/recording">
         <button class="readMore-btn">
             <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
             <span class="btn-text">更多文章</span>
@@ -77,17 +78,30 @@
     </a>
 </section>
 <section class="meetup-landing-page-lecturer">
-    <div class="container">
+    <!-- <div class="container">
        <div class="instructors">
           <h1 class="section-title">大咖讲师</h1>
           {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}}
       </div>
+    </div> -->
+    <div class="instructors section-container">
+      <h1 class="section-title">讲师介绍</h1>
+      {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}}
     </div>
 </section>
+
 <section class="meetup-landing-page-banner-footer">
     <div class="container">
         <img src="/images/meetup/meetup-footer-image.svg" alt="meetup tags">
     </div>
+</section>
+
+<section class="back-to-community-section">
+    <a href="/community-cn/#activities">
+        <button class="back-to-community">
+          更多社区活动
+        </button>
+    </a>
 </section>
 {{- end -}}
 

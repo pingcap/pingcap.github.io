@@ -1,10 +1,15 @@
 function calcBannerTitleImg() {
   if (window.matchMedia('(max-width: 700px)').matches) {
+    // $('.signable img').attr('src', '/images/community/activities/meetup.svg')
     $('.signable img').attr(
       'src',
       'https://download.pingcap.com/images/mobileDevCon.png'
     )
   } else {
+    // $('.signable img').attr(
+    //   'src',
+    //   '/images/community/activities/meetup-active-img.jpg'
+    // )
     $('.signable img').attr(
       'src',
       'https://download.pingcap.com/images/PCdevCon.png'
@@ -44,6 +49,28 @@ $(document).ready(function() {
   calcBannerTitleImg()
   $(window).resize(calcBannerTitleImg)
 
+  // scrolls to specific section smoothly
+  const hash = decodeURIComponent(location.hash)
+  var extraH_contributor
+  var extraH_arch
+  if (window.matchMedia('(max-width: 500px)').matches) {
+    extraH_contributor = 60
+    extraH_arch = 60
+  } else {
+    extraH_contributor = 250
+    extraH_arch = 60
+  }
+  if (hash) {
+    if (hash == '#activities') {
+      console.log('activities', extraH_arch)
+      $('html, body').animate(
+        {
+          scrollTop: $('.activity__section').offset().top - extraH_arch,
+        },
+        1000
+      )
+    }
+  }
   // displays events in this selected day
   $('.eventday').click(function() {
     var el = $(this)
