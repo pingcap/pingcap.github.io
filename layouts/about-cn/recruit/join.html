@@ -1,0 +1,59 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "虚位以待" }}
+    虚位以待
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "about"}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{$.Scratch.Set "data_i18_link" "https://angel.co/pingcap-1/jobs" }}
+    {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/gridtab.min.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/recruit.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+<div class="recruit">
+    <div class="container">
+        <div class="section">
+            <h2 class="title">Join PingCAP</h2>
+            <div class="desc">
+                在人才标准上，我们一向奉行精英理念，以高门槛招人，同时需要对方热爱开源，认同开源的理念，本身也在参与开源项目，能深刻认识到开源的价值。抛开具体的领域，我们认为优秀的人或多或少有一些共性的评价标准：Quick Learner, Earnest Curiosity, Faith in Open Source, Self-driven, Get Things Done.
+                <br>
+                如果你也是这样的人，马上开始 Step 1，看看有没有心仪的职位吧！
+            </div>
+            {{- partial "recruit/step-timeline.html" -}}
+        </div>
+        <div class="section">
+            <h2 id="positions" class="title">Positions</h2>
+            {{ $posts := where (where .Site.Pages "Section" "about-cn") ".Params.position" "==" true }}
+            <div id="positions-tabs">
+                <dt>All</dt>
+                <dd>{{- partial "recruit/positions-tab-panel.html" (dict "posts" $posts "global" .) -}}</dd>
+                {{- range $index, $toc := .Site.Data.recruit_cn_toc -}}
+                    <dt class="tab-{{ $index }}">{{- .name -}}</dt>
+                    <dd>{{- partial "recruit/positions-tab-panel.html" (dict "posts" $posts "name" .name "global" .) -}}</dd>
+                {{- end -}}
+            </div>
+        </div>
+    </div>
+    {{- partial "recruit/aside-menu.html" (dict "active" "join") -}}
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="https://download.pingcap.com/js/gridtab.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#positions-tabs').gridtab({
+                grid: 7,
+                tabPadding: 12,
+                contentPadding: 0,
+                config: {
+                    layout: 'tab',
+                    activeTab: 1,
+                    keepOpen: true,
+                },
+            });
+        });
+    </script>
+{{- end -}}

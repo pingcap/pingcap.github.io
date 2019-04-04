@@ -41,9 +41,10 @@ function initialSearch(lang) {
     indexName: 'pingcap',
     inputSelector: '#search-input',
     algoliaOptions: {
+      hitsPerPage: 50,
       facetFilters: ['tags:' + lang],
     },
-    debug: true, // Set debug to true if you want to inspect the dropdown
+    debug: false, // Set debug to true if you want to inspect the dropdown
     transformData: function(hits) {
       // filter 404 results
       function is404(h) {
@@ -65,8 +66,8 @@ function processSearch() {
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
   })
-  // Show search suggestions dropdown menu on focus
-  $('#search-input').focus(function(e) {
+  // Show search suggestions dropdown menu on change
+  $('#search-input').change(function(e) {
     e.preventDefault()
     if (e.target && e.target.value) $('.ds-dropdown-menu').show()
   })
