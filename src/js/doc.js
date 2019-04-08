@@ -40,7 +40,7 @@ function processStickyTree() {
     },
   })
 
-  // Open the first item in docs/docs-cn/weekly/recruit-cn list page
+  // Open the first item in docs/docs-cn/weekly/recruit list page
   const $firstLI = $('#list_page .st_tree > ul > li:first-child')
   const hash = decodeURIComponent(location.hash)
   if (!hash && $firstLI.length) openFolder($firstLI)
