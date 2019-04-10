@@ -31,23 +31,26 @@ function createEventListConsole(eventTitles, eventLinks) {
 }
 
 $(document).ready(function() {
-  var events = [
-    {
-      Date: new Date(2019, 1, 19),
-      Title: 'TiDB DevCon 2019',
-      Link: 'https://pingcap.com/community-cn/devcon2019',
-    },
-    {
-      Date: new Date(2019, 3, 30),
-      Title: 'Infra Meetup No.94 上海',
-      Link: 'https://www.huodongxing.com/event/9485633962000',
-    },
-    {
-      Date: new Date(2019, 3, 30),
-      Title: 'Infra Meetup No.95 成都',
-      Link: 'https://www.huodongxing.com/event/8485635374300',
-    },
-  ]
+  var events = []
+  if ($('.feature-activity').length) {
+    console.log('has feature activity')
+    $('.feature-activity').each(function() {
+      var date = $(this)[0].children[1].innerText
+      var y = new Date(date).getFullYear()
+      var m = new Date(date).getMonth() + 1
+      var d = new Date(date).getDate()
+      var title =
+        $(this)[0].children[0].innerText +
+        ', ' +
+        $(this)[0].children[3].innerText
+      events.push({
+        Title: title,
+        Date: new Date(y, m, d),
+        Link: $(this)[0].children[2].innerText,
+      })
+    })
+  }
+
   var settings = {
     test: 'testme',
   }
