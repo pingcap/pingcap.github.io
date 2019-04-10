@@ -29,10 +29,4 @@ $(document).ready(function() {
       prevEl: '.swiper-button-prev',
     },
   })
-
-  // $('.close-modal').click(function() {
-  //   console.log('close modal')
-  //   $('.j-carousel-overlay').fadeOut()
-  //   $('.j-carousel-overlay, .modal').removeClass('active')
-  // })
 })
