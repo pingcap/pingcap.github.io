@@ -7,6 +7,20 @@ console.log('🦊 Hello! @PingCAP website')
 
 // import '../../dist/css/main.css'
 
+// get total contributors amount from GitHub
+const url = 'https://pingcap.com/api/contributors'
+$.ajax({
+  url,
+  crossDomain: true,
+  success: function(res) {
+    window.tidbContributors = res.data
+    if (res.data) {
+      $('.j-amount').text(res.data.length)
+      $('.j-show').show()
+    }
+  },
+})
+
 // Smooth scrolling when the document is loaded and ready
 function smoothScroll(hash) {
   const y = $('header').height()
