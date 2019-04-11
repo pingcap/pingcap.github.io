@@ -32,7 +32,19 @@
   height: @primaryBtnHeight;
   line-height: @primaryBtnHeight;
   padding: 0 1rem;
-  .rounded-corners(0.9rem);
+  .rounded-corners(1.3rem);
+
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.btn-en {
+  display: inline-block;
+  min-width: @primaryBtnWidth-en;
+  height: @primaryBtnHeight;
+  line-height: @primaryBtnHeight;
+  padding: 0 1rem;
+  .rounded-corners(1.3rem);
 
   font-size: 0.8rem;
   text-align: center;
@@ -56,11 +68,16 @@
   }
 }
 
+.btn-primary-en {
+  .btn-theme-switch();
+}
+
 .btn-primary {
   .btn-theme-switch();
 }
 
-.btn-secondary {
+.btn-secondary,
+.btn-secondary-en {
   .btn-theme-switch(white, @themeBlue);
 
   background: transparent;
@@ -71,7 +88,7 @@
 }
 
 /* Section 1 */
-.homepage-slogan-mask {
+.homepage-slogan-mask { 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -93,6 +110,8 @@
 
   .logo-slogan-wrap {
     text-align: center;
+    margin: 0 auto;
+    // width: 100%;
   }
 
   .logo {
@@ -118,9 +137,14 @@
 
   .slogan-en {
     margin: 0 !important;
+    width: calc(~"100% -" @logoWidth);
     display: inline;
     float: right;
     font-size: 2.7rem !important;
+
+    span {
+      padding: 0 1.2rem 0 2rem;
+    }
   }
 
   .tagline {
@@ -139,9 +163,59 @@
     }
   }
 
+  .contributor-count {
+    position: relative;
+    padding: 0 40px;
+    margin: 2.5rem auto;
+
+    .numb:nth-child(1) {
+      right: 0;
+    }
+
+    .numb:nth-child(2) {
+      right: -28px;
+    }
+
+    .numb:nth-child(3) {
+      right: -56px;
+    }
+
+    .numb {
+      position: absolute;
+      top: -7px;
+      background: linear-gradient(0deg, #54536F, #fff 50%, #fff);
+      display: inline-block;
+      height: 40px;
+      width: 23px;
+      border-radius: 3px;
+
+      p {
+        padding: 6px 4px;
+        color: black;
+        font-size: 25px;
+      }
+    }
+
+    .numb::before {
+      content: '';
+      border-top: 1px solid black;
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+    }
+  }
+
   .contributor-count::before {
     content: '';
-    background-image: url('/images/svgs/github.svg');
+    width: 30px;
+    height: 30px;
+    left: 0;
+    top: 50%;
+    margin-top: -15px;
+    position: absolute;
+    background-image: url('/images/github-icon.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -183,10 +257,47 @@
   .buttons-en {
     margin: 0 auto;
     max-width: 25rem !important;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
 
     .btn-en {
       margin: 2.25rem 1rem 0;
       min-width: 10rem;
+    }
+
+    .btn-primary-en {
+      position: relative;
+      padding-left: 50px;
+
+      &::after {
+        position: absolute;
+        content: "";
+        top: 50%;
+        left: 30px;
+        width: 14px;
+        height: 14px;
+        margin-top: -8px;
+        background: url("/images/svgs/icon-download.svg");
+        background-size: 14px 14px;
+      }
+    }
+
+    .btn-primary-en:hover::after {
+      position: absolute;
+      content: "";
+      top: 50%;
+      left: 30px;
+      width: 14px;
+      height: 14px;
+      margin-top: -8px;
+      background: url("/images/svgs/icon-download-hover.svg");
+      background-size: 14px 14px;
+    }
+
+    .btn-secondary-en {
+      position: relative;
+      // padding-left: 2.5rem;
     }
   }
 
@@ -200,8 +311,9 @@
       margin-top: 2.25rem;
     }
 
-    .btn-primary-en {
+    .btn-secondary {
       position: relative;
+      padding-left: 2.5rem;
 
       &::after {
         position: absolute;
@@ -214,11 +326,6 @@
         background: url("/images/svgs/icon-download.svg");
         background-size: 14px 14px;
       }
-    }
-
-    .btn-secondary {
-      position: relative;
-      padding-left: 2.5rem;
     }
   }
 }
@@ -253,11 +360,12 @@
   .featured-stories-lists {
     max-width: 1248px;
     margin: 0 auto;
+    justify-content: center !important;
   }
 
   .story {
     // width: 30%;
-    flex-basis: 33%;
+    flex-basis: 100%;
     max-width: 400px;
     height: 400px;
     margin-bottom: 6rem;
@@ -275,7 +383,7 @@
     .thumbnail-img {
       display: block;
       width: 55%;
-      height: 200px;
+      height: 100%;
       background-position: center;
       background-repeat: no-repeat;
       background-size: contain;
@@ -294,24 +402,25 @@
   }
 
   .company-name {
-    font-size: 1.2rem;
+    font-size: 24px;
     padding: 10px 0;
   }
 
   .company-industry {
-    font-size: 0.8rem;
+    font-size: 16px;
     padding: 10px 0;
+    line-height: 1.7;
   }
 
   .company-scale {
-    font-size: 0.8rem;
+    font-size: 16px;
     padding: 10px 0;
     line-height: 1.7;
   }
 
   .read-more-arrow {
     text-align: right;
-    font-size: 0.8rem;
+    font-size: 16px;
     position: absolute;
     bottom: 15px;
     right: 15px;
@@ -492,13 +601,30 @@
     color: #fff;
   }
 
-  .buttons {
+  .buttons-en {
+    margin: 0 auto;
+    max-width: 25rem !important;
     display: flex;
+    flex-flow: row wrap;
     justify-content: center;
 
-    .btn {
-      margin: 0 10px;
+    .btn-en {
+      margin: 2rem 1rem 0;
+      min-width: 10rem;
     }
+
+    .btn-primary-en {
+      position: relative;
+    }
+
+    .btn-secondary-en {
+      position: relative;
+      // padding-left: 2.5rem;
+    }
+  }
+
+  .btn {
+    margin: 2rem 1rem 0;
   }
 }
 
@@ -671,6 +797,40 @@ body.banner-active .release-banner {
     .desc-cn {
       padding: 0 1rem;
     }
+
+    .contributor-count {
+      position: relative;
+      padding: 0 40px;
+      margin: 2.5rem auto;
+
+      .numb:nth-child(1) {
+        right: 13px;
+      }
+
+      .numb:nth-child(2) {
+        right: -9px;
+      }
+
+      .numb:nth-child(3) {
+        right: -31px;
+      }
+
+      .numb {
+        top: -5px;
+        height: 30px;
+        width: 18px;
+
+        p {
+          font-size: 18px;
+          padding: 5px 4px;
+        }
+      }
+    }
+
+    .contributor-count::before {
+      width: 25px;
+      height: 25px;
+    }
   }
 
   .homepage-advantages,
@@ -687,6 +847,25 @@ body.banner-active .release-banner {
 
     .row-1 .item {
       margin-top: 3rem;
+    }
+
+    .featured-stories-title {
+      font-size: 21px;
+    }
+
+    .story {
+      padding: 0 2.8rem;
+      height: 350px;
+    }
+
+    .company-name {
+      font-size: 19px;
+    }
+
+    .company-scale,
+    .company-industry,
+    .read-more-arrow {
+      font-size: 0.8rem;
     }
   }
 
@@ -711,6 +890,10 @@ body.banner-active .release-banner {
     .btn-primary {
       margin-bottom: 20px;
     }
+
+    .btn {
+      margin: 1rem;
+    }
   }
 }
 
@@ -728,5 +911,9 @@ body.banner-active .release-banner {
     .desc-cn {
       padding: 0 0.6rem;
     }
+  }
+
+  .homepage-features .story {
+    padding: 0 1rem;
   }
 }
