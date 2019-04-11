@@ -1,39 +1,32 @@
 {{- define "headTpl" -}}
     {{$.Scratch.Set "nav_active" "free-download"}}
-    {{- partial "head/preload-css" (dict "href" "/css/cases.css") -}}
-    <style>
-        .hero .image {
-            height: 6em;
-        }
-
-        .hero .hero__subheading {
-            font-size: 1.6em;
-        }
-    </style>
+    {{- partial "head/preload-css" (dict "href" "/css/download-tidb.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
-    <!-- {{ $headingLogo := "/images/tidb-cloud-logo.png" }} -->
-    {{ $subheading := "Download TiDB" }}
     <div class="contact-us">
-        {{- partial "layout/hero.html" (dict "headingLogo" $headingLogo "subheading" $subheading) -}}
-        <div class="container" style="padding: 0 1rem; min-height: 700px;">
-          <!-- <div class="desc">
-              To sign up for TiDB Cloud, managed as a service by PingCAP, please fill out the form below. A member from our customer
-              success engineering team will reach out via email in the next 24 hours.
-          </div> -->
-          <div class="contact-form" style="max-width: 500px;">
-              <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
-              <script>
-                hbspt.forms.create(
-
-                  {
-                    portalId: "4466002",
-                    formId: "77e7f071-13fd-4ebd-b8f0-7afc32fe1b6e"
-                  }
-                );
-              </script>
-          </div>
+        <div class="download-tidb-banner">
+            <div class="banner__container">
+                <div class="tidb-logo">
+                  <img src="/images/tidb-logo.png" />
+                </div>
+                <div class="banner-illustration">
+                  <img src="/images/download-tidb/banner-illustration.png" />
+                </div>
+            </div>
         </div>
+        <div class="container">
+            <div class="contact-form" style="max-width: 500px;">
+                <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+                <script>
+                  hbspt.forms.create(
+                    {
+                      portalId: "4466002",
+                      formId: "77e7f071-13fd-4ebd-b8f0-7afc32fe1b6e"
+                    }
+                  );
+                </script>
+            </div>
+          </div>
     </div>
 {{- end -}}
