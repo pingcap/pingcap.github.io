@@ -1,0 +1,77 @@
+<div class="download-instruction">
+    <div class="ins-env-icon">
+        <img src="{{ .imgSRC }}" />
+    </div>
+
+    <div class="install-method">Homebrew install instructions <span>{{ if eq .type "windows" }}(via Windows Subsystem for
+        Linux){{ else }}(Recommended){{ end }}</span>:
+        <ol>
+            <li>
+                <p>Install <a class="homebrew-install" href="ins-env-icon">Homebrew</a></p>
+            </li>
+            <li>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">brew install tidb-server</code></pre>
+              </div>
+            </li>
+        </ol>
+    </div>
+
+    {{- if ne .type "windows" -}}
+    <div class="install-method">Dbdeployer instructions:
+        <ol>
+            <li>
+                <p>Install <a href="https://github.com/datacharmer/dbdeployer">dbdeployer</a></p>
+            </li>
+            <li>
+                <p>Install MySQL 5.7</p>
+            </li>
+
+            {{- if eq .type "mac" -}}
+            <li>
+              <div class="highlight">
+                <pre
+                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                class="language-bash" data-lang="bash">curl -O https://download.pingcap.org/tidb-master-darwin-amd64.tar.gz</code></pre>
+              </div>
+            </li>
+            <li>
+              <div class="highlight">
+                <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                class="language-bash" data-lang="bash">dbdeployer deploy single 3.0.0 --client-from=5.7.25</code></pre>
+              </div>
+            </li>
+            <li>
+              <div class="highlight">
+                <pre
+                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                class="language-bash" data-lang="bash">dbdeployer unpack tidb-master-darwin-amd64.tar.gz --unpack-version=3.0.0</code></pre>
+              </div>
+            </li>
+            {{- else if eq .type "linux" -}}
+            <li>
+              <div class="highlight">
+                <pre
+                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                class="language-bash" data-lang="bash">wget https://download.pingcap.org/tidb-master-linux-amd64.tar.gz</code></pre>
+              </div>
+            </li>
+            <li>
+              <div class="highlight">
+                <pre
+                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                class="language-bash" data-lang="bash">dbdeployer unpack tidb-master-linux-amd64.tar.gz --unpack-version=3.0.0</code></pre>
+              </div>
+            </li>
+            <li>
+              <div class="highlight">
+                <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                class="language-bash" data-lang="bash">dbdeployer deploy single 3.0.0 --client-from=5.7.25</code></pre>
+              </div>
+            </li>
+        {{- end -}}
+      </ol>
+    </div>
+    {{- end -}}
+</div>
