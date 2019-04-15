@@ -64,7 +64,11 @@
                         </div>
                         <div class="project-name">{{ $i.name }}</div>
                         <div class="project-github">
-                            <a href="{{ $i.github_repo }}"><button class="project-github-btn">GitHub Repo</button></a>
+                            {{- if $i.github_repo -}}
+                                <a href="{{ $i.github_repo }}"><button class="project-github-btn">GitHub Repo</button></a>
+                            {{- else -}}
+                                <button class="project-github-btn unclickable-btn">GitHub Repo</button>
+                            {{- end }}
                         </div>
                     </div>
                 {{- end -}}
