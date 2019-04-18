@@ -7,12 +7,36 @@
         Linux){{ else }}(Recommended){{ end }}</span>:
         <ol>
             <li>
-                <p>Install <a class="homebrew-install" href="ins-env-icon">Homebrew</a></p>
+                <p>Install <a class="homebrew-install" href="https://brew.sh/">Homebrew</a></p>
+            </li>
+            <li>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">brew tap pingcap/brew</code></pre>
+              </div>
             </li>
             <li>
                 <div class="highlight">
                     <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
                     class="language-bash" data-lang="bash">brew install tidb-server</code></pre>
+              </div>
+            </li>
+            <li>
+                <p>Start the tidb-server</p>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">tidb-server</code></pre>
+              </div>
+            </li>
+            <li>
+                <p>If you would like to connect a MySQL client to TiDB</p>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">brew install mysql-client</code></pre>
+              </div>
+              <div class="highlight">
+                <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">mysql -h 127.0.0.1 -P4000 -uroot</code></pre>
               </div>
             </li>
         </ol>
@@ -30,45 +54,70 @@
 
             {{- if eq .type "mac" -}}
             <li>
-              <div class="highlight">
-                <pre
-                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
-                class="language-bash" data-lang="bash">curl -O https://download.pingcap.org/tidb-master-darwin-amd64.tar.gz</code></pre>
-              </div>
+                <div class="highlight">
+                    <pre
+                      style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">curl -LO https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.25-macos10.14-x86_64.tar.gz</code></pre>
+                </div>
             </li>
             <li>
-              <div class="highlight">
-                <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
-                class="language-bash" data-lang="bash">dbdeployer deploy single 3.0.0 --client-from=5.7.25</code></pre>
-              </div>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer unpack mysql-5.7.25-macos10.14-x86_64.tar.gz</code></pre>
+                </div>
             </li>
             <li>
-              <div class="highlight">
-                <pre
-                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
-                class="language-bash" data-lang="bash">dbdeployer unpack tidb-master-darwin-amd64.tar.gz --unpack-version=3.0.0</code></pre>
-              </div>
+                <div class="highlight">
+                    <pre
+                      style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">curl -LO https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.25-macos10.14-x86_64.tar.gz</code></pre>
+                </div>
+            </li>
+            <li>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer unpack mysql-5.7.25-macos10.14-x86_64.tar.gz</code></pre>
+                </div>
+            </li>
+            <li>
+                <div class="highlight">
+                    <pre
+                      style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer deploy single 3.0.0 --client-from=5.7.25</code></pre>
+                </div>
             </li>
             {{- else if eq .type "linux" -}}
             <li>
-              <div class="highlight">
-                <pre
-                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
-                class="language-bash" data-lang="bash">wget https://download.pingcap.org/tidb-master-linux-amd64.tar.gz</code></pre>
-              </div>
+                <div class="highlight">
+                    <pre
+                      style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer remote get mysql-5.7.25</code></pre>
+                </div>
             </li>
             <li>
-              <div class="highlight">
-                <pre
-                  style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
-                class="language-bash" data-lang="bash">dbdeployer unpack tidb-master-linux-amd64.tar.gz --unpack-version=3.0.0</code></pre>
-              </div>
+                <div class="highlight">
+                    <pre
+                      style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer unpack mysql-5.7.25.tar.xz</code></pre>
+                </div>
             </li>
             <li>
-              <div class="highlight">
-                <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
-                class="language-bash" data-lang="bash">dbdeployer deploy single 3.0.0 --client-from=5.7.25</code></pre>
-              </div>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">wget https://download.pingcap.org/tidb-master-linux-amd64.tar.gz</code></pre>
+                </div>
+            </li>
+            <li>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer unpack tidb-master-linux-amd64.tar.gz --unpack-version=3.0.0</code></pre>
+                </div>
+            </li>
+            <li>
+                <div class="highlight">
+                    <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code
+                    class="language-bash" data-lang="bash">dbdeployer deploy single 3.0.0 --client-from=5.7.25</code></pre>
+                </div>
             </li>
         {{- end -}}
       </ol>
