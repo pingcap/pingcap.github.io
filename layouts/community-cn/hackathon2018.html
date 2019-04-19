@@ -8,7 +8,6 @@
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{- partial "head/preload-css" (dict "href" "/css/community/hackathon2018.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/community/multi-slides-carousel.css") -}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
@@ -27,7 +26,7 @@
         <div class="container">
             <h2 class="section-title hackathon-section-title">赛事奖项归属</h2>
             <div class="awarded-list">
-                {{- range $idx, $i := .Site.Data.hackathon2018.winners -}}
+                {{- range $idx, $i := .Site.Data.hackathon.winners_2018 -}}
                     <div class="team">
                         <div class="team-info">
                             <img class="team-bg" src="{{ $i.image}}" />
@@ -54,10 +53,10 @@
         <div class="container">
             <h2 class="section-title">完赛项目展示</h2>
             <div class="project-list">
-                {{- range $idx, $i := .Site.Data.hackathon2018.projects -}}
+                {{- range $idx, $i := .Site.Data.hackathon.projects_2018 -}}
                     <div class="project">
                         <div class="project-thumbnail">
-                            <img class="project-img" src="https://download.pingcap.com/image/project-bg.jpg" />
+                            <img class="project-img" src="https://download.pingcap.com/images/project-bg.jpg" />
                             <div class="project-desc">
                                 {{ $i.intro}}
                             </div>
@@ -80,7 +79,7 @@
         <div class="container">
             <h2 class="section-title hackathon-section-title">导师团成员</h2>
             <div class="tutor-list">
-                {{- range $idx, $i := .Site.Data.hackathon2018.tutors}}
+                {{- range $idx, $i := .Site.Data.hackathon.tutors_2018}}
                     <div class="project tutor">
                         <img class="tutor-avatar" src="{{ $i.avatar }}" />
                         <div class="tutor-name">{{ $i.name }}</div>
@@ -94,14 +93,14 @@
     <section class="hackathon-moments">
         <div class="container">
             <h2 class="section-title">精彩瞬间</h2>
-            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.hackathon2018.moments) -}}
+            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.hackathon.moments_2018) -}}
         </div>
     </section>
 
     <section class="hackathon-review">
         <div class="container">
             <h2 class="section-title">往期回顾</h2>
-            {{- range $idx, $i := .Site.Data.hackathon2018.reviews -}}
+            {{- range $idx, $i := .Site.Data.hackathon.reviews_2018 -}}
                 <a href="{{ $i.link}}">
                     <div class="review-card">
                         <div class="review-thumbnail">
