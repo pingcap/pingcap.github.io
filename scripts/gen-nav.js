@@ -80,7 +80,7 @@ function genTableJSONFromMarkdown(source, target, prefix) {
     return ret
   }
   const jsonTable = JSON.stringify(iterObjProcess(NavData.children), null, 2)
-  console.log(jsonTable)
+  // console.log(jsonTable)
 
   fs.writeFileSync(target, jsonTable, 'utf8')
 }
