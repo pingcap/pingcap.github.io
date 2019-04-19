@@ -13,7 +13,7 @@ replace_dist_html_link() {
       # echo "$html"
       # [ "$html" = "." -o "$html" = ".." ] && continue
       if [ -d "$html" ];then
-        echo "process sub dir: " $html
+        # echo "process sub dir: " $html
         replace_dist_html_link "$html" $repo_name
       fi
       if [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
@@ -48,8 +48,8 @@ parent_dir="`echo $(pwd) | sed 's;/scripts;;g'`/dist"
 copy_images_from_media_to_dist() {
   repo_name=$1
   media_path=$(echo $parent_dir/$repo_name/media)
-  echo $media_path
-  echo $parent_dir/images/$repo_name
+  # echo $media_path
+  # echo $parent_dir/images/$repo_name
   [ -d $media_path ] && mv $media_path $parent_dir/images/$repo_name # cp -R
 }
 
