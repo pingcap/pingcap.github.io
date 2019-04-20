@@ -10,72 +10,95 @@
 {{- define "main" -}}
     <section class="homepage-slogan-mask">
         <div class="container">
-            <img class="logo" src="/images/tidb-logo.png" alt="TiDB">
-            <h1 class="slogan">Make Data Creative</h1>
-            <h2 class="tagline">A one-stop solution for both OLTP and OLAP</h2>
-            <p class="desc" style="font-size: 1rem;">
-                TiDB is an open source distributed scalable hybrid transactional and analytical processing (HTAP) database built by PingCAP.<br />
-                More than 300 companies are using TiDB in production.
-            </p>
-            <div class="buttons">
-                <a href="https://meetings.hubspot.com/kevin255" class="btn btn-primary f-fl" target="_blank"> Ask An Expert </a>
-                <a href="https://pingcap.com/docs/QUICKSTART/" class="btn btn-secondary f-fl"> Free Download </a>
+            <div class="logo-slogan-wrap">
+                <img class="logo logo-en" src="https://download.pingcap.com/images/tidb-logo-slogan-en.png" alt="TiDB">
+            </div>
+            <h4 class="tagline tagline-en">
+              <p>Tackling MySQL Scalability with TiDB: </p>
+              <p>the most actively developed open source NewSQL database on GitHub</p>
+            </h4>
+            <div class="contributor-count"> 
+                <p>Contributor Count:</p>
+                <div class="numb">
+                  <p>2</p>
+                </div>
+                <div class="numb">
+                  <p>5</p>
+                </div>
+                <div class="numb">
+                  <p>1</p>
+                </div>
+            </div>
+            <div class="buttons-en">
+                <a href="/download" class="btn-en btn-primary-en f-fl btn-en">
+                   Free Download </a>
+                <a href="https://meetings.hubspot.com/kevin255" class="btn-en btn-secondary-en f-fl btn-en" target="_blank">
+                  Ask An Expert </a>
             </div>
         </div>
     </section>
-    <section class="homepage-features">
+    <section class="homepage-features homepage-features-en">
         <div class="container">
+            <h4 class="featured-stories-title">Featured Customer Stories</h4>
+            <div class="featured-stories-lists">
+                {{- partial "layout/featured-stories.html" (dict "stories" .Site.Data.success_stories) -}}
+            </div>
+            <a href="/success-stories/"><div class="more-success-stories">See More Success Stories →</div></a>
             <div class="row row-1">
                 <div class="item">
-                    <div class="image-wrap">
-                        <span class="icon">{{ partial "svgs/icon-horizontal-scalability.svg" }}</span>
+                    <div class="feature-icon">
+                        <img src="https://download.pingcap.com/images/svgs/icon-horizontal-scalability.svg" />
                     </div>
                     <h3>HORIZONTAL SCALABILITY</h3>
-                    <p>TiDB provides horizontal scalability simply by adding new nodes. Never worry about infrastructure capacity ever again.</p>
+                    <p>TiDB scales horizontally by simply adding new nodes where sharding is automatically managed.</p>
                 </div>
                 <div class="item item-long">
-                    <div class="image-wrap">
-                        <span class="icon">{{ partial "svgs/icon-sql.svg" (dict "fill" "#fff" "width" 36 "height" 29 ) }}</span>
+                    <div class="feature-icon">
+                        <img src="https://download.pingcap.com/images/svgs/mysql-compatibility.svg" />
                     </div>
                     <h3>MYSQL COMPATIBILITY</h3>
-                    <p>Easily replace MySQL with TiDB to power your applications without changing a single line of code in most cases and still benefit from the MySQL ecosystem.</p>
+                    <p>Use TiDB without changing a single line of MySQL application code in most cases and still benefit
+                      from the MySQL ecosystem.</p>
                 </div>
                 <div class="item">
-                    <div class="image-wrap">
-                        <span class="icon">{{ partial "svgs/icon-transaction.svg" (dict "fill" "#fff" "width" 34 "height" 26 ) }}</span>
+                    <div class="feature-icon">
+                        <img src="https://download.pingcap.com/images/svgs/strong-consistency.svg" />
                     </div>
-                    <h3>DISTRIBUTED TRANSACTION</h3>
-                    <p>TiDB is your source of truth, guaranteeing ACID compliance, so your data is accurate and reliable anytime, anywhere.</p>
+                    <h3>STRONG CONSISTENCY</h3>
+                    <p>TiDB is a strongly consistent system that guarantees ACID compliance.</p>
                 </div>
             </div>
             <div class="row">
                 <div class="item item-long">
-                    <div class="image-wrap">
-                        <span class="icon">{{ partial "svgs/icon-cloud-native.svg" }}</span>
+                    <div class="feature-icon">
+                        <img src="https://download.pingcap.com/images/svgs/cloud-native.svg" />
                     </div>
                     <h3>CLOUD NATIVE</h3>
-                    <p>TiDB is designed to work in the cloud – public, private, or hybrid – making deployment, provisioning, and maintenance drop-dead simple.</p>
+                    <p>TiDB's modular architecture is designed to be cloud-native, making deployment, resource
+                      provisioning, and maintenance easy to manage and control.</p>
                 </div>
                 <div class="item item-long">
-                    <div class="image-wrap">
-                        <span class="icon">{{ partial "svgs/icon-etl.svg" }}</span>
+                    <div class="feature-icon">
+                        <img src="https://download.pingcap.com/images/svgs/minimize-etl.svg" />
                     </div>
                     <h3>MINIMIZE ETL</h3>
-                    <p>ETL is no longer necessary with TiDB's hybrid OLTP/OLAP architecture, enabling you to create new values for your users, easier and faster.</p>
+                    <p>Getting real-time analytics is easy with TiDB's hybrid OLTP/OLAP architecture, while ETL
+                      management is minimal.</p>
                 </div>
                 <div class="item">
-                    <div class="image-wrap">
-                        <span class="icon">{{ partial "svgs/icon-high-availability.svg" }}</span>
+                    <div class="feature-icon">
+                        <img src="https://download.pingcap.com/images/svgs/high-availability.svg" />
                     </div>
                     <h3>HIGH AVAILABILITY</h3>
-                    <p>With TiDB, your data and applications are always on and continuously available, so your users are never disappointed.</p>
+                    <p>TiDB uses the Raft consensus algorithm to ensure that data is highly available and safely
+                      replicated throughout, with automatic failure recovery and self-healing.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    {{ $heading := "World's Most Innovative Businesses Trust PingCAP" }}
-    {{ partial "layout/carousel.html" (dict "stories" .Site.Data.success_stories "heading" $heading "global" .) }}
+    <!-- {{ $heading := "World's Most Innovative Businesses Trust PingCAP" }} -->
+    <!-- {{ partial "layout/carousel.html" (dict "stories" .Site.Data.success_stories "heading" $heading "global" .) }} -->
     {{ partial "layout/cta-footer.html" . }}
 {{- end -}}
 
