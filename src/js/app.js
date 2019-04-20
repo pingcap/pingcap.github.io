@@ -140,7 +140,6 @@ function handleWindowScroll() {
 
 function processMobileOverlay() {
   $('.nav-btn.nav-slider').click(function() {
-    console.log('clicked')
     $('.overlay').show()
     $('nav').toggleClass('open')
   })
@@ -172,6 +171,16 @@ function tabCheckedInDocs() {
           .filter('[value=LocalContent]')
           .prop('checked', true)
         break
+      case '#production':
+        $('input:radio[name=tabs]')
+          .filter('[value=productionContent]')
+          .prop('checked', true)
+        break
+      case '#development':
+        $('input:radio[name=tabs]')
+          .filter('[value=developmentContent]')
+          .prop('checked', true)
+        break
     }
   } else {
     contentTabID = $('input:checked').val()
@@ -184,6 +193,12 @@ function tabCheckedInDocs() {
         break
       case 'LocalContent':
         window.location.href = `./#local`
+        break
+      case 'productionContent':
+        window.location.href = `./#production`
+        break
+      case 'developmentContent':
+        window.location.href = `./#development`
         break
     }
   }
@@ -201,6 +216,12 @@ function tabCheckedInDocs() {
         break
       case 'LocalContent':
         window.location.href = `./#local`
+        break
+      case 'productionContent':
+        window.location.href = `./#production`
+        break
+      case 'developmentContent':
+        window.location.href = `./#development`
         break
     }
     $('section').hide()
