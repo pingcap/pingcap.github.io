@@ -277,4 +277,28 @@ $(document).ready(function() {
   clipboard.on('success', function(e) {
     e.clearSelection()
   })
+
+  // highlight the blockquote in docs/docs-cn
+  $('blockquote').each(function() {
+    var $this = $(this)
+    var quoteLabel = $(this).find('p strong')[0].innerText
+    switch (quoteLabel) {
+      case 'Note:':
+      case '注释：':
+        $(this).addClass('label-note')
+        break
+      case 'Warning:':
+      case '警告：':
+        $(this).addClass('label-warning')
+        break
+      case 'Tip:':
+      case '建议：':
+        $(this).addClass('label-tips')
+        break
+      case 'Error:':
+      case '错误：':
+        $(this).addClass('label-error')
+        break
+    }
+  })
 })
