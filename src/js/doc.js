@@ -283,16 +283,20 @@ $(document).ready(function() {
     var $this = $(this)
     var quoteLabel = $(this).find('p strong')[0].innerText
     switch (quoteLabel) {
-      case 'Note':
+      case 'Note:':
+      case '注释：':
         $(this).addClass('label-note')
         break
-      case 'Warning':
+      case 'Warning:':
+      case '提醒：':
         $(this).addClass('label-warning')
         break
-      case 'Tips':
+      case 'Tips:':
+      case '提示：':
         $(this).addClass('label-tips')
         break
-      case 'Error':
+      case 'Error:':
+      case '错误：':
         $(this).addClass('label-error')
         break
     }
