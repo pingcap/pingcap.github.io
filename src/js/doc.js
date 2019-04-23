@@ -288,11 +288,11 @@ $(document).ready(function() {
         $(this).addClass('label-note')
         break
       case 'Warning:':
-      case '提醒：':
+      case '警告：':
         $(this).addClass('label-warning')
         break
-      case 'Tips:':
-      case '提示：':
+      case 'Tip:':
+      case '建议：':
         $(this).addClass('label-tips')
         break
       case 'Error:':
