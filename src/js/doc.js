@@ -284,7 +284,7 @@ $(document).ready(function() {
     var quoteLabel = $(this).find('p strong')[0].innerText
     switch (quoteLabel) {
       case 'Note:':
-      case '注释：':
+      case '注意：':
         $(this).addClass('label-note')
         break
       case 'Warning:':
