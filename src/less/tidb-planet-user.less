@@ -1,0 +1,469 @@
+// user info page
+
+@import './variables.less';
+
+.html2image-section {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.html2image-container {
+  width: 400px;
+  height: 400px;
+  position: fixed;
+  z-index: 1000;
+  left: -154px;
+  bottom: -154px;
+  // visibility: visible;
+  // transition: visibility 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
+
+  
+.camera-btn-container {
+    position: absolute;
+    top: 164px;
+    left: 164px;
+    width: 72px;
+    height: 72px;
+    z-index: 10001;
+    border-radius: 50%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      opacity: 0;
+      transform: scale(0);
+      border-radius: 50%;
+      transition:
+ transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s,
+      opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
+    }
+  }
+
+  .camera-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    background: @themeBlue;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    visibility: visible;
+    box-shadow:
+ 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+ 0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  }
+
+  .icon-camera {
+    width: 24px;
+    height: 24px;
+    flex: 1;
+    margin: 0;
+  }
+
+  .html2image-tip-container {
+    background-color: @themeBlue;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    transform: scale(0);
+    border-radius: 50%;
+    transition:
+ transform 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s,
+    opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1) 0s;
+  }
+
+  .html2image-tip {
+    width: 12em;
+    padding: 12px;
+    position: fixed;
+    top: 6em;
+    right: 3em;
+    color: #fff;
+    text-align: right;
+  }
+
+  .html2image-tip .text {
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  .capture-btn {
+    padding: 4px 8px;
+    margin: 24px 0;
+    border: 2px solid #fff;
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  &.show {
+    .camera-btn-container::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .html2image-tip-container {
+      opacity: 0.95;
+      transform: scale(1);
+    }
+  }
+}
+
+.share-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 8em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  padding: 1em;
+
+  .text {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #333;
+    width: 12em;
+  }
+
+  img {
+    display: block;
+    width: 6em;
+    height: 6em;
+  }
+}
+
+.user-info-container {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  margin-left: calc(10.6875em / 2 + 1em);
+  width: 24.6875em;
+
+  h2 {
+    margin-bottom: 1em;
+    font-size: 1.2em;
+  }
+
+  .card {
+    width: 24em;
+    height: 14em;
+    margin: 0 auto;
+  }
+
+  .card__content {
+    width: 100%;
+    height: 11em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1em;
+
+    .avatar {
+      width: 6.125em;
+      height: 6.125em;
+      border: 3px solid #fff;
+    }
+
+    .signature {
+      width: 100%;
+      margin-top: 1em;
+    }
+  }
+
+  .card__profile {
+    width: 6.125em;
+  }
+
+  .card__info {
+    width: 14em;
+
+    .number {
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .info {
+      width: 100%;
+      padding: 0;
+      list-style: none;
+
+      li {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        height: 1.8em;
+        margin: 0.4em 0;
+        border: 1px solid;
+        font-size: 0.85em;
+        overflow-x: auto;
+
+        &::before {
+          content: '';
+          position: absolute;
+          height: 100%;
+          width: 1px;
+          background: #fff;
+          left: 7em;
+          top: 0;
+        }
+
+        .label {
+          display: block;
+          // width: 7em;
+
+          
+padding: 0 0.5em;
+          // font-size: 80%;
+
+          
+font-weight: 600;
+        }
+
+        .value {
+          display: block;
+          // width: 9em;
+
+          
+padding-left: 0.5em;
+          // font-size: 85%;
+          // text-align: center;
+        
+}
+      }
+
+      li.info__name,
+      li.info__destination {
+        &::before {
+          left: 7em;
+        }
+
+        .label {
+          width: 7em;
+        }
+
+        .value {
+          width: 9em;
+        }
+      }
+
+      li.info__date {
+        &::before {
+          left: 4em;
+        }
+
+        .label {
+          width: 4em;
+        }
+
+        .value {
+          width: 12em;
+        }
+      }
+
+      li.info__contributions {
+        &::before {
+          left: 8em;
+        }
+
+        .label {
+          width: 8em;
+        }
+
+        .value {
+          width: 8em;
+        }
+      }
+    }
+  }
+
+  .card__header {
+    display: flex;
+    height: 2.4em;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 0.2em;
+
+    .logo-tidb {
+      width: 1.8em;
+      height: auto;
+    }
+
+    .sep {
+      display: block;
+      width: 2px;
+      height: 1.875em;
+      margin: 0 0.875em;
+      background: #fff;
+    }
+
+    .title {
+      width: 10em;
+      font-size: 0.85em;
+    }
+  }
+
+  .card__footer {
+    width: 100%;
+    height: 3em;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+    color: #1e2969;
+
+    .id-container {
+      width: 8em;
+      font-size: 0.9em;
+      line-height: 1.2;
+    }
+
+    .barcode {
+      width: 14em;
+    }
+  }
+
+  .card-residence {
+    border-radius: 5px;
+    background: #e25e51;
+
+    .card__footer {
+      background: #fff;
+      border-radius: 0 0 5px 5px;
+    }
+  }
+
+  .card-pass {
+    background: url('/images/tidb-planet/pass-bg.png') no-repeat;
+    background-size: 100% 100%;
+
+    .card__footer {
+      border-top: 1px dashed;
+    }
+  }
+}
+
+.user-info-page {
+  img {
+    display: block;
+  }
+
+  .element-astronaut {
+    top: -14em;
+    left: 50%;
+    margin-left: calc(~'-10.6875em / 2');
+    width: 10.6875em;
+    height: 21.875em;
+
+    img {
+      width: inherit;
+      height: inherit;
+    }
+  }
+
+  .element-flag {
+    top: -6em;
+    left: 50%;
+    margin-left: calc(~'-13.6875em / 2 - 12em / 2 - 1.2em');
+    width: 7.6785em;
+    height: 13.6875em;
+
+    img {
+      width: inherit;
+      height: inherit;
+    }
+  }
+}
+
+// capture-overlay
+.j-capture-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+
+  &.active::before {
+    content: 'Long-press on the photo to save it and share with your friends!';
+    position: absolute;
+    top: 4.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15em;
+    padding: 0.5em;
+    // border: 2px dashed;
+
+    
+border-radius: 12px;
+    color: #fff;
+    font-size: 1.5em;
+    line-height: 1.5;
+    z-index: 100000000;
+    text-align: center;
+  }
+}
+
+// capture modal
+.modal-capture {
+  width: 60%;
+  height: auto;
+  overflow: hidden;
+  background: transparent;
+  transform: scale(1.2);
+}
+
+/**
+ * Mobile  Styling
+ */
+@media only screen and (max-width: 768px) {
+  .user-info-page {
+    .tidb-planet {
+      top: 63%;
+      background: url('/images/tidb-planet/grey-planet.png') no-repeat center;
+      background-size: cover;
+    }
+
+    .element-flag {
+      top: -4em;
+      margin-left: 8em;
+      width: 4em;
+      height: 7.2em;
+    }
+
+    .element-astronaut {
+      left: 58%;
+      top: -9em;
+    }
+  }
+
+  .user-info-container {
+    top: 2em;
+    margin-left: calc(~'-24.6875em / 2');
+  }
+
+  .modal-capture {
+    transform: scale(1.1);
+  }
+}
+
+// xs iPhone4
+@media only screen and (max-width: 320px) {
+  .user-info-container {
+    top: 1.5em;
+  }
+}
