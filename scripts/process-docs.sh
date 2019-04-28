@@ -34,11 +34,11 @@ replace_dist_html_link "$cn_tmp_docs_path" docs-cn
 replace_dist_html_link "$en_tmp_docs_path" docs
 
 # cn_tmp_blogs_path="dist/blog-cn"
-# en_tmp_blogs_path="dist/blog"
+en_tmp_blogs_path="dist/blog"
 # replace_dist_html_link "$cn_tmp_blogs_path" blog-cn
 # replace_dist_html_link "dist/cases-cn" blog-cn
-# replace_dist_html_link "$en_tmp_blogs_path" blog
-# replace_dist_html_link "dist/success-stories" blog
+replace_dist_html_link "$en_tmp_blogs_path" blog
+replace_dist_html_link "dist/success-stories" blog
 
 # replace_dist_html_link "dist/meetup" meetup
 # replace_dist_html_link "dist/weekly" weekly
@@ -57,6 +57,6 @@ copy_images_from_media_to_dist() {
 copy_images_from_media_to_dist docs
 copy_images_from_media_to_dist docs-cn
 # copy_images_from_media_to_dist blog-cn
-# copy_images_from_media_to_dist blog
+copy_images_from_media_to_dist blog
 # copy_images_from_media_to_dist weekly
 # copy_images_from_media_to_dist meetup
