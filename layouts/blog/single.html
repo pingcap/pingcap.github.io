@@ -21,14 +21,6 @@
                         <a href="/blog">BLOG HOME</a>
                     </div>
                 {{- end -}}
-                <!-- <div class="article-head-img">
-                    {{- if .Params.image}}
-                    {{ $landingImg := .Params.image}}
-                        <img class="lazy" src="{{- $landingImg -}}" />
-                    {{- else -}}
-                        <img class="lazy"src="/images/blog-article/default.png" />
-                    {{- end -}}
-                </div> -->
                 <div class="content markdown-body">
                     <h1 class="title">{{ .Title }}</h1>
                     <ul class="blog-post-meta">
@@ -51,8 +43,14 @@
                     </ul>
                     <div class="blog-text">{{- .Content -}}</div>
                 </div>
-                <!-- {{- partial "archives/subscription.html" . -}} -->
                 {{- partial "archives/post-share.html" . -}}
+            </div>
+            <div class="trackable-btns">
+                <a href="/download" onclick="trackViews('{{ .Title }}', 'download-tidb-btn-bottom')"><button>Download
+                    TiDB</button></a>
+                <a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"
+                  onclick="trackViews('{{ .Title }}', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                    Blog</button></a>
             </div>
         </div>
     </div>
