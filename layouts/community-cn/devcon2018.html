@@ -11,38 +11,45 @@
 {{- end -}}
 
 {{- define "main" -}}
-{{- partial "layout/devcon-nav.html" . -}}
 <div class="devCon">
     <div class="devCon__container">
-        <section class="banner devcon2018-banner"></section>
+        <section class="banner__section devcon2018-banner"></section>
 
-        <div class="video__section">
-            <div class="container">
+        <section class="video__section">
+            <div class="section-container">
                 <div class="video-wrapper">
-                    <video id="video" preload="auto" controls webkit-playsinline="true" poster="" playsinline="true">
-                        <source src="/videos/devcon2018-blooper.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your
-                        browser does not support the video tag.
-                    </video>
+                  <video id="video" preload="auto" controls webkit-playsinline="true" poster="" playsinline="true">
+                    <source src="/videos/devcon2018-blooper.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
+                    Your
+                    browser does not support the video tag.
+                  </video>
                 </div>
                 <p>
                   活动已结束，3 分钟快速回顾 TiDB DevCon 2018
                 </p>
             </div>
-        </div>
+        </section>
 
-        <section class="instructors__section section-dark-bg">
+        <section class="site-record__section section-dark-bg">
+            <div class="instructors section-container">
+                <h1 class="section-title">现场实录</h1>
+                {{- partial "community-cn/site-record.html" (dict "records" .Site.Data.devcon.site_records "cardBg" "dark") -}}
+            </div>
+        </section>
+
+        <section class="instructors__section">
             <div class="instructors section-container">
                 <h1 class="section-title">大咖讲师</h1>
-                {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.techday.instructors_2018 "type" "techday") -}}
+                {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.devcon.instructors_2018 "cardBg" "dark") -}}
             </div>
         </section>
 
         <section class="agenda__section">
             <h1 class="section-title agenda-title">会议日程</h1>
-            {{- partial "archives/schedule-table.html" (dict "schedule" .Site.Data.devcon.schedule_2018 "global" .) -}}
+            {{- partial "community-cn/schedule-table.html" (dict "schedule" .Site.Data.devcon.schedule_2018 "global" .) -}}
         </section>
         
-        <section class="section-dark-bg">
+        <section>
             <div class="section-container">
                 <div class="container">
                     <h2 class="section-title">精彩瞬间</h2>
