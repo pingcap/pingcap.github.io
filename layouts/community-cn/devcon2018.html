@@ -7,6 +7,7 @@
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{ $.Scratch.Set "nav_active" "community" }}
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet/modal.css") -}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
@@ -19,7 +20,8 @@
             <div class="section-container">
                 <div class="video-wrapper">
                   <video id="video" preload="auto" controls webkit-playsinline="true" poster="" playsinline="true">
-                    <source src="/videos/devcon2018-blooper.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
+                    <source src="https://download.pingcap.com/videos/devcon2018-blooper.mp4"
+                      type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
                     Your
                     browser does not support the video tag.
                   </video>
@@ -53,7 +55,7 @@
             <div class="section-container">
                 <div class="container">
                     <h2 class="section-title">精彩瞬间</h2>
-                    {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.techday.moments_2018) -}}
+                    {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.devcon.moments_2018) -}}
                 </div>
             </div>
         </section>
@@ -73,5 +75,6 @@
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
     <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
+    <script type="text/javascript" src="/js/video_on_modal.js"></script>
     <script type="text/javascript" src="/js/devcon.js"></script>
 {{- end -}}
