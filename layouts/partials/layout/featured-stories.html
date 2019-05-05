@@ -1,0 +1,21 @@
+{{- range $index, $category := .stories -}}
+    {{- range $idx, $item := .children -}}
+        {{- if .isShow -}}
+            <div class="story">
+                <div class="company-thumbnail">
+                    <div class="thumbnail-img" style="background-image: url('{{ .logo }}');"></div>
+                </div>
+                <!-- <div classs="company-thumbnail">
+                  <img class="lazy" data-original="{{ .logo }}"
+                    style="background-image: url('{{ .logo }}');" />
+                </div> -->
+                <div class="story-info">
+                    <div class="company-name">{{ .name }}</div>
+                    <p class="company-industry">Industry: {{ .industry }}</p>
+                    <p class="company-scale">Scale: {{ .scale }}</p>
+                    <div class="read-more-arrow"><a href="{{ .link }}">Read More > </a></div>
+                </div>
+            </div>
+        {{- end -}}
+    {{- end -}}
+{{- end -}}

@@ -175,42 +175,94 @@
       position: relative;
       background-color: #272822;
       border-radius: 3px;
+    }
 
-      // pre {
-      //   border-radius: 3px 0 3px 3px;
-      // }
+    .version-mark {
+      color: @themeBlue;
+      font-style: italic;
+      font-size: 16px;
+      position: relative;
+      padding: 0 7px 0 25px;
+      font-family: TitilliumWeb;
+    }
 
-      // button::after {
-      //   font-family: 'FontAwesome';
-      //   content: '\f24d';
-      //   margin-left: 10px;
-      // }
+    .version-mark::before {
+        content: '';
+        background-image: url("/images/version-mark.png");
+        position: absolute;
+        left: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        background-size: 20px;
+        height: 20px;
     }
 
     .copy {
-        position: relative;
-        width: 85px;
-        float: right;
-        z-index: 2;
-        color: #94a3ea;
-        background: #272822;
-        border: none;
-        border-radius: 0 3px 0 0;
-        padding: 16px .3rem 0;
-        font-family: inherit;
-        font-size: 13px;
-        font-style: italic;
+      position: relative;
+      width: 85px;
+      float: right;
+      z-index: 2;
+      color: #94a3ea;
+      background: #272822;
+      border: none;
+      border-radius: 0 3px 0 0;
+      padding: 16px .3rem 0;
+      font-family: inherit;
+      font-size: 13px;
+      font-style: italic;
 
-        &:hover {
-          color: rgb(194, 194, 194);
-        }
+      &:hover {
+        color: rgb(194, 194, 194);
       }
+    }
 
-      .copy::after {
-        font-family: 'FontAwesome';
-        content: '\f24d';
-        margin-left: 5px;
+    .copy::after {
+      font-family: 'FontAwesome';
+      content: '\f24d';
+      margin-left: 5px;
+    }
+
+    blockquote {
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
+    }
+
+    .label-note {
+      background: #d3dded !important;
+      border-left: 0.25em solid @themeBlue !important;
+
+      strong {
+        color: @themeBlue !important;
       }
+    }
+
+    .label-tips {
+      background: #b7e2c1 !important;
+      border-left: 0.25em solid #0d9939 !important;
+
+      strong {
+        color: #0d9939 !important;
+      }
+    }
+
+    .label-warning {
+      background: #ffbfbf !important;
+      border-left: 0.25em solid #d80f0f !important;
+
+      strong {
+        color: #d80f0f !important;
+      }
+    }
+
+    .label-error {
+      background: #ffe0c1 !important;
+      border-left: 0.25em solid #ed7e02 !important;
+
+      strong {
+        color: #ed7e02 !important;
+      }
+    }
   }
 
   .tabs {
@@ -231,6 +283,10 @@
 
     input {
       display: none;
+    }
+
+    .regular-weight-label {
+      font-weight: 400 !important;
     }
 
     label {
@@ -338,12 +394,14 @@
   }
 }
 
-.doc {
+.doc,
+.blog {
   .sidebar {
     flex: 0 0 @sidebarWidth;
   }
 
   .sidebar-page {
+    max-width: 250px;
     flex: 0 0 @pageSidebarWidth;
     min-height: calc(~'100vh - @{pcFooterHeight}');
 
@@ -429,11 +487,35 @@
 .blog {
   .blogArticle__container {
     margin: 0 auto;
-    max-width: 1100px;
+    max-width: 1400px;
     padding: 0 4rem 1rem;
+    display: flex;
 
     .archive {
       max-width: 100%;
+    }
+  }
+
+  .trackable-btns {
+    text-align: center;
+    padding: 20px;
+
+    button {
+      padding: 14px 20px;
+      background: @themeBlue;
+      color: white;
+      font-size: 16px;
+      border: none;
+      margin: 30px 50px;
+      width: 180px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(.25, .8, .25, 1);
+
+      &:hover {
+        background: #556AFF;
+        box-shadow: 0 1px 4px #666;
+      }
     }
   }
 }
@@ -463,6 +545,19 @@
 // smarttoc-extender global
 #smarttoc-extender {
   display: none !important;
+}
+
+@media (max-width: 1024px) {
+  .blog {
+    .archive {
+      max-width: calc(~'100% - 12rem') !important;
+      padding-left: 0 !important;
+    }
+
+    .sidebar-page {
+      padding: 0 1rem 1rem 0;
+    }
+  } 
 }
 
 @media (min-width: 880px) {
@@ -530,7 +625,8 @@
     }
   }
 
-  .doc {
+  .doc,
+  .blog {
     .sidebar-page {
       min-height: 100%;
       padding-bottom: 25px;
@@ -549,6 +645,20 @@
       margin-top: 55px;
     }
   }
+
+  .blog {
+    .blogArticle__container {
+      display: block !important;
+    }
+
+    .archive {
+      max-width: 100% !important;
+    }
+
+    .article-nav {
+      padding: 0 0 1rem;
+    }
+  }
 }
 
 @media (max-width: 500px) {
@@ -562,6 +672,14 @@
         padding: 10px;
       }
     }
+
+    .blogArticle__container {
+      padding: 0;
+    }
+  }
+
+  .blog .trackable-btns button {
+    margin: 10px 0;
   }
 }
 

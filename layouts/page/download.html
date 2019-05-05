@@ -1,0 +1,77 @@
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "free-download"}}
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/download-tidb.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+    <div class="contact-us">
+        <div class="download-tidb-banner">
+            <div class="banner__container">
+                <div class="tidb-logo">
+                  <img src="/images/tidb-logo.png" />
+                </div>
+                <div class="download-title">Download TiDB</div>
+                <div class="banner-illustration">
+                  <img src="https://download.pingcap.com/images/download-tidb/banner-illustration.png" />
+                </div>
+            </div>
+        </div>
+        <div class="download-container doc">
+            <div class="tabs">
+
+              <input id="tabProduction" type="radio" name="tabs" value="productionContent" checked>
+              <label for="tabProduction" class="regular-weight-label">
+                <span>Production</span>
+              </label>
+
+              <input id="tabDevelopment" type="radio" name="tabs" value="developmentContent">
+              <label for="tabDevelopment" class="regular-weight-label">
+                <span>Development</span>
+              </label>
+
+              <section id="productionContent">
+                  <div class="install-desc">
+                      <p>Install Instructions for Production Environment using:</p>
+                  </div>
+                  <div class="env-logos">
+                      <img src="https://download.pingcap.com/images/download-tidb/binary-logo.png" />
+                      <img src="https://download.pingcap.com/images/download-tidb/ansible-logo.png" />
+                      <img src="https://download.pingcap.com/images/download-tidb/k8s-logo.png" />
+                      <img src="https://download.pingcap.com/images/download-tidb/docker-logo.png" />
+                      <img src="https://download.pingcap.com/images/download-tidb/aws-logo.png" />
+                      <img src="https://download.pingcap.com/images/download-tidb/new-gcp-logo.png" />
+                      <img src="https://download.pingcap.com/images/download-tidb/terraform-logo.png" />
+                  </div>
+                  <div style="max-width: 500px;">
+                      <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+                      <script>
+                        hbspt.forms.create(
+
+                          {
+                            portalId: "4466002",
+                            formId: "77e7f071-13fd-4ebd-b8f0-7afc32fe1b6e"
+                          }
+                        );
+                      </script>
+                  </div>
+              </section>
+
+              <section id="developmentContent">
+                  <div class="install-desc">
+                      <p>Developer Local Install Instructions:</p>
+                  </div>
+                  {{- partial "download-tidb/download-instruction.html" (dict "type" "mac" "imgSRC" "https://download.pingcap.com/images/download-tidb/mac-icon.png" "global" .) -}}
+                  {{- partial "download-tidb/download-instruction.html" (dict "type" "linux" "imgSRC" "https://download.pingcap.com/images/download-tidb/linux-icon.png" "global" .) -}}
+                  {{- partial "download-tidb/download-instruction.html" (dict "type" "windows" "imgSRC" "https://download.pingcap.com/images/download-tidb/windows-icon.png" "global" .) -}}
+              </section>
+            </div>
+          </div>
+    </div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
+{{- end -}}
