@@ -7,16 +7,15 @@
     {{$.Scratch.Set "nav_active" "community"}}
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{- partial "head/preload-css" (dict "href" "/css/community/hackathon2018.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/community/multi-slides-carousel.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/list.css") -}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
 <div class="hackathon-2018">
-    <section class="banner"></section>
+    <section class="banner__section hackathon2018-banner"></section>
     <section class="about-hackathon">
-        <div class="container">
+        <div class="section-container">
             <h2 class="section-title">关于 TiDB Hackathon</h2>
             <p class="hackathon-intro">TiDB Hackathon 是由 PingCAP 举办的黑客马拉松大赛，选手需围绕整个 TiDB 生态做出一个完整的作品并由评审最终评选出获奖者。赛制参考了国内外知名的 Hackathon 举办模式，参赛队伍需在规定时间（48 小时）内完成作品并展示。</p>
             <p class="hackathon-date">比赛时间：2018.12.01 至 12.02</p>
@@ -24,10 +23,10 @@
     </section>
 
     <section class="awarded-projects">
-        <div class="container">
+        <div class="section-container">
             <h2 class="section-title hackathon-section-title">赛事奖项归属</h2>
             <div class="awarded-list">
-                {{- range $idx, $i := .Site.Data.hackathon2018.winners -}}
+                {{- range $idx, $i := .Site.Data.hackathon.winners_2018 -}}
                     <div class="team">
                         <div class="team-info">
                             <img class="team-bg" src="{{ $i.image}}" />
@@ -51,13 +50,13 @@
     </section>
 
     <section class="total-projects">
-        <div class="container">
+        <div class="section-container">
             <h2 class="section-title">完赛项目展示</h2>
             <div class="project-list">
-                {{- range $idx, $i := .Site.Data.hackathon2018.projects -}}
+                {{- range $idx, $i := .Site.Data.hackathon.projects_2018 -}}
                     <div class="project">
                         <div class="project-thumbnail">
-                            <img class="project-img" src="https://download.pingcap.com/image/project-bg.jpg" />
+                            <img class="project-img" src="https://download.pingcap.com/images/project-bg.jpg" />
                             <div class="project-desc">
                                 {{ $i.intro}}
                             </div>
@@ -77,10 +76,10 @@
     </section>
 
     <section class="tutor-members">
-        <div class="container">
+        <div class="section-container">
             <h2 class="section-title hackathon-section-title">导师团成员</h2>
             <div class="tutor-list">
-                {{- range $idx, $i := .Site.Data.hackathon2018.tutors}}
+                {{- range $idx, $i := .Site.Data.hackathon.tutors_2018}}
                     <div class="project tutor">
                         <img class="tutor-avatar" src="{{ $i.avatar }}" />
                         <div class="tutor-name">{{ $i.name }}</div>
@@ -92,16 +91,16 @@
     </section>
 
     <section class="hackathon-moments">
-        <div class="container">
+        <div class="section-container">
             <h2 class="section-title">精彩瞬间</h2>
-            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.hackathon2018.moments) -}}
+            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.hackathon.moments_2018) -}}
         </div>
     </section>
 
     <section class="hackathon-review">
-        <div class="container">
+        <div class="section-container">
             <h2 class="section-title">往期回顾</h2>
-            {{- range $idx, $i := .Site.Data.hackathon2018.reviews -}}
+            {{- range $idx, $i := .Site.Data.hackathon.reviews_2018 -}}
                 <a href="{{ $i.link}}">
                     <div class="review-card">
                         <div class="review-thumbnail">

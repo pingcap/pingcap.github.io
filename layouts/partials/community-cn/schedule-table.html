@@ -13,14 +13,24 @@
             <tr>
                 <td>{{ $i.time }}</td>
                 <td>{{ $i.talk_title }}</td>
-                <td>{{ $i.speaker }}</td>
+                {{- if $i.company -}}
+                    <td>{{ $i.company }}<span> - {{ $i.speaker }}</span></td>
+                {{- else if $i.speaker_title -}}
+                    <td><span>{{ $i.speaker_title }} - </span>{{ $i.speaker }}</td>
+                {{- else -}}
+                    <td>{{ $i.speaker }}</td>
+                {{- end -}}
                 <td></td>
             </tr>
         {{- else if $i.talk_detail -}}
             <tr class="collapsable">
                 <td>{{ $i.time }}</td>
                 <td>{{ $i.talk_title }} </td>
-                <td>{{ $i.speaker }}</td>
+                {{- if $i.company -}}
+                    <td>{{ $i.company }}<span> - {{ $i.speaker }}</span></td>
+                {{- else -}}
+                    <td>{{ $i.speaker }}</td>
+                {{- end -}}
                 <td class="collapse"> + </td>
             </tr>
             <tr class="detail-block">
@@ -50,7 +60,9 @@
                     </ul>
                 </td>
                 <td>{{ $i3.company }}<span> - {{ $i3.speaker }}</span></td>
-                <td class="collapse"> + </td>
+                {{- if $i3.talk_detail -}}
+                    <td class="collapse"> + </td>
+                {{- end -}}
             </tr>
             <tr class="detail-block">
                 <td></td>
