@@ -1,6 +1,6 @@
 {{- define "title" -}}
-    {{ $.Scratch.Set "metaTitle" "Techday 2018" }}
-    Techday 2018
+    {{ $.Scratch.Set "metaTitle" "Techday 2017" }}
+    Techday 2017
 {{- end -}}
 
 {{- define "headTpl" -}}
@@ -8,45 +8,31 @@
     {{ $.Scratch.Set "nav_active" "community" }}
     {{- partial "head/preload-css" (dict "href" "/css/community/techday2018.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/agenda.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet/modal.css") -}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
-<div class="techday2018">
-    <section class="banner__section techday2018-banner"></section>
-    <section>
-        <div class="section-container">
-            <h1 class="section-title">实录分享</h1>
-            {{- partial "layout/recording-share.html" (dict "recordings" .Site.Data.techday.recording_share_2018) -}}
-        </div>
-    </section>
+<div class="techday2017">
+    <section class="banner__section techday2017-banner"></section>
     <section class="instructors__section section-dark-bg">
       <div class="instructors section-container">
         <h1 class="section-title">大咖讲师</h1>
-        {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.techday.instructors_2018 "type" "techday") -}}
+        {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.techday.instructors_2017 "type" "techday") -}}
       </div>
     </section>
 
     <section class="agenda__section">
         <h1 class="section-title">会议日程</h1>
-        {{- partial "community-cn/schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2018 "global" .) -}}
+        {{- partial "community-cn/schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2017 "global" .) -}}
     </section>
 
     <section class="section-dark-bg">
       <div class="section-container">
         <div class="container">
             <h2 class="section-title">精彩瞬间</h2>
-            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.techday.moments_2018) -}}
+            {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.techday.moments_2017) -}}
         </div>
       </div>
-    </section>
-
-    <section class="hackathon-review">
-        <div class="section-container">
-            <h2 class="section-title">往期回顾</h2>
-            {{- partial "community-cn/review-card.html" (dict "reviews" .Site.Data.techday.reviews_2017) -}}
-        </div>
     </section>
 
     <section class="back-to-community-section">
@@ -62,6 +48,5 @@
 {{- define "footJS" -}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
     <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
-    <script type="text/javascript" src="/js/video_on_modal.js"></script>
     <script type="text/javascript" src="/js/devcon.js"></script>
 {{- end -}}
