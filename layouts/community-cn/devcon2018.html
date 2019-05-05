@@ -1,0 +1,80 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "DevCon 2018" }}
+    DevCon 2018
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet/modal.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+{{- end -}}
+
+{{- define "main" -}}
+<div class="devCon">
+    <div class="devCon__container">
+        <section class="banner__section devcon2018-banner"></section>
+
+        <section class="video__section">
+            <div class="section-container">
+                <div class="video-wrapper">
+                  <video id="video" preload="auto" controls webkit-playsinline="true" poster="" playsinline="true">
+                    <source src="https://download.pingcap.com/videos/devcon2018-blooper.mp4"
+                      type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
+                    Your
+                    browser does not support the video tag.
+                  </video>
+                </div>
+                <p>
+                  活动已结束，5 分钟快速回顾 TiDB DevCon2018
+                </p>
+            </div>
+        </section>
+
+        <section class="site-record__section section-dark-bg">
+            <div class="instructors section-container">
+                <h1 class="section-title">现场实录</h1>
+                {{- partial "community-cn/site-record.html" (dict "records" .Site.Data.devcon.site_records "cardBg" "dark") -}}
+            </div>
+        </section>
+
+        <section class="instructors__section">
+            <div class="instructors section-container">
+                <h1 class="section-title">大咖讲师</h1>
+                {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.devcon.instructors_2018 "cardBg" "dark") -}}
+            </div>
+        </section>
+
+        <section class="agenda__section">
+            <h1 class="section-title agenda-title">会议日程</h1>
+            {{- partial "community-cn/schedule-table.html" (dict "schedule" .Site.Data.devcon.schedule_2018 "global" .) -}}
+        </section>
+        
+        <section>
+            <div class="section-container">
+                <div class="container">
+                    <h2 class="section-title">精彩瞬间</h2>
+                    {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.devcon.moments_2018) -}}
+                </div>
+            </div>
+        </section>
+
+        <section class="back-to-community-section">
+            <a href="/community-cn/#activities">
+                <button class="back-to-community">
+                    更多社区活动
+                </button>
+            </a>
+        </section>
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
+    <script type="text/javascript" src="/js/video_on_modal.js"></script>
+    <script type="text/javascript" src="/js/devcon.js"></script>
+{{- end -}}
