@@ -1,17 +1,206 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Community Organization" }}
+    Community Organization
+{{- end -}}
+
 {{- define "headTpl" -}}
-    {{- partial "head/preload-css" (dict "href" "/css/cases.css") -}}
+    {{$.Scratch.Set "nav_active" "community"}}
+    {{ $.Scratch.Set "data_i18_link" "/community-cn/organization" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/organization.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
-{{ $heading := "TiDB Community" }}
-<div class="contact-us">
-    {{- partial "layout/hero.html" (dict "heading" $heading) -}}
-    <div class="container" style="padding: 0 1rem; min-height: 300px;">
-        <div class="desc community-desc">
-            This is the dedicated TiDB Community page, where you can find the most up to date information on the latest events,
-            meetups, conferences, and other activities related to TiDB. Please check back again soon, as we build out the content
-            for this page.
+<div class="community-organization">
+    <div class="banner__section organization__banner">
+        <div class="banner__content-container">
+            <div class="content"> TiDB Community Organization </div>
+        </div>
+    </div>
+
+    <div class="organization__section">
+        <div class="container">
+            <div class="section-title">Community Organization</div>
+            <div class="intro">Open source projects live and breathe the open source community with different types of roles. The TiDB community has the following organizations:</div>
+            <div class="architecture">
+                <img class="skeleton" src="/images/community/organization/lines-mobilei7.svg">
+                <button class="head-node">TiDB Community Organization </button>
+                <button class="pmc">
+                  <div class="btnLogo"><img src="/images/community/organization/icons/pmc.svg" /></div>
+                  <p>PMC</p>
+                  <span class="tooltiptext">The Project Management Committee (PMC) is to manage and oversee the entire TiDB community. The PMC consists of Core Maintainers and Organizer Committee Chair. </span>
+                </button>
+                <button class="developer-group">
+                  <p>Community Developer Group</p></button>
+                <button class="committee">
+                  <div class="btnLogo"><img src="/images/community/organization/icons/org-committee.svg" /></div>
+                  <p>Organizer Committee</p>
+                  <span class="rightSide">The Organizer Committee is to manage the organizers, to execute the PMC strategies and decisions. The Organizer Committee consists of User Group Leader and Organizers.</span>
+                </button>
+                <button class="maintainer">
+                  <div class="btnLogo"><img src="/images/community/organization/icons/maintainer.svg" /></div>
+                  <p>Maintainer</p>
+                  <span class="tooltiptext">Maintainer is the planner and designer of the project. Maintainers come from Committers and has the right to commit, merge and approve the Pull Requests (PR) with LGTM (Looks Good To Me).</span>
+                </button>
+                <button class="committer">
+                  <div class="btnLogo"><img src="/images/community/organization/icons/committer.svg" /></div>
+                  <p>Committer</p>
+                </button>
+                <button class="contributor">
+                  <div class="btnLogo"><img src="/images/community/organization/icons/contributor.svg" /></div>
+                  <p>Contributor</p>
+                </button>
+                <button class="member">
+                  <div class="btnLogo"><img src="/images/community/organization/icons/org-member.svg" /></div>
+                  <p>Community Member</p>
+                  <span class="rightSide">The Community Members consist of those who are enthusiastic about the TiDB community and are actively engaged in the project features and discussions.</span>
+                </button>
+            </div>
+            <div class="divider"><div class="line"></div></div>
+            <div class="committer__detail">
+                <div class="committer-btn">
+                    <button>
+                        <span><img src="/images/community/organization/icons/committer.svg" /></span>
+                        Committer
+                    </button>
+                </div>
+                <div class="c-content">
+                  <p>Committers are developers of the projects and are elected from contributors. Currently, the TiDB community has the following committers:</p>
+                  <div class="committer-members">
+                      <div class="c-member c-member-en">
+                        <div class="avatar">
+                          <img src="/images/community/organization/yubai.jpg">
+                        </div>
+                        <div class="name">Kai LI<span></span></div>
+                        <div class="company">mobike.com | Technical Director of the Infrastructure Architecture team</div>
+                      </div>
+                      <div class="c-member c-member-en">
+                        <div class="avatar">
+                          <img src="/images/community/organization/wudi.jpg">
+                        </div>
+                        <div class="name">Di WU</div>
+                        <div class="company">Toutiao.com | Head of Database Middleware/Distributed Database</div>
+                      </div>
+                      <div class="c-member c-member-en">
+                        <div class="avatar">
+                          <img src="/images/community/organization/liyulai.jpeg">
+                          </div>
+                        <div class="name">Yulai LI</div>
+                        <div class="company">SpeedyCloud | Architect</div>
+                      </div>
+                      <div class="c-member c-member-en">
+                        <div class="avatar">
+                          <img src="/images/community/organization/duchuan.jpeg">
+                        </div>
+                        <div class="name">Chuan DU</div>
+                        <div class="company">Tencent Cloud | Senior Engineer</div>
+                      </div>
+                      <div class="c-member c-member-en">
+                        <div class="avatar">
+                          <img src="/images/community/organization/sunxiaoguang.jpeg">
+                        </div>
+                        <div class="name">Xiaoguang SUN</div>
+                        <div class="company">Zhihu.com | Head of the Search Engineering Architecture team</div>
+                      </div>
+                      <div class="c-member c-member-en">
+                        <div class="avatar">
+                          <img src="/images/community/organization/Jun-Seok-Heo.jpeg">
+                        </div>
+                        <div class="name">Jun-Seok Heo</div>
+                        <div class="company">Samsung Electronics | Cloud Database Engineering</div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="be__committer">
+                <div class="c-title"> How to be come a TiDB Committer?</div>
+                <div class="c-content">
+                  <p>First of all, you need to get involved and be a Contributor. A new Committer must be nominated by any existing Maintainer or PMC member, and is generated through the voting of PMC members. A Committer must have accomplished one or more of the following items:</p>
+                  <ul>
+                    <li>Your commits have been approved and merged by Maintainers for over ten times. </li>
+                    <li>You have implemented a complete feature.</li>
+                    <li>You have fixed a vital bug.</li>
+                  </ul>
+                </div>
+            </div>
+            <div class="divider"><div class="line"></div></div>
+            <div class="contributor__detail">
+                <div class="contributor-btn">
+                  <button>
+                      <span><img src="/images/community/organization/icons/contributor.svg" /></span>
+                      Contributor
+                  </button>
+                </div>
+                <div class="c-content">
+                  <p>If a PR submitted to the <a href="https://github.com/pingcap/tidb">TiDB</a>/<a href="https://github.com/pingcap/tikv">TiKV</a>/
+                      <a href="https://github.com/pingcap/tispark">TiSpark</a>/<a href="https://github.com/pingcap/pd">PD</a>/
+                      <a href="https://github.com/pingcap/tidb-operator">TiDB Operator</a>/<a href="https://github.com/pingcap/parser">Parser</a>/
+                      <a href="https://github.com/pingcap/docs">Docs</a>/<a href="https://github.com/pingcap/docs-cn">Docs-cn</a> projects by you is approved and merged, then you become a TiDB Contributor.</p>
+                  <div class="subtitle-pr"><div id="pr-collapse"> + </div> Your First Contribution </div>
+                  <div class="pr-content">
+                    <p>Your journey of becoming a contributor and committer starts from here: improving docs, improving code, giving talks, organizing meetups, etc. You can get your unique TiDB mug designed only for TiDB contributors. Start contributing now!</p>
+                    <ul>
+                      <li>Fork the project to your GitHub account</li>
+                      <li>Git Clone to your local repository</li>
+                      <li>Create a new branch based on the master branch</li>
+                      <li>Code and test in your local repository</li>
+                      <li>Commit and push your commit to the remote repository</li>
+                      <li>File a PR</li>
+                      <li>Code review: After we receive your PR, we will review your code, so please keep an eye on the conversations and comments of your PR. If you receive two LGTMs, your PR is approved and is to be merged! Congratulations on being a new TiDB contributor! Contact community@pingcap.com for your special swags as contributors. </li>
+                    </ul>
+                  </div>
+                  <div class="subtitle-guide"><div id="guide-collapse"> + </div>New to the Community? </div>
+                  <div class="guide-content">
+                    <p>If you have never been working on any open source projects, you can still contribute to the community. You can </p>
+                    <ul>
+                      <li>Try TiDB! If you like it, star, share, and recommend it.</li>
+                      <li>Look for GitHub issues with the 'for new contributors' or 'help wanted' labels. These lables are ususally easy and fun to start with.</li> 
+                      <li>Dig deeper, read a design doc, e.g. <a href="https://www.pingcap.com/blog/2016-10-17-how-we-build-tidb/">How we build TiDB</a>. </li>
+                      <li>Start with improving the documentation. You can search <a href="https://github.com/pingcap/docs/issues">open issues</a> to find inspiration for what to work on.</li>
+                      <li>Report bugs by creating issues or fix known issues</li>
+                      <li>There's always code that can be clarified and variables or functions that can be renamed or commented.</li>
+                      <li>Share your story with TiDB by creating case studies, technical blogs or give a talk at a local meetup or conferences.</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript">
+      function lines() {
+        if (window.matchMedia('(max-width: 360px)').matches) {
+          $('.architecture .skeleton').attr(
+            'src',
+            'https://download.pingcap.com/images/lines-mobilei5.svg'
+          )
+        } else if (window.matchMedia('(max-width: 700px)').matches) {
+          $('.architecture .skeleton').attr(
+            'src',
+            'https://download.pingcap.com/images/lines-mobilei7.svg'
+          )
+        } else {
+          $('.architecture .skeleton').attr(
+            'src',
+            'https://download.pingcap.com/images/lines-pc.svg'
+          )
+        }
+      }
+
+      $(document).ready(function() {
+        lines()
+        $(window).resize(lines)
+      })
+        
+    </script>
+    <script type="text/javascript" src="/js/devcon.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
 {{- end -}}
