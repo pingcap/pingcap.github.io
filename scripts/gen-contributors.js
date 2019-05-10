@@ -33,7 +33,8 @@ const repos = [
   'tidb-tools',
   'tikv',
   'tipb',
-  'tispark'
+  'tispark',
+  'tidb-binlog'
 ]
 
 const owner = 'pingcap'
