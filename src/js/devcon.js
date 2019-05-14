@@ -8,7 +8,7 @@ function handleWebsiteNavDisplay() {
     $('header').hide()
     $('.devcon-nav').css('top', '0')
     $('.devCon').css('padding-top', h)
-  } else {
+  } else if ($('.devcon-nav').length != 0) {
     $('header').show()
     $('.devcon-nav').css('top', h)
     $('.devCon').css('padding-top', 2 * h)

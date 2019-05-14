@@ -8,6 +8,7 @@
     {{ $.Scratch.Set "nav_active" "community" }}
     {{ $.Scratch.Set "nav_active" "devcon2019" }}
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
     <style type="text/css">
       .amap-logo,
       .amap-copyright {
@@ -25,6 +26,8 @@
 {{- define "footJS" -}}
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
     <script type="text/javascript" src="/js/devcon.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
     <!-- Begin gao_de map -->
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=5943f0161bc8beb9f40b4f652faf648f&callback=init"></script>
     <script type="text/javascript">
@@ -59,116 +62,131 @@
 {{- define "main" -}}
 {{- partial "layout/devcon-nav.html" . -}}
 <div class="devCon">
-    <div class="devCon__container">
-        <div class="banner">
+    <div class="banner__section devcon2019-banner"></div>
+    
+    <section class="agenda__section">
+        <div class="content">
+            <p>
+              TiDB DevCon 是 PingCAP 团队面向 TiDB 社区推出的技术会议。
+              本届 TiDB DevCon 2019 以 “Powered by Contributors” 为主题，聚焦 TiDB 项目核心技术的最新进展和未来规划，以及来自社区一线用户的最佳实践经验，展示 TiDB
+              在海内外的最新动态。旨在帮助社区更好的理解 TiDB 的技术理念，汇总用户从技术选型到应用落地各阶段的实操中总结出的经验和坑，挖掘 TiDB 场景适配的更多可能性。
+            </p>
         </div>
-        
-        <section class="agenda__section">
-            <div class="content">
-                <p>
-                  TiDB DevCon 是 PingCAP 团队面向 TiDB 社区推出的技术会议。
-                  本届 TiDB DevCon 2019 以 “Powered by Contributors” 为主题，聚焦 TiDB 项目核心技术的最新进展和未来规划，以及来自社区一线用户的最佳实践经验，展示 TiDB
-                  在海内外的最新动态。旨在帮助社区更好的理解 TiDB 的技术理念，汇总用户从技术选型到应用落地各阶段的实操中总结出的经验和坑，挖掘 TiDB 场景适配的更多可能性。
-                </p>
-            </div>
-            <div class="video__section">
-              <div class="container">
-                  <div class="video-wrapper">
-                    <video id="video" preload="auto" controls webkit-playsinline="true"  poster="https://download.pingcap.com/images/devcon2019-video-poster.jpg" playsinline="true">
-                        <source src="https://download.pingcap.com/videos/DevCon2019-video.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
-                    </video>
-                  </div>
-                  <p>
-                      活动已结束，3 分钟快速回顾 TiDB DevCon 2019
-                  </p>
+        <div class="video__section">
+          <div class="container">
+              <div class="video-wrapper">
+                <video id="video" preload="auto" controls webkit-playsinline="true"  poster="https://download.pingcap.com/images/devcon2019-video-poster.jpg" playsinline="true">
+                    <source src="https://download.pingcap.com/videos/DevCon2019-video.mp4" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' /> Your browser does not support the video tag.
+                </video>
               </div>
-            </div>
-            <h1 class="section-title agenda-title">会议日程</h1>
-            {{- partial "archives/schedule-table.html" (dict "schedule" .Site.Data.devcon_schedules.schedule2019 "global" .) -}}
-        </section>
-
-        <section class="instructors__section section-dark-bg">
-            <div class="instructors section-container">
-                <h1 class="section-title">讲师介绍</h1>
-                {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.devcon2019.instructors "type" "devcon") -}}
-            </div>
-        </section>
-
-        <section class="sponsor__section">
-          <div class="sponsors section-container">
-            <h1 class="section-title">支持媒体</h1>
-            <div class="sponsors__list">
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/geek.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/csdn.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/kaiyuanzhongguo.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/segmentfault.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/51cto.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/juejin.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/dbaplus.png" />
-                </div>
-                <div class="sponsor">
-                  <img src="/images/community/sponsors/tgo.jpg" />
-                </div>
-            </div>
+              <p>
+                  活动已结束，3 分钟快速回顾 TiDB DevCon 2019
+              </p>
           </div>
-        </section>
+        </div>
+        <h1 class="section-title agenda-title">会议日程</h1>
+        {{- partial "community-cn/schedule-table.html" (dict "schedule" .Site.Data.devcon.schedule_2019 "global" .) -}}
+    </section>
 
-        <section class="contact__section section-dark-bg">
-            <div class="contact section-container">
-                <h1 class="section-title">参会地址</h1>
-                <div class="address__guide">
-                    <div class="guide">地址 
-                        <div class="guide-detail">北京市 朝阳区 樱花园东街甲 2 号 北京服装学院内 中关村时尚产业创新园 二层</div>
-                    </div>
-                    <div class="guide">驾车路线
-                        <div class="guide-detail">导航搜索 “北京服装学院北 1 门”   校区内有<strong>收费</strong>停车场，停车位充足</div>
-                    </div>
-                    <div class="guide">地铁路线
-                        <div class="guide-detail">13 号线 / 10 号线 芍药居站 A 西口出  步行 900 米，至北京服装学院北 1 门进入</div>
-                    </div>
-                    <div class="guide">提示
-                        <div class="guide-detail">校区北 1 门设有门禁，我们会引导大家进入，请大家随身携带身份证。</div>
-                    </div>
-                </div>
-                <div id="map" class="map" style="width: clac(100% - 20px); height: 340px;"></div>
+    <section class="instructors__section section-dark-bg">
+        <div class="instructors section-container">
+            <h1 class="section-title">讲师介绍</h1>
+            {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.devcon.instructors_2019 "cardBg" "light") -}}
+        </div>
+    </section>
+
+    <section class="sponsor__section">
+      <div class="sponsors section-container">
+        <h1 class="section-title">支持媒体</h1>
+        <div class="sponsors__list">
+            <div class="sponsor">
+              <img src="/images/community/sponsors/geek.png" />
             </div>
-        </section>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/csdn.png" />
+            </div>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/kaiyuanzhongguo.png" />
+            </div>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/segmentfault.png" />
+            </div>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/51cto.png" />
+            </div>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/juejin.png" />
+            </div>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/dbaplus.png" />
+            </div>
+            <div class="sponsor">
+              <img src="/images/community/sponsors/tgo.jpg" />
+            </div>
+        </div>
+      </div>
+    </section>
 
-        <section class="back-to-community-section">
-            <a href="/community-cn/#activities">
-                <button class="back-to-community">
-                  更多社区活动
-                </button>
-            </a>
-        </section>
-
-        <!-- <div class="volunteer__section">
-            <div class="volunteers section-container">
-                <h1 class="title">志愿者招募</h1>
-                <div class="recruit">
-                    本次大会面向社区技术爱好者，开放志愿者申请通道，参与活动现场支持。如果你想近距离接触技术大咖，体验会议氛围，那就联系 TiDB Robot（<span>微信号：tidbai</span>）报名吧～
-                    志愿者还可以获得 TiDB DevCon 2019 定制帽衫哦！
+    <section class="contact__section section-dark-bg">
+        <div class="contact section-container">
+            <h1 class="section-title">参会地址</h1>
+            <div class="address__guide">
+                <div class="guide">地址 
+                    <div class="guide-detail">北京市 朝阳区 樱花园东街甲 2 号 北京服装学院内 中关村时尚产业创新园 二层</div>
                 </div>
-                <div class="image">
-                   <img src="/images/community/volunteer.jpeg" />
+                <div class="guide">驾车路线
+                    <div class="guide-detail">导航搜索 “北京服装学院北 1 门”   校区内有<strong>收费</strong>停车场，停车位充足</div>
+                </div>
+                <div class="guide">地铁路线
+                    <div class="guide-detail">13 号线 / 10 号线 芍药居站 A 西口出  步行 900 米，至北京服装学院北 1 门进入</div>
+                </div>
+                <div class="guide">提示
+                    <div class="guide-detail">校区北 1 门设有门禁，我们会引导大家进入，请大家随身携带身份证。</div>
                 </div>
             </div>
-        </div> -->
+            <div id="map" class="map" style="width: clac(100% - 20px); height: 340px;"></div>
+        </div>
+    </section>
 
-        <!-- <div class="signup__section">
+    <section class="section-dark-bg">
+        <div class="section-container">
+            <div class="container">
+                <h2 class="section-title">精彩瞬间</h2>
+                {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.devcon.moments_2019) -}}
+            </div>
+        </div>
+    </section>
+
+
+    <section class="hackathon-review">
+        <div class="section-container">
+            <h2 class="section-title">往期回顾</h2>
+            {{- partial "community-cn/review-card.html" (dict "reviews" .Site.Data.devcon.reviews_2018) -}}
+        </div>
+    </section>
+
+    <section class="back-to-community-section">
+        <a href="/community-cn/#activities">
+            <button class="back-to-community">
+              更多社区活动
+            </button>
+        </a>
+    </section>
+
+    <!-- <div class="volunteer__section">
+        <div class="volunteers section-container">
+            <h1 class="title">志愿者招募</h1>
+            <div class="recruit">
+                本次大会面向社区技术爱好者，开放志愿者申请通道，参与活动现场支持。如果你想近距离接触技术大咖，体验会议氛围，那就联系 TiDB Robot（<span>微信号：tidbai</span>）报名吧～
+                志愿者还可以获得 TiDB DevCon 2019 定制帽衫哦！
+            </div>
+            <div class="image">
+                <img src="/images/community/volunteer.jpeg" />
+            </div>
+        </div>
+    </div> -->
+
+    <!-- <div class="signup__section">
             <div class="signup section-container">
                 <h1 class="section-title">立即报名</h1>
                 <div class="ticket-table">
@@ -232,6 +250,5 @@
                 </div>
             </div>
         </div> -->
-    </div>
 </div>
 {{- end -}}
