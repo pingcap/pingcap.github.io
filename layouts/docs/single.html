@@ -19,7 +19,7 @@
 {{- $latest   := .Site.Params.versions.docs.latest }}
 <div class="doc">
     <div class="container">
-        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_toc "title" "Documentation" "versions" $versions "latest" $latest) -}}
+        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation" "versions" $versions "latest" $latest) -}}
 
         <div class="archive">
             <div class="content markdown-body">{{- .Content -}}</div>
@@ -28,6 +28,7 @@
         </div>
         <div class="sidebar-page">
             <div class="sticky-sidebar">
+                {{- partial "archives/version-switcher.html" -}}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs" "global" .) -}}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
                 <p class="toc-title">What’s on this page</p>
