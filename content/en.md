@@ -2,7 +2,7 @@
 type: page
 url: /en
 layout: index
-title: Home
+title: TiDB
 image: /images/pingcap-opengraph.jpg
-summary: PingCAP is focused on developing distributed NewSQL and is the team building TiDB, an open-source distributed NewSQL database.
+summary: Scale out MySQL. TiDB is an open source cloud-native distributed database that handles hybrid transactional and analytical processing (HTAP) workloads, a member of the NewSQL class of databases that’s reinventing how a relational database can be designed, built, and deployed at massive scale.
 ---
