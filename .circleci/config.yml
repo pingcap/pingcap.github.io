@@ -17,7 +17,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
@@ -63,6 +63,10 @@ jobs:
     steps:
       - restore_cache:
           key: dist-{{ .Environment.CIRCLE_SHA1 }}
+
+      - add_ssh_keys:
+          fingerprints:
+            - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
 
       - run:
           name: "Publish to website"
