@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt-get install -y rsync && sudo apt-get install Python-bs4
+      - run: sudo apt-get install Python-bs4
 
       - restore_cache:
           keys:
@@ -71,6 +71,7 @@ jobs:
       - run:
           name: "Publish to website"
           command: |
+            sudo apt-get install -y rsync
             mkdir ~/.ssh
             ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
             rsync -avz --delete dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
