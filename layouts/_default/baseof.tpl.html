@@ -12,7 +12,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | PingCAP</title>
     {{- partial "head/ga" . -}}
     {{- partial "head/meta-seo" . -}}
     {{- partial "head/preload-assets" . -}}
@@ -20,6 +19,9 @@
     {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/docsearch.min.css") -}}
     {{- partial "tracking-code/ga-events-js.html" -}}
     {{- block "headTpl" . -}}{{- end -}}
+    {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | {{ if $data_i18_cn }}PingCAP{{ else }}Amazon Aurora
+      Alternative. HTAP solution for Amazon Aurora{{ end }}</title>
     <script type="text/javascript">
     if (location.pathname === '/') {
         if (location.hostname === 'pingcap.github.io') {
