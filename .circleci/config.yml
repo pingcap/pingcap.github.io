@@ -39,17 +39,7 @@ jobs:
           fingerprints:
             - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
 
-      - restore_cache:
-          keys:
-            - submodules-{{ .Environment.CIRCLE_SHA1 }}
-            - submodules-
-
       - run: npm run build
-
-      - save_cache:
-          key: submodules-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - content
 
       # notice netlify to deploy yini/preview branch
       # when be triggered by webhook from submodule
