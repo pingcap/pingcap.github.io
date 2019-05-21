@@ -1,16 +1,27 @@
-# https://circleci.com/docs/2.0/sample-config/#sample-configuration-with-fan-infan-out-workflow
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
 version: 2
 jobs:
   build:
     docker:
+      # specify the version you desire here
       - image: circleci/node:8.11.3
+
     working_directory: ~/repo
+
+    branches:
+      only:
+        - src
+        - yini/web-preview
 
     steps:
       - checkout
 
-      - run: sudo apt-get install Python-bs4
+      - run: sudo apt-get install -y rsync && sudo apt-get install Python-bs4
 
+      # Download and cache dependencies and submodules
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
@@ -20,11 +31,10 @@ jobs:
       - run: npm install
 
       - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-
-      # for sync submodules from github
+          key: v1-dependencies-{{ checksum "package.json" }}
+          
       - add_ssh_keys:
           fingerprints:
             - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
@@ -32,6 +42,7 @@ jobs:
       - restore_cache:
           keys:
             - submodules-{{ .Environment.CIRCLE_SHA1 }}
+            - submodules-
 
       - run: npm run build
 
@@ -40,70 +51,27 @@ jobs:
           paths:
             - content
 
-      - save_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - dist
-
-  preview:
-    docker:
-      - image: circleci/node:8.11.3
-    working_directory: ~/repo
-
-    steps:
-      # notice netlify to deploy preview branch
+      # notice netlify to deploy yini/preview branch
       # when be triggered by webhook from submodule
       - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5cb97398aed249fc2447b1f1
 
-  deploy:
-    docker:
-      - image: circleci/node:8.11.3
-    working_directory: ~/repo
-
-    steps:
-      - restore_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
-
-      - add_ssh_keys:
-          fingerprints:
-            - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
-
-      - run:
-          name: "Publish to website"
+      - deploy:
+          name: "Publish Website"
           command: |
-            sudo apt-get install -y rsync
-            mkdir ~/.ssh
-            ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
-            rsync -avz --delete dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
-            ssh-keyscan "${DEPLOY_AWS_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
-            rsync -avz --delete dist/ "${DEPLOY_AWS_USER}@${DEPLOY_AWS_HOST}:${DEPLOY_AWS_PATH}" || true;
-
-      # update sitemap
-      - run: curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
-
+            if [ "${CIRCLE_BRANCH}" == "src" ]; then
+              ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
+              rsync -avz --delete dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
+              ssh-keyscan "${DEPLOY_AWS_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
+              rsync -avz --delete dist/ "${DEPLOY_AWS_USER}@${DEPLOY_AWS_HOST}:${DEPLOY_AWS_PATH}" || true;
+              curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
+            fi
       - add_ssh_keys:
           fingerprints:
             - "6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82"
 
-      - run:
-          name: "Publish to github.io"
-          command: |
-            chmod +x ./scripts/push-gh-pages.sh;sh ./scripts/push-gh-pages.sh;
-
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build
-      - preview:
-          requires:
-            - build
-          filters:
-            branches:
-              only: yini/web-preview
       - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: src
+          name: "Publish github.io"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "src" ];
+              then chmod +x ./scripts/push-gh-pages.sh;sh ./scripts/push-gh-pages.sh;
+            fi
