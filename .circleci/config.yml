@@ -40,13 +40,14 @@ jobs:
           paths:
             - content
 
+      # use .Environment.CIRCLE_BUILD_NUM to make sure the key is different with before
       - save_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+          key: dist-{{ .Environment.CIRCLE_SHA1 }}-{{ .Environment.CIRCLE_BUILD_NUM }}
           paths:
             - dist
 
       - save_cache:
-          key: scripts-{{  .Environment.CIRCLE_SHA1 }}
+          key: scripts-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - scripts
 
@@ -67,7 +68,7 @@ jobs:
 
     steps:
       - restore_cache:
-          key: dist-{{ .Environment.CIRCLE_SHA1 }}
+          key: dist-{{ .Environment.CIRCLE_SHA1 }}-{{ .Environment.CIRCLE_BUILD_NUM }}
 
       - add_ssh_keys:
           fingerprints:
