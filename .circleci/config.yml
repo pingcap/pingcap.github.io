@@ -45,6 +45,11 @@ jobs:
           paths:
             - dist
 
+      - save_cache:
+          key: scripts-{{  .Environment.CIRCLE_SHA1 }}
+          paths:
+            - scripts
+
   preview:
     docker:
       - image: circleci/node:8.11.3
@@ -85,10 +90,13 @@ jobs:
           fingerprints:
             - "6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82"
 
+      - restore_cache:
+          key: scripts-{{ .Environment.CIRCLE_SHA1 }}
+
       - run:
           name: "Publish to github.io"
           command: |
-            chmod +x ./scripts/push-gh-pages.sh;sh ./scripts/push-gh-pages.sh;
+            sh ./scripts/push-gh-pages.sh;
 
 workflows:
   version: 2
