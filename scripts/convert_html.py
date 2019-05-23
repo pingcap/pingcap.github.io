@@ -11,7 +11,7 @@ sys.setdefaultencoding('utf-8')
 
 abs_hyper_link_pattern = re.compile(r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}')
 image_rel_src_pattern = re.compile(r'^[\.\/]*media\/')
-doc_version_pattern = re.compile(r'(\/v\d+\.\d+\/)')
+doc_version_pattern = re.compile(r'\/(v\d+\.\d+|dev)\/')
 
 file_path = sys.argv[1]
 folder = sys.argv[2]
@@ -24,7 +24,7 @@ for link in soup.find_all('a'):
         if (not abs_hyper_link_pattern.match(href)) and href.rfind('.md') > 0:
             m = doc_version_pattern.search(file_path)
             if m:
-                doc_version = m.group(1)
+                doc_version = '/' + m.group(1) + '/'
             else:
                 doc_version = ''
             href = href.replace('.md', '')
