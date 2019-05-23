@@ -14,8 +14,12 @@ replace_dist_html_link() {
         replace_dist_html_link "$html" $repo_name
       elif [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
         set +e
-        grep -E 'href=\"\S+\.md' $html | grep -E -v 'href=\"http' > /dev/null
-        if [ $? -eq 0 ];then
+        echo $html
+        if grep -E 'href=\"\S+\.md' $html | grep -E -v 'href=\"http' > /dev/null;then
+          echo "process..."
+          python scripts/convert_html.py $html $repo_name
+        elif grep -E 'img src=\"[\.\/]*media\/' $html > /dev/null;then
+          echo "process..."
           python scripts/convert_html.py $html $repo_name
         fi
         set -e
