@@ -15,19 +15,31 @@
 {{- end -}}
 
 {{- define "main" -}}
-{{- $versions := .Site.Params.versions.docs.all }}
-{{- $latest   := .Site.Params.versions.docs.latest }}
+{{- $stable_version := .Site.Params.versions.docs.stable_version }}
+{{- $total_versions := .Site.Params.versions.docs.total_versions }}
 <div class="doc">
     <div class="container">
-        {{- partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_toc "title" "Documentation" "versions" $versions "latest" $latest) -}}
+        {{- if in .URL "v3.0" -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation") }} 
+        {{- else -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
+        {{- end -}}
 
         <div class="archive">
-            <div class="content markdown-body">{{- .Content -}}</div>
+            <div class="content markdown-body">
+              {{ printf "%#v" .Permalink }}
+              {{ printf "%#v" .Title }}
+              {{ printf "%#v" .URL }}
+              {{ printf "%#v" $stable_version }}
+              {{ printf "%#v" $total_versions }}
+              {{- .Content -}}
+            </div>
             <div class="article-toc"></div>
             {{- partial "archives/git-info.html" (dict "repo" "docs" "global" .) -}}
         </div>
         <div class="sidebar-page">
             <div class="sticky-sidebar">
+                {{ partial "archives/version-switcher.html" }}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs" "global" .) -}}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
                 <p class="toc-title">What’s on this page</p>

@@ -27,10 +27,16 @@ for link in soup.find_all('a'):
                 doc_version = '/' + m.group(1) + '/'
             else:
                 doc_version = ''
+            print("=============================")
+            print(href)
+            print(doc_version)
             href = href.replace('.md', '')
+            print(href)
             href = re.sub(r'^[\.\/]*', '/', href, count=0, flags=0)
+            print(href)
             href = os.path.normpath('/' + folder + doc_version + href)
             link['href'] = href
+            print(href)
 
 for img in soup.find_all('img'):
     src = img['src']
