@@ -10,19 +10,15 @@ replace_dist_html_link() {
   if [ -d "$doc_tmp_path" ];then
     for html in "$doc_tmp_path"/*
     do
-      # echo "$html"
-      # [ "$html" = "." -o "$html" = ".." ] && continue
       if [ -d "$html" ];then
-        # echo "process sub dir: " $html
         replace_dist_html_link "$html" $repo_name
-      fi
-      if [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
-        # using double quote to variable, using [\"] to
-        # sed -i -r 's;<img\s*src="([\.\/]*)media/(.*)"\s*(alt=".*?")?\s*/?>;<img src="/images/'"$repo_name"'/\2" \3 />;g' $html
-        # echo "start convert the href of a tag in html: " $html
-        python scripts/convert_html.py $html $repo_name
-        # echo "convert done"
-        # cat _tmp_out1 > $doc_tmp_path/$html
+      elif [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
+        set +e
+        grep -E 'href=\"\S+\.md' $html | grep -E -v 'href=\"http' > /dev/null
+        if [ $? -eq 0 ];then
+          python scripts/convert_html.py $html $repo_name
+        fi
+        set -e
       fi
     done
   fi
@@ -42,7 +38,6 @@ replace_dist_html_link "dist/success-stories" blog
 
 replace_dist_html_link "dist/meetup" meetup
 replace_dist_html_link "dist/weekly" weekly
-
 
 parent_dir="`echo $(pwd) | sed 's;/scripts;;g'`/dist"
 copy_images_from_media_to_dist() {
