@@ -32,19 +32,20 @@ for link in soup.find_all('a'):
             href = os.path.normpath('/' + folder + doc_version + href)
             link['href'] = href
 
-for img in soup.find_all('img'):
-    src = img['src']
-    if src:
-        if (not abs_hyper_link_pattern.match(src)) and image_rel_src_pattern.match(src):
-            _src = re.sub(r'[\.\/]*media\/', '/', src, count=0, flags=0)
-            _src = os.path.normpath('/images/' + folder + _src)
-            img['data-original']= _src
-            img['src'] = '/images/svgs/loader-spinner.svg'
-            img['class'] = 'lazy'
-        elif abs_hyper_link_pattern.match(src):
-            img['data-original']= src
-            img['src'] = '/images/svgs/loader-spinner.svg'
-            img['class'] = 'lazy'
+# TODO: implement this by js code
+# for img in soup.find_all('img'):
+#     src = img['src']
+#     if src:
+#         if (not abs_hyper_link_pattern.match(src)) and image_rel_src_pattern.match(src):
+#             _src = re.sub(r'[\.\/]*media\/', '/', src, count=0, flags=0)
+#             _src = os.path.normpath('/images/' + folder + _src)
+#             img['data-original']= _src
+#             img['src'] = '/images/svgs/loader-spinner.svg'
+#             img['class'] = 'lazy'
+#         elif abs_hyper_link_pattern.match(src):
+#             img['data-original']= src
+#             img['src'] = '/images/svgs/loader-spinner.svg'
+#             img['class'] = 'lazy'
 
 # write html
 with open(file_path, 'w') as f:
