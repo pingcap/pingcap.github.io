@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Learn about the most frequently asked questions (FAQs) relating to TiDB." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB FAQ" property="og:title"/>
+<meta content="Learn about the most frequently asked questions (FAQs) relating to TiDB." property="og:description"/>
+<meta content="https://pingcap.com/docs/faq/tidb/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Learn about the most frequently asked questions (FAQs) relating to TiDB." name="twitter:description"/>
+<meta content="TiDB FAQ" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB FAQ | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/docs-cn/faq/tidb" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="doc">
+<div class="container"><div class="sidebar">
+<div class="sticky-sidebar">
+<div class="title"> Documentation </div>
+<div class="st_tree nav-toc"><ul><li class="leaf-child ">
+<a href="/docs/overview/"><span>Introduction</span></a>
+</li><li class="has-child "><a href="#">
+<span>Concepts</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/architecture/"><span>Architecture</span></a>
+</li><li class="has-child "><a href="#">
+<span>Key Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/key-features/#horizontal-scalability"><span>Horizontal Scalability</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#mysql-compatible-syntax"><span>MySQL Compatible Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#replicate-from-and-to-mysql"><span>Replicate from and to MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#distributed-transactions-with-strong-consistency"><span>Distributed Transactions with Strong Consistency</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#cloud-native-architecture"><span>Cloud Native Architecture</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#minimize-etl-with-htap"><span>Minimize ETL with HTAP</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fault-tolerance--recovery-with-raft"><span>Fault Tolerance &amp; Recovery with Raft</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#automatic-rebalancing"><span>Automatic Rebalancing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#deployment-and-orchestration-with-ansible-kubernetes-docker"><span>Deployment and Orchestration with Ansible, Kubernetes, Docker</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#json-support"><span>JSON Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#spark-integration"><span>Spark Integration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#read-historical-data-without-restoring-from-backup"><span>Read Historical Data Without Restoring from Backup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fast-import-and-restore-of-data"><span>Fast Import and Restore of Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#hybrid-of-column-and-row-storage"><span>Hybrid of Column and Row Storage</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#sql-plan-management"><span>SQL Plan Management</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#open-source"><span>Open Source</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#online-schema-changes"><span>Online Schema Changes</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>How-to</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Get Started</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Start a Local Cluster</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-binary/"><span>From Binary</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-homebrew/"><span>From Homebrew</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-dbdeployer/"><span>From DBdeployer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-kubernetes/"><span>In Kubernetes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-docker-compose/"><span>In Docker Compose</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/explore-sql/"><span>Explore SQL with TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/import-example-database/"><span>Import Example Database</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/read-historical-data/"><span>Read Historical Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/tidb-binlog/"><span>TiDB-Binlog Tutorial</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/data-migration/"><span>TiDB Data Migration Tutorial</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Deploy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/hardware-recommendations/"><span>Hardware Recommendations</span></a>
+</li><li class="has-child "><a href="#">
+<span>From Binary Tarball</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/testing-environment/"><span>For Testing Environments</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/production-environment/"><span>For Production Environments</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Orchestrated Deployment</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible/"><span>Ansible Deployment (Recommended)</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/offline-ansible/"><span>Ansible Offline Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/docker/"><span>Docker Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/kubernetes/"><span>Kubernetes Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations/"><span>Overview of Ansible Operations</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Geographic Redundancy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/location-awareness/"><span>Configure Location Awareness</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/tispark/"><span>TiSpark</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/data-migration-with-ansible/"><span>Data Migration with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/time-zone/"><span>Time Zone</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/memory-control/"><span>Memory Control</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Secure</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Transport Layer Security (TLS)</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-clients/"><span>Enable TLS For MySQL Clients</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-between-components/"><span>Enable TLS Between TiDB Components</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/generate-self-signed-certificates/"><span>Generate Self-signed Certificates</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Monitor</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/monitor-a-cluster/"><span>Monitor a TiDB Cluster</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Migrate</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/overview/"><span>Overview</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-mysql/"><span>Migrate the Full Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/incrementally-from-mysql/"><span>Migrate the Incremental Data</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/tools/lightning/csv/"><span>Migrate from CSV</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Maintain</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/backup-and-restore/"><span>Backup and Restore</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/identify-slow-queries/"><span>Identify Slow Queries</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Scale</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/horizontally/"><span>Scale a TiDB Cluster</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/with-ansible/"><span>Scale using Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Upgrade</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/from-previous-version/"><span>Upgrade to TiDB 3.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/to-tidb-2.1/"><span>Upgrade to TiDB 2.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/data-migration/"><span>Upgrade Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/rolling-updates-with-ansible/"><span>Rolling updates with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Troubleshoot</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/cluster-setup/"><span>Troubleshoot Cluster Setup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/data-migration/"><span>Troubleshoot Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/tidb-lightning/"><span>Troubleshoot TiDB-Lightning</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Reference</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/mysql-compatibility/"><span>MySQL Compatibility</span></a>
+</li><li class="has-child "><a href="#">
+<span>SQL</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>SQL Language Structure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/literal-values/"><span>Literal Values</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/schema-object-names/"><span>Schema Object Names</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/keywords-and-reserved-words/"><span>Keywords and Reserved Words</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/user-defined-variables/"><span>User-Defined Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/expression-syntax/"><span>Expression Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/comment-syntax/"><span>Comment Syntax</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Data Types</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#numeric-types"><span>Numeric Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#date-and-time-types"><span>Date and Time Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#string-types"><span>String Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#json-types"><span>JSON Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-enum-data-type"><span>The ENUM Data Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-set-type"><span>The SET Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#data-type-default-values"><span>Data Type Default Values</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Functions and Operators</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/reference/"><span>Function and Operator Reference</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/type-conversion/"><span>Type Conversion in Expression Evaluation</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/operators/"><span>Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/control-flow-functions/"><span>Control Flow Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/string-functions/"><span>String Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/numeric-functions-and-operators/"><span>Numeric Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/date-and-time-functions/"><span>Date and Time Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/bit-functions-and-operators/"><span>Bit Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/cast-functions-and-operators/"><span>Cast Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/encryption-and-compression-functions/"><span>Encryption and Compression Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/information-functions/"><span>Information Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/json-functions/"><span>JSON Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/aggregate-group-by-functions/"><span>Aggregate (GROUP BY) Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/miscellaneous-functions/"><span>Miscellaneous Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/precision-math/"><span>Precision Math</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>SQL Statements</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-column/"><span>ADD COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-index/"><span>ADD INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/admin/"><span>ADMIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-table/"><span>ALTER TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-user/"><span>ALTER USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/analyze-table/"><span>ANALYZE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/begin/"><span>BEGIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/commit/"><span>COMMIT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-database/"><span>CREATE DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-index/"><span>CREATE INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table-like/"><span>CREATE TABLE LIKE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table/"><span>CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-user/"><span>CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-view/"><span>CREATE VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/deallocate/"><span>DEALLOCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/delete/"><span>DELETE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/desc/"><span>DESC</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/describe/"><span>DESCRIBE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/do/"><span>DO</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-column/"><span>DROP COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-database/"><span>DROP DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-index/"><span>DROP INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-table/"><span>DROP TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-user/"><span>DROP USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-view/"><span>DROP VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/execute/"><span>EXECUTE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain-analyze/"><span>EXPLAIN ANALYZE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain/"><span>EXPLAIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-privileges/"><span>FLUSH PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-status/"><span>FLUSH STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-tables/"><span>FLUSH TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/grant-privileges/"><span>GRANT &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/insert/"><span>INSERT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/kill/"><span>KILL [TIDB]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/load-data/"><span>LOAD DATA</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/modify-column/"><span>MODIFY COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/prepare/"><span>PREPARE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-index/"><span>RENAME INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-table/"><span>RENAME TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/replace/"><span>REPLACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/revoke-privileges/"><span>REVOKE &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rollback/"><span>ROLLBACK</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/select/"><span>SELECT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-names/"><span>SET [NAMES|CHARACTER SET]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-password/"><span>SET PASSWORD</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-transaction/"><span>SET TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-variable/"><span>SET [GLOBAL|SESSION] &lt;variable&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-character-set/"><span>SHOW CHARACTER SET</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-collation/"><span>SHOW COLLATION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-columns-from/"><span>SHOW [FULL] COLUMNS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-table/"><span>SHOW CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-user/"><span>SHOW CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-databases/"><span>SHOW DATABASES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-engines/"><span>SHOW ENGINES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-errors/"><span>SHOW ERRORS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-fields-from/"><span>SHOW [FULL] FIELDS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-grants/"><span>SHOW GRANTS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-indexes/"><span>SHOW INDEXES [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-index/"><span>SHOW INDEX [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-keys/"><span>SHOW KEYS [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-privileges/"><span>SHOW PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-processlist/"><span>SHOW [FULL] PROCESSSLIST</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-schemas/"><span>SHOW SCHEMAS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-tables/"><span>SHOW [FULL] TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-table-status/"><span>SHOW TABLE STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-variables/"><span>SHOW [GLOBAL|SESSION] VARIABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-warnings/"><span>SHOW WARNINGS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/start-transaction/"><span>START TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/trace/"><span>TRACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/truncate/"><span>TRUNCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/update/"><span>UPDATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/use/"><span>USE</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/constraints/"><span>Constraints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/generated-columns/"><span>Generated Columns</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/character-set/"><span>Character Set</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configuration</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>tidb-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/mysql-variables/"><span>MySQL System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/tidb-specific-variables/"><span>TiDB Specific System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration/"><span>Configuration Flags</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration-file/"><span>Configuration File</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>pd-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/pd-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>tikv-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tikv-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Security</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/security/compatibility/"><span>Security Compatibility with MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/privilege-system/"><span>The TiDB Access Privilege System</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/user-account-management/"><span>TiDB User Account Management</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Transactions</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-model/"><span>Transaction Model</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-isolation/"><span>Isolation Levels</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>System Databases</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/mysql/"><span>mysql</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/information-schema/"><span>information_schema</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/error-codes/"><span>Errors Codes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/supported-clients/"><span>Supported Client Drivers</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/garbage-collection/"><span>Garbage Collection (GC)</span></a>
+</li><li class="has-child "><a href="#">
+<span>Performance</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/sql-optimizer-overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/understanding-the-query-execution-plan/"><span>Understanding the Query Execution Plan</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/statistics/"><span>Introduction to Statistics</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/optimizer-hints/"><span>Optimizer Hints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/tune-tikv/"><span>Tune TiKV</span></a>
+</li><li class="leaf-child ">
+<a href="https://pingcap.com/blog/2017-07-24-tidbbestpractice/"><span>TiDB Best Practices</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tispark/"><span>TiSpark</span></a>
+</li><li class="has-child "><a href="#">
+<span>Tools</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/syncer/"><span>Syncer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/mydumper/"><span>mydumper</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/loader/"><span>Loader</span></a>
+</li><li class="has-child "><a href="#">
+<span>Data Migration</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/#usage-restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/deploy/"><span>Deploy</span></a>
+</li><li class="has-child "><a href="#">
+<span>Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#table-routing"><span>Table Routing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#black-and-white-table-lists"><span>Black and White Lists</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#binlog-event-filter"><span>Binlog Event Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#column-mapping"><span>Column Mapping</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#synchronization-delay-monitoring"><span>Synchronization Delay Monitoring</span></a>
+</li><li class="has-child "><a href="#">
+<span>Sharding Support</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/"><span>Introduction</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/#restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/manually-handling-sharding-ddl-locks/"><span>Handle Sharding DDL Locks Manually</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Usage Scenarios</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/simple-synchronization/"><span>Simple Scenario</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/shard-merge/"><span>Shard Merge Scenario</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/task-configuration-file/"><span>Task Configuration</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/manage-tasks/"><span>Manage the Task</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/cluster-operations/"><span>Cluster Operations</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL compatible database </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Lightning</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/deployment/"><span>Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/checkpoints/"><span>Checkpoints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/table-filter/"><span>Table Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/csv/"><span>CSV Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/monitor/"><span>Monitor</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Binlog</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/deploy/"><span>Deploy</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/operation/"><span>Maintain</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/upgrade/"><span>Upgrade</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-control/"><span>PD Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-recover/"><span>PD Recover</span></a>
+</li><li class="leaf-child ">
+<a href="https://github.com/tikv/tikv/blob/master/docs/tools/tikv-control.md"><span>TiKV Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-control/"><span>TiDB Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/download/"><span>Download</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Key Monitoring Metrics</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tidb/"><span>TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/pd/"><span>PD</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tikv/"><span>TiKV</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/adopters/"><span>Adopters</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>FAQs</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/faq/tidb/"><span>TiDB FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/tidb-lightning/"><span>TiDB-Lightning FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/upgrades/"><span>Upgrade FAQs</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Support  </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/support-resources/"><span>Support Resources</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/report-issue/"><span>Report an Issue</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Contribute</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/contribute/#contribute-to-tidb"><span>Contribute to TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/contribute/#improve-the-docs"><span>Improve the Docs</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/roadmap/"><span>Roadmap</span></a>
+</li><li class="has-child "><a href="#">
+<span>Releases</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>v3.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-rc.1/"><span>3.0.0-rc.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-beta.1/"><span>3.0.0-beta.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0beta/"><span>3.0.0-beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.1</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.1.10/"><span>2.1.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.9/"><span>2.1.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.8/"><span>2.1.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.7/"><span>2.1.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.6/"><span>2.1.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.5/"><span>2.1.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.4/"><span>2.1.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.3/"><span>2.1.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.2/"><span>2.1.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.1/"><span>2.1.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1ga/"><span>2.1 GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc5/"><span>2.1 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc4/"><span>2.1 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc3/"><span>2.1 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc2/"><span>2.1 RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc1/"><span>2.1 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21beta/"><span>2.1 Beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.0.11/"><span>2.0.11</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0.10/"><span>2.0.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/209/"><span>2.0.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/208/"><span>2.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/207/"><span>2.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/206/"><span>2.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/205/"><span>2.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/204/"><span>2.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/203/"><span>2.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/202/"><span>2.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/201/"><span>2.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0ga/"><span>2.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc5/"><span>2.0 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc4/"><span>2.0 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc3/"><span>2.0 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc1/"><span>2.0 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11beta/"><span>1.1 Beta</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11alpha/"><span>1.1 Alpha</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v1.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/108/"><span>1.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/107/"><span>1.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/106/"><span>1.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/105/"><span>1.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/104/"><span>1.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/103/"><span>1.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/102/"><span>1.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/101/"><span>1.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/ga/"><span>1.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/prega/"><span>Pre-GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc4/"><span>RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc3/"><span>RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc2/"><span>RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc1/"><span>RC1</span></a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 id="tidb-faq">TiDB FAQ</h1>
+<p>This document lists the Most Frequently Asked Questions about TiDB.</p>
+<h2 id="about-tidb">About TiDB</h2>
+<h3 id="tidb-introduction-and-architecture">TiDB introduction and architecture</h3>
+<h4 id="what-is-tidb">What is TiDB?</h4>
+<p>TiDB is a distributed SQL database that features in horizontal scalability, high availability and consistent distributed transactions. It also enables you to use MySQL’s SQL syntax and protocol to manage and retrieve data.</p>
+<h4 id="what-is-tidb-s-architecture">What is TiDB’s architecture?</h4>
+<p>The TiDB cluster has three components: the TiDB server, the PD (Placement Driver) server, and the TiKV server. For more details, see <a href="/docs/architecture">TiDB architecture</a>.</p>
+<h4 id="is-tidb-based-on-mysql">Is TiDB based on MySQL?</h4>
+<p>No. TiDB supports MySQL syntax and protocol, but it is a new open source database that is developed and maintained by PingCAP, Inc.</p>
+<h4 id="what-is-the-respective-responsibility-of-tidb-tikv-and-pd-placement-driver">What is the respective responsibility of TiDB, TiKV and PD (Placement Driver)?</h4>
+<ul>
+<li>TiDB works as the SQL computing layer, mainly responsible for parsing SQL, specifying query plan, and generating executor.</li>
+<li>TiKV works as a distributed Key-Value storage engine, used to store the real data. In short, TiKV is the storage engine of TiDB.</li>
+<li>PD works as the cluster manager of TiDB, which manages TiKV metadata, allocates timestamps, and makes decisions for data placement and load balancing.</li>
+</ul>
+<h4 id="is-it-easy-to-use-tidb">Is it easy to use TiDB?</h4>
+<p>Yes, it is. When all the required services are started, you can use TiDB as easily as a MySQL server. You can replace MySQL with TiDB to power your applications without changing a single line of code in most cases. You can also manage TiDB using the popular MySQL management tools.</p>
+<h4 id="how-is-tidb-compatible-with-mysql">How is TiDB compatible with MySQL?</h4>
+<p>Currently, TiDB supports the majority of MySQL 5.7 syntax, but does not support trigger, stored procedures, user-defined functions, and foreign keys. For more details, see <a href="/docs/sql/mysql-compatibility">Compatibility with MySQL</a>.</p>
+<h4 id="how-is-tidb-highly-available">How is TiDB highly available?</h4>
+<p>TiDB is self-healing. All of the three components, TiDB, TiKV and PD, can tolerate failures of some of their instances. With its strong consistency guarantee, whether it’s data machine failures or even downtime of an entire data center, your data can be recovered automatically. For more information, see <a href="/docs/architecture">TiDB architecture</a>.</p>
+<h4 id="how-is-tidb-strongly-consistent">How is TiDB strongly consistent?</h4>
+<p>TiDB implements Snapshot Isolation consistency, which it advertises as <code>REPEATABLE-READ</code> for compatibility with MySQL. Data is redundantly copied between TiKV nodes using the <a href="https://raft.github.io/">Raft consensus algorithm</a> to ensure recoverability should a node failure occur.</p>
+<p>At the bottom layer, TiKV uses a model of replication log + State Machine to replicate data. For the write requests, the data is written to a Leader and the Leader then replicates the command to its Followers in the form of log. When the majority of nodes in the cluster receive this log, this log is committed and can be applied into the State Machine.</p>
+<h4 id="does-tidb-support-distributed-transactions">Does TiDB support distributed transactions?</h4>
+<p>Yes. TiDB distributes transactions across your cluster, whether it is a few nodes in a single location or many <a href="/docs/op-guide/cross-dc-deployment">nodes across multiple datacenters</a>.</p>
+<p>Inspired by Google’s Percolator, the transaction model in TiDB is mainly a two-phase commit protocol with some practical optimizations. This model relies on a timestamp allocator to assign the monotone increasing timestamp for each transaction, so conflicts can be detected. <a href="/docs/architecture#placement-driver-server">PD</a> works as the timestamp allocator in a TiDB cluster.</p>
+<h4 id="what-programming-language-can-i-use-to-work-with-tidb">What programming language can I use to work with TiDB?</h4>
+<p>Any language supported by MySQL client or driver.</p>
+<h4 id="can-i-use-other-key-value-storage-engines-with-tidb">Can I use other Key-Value storage engines with TiDB?</h4>
+<p>Yes. TiKV and TiDB support many popular standalone storage engines, such as GolevelDB and BoltDB. If the storage engine is a KV engine that supports transactions and it provides a client that meets the interface requirement of TiDB, then it can connect to TiDB.</p>
+<h4 id="what-s-the-recommended-solution-for-the-deployment-of-three-geo-distributed-data-centers">What’s the recommended solution for the deployment of three geo-distributed data centers?</h4>
+<p>The architecture of TiDB guarantees that it fully supports geo-distribution and multi-activeness. Your data and applications are always-on. All the outages are transparent to your applications and your data can recover automatically. The operation depends on the network latency and stability. It is recommended to keep the latency within 5ms. Currently, we already have similar use cases. For details, contact info@pingcap.com.</p>
+<h4 id="does-tidb-provide-any-other-knowledge-resource-besides-the-documentation">Does TiDB provide any other knowledge resource besides the documentation?</h4>
+<p>Currently, <a href="https://www.pingcap.com/docs/">TiDB documentation</a> is the most important and timely way to get knowledge of TiDB. In addition, we also have some technical communication groups. If you have any needs, contact info@pingcap.com.</p>
+<h4 id="what-are-the-mysql-variables-that-tidb-is-compatible-with">What are the MySQL variables that TiDB is compatible with?</h4>
+<p>See <a href="/docs/sql/variable">The System Variables</a>.</p>
+<h4 id="does-tidb-support-select-for-update">Does TiDB support <code>select for update</code>?</h4>
+<p>Yes. But it differs from MySQL in syntax. As a distributed database, TiDB uses the optimistic lock. <code>select for update</code> does not lock data when the transaction is started, but checks conflicts when the transaction is committed. If the check reveals conflicts, the committing transaction rolls back.</p>
+<h4 id="can-the-codec-of-tidb-guarantee-that-the-utf-8-string-is-memcomparable-is-there-any-coding-suggestion-if-our-key-needs-to-support-utf-8">Can the codec of TiDB guarantee that the UTF-8 string is memcomparable? Is there any coding suggestion if our key needs to support UTF-8?</h4>
+<p>The character sets of TiDB use UTF-8 by default and currently only support UTF-8. The string of TiDB uses the memcomparable format.</p>
+<h4 id="what-is-the-length-limit-for-the-tidb-user-name">What is the length limit for the TiDB user name?</h4>
+<p>32 characters at most.</p>
+<h4 id="what-is-the-maximum-number-of-statements-in-a-transaction">What is the maximum number of statements in a transaction?</h4>
+<p>5000 at most.</p>
+<h4 id="does-tidb-support-xa">Does TiDB support XA？</h4>
+<p>No. The JDBC driver of TiDB is MySQL JDBC (Connector/J). When using Atomikos, set the data source to <code>type="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource"</code>. TiDB does not support the connection with MySQL JDBC XADataSource. MySQL JDBC XADataSource only works for MySQL (for example, using DML to modify the <code>redo</code> log).</p>
+<p>After you configure the two data sources of Atomikos, set the JDBC drives to XA. When Atomikos operates TM and RM (DB), Atomikos sends the command including XA to the JDBC layer. Taking MySQL for an example, when XA is enabled in the JDBC layer, JDBC will send a series of XA logic operations to InnoDB, including using DML to change the <code>redo</code> log. This is the operation of the two-phase commit. The current TiDB version does not support the upper application layer JTA/XA and does not parse XA operations sent by Atomikos.</p>
+<p>As a standalone database, MySQL can only implement across-database transactions using XA; while TiDB supports distributed transactions using Google Percolator transaction model and its performance stability is higher than XA, so TiDB does not support XA and there is no need for TiDB to support XA.</p>
+<h4 id="does-show-processlist-display-the-system-process-id">Does <code>show processlist</code> display the system process ID?</h4>
+<p>The display content of TiDB <code>show processlist</code> is almost the same as that of MySQL <code>show processlist</code>. TiDB <code>show processlist</code> does not display the system process ID. The ID that it displays is the current session ID. The differences between TiDB <code>show processlist</code> and MySQL <code>show processlist</code> are as follows:</p>
+<ul>
+<li>As TiDB is a distributed database, the <code>tidb-server</code> instance is a stateless engine for parsing and executing the SQL statements (for details, see <a href="/docs/architecture">TiDB architecture</a>). <code>show processlist</code> displays the session list executed in the <code>tidb-server</code> instance that the user logs in to from the MySQL client, not the list of all the sessions running in the cluster. But MySQL is a standalone database and its <code>show processlist</code> displays all the SQL statements executed in MySQL.</li>
+<li>TiDB <code>show processlist</code> displays the estimated memory usage (unit: Byte) of the current session, which is not displayed in MySQL <code>show processlist</code>.</li>
+</ul>
+<h4 id="how-to-modify-the-user-password-and-privilege">How to modify the user password and privilege?</h4>
+<p>To modify the user password in TiDB, it is recommended to use <code>set password for 'root'@'%' = '0101001';</code> or <code>alter</code>, not <code>update mysql.user</code> which might lead to the condition that the password in other nodes is not refreshed timely.</p>
+<p>It is recommended to use the official standard statements when modifying the user password and privilege. For details, see <a href="/docs/sql/user-account-management">TiDB user account management</a>.</p>
+<h4 id="why-does-the-auto-increment-id-of-the-later-inserted-data-is-smaller-than-that-of-the-earlier-inserted-data-in-tidb">Why does the auto-increment ID of the later inserted data is smaller than that of the earlier inserted data in TiDB?</h4>
+<p>The auto-increment ID feature in TiDB is only guaranteed to be automatically incremental and unique but is not guaranteed to be allocated sequentially. Currently, TiDB is allocating IDs in batches. If data is inserted into multiple TiDB servers simultaneously, the allocated IDs are not sequential. When multiple threads concurrently insert data to multiple <code>tidb-server</code> instances, the auto-increment ID of the later inserted data may be smaller. TiDB allows specifying <code>AUTO_INCREMENT</code> for the integer field, but allows only one <code>AUTO_INCREMENT</code> field in a single table. For details, see <a href="/docs/sql/ddl">DDL</a>.</p>
+<h4 id="how-to-modify-the-sql-mode-in-tidb-except-using-the-set-command">How to modify the <code>sql_mode</code> in TiDB except using the <code>set</code> command?</h4>
+<p>The configuration method of TiDB <code>sql_mode</code> is different from that of MySQL <code>sql_mode</code>. TiDB does not support using the configuration file to configure <code>sql\_mode</code> of the database; it only supports using the <code>set</code> command to configure <code>sql\_mode</code> of the database. You can use <code>set @@global.sql_mode = 'STRICT_TRANS_TABLES';</code> to configure it.</p>
+<h4 id="what-authentication-protocols-does-tidb-support-what-s-the-process">What authentication protocols does TiDB support? What’s the process?</h4>
+<ul>
+<li><p>Like MySQL, TiDB supports the SASL protocol for user login authentication and password processing.</p></li>
+<li><p>When the client connects to TiDB, the challenge-response authentication mode starts. The process is as follows:</p>
+<ol>
+<li>The client connects to the server.</li>
+<li>The server sends a random string challenge to the client.</li>
+<li>The client sends the username and response to the server.</li>
+<li>The server verifies the response.</li>
+</ol></li>
+</ul>
+<h3 id="tidb-techniques">TiDB techniques</h3>
+<h4 id="tikv-for-data-storage">TiKV for data storage</h4>
+<p>See <a href="https://www.pingcap.com/blog/2017-07-11-tidbinternal1/">TiDB Internal (I) - Data Storage</a>.</p>
+<h4 id="tidb-for-data-computing">TiDB for data computing</h4>
+<p>See <a href="https://www.pingcap.com/blog/2017-07-11-tidbinternal2/">TiDB Internal (II) - Computing</a>.</p>
+<h4 id="pd-for-scheduling">PD for scheduling</h4>
+<p>See <a href="https://www.pingcap.com/blog/2017-07-20-tidbinternal3/">TiDB Internal (III) - Scheduling</a>.</p>
+<h2 id="install-deploy-and-upgrade">Install, deploy and upgrade</h2>
+<h3 id="prepare">Prepare</h3>
+<h4 id="operating-system-version-requirements">Operating system version requirements</h4>
+<table>
+<thead>
+<tr>
+<th align="center">Linux OS Platform</th>
+<th align="center">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Red Hat Enterprise Linux</td>
+<td align="center">7.3 or later</td>
+</tr>
+<tr>
+<td align="center">CentOS</td>
+<td align="center">7.3 or later</td>
+</tr>
+<tr>
+<td align="center">Oracle Enterprise Linux</td>
+<td align="center">7.3 or later</td>
+</tr>
+</tbody>
+</table>
+<h5 id="why-it-is-recommended-to-deploy-the-tidb-cluster-on-centos-7">Why it is recommended to deploy the TiDB cluster on CentOS 7?</h5>
+<p>As an open source distributed NewSQL database with high performance, TiDB can be deployed in the Intel architecture server and major virtualization environments and runs well. TiDB supports most of the major hardware networks and Linux operating systems. For details, see <a href="/docs/op-guide/recommendation">Software and Hardware Requirements</a> for deploying TiDB.</p>
+<h4 id="server-requirements">Server requirements</h4>
+<p>You can deploy and run TiDB on the 64-bit generic hardware server platform in the Intel x86-64 architecture. The requirements and recommendations about server hardware configuration for development, testing and production environments are as follows:</p>
+<h5 id="development-and-testing-environments">Development and testing environments</h5>
+<table>
+<thead>
+<tr>
+<th align="center">Component</th>
+<th align="center">CPU</th>
+<th align="center">Memory</th>
+<th align="center">Local Storage</th>
+<th align="center">Network</th>
+<th align="center">Instance Number (Minimum Requirement)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">TiDB</td>
+<td align="center">8 core+</td>
+<td align="center">16 GB+</td>
+<td align="center">SAS, 200 GB+</td>
+<td align="center">Gigabit network card</td>
+<td align="center">1 (can be deployed on the same machine with PD)</td>
+</tr>
+<tr>
+<td align="center">PD</td>
+<td align="center">8 core+</td>
+<td align="center">16 GB+</td>
+<td align="center">SAS, 200 GB+</td>
+<td align="center">Gigabit network card</td>
+<td align="center">1 (can be deployed on the same machine with TiDB)</td>
+</tr>
+<tr>
+<td align="center">TiKV</td>
+<td align="center">8 core+</td>
+<td align="center">32 GB+</td>
+<td align="center">SAS, 200 GB+</td>
+<td align="center">Gigabit network card</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Total Server Number</td>
+<td align="center">4</td>
+</tr>
+</tbody>
+</table>
+<h5 id="production-environment">Production environment</h5>
+<table>
+<thead>
+<tr>
+<th align="center">Component</th>
+<th align="center">CPU</th>
+<th align="center">Memory</th>
+<th align="center">Hard Disk Type</th>
+<th align="center">Network</th>
+<th align="center">Instance Number (Minimum Requirement)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">TiDB</td>
+<td align="center">16 core+</td>
+<td align="center">48 GB+</td>
+<td align="center">SAS</td>
+<td align="center">10 Gigabit network card (2 preferred)</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">PD</td>
+<td align="center">8 core+</td>
+<td align="center">16 GB+</td>
+<td align="center">SSD</td>
+<td align="center">10 Gigabit network card (2 preferred)</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">TiKV</td>
+<td align="center">16 core+</td>
+<td align="center">48 GB+</td>
+<td align="center">SSD</td>
+<td align="center">10 Gigabit network card (2 preferred)</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">Monitor</td>
+<td align="center">8 core+</td>
+<td align="center">16 GB+</td>
+<td align="center">SAS</td>
+<td align="center">Gigabit network card</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Total Server Number</td>
+<td align="center">9</td>
+</tr>
+</tbody>
+</table>
+<h5 id="what-s-the-purposes-of-2-network-cards-of-10-gigabit">What’s the purposes of 2 network cards of 10 gigabit?</h5>
+<p>As a distributed cluster, TiDB has a high demand on time, especially for PD, because PD needs to distribute unique timestamps. If the time in the PD servers is not consistent, it takes longer waiting time when switching the PD server. The bond of two network cards guarantees the stability of data transmission, and 10 gigabit guarantees the transmission speed. Gigabit network cards are prone to meet bottlenecks, therefore it is strongly recommended to use 10 gigabit network cards.</p>
+<h5 id="is-it-feasible-if-we-don-t-use-raid-for-ssd">Is it feasible if we don’t use RAID for SSD?</h5>
+<p>If the resources are adequate, it is recommended to use RAID 10 for SSD. If the resources are inadequate, it is acceptable not to use RAID for SSD.</p>
+<h5 id="what-s-the-recommended-configuration-of-tidb-components">What’s the recommended configuration of TiDB components?</h5>
+<ul>
+<li>TiDB has a high requirement on CPU and memory. If you need to open Binlog, the local disk space should be increased based on the service volume estimation and the time requirement for the GC operation. But the SSD disk is not a must.</li>
+<li>PD stores the cluster metadata and has frequent Read and Write requests. It demands a high I/O disk. A disk of low performance will affect the performance of the whole cluster. It is recommended to use SSD disks. In addition, a larger number of Regions has a higher requirement on CPU and memory.</li>
+<li>TiKV has a high requirement on CPU, memory and disk. It is required to use SSD.</li>
+</ul>
+<p>For details, see <a href="/docs/op-guide/recommendation">TiDB software and hardware requirements</a>.</p>
+<h3 id="install-and-deploy">Install and deploy</h3>
+<h4 id="deploy-tidb-using-ansible-recommended">Deploy TiDB using Ansible (recommended)</h4>
+<p>See <a href="/docs/op-guide/ansible-deployment">Ansible Deployment</a>.</p>
+<h5 id="why-the-modified-toml-configuration-for-tikv-pd-does-not-take-effect">Why the modified <code>toml</code> configuration for TiKV/PD does not take effect?</h5>
+<p>You need to set the <code>--config</code> parameter in TiKV/PD to make the <code>toml</code> configuration effective. TiKV/PD does not read the configuration by default. Currently, this issue only occurs when deploying using Binary. For TiKV, edit the configuration and restart the service. For PD, the configuration file is only read when PD is started for the first time, after which you can modify the configuration using pd-ctl. For details, see <a href="/docs/tools/pd-control">PD Control User Guide</a>.</p>
+<h5 id="should-i-deploy-the-tidb-monitoring-framework-prometheus-grafana-on-a-standalone-machine-or-on-multiple-machines-what-is-the-recommended-cpu-and-memory">Should I deploy the TiDB monitoring framework (Prometheus + Grafana) on a standalone machine or on multiple machines? What is the recommended CPU and memory?</h5>
+<p>The monitoring machine is recommended to use standalone deployment. It is recommended to use an 8 core CPU with 16 GB+ memory and a 500 GB+ hard disk.</p>
+<h5 id="why-the-monitor-cannot-display-all-metrics">Why the monitor cannot display all metrics?</h5>
+<p>Check the time difference between the machine time of the monitor and the time within the cluster. If it is large, you can correct the time and the monitor will display all the metrics.</p>
+<h5 id="what-is-the-function-of-supervise-svc-svstat-service">What is the function of supervise/svc/svstat service?</h5>
+<ul>
+<li>supervise: the daemon process, to manage the processes</li>
+<li>svc: to start and stop the service</li>
+<li>svstat: to check the process status</li>
+</ul>
+<h5 id="description-of-inventory-ini-variables">Description of inventory.ini variables</h5>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cluster_name</td>
+<td>the name of a cluster, adjustable</td>
+</tr>
+<tr>
+<td>tidb_version</td>
+<td>the version of TiDB, configured by default in TiDB-Ansible branches</td>
+</tr>
+<tr>
+<td>deployment_method</td>
+<td>the method of deployment, binary by default, Docker optional</td>
+</tr>
+<tr>
+<td>process_supervision</td>
+<td>the supervision way of processes, systemd by default, supervise optional</td>
+</tr>
+<tr>
+<td>timezone</td>
+<td>the timezone of the managed node, adjustable, <code>Asia/Shanghai</code> by default, used with the <code>set_timezone</code> variable</td>
+</tr>
+<tr>
+<td>set_timezone</td>
+<td>to edit the timezone of the managed node, True by default; False means closing</td>
+</tr>
+<tr>
+<td>enable_elk</td>
+<td>currently not supported</td>
+</tr>
+<tr>
+<td>enable_firewalld</td>
+<td>to enable the firewall, closed by default</td>
+</tr>
+<tr>
+<td>enable_ntpd</td>
+<td>to monitor the NTP service of the managed node, True by default; do not close it</td>
+</tr>
+<tr>
+<td>machine_benchmark</td>
+<td>to monitor the disk IOPS of the managed node, True by default; do not close it</td>
+</tr>
+<tr>
+<td>set_hostname</td>
+<td>to edit the hostname of the managed node based on the IP, False by default</td>
+</tr>
+<tr>
+<td>enable_binlog</td>
+<td>whether to deploy Pump and enable the binlog, False by default, dependent on the Kafka cluster; see the <code>zookeeper_addrs</code> variable</td>
+</tr>
+<tr>
+<td>zookeeper_addrs</td>
+<td>the ZooKeeper address of the binlog Kafka cluster</td>
+</tr>
+<tr>
+<td>enable_slow_query_log</td>
+<td>to record the slow query log of TiDB into a single file: ({{ deploy_dir }}/log/tidb_slow_query.log). False by default, to record it into the TiDB log</td>
+</tr>
+<tr>
+<td>deploy_without_tidb</td>
+<td>the Key-Value mode, deploy only PD, TiKV and the monitoring service, not TiDB; set the IP of the tidb_servers host group to null in the <code>inventory.ini</code> file</td>
+</tr>
+</tbody>
+</table>
+<h4 id="deploy-tidb-offline-using-ansible">Deploy TiDB offline using Ansible</h4>
+<p>It is not recommended to deploy TiDB offline using Ansible. If the Control Machine has no access to external network, you can deploy TiDB offline using Ansible. For details, see <a href="/docs/op-guide/offline-ansible-deployment">Offline Deployment Using Ansible</a>.</p>
+<h4 id="how-to-deploy-tidb-quickly-using-docker-compose-on-a-single-machine">How to deploy TiDB quickly using Docker Compose on a single machine?</h4>
+<p>You can use Docker Compose to build a TiDB cluster locally, including the cluster monitoring components. You can also customize the version and number of instances for each component. The configuration file can also be customized. You can only use this deployment method for testing and development environment. For details, see <a href="/docs/op-guide/docker-compose">Building the Cluster Using Docker Compose</a>.</p>
+<h4 id="how-to-separately-record-the-slow-query-log-in-tidb-how-to-locate-the-slow-query-sql-statement">How to separately record the slow query log in TiDB? How to locate the slow query SQL statement?</h4>
+<ol>
+<li><p>The slow query definition for TiDB is in the <code>conf/tidb.yml</code> configuration file of <code>tidb-ansible</code>. The <code>slow-threshold: 300</code> parameter is used to configure the threshold value of the slow query (unit: millisecond).</p>
+<p>The slow query log is recorded in <code>tidb.log</code> by default. If you want to generate a slow query log file separately, set <code>enable_slow_query_log</code> in the <code>inventory.ini</code> configuration file to <code>True</code>.</p>
+<p>Then run <code>ansible-playbook rolling_update.yml --tags=tidb</code> to perform a rolling update on the <code>tidb-server</code> instance. After the update is finished, the <code>tidb-server</code> instance will record the slow query log in <code>tidb_slow_query.log</code>.</p></li>
+<li><p>If a slow query occurs, you can locate the <code>tidb-server</code> instance where the slow query is and the slow query time point using Grafana and find the SQL statement information recorded in the log on the corresponding node.</p></li>
+<li><p>In addition to the log, you can also view the slow query using the <code>admin show slow</code> command. For details, see <a href="/docs/sql/slow-query#admin-show-slow-command"><code>admin show slow</code> command</a>.</p></li>
+</ol>
+<h4 id="how-to-add-the-label-configuration-if-label-of-tikv-was-not-configured-when-i-deployed-the-tidb-cluster-for-the-first-time">How to add the <code>label</code> configuration if <code>label</code> of TiKV was not configured when I deployed the TiDB cluster for the first time?</h4>
+<p>The configuration of TiDB <code>label</code> is related to the cluster deployment architecture. It is important and is the basis for PD to execute global management and scheduling. If you did not configure <code>label</code> when deploying the cluster previously, you should adjust the deployment structure by manually adding the <code>location-labels</code> information using the PD management tool <code>pd-ctl</code>, for example, <code>config set location-labels "zone, rack, host"</code> (you should configure it based on the practical <code>label</code> level name).</p>
+<p>For the usage of <code>pd-ctl</code>, see <a href="/docs/tools/pd-control">PD Control Instruction</a>.</p>
+<h4 id="why-does-the-dd-command-for-the-disk-test-use-the-oflag-direct-option">Why does the <code>dd</code> command for the disk test use the <code>oflag=direct</code> option?</h4>
+<p>The Direct mode wraps the Write request into the I/O command and sends this command to the disk to bypass the file system cache and directly test the real I/O Read/Write performance of the disk.</p>
+<h4 id="how-to-use-the-fio-command-to-test-the-disk-performance-of-the-tikv-instance">How to use the <code>fio</code> command to test the disk performance of the TiKV instance?</h4>
+<ul>
+<li><p>Random Read test:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./fio -ioengine<span style="color:#f92672">=</span>psync -bs<span style="color:#f92672">=</span>32k -fdatasync<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> -thread -rw<span style="color:#f92672">=</span>randread -size<span style="color:#f92672">=</span>10G -filename<span style="color:#f92672">=</span>fio_randread_test.txt -name<span style="color:#f92672">=</span><span style="color:#e6db74">'fio randread test'</span> -iodepth<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> -runtime<span style="color:#f92672">=</span><span style="color:#ae81ff">60</span> -numjobs<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> -group_reporting --output-format<span style="color:#f92672">=</span>json --output<span style="color:#f92672">=</span>fio_randread_result.json</code></pre></div></li>
+<li><p>The mix test of sequential Write and random Read:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./fio -ioengine<span style="color:#f92672">=</span>psync -bs<span style="color:#f92672">=</span>32k -fdatasync<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> -thread -rw<span style="color:#f92672">=</span>randrw -percentage_random<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,0 -size<span style="color:#f92672">=</span>10G -filename<span style="color:#f92672">=</span>fio_randread_write_test.txt -name<span style="color:#f92672">=</span><span style="color:#e6db74">'fio mixed randread and sequential write test'</span> -iodepth<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> -runtime<span style="color:#f92672">=</span><span style="color:#ae81ff">60</span> -numjobs<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> -group_reporting --output-format<span style="color:#f92672">=</span>json --output<span style="color:#f92672">=</span>fio_randread_write_test.json</code></pre></div></li>
+</ul>
+<h4 id="error-unreachable-msg-failed-to-connect-to-the-host-via-ssh-when-deploying-tidb-using-tidb-ansible">Error <code>UNREACHABLE! "msg": "Failed to connect to the host via ssh: "</code> when deploying TiDB using TiDB-Ansible</h4>
+<p>Two possible reasons and solutions:</p>
+<ul>
+<li>The SSH mutual trust is not configured as required. It’s recommended to follow <a href="/docs/op-guide/ansible-deployment/#step-5-configure-the-ssh-mutual-trust-and-sudo-rules-on-the-control-machine">the steps described in the official document</a> and check whether it is successfully configured using <code>ansible -i inventory.ini all -m shell -a 'whoami' -b</code>.</li>
+<li>If it involves the scenario where a single server is assigned multiple roles, for example, the mixed deployment of multiple components or multiple TiKV instances are deployed on a single server, this error might be caused by the SSH reuse mechanism. You can use the option of <code>ansible … -f 1</code> to avoid this error.</li>
+</ul>
+<h3 id="upgrade">Upgrade</h3>
+<h4 id="how-to-perform-rolling-updates-using-ansible">How to perform rolling updates using Ansible?</h4>
+<ul>
+<li><p>Apply rolling updates to the TiKV node (only update the TiKV service).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook rolling_update.yml --tags=tikv</pre></div></li>
+<li><p>Apply rolling updates to all services.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook rolling_update.yml</pre></div></li>
+</ul>
+<h4 id="how-are-the-rolling-updates-done">How are the rolling updates done?</h4>
+<p>When you apply rolling updates to the TiDB services, the running application is not affected. You need to configure the minimum cluster topology (TiDB * 2, PD * 3, TiKV * 3). If the Pump/Drainer service is involved in the cluster, it is recommended to stop Drainer before rolling updates. When you update TiDB, Pump is also updated.</p>
+<h4 id="how-to-upgrade-when-i-deploy-tidb-using-binary">How to upgrade when I deploy TiDB using Binary?</h4>
+<p>It is not recommended to deploy TiDB using Binary. The support for upgrading using Binary is not as friendly as using Ansible. It is recommended to deploy TiDB using Ansible.</p>
+<h4 id="should-i-upgrade-tikv-or-all-components-generally">Should I upgrade TiKV or all components generally?</h4>
+<p>Generally you should upgrade all components, because the whole version is tested together. Upgrade a single component only when an emergent issue occurs and you need to upgrade this component.</p>
+<h4 id="what-causes-timeout-when-waiting-for-search-string-200-ok-when-starting-or-upgrading-a-cluster-how-to-deal-with-it">What causes “Timeout when waiting for search string 200 OK” when starting or upgrading a cluster? How to deal with it?</h4>
+<p>Possible reasons:</p>
+<ul>
+<li>The process did not start normally.</li>
+<li>The port is occupied.</li>
+<li>The process did not stop normally.</li>
+<li>You use <code>rolling_update.yml</code> to upgrade the cluster when the cluster is stopped (operation error).</li>
+</ul>
+<p>Solution:</p>
+<ul>
+<li>Log into the node to check the status of the process or port.</li>
+<li>Correct the incorrect operation procedure.</li>
+</ul>
+<h2 id="manage-the-cluster">Manage the cluster</h2>
+<h3 id="daily-management">Daily management</h3>
+<h4 id="what-are-the-common-operations">What are the common operations?</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Job</th>
+<th align="left">Playbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Start the cluster</td>
+<td align="left"><code>ansible-playbook start.yml</code></td>
+</tr>
+<tr>
+<td align="left">Stop the cluster</td>
+<td align="left"><code>ansible-playbook stop.yml</code></td>
+</tr>
+<tr>
+<td align="left">Destroy the cluster</td>
+<td align="left"><code>ansible-playbook unsafe_cleanup.yml</code> (If the deployment directory is a mount point, an error will be reported, but implementation results will remain unaffected)</td>
+</tr>
+<tr>
+<td align="left">Clean data (for test)</td>
+<td align="left"><code>ansible-playbook unsafe_cleanup_data.yml</code></td>
+</tr>
+<tr>
+<td align="left">Apply rolling updates</td>
+<td align="left"><code>ansible-playbook rolling_update.yml</code></td>
+</tr>
+<tr>
+<td align="left">Apply rolling updates to TiKV</td>
+<td align="left"><code>ansible-playbook rolling_update.yml --tags=tikv</code></td>
+</tr>
+<tr>
+<td align="left">Apply rolling updates to components except PD</td>
+<td align="left"><code>ansible-playbook rolling_update.yml --skip-tags=pd</code></td>
+</tr>
+<tr>
+<td align="left">Apply rolling updates to the monitoring components</td>
+<td align="left"><code>ansible-playbook rolling_update_monitor.yml</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="how-to-log-into-tidb">How to log into TiDB?</h4>
+<p>You can log into TiDB like logging into MySQL. For example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">mysql -h 127.0.0.1 -uroot -P4000</pre></div>
+<h4 id="how-to-modify-the-system-variables-in-tidb">How to modify the system variables in TiDB?</h4>
+<p>Similar to MySQL, TiDB includes static and solid parameters. You can directly modify static parameters using <code>set global xxx = n</code>, but the new value of a parameter is only effective within the life cycle in this instance.</p>
+<h4 id="where-and-what-are-the-data-directories-in-tidb-tikv">Where and what are the data directories in TiDB (TiKV)?</h4>
+<p>TiDB data directories are in <code>${[data-dir](https://pingcap.com/docs-cn/op-guide/configuration/#data-dir-1)}/data/</code> by default, which include four directories of backup, db, raft, and snap, used to store backup, data, Raft data, and mirror data respectively.</p>
+<h4 id="what-are-the-system-tables-in-tidb">What are the system tables in TiDB?</h4>
+<p>Similar to MySQL, TiDB includes system tables as well, used to store the information required by the server when it runs.</p>
+<h4 id="where-are-the-tidb-pd-tikv-logs">Where are the TiDB/PD/TiKV logs?</h4>
+<p>By default, TiDB/PD/TiKV outputs standard error in the logs. If a log file is specified by <code>--log-file</code> during the startup, the log is output to the specified file and executes rotation daily.</p>
+<h4 id="how-to-safely-stop-tidb">How to safely stop TiDB?</h4>
+<p>If the cluster is deployed using Ansible, you can use the <code>ansible-playbook stop.yml</code> command to stop the TiDB cluster. If the cluster is not deployed using Ansible, <code>kill</code> all the services directly. The components of TiDB will do <code>graceful shutdown</code>.</p>
+<h4 id="can-kill-be-executed-in-tidb">Can <code>kill</code> be executed in TiDB?</h4>
+<ul>
+<li>You can <code>kill</code> DML statements. First use <code>show processlist</code> to find the ID corresponding with the session, and then run <code>kill tidb [session id]</code>.</li>
+<li>You can <code>kill</code> DDL statements. First use <code>admin show ddl jobs</code> to find the ID of the DDL job you need to kill, and then run <code>admin cancel ddl jobs 'job_id' [, 'job_id'] ...</code>. For more details, see the <a href="/docs/sql/admin#admin-statement"><code>ADMIN</code> statement</a>.</li>
+</ul>
+<h4 id="does-tidb-support-session-timeout">Does TiDB support session timeout?</h4>
+<p>Currently, TiDB does not support session timeout in the database level. If you want to implement session timeout, use the session ID started by side records in the absence of LB (Load Balancing), and customize the session timeout on the application. After timeout, kill SQL using <code>kill tidb [session id]</code> on the node that starts the query. It is currently recommended to implement session timeout using applications. When the timeout time is reached, the application layer reports an exception and continues to execute subsequent program segments.</p>
+<h4 id="what-is-the-tidb-version-management-strategy-for-production-environment-how-to-avoid-frequent-upgrade">What is the TiDB version management strategy for production environment? How to avoid frequent upgrade?</h4>
+<p>Currently, TiDB has a standard management of various versions. Each release contains a detailed change log and <a href="/docs/releases/rn">release notes</a>. Whether it is necessary to upgrade in the production environment depends on the application system. It is recommended to learn the details about the functional differences between the previous and later versions before upgrading.</p>
+<p>Take <code>Release Version: v1.0.3-1-ga80e796</code> as an example of version number description:</p>
+<ul>
+<li><code>v1.0.3</code> indicates the standard GA version.</li>
+<li><code>-1</code> indicates the current version has one commit.</li>
+<li><code>ga80e796</code> indicates the version <code>git-hash</code>.</li>
+</ul>
+<h4 id="what-s-the-difference-between-various-tidb-master-versions-how-to-avoid-using-the-wrong-tidb-ansible-version">What’s the difference between various TiDB master versions? How to avoid using the wrong TiDB-Ansible version?</h4>
+<p>The TiDB community is highly active. After the 1.0 GA release, the engineers have been keeping optimizing and fixing bugs. Therefore, the TiDB version is updated quite fast. If you want to keep informed of the latest version, see <a href="https://pingcap.com/weekly/">TiDB Weekly update</a>.</p>
+<p>It is recommended to deploy the TiDB cluster using the latest version of TiDB-Ansible, which will also be updated along with the TiDB version. TiDB has a unified management of the version number after the 1.0 GA release. You can view the version number using the following two methods:</p>
+<ul>
+<li><code>select tidb_version()</code></li>
+<li><code>tidb-server -V</code></li>
+</ul>
+<h4 id="is-there-a-graphical-deployment-tool-for-tidb">Is there a graphical deployment tool for TiDB?</h4>
+<p>Currently no.</p>
+<h4 id="how-to-scale-tidb-horizontally">How to scale TiDB horizontally?</h4>
+<p>As your business grows, your database might face the following three bottlenecks:</p>
+<ul>
+<li><p>Lack of storage resources which means that the disk space is not enough.</p></li>
+<li><p>Lack of computing resources such as high CPU occupancy.</p></li>
+<li><p>Not enough write and read capacity.</p></li>
+</ul>
+<p>You can scale TiDB as your business grows.</p>
+<ul>
+<li><p>If the disk space is not enough, you can increase the capacity simply by adding more TiKV nodes. When the new node is started, PD will migrate the data from other nodes to the new node automatically.</p></li>
+<li><p>If the computing resources are not enough, check the CPU consumption situation first before adding more TiDB nodes or TiKV nodes. When a TiDB node is added, you can configure it in the Load Balancer.</p></li>
+<li><p>If the capacity is not enough, you can add both TiDB nodes and TiKV nodes.</p></li>
+</ul>
+<h4 id="why-does-tidb-use-grpc-instead-of-thrift-is-it-because-google-uses-it">Why does TiDB use gRPC instead of Thrift? Is it because Google uses it?</h4>
+<p>Not really. We need some good features of gRPC, such as flow control, encryption and streaming.</p>
+<h4 id="what-does-the-92-indicate-in-like-bindo-customers-name-jason-92">What does the 92 indicate in <code>like(bindo.customers.name, jason%, 92)</code>?</h4>
+<p>The 92 indicates the escape character, which is ASCII 92 by default.</p>
+<h4 id="why-does-the-data-length-shown-by-information-schema-tables-data-length-differ-from-the-store-size-on-the-tikv-monitoring-panel">Why does the data length shown by <code>information_schema.tables.data_length</code> differ from the store size on the TiKV monitoring panel?</h4>
+<p>Two reasons:</p>
+<ul>
+<li>The two results are calculated in different ways. <code>information_schema.tables.data_length</code> is an estimated value by calculating the averaged length of each row, while the store size on the TiKV monitoring panel sums up the length of the data files (the SST files of RocksDB) in a single TiKV instance.</li>
+<li><code>information_schema.tables.data_length</code> is a logical value, while the store size is a physical value. The redundant data generated by multiple versions of the transaction is not included in the logical value, while the redundant data is compressed by TiKV in the physical value.</li>
+</ul>
+<h3 id="manage-the-pd-server">Manage the PD server</h3>
+<h4 id="the-tikv-cluster-is-not-bootstrapped-message-is-displayed-when-i-access-pd">The <code>TiKV cluster is not bootstrapped</code> message is displayed when I access PD.</h4>
+<p>Most of the APIs of PD are available only when the TiKV cluster is initialized. This message is displayed if PD is accessed when PD is started while TiKV is not started when a new cluster is deployed. If this message is displayed, start the TiKV cluster. When TiKV is initialized, PD is accessible.</p>
+<h4 id="the-etcd-cluster-id-mismatch-message-is-displayed-when-starting-pd">The <code>etcd cluster ID mismatch</code> message is displayed when starting PD.</h4>
+<p>This is because the <code>--initial-cluster</code> in the PD startup parameter contains a member that doesn’t belong to this cluster. To solve this problem, check the corresponding cluster of each member, remove the wrong member, and then restart PD.</p>
+<h4 id="what-s-the-maximum-tolerance-for-time-synchronization-error-of-pd">What’s the maximum tolerance for time synchronization error of PD?</h4>
+<p>PD can tolerate any synchronization error, but a larger error value means a larger gap between the timestamp allocated by the PD and the physical time, which will affect functions such as read of historical versions.</p>
+<h4 id="how-does-the-client-connection-find-pd">How does the client connection find PD?</h4>
+<p>The client connection can only access the cluster through TiDB. TiDB connects PD and TiKV. PD and TiKV are transparent to the client. When TiDB connects to any PD, the PD tells TiDB who is the current leader. If this PD is not the leader, TiDB reconnects to the leader PD.</p>
+<h4 id="what-is-the-difference-between-the-leader-schedule-limit-and-region-schedule-limit-scheduling-parameters-in-pd">What is the difference between the <code>leader-schedule-limit</code> and <code>region-schedule-limit</code> scheduling parameters in PD?</h4>
+<ul>
+<li>The <code>leader-schedule-limit</code> scheduling parameter is used to balance the Leader number of different TiKV servers, affecting the load of query processing.</li>
+<li>The <code>region-schedule-limit</code> scheduling parameter is used to balance the replica number of different TiKV servers, affecting the data amount of different nodes.</li>
+</ul>
+<h4 id="is-the-number-of-replicas-in-each-region-configurable-if-yes-how-to-configure-it">Is the number of replicas in each region configurable? If yes, how to configure it?</h4>
+<p>Yes. Currently, you can only update the global number of replicas. When started for the first time, PD reads the configuration file (conf/pd.yml) and uses the max-replicas configuration in it. If you want to update the number later, use the pd-ctl configuration command <code>config set max-replicas $num</code> and view the enabled configuration using <code>config show all</code>. The updating does not affect the applications and is configured in the background.</p>
+<p>Make sure that the total number of TiKV instances is always greater than or equal to the number of replicas you set. For example, 3 replicas need 3 TiKV instances at least. Additional storage requirements need to be estimated before increasing the number of replicas. For more information about pd-ctl, see <a href="/docs/tools/pd-control">PD Control User Guide</a>.</p>
+<h4 id="how-to-check-the-health-status-of-the-whole-cluster-when-lacking-command-line-cluster-management-tools">How to check the health status of the whole cluster when lacking command line cluster management tools?</h4>
+<p>You can determine the general status of the cluster using the pd-ctl tool. For detailed cluster status, you need to use the monitor to determine.</p>
+<h4 id="how-to-delete-the-monitoring-data-of-a-cluster-node-that-is-offline">How to delete the monitoring data of a cluster node that is offline?</h4>
+<p>The offline node usually indicates the TiKV node. You can determine whether the offline process is finished by the pd-ctl or the monitor. After the node is offline, perform the following steps:</p>
+<ol>
+<li>Manually stop the relevant services on the offline node.</li>
+<li>Delete the <code>node_exporter</code> data of the corresponding node from the Prometheus configuration file.</li>
+<li>Delete the data of the corresponding node from Ansible <code>inventory.ini</code>.</li>
+</ol>
+<h4 id="why-couldn-t-i-connect-to-the-pd-server-using-127-0-0-1-when-i-was-using-the-pd-control">Why couldn’t I connect to the PD server using <code>127.0.0.1</code> when I was using the PD Control?</h4>
+<p>If your TiDB cluster is deployed using TiDB-Ansible, the PD external service port is not bound to <code>127.0.0.1</code>, so PD Control does not recognize <code>127.0.0.1</code> and you can only connect to it using the local IP address.</p>
+<h3 id="manage-the-tidb-server">Manage the TiDB server</h3>
+<h4 id="how-to-set-the-lease-parameter-in-tidb">How to set the <code>lease</code> parameter in TiDB?</h4>
+<p>The lease parameter (<code>--lease=60</code>) is set from the command line when starting a TiDB server. The value of the lease parameter impacts the Database Schema Changes (DDL) speed of the current session. In the testing environments, you can set the value to 1s for to speed up the testing cycle. But in the production environments, it is recommended to set the value to minutes (for example, 60) to ensure the DDL safety.</p>
+<h4 id="what-is-the-processing-time-of-a-ddl-operation">What is the processing time of a DDL operation?</h4>
+<p>The processing time is different for different scenarios. Generally, you can consider the following three scenarios:</p>
+<ol>
+<li>The <code>Add Index</code> operation with a relatively small number of rows in the corresponding data table: about 3s</li>
+<li>The <code>Add Index</code> operation with a relatively large number of rows in the corresponding data table: the processing time depends on the specific number of rows and the QPS at that time (the <code>Add Index</code> operation has a lower priority than ordinary SQL operations)</li>
+<li>Other DDL operations: about 1s</li>
+</ol>
+<p>If the TiDB server instance that receives the DDL request is the same TiDB server instance that the DDL owner is in, the first and third scenarios above may cost only dozens to hundreds of milliseconds.</p>
+<h4 id="why-it-is-very-slow-to-run-ddl-statements-sometimes">Why it is very slow to run DDL statements sometimes?</h4>
+<p>Possible reasons:</p>
+<ul>
+<li>If you run multiple DDL statements together, the last few DDL statements might run slowly. This is because the DDL statements are executed serially in the TiDB cluster.</li>
+<li>After you start the cluster successfully, the first DDL operation may take a longer time to run, usually around 30s. This is because the TiDB cluster is electing the leader that processes DDL statements.</li>
+<li>The processing time of DDL statements in the first ten minutes after starting TiDB would be much longer than the normal case if you meet the following conditions: 1) TiDB cannot communicate with PD as usual when you are stopping TiDB (including the case of power failure); 2) TiDB fails to clean up the registration data from PD in time because TiDB is stopped by the <code>kill -9</code> command. If you run DDL statements during this period, for the state change of each DDL, you need to wait for 2 * lease (lease = 45s).</li>
+<li>If a communication issue occurs between a TiDB server and a PD server in the cluster, the TiDB server cannot get or update the version information from the PD server in time. In this case, you need to wait for 2 * lease for the state processing of each DDL.</li>
+</ul>
+<h4 id="can-i-use-s3-as-the-backend-storage-engine-in-tidb">Can I use S3 as the backend storage engine in TiDB?</h4>
+<p>No. Currently, TiDB only supports the distributed storage engine and the Goleveldb/RocksDB/BoltDB engine.</p>
+<h4 id="can-the-information-schema-support-more-real-information">Can the <code>Information_schema</code> support more real information?</h4>
+<p>The tables in <code>Information_schema</code> exist mainly for compatibility with MySQL, and some third-party software queries information in the tables. Currently, most of those tables are null. More parameter information is to be involved in the tables as TiDB updates later.</p>
+<p>For the <code>Information_schema</code> that TiDB currently supports, see <a href="/docs/sql/system-database">The TiDB System Database</a>.</p>
+<h4 id="what-s-the-explanation-of-the-tidb-backoff-type-scenario">What’s the explanation of the TiDB Backoff type scenario?</h4>
+<p>In the communication process between the TiDB server and the TiKV server, the <code>Server is busy</code> or <code>backoff.maxsleep 20000ms</code> log message is displayed when processing a large volume of data. This is because the system is busy while the TiKV server processes data. At this time, usually you can view that the TiKV host resources usage rate is high. If this occurs, you can increase the server capacity according to the resources usage.</p>
+<h4 id="what-s-the-maximum-number-of-concurrent-connections-that-tidb-supports">What’s the maximum number of concurrent connections that TiDB supports?</h4>
+<p>The current TiDB version has no limit for the maximum number of concurrent connections. If too large concurrency leads to an increase of response time, you can increase the capacity by adding TiDB nodes.</p>
+<h4 id="how-to-view-the-creation-time-of-a-table">How to view the creation time of a table?</h4>
+<p>The <code>create_time</code> of tables in the <code>information_schema</code> is the creation time.</p>
+<h4 id="what-is-the-meaning-of-expensive-query-in-the-tidb-log">What is the meaning of <code>EXPENSIVE_QUERY</code> in the TiDB log?</h4>
+<p>When TiDB is executing a SQL statement, the query will be <code>EXPENSIVE_QUERY</code> if each operator is estimated to process over 10000 pieces of data. You can modify the <code>tidb-server</code> configuration parameter to adjust the threshold and then restart the <code>tidb-server</code>.</p>
+<h4 id="how-to-control-or-change-the-execution-priority-of-sql-commits">How to control or change the execution priority of SQL commits?</h4>
+<p>TiDB supports changing the priority on a <a href="/docs/sql/tidb-specific#tidb_force_priority">per-session</a>, <a href="/docs/sql/server-command-option#force-priority">global</a> or <a href="/docs/sql/dml">individual statement basis</a>. Priority has the following meaning:</p>
+<ul>
+<li><p>HIGH_PRIORITY: this statement has a high priority, that is, TiDB gives priority to this statement and executes it first.</p></li>
+<li><p>LOW_PRIORITY: this statement has a low priority, that is, TiDB reduces the priority of this statement during the execution period.</p></li>
+</ul>
+<p>You can combine the above two parameters with the DML of TiDB to use them. For usage details, see <a href="/docs/sql/dml">TiDB DML</a>. For example:</p>
+<ol>
+<li><p>Adjust the priority by writing SQL statements in the database:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> HIGH_PRIORITY <span style="color:#f92672">|</span> LOW_PRIORITY <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">table_name</span>;
+<span style="color:#66d9ef">insert</span> HIGH_PRIORITY <span style="color:#f92672">|</span> LOW_PRIORITY <span style="color:#66d9ef">into</span> <span style="color:#66d9ef">table_name</span> insert_values;
+<span style="color:#66d9ef">delete</span> HIGH_PRIORITY <span style="color:#f92672">|</span> LOW_PRIORITY <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">table_name</span>;
+<span style="color:#66d9ef">update</span> HIGH_PRIORITY <span style="color:#f92672">|</span> LOW_PRIORITY table_reference <span style="color:#66d9ef">set</span> assignment_list <span style="color:#66d9ef">where</span> where_condition;
+<span style="color:#66d9ef">replace</span> HIGH_PRIORITY <span style="color:#f92672">|</span> LOW_PRIORITY <span style="color:#66d9ef">into</span> <span style="color:#66d9ef">table_name</span>;</code></pre></div></li>
+<li><p>The full table scan statement automatically adjusts itself to a low priority. <code>analyze</code> has a low priority by default.</p></li>
+</ol>
+<h4 id="what-s-the-trigger-strategy-for-auto-analyze-in-tidb">What’s the trigger strategy for <code>auto analyze</code> in TiDB?</h4>
+<p>Trigger strategy: <code>auto analyze</code> is automatically triggered when the number of pieces of data in a new table reaches 1000 and this table has no write operation within one minute.</p>
+<p>When the modified number or the current total row number is larger than <code>tidb_auto_analyze_ratio</code>, the <code>analyze</code> statement is automatically triggered. The default value of <code>tidb_auto_analyze_ratio</code> is 0, indicating that this feature is disabled. To ensure safety, its minimum value is 0.3 when the feature is enabled, and it must be smaller than <code>pseudo-estimate-ratio</code> whose default value is 0.7, otherwise pseudo statistics will be used for a period of time. It is recommended to set <code>tidb_auto_analyze_ratio</code> to 0.5.</p>
+<h4 id="how-to-use-a-specific-index-with-hint-in-a-sql-statement">How to use a specific index with hint in a SQL statement?</h4>
+<p>Its usage is similar to MySQL:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">column_name</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">table_name</span> use <span style="color:#66d9ef">index</span><span style="color:#960050;background-color:#1e0010">（</span>index_name<span style="color:#960050;background-color:#1e0010">）</span><span style="color:#66d9ef">where</span> where_condition;</code></pre></div>
+<h3 id="manage-the-tikv-server">Manage the TiKV server</h3>
+<h4 id="what-is-the-recommended-number-of-replicas-in-the-tikv-cluster-is-it-better-to-keep-the-minimum-number-for-high-availability">What is the recommended number of replicas in the TiKV cluster? Is it better to keep the minimum number for high availability?</h4>
+<p>Use 3 replicas for test. If you increase the number of replicas, the performance declines but it is more secure. Whether to configure more replicas depends on the specific business needs.</p>
+<h4 id="the-cluster-id-mismatch-message-is-displayed-when-starting-tikv">The <code>cluster ID mismatch</code> message is displayed when starting TiKV.</h4>
+<p>This is because the cluster ID stored in local TiKV is different from the cluster ID specified by PD. When a new PD cluster is deployed, PD generates random cluster IDs. TiKV gets the cluster ID from PD and stores the cluster ID locally when it is initialized. The next time when TiKV is started, it checks the local cluster ID with the cluster ID in PD. If the cluster IDs don’t match, the <code>cluster ID mismatch</code> message is displayed and TiKV exits.</p>
+<p>If you previously deploy a PD cluster, but then you remove the PD data and deploy a new PD cluster, this error occurs because TiKV uses the old data to connect to the new PD cluster.</p>
+<h4 id="the-duplicated-store-address-message-is-displayed-when-starting-tikv">The <code>duplicated store address</code> message is displayed when starting TiKV.</h4>
+<p>This is because the address in the startup parameter has been registered in the PD cluster by other TiKVs. This error occurs when there is no data folder under the directory that TiKV <code>--store</code> specifies, but you use the previous parameter to restart the TiKV.</p>
+<p>To solve this problem, use the <a href="https://github.com/pingcap/pd/tree/55db505e8f35e8ab4e00efd202beb27a8ecc40fb/tools/pd-ctl#store-delete--label--weight-store_id----jqquery-string"><code>store delete</code></a> function to delete the previous store and then restart TiKV.</p>
+<h4 id="tikv-master-and-slave-use-the-same-compression-algorithm-why-the-results-are-different">TiKV master and slave use the same compression algorithm, why the results are different?</h4>
+<p>Currently, some files of TiKV master have a higher compression rate, which depends on the underlying data distribution and RocksDB implementation. It is normal that the data size fluctuates occasionally. The underlying storage engine adjusts data as needed.</p>
+<h4 id="what-are-the-features-of-tikv-block-cache">What are the features of TiKV block cache?</h4>
+<p>TiKV implements the Column Family (CF) feature of RocksDB. By default, the KV data is eventually stored in the 3 CFs (default, write and lock) within RocksDB.</p>
+<ul>
+<li>The default CF stores real data and the corresponding parameter is in <code>[rocksdb.defaultcf]</code>. The write CF stores the data version information (MVCC) and index-related data, and the corresponding parameter is in <code>[rocksdb.writecf]</code>. The lock CF stores the lock information and the system uses the default parameter.</li>
+<li>The Raft RocksDB instance stores Raft logs. The default CF mainly stores Raft logs and the corresponding parameter is in <code>[raftdb.defaultcf]</code>.</li>
+<li>Each CF has an individual block-cache to cache data blocks and improve RocksDB read speed. The size of block-cache is controlled by the <code>block-cache-size</code> parameter. A larger value of the parameter means more hot data can be cached and is more favorable to read operation. At the same time, it consumes more system memory.</li>
+<li>Each CF has an individual write-buffer and the size is controlled by the <code>write-buffer-size</code> parameter.</li>
+</ul>
+<h4 id="why-it-occurs-that-tikv-channel-full">Why it occurs that “TiKV channel full”?</h4>
+<ul>
+<li>The Raftstore thread is too slow or blocked by I/O. You can view the CPU usage status of Raftstore.</li>
+<li>TiKV is too busy (CPU, disk I/O, etc.) and cannot manage to handle it.</li>
+</ul>
+<h4 id="why-does-tikv-frequently-switch-region-leader">Why does TiKV frequently switch Region leader?</h4>
+<ul>
+<li>Leaders can not reach out to followers. E.g., network problem or node failure.</li>
+<li>Leader balance from PD. E.g., PD wants to transfer leaders from a hotspot node to others.</li>
+</ul>
+<h4 id="if-a-node-is-down-will-the-service-be-affected-if-yes-how-long">If a node is down, will the service be affected? If yes, how long?</h4>
+<p>TiDB uses Raft to synchronize data among multiple replicas and guarantees the strong consistency of data. If one replica goes wrong, the other replicas can guarantee data security. The default number of replicas in each Region is 3. Based on the Raft protocol, a leader is elected in each Region, and if a single leader fails, a follower is soon elected as Region leader after a maximum of 2 * lease time (lease time is 10 seconds).</p>
+<h4 id="what-are-the-tikv-scenarios-that-take-up-high-i-o-memory-cpu-and-exceed-the-parameter-configuration">What are the TiKV scenarios that take up high I/O, memory, CPU, and exceed the parameter configuration?</h4>
+<p>Writing or reading a large volume of data in TiKV takes up high I/O, memory and CPU. Executing very complex queries costs a lot of memory and CPU resources, such as the scenario that generates large intermediate result sets.</p>
+<h4 id="does-tikv-support-sas-sata-disks-or-mixed-deployment-of-ssd-sas-disks">Does TiKV support SAS/SATA disks or mixed deployment of SSD/SAS disks?</h4>
+<p>No. For OLTP scenarios, TiDB requires high I/O disks for data access and operation. As a distributed database with strong consistency, TiDB has some write amplification such as replica replication and bottom layer storage compaction. Therefore, it is recommended to use NVMe SSD as the storage disks in TiDB best practices. Mixed deployment of TiKV and PD is not supported.</p>
+<h4 id="is-the-range-of-the-key-data-table-divided-before-data-access">Is the Range of the Key data table divided before data access?</h4>
+<p>No. It differs from the table splitting rules of MySQL. In TiKV, the table Range is dynamically split based on the size of Region.</p>
+<h4 id="how-does-region-split">How does Region split?</h4>
+<p>Region is not divided in advance, but it follows a Region split mechanism. When the Region size exceeds the value of the <code>region_split_size</code> or <code>region-split-keys</code> parameters, split is triggered. After the split, the information is reported to PD.</p>
+<h4 id="does-tikv-have-the-innodb-flush-log-trx-commit-parameter-like-mysql-to-guarantee-the-security-of-data">Does TiKV have the <code>innodb_flush_log_trx_commit</code> parameter like MySQL, to guarantee the security of data?</h4>
+<p>Yes. Currently, the standalone storage engine uses two RocksDB instances. One instance is used to store the raft-log. When the <code>sync-log</code> parameter in TiKV is set to true, each commit is mandatorily flushed to the raft-log. If a crash occurs, you can restore the KV data using the raft-log.</p>
+<h4 id="what-is-the-recommended-server-configuration-for-wal-storage-such-as-ssd-raid-level-cache-strategy-of-raid-card-numa-configuration-file-system-i-o-scheduling-strategy-of-the-operating-system">What is the recommended server configuration for WAL storage, such as SSD, RAID level, cache strategy of RAID card, NUMA configuration, file system, I/O scheduling strategy of the operating system?</h4>
+<p>WAL belongs to ordered writing, and currently, we do not apply a unique configuration to it. Recommended configuration is as follows:</p>
+<ul>
+<li>SSD</li>
+<li>RAID 10 preferred</li>
+<li>Cache strategy of RAID card and I/O scheduling strategy of the operating system: currently no specific best practices; you can use the default configuration in Linux 7 or later</li>
+<li>NUMA: no specific suggestion; for memory allocation strategy, you can use <code>interleave = all</code></li>
+<li>File system: ext4</li>
+</ul>
+<h4 id="how-is-the-write-performance-in-the-most-strict-data-available-mode-sync-log-true">How is the write performance in the most strict data available mode (<code>sync-log = true</code>)?</h4>
+<p>Generally, enabling <code>sync-log</code> reduces about 30% of the performance. For write performance when <code>sync-log</code> is set to <code>false</code>, see <a href="/docs/benchmark/sysbench">Performance test result for TiDB using Sysbench</a>.</p>
+<h4 id="can-raft-multiple-replicas-in-the-tikv-architecture-achieve-absolute-data-security-is-it-necessary-to-apply-the-most-strict-mode-sync-log-true-to-a-standalone-storage">Can Raft + multiple replicas in the TiKV architecture achieve absolute data security? Is it necessary to apply the most strict mode (<code>sync-log = true</code>) to a standalone storage?</h4>
+<p>Data is redundantly copied between TiKV nodes using the <a href="https://raft.github.io/">Raft consensus algorithm</a> to ensure recoverability should a node failure occur. Only when the data has been written into more than 50% of the nodes, will the application return ACK (two out of three nodes). However, theoretically, two nodes might crash. Therefore, for scenarios with a strict requirement on data security, for example, the financial industry, you need to enable the <code>sync-log</code> mode.</p>
+<p>As an alternative to using <code>sync-log</code>, you may also consider having five nodes instead of three in your Raft group. This would allow for the failure of two nodes, while still providing data safety.</p>
+<h4 id="since-tikv-uses-the-raft-protocol-multiple-network-roundtrips-occur-during-data-writing-what-is-the-actual-write-delay">Since TiKV uses the Raft protocol, multiple network roundtrips occur during data writing. What is the actual write delay?</h4>
+<p>Theoretically, TiDB has a write delay of 4 more network roundtrips than standalone databases.</p>
+<h4 id="does-tidb-have-a-innodb-memcached-plugin-like-mysql-which-can-directly-use-the-kv-interface-and-does-not-need-the-independent-cache">Does TiDB have a InnoDB memcached plugin like MySQL which can directly use the KV interface and does not need the independent cache?</h4>
+<p>TiKV supports calling the interface separately. Theoretically, you can take an instance as the cache. Because TiDB is a distributed relational database, we do not support TiKV separately.</p>
+<h4 id="what-is-the-coprocessor-component-used-for">What is the Coprocessor component used for?</h4>
+<ul>
+<li>Reduce the data transmission between TiDB and TiKV</li>
+<li>Make full use of the distributed computing resources of TiKV to execute computing pushdown</li>
+</ul>
+<h4 id="the-error-message-io-error-no-space-left-on-device-while-appending-to-file-is-displayed">The error message <code>IO error: No space left on device While appending to file</code> is displayed.</h4>
+<p>This is because the disk space is not enough. You need to add nodes or enlarge the disk space.</p>
+<h4 id="why-does-the-oom-out-of-memory-error-occur-frequently-in-tikv">Why does the OOM (Out of Memory) error occur frequently in TiKV?</h4>
+<p>The memory usage of TiKV mainly comes from the block-cache of RocksDB, which is 40% of the system memory size by default. When the OOM error occurs frequently in TiKV, you should check whether the value of <code>block-cache-size</code> is set too high. In addition, when multiple TiKV instances are deployed on a single machine, you need to explicitly configure the parameter to prevent multiple instances from using too much system memory that results in the OOM error.</p>
+<h3 id="tidb-test">TiDB test</h3>
+<h4 id="what-is-the-performance-test-result-for-tidb-using-sysbench">What is the performance test result for TiDB using Sysbench?</h4>
+<p>At the beginning, many users tend to do a benchmark test or a comparison test between TiDB and MySQL. We have also done a similar official test and find the test result is consistent at large, although the test data has some bias. Because the architecture of TiDB differs greatly from MySQL, it is hard to find a benchmark point. The suggestions are as follows:</p>
+<ul>
+<li>Do not spend too much time on the benchmark test. Pay more attention to the difference of scenarios using TiDB.</li>
+<li>See the official test. For the Sysbench test and comparison test between TiDB and MySQL, see <a href="/docs/benchmark/sysbench">Performance test result for TiDB using Sysbench</a>.</li>
+</ul>
+<h4 id="what-s-the-relationship-between-the-tidb-cluster-capacity-qps-and-the-number-of-nodes-how-does-tidb-compare-to-mysql">What’s the relationship between the TiDB cluster capacity (QPS) and the number of nodes? How does TiDB compare to MySQL?</h4>
+<ul>
+<li>Within 10 nodes, the relationship between TiDB write capacity (Insert TPS) and the number of nodes is roughly 40% linear increase. Because MySQL uses single-node write, its write capacity cannot be scaled.</li>
+<li>In MySQL, the read capacity can be increased by adding slave, but the write capacity cannot be increased except using sharding, which has many problems.</li>
+<li>In TiDB, both the read and write capacity can be easily increased by adding more nodes.</li>
+</ul>
+<h4 id="the-performance-test-of-mysql-and-tidb-by-our-dba-shows-that-the-performance-of-a-standalone-tidb-is-not-as-good-as-mysql">The performance test of MySQL and TiDB by our DBA shows that the performance of a standalone TiDB is not as good as MySQL.</h4>
+<p>TiDB is designed for scenarios where sharding is used because the capacity of a MySQL standalone is limited, and where strong consistency and complete distributed transactions are required. One of the advantages of TiDB is pushing down computing to the storage nodes to execute concurrent computing.</p>
+<p>TiDB is not suitable for tables of small size (such as below ten million level), because its strength in concurrency cannot be shown with a small size of data and limited Regions. A typical example is the counter table, in which records of a few lines are updated high frequently. In TiDB, these lines become several Key-Value pairs in the storage engine, and then settle into a Region located on a single node. The overhead of background replication to guarantee strong consistency and operations from TiDB to TiKV leads to a poorer performance than a MySQL standalone.</p>
+<h3 id="backup-and-restore">Backup and restore</h3>
+<h4 id="how-to-back-up-data-in-tidb">How to back up data in TiDB?</h4>
+<p>Currently, the preferred method for backup is using the <a href="/docs/tools/mydumper">PingCAP fork of mydumper</a>. Although the official MySQL tool <code>mysqldump</code> is also supported in TiDB to back up and restore data, its performance is poorer than <a href="/docs/tools/mydumper"><code>mydumper</code></a>/<a href="/docs/tools/loader"><code>loader</code></a> and it needs much more time to back up and restore large volumes of data.</p>
+<p>Keep the size of the data file exported from <code>mydumper</code> as small as possible. It is recommended to keep the size within 64M. You can set value of the <code>-F</code> parameter to 64.</p>
+<p>You can edit the <code>t</code> parameter of <code>loader</code> based on the number of TiKV instances and load status. For example, in scenarios of three TiKV instances, you can set its value to <code>3 * (1 ～ n)</code>. When the TiKV load is very high and <code>backoffer.maxSleep 15000ms is exceeded</code> displays a lot in <code>loader</code> and TiDB logs, you can adjust the parameter to a smaller value. When the TiKV load is not very high, you can adjust the parameter to a larger value accordingly.</p>
+<h2 id="migrate-the-data-and-traffic">Migrate the data and traffic</h2>
+<h3 id="full-data-export-and-import">Full data export and import</h3>
+<h4 id="mydumper">Mydumper</h4>
+<p>See <a href="/docs/tools/mydumper">mydumper Instructions</a>.</p>
+<h4 id="loader">Loader</h4>
+<p>See <a href="/docs/tools/loader">Loader Instructions</a>.</p>
+<h4 id="how-to-migrate-an-application-running-on-mysql-to-tidb">How to migrate an application running on MySQL to TiDB?</h4>
+<p>Because TiDB supports most MySQL syntax, generally you can migrate your applications to TiDB without changing a single line of code in most cases.</p>
+<h4 id="if-i-accidentally-import-the-mysql-user-table-into-tidb-or-forget-the-password-and-cannot-log-in-how-to-deal-with-it">If I accidentally import the MySQL user table into TiDB, or forget the password and cannot log in, how to deal with it?</h4>
+<p>Restart the TiDB service, add the <code>-skip-grant-table=true</code> parameter in the configuration file. Log into the cluster without password and recreate the user, or recreate the <code>mysql.user</code> table using the following statement:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> EXIST mysql.<span style="color:#66d9ef">user</span>;
+
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">exists</span> mysql.<span style="color:#66d9ef">user</span> (
+    <span style="color:#66d9ef">Host</span>        CHAR(<span style="color:#ae81ff">64</span>),
+    <span style="color:#66d9ef">User</span>        CHAR(<span style="color:#ae81ff">16</span>),
+    Password      CHAR(<span style="color:#ae81ff">41</span>),
+    Select_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Insert_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Update_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Delete_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Create_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Drop_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Process_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Grant_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    References_priv     ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Alter_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Show_db_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Super_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Create_tmp_table_priv   ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Lock_tables_priv    ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Execute_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Create_view_priv    ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Show_view_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Create_routine_priv   ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Alter_routine_priv    ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Index_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Create_user_priv    ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Event_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    Trigger_priv      ENUM(<span style="color:#e6db74">'N'</span>,<span style="color:#e6db74">'Y'</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">'N'</span>,
+    <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#66d9ef">Host</span>, <span style="color:#66d9ef">User</span>));
+
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> mysql.<span style="color:#66d9ef">user</span> <span style="color:#66d9ef">VALUES</span> (<span style="color:#e6db74">"%"</span>, <span style="color:#e6db74">"root"</span>, <span style="color:#e6db74">""</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>, <span style="color:#e6db74">"Y"</span>);</code></pre></div>
+<h4 id="can-tidb-provide-services-while-loader-is-running">Can TiDB provide services while Loader is running?</h4>
+<p>TiDB can provide services while Loader is running because Loader inserts the data logically. But do not perform the related DDL operations.</p>
+<h4 id="how-to-export-the-data-in-tidb">How to export the data in TiDB?</h4>
+<p>Currently, TiDB does not support <code>select into outfile</code>. You can use the following methods to export the data in TiDB:</p>
+<ul>
+<li>See <a href="http://blog.csdn.net/xin_yu_xin/article/details/7574662">MySQL uses mysqldump to export part of the table data</a> in Chinese and export data using mysqldump and the WHERE condition.</li>
+<li>Use the MySQL client to export the results of <code>select</code> to a file.</li>
+</ul>
+<h4 id="how-to-migrate-from-db2-or-oracle-to-tidb">How to migrate from DB2 or Oracle to TiDB?</h4>
+<p>To migrate all the data or migrate incrementally from DB2 or Oracle to TiDB, see the following solution:</p>
+<ul>
+<li>Use the official migration tool of Oracle, such as OGG, Gateway, CDC (Change Data Capture).</li>
+<li>Develop a program for importing and exporting data.</li>
+<li>Export Spool as text file, and import data using Load infile.</li>
+<li>Use a third-party data migration tool.</li>
+</ul>
+<p>Currently, it is recommended to use OGG.</p>
+<h4 id="error-java-sql-batchupdateexecption-statement-count-5001-exceeds-the-transaction-limitation-while-using-sqoop-to-write-data-into-tidb-in-batches">Error: <code>java.sql.BatchUpdateExecption:statement count 5001 exceeds the transaction limitation</code> while using Sqoop to write data into TiDB in batches</h4>
+<p>In Sqoop, <code>--batch</code> means committing 100 <code>statement</code>s in each batch, but by default each <code>statement</code> contains 100 SQL statements. So, 100 * 100 = 10000 SQL statements, which exceeds 5000, the maximum number of statements allowed in a single TiDB transaction.</p>
+<p>Two solutions:</p>
+<ul>
+<li><p>Add the <code>-Dsqoop.export.records.per.statement=10</code> option as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">sqoop export \
+    -Dsqoop.export.records.per.statement=10 \
+    --connect jdbc:mysql://mysql.example.com/sqoop \
+    --username sqoop ${user} \
+    --password ${passwd} \
+    --table ${tab_name} \
+    --export-dir ${dir} \
+    --batch</pre></div></li>
+<li><p>You can also increase the limited number of statements in a single TiDB transaction, but this will consume more memory.</p></li>
+</ul>
+<h4 id="does-tidb-have-a-function-like-the-flashback-query-in-oracle-does-it-support-ddl">Does TiDB have a function like the Flashback Query in Oracle? Does it support DDL?</h4>
+<p>Yes, it does. And it supports DDL as well. For details, see <a href="/docs/op-guide/history-read">how TiDB reads data from history versions</a>.</p>
+<h3 id="migrate-the-data-online">Migrate the data online</h3>
+<h4 id="syncer">Syncer</h4>
+<h5 id="syncer-user-guide">Syncer user guide</h5>
+<p>See <a href="/docs/tools/syncer">Syncer User Guide</a>.</p>
+<h5 id="how-to-configure-to-monitor-syncer-status">How to configure to monitor Syncer status?</h5>
+<p>Download and import <a href="https://github.com/pingcap/docs/blob/master/etc/Syncer.json">Syncer Json</a> to Grafana. Edit the Prometheus configuration file and add the following content:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">- job_name: ‘syncer_ops’ // task name
+    static_configs:
+      - targets: [’10.10.1.1:10096’] // Syncer monitoring address and port, informing Prometheus to pull the data of Syncer</pre></div>
+<p>Restart Prometheus.</p>
+<h5 id="is-there-a-current-solution-to-synchronizing-data-from-tidb-to-other-databases-like-hbase-and-elasticsearch">Is there a current solution to synchronizing data from TiDB to other databases like HBase and Elasticsearch?</h5>
+<p>No. Currently, the data synchronization depends on the application itself.</p>
+<h5 id="does-syncer-support-synchronizing-only-some-of-the-tables-when-syncer-is-synchronizing-data">Does Syncer support synchronizing only some of the tables when Syncer is synchronizing data?</h5>
+<p>Yes. For details, see <a href="/docs/tools/syncer">Syncer User Guide</a></p>
+<h5 id="do-frequent-ddl-operations-affect-the-synchronization-speed-of-syncer">Do frequent DDL operations affect the synchronization speed of Syncer?</h5>
+<p>Frequent DDL operations may affect the synchronization speed. For Sycner, DDL operations are executed serially. When DDL operations are executed during data synchronization, data will be synchronized serially and thus the synchronization speed will be slowed down.</p>
+<h5 id="if-the-machine-that-syncer-is-in-is-broken-and-the-directory-of-the-syncer-meta-file-is-lost-what-should-i-do">If the machine that Syncer is in is broken and the directory of the <code>syncer.meta</code> file is lost, what should I do?</h5>
+<p>When you synchronize data using Syncer GTID, the <code>syncer.meta</code> file is constantly updated during the synchronization process. The current version of Syncer does not contain the design for high availability. The <code>syncer.meta</code> configuration file of Syncer is directly stored on the hard disks, which is similar to other tools in the MySQL ecosystem, such as mydumper.</p>
+<p>Two solutions:</p>
+<ul>
+<li>Put the <code>syncer.meta</code> file in a relatively secure disk. For example, use disks with RAID 1.</li>
+<li>Restore the location information of history synchronization according to the monitoring data that Syncer reports to Prometheus regularly. But the location information might be inaccurate due to the delay when a large amount of data is synchronized.</li>
+</ul>
+<h5 id="if-the-downstream-tidb-data-is-not-consistent-with-the-mysql-data-during-the-synchronization-process-of-syncer-will-dml-operations-cause-exits">If the downstream TiDB data is not consistent with the MySQL data during the synchronization process of Syncer, will DML operations cause exits?</h5>
+<ul>
+<li>If the data exists in the upstream MySQL but does not exist in the downstream TiDB, when the upstream MySQL performs the <code>UPDATE</code> or <code>DELETE</code> operation on this row of data, Syncer will not report an error and the synchronization process will not exit, and this row of data does not exist in the downstream.</li>
+<li>If a conflict exists in the primary key indexes or the unique indexes in the downstream, preforming the <code>UPDATE</code> operation will cause an exit and performing the <code>INSERT</code> operation will not cause an exit.</li>
+</ul>
+<h3 id="migrate-the-traffic">Migrate the traffic</h3>
+<h4 id="how-to-migrate-the-traffic-quickly">How to migrate the traffic quickly?</h4>
+<p>It is recommended to build a multi-source MySQL -&gt; TiDB real-time synchronization environment using Syncer tool. You can migrate the read and write traffic in batches by editing the network configuration as needed. Deploy a stable network LB (HAproxy, LVS, F5, DNS, etc.) on the upper layer, in order to implement seamless migration by directly editing the network configuration.</p>
+<h4 id="is-there-a-limit-for-the-total-write-and-read-capacity-in-tidb">Is there a limit for the total write and read capacity in TiDB?</h4>
+<p>The total read capacity has no limit. You can increase the read capacity by adding more TiDB servers. Generally the write capacity has no limit as well. You can increase the write capacity by adding more TiKV nodes.</p>
+<h4 id="the-error-message-transaction-too-large-is-displayed">The error message <code>transaction too large</code> is displayed.</h4>
+<p>As distributed transactions need to conduct two-phase commit and the bottom layer performs Raft replication, if a transaction is very large, the commit process would be quite slow and the following Raft replication flow is thus struck. To avoid this problem, we limit the transaction size:</p>
+<ul>
+<li>Each Key-Value entry is no more than 6MB</li>
+<li>The total number of Key-Value entry is no more than 300,000 rows</li>
+<li>The total size of Key-Value entry is no more than 100MB</li>
+</ul>
+<p>There are <a href="https://cloud.google.com/spanner/docs/limits">similar limits</a> on Google Cloud Spanner.</p>
+<h4 id="how-to-import-data-in-batches">How to import data in batches?</h4>
+<ol>
+<li><p>When you import data, insert in batches and keep the number of rows within 10,000 for each batch.</p></li>
+<li><p>As for <code>insert</code> and <code>select</code>, you can open the hidden parameter <code>set @@session.tidb_batch_insert=1;</code>, and <code>insert</code> will execute large transactions in batches. In this way, you can avoid the timeout caused by large transactions, but this may lead to the loss of atomicity. An error in the process of execution leads to partly inserted transaction. Therefore, use this parameter only when necessary, and use it in session to avoid affecting other statements. When the transaction is finished, use <code>set @@session.tidb_batch_insert=0</code> to close it.</p></li>
+<li><p>As for <code>delete</code> and <code>update</code>, you can use <code>limit</code> plus circulation to operate.</p></li>
+</ol>
+<h4 id="does-tidb-release-space-immediately-after-deleting-data">Does TiDB release space immediately after deleting data?</h4>
+<p>None of the <code>DELETE</code>, <code>TRUNCATE</code> and <code>DROP</code> operations release data immediately. For the <code>TRUNCATE</code> and <code>DROP</code> operations, after the TiDB GC (Garbage Collection) time (10 minutes by default), the data is deleted and the space is released. For the <code>DELETE</code> operation, the data is deleted but the space is not released according to TiDB GC. When subsequent data is written into RocksDB and executes <code>COMPACT</code>, the space is reused.</p>
+<h4 id="can-i-execute-ddl-operations-on-the-target-table-when-loading-data">Can I execute DDL operations on the target table when loading data?</h4>
+<p>No. None of the DDL operations can be executed on the target table when you load data, otherwise the data fails to be loaded.</p>
+<h4 id="does-tidb-support-the-replace-into-syntax">Does TiDB support the <code>replace into</code> syntax?</h4>
+<p>Yes. But the <code>load data</code> does not support the <code>replace into</code> syntax.</p>
+<h4 id="why-does-the-query-speed-getting-slow-after-deleting-data">Why does the query speed getting slow after deleting data?</h4>
+<p>Deleting a large amount of data leaves a lot of useless keys, affecting the query efficiency. Currently the Region Merge feature is in development, which is expected to solve this problem. For details, see the <a href="https://pingcap.com/blog/2017-07-24-tidbbestpractice/#write">deleting data section in TiDB Best Practices</a>.</p>
+<h4 id="what-is-the-most-efficient-way-of-deleting-data">What is the most efficient way of deleting data?</h4>
+<p>When deleting a large amount of data, it is recommended to use <code>Delete * from t where xx limit 5000;</code>. It deletes through the loop and uses <code>Affected Rows == 0</code> as a condition to end the loop, so as not to exceed the limit of transaction size. With the prerequisite of meeting business filtering logic, it is recommended to add a strong filter index column or directly use the primary key to select the range, such as <code>id &gt;= 5000*n+m and id &lt; 5000*(n+1)+m</code>.</p>
+<p>If the amount of data that needs to be deleted at a time is very large, this loop method will get slower and slower because each deletion traverses backward. After deleting the previous data, lots of deleted flags remain for a short period (then all will be processed by Garbage Collection) and influence the following Delete statement. If possible, it is recommended to refine the Where condition. See <a href="https://pingcap.com/blog/2017-07-24-tidbbestpractice/#write">details in TiDB Best Practices</a>.</p>
+<h4 id="how-to-improve-the-data-loading-speed-in-tidb">How to improve the data loading speed in TiDB?</h4>
+<ul>
+<li>The <a href="/docs/tools/lightning/overview-architecture">Lightning</a> tool is developed for distributed data import. It should be noted that the data import process does not perform a complete transaction process for performance reasons. Therefore, the ACID constraint of the data being imported during the import process cannot be guaranteed. The ACID constraint of the imported data can only be guaranteed after the entire import process ends. Therefore, the applicable scenarios mainly include importing new data (such as a new table or a new index) or the full backup and restoring (truncate the original table and then import data).</li>
+<li>Data loading in TiDB is related to the status of disks and the whole cluster. When loading data, pay attention to metrics like the disk usage rate of the host, TiClient Error, Backoff, Thread CPU and so on. You can analyze the bottlenecks using these metrics.</li>
+</ul>
+<h4 id="what-should-i-do-if-it-is-slow-to-reclaim-storage-space-after-deleting-data">What should I do if it is slow to reclaim storage space after deleting data?</h4>
+<p>You can configure concurrent GC to increase the speed of reclaiming storage space. The default concurrency is 1, and you can modify it to at most 50% of the number of TiKV instances using the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">update mysql.tidb set VARIABLE_VALUE="3" where VARIABLE_NAME="tikv_gc_concurrency";</pre></div>
+<h2 id="sql-optimization">SQL optimization</h2>
+<h3 id="tidb-execution-plan-description">TiDB execution plan description</h3>
+<p>See <a href="/docs/sql/understanding-the-query-execution-plan">Understand the Query Execution Plan</a>.</p>
+<h3 id="statistics-collection">Statistics collection</h3>
+<p>See <a href="/docs/sql/statistics">Introduction to Statistics</a>.</p>
+<h4 id="how-to-optimize-select-count-1">How to optimize <code>select count(1)</code>?</h4>
+<p>The <code>count(1)</code> statement counts the total number of rows in a table. Improving the degree of concurrency can significantly improve the speed. To modify the concurrency, refer to the <a href="/docs/sql/tidb-specific#tidb_distsql_scan_concurrency">document</a>. But it also depends on the CPU and I/O resources. TiDB accesses TiKV in every query. When the amount of data is small, all MySQL is in memory, and TiDB needs to conduct a network access.</p>
+<p>Recommendations:</p>
+<ol>
+<li>Improve the hardware configuration. See <a href="/docs/op-guide/recommendation">Software and Hardware Requirements</a>.</li>
+<li>Improve the concurrency. The default value is 10. You can improve it to 50 and have a try. But usually the improvement is 2-4 times of the default value.</li>
+<li>Test the <code>count</code> in the case of large amount of data.</li>
+<li>Optimize the TiKV configuration. See <a href="/docs/op-guide/tune-tikv">Performance Tuning for TiKV</a>.</li>
+</ol>
+<h4 id="how-to-view-the-progress-of-the-current-ddl-job">How to view the progress of the current DDL job?</h4>
+<p>You can use <code>admin show ddl</code> to view the progress of the current DDL job. The operation is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">tidb<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> ddl<span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span>;
+<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. <span style="color:#66d9ef">row</span> <span style="color:#f92672">***************************</span>
+  SCHEMA_VER: <span style="color:#ae81ff">140</span>
+       <span style="color:#66d9ef">OWNER</span>: <span style="color:#ae81ff">1</span>a1c4174<span style="color:#f92672">-</span><span style="color:#ae81ff">0</span>fcd<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>ba0<span style="color:#f92672">-</span>add9<span style="color:#f92672">-</span><span style="color:#ae81ff">12</span>d08c4077dc
+RUNNING_JOBS: ID:<span style="color:#ae81ff">121</span>, <span style="color:#66d9ef">Type</span>:<span style="color:#66d9ef">add</span> <span style="color:#66d9ef">index</span>, <span style="color:#66d9ef">State</span>:running, SchemaState:<span style="color:#66d9ef">write</span> reorganization, SchemaID:<span style="color:#ae81ff">1</span>, TableID:<span style="color:#ae81ff">118</span>, RowCount:<span style="color:#ae81ff">77312</span>, ArgLen:<span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">start</span> time: <span style="color:#ae81ff">2018</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">05</span> <span style="color:#ae81ff">16</span>:<span style="color:#ae81ff">26</span>:<span style="color:#ae81ff">10</span>.<span style="color:#ae81ff">652</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">0800</span> CST, Err:<span style="color:#f92672">&lt;</span>nil<span style="color:#f92672">&gt;</span>, ErrCount:<span style="color:#ae81ff">0</span>, SnapshotVersion:<span style="color:#ae81ff">404749908941733890</span>
+     SELF_ID: <span style="color:#ae81ff">1</span>a1c4174<span style="color:#f92672">-</span><span style="color:#ae81ff">0</span>fcd<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>ba0<span style="color:#f92672">-</span>add9<span style="color:#f92672">-</span><span style="color:#ae81ff">12</span>d08c4077dc</code></pre></div>
+<p>From the above results, you can get that the <code>add index</code> operation is being processed currently. You can also get from the <code>RowCount</code> field of the <code>RUNNING_JOBS</code> column that now the <code>add index</code> operation has added 77312 rows of indexes.</p>
+<h4 id="how-to-view-the-ddl-job">How to view the DDL job?</h4>
+<ul>
+<li><code>admin show ddl</code>: to view the running DDL job</li>
+<li><code>admin show ddl jobs</code>: to view all the results in the current DDL job queue (including tasks that are running and waiting to run) and the last ten results in the completed DDL job queue</li>
+<li><code>admin show ddl job queries 'job_id' [, 'job_id'] ...</code>: to view the original SQL statement of the DDL task corresponding to the <code>job_id</code>; the <code>job_id</code> only searches the running DDL job and the last ten results in the DDL history job queue</li>
+</ul>
+<h4 id="does-tidb-support-cbo-cost-based-optimization-if-yes-to-what-extent">Does TiDB support CBO (Cost-Based Optimization)? If yes, to what extent?</h4>
+<p>Yes. TiDB uses the cost-based optimizer. The cost model and statistics are constantly optimized. TiDB also supports correlation algorithms like hash join and soft merge.</p>
+<h4 id="how-to-determine-whether-i-need-to-execute-analyze-on-a-table">How to determine whether I need to execute <code>analyze</code> on a table?</h4>
+<p>View the <code>Healthy</code> field using <code>show stats_healthy</code> and generally you need to execute <code>analyze</code> on a table when the field value is smaller than 60.</p>
+<h4 id="what-is-the-id-rule-when-a-query-plan-is-presented-as-a-tree-what-is-the-execution-order-for-this-tree">What is the ID rule when a query plan is presented as a tree? What is the execution order for this tree?</h4>
+<p>No rule exists for these IDs but the IDs are unique. When IDs are generated, a counter works and adds one when one plan is generated. The execution order has nothing to do with the ID. The whole query plan is a tree and the execution process starts from the root node and the data is returned to the upper level continuously. For details about the query plan, see <a href="/docs/sql/understanding-the-query-execution-plan">Understanding the TiDB Query Execution Plan</a>.</p>
+<h4 id="in-the-tidb-query-plan-cop-tasks-are-in-the-same-root-are-they-executed-concurrently">In the TiDB query plan, <code>cop</code> tasks are in the same root. Are they executed concurrently?</h4>
+<p>Currently the computing tasks of TiDB belong to two different types of tasks: <code>cop task</code> and <code>root task</code>.</p>
+<p><code>cop task</code> is the computing task which is pushed down to the KV end for distributed execution; <code>root task</code> is the computing task for single point execution on the TiDB end.</p>
+<p>Generally the input data of <code>root task</code> comes from <code>cop task</code>; when <code>root task</code> processes data, <code>cop task</code> of TiKV can processes data at the same time and waits for the pull of <code>root task</code> of TiDB. Therefore, <code>cop</code> tasks can be considered as executed concurrently; but their data has an upstream and downstream relationship. During the execution process, they are executed concurrently during some time. For example, the first <code>cop task</code> is processing the data in [100, 200] and the second <code>cop task</code> is processing the data in [1, 100]. For details, see <a href="/docs/sql/understanding-the-query-execution-plan">Understanding the TiDB Query Plan</a>.</p>
+<h2 id="database-optimization">Database optimization</h2>
+<h3 id="tidb">TiDB</h3>
+<h4 id="edit-tidb-options">Edit TiDB options</h4>
+<p>See <a href="/docs/sql/server-command-option">The TiDB Command Options</a>.</p>
+<h4 id="how-to-scatter-the-hotspots">How to scatter the hotspots?</h4>
+<p>In TiDB, data is divided into Regions for management. Generally, the TiDB hotspot means the Read/Write hotspot in a Region. In TiDB, for the table whose primary key (PK) is not an integer or which has no PK, you can properly break Regions by configuring <code>SHARD_ROW_ID_BITS</code> to scatter the Region hotspots. For details, see the introduction of <code>SHARD_ROW_ID_BITS</code> in <a href="/docs/sql/tidb-specific">TiDB Specific System Variables and Syntax</a>.</p>
+<h3 id="tikv">TiKV</h3>
+<h4 id="tune-tikv-performance">Tune TiKV performance</h4>
+<p>See <a href="/docs/op-guide/tune-tikv">Tune TiKV Performance</a>.</p>
+<h2 id="monitor">Monitor</h2>
+<h3 id="prometheus-monitoring-framework">Prometheus monitoring framework</h3>
+<p>See <a href="/docs/op-guide/monitor-overview">Overview of the Monitoring Framework</a>.</p>
+<h3 id="key-metrics-of-monitoring">Key metrics of monitoring</h3>
+<p>See <a href="/docs/op-guide/dashboard-overview-info">Key Metrics</a>.</p>
+<h4 id="is-there-a-better-way-of-monitoring-the-key-metrics">Is there a better way of monitoring the key metrics?</h4>
+<p>The monitoring system of TiDB consists of Prometheus and Grafana. From the dashboard in Grafana, you can monitor various running metrics of TiDB which include the monitoring metrics of system resources, of client connection and SQL operation, of internal communication and Region scheduling. With these metrics, the database administrator can better understand the system running status, running bottlenecks and so on. In the practice of monitoring these metrics, we list the key metrics of each TiDB component. Generally you only need to pay attention to these common metrics. For details, see <a href="/docs/op-guide/dashboard-overview-info">Key Metrics</a>.</p>
+<h4 id="the-prometheus-monitoring-data-is-deleted-every-15-days-by-default-could-i-set-it-to-two-months-or-delete-the-monitoring-data-manually">The Prometheus monitoring data is deleted every 15 days by default. Could I set it to two months or delete the monitoring data manually?</h4>
+<p>Yes. Find the startup script on the machine where Prometheus is started, edit the startup parameter and restart Prometheus.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">--storage.tsdb.retention="60d"</pre></div>
+<h4 id="region-health-monitor">Region Health monitor</h4>
+<p>In TiDB 2.0, Region health is monitored in the PD metric monitoring page, in which the <code>Region Health</code> monitoring item shows the statistics of all the Region replica status. <code>miss</code> means shortage of replicas and <code>extra</code> means the extra replica exists. In addition, <code>Region Health</code> also shows the isolation level by <code>label</code>. <code>level-1</code> means the Region replicas are isolated physically in the first <code>label</code> level. All the Regions are in <code>level-0</code> when <code>location label</code> is not configured.</p>
+<h4 id="what-is-the-meaning-of-selectsimplefull-in-statement-count-monitor">What is the meaning of <code>selectsimplefull</code> in Statement Count monitor?</h4>
+<p>It means full table scan but the table might be a small system table.</p>
+<h4 id="what-is-the-difference-between-qps-and-statement-ops-in-the-monitor">What is the difference between <code>QPS</code> and <code>Statement OPS</code> in the monitor?</h4>
+<p>The <code>QPS</code> statistics is about all the SQL statements, including <code>use database</code>, <code>load data</code>, <code>begin</code>, <code>commit</code>, <code>set</code>, <code>show</code>, <code>insert</code> and <code>select</code>.</p>
+<p>The <code>Statement OPS</code> statistics is only about applications related SQL statements, including <code>select</code>, <code>update</code> and <code>insert</code>, therefore the <code>Statement OPS</code> statistics matches the applications better.</p>
+<h2 id="troubleshoot">Troubleshoot</h2>
+<h3 id="tidb-custom-error-messages">TiDB custom error messages</h3>
+<h4 id="error-9001-hy000-pd-server-timeout">ERROR 9001 (HY000): PD Server Timeout</h4>
+<p>A PD request timeout. Check the status, monitoring data and log of the PD server, and the network between the TiDB server and the PD server.</p>
+<h4 id="error-9002-hy000-tikv-server-timeout">ERROR 9002 (HY000): TiKV Server Timeout</h4>
+<p>A TiKV request timeout. Check the status, monitoring data and log of the TiKV server, and the network between the TiDB server and the TiKV server.</p>
+<h4 id="error-9003-hy000-tikv-server-is-busy">ERROR 9003 (HY000): TiKV Server is Busy</h4>
+<p>The TiKV server is busy. This usually occurs when the database load is very high. Check the status, monitoring data and log of the TiKV server.</p>
+<h4 id="error-9004-hy000-resolve-lock-timeout">ERROR 9004 (HY000): Resolve Lock Timeout</h4>
+<p>A lock resolving timeout. This usually occurs when a large number of transaction conflicts exist. Check the application code to see whether lock contention exists in the database.</p>
+<h4 id="error-9005-hy000-region-is-unavailable">ERROR 9005 (HY000): Region is unavailable</h4>
+<p>The accessed Region is not available. A Raft Group is not available, with possible reasons like an inadequate number of replicas. This usually occurs when the TiKV server is busy or the TiKV node is shut down. Check the status, monitoring data and log of the TiKV server.</p>
+<h4 id="error-9006-hy000-gc-life-time-is-shorter-than-transaction-duration">ERROR 9006 (HY000): GC life time is shorter than transaction duration</h4>
+<p>The interval of <code>GC Life Time</code> is too short. The data that should have been read by long transactions might be deleted. You can add <code>GC Life Time</code> using the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">update mysql.tidb set variable_value='30m' where variable_name='tikv_gc_life_time';</pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>“30m” means only cleaning up the data generated 30 minutes ago, which might consume some extra storage space.</p>
+</blockquote>
+<h3 id="mysql-native-error-messages">MySQL native error messages</h3>
+<h4 id="error-2013-hy000-lost-connection-to-mysql-server-during-query">ERROR 2013 (HY000): Lost connection to MySQL server during query</h4>
+<ul>
+<li>Check whether panic is in the log.</li>
+<li>Check whether OOM exists in dmesg using <code>dmesg -T | grep -i oom</code>.</li>
+<li>A long time of no access might also lead to this error. It is usually caused by TCP timeout. If TCP is not used for a long time, the operating system kills it.</li>
+</ul>
+<h4 id="error-1105-hy000-other-error-unknown-error-wire-error-invalidenumvalue-4004">ERROR 1105 (HY000): other error: unknown error Wire Error(InvalidEnumValue(4004))</h4>
+<p>This error usually occurs when the version of TiDB does not match with the version of TiKV. To avoid version mismatch, upgrade all components when you upgrade the version.</p>
+<h4 id="error-1148-42000-the-used-command-is-not-allowed-with-this-tidb-version">ERROR 1148 (42000): the used command is not allowed with this TiDB version</h4>
+<p>When you execute the <code>LOAD DATA LOCAL</code> statement but the MySQL client does not allow executing this statement (the value of the <code>local_infile</code> option is 0), this error occurs.</p>
+<p>The solution is to use the <code>--local-infile=1</code> option when you start the MySQL client. For example, use command like <code>mysql --local-infile=1 -u root -h 127.0.0.1 -P 4000</code>. The default value of <code>local-infile</code> is different in different versions of MySQL client, therefore you need to configure it in some MySQL clients and do not need to configure it in some others.</p>
+<h4 id="error-9001-hy000-pd-server-timeout-start-timestamp-may-fall-behind-safe-point">ERROR 9001 (HY000): PD server timeout start timestamp may fall behind safe point</h4>
+<p>This error occurs when TiDB fails to access PD. A worker in the TiDB background continuously queries the safepoint from PD and this error occurs if it fails to query within 100s. Generally, it is because the disk on PD is slow and busy or the network failed between TiDB and PD. For the details of common errors, see <a href="/docs/sql/error">Error Number and Fault Diagnosis</a>.</p>
+<h3 id="tidb-log-error-messages">TiDB log error messages</h3>
+<h4 id="eof-error">EOF error</h4>
+<p>When the client or proxy disconnects from TiDB, TiDB does not immediately notice that the connection has been disconnected. Instead, TiDB can only notice the disconnection when it begins to return data to the connection. At this time, the log prints an EOF error.</p>
+</div>
+<div class="article-toc"></div>
+<div class="git-info">
+<a class="link" href="https://github.com/pingcap/docs/blob/master/faq/tidb.md">"TiDB FAQ"</a>
+                was last updated
+                <span>May 10 2019</span>:
+                <a class="link" href="https://github.com/pingcap/docs/commit/ce5c22756664090ce9858570c858ee1e202f8268">
+                    *: Update reference to new URL structure (#1123) <span class="hash">(ce5c227)</span>
+</a>
+</div></div>
+<div class="sidebar-page">
+<div class="sticky-sidebar"><a class="improve-doc" href="https://github.com/pingcap/docs/edit/master/faq/tidb.md" target="_blank">
+<svg fill="#142848" height="14" viewbox="0 0 275.836 275.836" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M191.344 20.922l-95.155 95.155a5.99 5.99 0 0 0-1.565 2.734l-8.167 31.454a6.003 6.003 0 0 0 7.315 7.316l31.454-8.168a6.003 6.003 0 0 0 2.734-1.565l95.153-95.153.005-.004.004-.005 19.156-19.156a5.998 5.998 0 0 0 .001-8.484L218.994 1.758a5.998 5.998 0 0 0-8.485 0l-19.155 19.155-.005.004-.005.005zm-70.713 117.286l-19.993 5.192 5.191-19.993 89.762-89.762 14.801 14.802-89.761 89.761zm94.12-123.723l14.801 14.802-10.675 10.675-14.801-14.802 10.675-10.675z"></path><path d="M238.037 65.022a6 6 0 0 0-6 6v192.813H43.799V34.417h111.063a6 6 0 0 0 0-12H37.799a6 6 0 0 0-6 6v241.419a6 6 0 0 0 6 6h200.238a6 6 0 0 0 6-6V71.022a6 6 0 0 0-6-6z"></path></svg>
+    Edit this page
+</a>
+<a class="request-docs-changes" href="https://github.com/pingcap/docs/issues/new?body=File:%20[faq%2ftidb.md](https%3a%2f%2fpingcap.com%2fdocs%2ffaq%2ftidb%2f)" target="_blank">
+<svg height="14px" version="1.1" viewbox="0 0 192 192" width="14px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="none" fill-rule="nonzero" font-family="none" font-size="none" font-weight="none" stroke="none" stroke-dasharray="" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-width="1" style="mix-blend-mode: normal" text-anchor="none"><path d="M0,192v-192h192v192z" fill="none"></path><g fill="#142848"><path d="M162.34375,42.34375l-90.34375,90.34375l-34.34375,-34.34375l-11.3125,11.3125l45.65625,45.65625l101.65625,-101.65625z"></path></g></g></svg>
+
+    Request docs changes
+</a><p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/docs-cn/faq/tidb" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

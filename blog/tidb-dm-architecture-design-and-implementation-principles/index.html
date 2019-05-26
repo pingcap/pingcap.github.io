@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="TiDB-DM is an integrated data transfer and replication management platform that supports full data migration or incremental data replication from MySQL or MariaDB instances into a TiDB cluster. This post introduces its architecture design and implementation principles." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles" property="og:title"/>
+<meta content="TiDB-DM is an integrated data transfer and replication management platform that supports full data migration or incremental data replication from MySQL or MariaDB instances into a TiDB cluster. This post introduces its architecture design and implementation principles." property="og:description"/>
+<meta content="https://pingcap.com/blog/tidb-dm-architecture-design-and-implementation-principles/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="TiDB-DM is an integrated data transfer and replication management platform that supports full data migration or incremental data replication from MySQL or MariaDB instances into a TiDB cluster. This post introduces its architecture design and implementation principles." name="twitter:description"/>
+<meta content="TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li class="sel"><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li class="sel"><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="blogArticle__container">
+<div class="archive"><div class="article-nav">
+<a href="/blog/#MySQL-Scalability">BLOG HOME</a> <span> &gt; </span>MySQL Scalability</div><div class="content markdown-body">
+<h1 class="title">TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Fri, Feb 1, 2019</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>Xuecheng Zhang</li>
+</ul>
+<div class="blog-text">
+<p>TiDB-DM (Data Migration) is an integrated data transfer and replication management platform that supports full data migration or incremental data replication from MySQL or MariaDB instances into a TiDB cluster.</p>
+<p>A common real-life use case is using TiDB-DM to connect sharded MySQL or MariaDB to TiDB, treating TiDB almost as a slave, then run analytical workloads on this TiDB cluster to fulfill real-time reporting needs. TiDB-DM provides good support if you need to manage multiple data replication tasks at the same time or need to merge multiple MySQL/MariaDB instances into a single TiDB cluster.</p>
+<h2 id="architecture-design">Architecture design</h2>
+<p>TiDB-DM consists of three components: DM-master, DM-worker, and dmctl. It supports migrating the data of multiple upstream MySQL instances to multiple downstream TiDB clusters. The architecture design is as follows:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/tidb-dm-architecture.png" src="/images/svgs/loader-spinner.svg"/></p>
+<ul>
+<li><p>DM-master:</p>
+<ul>
+<li>Managing the whole TiDB-DM cluster, maintaining the topology information of the TiDB-DM cluster, and monitoring the running state of each DM-worker instance;</li>
+<li>Splitting and delivering the data replication tasks, and monitoring the running state of data replication tasks;</li>
+<li>Coordinating DM-workers to execute or skip the DDL statements when incrementally replicating data;</li>
+<li>Providing a unified portal for the management of data replication tasks.</li>
+</ul></li>
+<li><p>DM-worker:</p>
+<ul>
+<li>Executing the specific replication tasks of full backup data and incremental data, with each DM-worker corresponding to a unique upstream MySQL instance;</li>
+<li>Fetching the upstream MySQL binlog and persisting the binlog data to the local storage;</li>
+<li>Dumping the full backup data of upstream MySQL instances in the format of SQL files and loading them to the downstream TiDB; or parsing the persistent binlog in the local storage and replicating it to downstream TiDB cluster;</li>
+<li>Orchestrating the data replication subtasks split by DM-master and monitoring the running status of subtasks.</li>
+</ul></li>
+<li><p>dmctl</p>
+<ul>
+<li>The command line tool used to manage both the TiDB-DM cluster and data replication tasks after connecting to DM-master.</li>
+</ul></li>
+</ul>
+<h2 id="implementation-principles">Implementation principles</h2>
+<p>Now, I’ll introduce TiDB-DM’s implementation principles in detail.</p>
+<h3 id="data-migration-process">Data migration process</h3>
+<p>A single TiDB-DM cluster can perform multiple data replication tasks simultaneously. For each task, it can be split into multiple subtasks undertaken by many DM-worker nodes. Each DM-worker node is responsible for replicating the data of the corresponding upstream MySQL instance.</p>
+<p>The following diagram shows the data migration process of a single subtask of data replication on each DM-worker node.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/data-migration-process.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>In the whole process, the upper data flow is the full backup migration and the lower data flow is the incremental data replication.</p>
+<p>In each DM-worker node, dumper, loader, relay, syncer (binlog replication) and other processing units perform the specific data replication step to complete a specific data replication subtask.</p>
+<ul>
+<li><p>For full backup migration:</p>
+<ol>
+<li>Dumper dumps the table schema and data from the upstream MySQL instance to SQL files.</li>
+<li>Loader loads these SQL files and then replicates these files to the downstream TiDB.</li>
+</ol></li>
+<li><p>For incremental data replication:</p>
+<ol>
+<li>Relay is used as a slave of the upstream MySQL to fetch the binlog that is persisted in the local storage as the relay log.</li>
+<li>Syncer reads and parses the relay log to build SQL statements, and then replicates these SQL statements to the downstream TiDB.</li>
+</ol></li>
+</ul>
+<p>This process is similar to the master-slave replication in MySQL. But the main difference is in TiDB-DM, the persisted relay log in the local storage can be used simultaneously by multiple syncer units of different subtasks, which avoids multiple tasks’ repeatedly fetching the binlog from the upstream MySQL.</p>
+<h3 id="concurrency-model">Concurrency model</h3>
+<p>In order to accelerate data migration, TiDB-DM applies the concurrency model in part of the process of both full backup migration and incremental data replication.</p>
+<p><strong>For full backup migration</strong></p>
+<ol>
+<li><p>Dumper calls mydumper, a data exporting tool, to implement data exporting. For the corresponding concurrency model, see <a href="https://github.com/pingcap/mydumper">mydumper source code</a>.</p></li>
+<li><p>Loader is used to load the data. For the corresponding concurrency model, see the following diagram:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/concurrency-model-of-loader.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+</ol>
+<p>During the data exporting process with mydumper, a single table can be split into multiple SQL files with <code>--chunk-filesize</code> and other parameters. Each of these SQL files corresponds to a static snapshot data of the upstream MySQL at a specific moment and no correlation exists between two SQL files. So when importing the data with loader, you can directly start multiple worker goroutines in a loader unit and each worker goroutine reads to-be-imported SQL files independently and concurrently and applies them into downside streaming. That’s to say, loader loads data concurrently at the level of the SQL file. In task configuration,TiDB-DM controls the number of worker goroutines with the <code>pool-size</code> parameter in the loader unit.</p>
+<p><strong>For incremental data replication</strong></p>
+<ol>
+<li><p>When fetching the binlog from the upstream MySQL to persist it in the local storage, the binlog can only be handled serially because the upstream MySQL generates and sends the binlog in a stream.</p></li>
+<li><p>When importing the data using syncer, you can import data concurrently under limited conditions. The corresponding model architecture is as follows:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/concurrency-model-of-syncer.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+</ol>
+<p>Syncer reads and parses the local relay log in a stream, which is executed serially. When syncer parses the binlog events and builds the to-be-synchronized jobs, it delivers the jobs to different to-be-synchronized job channels after hash computing based on the primary key, index and other information of the corresponding row.</p>
+<p>At the other end of the channel, the worker goroutine concurrently fetches the job from the corresponding channel and replicates the job to the downstream TiDB.</p>
+<p>That’s to say, Syncer imports data concurrently at the level of the binlog event. In task allocation, TiDB-DM controls the number of worker goroutines with the worker-count parameter in the syncer unit.</p>
+<p>However, some limitations exist in this process as follows:</p>
+<ul>
+<li><p>For the DDL operation, the downstream table schema will change so the replication process can only start after all the DML events corresponding to the previous table schema have been successfully replicated.</p>
+<ol>
+<li>In TiDB-DM, a specific flush job is sent to each job channel after DDL events are obtained from the parsed binlog event.</li>
+<li>When each worker goroutine meets a flush job, it replicates all the previously fetched jobs to the downstream TiDB.</li>
+<li>When all the jobs in job channels are replicated to the downstream TiDB, the DDL event replication starts.</li>
+<li>After all the DDL events are replicated, DML event replication starts.</li>
+</ol>
+<p>In other words, DDL and DML events are not replicated concurrently, and the DML events before and after the DDL operation are not replicated concurrently either.</p></li>
+<li><p>For the DML operation, the conflict exists when multiple DML statements possibly concurrently modify the data of the same row, even the primary or the same unique key, which leads to the failure of some DML operations. If these DML events are replicated concurrently, data inconsistency might occur. Detection and resolution of DML event conflicts in TiDB-DM is similar to those in TiDB-Binlog. For more details of the specific principles, see <a href="https://www.pingcap.com/blog/tidb-binlog-architecture-evolution-and-implementation-principles/">TiDB-Binlog Architecture Evolution and Implementation Principles</a>.</p></li>
+</ul>
+<h3 id="replicating-data-from-merged-tables">Replicating data from merged tables</h3>
+<p>When handling a large amount of data using MySQL, manual sharding is commonly used. After data has been replicated to TiDB, logically merging tables needs to be done.</p>
+<p>This section introduces some features of TiDB-DM for supporting replicating data from merged tables as follows.</p>
+<h4 id="table-router">Table router</h4>
+<p>Let’s start with an example as shown in the diagram below:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/table-router-example.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>In this example, there are two MySQL instances in the upstream; each instance has two schemas and each schema has two tables; there are eight tables in total. After we replicate the data to the downstream TiDB, the eight tables should be merged and replicated into one table.</p>
+<p>To replicate these tables with different names from different schemas of different instances to the same table, data of different tables should be routed to the same downstream table according to the predefined rules. In TiDB-DM, these rules are <code>router-rule</code>s.</p>
+<p>For instance, the router rule for the above example is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-router-rule:
+    schema-pattern: "schema_*"
+    table-pattern: "table_*"
+    target-schema: "schema"
+    target-table: "table"</pre></div>
+<ul>
+<li><code>name-of-router-rule</code>: the rule name, specified by the user. When a same rule needs to be applied to multiple upstream instances, you can define only one rule that can be referenced by different instances.</li>
+<li><code>schema-pattern</code>: the pattern that matches the upstream schema name. It supports wildcard characters (such as “*”) as the suffix. In this example, <code>schema_*</code> matches both the two schemas.</li>
+<li><code>table-pattern</code>: the pattern that matches the upstream table name. Its usage is similar to that of <code>schema-pattern</code>. In this example, <code>table_*</code> matches both the two tables.</li>
+<li><code>target-schema</code>: the name of the target schema. The data matched will be routed into this schema.</li>
+<li><code>target-table</code>: the name of the target table. The data that matches the schema name and table name are routed to this table in the <code>target-schema</code>.</li>
+</ul>
+<p>Now let’s take a look at the internals of TiDB-DM:</p>
+<ol>
+<li>We build the trie structure based on <code>schema-pattern</code>/<code>table-pattern</code> and store the rules in the trie nodes.</li>
+<li>If there is any SQL statement that needs to be synchronized to the downstream, we can query <code>trie</code> to obtain the corresponding rules via the schema name and table name in the upstream, and replace the original schema name and table name in the SQL statement based on the rules.</li>
+<li>After executing the replaced SQL statements to the downstream TiDB, the router replication based on table names are completed. For the detailed implementation of the router rules, see <a href="https://github.com/pingcap/tidb-tools/tree/master/pkg/table-router">table-router pkg source code</a> in TiDB-Tools.</li>
+</ol>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles', 'download-tidb-btn-middle')"><button>Download TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles', 'subscribe-blog-btn-middle')"><button>Subscribe to Blog</button></a>
+</div>
+<h4 id="column-mapping">Column mapping</h4>
+<p>With the table router feature, we can implement the basic function of replicating data from sharded tables. But in a database, auto-increment columns are widely used as the primary keys. If multiple primary keys of the sharded tables in the upstream generate their numbers automatically and independently, a conflict between primary keys might occur and result in the data mismatch after merging and synchronizing them into the downstream. Let’s see another example as follows:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/column-mapping-example.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>In this example, there are four tables that need to be merged and replicated into the table in the downstream TiDB. Each table has a record in the <code>id</code> column whose value is 1. Suppose that this <code>id</code> column is the primary key of the table. During the replication process, as some update operations use the <code>id</code> column as the condition to confirm records that need to be updated, it might make the latter replicated data overwrite the data that has been replicated and thus result in some data loss.</p>
+<p>Therefore, during the data replication process, the column mapping function is developed to convert the data of related columns based on specified rules, so as to avoid the data conflict and loss.</p>
+<p>For instance, the column mapping rule for MySQL instance 1 is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">mapping-rule-of-instance-1:
+    schema-pattern: "schema_*"
+    table-pattern: "table_*"
+    expression: "partition id"
+    source-column: "id"
+    target-column: "id"
+    arguments: ["1", "schema_", "table_"]</pre></div>
+<ul>
+<li><code>mapping-rule-of-instance-1</code>: the rule name which is specified by the user. Because different upstream MySQL instances need to be converted into different values, each MySQL instance usually applies a unique rule.</li>
+<li><code>schema-pattern</code>/<code>table-pattern</code>: the matching pattern of the upstream schema name and table name which is the same as the configuration of router-rules.</li>
+<li><code>expression</code>: the name of the expression that does the data conversion. Currently, the common expression is “partition id”. For details, see what follows in the passage.</li>
+<li><code>source-column</code>: the name of the source column that inputs the data into the conversion expression. “id” indicates that this expression will be applied on the column named “id” in the table. Temporarily we only support the data conversion from a single source column.</li>
+<li><code>target-column</code>: the name of the target column into which the conversion expression outputs the data. Its usage is similar to that of <code>source-column</code>. Temporarily we only support the data conversion to a single target column, and the target column must exist.</li>
+<li><code>arguments</code>: the arguments of the conversion expression. The number and meanings of arguments depend on the specific expression.</li>
+</ul>
+<p>Currently, <code>partition id</code> is the mainly supported conversion expression. It resolves the conflicts caused by merging and replicating data from different tables by adding the binary prefix to values of the <code>bigint</code> type. <code>partition id</code> includes three arguments:</p>
+<ul>
+<li>MySQL instance ID: it identifies the source MySQL instance and is specified by the user. For example, “1” indicates that the data that matches this rule comes from MySQL instance 1, and this ID will be converted to a binary value and added to the conversion result as a part of prefix.</li>
+<li>Prefix of the schema name: it identifies the source schema. For example, when “schema_” is applied to <code>schema_2</code>, it indicates that the remaining part after removing the prefix (i.e. the number “2”) will be added to the conversion result as a part of prefix in a binary form.</li>
+<li>Prefix of the table name: it identifies the source table. For example, when “table_” is applied to <code>table_3</code>, it indicates that the remaining part after removing the prefix (i.e. the number “3”) will be added to the conversion result as a part of prefix in a binary form.</li>
+</ul>
+<p>Each argument has the following binary distribution in the conversion result (the number of bits that each part occupies by default):</p>
+<p><img alt="" class="lazy" data-original="/images/blog/binary-distribution.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Suppose that the original data is “123” before conversion and the arguments are set up as above, then the conversion result is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">1&lt;&lt;(64-1-4) | 2&lt;&lt;(64-1-4-7) | 3&lt;&lt;(64-1-4-7-8) | 123</pre></div>
+<p>In addition, the three arguments can all be set as an empty string (“”), which means that this part will not be added to the conversion result and occupy extra bits. For example, if you set them up as [“1”, “”, “table_“], then the conversion result is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">1 &lt;&lt; (64-1-4) | 3&lt;&lt; (64-1-4-8) | 123</pre></div>
+<p>For the detailed implementation of the column mapping, see <a href="https://github.com/pingcap/tidb-tools/tree/master/pkg/column-mapping">column-mapping pkg source code</a> in TiDB-Tools.</p>
+<h4 id="sharding-ddl">Sharding DDL</h4>
+<p>With the table router and column mapping function, we can replicate DML statements from sharded tables in a smooth manner. But in the process of incrementally replicating data, if DDL statements are executed on the upstream sharded tables that are waiting for merging, then an error might occur. Let’s see a simple example of executing DDL statements on the sharded tables.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/sharding-ddl-example.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>In this example, we simplify the replication process, in which there are only two MySQL instances in the upstream and each instance has only one table. Suppose that during the replication, we mark the schema version of two sharded tables as <code>schema V1</code>, and mark the schema version after executing DDL statements as <code>schema V2</code>.</p>
+<p>Now, suppose that the binlog data received from the two upstream sharded tables has the following time sequence in the synchronization process:</p>
+<ol>
+<li>When the replication starts, the two sharded tables can only receive the DML events from <code>schema V1</code>.</li>
+<li>At point <code>t1</code>, the sharding DDL events on instance 1 are received.</li>
+<li>From point <code>t2</code> on, the two sharded tables receive the DML events from <code>schema V2</code> on the instance 1; but on instance 2, they are still receiving the DML events from <code>schema V1</code>.</li>
+<li>At point <code>t3</code>, the sharding DDL events on instance 2 are received.</li>
+<li>From point <code>t4</code> on, the two sharded tables receive the DML events from <code>schema V2</code> on instance 2 as well.</li>
+</ol>
+<p>Suppose that we do no operation to the DDL of the sharded tables during data replication. When the DDL of Instance 1 is replicated to downstream, the table structure of downstream will be changed to <code>schema V2</code>. But DM-worker still receives the DML of <code>schema V1</code> during the period between <code>t2</code> and <code>t3</code>. When DM-worker tries to replicate the DML of <code>schema V1</code> to downstream, the inconsistency between the DML and the table structure may lead to error and data cannot be replicated correctly. Let’s look at the example above again to see how we handle the DDL replication when merging tables in TiDB-DM.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/ddl-replication-example.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>In this example, DM-worker-1 replicates the data from MySQL Instance 1 and DM-worker-2 replicates the data from MySQL Instance 2. DM-master coordinates the DDL replication among multiple DM-workers. After DM-worker-1 receives DDL, simplified procedures of DDL replication are as follows:</p>
+<ol>
+<li>DM-worker-1 receives the DDL from MySQL Instance 1, pauses its own replication task including the DDL and DML, and sends the DDL information to DM-master.</li>
+<li>DM-master checks which DDL replication needs to be coordinated based on the DDL information that it just received, creates a lock for the DDL, returns the DDL lock information to DM-worker-1 and at the same time marks DM-worker-1 as the owner of this lock.</li>
+<li>DM-worker-2 continues the DML replication until it receives the DDL from MySQL Instance 2 at t3, pauses its own replication task including the DDL and DML statements, and sends the DDL information to DM-master.</li>
+<li>Based on the DDL information that it just received, DM-master checks that a lock related to this DDL already exists, and directly returns the lock information to DM-worker-2.</li>
+<li>Based on 1) the configuration information with which the task begins, 2) information of the sharded tables in the upstream MySQL instance, 3) deployment topology information and other information, DM-master checks that it has already received the DDL of all upstream sharded tables to be merged, requests the owner of the DDL lock (DM-worker-1) to execute DDL to the downstream.</li>
+<li>DM-worker-1 verifies the DDL execution request based on the DDL lock information received at step 2; executes the DDL to downstream, and returns the results to DM-master. If the execution is successful, DM-worker-1 continues to replicate subsequent (from the binlog at t2) DML.</li>
+<li>DM-master receives a response from the lock owner that the DDL is successfully executed, requests all other DM-workers that wait for the DDL lock to ignore the DDL and to continue to replicate subsequent (from the binlog at t4) DML.</li>
+</ol>
+<p>As for the sharding DDL replication within one TiDB-DM, we can generalize some characteristics from the above procedures:</p>
+<ul>
+<li>Based on the information of task configuration and the TiDB-DM cluster topology configuration, we build a logical sharding group in DM-master that coordinates DDL replication. The group members are the DM-workers of each sub-task into which the task is divided.</li>
+<li>After receiving DDL from binlog event, each DM-worker sends the DDL information to DM-master.</li>
+<li>DM-master creates or updates the DDL lock based on the DDL information from DM-worker and sharding group information.</li>
+<li>If all members of the sharding group receive a specific DDL, this indicates that all DML of the upstream sharded tables before the DDL execution is replicated; that the DDL can be executed and subsequent DML can be replicated.</li>
+<li>After being transformed by table router, the DDL of the upstream sharded tables should be consistent with the DDL to be executed in downstream. Therefore, this DDL only needs to be executed once by the DDL owner and all other DM-worker can ignore this DDL.</li>
+</ul>
+<p>From the above characteristics, we can see some functional restrictions as follows:</p>
+<ul>
+<li>The upstream sharded table must execute the same DDL (“same” meaning they are the same after transformation by table router) in the same sequence. For example, in Table 1, Row a is added before Row b while in Table 2, Row b is added before Row a. The different sequences are not allowed for DDL execution.</li>
+<li>Within a logical group, all upstream sharded tables that correspond to DM-workers should execute DDL. For example, when the upstream sharded table that corresponds to DM-worker-2 does not execute DDL, the other DM-workers that have already executed DDL will pause the replication and wait for DM-worker-2 to receive DDL from its corresponding upstream.</li>
+<li>Latency will increase during the data replication due to the waiting.</li>
+<li>When the incremental replication begins, all upstream sharded tables must be consistent in structure. Only this will ensure that DML from different tables can be replicated to an established structure in downstream and that the DDL of the subsequent sharded tables can be correctly matched and replicated.</li>
+</ul>
+<p>In the example above, there is only one sharded table to be merged in the upstream MySQL instance that corresponds to each DM-worker. But in actual scenarios, there may be multiple sharded tables to be merged in a MySQL instance, and one such scenario is where we introduce table router and column mapping in the above section. With this scenario, the replication of sharding DDL becomes more complex. Assume that in a MySQL instance there are 2 tables to be merged, <code>table_1</code> and <code>table_2</code>. See the following figure：</p>
+<p><img alt="" class="lazy" data-original="/images/blog/two-tables-to-be-merged.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Because data comes from the same MySQL instance, all the data is obtained from the same binlog flow. In this case, the time sequence is as follows:</p>
+<ol>
+<li>Both sharded tables receive the DML of <code>schema V1</code> when replication begins.</li>
+<li>At <code>t1</code>, it receives the DDL of <code>table_1</code>.</li>
+<li>During the period between <code>t2</code> and <code>t3</code>, the data received includes the DML of <code>table_1</code> <code>schema V2</code> and the DML of <code>table_2</code> <code>schema V1</code>.</li>
+<li>At <code>t3</code>, it receives the DDL of  <code>table_2</code>.</li>
+<li>From <code>t4</code> on, both tables receive the DML of <code>schema V2</code>.</li>
+</ol>
+<p>If we do no special operation to DDL during the data replication, when the DDL of <code>table_1</code> is replicated to downstream and changes the table structure of downstream, the DML of <code>table_2</code> <code>schema V1</code> will not be replicated as normal. Therefore, within a single DM-worker, we have created logical sharding groups which are similar to those within a DM-master. But the group members are the different sharded tables in the same upstream MySQL instance.</p>
+<p>But when DM-worker coordinates the replication among sharding groups within a DM-worker, the coordination is not entirely the same as that performed by DM-master. The reasons are:</p>
+<ul>
+<li>When DM-worker receives the DDL of  <code>table_1</code>, it can not pause the replication and must continue parsing binlog to get the DDL of the following <code>table_2</code>, namely continuing parsing from <code>t2</code> to <code>t3</code>.</li>
+<li>During the period of binlog parsing from <code>t2</code> to <code>t3</code>, the DML of <code>schema V2</code> of <code>table_1</code> cannot be replicated to downstream until sharding DDL is replicated and successfully executed.</li>
+</ul>
+<p>In TiDB-DM, a simplified replication process of sharding DDL within the TiDB-DM worker is as described below:</p>
+<ol>
+<li>When receiving the DDL statement for <code>table_1</code> at <code>t1</code>, the DM-worker records the DDL information and the current position of the binlog.</li>
+<li>Resume parsing the binlog between <code>t2</code> and <code>t3</code>.</li>
+<li>Ignore the schema V2 DML statement if it belongs to <code>table_1</code>. Replicate the schema V1 DML statement normally to downstream if it belongs to <code>table_2</code>.</li>
+<li>When receiving the DDL statement for <code>table_2</code> at <code>t3</code>, the DM-worker records the DDL statement and the current position of the binlog.</li>
+<li>Based on information of the replication task configurations and the upstream schema and table, the DM-worker identifies whether DDL statements for all sharded tables in the MySQL instance have been received. If all DDL statements have been received, replicate them to downstream, execute, and change the structures of downstream tables.</li>
+<li>Set the parse starting point of the new binlog stream to be the point saved in step 1.</li>
+<li>Resume parsing the binlog stream from <code>t2</code> to <code>t3</code>.</li>
+<li>Replicate the schema V2 DML normally to downstream if it belongs to <code>table_1</code>. Ignore the schema V1 DML that belongs to <code>table_1</code>.</li>
+<li>When the parse reaches binlog position saved in step 4, the DM-worker knows that all DML statements that have been ignored in step 4 have been re-replicated to downstream.</li>
+<li>Resume normal replication from the binlog position of <code>t4</code>.</li>
+</ol>
+<p>As you can see, TiDB-DM mostly uses a two-level sharding group for coordination and control when handling replication of sharding DDL. Here is the simplified process:</p>
+<ol>
+<li>Each DM-worker independently coordinates the DDL replication for the corresponding upstream sharding group made of multiple sharded tables within the MySQL instance.</li>
+<li>After receiving the DDL statements for all sharding tables of the DM-worker, the DM-worker sends DDL related information to the DM-master.</li>
+<li>The DM-master coordinates the DDL replication for the sharding group made of DM-workers.</li>
+<li>After receiving the DDL information from all DM-workers, the DM-master requests the DDL lock owner (a specific DM-worker) to execute the DDL.</li>
+<li>The DDL lock owner executes the DDL and provides the result to the DM-master. Then the owner starts to re-replicate the DML statements that have been ignored during the internal coordination of DDL replication.</li>
+<li>After detecting that the DDL lock owner has successfully executed the DDL statement, the DM-master requests all other DM-workers to continue with replication.</li>
+<li>All other DM-workers respectively start to re-replicate the DML statements that have been ignored during the internal coordination of DDL replication.</li>
+<li>After finishing re-replicating the DML statements that have been ignored, all DM-workers resumes normal replication.</li>
+</ol>
+<h3 id="data-replication-filtering">Data replication filtering</h3>
+<p>During data replication, sometimes it is not necessary to replicate all upstream data to downstream. This is a scenario where we could use certain rules to filter out the unwanted part of the data. In TiDB-DM, we support two replication filters that apply to different levels.</p>
+<h4 id="black-and-white-table-lists">Black and white table lists</h4>
+<p>TiDB-DM allows you to configure inclusive/exclusive replication of a specific part of tables or schemas for processing units including Dumper, Loader, and Syncer.</p>
+<p>For example, if we only want to export data from tables t1 and t2 in the test schema, we can configure the following rule for the dumper unit:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-dump-rule:
+    extra-args: "-B test -T t1,t2"</pre></div>
+<ul>
+<li><code>name-of-dump-rule</code>: name of the rule specified by the user. Multiple upstream instances can share a common rule by referencing the rule name.</li>
+<li><code>extra-args</code>: an extra parameter for the dumper unit. Mydumper configuration options that are not explicitly defined in the dumper unit must be passed in through this parameter. The format is consistent with mydumper.</li>
+</ul>
+<p>For more information on support for black and white table list, see mydumper parameters and its <a href="https://github.com/pingcap/mydumper">source code</a>.</p>
+<p>The corresponding rule of table and schema black and white list for Loader and Syncer is black-white-list. Assuming you only want to replicate data from tables t1 and t2 from the test schema, you can configure the rule as below:</p>
+<p>The corresponding rule of table and schema black and white list for Loader and Syncer is  black-white-list. Assuming you only want to replicate data from tables <code>t1</code> and <code>t2</code> from the test schema, you can configure the rule as below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-bwl-rule:
+    do-tables:
+    - db-name: "test"
+      tbl-name: "t1"
+    - db-name: "test"
+      tbl-name: "t2"</pre></div>
+<p>Only part of the configuration options are used in the sample above. For complete configuration options and their definitions, see the <a href="https://pingcap.com/docs//tools/dm/data-synchronization-features/#black-and-white-table-lists">user documentation</a> for this feature. The rule used in TiDB-DM is similar to the master-slave filter rule in MySQL, so you can also refer to <a href="https://dev.mysql.com/doc/refman/5.7/en/replication-rules-db-options.html">Evaluation of Database-Level Replication and Binary Logging Options</a> and <a href="https://dev.mysql.com/doc/refman/5.7/en/replication-rules-table-options.html">Evaluation of Table-Level Replication Options</a>.</p>
+<p>For the Loader unit, after getting the schema name and table name by parsing the SQL file name, it identifies the configured black and white list rule. If the result indicates no replication is required, the entire SQL file will be ignored. For the Syncer unit, after getting the schema name and table name by parsing the binlog file, it identifies the configured black and white list rule. If the result indicates no replication is required, the corresponding binlog event data will be ignored.</p>
+<h4 id="binlog-event-filtering">Binlog event filtering</h4>
+<p>During an incremental data replication, sometimes you may want to filter out specific types of binlog event. There are two typical scenarios:</p>
+<ul>
+<li>Do not empty data in downstream tables when executing <code>TRUNCATE TABLE</code> in upstream</li>
+<li>Do not drop merged tables in downstream when executing <code>DROP TABLE</code> in upstream sharded tables</li>
+</ul>
+<p>TiDB-DM allows you to filter by binlog event types. For the <code>TRUNCATE TABLE</code> and <code>DROP TABLE</code> filter scenarios mentioned above, configure the rule as below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-filter-rule:
+​    schema-pattern: "test_*"
+​    table-pattern: "t_*"
+​    events: ["truncate table", "drop table"]
+​    action: Ignore</pre></div>
+<p>The matching pattern of the rule is similar to <a href="https://pingcap.com/docs//tools/dm/data-synchronization-features/#table-routing">table routing</a> and <a href="https://pingcap.com/docs//tools/dm/data-synchronization-features/#column-mapping">column mapping</a>. For detailed configurations, see the user documentation for the feature.</p>
+<p>To implement this, after getting the schema name, table name, and binlog event type, the TiDB-DM processing unit will identify the configured rule, and decide whether to filter based on the action configuration. For detailed implementation of the filter function, see <a href="https://github.com/pingcap/tidb-tools/tree/master/pkg/binlog-filter">binlog-filter pkg</a> under TiDB-tools.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>As an integrated data transfer and replication management platform, TiDB-DM plays an important role in the TiDB ecosystem. It works well in providing the full data migration and the incremental data replication services, and gains more and more popularity among customers. In the future, it will still be a key focus of our development team and we are expecting more contributors to join us to improve its reliability, stability, and usability together.</p>
+</div>
+</div>
+<div class="article-toc"></div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_twitter_share" data-site="" href="http://twitter.com/share?url=https%3a%2f%2fpingcap.com%2fblog%2ftidb-dm-architecture-design-and-implementation-principles%2f" target="_blank">
+<img src="/images/svgs/twitter-icon.svg"/>
+</a>
+<a class="ssba_reddit_share" data-site="reddit" href="http://reddit.com/submit?url=https%3a%2f%2fpingcap.com%2fblog%2ftidb-dm-architecture-design-and-implementation-principles%2f&amp;title=TiDB%20Tools%20%28III%29%3a%20TiDB-DM%20Architecture%20Design%20and%20Implementation%20Principles" target="_blank">
+<img src="/images/svgs/reddit-icon.svg"/>
+</a>
+<a class="ssba_facebook_share" data-site="" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fpingcap.com%2fblog%2ftidb-dm-architecture-design-and-implementation-principles%2f" target="_blank">
+<img src="/images/svgs/facebook-icon.svg"/>
+</a>
+<a class="ssba_linkedin_share" data-site="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fpingcap.com%2fblog%2ftidb-dm-architecture-design-and-implementation-principles%2f" target="_blank">
+<img src="/images/svgs/linkedin-icon.svg"/>
+</a>
+<a class="ssba_hackernews_share" data-site="hackernews" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fpingcap.com%2fblog%2ftidb-dm-architecture-design-and-implementation-principles%2f&amp;t=TiDB%20Tools%20%28III%29%3a%20TiDB-DM%20Architecture%20Design%20and%20Implementation%20Principles" target="_blank">
+<img src="/images/svgs/hacker-news-icon.svg"/>
+</a>
+</div>
+</div>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles', 'download-tidb-btn-bottom')"><button>Download
+                        TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('TiDB Tools (III): TiDB-DM Architecture Design and Implementation Principles', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                        Blog</button></a>
+</div>
+</div>
+<div class="sidebar-page">
+<div class="sticky-sidebar">
+<p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

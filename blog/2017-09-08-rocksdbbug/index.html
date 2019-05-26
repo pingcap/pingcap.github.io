@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Data was corrupted. A cluster panicked. The crime scene was compromised. What happened? Detective Huang went all lengths to locate the criminal and solved it once and for all." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="How We Found a Data Corruption Bug in RocksDB" property="og:title"/>
+<meta content="Data was corrupted. A cluster panicked. The crime scene was compromised. What happened? Detective Huang went all lengths to locate the criminal and solved it once and for all." property="og:description"/>
+<meta content="https://pingcap.com/blog/2017-09-08-rocksdbbug/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Data was corrupted. A cluster panicked. The crime scene was compromised. What happened? Detective Huang went all lengths to locate the criminal and solved it once and for all." name="twitter:description"/>
+<meta content="How We Found a Data Corruption Bug in RocksDB" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>How We Found a Data Corruption Bug in RocksDB | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li class="sel"><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li class="sel"><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="blogArticle__container">
+<div class="archive"><div class="article-nav">
+<a href="/blog/#Engineering">BLOG HOME</a> <span> &gt; </span>Engineering</div><div class="content markdown-body">
+<h1 class="title">How We Found a Data Corruption Bug in RocksDB</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Fri, Sep 8, 2017</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>Huachao HUANG</li>
+</ul>
+<div class="blog-text">
+<p><span id="top"></span></p>
+<p>Data was corrupted. A cluster panicked. The crime scene was compromised. What happened? Detective Huang (huachao@pingcap.com) went all lengths to locate the criminal and solved it once and for all.</p>
+<h2 id="background">Background</h2>
+<p>As a distributed open source HTAP database, <a href="https://github.com/pingcap/tidb">TiDB</a> uses <a href="https://github.com/pingcap/tikv">TiKV</a> as its storage engine. Inside TiKV, we use RocksDB as the local storage. RocksDB is a great project. It’s mature, fast, tunable, and widely used in very large scale production environments. We have been working very closely with the RocksDB team. Recently, we found a bug in the DeleteRange feature in RocksDB.</p>
+<p>Before we begin, let’s introduce some basic knowledge about RocksDB first.</p>
+<p>RocksDB is a log structured storage engine. All writes are append-only, and every write is assigned a globally increasing sequence number to distinguish it.</p>
+<p>Let’s use <code>(key,sequence,entry_type)</code> to denote an entry in RocksDB. If we put “a”, “b”, and “c”, RocksDB will append three PUT entries to the disk: <code>(a,1,PUT),(b,2,PUT),(c,3,PUT)</code>. If we put it in a table, it goes like this:</p>
+<table>
+<tr>
+<td>key</td>
+<td>sequence</td>
+<td>entry_type</td>
+</tr>
+<tr>
+<td>c</td>
+<td>3</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>b</td>
+<td>2</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>a</td>
+<td>1</td>
+<td>PUT</td>
+</tr>
+</table>
+<p>If we delete “c”, RocksDB will not erase the <code>(c,3,PUT)</code> entry in place, but append a DELETE entry: <code>(c,4,DELETE)</code> instead, so the table becomes:</p>
+<table>
+<tr>
+<td>key</td>
+<td>sequence</td>
+<td>entry_type</td>
+</tr>
+<tr>
+<td>c</td>
+<td>4</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>c</td>
+<td>3</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>b</td>
+<td>2</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>a</td>
+<td>1</td>
+<td>PUT</td>
+</tr>
+</table>
+<p>Then if we try to get “c”, RocksDB will encounter entry <code>(c,4,DELETE)</code> first and return that “c” is not found.</p>
+<p>Of course, RocksDB cannot keep all the entries forever. It needs to compact and drop old entries when necessary. RocksDB organizes entries into SST (Sorted String Table) files, we can think of an SST as a big sorted array of key-value pairs in the disk, and SST files will be compacted into different levels later.</p>
+<p>All the entries are appended to a WAL (Write Ahead Log) and a Memtable first. When the Memtable is large enough, it will be flushed to a new SST in Level-0. SST files in Level-0 can be overlapped with each other because they haven’t been compacted yet. When the files in Level-0 are large enough, RocksDB will compact the SST files in Level-0 with overlapped SST files in Level-1, and then output new SST files to Level-1 without overlap. Then files in Level-1 will be compacted to the next level and so on. In short, only SST files in Level-0 can be overlapped, SST files under Level-0 must not overlap with each other in the same level.</p>
+<p>Additionally, RocksDB logs some compaction information in its <code>LOG</code> file, including all the input and output file numbers of each compaction, and other useful statistics. RocksDB also records all deleted and added files of each compaction in the <code>MANIFEST</code> file, plus the information of all the files of each level. The <code>LOG</code> file and the <code>MANIFEST</code> file are two important sources to track RocksDB’s behaviors, we will use them later.</p>
+<p>Well, that’s an overly simplified introduction to RocksDB, but enough to go on now.</p>
+<h2 id="deleterange">DeleteRange</h2>
+<p>Now we know how to delete a key in RocksDB, but what if we want to delete a range of keys? For example, if we want to delete keys in a range <code>[a,c)</code>, we can first scan keys in <code>[a,c)</code>, which are “a” and “b” in the above example, and delete them one by one. The result of the above example will be:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">(a,1,PUT),(b,2,PUT),(c,3,PUT),(c,4,DELETE),(a,5,DELETE),(b,6,DELETE)</pre></div>
+<p>In the table, it looks like:
+</p><table>
+<tr>
+<td>key</td>
+<td>sequence</td>
+<td>entry_type</td>
+</tr>
+<tr>
+<td>a</td>
+<td>6</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>b</td>
+<td>5</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>c</td>
+<td>4</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>c</td>
+<td>3</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>a</td>
+<td>2</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>b</td>
+<td>1</td>
+<td>PUT</td>
+</tr>
+</table>
+<p>That’s how we delete a range in TiKV now, for example, to drop a table or destroy a replica. It’s easy, but has two drawbacks:</p>
+<ol>
+<li>A replica can contain a lot of keys, it’s costly to scan them all</li>
+<li>Deleting all keys appends a lot of delete entries. So as you can see, deleting data can result in more data temporarily (before compaction), and more IO amplification.</li>
+</ol>
+<p>Let’s see how the DeleteRange feature from RocksDB comes to rescue. In the above example, instead of scanning range <code>[a,c)</code> and delete “a” and “b” separately, we just append a DeleteRange entry <code>([a,c),5,DELETE_RANGE)</code>, which results in:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">(a,1,PUT),(b,2,PUT),(c,3,PUT),(c,4,DELETE),([a,c),5,DELETE_RANGE)</pre></div>
+<p>In the table, it looks like:
+</p><table>
+<tr>
+<td>key</td>
+<td>sequence</td>
+<td>entry_type</td>
+</tr>
+<tr>
+<td>[a,c)</td>
+<td>5</td>
+<td>DELETE_RANGE</td>
+</tr>
+<tr>
+<td>c</td>
+<td>4</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>c</td>
+<td>3</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>a</td>
+<td>2</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>b</td>
+<td>1</td>
+<td>PUT</td>
+</tr>
+</table>
+<p>Now, if we try to get “a”, we will encounter the <code>DELETE_RANGE</code> first, and return that “a” is not found. That’s good, we don’t need to scan all data anymore, and the size of a DeleteRange entry can be ignored in face of a large range. So we planned to use the DeleteRange feature in TiKV and started to test it.</p>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('How We Found a Data Corruption Bug in RocksDB', 'download-tidb-btn-middle')"><button>Download TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('How We Found a Data Corruption Bug in RocksDB', 'subscribe-blog-btn-middle')"><button>Subscribe to Blog</button></a>
+</div>
+<h2 id="the-bug">The BUG</h2>
+<p>Before telling the story, let’s see how we check data in tests first. TiKV has a useful consistency check mechanism, which has helped to expose some serious bugs. When it is enabled, TiKV runs the consistency check periodically. Consistency check will calculate a hash of each replica and compare the hashes of all replicas to check whether they are consistent. If the hashes don’t match, something must be terribly wrong, so it will panic.</p>
+<p>Everything worked great until one of our test clusters panicked?</p>
+<p>The panicked cluster, which we named it Cluster A, was running a branch with the DeleteRange feature, so that’s why we started hunting the DeleteRange bug.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="round-1">Round 1</h3>
+<p>There are 4 TiKV instances KV1, KV2, KV3, and KV4 in Cluster A, and the consistency check showed that we had an abnormal replica R2 in KV2, and two normal replicas R1 and R3 in KV1 and KV3. We used tikv-ctl to print out the diff of R2 and R1 to see what’s wrong. The diff showed that R2 had lost some ranges of data, and some deleted data reappeared too. Since we were testing the DeleteRange branch in this cluster, we guessed that this could happen if a DeleteRange entry dropped some entries in a wrong way during the compaction.</p>
+<p>We tried to collect more evidence to locate the problem, but unfortunately, the crime scene had been destroyed after we used tikv-ctl to open the underlying data directory, because tikv-ctl started RocksDB, which reorganized the data in some background compaction, and we hadn’t made any backup.</p>
+<p>However, the problem was still there, we did with what we got. We analyzed the log of the abnormal KV2 and found out that R2 sent a snapshot to R1 in 2017-08-15 11:46:17, and panicked in 2017-08-15 12:11:04. Since R1 was restored from R2’s snapshot in 11:46:17 and R1 was OK in 12:11:04, it meant that R2 should be OK in 11:46:17, so what happened between 11:46:17~12:11:04? We assumed that one of the compaction in RocksDB between that time was wrong and started investigating RocksDB’s <code>LOG</code> and <code>MANIFEST</code> files. The <code>LOG</code> file showed that some compactions were done in that time. We could do a cross-reference with the <code>MANIFEST</code> file to get more details. However, remembered that the crime scene had been destroyed? It meant that the <code>MANIFEST</code> file was truncated and the SST files generated in that time were deleted and we were stalled.</p>
+<p>So we decided to deploy another test cluster, which we called it Cluster B, and hopefully, it would panic again soon so that we could have another fresh crime scene. Meanwhile, we kept investigating here and there, but still without any clue. We had no choice but tried to locate the bug in the source code of RocksDB directly. We believed that the bug was related to either the DeleteRange feature or the compaction, so we dived into there. After a few days, we got some suspicious places but still nothing solid, except to realize that the DeleteRange implementation was more complicated than we expected.</p>
+<h3 id="round-2">Round 2</h3>
+<p>A few days later, Cluster B panicked again, so we were given another chance to hunt, let’s go. This time, we protected the crime scene very well and made a backup before doing anything.</p>
+<p>The consistency check showed that we had an abnormal replica R3 in KV3, and two normal replicas R1 and R2 in KV1 and KV2. And yep, tikv-ctl showed that R3 had lost some data. The log of the abnormal KV3 showed a similar situation that R3 sent a snapshot to R1 in 13:42:59, and panicked in 14:01:34. This time we had the fresh <code>LOG</code> and <code>MANIFEST</code> files, we started to cross-reference them between 13:42:49~14:01:34. But there were a lot of files deleted and added  during the compaction at the time, it’s still hard to find out what’s wrong.</p>
+<p>Luckily, we noticed in the <code>MANIFEST</code> file that something was wrong in Level-1 of column family “write”:</p>
+<ol>
+<li><p>Files in Level-1 should be sorted by their smallest and largest keys, and should not overlap with each other. <strong>But file 185808 was overlapped with the file before and after it.</strong></p></li>
+<li><p>The file’s smallest key must be smaller than its largest key. <strong>But file 185830’s smallest key was larger than its largest key.</strong></p></li>
+</ol>
+<p><img alt="" class="lazy" data-original="/images/blog/rocksdbbug0.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Once we confirmed that something must be wrong here, we reported this discovery to RocksDB with the <code>MANIFEST</code> file.</p>
+<p><a href="#top">Back to the top</a></p>
+<p>Meanwhile, we tried to keep investigating this problem further. Since file 185830 was wrong, let’s trace back to see which compaction generated this file. The <code>LOG</code> file showed that file 185830 was generated in compaction [JOB 10654] where the input files of <a href="texts below were edited and combined together to make them more easy to trace">JOB 10654</a>:</p>
+<ol>
+<li>Again, files in Level-1 should not overlap with each other. <strong>But file 185582 was overlapped with some files in Level-1.</strong></li>
+</ol>
+<p><img alt="" class="lazy" data-original="/images/blog/rocksdbbug1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>We traced back and found out that file 185582 was generated by [JOB 10647], and again, one of the compaction input <strong>file 185430 was overlapped with others</strong>:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/rocksdbbug2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>We traced back again and found out that file 185430 was generated by [JOB 10643]:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/rocksdbbug3.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>This time both the input and output files in Level-1 had no overlap, but we were surprised to find out that <strong>the output file 185430’s smallest key was smaller than all input files’ smallest keys</strong>, which was not reasonable. A possible explanation was that some input files were hiding a smaller DeleteRange entry than its smallest key. But which one? We noticed that there were three ingested SST files in the input, and we had used SST ingestion in TiKV for replica snapshot, so maybe our snapshot implementation was wrong? However, after carefully reviewing the snapshot related code, it seemed impossible that the snapshot (ingested SST files) could contain any DeleteRange entries. All the input files in this compaction seemed normal, and they were deleted after this compaction, so it’s hard to trace back further. Well, we were sure the bug must be related to DeleteRange or compaction, which could be the cause of hidden DeleteRange entries and the wrong smallest key, it’s time to dive into the source code again.</p>
+<p>Finally, we narrowed down to a DeleteRange function in RocksDB and reviewed it again and again. The function adds DeleteRange tombstones into the SST file and sets the smallest and largest key of that SST file accordingly. However, in some cases, DeleteRange tombstones are not stored in order, but that function considers only the first added tombstone as the smallest candidate by mistake, which explains the hidden DeleteRange entry and wrong smallest key in our evidence. We successfully reproduced the problem with a minimal test snippet and reported to RocksDB. Finding the bug was hard, but fixing it was easy, we then sent a PR to fix it and was merged at last. If you are interested, here are the <a href="https://github.com/facebook/rocksdb/issues/2752">issue</a> and the <a href="https://github.com/facebook/rocksdb/pull/2799">PR</a>.</p>
+<h2 id="the-end">The End</h2>
+<p>The RocksDB team reacted quickly and released a bugfix version for us, we highly appreciate that. However, it turns out the DeleteRange feature cannot work well with another delete files in range feature we are using now (see this <a href="https://github.com/facebook/rocksdb/issues/2833">issue</a>), and both the features are kind of dangerous, so we still need to wait and test them thoroughly.</p>
+<p>RocksDB plays a significant role in TiKV, thanks for the support from the RocksDB team and their great work. We are happy to help to improve the stability and performance in the future.</p>
+<h3 id="lessons-learned">Lessons learned:</h3>
+<ol>
+<li>Protect your crime scene well. Some bugs are hard to reproduce, so seize every opportunity.</li>
+<li>Collect more evidence before diving into the details. It’s inefficient to hunt with no clear direction. What’s worse is that it’s easy to go too deep in a wrong direction.</li>
+<li>It’s important to test new features (especially those with high risks) carefully under different conditions, some bugs rarely happen but can be destructive. Time tries truth.</li>
+</ol>
+<p><a href="#top">Back to the top</a></p>
+</div>
+</div>
+<div class="article-toc"></div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_twitter_share" data-site="" href="http://twitter.com/share?url=https%3a%2f%2fpingcap.com%2fblog%2f2017-09-08-rocksdbbug%2f" target="_blank">
+<img src="/images/svgs/twitter-icon.svg"/>
+</a>
+<a class="ssba_reddit_share" data-site="reddit" href="http://reddit.com/submit?url=https%3a%2f%2fpingcap.com%2fblog%2f2017-09-08-rocksdbbug%2f&amp;title=How%20We%20Found%20a%20Data%20Corruption%20Bug%20in%20RocksDB" target="_blank">
+<img src="/images/svgs/reddit-icon.svg"/>
+</a>
+<a class="ssba_facebook_share" data-site="" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fpingcap.com%2fblog%2f2017-09-08-rocksdbbug%2f" target="_blank">
+<img src="/images/svgs/facebook-icon.svg"/>
+</a>
+<a class="ssba_linkedin_share" data-site="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fpingcap.com%2fblog%2f2017-09-08-rocksdbbug%2f" target="_blank">
+<img src="/images/svgs/linkedin-icon.svg"/>
+</a>
+<a class="ssba_hackernews_share" data-site="hackernews" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fpingcap.com%2fblog%2f2017-09-08-rocksdbbug%2f&amp;t=How%20We%20Found%20a%20Data%20Corruption%20Bug%20in%20RocksDB" target="_blank">
+<img src="/images/svgs/hacker-news-icon.svg"/>
+</a>
+</div>
+</div>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('How We Found a Data Corruption Bug in RocksDB', 'download-tidb-btn-bottom')"><button>Download
+                        TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('How We Found a Data Corruption Bug in RocksDB', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                        Blog</button></a>
+</div>
+</div>
+<div class="sidebar-page">
+<div class="sticky-sidebar">
+<p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="This document introduces how TiKV works as a Key-Value database." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="A Deep Dive into TiKV" property="og:title"/>
+<meta content="This document introduces how TiKV works as a Key-Value database." property="og:description"/>
+<meta content="https://pingcap.com/blog/2016-11-09-Deep-Dive-into-TiKV/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="This document introduces how TiKV works as a Key-Value database." name="twitter:description"/>
+<meta content="A Deep Dive into TiKV" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>A Deep Dive into TiKV | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li class="sel"><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li class="sel"><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="blogArticle__container">
+<div class="archive"><div class="article-nav">
+<a href="/blog/#Engineering">BLOG HOME</a> <span> &gt; </span>Engineering</div><div class="content markdown-body">
+<h1 class="title">A Deep Dive into TiKV</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Wed, Nov 9, 2016</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>PingCAP</li>
+</ul>
+<div class="blog-text">
+<p><span id="top"><span></span></span></p>
+<h1 id="table-of-content">Table of Content</h1>
+<ul>
+<li><a href="#about-tikv">About TiKV</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#protocol">Protocol</a></li>
+<li><a href="#raft">Raft</a></li>
+<li><a href="#placement-driver">Placement Driver (PD)</a></li>
+<li><a href="#transaction">Transaction</a></li>
+<li><a href="#coprocessor">Coprocessor</a></li>
+<li><a href="#key-processes-analysis">Key processes analysis</a>
+<ul>
+<li><a href="#key-value-operation">Key-Value operation</a></li>
+<li><a href="#membership-change">Membership Change</a></li>
+<li><a href="#split">Split</a></li>
+</ul></li>
+</ul>
+<h1 id="about-tikv">About TiKV</h1>
+<p>TiKV (The pronunciation is: /‘taɪkeɪvi:/ tai-K-V, etymology: titanium) is a distributed Key-Value database which is based on the design of Google Spanner, F1, and HBase, but it is much simpler without dependency on any distributed file system.</p>
+<h1 id="architecture">Architecture</h1>
+<p><img alt="" class="lazy" data-original="/images/blog/TiKV_ Architecture.png" src="/images/svgs/loader-spinner.svg"/></p>
+<ul>
+<li><p>Placement Driver (PD): PD is the brain of the TiKV system which manages the metadata about Nodes, Stores, Regions mapping, and makes decisions for data placement and load balancing. PD periodically checks replication constraints to balance load and data automatically.</p></li>
+<li><p>Node: A physical node in the cluster. Within each node, there are one or more Stores. Within each Store, there are many Regions.</p></li>
+<li><p>Store: There is a RocksDB within each Store and it stores data in local disks.</p></li>
+<li><p>Region: Region is the basic unit of Key-Value data movement and corresponds to a data range in a Store. Each Region is replicated to multiple Nodes. These multiple replicas form a Raft group. A replica of a Region is called a Peer.</p></li>
+</ul>
+<h1 id="protocol">Protocol</h1>
+<p>TiKV uses the <a href="https://developers.google.com/protocol-buffers/">Protocol Buffer</a> protocol for interactions among different components. Because Rust doesn’t support <a href="http://www.grpc.io/">gRPC</a> for the time being, we use our own protocol in the following format:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Message: Header + Payload 
+
+Header: | 0xdaf4(2 bytes magic value) | 0x01(version 2 bytes) | msg\_len(4 bytes) | msg\_id(8 bytes) |</pre></div>
+<p>The data of Protocol Buffer is stored in the Payload part of the message. At the Network level, we will first read the 16-byte Header. According to the message length (<code>msg_len</code>) information in the Header, we calculate the actual length of the message, and then read the corresponding data and decode it.</p>
+<p>The interaction protocol of TiKV is in the  <a href="https://github.com/pingcap/kvproto"><code>kvproto</code></a> project and the protocol to support push-down is in the <a href="https://github.com/pingcap/tipb"><code>tipb</code></a> project. Here, let’s focused on the <code>kvproto</code> project only.</p>
+<p>About the protocol files in the <code>kvproto</code> project:</p>
+<ul>
+<li><code>msgpb.proto</code>: All the protocol interactions are in the same message structure. When a message is received, we will handle the message according to its <code>MessageType</code>.</li>
+<li><code>metapb.proto</code>: To define the public metadata for Store, Region, Peer, etc.</li>
+<li><code>raftpb.proto</code>: For the internal use of Raft. It is ported from etcd and needs to be consistent with etcd.</li>
+<li><code>raft_serverpb.proto</code>: For the interactions among the Raft nodes.</li>
+<li><code>raft_cmdpb.proto</code>: The actual command executed when Raft applies.</li>
+<li><code>pdpb.proto</code>: The protocol for the interaction between TiKV and PD.</li>
+<li><code>kvrpcpb.proto</code>: The Key-Value protocol that supports transactions.</li>
+<li><code>mvccpb.proto</code>: For internal Multi-Version Concurrency Control (MVCC).</li>
+<li><code>coprocessor.proto</code>: To support the Push-Down operations.</li>
+</ul>
+<p>There are following ways for external applications to connect to TiKV:</p>
+<ul>
+<li>For the simple Key-Value features only, implement <code>raft_cmdpb.proto</code>.</li>
+<li>For the Transactional Key-Value features, implement <code>kvrpcpb.proto</code>.</li>
+<li>For the Push-Down features, implement <code>coprocessor.proto</code>. See <a href="https://github.com/pingcap/tipb">tipb</a> for detailed push-down protocol.</li>
+</ul>
+<p><a href="#top">Back to the Top</a></p>
+<h1 id="raft">Raft</h1>
+<p>TiKV uses the Raft algorithm to ensure the data consistency in the distributed systems. For more information, see <a href="https://raft.github.io/">https://raft.github.io/</a>.</p>
+<p>The Raft in TiKV is completely migrated from etcd. We chose etcd Raft because it is very simple to implement, very easy to migrate and it is production proven.</p>
+<p>The Raft implementation in TiKV can be used independently. You can apply it in your project directly.</p>
+<p>See the following details about how to use Raft:</p>
+<ol>
+<li>Define its own storage and implement the Raft Storage trait. See the following Storage trait interface:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#75715e">// initial_state returns the information about HardState and ConfState in Storage
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">initial_state</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Result<span style="color:#f92672">&lt;</span>RaftState<span style="color:#f92672">&gt;</span>;
+    
+    <span style="color:#75715e">// return the log entries in the [low, high] range
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">entries</span>(<span style="color:#f92672">&amp;</span>self, low: <span style="color:#66d9ef">u64</span>, high: <span style="color:#66d9ef">u64</span>, max_size: <span style="color:#66d9ef">u64</span>) -&gt; Result<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>Entry<span style="color:#f92672">&gt;&gt;</span>;
+    
+    <span style="color:#75715e">// get the term of the log entry according to the corresponding log index
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">term</span>(<span style="color:#f92672">&amp;</span>self, idx: <span style="color:#66d9ef">u64</span>) -&gt; Result<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span><span style="color:#f92672">&gt;</span>;
+    
+    <span style="color:#75715e">// get the index from the first log entry at the current position
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">first_index</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Result<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span><span style="color:#f92672">&gt;</span>;
+    
+    <span style="color:#75715e">// get the index from the last log entry at the current position
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">last_index</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Result<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span><span style="color:#f92672">&gt;</span>;
+    
+    <span style="color:#75715e">// generate a current snapshot
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">snapshot</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Result<span style="color:#f92672">&lt;</span>Snapshot<span style="color:#f92672">&gt;</span>;</code></pre></div>
+<ol>
+<li><p>Create a raw node object and pass the corresponding configuration and customized storage instance to the object. About the configuration, we need to pay attention to <code>election_tick</code> and <code>heartbeat_tick</code>. Some of the Raft logics step by periodical ticks. For every Tick, the Leader will decide if the frequency of the heartbeat elapsing exceeds the frequency of the <code>heartbeat_tick</code>. If it does, the Leader will send heartbeats to the Followers and reset the elapse. For a Follower, if the frequency of the election elapsing exceeds the frequency of the <code>election_tick</code>, the Follower will initiate an election.</p></li>
+<li><p>After a raw node is created, the tick interface of the raw node will be called periodically (like every 100ms) and drives the internal Raft Step function.</p></li>
+<li><p>If data is to be written by Raft, the Propose interface is called directly. The parameters of the Propose interface is an arbitrary binary data which means that Raft doesn’t care the exact data content that is replicated by it. It is completely up to the external logics as how to handle the data.</p></li>
+<li><p>If it is to process the membership changes, the <code>propose_conf_change</code> interface of the raw node can be called to send a ConfChange object to add/remove a certain node.</p></li>
+<li><p>After the functions in the raw node like Tick and Propose of the raw node are called, Raft will initiate a Ready state. Here are some details of the Ready state:</p>
+<p>There are three parts in the Ready state:</p>
+<ul>
+<li>The part that needs to be stored in Raft storage, which are entries, hard state and snapshot.</li>
+<li>The part that needs to be sent to other Raft nodes, which are messages.</li>
+<li>The part that needs to be applied to other state machines, which are committed_entries.</li>
+</ul></li>
+</ol>
+<p>After handling the Ready status, the Advance function needs be called to inform Raft of the next Ready process.</p>
+<p>In TiKV, Raft is used through <a href="https://github.com/carllerche/mio">mio</a> as in the following process:</p>
+<ol>
+<li><p>Register a base Raft tick timer (usually 100ms). Every time the timer timeouts, the Tick of the raw node is called and the timer is re-registered.</p></li>
+<li><p>Receive the external commands through the notify function in mio and call the Propose or the <code>propose_conf_change</code> interface.</p></li>
+<li><p>Decide if a Raft is ready in the mio tick callback (<strong>Note:</strong> The mio tick is called at the end of each event loop, which is different from the Raft tick.). If it is ready,  proceed with the Ready process.</p></li>
+</ol>
+<p>In the descriptions above, we covered how to use one Raft only. But in TiKV, we have multiple Raft groups. These Raft groups are independent to each other and therefore can be processed following the same approach.</p>
+<p>In TiKV, each Raft group corresponds to a Region. At the very beginning, there is only one Region in TiKV which is in charge of the range (-inf, +inf). As more data comes in and the Region reaches its threshold (64 MB currently), the Region is split into two Regions. Because all the data in TiKV are sorted according to the key, it is very convenient to choose a Split Key to split the Region. See <a href="#split">Split</a> for the detailed splitting process.</p>
+<p>Of course, where there is Split, there is Merge. If there are very few data in two adjacent Regions, these two regions can merge to one big Region. Region Merge is in the TiKV roadmap but it is not implemented yet.</p>
+<p><a href="#top">Back to the Top</a></p>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('A Deep Dive into TiKV', 'download-tidb-btn-middle')"><button>Download TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('A Deep Dive into TiKV', 'subscribe-blog-btn-middle')"><button>Subscribe to Blog</button></a>
+</div>
+<h1 id="placement-driver">Placement Driver</h1>
+<p>Placement Driver (PD) is in charge of the managing and scheduling of the whole TiKV cluster. It is a central service and we have to ensure that it is highly available and stable.</p>
+<p>The first issue to be resolved is the single point of failure of PD. Our solution is to start multiple PD servers. These servers elect a Leader through the election mechanism in etcd and the leader provides services to the outside. If the leader is down, there will be another election to elect a new leader to provide services.</p>
+<p>The second issue is the consistency of the data stored in PD. If one PD is down, how to ensure that the new elected PD has the consistent data? This is also resolved by putting PD data in etcd. Because etcd is a distributed consistent Key-Value store, it helps us ensure the consistency of the data stored in it. When the new PD is started, it only needs to load data from etcd.</p>
+<p>At first, we used the independent external etcd service, but now we have embedded PD in etcd, which means, PD itself is an etcd. The embedment makes it simpler to deploy because there is one service less. The embedment also makes it more convenient for PD and etcd to customize and therefore improve the performance.</p>
+<p>The current functions of PD are as follows:</p>
+<ol>
+<li><p>The Timestamp Oracle (TSO) service: to provide the globally unique timestamp for TiDB to implement distributed transactions.</p></li>
+<li><p>The generation of the globally unique ID: to enable TiKV to generate the unique IDs for new Regions and Stores.</p></li>
+<li><p>TiKV cluster auto-balance: In TiKV, the basic data movement unit is Region, so the PD auto-balance is to balance Region automatically. There are two ways to trigger the scheduling of a Region:</p>
+<p>1). The heartbeat triggering: Regions report the current state to PD periodically. If PD finds that there are not enough or too much replicas in one Region, PD informs this Region to initiate membership change.</p>
+<p>2). The regular triggering: PD checks if the whole system needs scheduling on a regular bases. If PD finds out that there is not enough space on a certain Store or that there are too many leader Regions on a certain Store and the load is too high, PD will select a Region from the Store and move the replicas to another Store.</p></li>
+</ol>
+<p><a href="#top">Back to the Top</a></p>
+<h1 id="transaction">Transaction</h1>
+<p>The transaction model in TiKV is inspired by <a href="http://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/36726.pdf">Google Percolator</a> and <a href="https://github.com/XiaoMi/themis">Themis from Xiaomi</a> with the following optimizations:</p>
+<ol>
+<li><p>For a system that is similar to Percolator, there needs to be a globally unique time service, which is called Timestamp Oracle (TSO), to allocate a monotonic increasing timestamp. The functions of TSO are provided in PD in TiKV. The generation of TSO in PD is purely memory operations and stores the TSO information in etcd on a regular base to ensure that TSO is still  monotonic increasing even after PD restarts.</p></li>
+<li><p>Compared with Percolator where the information such as Lock is stored by adding extra column to a specific row, TiKV uses a column family (CF) in RocksDB to handle all the information related to Lock. For massive data, there aren’t many row Locks for simultaneous transactions. So the Lock processing speed can be improved significantly by placing it in an extra and optimized CF.</p></li>
+<li><p>Another advantage about using an extra CF is that we can easily clean up the remaining Locks. If the Lock of a row is acquired by a transaction but is not cleaned up because of crashed threads or other reasons, and there are no more following-up transactions to visit this Lock, the Lock is left behind. We can easily discover and clean up these Locks by scanning the CF.</p></li>
+</ol>
+<p>The implementation of the distributed transaction depends on the TSO service and the client that encapsulates corresponding transactional algorithm which is implemented in TiDB. The monotonic increasing timestamp can set the time series for concurrent transactions and the external clients can act as a coordinator to resolve the conflicts and unexpected terminations of the transactions.</p>
+<p>Let’s see how a transaction is executed:</p>
+<ol>
+<li><p>The transaction starts. When the transaction starts, the client must obtain the current timestamp (startTS) from TSO. Because TSO guarantees the monotonic increasing of the timestamp, startTS can be used to identify the time series of the transaction.</p></li>
+<li><p>The transaction is in progress. During a transaction, all the read operations must carry <code>startTS</code> while they send RPC requests to TiKV and TiKV uses MVCC to make sure to return the data that is written before <code>startTS</code>. For the write operations, TiKV uses optimistic concurrency control which means the actual data is cached on the clients rather than written to the servers assuming that the current transaction doesn’t affect other transactions.</p></li>
+<li><p>The transaction commits. TiKV uses a 2-phase commit algorithm. Its difference from the common 2-phase commit is that there is no independent transaction manager. The commit state of a transaction is identified by the commit state of the <code>PrimaryKey</code> which is selected from one of the to-be-committed keys.</p>
+<p>1). During the <code>Prewrite</code> phase, the client submits the data that is to be written to multiple TiKV servers. When the data is stored in a server, the server sets the corresponding Key as Locked and records the the PrimaryKey of the transaction. If there is any writing conflict on any of the nodes, the transaction aborts and rolls back.</p>
+<p>2). When <code>Prewrite</code> finishes, a new timestamp is obtained from TSO and is set as commitTS.</p>
+<p>3). During the Commit phase, requests are sent to the TiKV servers with <code>PrimaryKey</code>. The process of how TiKV handles commit is to clean up the Locks from the PrimaryKey phase and write corresponding commit records with commitTS. When the <code>PrimaryKey</code> commit finishes, the transaction is committed. The Locks that remain on other Keys can get the commit state and the corresponding commitTS by retrieving the state of the <code>Primarykey</code>. But in order to reduce the cost of cleaning up Locks afterwards, the practical practice is to submit all the Keys that are involved in the transaction asynchronously on the backend.</p></li>
+</ol>
+<p><a href="#top">Back to the Top</a></p>
+<h1 id="coprocessor">Coprocessor</h1>
+<p>Similar to HBase, TiKV provides the Coprocessor support. But for the time being, Coprocessor cannot be dynamically loaded, it has to be statically compiled to the code.</p>
+<p>Currently, the Coprocessor in TiKV is mainly used in two situations, Split and push-down, both to serve TiDB.</p>
+<ol>
+<li><p>For Split, before the Region split requests are truly proposed, the split key needs to be checked if it is legal. For example, for a Row in TiDB, there are many versions of it in TiKV, such as V1, V2, and V3, V3 being the latest version. Assuming that V2 is the selected split key, then the data of the Row might be split to two different Regions, which means the data in the Row cannot be handled atomically. Therefore, the Split Coprocessor will adjust the split key to V1. In this way, the data in this Row is still in the same Region during the splitting.</p></li>
+<li><p>For push-down, the Coprocessor is used to improve the performance of TiDB. For some operations like select count(*), there is no need for TiDB to get data from row to row first and then count. The quicker way is that TiDB pushes down these operations to the corresponding TiKV nodes, the TiKV nodes do the computing and then TiDB consolidates the final results.</p></li>
+</ol>
+<p>Let’s take an example of <code>select count(*) from t1</code> to show how a complete push-down process works:</p>
+<ol>
+<li><p>After TiDB parses the SQL statement, based on the range of the t1 table, TiDB finds out that all the data of t1 are in Region 1 and Region 2 on TiKV, so TiDB sends the push-down commands to Region 1 and Region 2.</p></li>
+<li><p>After Region 1 and Region 2 receive the push-down commands, they get a snapshot of their data separately by using the Raft process.</p></li>
+<li><p>Region 1 and Region 2 traverse their snapshots to get the corresponding data and and calculate <code>count()</code>.</p></li>
+<li><p>Each Region returns the result of <code>count()</code> to TiDB and TiDB consolidates and outputs the total result.</p></li>
+</ol>
+<p><a href="#top">Back to the Top</a></p>
+<h1 id="key-processes-analysis">Key processes analysis</h1>
+<h2 id="key-value-operation">Key-Value operation</h2>
+<p>When a request of Get or Put is sent to TiKV, how does TiKV process it?</p>
+<p>As mentioned earlier, TiKV provides features such as simple Key-Value, transactional Key-Value and push-down. But no matter it’s transactional Key-Value or push-down, it will be transformed to simple Key-Value operations in TiKV. Therefore, let’s take an example of simple Key-Value operations to show how TiKV processes a request. As for how TiKV implements transaction Key-Value and push-down support, let’s cover that later.</p>
+<p>Let’s take <code>Put</code> as an example to show how a complete Key-Value process works:</p>
+<ol>
+<li><p>The client sends a <code>Put</code> command to TiKV, such as <code>put k1 v1</code>. First, the client gets the Region ID for the k1 key and the leader of the Region peers from PD. Second, the client sends the Put request to the corresponding TiKV node.</p></li>
+<li><p>After the TiKV server receives the request, it notifies the internal RaftStore thread through the mio channel and takes a callback function with it.</p></li>
+<li><p>When the <code>RaftStore</code> thread receives the request, first it checks if the request is legal including if the request is a legal epoch. If the request is legal and the peer is the Leader of the Region, the RaftStore thread encodes the request to be a binary array, calls Propose and begins the Raft process.</p></li>
+<li><p>At the stage of handle ready, the newly generated entry will be first appended to the Raft log and sent to other followers at the same time.</p></li>
+<li><p>When the majority of the nodes of the Region have appended the entry to the log, the entry is committed. In the following Ready process, the entry can be obtained from the <code>committed_entries</code>, then decoded and the corresponding command can be executed. This is how the <code>put k1 v1</code> command is executed in RocksDB.</p></li>
+<li><p>When the entry log is applied by the leader, the callback of the entry will be called and return the response to the client.</p></li>
+</ol>
+<p>The same process also applies to Get, which means all the requests are not processed until they are replicated to the majority of the nodes by Raft. Of course, this is also to ensure the data linearizability in distributed systems.</p>
+<p>Of course, we will optimize the reading requests for better performance in the following aspects:</p>
+<ol>
+<li><p>Introduce lease into the Leader. Within the lease, we can assume that the Leader is valid so that the Leader can provide the read service directly and there will be no need to go through Raft replicated log.</p></li>
+<li><p>The Follower provides the read service.</p></li>
+</ol>
+<p>These optimizations are mentioned in the Raft paper and they have been supported by etcd. We will introduce them into TiKV as well in the future.</p>
+<p><a href="#top">Back to the Top</a></p>
+<h2 id="membership-change">Membership Change</h2>
+<p>To ensure the data safety, there are multiple replicas on different stores. Each replica is another replica’s Peer. If there aren’t enough replicas for a certain Region, we will add new replicas; on the contrary, if the numbers of the replicas for a certain Region exceeds the threshold, we will remove some replicas.</p>
+<p>In TiKV, the change of the Region replicas are completed by the Raft Membership Change. But how and when a Region changes its membership is scheduled by PD. Let’s take adding a Replica as an example to show how the whole process works:</p>
+<ol>
+<li><p>A Region sends heartbeats to PD regularly. The heartbeats include the relative information about this Region, such as the information of the peers.</p></li>
+<li><p>When PD receives the heartbeats, it will check if the number of the replicas of this Region is consistent with the setup. Assuming there are only two replicas in this Region but it’s three replicas in the setup, PD will find an appropriate Store and return the ChangePeer command to the Region.</p></li>
+<li><p>After the Region receives the ChangePeer command, if it finds it necessary to add replica to another Store, it will submit a ChangePeer request through the Raft process. When the log is applied, the new peer information will be updated in the Region meta and then the Membership Change completes.</p></li>
+</ol>
+<p>It should be noted that even if the Membership Change completes, it only means that the Replica information is added to the meta by the Region. Later if the Leader finds that if there is no data in the new Follower, it will send snapshot to it.</p>
+<p>It should also be noted that the Membership Change implementation in TiKV and etcd is different from what’s in the Raft paper. In the Raft paper, if a new peer is added, it is added to the Region meta at the Propose command. But to simplify, TiKV and etcd don’t add the peer information to the Region meta until the log is applied.</p>
+<p><a href="#top">Back to the Top</a></p>
+<h2 id="split">Split</h2>
+<p>At the very beginning, there is only one Region. As data grows, the Region needs to be split.</p>
+<p>Within TiKV, if a Region splits, there will be two new Regions, which we call them the Left Region and the Right Region. The Left Region will use all the IDs of the old Region. We can assume that the Region just changes its range. The Right Region will get a new ID through PD. Here is a simple example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Region 1 [a, c) -&gt; Region 1 [a, b) + Region 2 [b, c)</pre></div>
+<p>The original range of Region 1 is [a, c). After splitting at the b point, the Left Region is still Region 1 but the range is now [a, b). The Right Region is a new Region, Region 2, and its range is [b, c).</p>
+<p>Assuming the base size of Region 1 is 64MB. A complete spit process is as follows:</p>
+<ol>
+<li><p>In a given period of time, if the accumulated size of the data in Region 1 exceeds the threshold (8MB for example), Region 1 notifies the split checker to check Region 1.</p></li>
+<li><p>The split checker scans Region 1 sequentially. When it finds that the accumulated size of a certain key exceeds 64MB, it will keep a record of this key and make it the split key. Meanwhile, the split checker continues scanning and if it finds that the accumulated size of a certain key exceeds the threshold (96 MB for example), it considers this Region could split and notifies the RaftStore thread.</p></li>
+<li><p>When the RaftStore thread receives the message, it sends the AskSplit command to PD and requests PD to assign a new ID for the newly generated PD, Region 2, for example.</p></li>
+<li><p>When the ID is generated in PD, an Admin SplitRequest will be generated and sent to the RaftSore thread.</p></li>
+<li><p>Before RaftStore proposes the Admin SplitRequest, the Coprocessor will pre-process the command and decide if the split key is appropriate. If the split key is not appropriate, the Coprocessor will adjust the split key to an appropriate one.</p></li>
+<li><p>The Split request is submitted through the Raft process and then applied. For TiKV, the splitting of a Region is to change the range of the original Region and then create another Region. All these changes involves only the change of the Region meta, the real data under the hood is not moved, so it is very fast for Region to split in TiKV.</p></li>
+<li><p>When the Splitting completes, TiKV sends the latest information about the Left Region and Right Region to PD.</p></li>
+</ol>
+<p><a href="#top">Back to the Top</a></p>
+</div>
+</div>
+<div class="article-toc"></div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_twitter_share" data-site="" href="http://twitter.com/share?url=https%3a%2f%2fpingcap.com%2fblog%2f2016-11-09-Deep-Dive-into-TiKV%2f" target="_blank">
+<img src="/images/svgs/twitter-icon.svg"/>
+</a>
+<a class="ssba_reddit_share" data-site="reddit" href="http://reddit.com/submit?url=https%3a%2f%2fpingcap.com%2fblog%2f2016-11-09-Deep-Dive-into-TiKV%2f&amp;title=A%20Deep%20Dive%20into%20TiKV" target="_blank">
+<img src="/images/svgs/reddit-icon.svg"/>
+</a>
+<a class="ssba_facebook_share" data-site="" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fpingcap.com%2fblog%2f2016-11-09-Deep-Dive-into-TiKV%2f" target="_blank">
+<img src="/images/svgs/facebook-icon.svg"/>
+</a>
+<a class="ssba_linkedin_share" data-site="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fpingcap.com%2fblog%2f2016-11-09-Deep-Dive-into-TiKV%2f" target="_blank">
+<img src="/images/svgs/linkedin-icon.svg"/>
+</a>
+<a class="ssba_hackernews_share" data-site="hackernews" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fpingcap.com%2fblog%2f2016-11-09-Deep-Dive-into-TiKV%2f&amp;t=A%20Deep%20Dive%20into%20TiKV" target="_blank">
+<img src="/images/svgs/hacker-news-icon.svg"/>
+</a>
+</div>
+</div>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('A Deep Dive into TiKV', 'download-tidb-btn-bottom')"><button>Download
+                        TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('A Deep Dive into TiKV', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                        Blog</button></a>
+</div>
+</div>
+<div class="sidebar-page">
+<div class="sticky-sidebar">
+<p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

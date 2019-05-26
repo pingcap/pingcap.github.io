@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Failpoint 项目是 FreeBSD Failpoints 的 Golang 实现，允许在代码中注入错误或异常行为，并由环境变量或代码动态激活来触发这些异常行为。Failpoint 能用于各种复杂系统中模拟错误处理来提高系统的容错性、正确性和稳定性。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="Golang Failpoint 的设计与实现" property="og:title"/>
+<meta content="Failpoint 项目是 FreeBSD Failpoints 的 Golang 实现，允许在代码中注入错误或异常行为，并由环境变量或代码动态激活来触发这些异常行为。Failpoint 能用于各种复杂系统中模拟错误处理来提高系统的容错性、正确性和稳定性。" property="og:description"/>
+<meta content="https://pingcap.com/blog-cn/golang-failpoint/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Failpoint 项目是 FreeBSD Failpoints 的 Golang 实现，允许在代码中注入错误或异常行为，并由环境变量或代码动态激活来触发这些异常行为。Failpoint 能用于各种复杂系统中模拟错误处理来提高系统的容错性、正确性和稳定性。" name="twitter:description"/>
+<meta content="Golang Failpoint 的设计与实现" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>Golang Failpoint 的设计与实现 | PingCAP</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/index.html"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                        University</a></li>
+<li><a href="/docs-cn" onclick="trackViews('navbar-docs', 'docs-cn_view')">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a class="link-download" href="mailto:info@pingcap.com">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/docs-cn">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a class="link-download" href="mailto:info@pingcap.com">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP University</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe">
+<style media="screen" type="text/css">
+    #mc_embed_signup .response {
+        margin-top: 12px;
+        line-height: 1.4;
+        font-size: 0.65rem;
+    }
+</style>
+<div id="mc_embed_signup">
+<form action="//pingcap.us16.list-manage.com/subscribe/post?u=ab57beb8a88391cf6193c1b48&amp;id=7c67af4f9d" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+<div id="mc_embed_signup_scroll">
+<div class="form-inline">
+<input class="form-control" id="mce-EMAIL" name="EMAIL" placeholder="Subscribe to our newsletter" type="email" value=""/>
+<input class="btn btn-subscribe f-tc" id="mc-embedded-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+</div>
+<div class="clear" id="mce-responses">
+<div class="response" id="mce-error-response" style="display: none;"></div>
+<div class="response" id="mce-success-response" style="display: none;"></div>
+</div>
+<div aria-hidden="true" style="position: absolute; left: -5000px;">
+<input name="b_ab57beb8a88391cf6193c1b48_7c67af4f9d" tabindex="-1" type="text" value=""/>
+</div>
+</div>
+</form>
+</div>
+<script src="https://download.pingcap.com/js/mc-validate.js" type="text/javascript"></script>
+<script type="text/javascript">
+;(function($) {
+    window.fnames = new Array()
+    window.ftypes = new Array()
+    fnames[0] = 'EMAIL'
+    ftypes[0] = 'email'
+    fnames[1] = 'FNAME'
+    ftypes[1] = 'text'
+    fnames[2] = 'LNAME'
+    ftypes[2] = 'text'
+})(jQuery)
+var $mcj = jQuery.noConflict(true)
+</script>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><a class="tag all" href="#">ALL (115)</a>
+<div class="tag-list"><a class="tag " data-tag="Binlog" href="#Binlog">Binlog (2)
+                </a><a class="tag " data-tag="Contributor" href="#Contributor">Contributor (4)
+                </a><a class="tag " data-tag="DM-源码阅读" href="#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">DM-源码阅读 (5)
+                </a><a class="tag " data-tag="MVCC" href="#MVCC">MVCC (2)
+                </a><a class="tag " data-tag="PD" href="#PD">PD (4)
+                </a><a class="tag " data-tag="Prometheus" href="#Prometheus">Prometheus (2)
+                </a><a class="tag " data-tag="Raft" href="#Raft">Raft (10)
+                </a><a class="tag " data-tag="RocksDB" href="#RocksDB">RocksDB (3)
+                </a><a class="tag " data-tag="Rust" href="#Rust">Rust (2)
+                </a><a class="tag " data-tag="SQL" href="#SQL">SQL (4)
+                </a><a class="tag " data-tag="Spanner" href="#Spanner">Spanner (2)
+                </a><a class="tag " data-tag="TiDB" href="#TiDB">TiDB (42)
+                </a><a class="tag " data-tag="TiDB-Ecosystem-Tools" href="#TiDB-Ecosystem-Tools">TiDB-Ecosystem-Tools (3)
+                </a><a class="tag " data-tag="TiDB-Operator" href="#TiDB-Operator">TiDB-Operator (3)
+                </a><a class="tag " data-tag="TiDB-源码阅读" href="#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB-源码阅读 (24)
+                </a><a class="tag " data-tag="TiKV" href="#TiKV">TiKV (20)
+                </a><a class="tag " data-tag="TiKV-源码解析" href="#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90">TiKV-源码解析 (7)
+                </a><a class="tag " data-tag="TiSpark" href="#TiSpark">TiSpark (2)
+                </a><a class="tag " data-tag="gRPC" href="#gRPC">gRPC (2)
+                </a><a class="tag " data-tag="事务" href="#%e4%ba%8b%e5%8a%a1">事务 (2)
+                </a><a class="tag " data-tag="分布式系统测试" href="#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a><a class="tag " data-tag="工具" href="#%e5%b7%a5%e5%85%b7">工具 (4)
+                </a><a class="tag " data-tag="性能" href="#%e6%80%a7%e8%83%bd">性能 (2)
+                </a><a class="tag " data-tag="性能优化" href="#%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化 (2)
+                </a><a class="tag " data-tag="数据同步" href="#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5">数据同步 (2)
+                </a><a class="tag " data-tag="架构" href="#%e6%9e%b6%e6%9e%84">架构 (3)
+                </a><a class="tag " data-tag="社区" href="#%e7%a4%be%e5%8c%ba">社区 (46)
+                </a><a class="tag " data-tag="集群调度" href="#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6">集群调度 (2)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">Golang Failpoint 的设计与实现</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Tue, Apr 30, 2019</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>龙恒</li>
+</ul>
+<div class="blog-text">
+<p>对于一个大型复杂的系统来说，通常包含多个模块或多个组件构成，模拟各个子系统的故障是测试中必不可少的环节，并且这些故障模拟必须做到无侵入地集成到自动化测试系统中，通过在自动化测试中自动激活这些故障点来模拟故障，并观测最终结果是否符合预期结果来判断系统的正确性和稳定性。如果在一个分布式系统中需要专门请一位同事来插拔网线来模拟网络异常，一个存储系统中需要通过破坏硬盘来模拟磁盘损坏，昂贵的测试成本会让测试成为一场灾难，并且难以模拟一些需要精细化控制的的测试。所以我们需要一些自动化的方式来进行确定性的故障测试。</p>
+<p><strong><a href="https://github.com/pingcap/failpoint">Failpoint 项目</a> 就是为此而生，它是 FreeBSD <a href="http://www.freebsd.org/cgi/man.cgi?query=fail">failpoints</a> 的 Golang 实现，允许在代码中注入错误或异常行为， 并由环境变量或代码动态激活来触发这些异常行为。Failpoint 能用于各种复杂系统中模拟错误处理来提高系统的容错性、正确性和稳定性，比如：</strong></p>
+<ul>
+<li>微服务中某个服务出现随机延迟、某个服务不可用。</li>
+<li>存储系统磁盘 I/O 延迟增加、I/O 吞吐量过低、落盘时间长。</li>
+<li>调度系统中出现热点，某个调度指令失败。</li>
+<li>充值系统中模拟第三方重复请求充值成功回调接口。</li>
+<li>游戏开发中模拟玩家网络不稳定、掉帧、延迟过大等，以及各种异常输入（外挂请求）情况下系统是否正确工作。</li>
+<li>……</li>
+</ul>
+<h2 id="为什么要重复造轮子">为什么要重复造轮子？</h2>
+<p>etcd 团队在 2016 年开发了 <a href="https://github.com/etcd-io/gofail/">gofail</a> 极大地简化了错误注入，为 Golang 生态做出了巨大贡献。我们在 2018 年已经引入了 gofail 进行错误注入测试，但是我们在使用中发现了一些功能性以及便利性的问题，所以我们决定造一个更好的「轮子」。</p>
+<h3 id="如何使用-gofail">如何使用 gofail</h3>
+<ul>
+<li><p>使用注释在程序中注入一个 failpoint：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// gofail: var FailIfImportedChunk int
+</span><span style="color:#75715e">// if merger, ok := scp.merger.(*ChunkCheckpointMerger); ok &amp;&amp; merger.Checksum.SumKVS() &gt;= uint64(FailIfImportedChunk) {
+</span><span style="color:#75715e">// rc.checkpointsWg.Done()
+</span><span style="color:#75715e">// rc.checkpointsWg.Wait()
+</span><span style="color:#75715e">// panic("forcing failure due to FailIfImportedChunk")
+</span><span style="color:#75715e">// }
+</span><span style="color:#75715e">// goto RETURN1
+</span><span style="color:#75715e"></span>    
+<span style="color:#75715e">// gofail: RETURN1:
+</span><span style="color:#75715e"></span>    
+<span style="color:#75715e">// gofail: var FailIfStatusBecomes int
+</span><span style="color:#75715e">// if merger, ok := scp.merger.(*StatusCheckpointMerger); ok &amp;&amp; merger.EngineID &gt;= 0 &amp;&amp; int(merger.Status) == FailIfStatusBecomes {
+</span><span style="color:#75715e">// rc.checkpointsWg.Done()
+</span><span style="color:#75715e">// rc.checkpointsWg.Wait()
+</span><span style="color:#75715e">// panic("forcing failure due to FailIfStatusBecomes")
+</span><span style="color:#75715e">// }
+</span><span style="color:#75715e">// goto RETURN2
+</span><span style="color:#75715e"></span>    
+<span style="color:#f92672">//</span> <span style="color:#a6e22e">gofail</span>: <span style="color:#a6e22e">RETURN2</span>:</code></pre></div></li>
+<li><p>使用 <code>gofail enable</code> 命令将注释转换为代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">vFailIfImportedChunk</span>, <span style="color:#a6e22e">__fpErr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">__fp_FailIfImportedChunk</span>.<span style="color:#a6e22e">Acquire</span>(); <span style="color:#a6e22e">__fpErr</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> { <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">__fp_FailIfImportedChunk</span>.<span style="color:#a6e22e">Release</span>(); <span style="color:#a6e22e">FailIfImportedChunk</span>, <span style="color:#a6e22e">__fpTypeOK</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">vFailIfImportedChunk</span>.(<span style="color:#66d9ef">int</span>); <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">__fpTypeOK</span> { <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">__badTypeFailIfImportedChunk</span>} 
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">merger</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scp</span>.<span style="color:#a6e22e">merger</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">ChunkCheckpointMerger</span>); <span style="color:#a6e22e">ok</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">merger</span>.<span style="color:#a6e22e">Checksum</span>.<span style="color:#a6e22e">SumKVS</span>() <span style="color:#f92672">&gt;=</span> uint64(<span style="color:#a6e22e">FailIfImportedChunk</span>) {
+        <span style="color:#a6e22e">rc</span>.<span style="color:#a6e22e">checkpointsWg</span>.<span style="color:#a6e22e">Done</span>()
+        <span style="color:#a6e22e">rc</span>.<span style="color:#a6e22e">checkpointsWg</span>.<span style="color:#a6e22e">Wait</span>()
+        panic(<span style="color:#e6db74">"forcing failure due to FailIfImportedChunk"</span>)
+    }
+    <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">RETURN1</span>; <span style="color:#a6e22e">__badTypeFailIfImportedChunk</span>: <span style="color:#a6e22e">__fp_FailIfImportedChunk</span>.<span style="color:#a6e22e">BadType</span>(<span style="color:#a6e22e">vFailIfImportedChunk</span>, <span style="color:#e6db74">"int"</span>); };
+    
+<span style="color:#75715e">/* gofail-label */</span> <span style="color:#a6e22e">RETURN1</span>:
+    
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">vFailIfStatusBecomes</span>, <span style="color:#a6e22e">__fpErr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">__fp_FailIfStatusBecomes</span>.<span style="color:#a6e22e">Acquire</span>(); <span style="color:#a6e22e">__fpErr</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> { <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">__fp_FailIfStatusBecomes</span>.<span style="color:#a6e22e">Release</span>(); <span style="color:#a6e22e">FailIfStatusBecomes</span>, <span style="color:#a6e22e">__fpTypeOK</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">vFailIfStatusBecomes</span>.(<span style="color:#66d9ef">int</span>); <span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">__fpTypeOK</span> { <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">__badTypeFailIfStatusBecomes</span>} 
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">merger</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scp</span>.<span style="color:#a6e22e">merger</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">StatusCheckpointMerger</span>); <span style="color:#a6e22e">ok</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">merger</span>.<span style="color:#a6e22e">EngineID</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> int(<span style="color:#a6e22e">merger</span>.<span style="color:#a6e22e">Status</span>) <span style="color:#f92672">==</span> <span style="color:#a6e22e">FailIfStatusBecomes</span> {
+        <span style="color:#a6e22e">rc</span>.<span style="color:#a6e22e">checkpointsWg</span>.<span style="color:#a6e22e">Done</span>()
+        <span style="color:#a6e22e">rc</span>.<span style="color:#a6e22e">checkpointsWg</span>.<span style="color:#a6e22e">Wait</span>()
+        panic(<span style="color:#e6db74">"forcing failure due to FailIfStatusBecomes"</span>)
+    }
+    <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">RETURN2</span>; <span style="color:#a6e22e">__badTypeFailIfStatusBecomes</span>: <span style="color:#a6e22e">__fp_FailIfStatusBecomes</span>.<span style="color:#a6e22e">BadType</span>(<span style="color:#a6e22e">vFailIfStatusBecomes</span>, <span style="color:#e6db74">"int"</span>); };
+    
+<span style="color:#75715e">/* gofail-label */</span> <span style="color:#a6e22e">RETURN2</span>:</code></pre></div></li>
+</ul>
+<h3 id="gofail-使用中遇到的问题">gofail 使用中遇到的问题</h3>
+<ul>
+<li>使用注释的方式在代码中注入 failpoint，代码容易出错，并且没有编译器检测。</li>
+<li>只能全局生效，大型项目为了缩短自动化测试的时间会引入并行测试，不同并行任务之间会存在干扰。</li>
+<li>需要写一些 hack 代码来避免一些不必要的错误日志，比如如上代码，必须要写 <code>// goto RETURN2</code> 和 <code>// gofail: RETURN2:</code>，并且中间必须添加一个空行，至于原因可以看 generated code 逻辑。</li>
+</ul>
+<h2 id="我们要设计一个什么样子的-failpoint">我们要设计一个什么样子的 failpoint？</h2>
+<h3 id="理想的-failpoint-实现应该是什么样子">理想的 failpoint 实现应该是什么样子？</h3>
+<p>理想中的 failpoint 应该是使用代码定义并且对业务逻辑无侵入，如果在一个支持宏的语言中 (比如 Rust)，我们可以定义一个 <code>fail_point</code> 宏来定义 failpoint：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">fail_point<span style="color:#f92672">!</span>(<span style="color:#e6db74">"transport_on_send_store"</span>, <span style="color:#f92672">|</span>sid<span style="color:#f92672">|</span> <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(sid) <span style="color:#f92672">=</span> sid {
+    <span style="color:#66d9ef">let</span> sid: <span style="color:#66d9ef">u64</span> <span style="color:#f92672">=</span> sid.parse().unwrap();
+    <span style="color:#66d9ef">if</span> sid <span style="color:#f92672">==</span> store_id {
+        self.raft_client.wl().addrs.remove(<span style="color:#f92672">&amp;</span>store_id);
+    }
+})</code></pre></div>
+<p>但是我们遇到了一些问题：</p>
+<ul>
+<li>Golang 并不支持 macro 语言特性。</li>
+<li>Golang 不支持编译器插件。</li>
+<li>Golang tags 也不能提供一个比较优雅的实现 (<code>go build --tag="enable-failpoint-a"</code>)。</li>
+</ul>
+<h3 id="failpoint-设计准则">Failpoint 设计准则</h3>
+<ul>
+<li>使用 Golang 代码定义 failpoint，而不是注释或其他形式。</li>
+<li>Failpoint 代码不应该有任何额外开销：
+
+<ul>
+<li>不能影响正常功能逻辑，不能对功能代码有任何侵入。</li>
+<li>注入 failpoint 代码之后不能导致性能回退。</li>
+<li>Failpoint 代码最终不能出现在最终发行的二进制文件中。</li>
+</ul></li>
+<li>Failpoint 代码必须是易读、易写并且能引入编译器检测。</li>
+<li>最终生成的代码必须具有可读性。</li>
+<li>生成代码中，功能逻辑代码的行号不能发生变化（便于调试）。</li>
+<li>支持并行测试，可以通过 <code>context.Context</code> 控制一个某个具体的 failpoint 是否激活。</li>
+</ul>
+<h3 id="golang-如何实现一个类似-failpoint-宏">Golang 如何实现一个类似 failpoint 宏？</h3>
+<p>宏的本质是什么？如果追本溯源，发现其实可以通过 AST 重写在 Golang 中实现满足以上条件的 failpoint，原理如下图所示：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/golang-failpoint/1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>对于任何一个 Golang 代码的源文件，可以通过解析出这个文件的语法树，遍历整个语法树，找出所有 failpoint 注入点，然后对语法树重写，转换成想要的逻辑。</p>
+<h2 id="相关概念">相关概念</h2>
+<h3 id="failpoint">Failpoint</h3>
+<p>Failpoint 是一个代码片段，并且仅在对应的 failpoint name 激活的情况下才会执行，如果通过 <code>failpoint.Disable("failpoint-name-for-demo")</code> 禁用后，那么对应的的 failpoint 永远不会触发。所有 failpoint 代码片段不会编译到最终的二进制文件中，比如我们模拟文件系统权限控制：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">saveTo</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-permission-deny"</span>, <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span> {
+         <span style="color:#75715e">// It's OK to access outer scope variable
+</span><span style="color:#75715e"></span>         <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">"mock permission deny: %s"</span>, <span style="color:#a6e22e">path</span>)
+    })
+}</code></pre></div>
+<h3 id="marker-函数">Marker 函数</h3>
+<p>AST 重写阶段标记需要被重写的部分，主要有以下功能：</p>
+<ul>
+<li>提示 Rewriter 重写为一个相等的 IF 语句。
+
+<ul>
+<li>标记函数的参数是重写过程中需要用到的参数。</li>
+<li>标记函数是一个空函数，编译过程会被 inline，进一步被消除。</li>
+<li>标记函数中注入的 failpoint 是一个闭包，如果闭包访问外部作用域变量，闭包语法允许捕获外部作用域变量，则不会出现编译错误，同时转换后的的代码是一个 IF 语句，IF 语句访问外部作用域变量不会产生任何问题，所以闭包捕获只是为了语法合法，最终不会有任何额外开销。</li>
+</ul></li>
+<li>简单、易读、易写。</li>
+<li>引入编译器检测，如果 Marker 函数的参数不正确，程序不能通过编译的，进而保证转换后的代码正确性。</li>
+</ul>
+<p>目前支持的 Marker 函数列表：</p>
+<ul>
+<li><code>func Inject(fpname string</code>, <code>fpblock func(val Value)) {}</code></li>
+<li><code>func InjectContext(fpname string</code>, <code>ctx context.Context</code>, <code>fpblock func(val Value)) {}</code></li>
+<li><code>func Break(label ...string) {}</code></li>
+<li><code>func Goto(label string) {}</code></li>
+<li><code>func Continue(label ...string) {}</code></li>
+<li><code>func Return(results ...interface{}) {}</code></li>
+<li><code>func Fallthrough() {}</code></li>
+<li><code>func Return(results ...interface{}) {}</code></li>
+<li><code>func Label(label string) {}</code></li>
+</ul>
+<h2 id="如何在你的程序中使用-failpoint-进行注入">如何在你的程序中使用 failpoint 进行注入？</h2>
+<p><strong>最简单的方式是使用 <code>failpoint.Inject</code> 在调用的地方注入一个 failpoint，最终 <code>failpoint.Inject</code> 调用会重写为一个 IF 语句，其中 <code>mock-io-error</code> 用来判断是否触发，<code>failpoint-closure</code> 中的逻辑会在触发后执行。</strong> 比如我们在一个读取文件的函数中注入一个 I/O 错误：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-io-error"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">error</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">"mock error: %v"</span>, <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">string</span>))
+})</code></pre></div>
+<p>最终转换后的代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"mock-io-error"</span>)); <span style="color:#a6e22e">ok</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">"mock error: %v"</span>, <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">string</span>))
+}</code></pre></div>
+<p>通过 <code>failpoint.Enable("mock-io-error", "return("disk error")")</code> 激活程序中的 failpoint，如果需要给 <code>failpoint.Value</code> 赋一个自定义的值，则需要传入一个 failpoint expression，比如这里 <code>return("disk error")</code>，更多语法可以参考 <a href="http://www.freebsd.org/cgi/man.cgi?query=fail">failpoint 语法</a>。</p>
+<p><strong>闭包可以为 <code>nil</code>，比如 <code>failpoint.Enable("mock-delay", "sleep(1000)")</code>，目的是在注入点休眠一秒，不需要执行额外的逻辑。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-delay"</span>, <span style="color:#66d9ef">nil</span>)
+<span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-delay"</span>, <span style="color:#66d9ef">func</span>(){})</code></pre></div>
+<p>最终会产生以下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"mock-delay"</span>))
+<span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"mock-delay"</span>))</code></pre></div>
+<p><strong>如果我们只想在 failpoint 中执行一个 panic，不需要接收 <code>failpoint.Value</code>，则我们可以在闭包的参数中忽略这个值。</strong>例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-panic"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">_</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">error</span> {
+    panic(<span style="color:#e6db74">"mock panic"</span>)
+})
+<span style="color:#75715e">// OR
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-panic"</span>, <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span> {
+    panic(<span style="color:#e6db74">"mock panic"</span>)
+})</code></pre></div>
+<p>最佳实践是以下这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Enable</span>(<span style="color:#e6db74">"mock-panic"</span>, <span style="color:#e6db74">"panic"</span>)
+<span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"mock-panic"</span>, <span style="color:#66d9ef">nil</span>)
+<span style="color:#75715e">// GENERATED CODE
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"mock-panic"</span>))</code></pre></div>
+<p><strong>为了可以在并行测试中防止不同的测试任务之间的干扰，可以在 <code>context.Context</code> 中包含一个回调函数，用于精细化控制 failpoint 的激活与关闭</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">InjectContext</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#e6db74">"failpoint-name"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+})</code></pre></div>
+<p>转换后的代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">EvalContext</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"failpoint-name"</span>)); <span style="color:#a6e22e">ok</span> {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+}</code></pre></div>
+<p><strong>使用 <code>failpoint.WithHook</code> 的示例</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">dmlSuite</span>) <span style="color:#a6e22e">TestCRUDParallel</span>() {
+    <span style="color:#a6e22e">sctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">WithHook</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Backgroud</span>(), <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">fpname</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">bool</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Value</span>(<span style="color:#a6e22e">fpname</span>) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#75715e">// Determine by ctx key
+</span><span style="color:#75715e"></span>    })
+    <span style="color:#a6e22e">insertFailpoints</span> = <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">struct</span>{} {
+        <span style="color:#e6db74">"insert-record-fp"</span>: {},
+        <span style="color:#e6db74">"insert-index-fp"</span>: {},
+        <span style="color:#e6db74">"on-duplicate-fp"</span>: {},
+    }
+    <span style="color:#a6e22e">ictx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">WithHook</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Backgroud</span>(), <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">fpname</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">bool</span> {
+        <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">found</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">insertFailpoints</span>[<span style="color:#a6e22e">fpname</span>] <span style="color:#75715e">// Only enables some failpoints.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">found</span>
+    })
+    <span style="color:#a6e22e">deleteFailpoints</span> = <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">struct</span>{} {
+        <span style="color:#e6db74">"tikv-is-busy-fp"</span>: {},
+        <span style="color:#e6db74">"fetch-tso-timeout"</span>: {},
+    }
+    <span style="color:#a6e22e">dctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">WithHook</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Backgroud</span>(), <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">fpname</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">bool</span> {
+        <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">found</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">deleteFailpoints</span>[<span style="color:#a6e22e">fpname</span>] <span style="color:#75715e">// Only disables failpoints. 
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> !<span style="color:#a6e22e">found</span>
+    })
+    <span style="color:#75715e">// other DML parallel test cases.
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">RunParallel</span>(<span style="color:#a6e22e">buildSelectTests</span>(<span style="color:#a6e22e">sctx</span>))
+    <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">RunParallel</span>(<span style="color:#a6e22e">buildInsertTests</span>(<span style="color:#a6e22e">ictx</span>))
+    <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">RunParallel</span>(<span style="color:#a6e22e">buildDeleteTests</span>(<span style="color:#a6e22e">dctx</span>))
+}</code></pre></div>
+<p><strong>如果我们在循环中使用 failpoint，可能我们会使用到其他的 Marker 函数</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Label</span>(<span style="color:#e6db74">"outer"</span>)
+<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+    <span style="color:#a6e22e">inner</span>:
+        <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
+            <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">j</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">i</span> {
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">5</span>:
+                <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Break</span>()
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">7</span>:
+                <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Continue</span>(<span style="color:#e6db74">"outer"</span>)
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">9</span>:
+                <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Fallthrough</span>()
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">10</span>:
+                <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Goto</span>(<span style="color:#e6db74">"outer"</span>)
+            <span style="color:#66d9ef">default</span>:
+                <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"failpoint-name"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+                    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>))
+                    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">val</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">/</span><span style="color:#ae81ff">11</span> {
+                        <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Break</span>(<span style="color:#e6db74">"inner"</span>)
+                    } <span style="color:#66d9ef">else</span> {
+                        <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Goto</span>(<span style="color:#e6db74">"outer"</span>)
+                    }
+                })
+        }
+    }
+}</code></pre></div>
+<p>以上代码最终会重写为如下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">outer</span>:
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">100</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+    <span style="color:#a6e22e">inner</span>:
+        <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
+            <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">j</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">i</span> {
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">5</span>:
+                <span style="color:#66d9ef">break</span>
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">7</span>:
+                <span style="color:#66d9ef">continue</span> <span style="color:#a6e22e">outer</span>
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">9</span>:
+                <span style="color:#66d9ef">fallthrough</span>
+            <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">10</span>:
+                <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">outer</span>
+            <span style="color:#66d9ef">default</span>:
+                <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"failpoint-name"</span>)); <span style="color:#a6e22e">ok</span> {
+                    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>))
+                    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">val</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">/</span><span style="color:#ae81ff">11</span> {
+                        <span style="color:#66d9ef">break</span> <span style="color:#a6e22e">inner</span>
+                    } <span style="color:#66d9ef">else</span> {
+                        <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">outer</span>
+                    }
+                }
+            }
+        }
+    }</code></pre></div>
+<p><strong>为什么会有 <code>label</code>、<code>break</code>、<code>continue</code> 和 <code>fallthrough</code> 相关 Marker 函数? 为什么不直接使用关键字？</strong></p>
+<ul>
+<li><p>Golang 中如果某个变量或则标签未使用，是不能通过编译的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">label1</span>: <span style="color:#75715e">// compiler error: unused label1
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"failpoint-name"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1000</span> {
+            <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">label1</span> <span style="color:#75715e">// illegal to use goto here
+</span><span style="color:#75715e"></span>        }
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+    })
+    </code></pre></div></li>
+<li><p><code>break</code> 和 <code>continue</code> 只能在循环上下文中使用，在闭包中使用。</p></li>
+</ul>
+<h3 id="一些复杂的注入示例">一些复杂的注入示例</h3>
+<p><strong>示例一：在 IF 语句的 <code>INITIAL</code> 和 <code>CONDITIONAL</code> 中注入 failpoint</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>() {
+    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"failpoint-name"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+    })
+}, <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">200</span>) }(); <span style="color:#a6e22e">b</span> &gt; <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> {
+    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"failpoint-name"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">int</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>)
+    })
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">3000</span>)
+}() <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">b</span> &lt; <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> {
+    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"failpoint-name-2"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>))
+    })
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">6000</span>)
+}() {
+    <span style="color:#a6e22e">a</span>()
+    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"failpoint-name-3"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+    })
+}</code></pre></div>
+<p>上面的代码最终会被重写为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>() {
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"failpoint-name"</span>)); <span style="color:#a6e22e">ok</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+    }
+}, <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">200</span>) }(); <span style="color:#a6e22e">b</span> &gt; <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> {
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"failpoint-name"</span>)); <span style="color:#a6e22e">ok</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>)
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">3000</span>)
+}() <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">b</span> &lt; <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> {
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"failpoint-name-2"</span>)); <span style="color:#a6e22e">ok</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">int</span>))
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">6000</span>)
+}() {
+    <span style="color:#a6e22e">a</span>()
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"failpoint-name-3"</span>)); <span style="color:#a6e22e">ok</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"unit-test"</span>, <span style="color:#a6e22e">val</span>)
+    }
+}</code></pre></div>
+<p><strong>示例二：在 <code>SELECT</code> 语句的 CASE 中注入 failpoint 来动态控制某个 case 是否被阻塞</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">StoreService</span>) <span style="color:#a6e22e">ExecuteStoreTask</span>() {
+    <span style="color:#66d9ef">select</span> {
+    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">StoreTask</span> {
+        <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"priority-fp"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">_</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) {
+            <span style="color:#66d9ef">return</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">StoreTask</span>)
+        })
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">priorityHighCh</span>
+    }():
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"execute high priority task"</span>)
+
+    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">priorityNormalCh</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"execute normal priority task"</span>)
+
+    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">priorityLowCh</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"execute normal low task"</span>)
+    }
+}</code></pre></div>
+<p>上面的代码最终会被重写为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">StoreService</span>) <span style="color:#a6e22e">ExecuteStoreTask</span>() {
+    <span style="color:#66d9ef">select</span> {
+    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">StoreTask</span> {
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"priority-fp"</span>)); <span style="color:#a6e22e">ok</span> {
+            <span style="color:#66d9ef">return</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">StoreTask</span>)
+        })
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">priorityHighCh</span>
+    }():
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"execute high priority task"</span>)
+
+    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">priorityNormalCh</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"execute normal priority task"</span>)
+
+    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">priorityLowCh</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"execute normal low task"</span>)
+    }
+}</code></pre></div>
+<p><strong>示例三：动态注入 SWITCH CASE</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">operator</span>.<span style="color:#a6e22e">Type</span>(); {
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">"balance-leader"</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"create balance leader steps"</span>)
+
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">"balance-region"</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"create balance region steps"</span>)
+
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">"scatter-region"</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"create scatter region steps"</span>)
+
+<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">bool</span> {
+    <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Inject</span>(<span style="color:#e6db74">"dynamic-op-type"</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">val</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">bool</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">string</span>), <span style="color:#a6e22e">opType</span>)
+    })
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+}():
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"do something"</span>)
+
+<span style="color:#66d9ef">default</span>:
+    panic(<span style="color:#e6db74">"unsupported operator type"</span>)
+}</code></pre></div>
+<p>以上代码最终会重写为如下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">operator</span>.<span style="color:#a6e22e">Type</span>(); {
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">"balance-leader"</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"create balance leader steps"</span>)
+
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">"balance-region"</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"create balance region steps"</span>)
+
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">opType</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">"scatter-region"</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"create scatter region steps"</span>)
+
+<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">bool</span> {
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"dynamic-op-type"</span>)); <span style="color:#a6e22e">ok</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#a6e22e">val</span>.(<span style="color:#66d9ef">string</span>), <span style="color:#a6e22e">opType</span>)
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+}():
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">"do something"</span>)
+
+<span style="color:#66d9ef">default</span>:
+    panic(<span style="color:#e6db74">"unsupported operator type"</span>)
+}</code></pre></div>
+<p>除了上面的例子之外，还可以写的更加复杂的情况：</p>
+<ul>
+<li>由 <code>INITIAL</code> 语句、<code>CONDITIONAL</code> 表达式，以及 <code>POST</code> 语句组成的循环</li>
+<li><code>FOR RANGE</code> 语句</li>
+<li><code>SWITCH INITIAL</code> 语句</li>
+<li>Slice 的构造和索引</li>
+<li>结构体动态初始化</li>
+<li>……</li>
+</ul>
+<p>实际上，任何你可以调用函数的地方都可以注入 failpoint，所以请发挥你的想象力。</p>
+<h2 id="failpoint-命名最佳实践">Failpoint 命名最佳实践</h2>
+<p>上面生成的代码中会自动添加一个 <code>_curpkg_</code> 调用在 <code>failpoint-name</code> 上，是因为名字是全局的，为了避免命名冲突，所以会在最终的名字中包含包名，<code>_curpkg_</code> 相当一个宏，在运行的时候自动使用包名进行展开。你并不需要在自己的应用程序中实现 <code>_curpkg_</code>，它在执行 <code>failpoint-ctl enable</code> 命令的时候自动生成以及自动添加，并在执行 <code>failpoint-ctl disable</code> 命令的时候被删除。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">ddl</span> <span style="color:#75715e">// ddl’s parent package is `github.com/pingcap/tidb`
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">demo</span>() {
+	<span style="color:#75715e">// _curpkg_("the-original-failpoint-name") will be expanded as `github.com/pingcap/tidb/ddl/the-original-failpoint-name`
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">failpoint</span>.<span style="color:#a6e22e">Eval</span>(<span style="color:#a6e22e">_curpkg_</span>(<span style="color:#e6db74">"the-original-failpoint-name"</span>)); <span style="color:#a6e22e">ok</span> {<span style="color:#f92672">...</span>}
+}</code></pre></div>
+<p>因为同一个包下面的所有 failpoint 都在同一个命名空间，所以需要小心命名来避免命名冲突，这里有一些推荐的规则来改善这种情况：</p>
+<ul>
+<li>保证名字在包内是唯一的。</li>
+<li>使用一个自解释的名字。</li>
+</ul>
+<p>可以通过环境变量来激活 failpoint：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">GO_FAILPOINTS="github.com/pingcap/tidb/ddl/renameTableErr=return(100);github.com/pingcap/tidb/planner/core/illegalPushDown=return(true);github.com/pingcap/pd/server/schedulers/balanceLeaderFailed=return(true)"</pre></div>
+<h2 id="致谢">致谢</h2>
+<ul>
+<li>感谢 <a href="https://github.com/etcd-io/gofail">gofail</a> 提供最初实现，给我们提供了灵感，让我们能站在巨人的肩膀上对 failpoint 进行迭代。</li>
+<li>感谢 FreeBSD 定义<a href="http://www.freebsd.org/cgi/man.cgi?query=fail">语法规范</a>。</li>
+</ul>
+<p>最后，欢迎大家和我们交流讨论，一起完善 <a href="https://github.com/pingcap/failpoint">Failpoint 项目</a>。</p>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/blog-cn/golang-failpoint/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a></li>
+<li><a href="/docs-cn/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs-cn/ROADMAP/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="/docs-cn/op-guide/docker-compose/">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/FAQ/">常见问题解答</a></li>
+<li><a href="/docs-cn/tools/syncer/">TiDB 周边工具</a></li>
+<li><a href="/docs-cn/releases/rn/">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://zhuanlan.zhihu.com/newsql" target="_blank">知乎专栏</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                    University</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="/about-cn/recruit/join/" onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe">
+<style media="screen" type="text/css">
+    #mc_embed_signup .response {
+        margin-top: 12px;
+        line-height: 1.4;
+        font-size: 0.65rem;
+    }
+</style>
+<div id="mc_embed_signup">
+<form action="//pingcap.us16.list-manage.com/subscribe/post?u=ab57beb8a88391cf6193c1b48&amp;id=7c67af4f9d" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+<div id="mc_embed_signup_scroll">
+<div class="form-inline">
+<input class="form-control" id="mce-EMAIL" name="EMAIL" placeholder="Subscribe to our newsletter" type="email" value=""/>
+<input class="btn btn-subscribe f-tc" id="mc-embedded-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+</div>
+<div class="clear" id="mce-responses">
+<div class="response" id="mce-error-response" style="display: none;"></div>
+<div class="response" id="mce-success-response" style="display: none;"></div>
+</div>
+<div aria-hidden="true" style="position: absolute; left: -5000px;">
+<input name="b_ab57beb8a88391cf6193c1b48_7c67af4f9d" tabindex="-1" type="text" value=""/>
+</div>
+</div>
+</form>
+</div>
+<script src="https://download.pingcap.com/js/mc-validate.js" type="text/javascript"></script>
+<script type="text/javascript">
+;(function($) {
+    window.fnames = new Array()
+    window.ftypes = new Array()
+    fnames[0] = 'EMAIL'
+    ftypes[0] = 'email'
+    fnames[1] = 'FNAME'
+    ftypes[1] = 'text'
+    fnames[2] = 'LNAME'
+    ftypes[2] = 'text'
+})(jQuery)
+var $mcj = jQuery.noConflict(true)
+</script>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/blog" id="lang">English</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

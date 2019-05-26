@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Use the slow query log to identify problematic SQL statements." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="Slow Query Log" property="og:title"/>
+<meta content="Use the slow query log to identify problematic SQL statements." property="og:description"/>
+<meta content="https://pingcap.com/docs/v2.1/sql/slow-query/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Use the slow query log to identify problematic SQL statements." name="twitter:description"/>
+<meta content="Slow Query Log" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>Slow Query Log | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/docs-cn/v2.1/sql/slow-query" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="doc">
+<div class="container"><div class="sidebar">
+<div class="sticky-sidebar">
+<div class="title"> Documentation </div>
+<div class="st_tree nav-toc"><ul><li class="leaf-child ">
+<a href="/docs/overview/"><span>Introduction</span></a>
+</li><li class="has-child "><a href="#">
+<span>Concepts</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/architecture/"><span>Architecture</span></a>
+</li><li class="has-child "><a href="#">
+<span>Key Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/key-features/#horizontal-scalability"><span>Horizontal Scalability</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#mysql-compatible-syntax"><span>MySQL Compatible Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#replicate-from-and-to-mysql"><span>Replicate from and to MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#distributed-transactions-with-strong-consistency"><span>Distributed Transactions with Strong Consistency</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#cloud-native-architecture"><span>Cloud Native Architecture</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#minimize-etl-with-htap"><span>Minimize ETL with HTAP</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fault-tolerance--recovery-with-raft"><span>Fault Tolerance &amp; Recovery with Raft</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#automatic-rebalancing"><span>Automatic Rebalancing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#deployment-and-orchestration-with-ansible-kubernetes-docker"><span>Deployment and Orchestration with Ansible, Kubernetes, Docker</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#json-support"><span>JSON Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#spark-integration"><span>Spark Integration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#read-historical-data-without-restoring-from-backup"><span>Read Historical Data Without Restoring from Backup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fast-import-and-restore-of-data"><span>Fast Import and Restore of Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#hybrid-of-column-and-row-storage"><span>Hybrid of Column and Row Storage</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#sql-plan-management"><span>SQL Plan Management</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#open-source"><span>Open Source</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#online-schema-changes"><span>Online Schema Changes</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>How-to</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Get Started</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Start a Local Cluster</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-binary/"><span>From Binary</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-homebrew/"><span>From Homebrew</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-dbdeployer/"><span>From DBdeployer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-kubernetes/"><span>In Kubernetes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-docker-compose/"><span>In Docker Compose</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/explore-sql/"><span>Explore SQL with TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/import-example-database/"><span>Import Example Database</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/read-historical-data/"><span>Read Historical Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/tidb-binlog/"><span>TiDB-Binlog Tutorial</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/data-migration/"><span>TiDB Data Migration Tutorial</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Deploy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/hardware-recommendations/"><span>Hardware Recommendations</span></a>
+</li><li class="has-child "><a href="#">
+<span>From Binary Tarball</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/testing-environment/"><span>For Testing Environments</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/production-environment/"><span>For Production Environments</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Orchestrated Deployment</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible/"><span>Ansible Deployment (Recommended)</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/offline-ansible/"><span>Ansible Offline Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/docker/"><span>Docker Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/kubernetes/"><span>Kubernetes Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations/"><span>Overview of Ansible Operations</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Geographic Redundancy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/location-awareness/"><span>Configure Location Awareness</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/tispark/"><span>TiSpark</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/data-migration-with-ansible/"><span>Data Migration with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/time-zone/"><span>Time Zone</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/memory-control/"><span>Memory Control</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Secure</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Transport Layer Security (TLS)</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-clients/"><span>Enable TLS For MySQL Clients</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-between-components/"><span>Enable TLS Between TiDB Components</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/generate-self-signed-certificates/"><span>Generate Self-signed Certificates</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Monitor</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/monitor-a-cluster/"><span>Monitor a TiDB Cluster</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Migrate</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/overview/"><span>Overview</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-mysql/"><span>Migrate the Full Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/incrementally-from-mysql/"><span>Migrate the Incremental Data</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/tools/lightning/csv/"><span>Migrate from CSV</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Maintain</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/backup-and-restore/"><span>Backup and Restore</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/identify-slow-queries/"><span>Identify Slow Queries</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Scale</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/horizontally/"><span>Scale a TiDB Cluster</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/with-ansible/"><span>Scale using Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Upgrade</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/from-previous-version/"><span>Upgrade to TiDB 3.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/to-tidb-2.1/"><span>Upgrade to TiDB 2.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/data-migration/"><span>Upgrade Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/rolling-updates-with-ansible/"><span>Rolling updates with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Troubleshoot</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/cluster-setup/"><span>Troubleshoot Cluster Setup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/data-migration/"><span>Troubleshoot Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/tidb-lightning/"><span>Troubleshoot TiDB-Lightning</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Reference</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/mysql-compatibility/"><span>MySQL Compatibility</span></a>
+</li><li class="has-child "><a href="#">
+<span>SQL</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>SQL Language Structure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/literal-values/"><span>Literal Values</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/schema-object-names/"><span>Schema Object Names</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/keywords-and-reserved-words/"><span>Keywords and Reserved Words</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/user-defined-variables/"><span>User-Defined Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/expression-syntax/"><span>Expression Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/comment-syntax/"><span>Comment Syntax</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Data Types</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#numeric-types"><span>Numeric Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#date-and-time-types"><span>Date and Time Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#string-types"><span>String Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#json-types"><span>JSON Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-enum-data-type"><span>The ENUM Data Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-set-type"><span>The SET Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#data-type-default-values"><span>Data Type Default Values</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Functions and Operators</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/reference/"><span>Function and Operator Reference</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/type-conversion/"><span>Type Conversion in Expression Evaluation</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/operators/"><span>Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/control-flow-functions/"><span>Control Flow Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/string-functions/"><span>String Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/numeric-functions-and-operators/"><span>Numeric Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/date-and-time-functions/"><span>Date and Time Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/bit-functions-and-operators/"><span>Bit Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/cast-functions-and-operators/"><span>Cast Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/encryption-and-compression-functions/"><span>Encryption and Compression Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/information-functions/"><span>Information Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/json-functions/"><span>JSON Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/aggregate-group-by-functions/"><span>Aggregate (GROUP BY) Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/miscellaneous-functions/"><span>Miscellaneous Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/precision-math/"><span>Precision Math</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>SQL Statements</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-column/"><span>ADD COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-index/"><span>ADD INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/admin/"><span>ADMIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-table/"><span>ALTER TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-user/"><span>ALTER USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/analyze-table/"><span>ANALYZE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/begin/"><span>BEGIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/commit/"><span>COMMIT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-database/"><span>CREATE DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-index/"><span>CREATE INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table-like/"><span>CREATE TABLE LIKE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table/"><span>CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-user/"><span>CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-view/"><span>CREATE VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/deallocate/"><span>DEALLOCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/delete/"><span>DELETE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/desc/"><span>DESC</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/describe/"><span>DESCRIBE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/do/"><span>DO</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-column/"><span>DROP COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-database/"><span>DROP DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-index/"><span>DROP INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-table/"><span>DROP TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-user/"><span>DROP USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-view/"><span>DROP VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/execute/"><span>EXECUTE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain-analyze/"><span>EXPLAIN ANALYZE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain/"><span>EXPLAIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-privileges/"><span>FLUSH PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-status/"><span>FLUSH STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-tables/"><span>FLUSH TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/grant-privileges/"><span>GRANT &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/insert/"><span>INSERT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/kill/"><span>KILL [TIDB]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/load-data/"><span>LOAD DATA</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/modify-column/"><span>MODIFY COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/prepare/"><span>PREPARE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-index/"><span>RENAME INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-table/"><span>RENAME TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/replace/"><span>REPLACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/revoke-privileges/"><span>REVOKE &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rollback/"><span>ROLLBACK</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/select/"><span>SELECT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-names/"><span>SET [NAMES|CHARACTER SET]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-password/"><span>SET PASSWORD</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-transaction/"><span>SET TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-variable/"><span>SET [GLOBAL|SESSION] &lt;variable&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-character-set/"><span>SHOW CHARACTER SET</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-collation/"><span>SHOW COLLATION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-columns-from/"><span>SHOW [FULL] COLUMNS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-table/"><span>SHOW CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-user/"><span>SHOW CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-databases/"><span>SHOW DATABASES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-engines/"><span>SHOW ENGINES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-errors/"><span>SHOW ERRORS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-fields-from/"><span>SHOW [FULL] FIELDS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-grants/"><span>SHOW GRANTS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-indexes/"><span>SHOW INDEXES [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-index/"><span>SHOW INDEX [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-keys/"><span>SHOW KEYS [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-privileges/"><span>SHOW PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-processlist/"><span>SHOW [FULL] PROCESSSLIST</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-schemas/"><span>SHOW SCHEMAS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-tables/"><span>SHOW [FULL] TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-table-status/"><span>SHOW TABLE STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-variables/"><span>SHOW [GLOBAL|SESSION] VARIABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-warnings/"><span>SHOW WARNINGS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/start-transaction/"><span>START TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/trace/"><span>TRACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/truncate/"><span>TRUNCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/update/"><span>UPDATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/use/"><span>USE</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/constraints/"><span>Constraints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/generated-columns/"><span>Generated Columns</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/character-set/"><span>Character Set</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configuration</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>tidb-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/mysql-variables/"><span>MySQL System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/tidb-specific-variables/"><span>TiDB Specific System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration/"><span>Configuration Flags</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration-file/"><span>Configuration File</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>pd-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/pd-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>tikv-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tikv-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Security</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/security/compatibility/"><span>Security Compatibility with MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/privilege-system/"><span>The TiDB Access Privilege System</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/user-account-management/"><span>TiDB User Account Management</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Transactions</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-model/"><span>Transaction Model</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-isolation/"><span>Isolation Levels</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>System Databases</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/mysql/"><span>mysql</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/information-schema/"><span>information_schema</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/error-codes/"><span>Errors Codes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/supported-clients/"><span>Supported Client Drivers</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/garbage-collection/"><span>Garbage Collection (GC)</span></a>
+</li><li class="has-child "><a href="#">
+<span>Performance</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/sql-optimizer-overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/understanding-the-query-execution-plan/"><span>Understanding the Query Execution Plan</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/statistics/"><span>Introduction to Statistics</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/optimizer-hints/"><span>Optimizer Hints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/tune-tikv/"><span>Tune TiKV</span></a>
+</li><li class="leaf-child ">
+<a href="https://pingcap.com/blog/2017-07-24-tidbbestpractice/"><span>TiDB Best Practices</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tispark/"><span>TiSpark</span></a>
+</li><li class="has-child "><a href="#">
+<span>Tools</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/syncer/"><span>Syncer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/mydumper/"><span>mydumper</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/loader/"><span>Loader</span></a>
+</li><li class="has-child "><a href="#">
+<span>Data Migration</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/#usage-restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/deploy/"><span>Deploy</span></a>
+</li><li class="has-child "><a href="#">
+<span>Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#table-routing"><span>Table Routing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#black-and-white-table-lists"><span>Black and White Lists</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#binlog-event-filter"><span>Binlog Event Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#column-mapping"><span>Column Mapping</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#synchronization-delay-monitoring"><span>Synchronization Delay Monitoring</span></a>
+</li><li class="has-child "><a href="#">
+<span>Sharding Support</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/"><span>Introduction</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/#restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/manually-handling-sharding-ddl-locks/"><span>Handle Sharding DDL Locks Manually</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Usage Scenarios</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/simple-synchronization/"><span>Simple Scenario</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/shard-merge/"><span>Shard Merge Scenario</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/task-configuration-file/"><span>Task Configuration</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/manage-tasks/"><span>Manage the Task</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/cluster-operations/"><span>Cluster Operations</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL compatible database </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Lightning</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/deployment/"><span>Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/checkpoints/"><span>Checkpoints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/table-filter/"><span>Table Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/csv/"><span>CSV Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/monitor/"><span>Monitor</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Binlog</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/deploy/"><span>Deploy</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/operation/"><span>Maintain</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/upgrade/"><span>Upgrade</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-control/"><span>PD Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-recover/"><span>PD Recover</span></a>
+</li><li class="leaf-child ">
+<a href="https://github.com/tikv/tikv/blob/master/docs/tools/tikv-control.md"><span>TiKV Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-control/"><span>TiDB Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/download/"><span>Download</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Key Monitoring Metrics</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tidb/"><span>TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/pd/"><span>PD</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tikv/"><span>TiKV</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/adopters/"><span>Adopters</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>FAQs</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/faq/tidb/"><span>TiDB FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/tidb-lightning/"><span>TiDB-Lightning FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/upgrades/"><span>Upgrade FAQs</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Support  </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/support-resources/"><span>Support Resources</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/report-issue/"><span>Report an Issue</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Contribute</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/contribute/#contribute-to-tidb"><span>Contribute to TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/contribute/#improve-the-docs"><span>Improve the Docs</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/roadmap/"><span>Roadmap</span></a>
+</li><li class="has-child "><a href="#">
+<span>Releases</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>v3.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-rc.1/"><span>3.0.0-rc.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-beta.1/"><span>3.0.0-beta.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0beta/"><span>3.0.0-beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.1</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.1.10/"><span>2.1.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.9/"><span>2.1.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.8/"><span>2.1.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.7/"><span>2.1.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.6/"><span>2.1.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.5/"><span>2.1.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.4/"><span>2.1.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.3/"><span>2.1.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.2/"><span>2.1.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.1/"><span>2.1.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1ga/"><span>2.1 GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc5/"><span>2.1 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc4/"><span>2.1 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc3/"><span>2.1 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc2/"><span>2.1 RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc1/"><span>2.1 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21beta/"><span>2.1 Beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.0.11/"><span>2.0.11</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0.10/"><span>2.0.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/209/"><span>2.0.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/208/"><span>2.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/207/"><span>2.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/206/"><span>2.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/205/"><span>2.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/204/"><span>2.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/203/"><span>2.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/202/"><span>2.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/201/"><span>2.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0ga/"><span>2.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc5/"><span>2.0 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc4/"><span>2.0 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc3/"><span>2.0 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc1/"><span>2.0 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11beta/"><span>1.1 Beta</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11alpha/"><span>1.1 Alpha</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v1.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/108/"><span>1.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/107/"><span>1.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/106/"><span>1.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/105/"><span>1.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/104/"><span>1.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/103/"><span>1.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/102/"><span>1.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/101/"><span>1.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/ga/"><span>1.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/prega/"><span>Pre-GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc4/"><span>RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc3/"><span>RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc2/"><span>RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc1/"><span>RC1</span></a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 id="slow-query-log">Slow Query Log</h1>
+<p>The slow query log is a record of SQL statements that took a long time to perform.</p>
+<p>A problematic SQL statement can increase the pressure on the entire cluster, resulting in a longer response time. To solve this problem, you can use the slow query log to identify the problematic statements and thus improve the performance.</p>
+<h3 id="obtain-the-log">Obtain the log</h3>
+<p>By <code>grep</code> the keyword <code>SLOW_QUERY</code> in the log file of TiDB, you can obtain the logs of statements whose execution time exceeds <a href="/docs/op-guide/tidb-config-file#slow-threshold">slow-threshold</a>.</p>
+<p>You can edit <code>slow-threshold</code> in the configuration file and its default value is 300ms. If you configure the <a href="/docs/op-guide/tidb-config-file#slow-query-file">slow-query-file</a>, all the slow query logs will be written in this file.</p>
+<h3 id="usage-example">Usage example</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">2018/08/20 19:52:08.632 adapter.go:363: [warning] [SLOW_QUERY] cost_time:18.647928814s
+process_time:1m6.768s wait_time:12m11.212s backoff_time:600ms request_count:2058
+total_keys:1869712 processed_keys:1869710 succ:true con:3 user:root@127.0.0.1
+txn_start_ts:402329674704224261 database:test table_ids:[31],index_ids:[1],
+sql:select count(c) from sbtest1 use index (k_1)</pre></div>
+<h3 id="fields-description">Fields description</h3>
+<p>This section describes fields in the slow query log based on the usage example above.</p>
+<h4 id="cost-time"><code>cost_time</code></h4>
+<p>The execution time of this statement. Only the statements whose execution time exceeds <a href="/docs/op-guide/tidb-config-file#slow-threshold">slow-threshold</a> output this log.</p>
+<h4 id="process-time"><code>process_time</code></h4>
+<p>The total processing time of this statement in TiKV. Because data is sent to TiKV concurrently for execution, this value might exceed <code>cost_time</code>.</p>
+<h4 id="wait-time"><code>wait_time</code></h4>
+<p>The total waiting time of this statement in TiKV. Because the Coprocessor of TiKV runs a limited number of threads, requests might queue up when all threads of Coprocessor are working. When a request in the queue takes a long time to process, the waiting time of the subsequent requests will increase.</p>
+<h4 id="backoff-time"><code>backoff_time</code></h4>
+<p>The waiting time before retry when this statement encounters errors that require a retry. The common errors as such include: lock occurs, Region split, the TiKV server is busy.</p>
+<h4 id="request-count"><code>request_count</code></h4>
+<p>The number of Coprocessor requests that this statement sends.</p>
+<h4 id="total-keys"><code>total_keys</code></h4>
+<p>The number of keys that Coprocessor has scanned.</p>
+<h4 id="processed-keys"><code>processed_keys</code></h4>
+<p>The number of keys that Coprocessor has processed. Compared with <code>total_keys</code>, <code>processed_keys</code> does not include the old versions of MVCC. A great difference between <code>processed_keys</code> and <code>total_keys</code> indicates that the number of old versions are relatively large.</p>
+<h4 id="succ"><code>succ</code></h4>
+<p>Whether the execution of the request succeeds or not.</p>
+<h4 id="con"><code>con</code></h4>
+<p>Connection ID (session ID). For example, you can use the keyword <code>con:3</code> to <code>grep</code> the log whose session ID is 3.</p>
+<h4 id="user"><code>user</code></h4>
+<p>The name of the user who executes this statement.</p>
+<h4 id="txn-start-ts"><code>txn_start_ts</code></h4>
+<p>The start timestamp of the transaction, that is, the ID of the transaction. You can use this value to <code>grep</code> the transaction-related logs.</p>
+<h4 id="database"><code>database</code></h4>
+<p>The current database.</p>
+<h4 id="table-ids"><code>table_ids</code></h4>
+<p>The IDs of the tables involved in the statement.</p>
+<h4 id="index-ids"><code>index_ids</code></h4>
+<p>The IDs of the indexes involved in the statement.</p>
+<h4 id="sql"><code>sql</code></h4>
+<p>The SQL statement.</p>
+<h3 id="identify-problematic-sql-statements">Identify problematic SQL statements</h3>
+<p>Not all of the <code>SLOW_QUERY</code> statements are problematic. Only those whose <code>process_time</code> is very large will increase the pressure on the entire cluster.</p>
+<p>The statements whose <code>wait_time</code> is very large and <code>process_time</code> is very small are usually not problematic. The large <code>wait_time</code> is because the statement is blocked by real problematic statements and it has to wait in the execution queue, which leads to a much longer response time.</p>
+<h3 id="admin-show-slow-command"><code>admin show slow</code> command</h3>
+<p>In addition to the TiDB log file, you can identify slow queries by running the <code>admin show slow</code> command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> slow recent N
+<span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> slow top [internal <span style="color:#f92672">|</span> <span style="color:#66d9ef">all</span>] N</code></pre></div>
+<p><code>recent N</code> shows the recent N slow query records, for example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> slow recent <span style="color:#ae81ff">10</span></code></pre></div>
+<p><code>top N</code> shows the slowest N query records recently (within a few days).
+If the <code>internal</code> option is provided, the returned results would be the inner SQL executed by the system;
+If the <code>all</code> option is provided, the returned results would be the user’s SQL combinated with inner SQL;
+Otherwise, this command would only return the slow query records from the user’s SQL.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> slow top <span style="color:#ae81ff">3</span>
+<span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> slow top internal <span style="color:#ae81ff">3</span>
+<span style="color:#66d9ef">admin</span> <span style="color:#66d9ef">show</span> slow top <span style="color:#66d9ef">all</span> <span style="color:#ae81ff">5</span></code></pre></div>
+<p>Due to the memory footprint restriction, the stored slow query records count is limited. If the specified <code>N</code> is greater than the records count, the returned records count may be smaller than <code>N</code>.</p>
+</div>
+<div class="article-toc"></div>
+<div class="git-info">
+<a class="link" href="https://github.com/pingcap/docs/blob/master/v2.1/sql/slow-query.md">"Slow Query Log"</a>
+                was last updated
+                <span>Jan 16 2019</span>:
+                <a class="link" href="https://github.com/pingcap/docs/commit/f15c3ffbc95585656fcd0a6c4ec26f4e1c995c40">
+                    *: add v2.1 docs subdirectory (#859) <span class="hash">(f15c3ff)</span>
+</a>
+</div></div>
+<div class="sidebar-page">
+<div class="sticky-sidebar"><a class="improve-doc" href="https://github.com/pingcap/docs/edit/master/v2.1/sql/slow-query.md" target="_blank">
+<svg fill="#142848" height="14" viewbox="0 0 275.836 275.836" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M191.344 20.922l-95.155 95.155a5.99 5.99 0 0 0-1.565 2.734l-8.167 31.454a6.003 6.003 0 0 0 7.315 7.316l31.454-8.168a6.003 6.003 0 0 0 2.734-1.565l95.153-95.153.005-.004.004-.005 19.156-19.156a5.998 5.998 0 0 0 .001-8.484L218.994 1.758a5.998 5.998 0 0 0-8.485 0l-19.155 19.155-.005.004-.005.005zm-70.713 117.286l-19.993 5.192 5.191-19.993 89.762-89.762 14.801 14.802-89.761 89.761zm94.12-123.723l14.801 14.802-10.675 10.675-14.801-14.802 10.675-10.675z"></path><path d="M238.037 65.022a6 6 0 0 0-6 6v192.813H43.799V34.417h111.063a6 6 0 0 0 0-12H37.799a6 6 0 0 0-6 6v241.419a6 6 0 0 0 6 6h200.238a6 6 0 0 0 6-6V71.022a6 6 0 0 0-6-6z"></path></svg>
+    Edit this page
+</a>
+<a class="request-docs-changes" href="https://github.com/pingcap/docs/issues/new?body=File:%20[v2.1%2fsql%2fslow-query.md](https%3a%2f%2fpingcap.com%2fdocs%2fv2.1%2fsql%2fslow-query%2f)" target="_blank">
+<svg height="14px" version="1.1" viewbox="0 0 192 192" width="14px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="none" fill-rule="nonzero" font-family="none" font-size="none" font-weight="none" stroke="none" stroke-dasharray="" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-width="1" style="mix-blend-mode: normal" text-anchor="none"><path d="M0,192v-192h192v192z" fill="none"></path><g fill="#142848"><path d="M162.34375,42.34375l-90.34375,90.34375l-34.34375,-34.34375l-11.3125,11.3125l45.65625,45.65625l101.65625,-101.65625z"></path></g></g></svg>
+
+    Request docs changes
+</a><p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/docs-cn/v2.1/sql/slow-query" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

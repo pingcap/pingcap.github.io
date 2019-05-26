@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="TiDB-DM（Data Migration）是用于将数据从 MySQL/MariaDB 迁移到 TiDB 的工具。该工具既支持以全量备份文件的方式将 MySQL/MariaDB 的数据导入到 TiDB，也支持通过解析执行 MySQL/MariaDB binlog 的方式将数据增量同步到 TiDB。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB Ecosystem Tools 原理解读系列（三）TiDB-DM 架构设计与实现原理" property="og:title"/>
+<meta content="TiDB-DM（Data Migration）是用于将数据从 MySQL/MariaDB 迁移到 TiDB 的工具。该工具既支持以全量备份文件的方式将 MySQL/MariaDB 的数据导入到 TiDB，也支持通过解析执行 MySQL/MariaDB binlog 的方式将数据增量同步到 TiDB。" property="og:description"/>
+<meta content="https://pingcap.com/blog-cn/tidb-ecosystem-tools-3/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="TiDB-DM（Data Migration）是用于将数据从 MySQL/MariaDB 迁移到 TiDB 的工具。该工具既支持以全量备份文件的方式将 MySQL/MariaDB 的数据导入到 TiDB，也支持通过解析执行 MySQL/MariaDB binlog 的方式将数据增量同步到 TiDB。" name="twitter:description"/>
+<meta content="TiDB Ecosystem Tools 原理解读系列（三）TiDB-DM 架构设计与实现原理" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB Ecosystem Tools 原理解读系列（三）TiDB-DM 架构设计与实现原理 | PingCAP</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/index.html"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                        University</a></li>
+<li><a href="/docs-cn" onclick="trackViews('navbar-docs', 'docs-cn_view')">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a class="link-download" href="mailto:info@pingcap.com">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/docs-cn">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a class="link-download" href="mailto:info@pingcap.com">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP University</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe">
+<style media="screen" type="text/css">
+    #mc_embed_signup .response {
+        margin-top: 12px;
+        line-height: 1.4;
+        font-size: 0.65rem;
+    }
+</style>
+<div id="mc_embed_signup">
+<form action="//pingcap.us16.list-manage.com/subscribe/post?u=ab57beb8a88391cf6193c1b48&amp;id=7c67af4f9d" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+<div id="mc_embed_signup_scroll">
+<div class="form-inline">
+<input class="form-control" id="mce-EMAIL" name="EMAIL" placeholder="Subscribe to our newsletter" type="email" value=""/>
+<input class="btn btn-subscribe f-tc" id="mc-embedded-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+</div>
+<div class="clear" id="mce-responses">
+<div class="response" id="mce-error-response" style="display: none;"></div>
+<div class="response" id="mce-success-response" style="display: none;"></div>
+</div>
+<div aria-hidden="true" style="position: absolute; left: -5000px;">
+<input name="b_ab57beb8a88391cf6193c1b48_7c67af4f9d" tabindex="-1" type="text" value=""/>
+</div>
+</div>
+</form>
+</div>
+<script src="https://download.pingcap.com/js/mc-validate.js" type="text/javascript"></script>
+<script type="text/javascript">
+;(function($) {
+    window.fnames = new Array()
+    window.ftypes = new Array()
+    fnames[0] = 'EMAIL'
+    ftypes[0] = 'email'
+    fnames[1] = 'FNAME'
+    ftypes[1] = 'text'
+    fnames[2] = 'LNAME'
+    ftypes[2] = 'text'
+})(jQuery)
+var $mcj = jQuery.noConflict(true)
+</script>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><a class="tag all" href="#">ALL (115)</a>
+<div class="tag-list"><a class="tag " data-tag="Binlog" href="#Binlog">Binlog (2)
+                </a><a class="tag " data-tag="Contributor" href="#Contributor">Contributor (4)
+                </a><a class="tag " data-tag="DM-源码阅读" href="#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">DM-源码阅读 (5)
+                </a><a class="tag " data-tag="MVCC" href="#MVCC">MVCC (2)
+                </a><a class="tag " data-tag="PD" href="#PD">PD (4)
+                </a><a class="tag " data-tag="Prometheus" href="#Prometheus">Prometheus (2)
+                </a><a class="tag " data-tag="Raft" href="#Raft">Raft (10)
+                </a><a class="tag " data-tag="RocksDB" href="#RocksDB">RocksDB (3)
+                </a><a class="tag " data-tag="Rust" href="#Rust">Rust (2)
+                </a><a class="tag " data-tag="SQL" href="#SQL">SQL (4)
+                </a><a class="tag " data-tag="Spanner" href="#Spanner">Spanner (2)
+                </a><a class="tag " data-tag="TiDB" href="#TiDB">TiDB (42)
+                </a><a class="tag sel" data-tag="TiDB-Ecosystem-Tools" href="#TiDB-Ecosystem-Tools">TiDB-Ecosystem-Tools (3)
+                </a><a class="tag " data-tag="TiDB-Operator" href="#TiDB-Operator">TiDB-Operator (3)
+                </a><a class="tag " data-tag="TiDB-源码阅读" href="#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB-源码阅读 (24)
+                </a><a class="tag " data-tag="TiKV" href="#TiKV">TiKV (20)
+                </a><a class="tag " data-tag="TiKV-源码解析" href="#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90">TiKV-源码解析 (7)
+                </a><a class="tag " data-tag="TiSpark" href="#TiSpark">TiSpark (2)
+                </a><a class="tag " data-tag="gRPC" href="#gRPC">gRPC (2)
+                </a><a class="tag " data-tag="事务" href="#%e4%ba%8b%e5%8a%a1">事务 (2)
+                </a><a class="tag " data-tag="分布式系统测试" href="#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a><a class="tag " data-tag="工具" href="#%e5%b7%a5%e5%85%b7">工具 (4)
+                </a><a class="tag " data-tag="性能" href="#%e6%80%a7%e8%83%bd">性能 (2)
+                </a><a class="tag " data-tag="性能优化" href="#%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化 (2)
+                </a><a class="tag " data-tag="数据同步" href="#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5">数据同步 (2)
+                </a><a class="tag " data-tag="架构" href="#%e6%9e%b6%e6%9e%84">架构 (3)
+                </a><a class="tag " data-tag="社区" href="#%e7%a4%be%e5%8c%ba">社区 (46)
+                </a><a class="tag " data-tag="集群调度" href="#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6">集群调度 (2)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">TiDB Ecosystem Tools 原理解读系列（三）TiDB-DM 架构设计与实现原理</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Wed, Dec 26, 2018</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>张学程</li>
+</ul>
+<div class="blog-text">
+<h2 id="简介">简介</h2>
+<p>TiDB-DM（Data Migration）是用于将数据从 MySQL/MariaDB 迁移到 TiDB 的工具。该工具既支持以全量备份文件的方式将 MySQL/MariaDB 的数据导入到 TiDB，也支持通过解析执行 MySQL/MariaDB binlog 的方式将数据增量同步到 TiDB。特别地，对于有多个 MySQL/MariaDB 实例的分库分表需要合并后同步到同一个 TiDB 集群的场景，DM 提供了良好的支持。如果你需要从 MySQL/MariaDB 迁移到 TiDB，或者需要将 TiDB 作为 MySQL/MariaDB 的从库，DM 将是一个非常好的选择。</p>
+<h2 id="架构设计">架构设计</h2>
+<p>DM 是集群模式的，其主要由 DM-master、DM-worker 与 DM-ctl 三个组件组成，能够以多对多的方式将多个上游 MySQL 实例的数据同步到多个下游 TiDB 集群，其架构图如下：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<ul>
+<li><p>DM-master：管理整个 DM 集群，维护集群的拓扑信息，监控各个 DM-worker 实例的运行状态；进行数据同步任务的拆解与分发，监控数据同步任务的执行状态；在进行合库合表的增量数据同步时，协调各 DM-worker 上 DDL 的执行或跳过；提供数据同步任务管理的统一入口。</p></li>
+<li><p>DM-worker：与上游 MySQL 实例一一对应，执行具体的全量、增量数据同步任务；将上游 MySQL 的 binlog 拉取到本地并持久化保存；根据定义的数据同步任务，将上游 MySQL 数据全量导出成 SQL 文件后导入到下游 TiDB，或解析本地持久化的 binlog 后增量同步到下游 TiDB；编排 DM-master 拆解后的数据同步子任务，监控子任务的运行状态。</p></li>
+<li><p>DM-ctl：命令行交互工具，通过连接到 DM-master 后，执行 DM 集群的管理与数据同步任务的管理。</p></li>
+</ul>
+<h2 id="实现原理">实现原理</h2>
+<h3 id="数据迁移流程">数据迁移流程</h3>
+<p>单个 DM 集群可以同时运行多个数据同步任务；对于每一个同步任务，可以拆解为多个子任务同时由多个 DM-worker 节点承担，其中每个 DM-worker 节点负责同步来自对应的上游 MySQL 实例的数据。对于单个 DM-worker 节点上的单个数据同步子任务，其数据迁移流程如下，其中上部的数据流向为全量数据迁移、下部的数据流向为增量数据同步：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>在每个 DM-worker 节点内部，对于特定的数据同步子任务，主要由 dumper、loader、relay 与 syncer（binlog replication）等数据同步处理单元执行具体的数据同步操作。</p>
+<ul>
+<li><p>对于全量数据迁移，DM 首先使用 dumper 单元从上游 MySQL 中将表结构与数据导出成 SQL 文件；然后使用 loader 单元读取这些 SQL 文件并同步到下游 TiDB。</p></li>
+<li><p>对于增量数据同步，首先使用 relay 单元作为 slave 连接到上游 MySQL 并拉取 binlog 数据后作为 relay log 持久化存储在本地，然后使用 syncer 单元读取这些 relay log 并解析构造成 SQL 语句后同步到下游 TiDB。这个增量同步的过程与 MySQL 的主从复制类似，主要区别在于在 DM 中，本地持久化的 relay log 可以同时供多个不同子任务的 syncer 单元所共用，避免了多个任务需要重复从上游 MySQL 拉取 binlog 的问题。</p></li>
+</ul>
+<h3 id="数据迁移并发模型">数据迁移并发模型</h3>
+<p>为加快数据导入速度，在 DM 中不论是全量数据迁移，还是增量数据同步，都在其中部分阶段使用了并发处理。</p>
+<p>对于全量数据迁移，在导出阶段，dumper 单元调用 mydumper 导出工具执行实际的数据导出操作，对应的并发模型可以直接参考 <a href="https://github.com/pingcap/mydumper">mydumper 的源码</a>。在使用 loader 单元执行的导入阶段，对应的并发模型结构如下：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/3.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>使用 mydumper 执行导出时，可以通过 <code>--chunk-filesize</code> 等参数将单个表拆分成多个 SQL 文件，这些 SQL 文件对应的都是上游 MySQL 某一个时刻的静态快照数据，且各 SQL 文件间的数据不存在关联。因此，在使用 loader 单元执行导入时，可以直接在一个 loader 单元内启动多个 worker 工作协程，由各 worker 协程并发、独立地每次读取一个待导入的 SQL 文件进行导入。即 loader 导入阶段，是以 SQL 文件级别粒度并发进行的。在 DM 的任务配置中，对于 loader 单元，其中的 <code>pool-size</code> 参数即用于控制此处 worker 协程数量。</p>
+<p>对于增量数据同步，在从上游拉取 binlog 并持久化到本地的阶段，由于上游 MySQL 上 binlog 的产生与发送是以 stream 形式进行的，因此这部分只能串行处理。在使用 syncer 单元执行的导入阶段，在一定的限制条件下，可以执行并发导入，对应的模型结构如下：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/4.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>当 syncer 读取与解析本地 relay log 时，与从上游拉取 binlog 类似，是以 stream 形式进行的，因此也只能串行处理。当 syncer 解析出各 binlog event 并构造成待同步的 job 后，则可以根据对应行数据的主键、索引等信息经过 hash 计算后分发到多个不同的待同步 job channel 中；在 channel 的另一端，与各个 channel 对应的 worker 协程并发地从 channel 中取出 job 后同步到下游的 TiDB。即 syncer 导入阶段，是以 binlog event 级别粒度并发进行的。在 DM 的任务配置中，对于 syncer 单元，其中的 <code>worker-count</code> 参数即用于控制此处 worker 协程数量。</p>
+<p>但 syncer 并发同步到下游 TiDB 时，存在一些限制，主要包括：</p>
+<ul>
+<li><p>对于 DDL，由于会变更下游的表结构，因此必须确保在旧表结构对应的 DML 都同步完成后，才能进行同步。在 DM 中，当解析 binlog event 得到 DDL 后，会向每一个 job channel 发送一个特殊的 flush job；当各 worker 协程遇到 flush job 时，会立刻向下游 TiDB 同步之前已经取出的所有 job；等各 job channel 中的 job 都同步到下游 TiDB 后，开始同步 DDL；等待 DDL 同步完成后，继续同步后续的 DML。即 DDL 不能与 DML 并发同步，且 DDL 之前与之后的 DML 也不能并发同步。sharding 场景下 DDL 的同步处理见后文。</p></li>
+<li><p>对于 DML，多条 DML 可能会修改同一行的数据，甚至是主键。如果并发地同步这些 DML，则可能造成同步后数据的不一致。DM 中对于 DML 之间的冲突检测与处理，与 TiDB-Binlog 中的处理类似，具体原理可以阅读《<a href="https://mp.weixin.qq.com/s/N8ozCqkUmdrB3Qu6Mt-5_Q">TiDB EcoSystem Tools 原理解读（一）TiDB-Binlog 架构演进与实现原理</a>》中关于 Drainer 内 SQL 之间冲突检测的讨论。</p></li>
+</ul>
+<h3 id="合库合表数据同步">合库合表数据同步</h3>
+<p>在使用 MySQL 支撑大量数据时，经常会选择使用分库分表的方案。但当将数据同步到 TiDB 后，通常希望逻辑上进行合库合表。DM 为支持合库合表的数据同步，主要实现了以下的一些功能。</p>
+<h4 id="table-router">table router</h4>
+<p>为说明 DM 中 table router（表名路由）功能，先看如下图所示的一个例子：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/5.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>在这个例子中，上游有 2 个 MySQL 实例，每个实例有 2 个逻辑库，每个库有 2 个表，总共 8 个表。当同步到下游 TiDB 后，希望所有的这 8 个表最终都合并同步到同一个表中。</p>
+<p>但为了能将 8 个来自不同实例、不同库且有不同名的表同步到同一个表中，首先要处理的，就是要能根据某些定义好的规则，将来自不同表的数据都路由到下游的同一个表中。在 DM 中，这类规则叫做 router-rules。对于上面的示例，其规则如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-router-rule:
+    schema-pattern: "schema_*"
+    table-pattern: "table_*"
+    target-schema: "schema"
+    target-table: "table"</pre></div>
+<ul>
+<li><p><code>name-of-router-rule</code>：规则名，用户指定。当有多个上游实例需要使用相同的规则时，可以只定义一条规则，多个不同的实例通过规则名进行引用。</p></li>
+<li><p><code>schema-pattern</code>：用于匹配上游库（schema）名的模式，支持在尾部使用通配符（*）。这里使用 <code>schema_*</code> 即可匹配到示例中的两个库名。</p></li>
+<li><p><code>table-pattern</code>：用于匹配上游表名的模式，与 <code>schema-pattern</code> 类似。这里使用 <code>table_*</code> 即可匹配到示例中的两个表名。</p></li>
+<li><p><code>target-schema</code>：目标库名。对于库名、表名匹配的数据，将被路由到这个库中。</p></li>
+<li><p><code>target-table</code>：目标表名。对于库名、表名匹配的数据，将被路由到 <code>target-schema</code> 库下的这个表中。</p></li>
+</ul>
+<p>在 DM 内部实现上，首先根据 <code>schema-pattern</code> / <code>table-pattern</code> 构造对应的 trie 结构，并将规则存储在 trie 节点中；当有 SQL 需要同步到下游时，通过使用上游库名、表名查询 trie 即可得到对应的规则，并根据规则替换原 SQL 中的库名、表名；通过向下游 TiDB 执行替换后的 SQL 即完成了根据表名的路由同步。有关 <code>router-rules</code> 规则的具体实现，可以阅读 TiDB-Tools 下的 <a href="https://github.com/pingcap/tidb-tools/tree/master/pkg/table-router">table-router pkg 源代码</a>。</p>
+<h4 id="column-mapping">column mapping</h4>
+<p>有了 table router 功能，已经可以完成基本的合库合表数据同步了。但在数据库中，我们经常会使用自增类型的列作为主键。如果多个上游分表的主键各自独立地自增，将它们合并同步到下游后，就很可能会出现主键冲突，造成数据的不一致。我们可看一个如下的例子：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/6.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>在这个例子中，上游 4 个需要合并同步到下游的表中，都存在 id 列值为 1 的记录。假设这个 id 列是表的主键。在同步到下游的过程中，由于相关更新操作是以 id 列作为条件来确定需要更新的记录，因此会造成后同步的数据覆盖前面已经同步过的数据，导致部分数据的丢失。</p>
+<p>在 DM 中，我们通过 column mapping 功能在数据同步的过程中依据指定规则对相关列的数据进行转换改写来避免数据冲突与丢失。对于上面的示例，其中 MySQL 实例 1 的 column mapping 规则如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">mapping-rule-of-instance-1:
+    schema-pattern: "schema_*"
+    table-pattern: "table_*"
+    expression: "partition id"
+    source-column: "id"
+    target-column: "id"
+    arguments: ["1", "schema_", "table_"]  </pre></div>
+<ul>
+<li><p><code>mapping-rule-of-instance-1</code>：规则名，用户指定。由于不同的上游 MySQL 实例需要转换得到不同的值，因此通常每个 MySQL 实例使用一条专有的规则。</p></li>
+<li><p><code>schema-pattern</code> / <code>table-pattern</code>：上游库名、表名匹配模式，与 <code>router-rules</code> 中的对应配置项一致。</p></li>
+<li><p><code>expression</code>：进行数据转换的表达式名。目前常用的表达式即为 <code>"partition id"</code>，有关该表达式的具体说明见下文。</p></li>
+<li><p><code>source-column</code>：转换表达式的输入数据对应的来源列名，<code>"id"</code> 表示这个表达式将作用于表中名为 id 的列。暂时只支持对单个来源列进行数据转换。</p></li>
+<li><p><code>target-column</code>：转换表达式的输出数据对应的目标列名，与 <code>source-column</code> 类似。暂时只支持对单个目标列进行数据转换，且对应的目标列必须已经存在。</p></li>
+<li><p><code>arguments</code>：转换表达式所依赖的参数。参数个数与含义依具体表达式而定。</p></li>
+</ul>
+<p><code>partition id</code> 是目前主要受支持的转换表达式，其通过为 bigint 类型的值增加二进制前缀来解决来自不同表的数据合并同步后可能产生冲突的问题。<code>partition id</code> 的 arguments 包括 3 个参数，分别为：</p>
+<ul>
+<li><p>MySQL 实例 ID：标识数据的来源 MySQL 实例，用户自由指定。如 <code>"1"</code> 表示匹配该规则的数据来自于 MySQL 实例 1，且这个标识将被转换成数值后以二进制的形式作为前缀的一部分添加到转换后的值中。</p></li>
+<li><p>库名前缀：标识数据的来源逻辑库。如 <code>"schema_"</code> 应用于 <code>schema_2</code> 逻辑库时，表示去除前缀后剩下的部分（数字 <code>2</code>）将以二进制的形式作为前缀的一部分添加到转换后的值中。</p></li>
+<li><p>表名前缀：标识数据的来源表。如 <code>"table_"</code> 应用于 <code>table_3</code> 表时，表示去除前缀后剩下的部分（数字 <code>3</code>）将以二进制的形式作为前缀的一部分添加到转换后的值中。</p></li>
+</ul>
+<p>各部分在经过转换后的数值中的二进制分布如下图所示（各部分默认所占用的 bits 位数如图所示）：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/7.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>假如转换前的原始数据为 <code>123</code>，且有如上的 arguments 参数设置，则转换后的值为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">1&lt;&lt;(64-1-4) | 2&lt;&lt;(64-1-4-7) | 3&lt;&lt;(64-1-4-7-8) | 123</pre></div>
+<p>另外，arguments 中的 3 个参数均可设置为空字符串（<code>""</code>），即表示该部分不被添加到转换后的值中，且不占用额外的 bits。比如将其设置为<code>["1", "", "table_"]</code>，则转换后的值为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">1 &lt;&lt; (64-1-4) | 3&lt;&lt; (64-1-4-8) | 123</pre></div>
+<p>有关 column mapping 功能的具体实现，可以阅读 TiDB-Tools 下的 <a href="https://github.com/pingcap/tidb-tools/tree/master/pkg/column-mapping">column-mapping pkg 源代码</a>。</p>
+<h4 id="sharding-ddl">sharding DDL</h4>
+<p>有了 table router 和 column mapping 功能，DML 的合库合表数据同步已经可以正常进行了。但如果在增量数据同步的过程中，上游待合并的分表上执行了 DDL 操作，则可能出现问题。我们先来看一个简化后的在分表上执行 DDL 的例子。</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/8.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>在上图的例子中，分表的合库合表简化成了上游只有两个 MySQL 实例，每个实例内只有一个表。假设在开始数据同步时，将两个分表的表结构 schema 的版本记为 <code>schema V1</code>，将 DDL 执行完成后的表结构 schema 的版本记为 <code>schema V2</code>。</p>
+<p>现在，假设数据同步过程中，从两个上游分表收到的 binlog 数据有如下的时序：</p>
+<ol>
+<li><p>开始同步时，从两个分表收到的都是 <code>schema V1</code> 的 DML。</p></li>
+<li><p>在 t1 时刻，收到实例 1 上分表的 DDL。</p></li>
+<li><p>从 t2 时刻开始，从实例 1 收到的是 <code>schema V2</code> 的 DML；但从实例 2 收到的仍是 <code>schema V1</code> 的 DML。</p></li>
+<li><p>在 t3 时刻，收到实例 2 上分表的 DDL。</p></li>
+<li><p>从 t4 时刻开始，从实例 2 收到的也是 <code>schema V2</code> 的 DML。</p></li>
+</ol>
+<p>假设在数据同步过程中，不对分表的 DDL 进行处理。当将实例 1 的 DDL 同步到下游后，下游的表结构会变更成为 <code>schema V2</code>。但对于实例 2，在 t2 时刻到 t3 时刻这段时间内收到的仍然是 <code>schema V1</code> 的 DML。当尝试把这些与 <code>schema V1</code> 对应的 DML 同步到下游时，就会由于 DML 与表结构的不一致而发生错误，造成数据无法正确同步。</p>
+<p>继续使用上面的例子，来看看我们在 DM 中是如何处理合库合表过程中的 DDL 同步的。</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/9.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>在这个例子中，DM-worker-1 用于同步来自 MySQL 实例 1 的数据，DM-worker-2 用于同步来自 MySQL 实例 2 的数据，DM-master 用于协调多个 DM-worker 间的 DDL 同步。从 DM-worker-1 收到 DDL 开始，简化后的 DDL 同步流程为：</p>
+<ol>
+<li><p>DM-worker-1 在 t1 时刻收到来自 MySQL 实例 1 的 DDL，自身暂停该 DDL 对应任务的 DDL 及 DML 数据同步，并将 DDL 相关信息发送给 DM-master。</p></li>
+<li><p>DM-master 根据 DDL 信息判断需要协调该 DDL 的同步，为该 DDL 创建一个锁，并将 DDL 锁信息发回给 DM-worker-1，同时将 DM-worker-1 标记为这个锁的 owner。</p></li>
+<li><p>DM-worker-2 继续进行 DML 的同步，直到在 t3 时刻收到来自 MySQL 实例 2 的 DDL，自身暂停该 DDL 对应任务的数据同步，并将 DDL 相关信息发送给 DM-master。</p></li>
+<li><p>DM-master 根据 DDL 信息判断该 DDL 对应的锁信息已经存在，直接将对应锁信息发回给 DM-worker-2。</p></li>
+<li><p>DM-master 根据启动任务时的配置信息、上游 MySQL 实例分表信息、部署拓扑信息等，判断得知已经收到了需要合表的所有上游分表的该 DDL，请求 DDL 锁的 owner（DM-worker-1）向下游同步执行该 DDL。</p></li>
+<li><p>DM-worker-1 根据 step 2 时收到的 DDL 锁信息验证 DDL 执行请求；向下游执行 DDL，并将执行结果反馈给 DM-master；若执行 DDL 成功，则自身开始继续同步后续的（从 t2 时刻对应的 binlog 开始的）DML。</p></li>
+<li><p>DM-master 收到来自 owner 执行 DDL 成功的响应，请求在等待该 DDL 锁的所有其他 DM-worker（DM-worker-2）忽略该 DDL，直接继续同步后续的（从 t4 时刻对应的 binlog 开始的）DML。</p></li>
+</ol>
+<p>根据上面 DM 处理多个 DM-worker 间的 DDL 同步的流程，归纳一下 DM 内处理多个 DM-worker 间 sharding DDL 同步的特点：</p>
+<ul>
+<li><p>根据任务配置与 DM 集群部署拓扑信息，在 DM-master 内建立一个需要协调 DDL 同步的逻辑 sharding group，group 中的成员为处理该任务拆解后各子任务的 DM-worker。</p></li>
+<li><p>各 DM-worker 在从 binlog event 中获取到 DDL 后，会将 DDL 信息发送给 DM-master。</p></li>
+<li><p>DM-master 根据来自 DM-worker 的 DDL 信息及 sharding group 信息创建/更新 DDL 锁。</p></li>
+<li><p>如果 sharding group 的所有成员都收到了某一条 DDL，则表明上游分表在该 DDL 执行前的 DML 都已经同步完成，可以执行 DDL，并继续后续的 DML 同步。</p></li>
+<li><p>上游分表的 DDL 在经过 table router 转换后，对应需要在下游执行的 DDL 应该一致，因此仅需 DDL 锁的 owner 执行一次即可，其他 DM-worker 可直接忽略对应的 DDL。</p></li>
+</ul>
+<p>从 DM 处理 DM-worker 间 sharding DDL 同步的特点，可以看出该功能存在以下一些限制：</p>
+<ul>
+<li><p>上游的分表必须以相同的顺序执行（table router 转换后相同的）DDL，比如表 1 先增加列 <code>a</code> 后再增加列 <code>b</code>，而表 2 先增加列 <code>b</code> 后再增加列 <code>a</code>，这种不同顺序的 DDL 执行方式是不支持的。</p></li>
+<li><p>一个逻辑 sharding group 内的所有 DM-worker 对应的上游分表，都应该执行对应的 DDL，比如其中有 DM-worker-2 对应的上游分表未执行 DDL，则其他已执行 DDL 的 DM-worker 都会暂停同步任务，等待 DM-worker-2 收到对应上游的 DDL。</p></li>
+<li><p>由于已经收到的 DDL 的 DM-worker 会暂停任务以等待其他 DM-worker 收到对应的 DDL，因此数据同步延迟会增加。</p></li>
+<li><p>增量同步开始时，需要合并的所有上游分表结构必须一致，才能确保来自不同分表的 DML 可以同步到一个确定表结构的下游，也才能确保后续各分表的 DDL 能够正确匹配与同步。</p></li>
+</ul>
+<p>在上面的示例中，每个 DM-worker 对应的上游 MySQL 实例中只有一个需要进行合并的分表。但在实际场景下，一个 MySQL 实例可能有多个分库内的多个分表需要进行合并，比如前面介绍 table router 与 column mapping 功能时的例子。当一个 MySQL 实例中有多个分表需要合并时，sharding DDL 的协调同步过程增加了更多的复杂性。</p>
+<p>假设同一个 MySQL 实例中有 <code>table_1</code> 和 <code>table_2</code> 两个分表需要进行合并，如下图：</p>
+<p><img alt="" class="lazy" data-original="/images/blog-cn/tidb-ecosystem-tools-3/10.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>由于数据来自同一个 MySQL 实例，因此所有数据都是从同一个 binlog 流中获得。在这个例子中，时序如下：</p>
+<ol>
+<li><p>开始同步时，两个分表收到的数据都是 <code>schema V1</code> 的 DML。</p></li>
+<li><p>在 t1 时刻，收到了 <code>table_1</code> 的 DDL。</p></li>
+<li><p>从 t2 时刻到 t3 时刻，收到的数据同时包含 table_1 schema V2 的 DML 及 <code>table_2</code> <code>schema V1</code> 的 DML。</p></li>
+<li><p>在 t3 时刻，收到了 <code>table_2</code> 的 DDL。</p></li>
+<li><p>从 t4 时刻开始，两个分表收到的数据都是 <code>schema V2</code> 的 DML。</p></li>
+</ol>
+<p>假设在数据同步过程中不对 DDL 进行特殊处理，当 <code>table_1</code> 的 DDL 同步到下游、变更下游表结构后，<code>table_2 schema V1</code> 的 DML 将无法正常同步。因此，在单个 DM-worker 内部，我们也构造了与 DM-master 内类似的逻辑 sharding group，但 group 的成员是同一个上游 MySQL 实例的不同分表。</p>
+<p>但 DM-worker 内协调处理 sharding group 的同步不能完全与 DM-master 处理时一致，主要原因包括：</p>
+<ul>
+<li><p>当收到 <code>table_1</code> 的 DDL 时，同步不能暂停，需要继续解析 binlog 才能获得后续 <code>table_2</code>的 DDL，即需要从 t2 时刻继续向前解析直到 t3 时刻。</p></li>
+<li><p>在继续解析 t2 时刻到 t3 时刻的 binlog 的过程中，<code>table_1</code> 的 <code>schema V2</code> 的 DML 不能向下游同步；但在 sharding DDL 同步并执行成功后，这些 DML 需要同步到下游。</p></li>
+</ul>
+<p>在 DM 中，简化后的 DM-worker 内 sharding DDL 同步流程为：</p>
+<ol>
+<li><p>在 t1 时刻收到 <code>table_1</code> 的 DDL，记录 DDL 信息及此时的 binlog 位置点信息。</p></li>
+<li><p>继续向前解析 t2 时刻到 t3 时刻的 binlog。</p></li>
+<li><p>对于属于 <code>table_1</code> 的 <code>schema V2</code> DML，忽略；对于属于 <code>table_2</code> 的 <code>schema V1</code> DML，正常同步到下游。</p></li>
+<li><p>在 t3 时刻收到 <code>table_2</code> 的 DDL，记录 DDL 信息及此时的 binlog 位置点信息。</p></li>
+<li><p>根据同步任务配置信息、上游库表信息等，判断该 MySQL 实例上所有分表的 DDL 都已经收到；将 DDL 同步到下游执行、变更下游表结构。</p></li>
+<li><p>设置新的 binlog 流的解析起始位置点为 step 1 时保存的位置点。</p></li>
+<li><p>重新开始解析从 t2 时刻到 t3 时刻的 binlog。</p></li>
+<li><p>对于属于 <code>table_1</code> 的 <code>schema V2</code> DML，正常同步到下游；对于属于 <code>table_2</code> 的 <code>shema V1</code> DML，忽略。</p></li>
+<li><p>解析到达 step 4 时保存的 binlog 位置点，可得知在 step 3 时被忽略的所有 DML 都已经重新同步到下游。</p></li>
+<li><p>继续从 t4 时刻对应的 binlog 位置点正常同步。</p></li>
+</ol>
+<p>从上面的分析可以知道，DM 在处理 sharding DDL 同步时，主要通过两级 sharding group 来进行协调控制，简化的流程为：</p>
+<ol>
+<li><p>各 DM-worker 独立地协调对应上游 MySQL 实例内多个分表组成的 sharding group 的 DDL 同步。</p></li>
+<li><p>当 DM-worker 内所有分表的 DDL 都收到时，向 DM-master 发送 DDL 相关信息。</p></li>
+<li><p>DM-master 根据 DM-worker 发来的 DDL 信息，协调由各 DM-worker 组成的 sharing group 的 DDL 同步。</p></li>
+<li><p>当 DM-master 收到所有 DM-worker 的 DDL 信息时，请求 DDL lock 的 owner（某个 DM-worker）执行 DDL。</p></li>
+<li><p>owner 执行 DDL，并将结果反馈给 DM-master；自身开始重新同步在内部协调 DDL 同步过程中被忽略的 DML。</p></li>
+<li><p>当 DM-master 发现 owner 执行 DDL 成功后，请求其他所有 DM-worker 开始继续同步。</p></li>
+<li><p>其他所有 DM-worker 各自开始重新同步在内部协调 DDL 同步过程中被忽略的 DML。</p></li>
+<li><p>所有 DM-worker 在重新同步完成被忽略的 DML 后，继续正常同步。</p></li>
+</ol>
+<h3 id="数据同步过滤">数据同步过滤</h3>
+<p>在进行数据同步的过程中，有时可能并不需要将上游所有的数据都同步到下游，这时一般期望能在同步过程中根据某些规则，过滤掉部分不期望同步的数据。在 DM 中，支持 2 种不同级别的同步过滤方式。</p>
+<h4 id="库表黑白名单">库表黑白名单</h4>
+<p>DM 在 dumper、loader、syncer 三个处理单元中都支持配置规则只同步/不同步部分库或表。</p>
+<p>对于 dumper 单元，其实际调用 <a href="https://github.com/pingcap/mydumper">mydumper</a> 来 dump 上游 MySQL 的数据。比如只期望导出 test 库中的 t1、t2 两个表的数据，则可以为 dumper 单元配置如下规则：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-dump-rule:
+    extra-args: "-B test -T t1,t2"</pre></div>
+<ul>
+<li><p><code>name-of-dump-rule</code>：规则名，用户指定。当有多个上游实例需要使用相同的规则时，可以只定义一条规则，多个不同的实例通过规则名进行引用。</p></li>
+<li><p><code>extra-args</code>：dumper 单元额外参数。除 dumper 单元中明确定义的配置项外的其他所有 mydumper 配置项都通过此参数传入，格式与使用 mydumper 时一致。</p></li>
+</ul>
+<p>有关 mydumper 对库表黑白名单的支持，可查看 mydumper 的参数及 <a href="https://github.com/pingcap/mydumper">mydumper 的源码</a>。</p>
+<p>对于 loader 和 syncer 单元，其对应的库表黑白名单规则为 <code>black-white-list</code>。假设只期望同步 test 库中的 t1、t2 两个表的数据，则可配置如下规则：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-bwl-rule:
+    do-tables:
+    - db-name: "test"
+      tbl-name: "t1"
+    - db-name: "test"
+      tbl-name: "t2"</pre></div>
+<p>示例中只使用了该规则的部分配置项，完整的配置项及各配置项的含义，可阅读该功能对应的用户文档。DM 中该规则与 MySQL 的主从同步过滤规则类似，因此也可参考 <a href="https://dev.mysql.com/doc/refman/5.7/en/replication-rules-db-options.html">Evaluation of Database-Level Replication and Binary Logging Options</a> 与 <a href="https://dev.mysql.com/doc/refman/5.7/en/replication-rules-table-options.html">Evaluation of Table-Level Replication Options</a>。</p>
+<p>对于 loader 单元，在解析 SQL 文件名获得库名表名后，会与配置的黑白名单规则进行匹配，如果匹配结果为不需要同步，则会忽略对应的整个 SQL 文件。对于 syncer 单元，在解析 binlog 获得库名表名后，会与配置的黑白名单规则进行匹配，如果匹配结果为不需要同步，则会忽略对应的（部分）binlog event 数据。</p>
+<h4 id="binlog-event-过滤">binlog event 过滤</h4>
+<p>在进行增量数据同步时，有时会期望过滤掉某些特定类型的 binlog event，两个典型的场景包括：</p>
+<ul>
+<li><p>上游执行 <code>TRUNCATE TABLE</code> 时不希望清空下游表中的数据。</p></li>
+<li><p>上游分表上执行 <code>DROP TABLE</code> 时不希望 <code>DROP</code> 下游合并后的表。</p></li>
+</ul>
+<p>在 DM 中支持根据 binlog event 的类型进行过滤，对于需要过滤 <code>TRUNCATE TABLE</code> 与 <code>DROP TABLE</code> 的场景，可配置规则如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">name-of-filter-rule:
+​    schema-pattern: "test_*"
+​    table-pattern: "t_*"
+​    events: ["truncate table", "drop table"]
+​    action: Ignore</pre></div>
+<p>规则的匹配模式与 table router、column mapping 类似，具体的配置项可阅读该功能对应的用户文档。</p>
+<p>在实现上，当解析 binlog event 获得库名、表名及 binlog event 类型后，与配置的规则进行匹配，并在匹配后依据 action 配置项来决定是否需要进行过滤。有关 binlog event 过滤功能的具体实现，可以阅读 TiDB-Tools 下的 <a href="https://github.com/pingcap/tidb-tools/tree/master/pkg/binlog-filter">binlog-filter pkg 源代码</a>。</p>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/blog-cn/tidb-ecosystem-tools-3/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a></li>
+<li><a href="/docs-cn/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs-cn/ROADMAP/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="/docs-cn/op-guide/docker-compose/">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/FAQ/">常见问题解答</a></li>
+<li><a href="/docs-cn/tools/syncer/">TiDB 周边工具</a></li>
+<li><a href="/docs-cn/releases/rn/">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://zhuanlan.zhihu.com/newsql" target="_blank">知乎专栏</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                    University</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="/about-cn/recruit/join/" onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe">
+<style media="screen" type="text/css">
+    #mc_embed_signup .response {
+        margin-top: 12px;
+        line-height: 1.4;
+        font-size: 0.65rem;
+    }
+</style>
+<div id="mc_embed_signup">
+<form action="//pingcap.us16.list-manage.com/subscribe/post?u=ab57beb8a88391cf6193c1b48&amp;id=7c67af4f9d" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+<div id="mc_embed_signup_scroll">
+<div class="form-inline">
+<input class="form-control" id="mce-EMAIL" name="EMAIL" placeholder="Subscribe to our newsletter" type="email" value=""/>
+<input class="btn btn-subscribe f-tc" id="mc-embedded-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+</div>
+<div class="clear" id="mce-responses">
+<div class="response" id="mce-error-response" style="display: none;"></div>
+<div class="response" id="mce-success-response" style="display: none;"></div>
+</div>
+<div aria-hidden="true" style="position: absolute; left: -5000px;">
+<input name="b_ab57beb8a88391cf6193c1b48_7c67af4f9d" tabindex="-1" type="text" value=""/>
+</div>
+</div>
+</form>
+</div>
+<script src="https://download.pingcap.com/js/mc-validate.js" type="text/javascript"></script>
+<script type="text/javascript">
+;(function($) {
+    window.fnames = new Array()
+    window.ftypes = new Array()
+    fnames[0] = 'EMAIL'
+    ftypes[0] = 'email'
+    fnames[1] = 'FNAME'
+    ftypes[1] = 'text'
+    fnames[2] = 'LNAME'
+    ftypes[2] = 'text'
+})(jQuery)
+var $mcj = jQuery.noConflict(true)
+</script>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/blog" id="lang">English</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="TiDB-Binlog is a tool used to collect the logical changes made to a TiDB cluster and provide incremental backup and replication. This post introduces its architecture evolution and implementation principles." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles" property="og:title"/>
+<meta content="TiDB-Binlog is a tool used to collect the logical changes made to a TiDB cluster and provide incremental backup and replication. This post introduces its architecture evolution and implementation principles." property="og:description"/>
+<meta content="https://pingcap.com/blog/tidb-binlog-architecture-evolution-and-implementation-principles/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="TiDB-Binlog is a tool used to collect the logical changes made to a TiDB cluster and provide incremental backup and replication. This post introduces its architecture evolution and implementation principles." name="twitter:description"/>
+<meta content="TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li class="sel"><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li class="sel"><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="blogArticle__container">
+<div class="archive"><div class="article-nav">
+<a href="/blog/#MySQL-Scalability">BLOG HOME</a> <span> &gt; </span>MySQL Scalability</div><div class="content markdown-body">
+<h1 class="title">TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Tue, Jan 29, 2019</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>Xiang Wang</li>
+</ul>
+<div class="blog-text">
+<p>TiDB-Binlog is a tool used to collect the logical changes made to a TiDB cluster and provide incremental backup and replication.</p>
+<p>TiDB-Binlog is similar in functionality to MySQL master-slave replication, which relies on persisting a logical set of changes into a binary log. The main difference is that since TiDB is a distributed database, the binlog generated by each TiDB instance needs to be merged and sorted according to the time of the transaction commit before being consumed downstream.</p>
+<p>You can use the TiDB-Binlog to asynchronously replicate between TiDB clusters across a WAN, or to subscribe to TiDB data changes and feed other systems (such as an external cache or fulltext index).</p>
+<p>A common real-life use case is using TiDB-Binlog to replicate data from one TiDB cluster in one data center (DC) to another TiDB cluster in a different data center, both in the same city or close geographical proximity (e.g. an Availability Zone). This scenario guarantees cross-DC availability of your data with high performance since the physical distance between the two DCs is short.</p>
+<h2 id="architecture-evolution">Architecture evolution</h2>
+<p>The first version of TiDB-Binlog was released more than two years ago. Among the multiple versions of TiDB-Binlog, the Kafka-based version was widely used. The architecture was as follows:</p>
+<p><img alt="The architecture of the Kafka version of TiDB-Binlog" class="lazy" data-original="/images/blog/tidb_binlog_kafka_architecture.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>The architecture of the Kafka version of TiDB-Binlog</em> </center>
+<p>The Kafka version of TiDB-Binlog consisted of the following two components:</p>
+<ul>
+<li><p>Pump</p>
+<p>Pump was a daemon that run on the background of each TiDB host. Its main function was to record the binlog files generated by TiDB in real time and write them to Kafka sequentially.</p></li>
+<li><p>Drainer</p>
+<p>Drainer collected binlog files from Kafka, converted them, in the commit order of TiDB transactions, into SQL statements compatible with the specified database or data with the specified format, and then synchronized the data to the target database or wrote the data sequentially to the file.</p></li>
+</ul>
+<p>The Kafka architecture worked as follows:</p>
+<ol>
+<li>TiDB needed to be bound to Pump, which meant the TiDB instance could only send the generated binlog to a specified Pump instance.</li>
+<li>Pump wrote the binlog to a local file and then wrote them asynchronously to Kafka.</li>
+<li>Drainer read the binlog from Kafka, sorted the binlog, parsed the binlog, and then synchronized the generated SQL statements or data in the specified format to the downstream.</li>
+</ol>
+<p>This Kafka-based version of TiDB-Binlog had a few issues:</p>
+<ul>
+<li><p>The TiDB load was unbalanced. Some TiDB instances undertook more applications and generated more binlog than others. The corresponding Pump instances also had a high load, which led to a high delay in data synchronization.</p></li>
+<li><p>Relying on Kafka clusters increased the operations and maintenance cost. In addition, the size of a single row of binlog generated by TiDB could reach up to 2GB (for example, deleting or writing data in batches), so you needed to configure the message size of Kafka. However, Kafka was not suitable for the scenario where a single row of data is large.</p></li>
+<li><p>Drainer needed to read, sort, and parse the binlog in Kafka, and then synchronized the data to the downstream. Apparently, Drainer had a lot of work to do, but it was a standalone node, so Drainer often became the bottleneck of data synchronization.</p></li>
+</ul>
+<p>To resolve these issues, we refactored TiDB-Binlog into the following architecture:</p>
+<p><img alt="The architecture of the latest (cluster) version of TiDB-Binlog" class="lazy" data-original="/images/blog/tidb_binlog_cluster_architecture.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>The architecture of the latest (cluster) version of TiDB-Binlog</em> </center>
+<p>This version of TiDB-Binlog no longer uses Kafka to store the binlog. Although it still keeps both the Pump and Drainer components, the functionality has been adjusted as follows:</p>
+<ul>
+<li><p>Pump records the binlog generated by TiDB in real time, and sorts the binlog according to the commit time of the transaction, and then provides it to Drainer for consumption.</p></li>
+<li><p>Drainer collects and merges the binlog from each Pump instance, and then converts the binlog into SQL statements or data in the specified format, and finally pushes the data to the downstream.</p></li>
+</ul>
+<p>This version has the following advantages:</p>
+<ul>
+<li>Multiple Pump instances form a cluster that can be scaled horizontally, and each Pump instance can deal with the application load in balance.</li>
+<li>TiDB distributes the binlog to each Pump instance through the built-in Pump Client. Even if some Pump instances break down, the application in TiDB will not be affected.</li>
+<li>A simple internal KV storage is implemented in Pump to store the binlog, making it easy to manage the binlog data.</li>
+<li>The original binlog sorting logic is moved from Drainer to the scalable Pump, which improves the overall synchronization performance.</li>
+<li>Drainer no longer needs to read a batch of binlog into memory for heap sorting. It only needs to read the binlog of each Pump instance in turn, merge and sort the binlog. This can save a lot of memory usage and make memory control easier.</li>
+</ul>
+<p>Since the biggest characteristic of this version of TiDB-Binlog is that multiple Pump instances constitute a cluster, we call this version: <strong>the cluster version</strong>.</p>
+<h2 id="implementation">Implementation</h2>
+<p>Now, I’ll introduce the implementation principles of the cluster version of TiDB-Binlog.</p>
+<h3 id="binlog">Binlog</h3>
+<p>TiDB uses the 2PC (two-phase commit) algorithm for transactions. A successful transaction writes two binlog records, including one Prewrite binlog record and one Commit binlog record. If the transaction fails, it will write a Rollback binlog record.</p>
+<h4 id="binlog-structure-definition">Binlog structure definition</h4>
+<p>The binlog structure is defined as below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># Binlog records all transaction changes and can be used to build SQL statements.
+message Binlog {
+    # The binlog types, including Prewrite, Commit, Rollback, and so on.
+    optional BinlogType  tp = 1 [(gogoproto.nullable) = false];
+
+    # The “start_ts” in the Prewrite, Commit, and Rollback types of binlog, used to record the ts when a transaction starts.
+    optional int64  start_ts = 2 [(gogoproto.nullable) = false];
+
+    # “commit_ts” records the ts when a transaction ends, and only records it in the Commit type of binlog.
+    optional int64  commit_ts = 3 [(gogoproto.nullable) = false];
+
+    # “prewrite_key” is recorded only in the Prewrite type of binlog.
+    # It is the primary key of a transaction, used to query whether the transaction is committed.
+    optional bytes  prewrite_key = 4;
+
+    # “prewrite_value” is recorded in the Prewrite type of binlog, used to record the change of each row of data.
+    optional bytes  prewrite_value = 5;
+
+    # “ddl_query” records the DDL statements.
+    optional bytes  ddl_query = 6;
+
+    # “ddl_job_id” records the job ID of DDL statements.
+    optional int64  ddl_job_id = 7 [(gogoproto.nullable) = false];
+}</pre></div>
+<p>For more details about binlog and the data structure definition, see <a href="https://github.com/pingcap/tipb/blob/535e1abaa330653c8955cb3484261ea9f229e926/proto/binlog/binlog.proto">binlog.proto</a>.</p>
+<p>In TiDB, <code>ts</code> (TSO, Timestamp Oracle) is a globally unique time service provided by Placement Driver (PD). It is converted from the physical time and the logic time. <code>start_ts</code> is the starting timestamp value of a transaction. <code>commit_ts</code> is the commit timestamp value of a transaction.</p>
+<p>When a transaction is started, TiDB requests a timestamp from PD as the transaction <code>start_ts</code>. When the transaction is committed, TiDB requests a timestamp again from PD as the transaction <code>commit_ts</code>. This <code>commit_ts</code> is used to sort the binlog in Pump and Drainer.</p>
+<p>The TiDB-Binlog format is row-based logging (RBL), which stores the change of each row of data. The data change is recorded in the <code>prewrite_value</code> field, and the data in this field mainly consists of serialized data arrays with the following <code>TableMutation</code> structure:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># The data change in the TableMutation storage table
+message TableMutation {
+    # The table ID that uniquely identifies a table
+    optional int64 table_id = 1 [(gogoproto.nullable) = false];
+
+    # Saves the data of each inserted row
+    repeated bytes inserted_rows = 2;
+
+    # Saves the data of each row both before and after the modification
+    repeated bytes updated_rows  = 3;
+
+    # Deprecated
+    repeated int64 deleted_ids = 4;
+
+    # Deprecated
+    repeated bytes deleted_pks   = 5;
+
+    # The data of deleted rows
+    repeated bytes deleted_rows  = 6;
+
+    # Records the sequence of data changes
+    repeated MutationType sequence = 7;
+}</pre></div>
+<h4 id="storing-data-changes-to-binlog">Storing data changes to binlog</h4>
+<p>I’ll use an example to explain how binlog stores data changes.</p>
+<p>Assume that the table schema is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#f92672">`</span>test<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> int, <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">24</span>), <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span> <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>)</code></pre></div>
+<p>Execute the following SQL statements in order:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">begin</span>;
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> test(id, name) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">"a"</span>);
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> test(id, name) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">"b"</span>);
+<span style="color:#66d9ef">update</span> test <span style="color:#66d9ef">set</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">"c"</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+<span style="color:#66d9ef">update</span> test <span style="color:#66d9ef">set</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">"d"</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+<span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> test <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> test(id, name) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">"c"</span>);
+<span style="color:#66d9ef">commit</span>;</code></pre></div>
+<p>Then the following <code>TableMutation</code> data is generated:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">inserted_rows:
+1, "a"
+2, "b"
+2, "c"
+
+updated_rows:
+1, "a", 1, "c"
+2, "b", 2, "d"
+
+deleted_rows:
+2, "d"
+
+sequence:
+Insert, Insert, Update, Update, DeleteRow, Insert</pre></div>
+<p>From the above results, we can see that the order of data modification types saved in <code>sequence</code> is right the execution order of SQL statements. Detailed modification data is saved to the corresponding variable.</p>
+<p>Before replicating the binlog data to the downstream, Drainer needs to convert the above data back into SQL statements.</p>
+<p>When writing binlog, TiDB sends a writing data request to TiKV and a Prewrite binlog record to Pump concurrently. If one of the two requests fails, the transaction will fail. After Prewrite succeeds, TiDB sends a commit message to TiKV , and then asynchronously sends a Commit binlog record to Pump. Since TiDB sends requests to TiKV and Pump in Prewrite phase at the same time, as long as the time that Pump handles the Prewrite binlog request is less than or equal to the time that TiKV executes Prewrite, enabling binlog will not affect the transaction delay.</p>
+<h3 id="pump-client">Pump Client</h3>
+<p>We already know that multiple Pump instances compose a cluster and handle the requests of writing binlog. Then we need to ensure that TiDB can distribute the writing binlog requests to each Pump instance as evenly as possible. In addition, we also need to identify the unavailable Pump instances and timely obtain the information of newly added Pump instances in the cluster. This is implemented in Pump Client.</p>
+<p>Pump Client is integrated into TiDB in the form of a package. See <a href="https://github.com/pingcap/tidb-tools/tree/v2.1.0/tidb-binlog/pump_client">Pump Client code</a>.</p>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles', 'download-tidb-btn-middle')"><button>Download TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles', 'subscribe-blog-btn-middle')"><button>Subscribe to Blog</button></a>
+</div>
+<h4 id="pump-status-definition">Pump status definition</h4>
+<p>Pump Client maintains the Pump cluster information, which mainly comes from the Pump status information stored in PD. The status information (<a href="https://github.com/pingcap/tidb-tools/blob/v2.1.0/tidb-binlog/node/node.go">status code</a>) is defined as below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">type Status struct {
+    # The unique identifier of the Pump/Drainer instance
+    NodeID string `json:"nodeId"`
+
+    # The Pump/Drainer service address
+    Addr string `json:"host"`
+
+    # The Pump/Drainer state. Optional values are: “online”, “pausing”, “paused”, “closing”, “offline”.
+    State string `json:"state"`
+
+    # Whether Pump/Drainer is alive. (Currently, this field is not used.)
+    IsAlive bool `json:"isAlive"`
+
+    # The Pump score, which is calculated according to elements such as the load of the node, the disk usage, and the size of the stored data.
+    # According to the score, Pump Client can choose the appropriate Pump instance to send binlog. (To be implemented)
+    Score int64 `json:"score"`
+
+    # The Pump label. TiDB and Pump can be grouped based on the label.
+    # TiDB sends binlog only to the Pump instance with the same label. (To be implemented)
+    Label *Label `json:"label"`
+
+    # Pump: the timestamp of the biggest binlog commit that is saved.
+    # Drainer: the timestamp of the biggest consumed binlog commit
+    MaxCommitTS int64 `json:"maxCommitTS"`
+
+    # The timestamp that the state information update time corresponds to
+    UpdateTS int64 `json:"updateTS"`
+}</pre></div>
+<h4 id="sending-binlog-to-available-pump-instances">Sending binlog to available Pump instances</h4>
+<p>Based on the information that Pump reports to PD and the actual situation of the writing binlog requests, Pump Client divides the Pump instances into two types: the available Pump instances and the unavailable Pump instances.</p>
+<p>The methods that Pump Client uses to divide Pump instances are as follows:</p>
+<ul>
+<li><p>During initialization, Pump Client gets the information of all Pump instances from PD, adds the Pump instances with the “online” state to the list of available Pump instances, and adds other Pump instances to the unavailable node list.</p></li>
+<li><p>Pump sends a heartbeat to PD at regular intervals and updates its own state. Pump Client monitors the status information in PD reported by Pump, and timely updates the Pump information maintained in the memory. If the state is changed from non-online to “online”, then this Pump instance is added to the available Pump instance list; otherwise, it is added to the unavailable node list.</p></li>
+<li><p>When TiDB writes binlog to Pump, if the Pump instance still fails to write the binlog after retrying multiple times, Pump Client will add this Pump instance to the unavailable list.</p></li>
+<li><p>Pump Client sends the probe request of writing empty binlog to the online Pump instance in the unavailable Pump list. If the result is successfully returned, this Pump instance is re-added to the available Pump list.</p></li>
+</ul>
+<p>Through the above measures, the Pump Client can update the maintained Pump cluster information in time to ensure that the binlog is sent to available Pump instances.</p>
+<h4 id="distributing-binlog-writing-requests-evenly">Distributing binlog writing requests evenly</h4>
+<p>After ensuring that the binlog is sent to available Pump instances, another problem is how to guarantee that Pump Client distributes binlog writing requests evenly to each Pump instance. To solve it, we provide the following three routing strategies currently:</p>
+<ul>
+<li><p>Range</p>
+<p>Pump Client selects the Pump instance and sends the binlog to it in order, which means Pump Client selects the first Pump instance for the first time and then selects the second Pump instance for the second time.</p></li>
+<li><p>Hash</p>
+<p>Pump Client hashes the <code>start_ts</code> of the binlog and then selects the Pump instance corresponding to the hash value.</p></li>
+<li><p>Score</p>
+<p>According to the weighted average algorithm, Pump Client selects the Pump instance based on the scores reported by Pump. (to be implemented)</p></li>
+</ul>
+<p>It should be noted that the above strategies are only for the Prewrite binlog. For the Commit binlog, Pump Client will send it to the Pump instance selected by the corresponding Prewrite binlog. This is because Pump needs to provide Drainer with the complete binlog of a successfully executed transaction, namely both the Prewrite binlog and the Commit binlog. So it does not make sense to send the Commit binlog to other Pump instances.</p>
+<p>Pump Client uses the <code>WriteBinlog</code> interface in <a href="https://github.com/pingcap/tipb/blob/535e1abaa330653c8955cb3484261ea9f229e926/proto/binlog/pump.proto">pump.proto</a> to submit writing binlog requests to Pump, and gRPC is used to send these requests.</p>
+<h3 id="pump">Pump</h3>
+<p>Pump is mainly responsible for handling writing binlog requests, maintaining binlog data, and providing the ordered binlog for Drainer.</p>
+<p>We abstract Pump into a simple KV database. The Key is the start timestamp of binlog (<code>start_ts</code>, Prewrite binlog) or the commit timestamp of binlog (<code>commit_ts</code>, Commit binlog), while the Value is the binlog metadata. The binlog data is stored in the data file. Drainer obtains the binlog it needs just like querying a database.</p>
+<p>Pump uses the built-in LevelDB to store the binlog metadata. When Pump receives the request of writing binlog, it will first write the binlog data to the file in the appending way, and then save to LevelDB the binlog timestamp, type, data length, saved file, and the location information in the file. If it is a Prewrite binlog, <code>start_ts</code> is used as the Key; if it is Commit binlog, <code>commit_ts</code> is used as the Key.</p>
+<p>When Drainer requests the binlog after a specified timestamp from Pump, Pump queries the metadata of the corresponding binlog in LevelDB. If the current data is the Prewrite binlog, Pump needs to find the corresponding Commit binlog before going ahead; if the current data is the Commit binlog, Pump continues to move forward.</p>
+<p>There is a problem here. As mentioned in the the <a href="#binlog">binlog</a> section, if TiKV successfully writes data and Pump successfully receives the Prewrite binlog, then the transaction is committed successfully. However, if some anomalies occur before TiDB sends the Commit binlog to Pump (such as TiDB exits abnormally or the TiDB process is forcibly terminated) and as a result, Pump does not receive the Commit binlog, then the Commit binlog corresponding to certain Prewrite binlog cannot be found in Pump.</p>
+<p>So we handled this problem in Pump. If one piece of Prewrite binlog cannot find the corresponding Commit binlog within the transaction timeout limit (ten minutes by default), <code>prewrite_key</code> in the binlog data will be used to query in TiKV whether the transaction has been committed. If the commit is successful, TiKV will return the <code>commit_ts</code> of this transaction. Otherwise, Pump will discard this piece of Prewrite binlog.</p>
+<p>The binlog metadata provides the file and location of the data store, which can be used to obtain data by reading the specified location of the binlog file. Because binlog data is basically written to the file in order, Pump only needs to read the binlog file sequentially, which ensures that Pump performance will not be affected by frequent file read operations. Finally, Pump transfers the binlog data to Drainer with <code>commit_ts</code> as the sorting criteria. The interface that Drainer requests binlog data from Pump is <code>PullBinlogs</code> in <a href="https://github.com/pingcap/tipb/blob/535e1abaa330653c8955cb3484261ea9f229e926/proto/binlog/pump.proto">pump.proto</a>, which transfers binlog data in the form of gRPC streaming.</p>
+<p>It is worth mentioning that there is a fake binlog mechanism in Pump. Pump periodically (three seconds by default) writes a piece of binlog with empty data to the local storage. Before generating binlog, Pump will get a timestamp from PD as the <code>start_ts</code> and <code>commit_ts</code> of this binlog. This type of binlog is called fake binlog.</p>
+<h3 id="drainer">Drainer</h3>
+<p>Drainer obtains and merges binlog from each Pump instance, parses the binlog and generates SQL statements or data in the specified format, and then synchronizes the data to the downstream.</p>
+<p>To get the binlog data from each Pump instance, Drainer needs to maintain the Pump cluster information, get information of the newly added Pump instance in time, and identify the unavailable Pump instance. This function is similar to that of the Pump Client. Drainer also uses the Pump status information stored in PD to maintain the Pump information. Also note that if a new Pump instance is added, this Pump instance must notify Drainer that it is online, to ensure no data loss.</p>
+<p>For example, Pump1 and Pump2 already exist in the cluster, and Drainer reads the data of Pump1 and Pump2 and merges them:</p>
+<p><img alt="Drainer" class="lazy" data-original="/images/blog/tidb-binlog-drainer.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>The binlog stored by Pump1 is <code>{1, 3, 5, 7, 9}</code>, and the binlog stored by Pump2 is <code>{2, 4, 6, 10}</code>. Drainer gets the binlog from the two Pump instances. Assuming that the binlog <code>{1, 2, 3, 4, 5, 6, 7}</code> have been read so far and the position of the processed binlog is 7, at this time, Pump3 joins the cluster and reports its online information to PD. It takes some time for Dainer to obtain the information from PD that Pump3 goes online. Let’s assume that Pump3 directly provides the writing binlog service without notifying Drainer and writes the binlog <code>{8, 12}</code>. During this period, Drainer continues to read the binlog of Pump1 and Pump2 and doesn’t recognize Pump3 until it has read the binlog <code>{9}</code>. Then Drainer adds Pump3 to the merging and sorting list. At this time, the binlog <code>{8}</code> of Pump3 is lost. To avoid this issue, Pump3 needs to notify Drainer that it goes online. After receiving the notification, Drainer will add Pump3 to the merging and sorting list and returns a successful feedback to Pump3, and only then can Pump3 provide the writing binlog service.</p>
+<p>Drainer merges and sorts the binlog in the way described as above and advances the position of synchronization. However, the following issue might be encountered: Drainer cannot continue to merge and sort the binlog when a certain Pump receives no binlog data during a period of time for some special reasons. This is just like we walk with two legs but one of them cannot move, so you cannot keep moving forward. To avoid this issue, we introduce the fake binlog mechanism mentioned above. Pump generates a fake binlog every specified time. Even if some Pump instances receives no binlog data, we can still ensure that the binlog is merged and sorted normally.</p>
+<p>Drainer merges and sorts all the binlog data in Pump according to <code>commit_ts</code> and passes the binlog to the data parsing and synchronization module in Drainer. The table schema information is not stored in the binlog file, so Drainer needs to maintain the structure information of all schemas and tables. When Drainer is started, it requests information about all historical DDL jobs from TiKV, filters these DDL jobs, and uses the DDL statements before the <code>initial-commit-ts</code> specified by Drainer (or the <code>commit_ts</code> saved in the checkpoint) to build the structure information of schemas and tables in memory. In this way, Drainer gets a snapshot of the schemas and tables corresponding to different timestamps. When reading the binlog of the DDL type, Drainer updates the schema and table information; when reading the binlog of the DML type, Drainer generates SQL statements according to the schema and table information.</p>
+<p>After generating SQL statements, Drainer will synchronize them to the downstream. To improve the speed of Drainer synchronization, multiple goroutines are used in Drainer to execute SQL statements. When generating the SQL statement, Drainer uses the value of the primary key or unique key as the key of this SQL statement, and sends this SQL statement to the corresponding goroutine by hashing the key. When each goroutine collects enough SQL statements or exceeds a certain amount of time, the batch of SQL statements will be committed to the downstream in a transaction.</p>
+<p>However, some SQL statements are related. If these SQL statements are allocated to different goroutines, the execution order of SQL statements cannot be guaranteed, resulting in inconsistent data. For example,</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">SQL1: <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> test.test <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+
+SQL2: <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">into</span> test.test (id, name ) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">"a"</span>);</code></pre></div>
+<p>After executing the SQL statements in order, the <code>id = 1</code> row exists in the table. If the two SQL statements are allocated to goroutine 1 and goroutine 2 respectively, and goroutine 2 executes the SQL statement first, then the <code>id = 1</code> row no longer exists in the table.</p>
+<p>To avoid this issue, Drainer introduces the conflict detection mechanism. If the detection shows the two SQL statements conflict (modifying the same row of data), the subsequent SQL statement will not be sent to the goroutine, but a job of the Flush type is generated and sent to all goroutines. Each goroutine will execute the cached SQL statement right away once it encounters a Flush job. Then this conflicting SQL statement is sent to the corresponding goroutine.</p>
+<p>The following example illustrates the mechanism of conflict detection:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">SQL1: <span style="color:#66d9ef">update</span> itest <span style="color:#66d9ef">set</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>, name <span style="color:#f92672">=</span> <span style="color:#e6db74">"c"</span>, age <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;     <span style="color:#66d9ef">key</span>: <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>
+
+SQL2:  <span style="color:#66d9ef">update</span> itest <span style="color:#66d9ef">set</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>, name <span style="color:#f92672">=</span> <span style="color:#e6db74">"b"</span>, age <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span> <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;   <span style="color:#66d9ef">key</span><span style="color:#960050;background-color:#1e0010">：</span><span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">2</span>
+
+SQL3<span style="color:#960050;background-color:#1e0010">：</span><span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> itest <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;                                               <span style="color:#66d9ef">key</span>: <span style="color:#ae81ff">3</span></code></pre></div>
+<p>The SQL statements are shown above and <code>id</code> is the primary key of the table. The conflict detection mechanism in Drainer works as follows to guarantee data consistency:</p>
+<ol>
+<li>Drainer sends SQL1 to the specified goroutine. At this time, all keys are <code>[3,4]</code>.</li>
+<li>The <code>[5, 2]</code> SQL2 keys have no conflict with <code>[3,4]</code>  keys. Drainer sends SQL2 to the specified goroutine. At this time, the keys are <code>[3, 4, 5, 2]</code>;</li>
+<li>The <code>[3]</code> SQL3 key conflicts with <code>[3]</code> in keys. Drainer sends a Flush job to all goroutines, SQL1 and SQL2 are executed, and the keys are cleared.</li>
+<li>Drainer sends SQL3 to the specified goroutine and meanwhile updates keys to <code>[3]</code>.</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>As an important tool in the TiDB ecosystem, TiDB-Binlog is being used more and more often by our customers. It’s a key focus of our development team and we’ll continue to improve its reliability, stability, and usability.</p>
+</div>
+</div>
+<div class="article-toc"></div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_twitter_share" data-site="" href="http://twitter.com/share?url=https%3a%2f%2fpingcap.com%2fblog%2ftidb-binlog-architecture-evolution-and-implementation-principles%2f" target="_blank">
+<img src="/images/svgs/twitter-icon.svg"/>
+</a>
+<a class="ssba_reddit_share" data-site="reddit" href="http://reddit.com/submit?url=https%3a%2f%2fpingcap.com%2fblog%2ftidb-binlog-architecture-evolution-and-implementation-principles%2f&amp;title=TiDB%20Tools%20%28I%29%3a%20TiDB-Binlog%20Architecture%20Evolution%20and%20Implementation%20Principles" target="_blank">
+<img src="/images/svgs/reddit-icon.svg"/>
+</a>
+<a class="ssba_facebook_share" data-site="" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fpingcap.com%2fblog%2ftidb-binlog-architecture-evolution-and-implementation-principles%2f" target="_blank">
+<img src="/images/svgs/facebook-icon.svg"/>
+</a>
+<a class="ssba_linkedin_share" data-site="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fpingcap.com%2fblog%2ftidb-binlog-architecture-evolution-and-implementation-principles%2f" target="_blank">
+<img src="/images/svgs/linkedin-icon.svg"/>
+</a>
+<a class="ssba_hackernews_share" data-site="hackernews" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fpingcap.com%2fblog%2ftidb-binlog-architecture-evolution-and-implementation-principles%2f&amp;t=TiDB%20Tools%20%28I%29%3a%20TiDB-Binlog%20Architecture%20Evolution%20and%20Implementation%20Principles" target="_blank">
+<img src="/images/svgs/hacker-news-icon.svg"/>
+</a>
+</div>
+</div>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles', 'download-tidb-btn-bottom')"><button>Download
+                        TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('TiDB Tools (I): TiDB-Binlog Architecture Evolution and Implementation Principles', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                        Blog</button></a>
+</div>
+</div>
+<div class="sidebar-page">
+<div class="sticky-sidebar">
+<p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+
+
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible"content="IE=edge">
+<meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async src="https://download.pingcap.com/js/ga-analytics.js"></script>
+
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="canonical" href="https://www.pingcap.com/">
+<meta name="description" content="Amazon Aurora alternative on GCP. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database.">
+<meta name="robots" content="noodp">
+<meta name="keywords" content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TiDB and MySQL: Behavior Differences">
+<meta property="og:description" content="Amazon Aurora alternative on GCP. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database.">
+<meta property="og:url" content="https://pingcap.com/tidb-academy/mysql_dbas/mysql-compatibility/behavior-differences/">
+<meta property="og:site_name" content="MySQL at Scale. No more manual sharding">
+<meta property="og:image" content="https://pingcap.com/images/pingcap-opengraph.jpg">
+<meta property="og:image:secure_url" content="https://pingcap.com/images/pingcap-opengraph.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:description" content="Amazon Aurora alternative on GCP. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database.">
+<meta name="twitter:title" content="TiDB and MySQL: Behavior Differences">
+<meta name="twitter:site" content="@pingcap">
+<meta name="twitter:image:src" content="https://pingcap.com/images/pingcap-opengraph.jpg">
+<meta name="twitter:creator" content="@pingcap">
+
+
+<script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0076/9903.js" async="async"></script>
+
+
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+<link rel="preload" href="https://download.pingcap.com/js/jquery.min.js" as="script">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/docsearch.min.css">
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<style type="text/css" media="screen">
+        .st_tree {
+          display: none;
+        }
+    </style>
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/github-markdown.css">
+
+
+<link rel="stylesheet" href="/css/doc.css">
+
+
+<link rel="stylesheet" href="/css/tidb-academy.css">
+
+    
+    
+    
+<script>
+  
+if(location.href.search('#access_token') == -1 && location.pathname == '/tidb-academy/' &&
+    localStorage.getItem('access_token')) {
+      window.location.pathname = '/tidb-academy/mysql_dbas/introduction/course-overview/'
+} else if(location.href.search('#access_token') == -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
+    !localStorage.getItem('access_token')) {
+      window.location.pathname = '/tidb-academy/'
+} else if(location.href.search('#access_token') != -1 && location.pathname.substr(0,13) == '/tidb-academy' &&
+    localStorage.getItem('access_token')) {
+      window.location.hash = ''
+}
+</script><title>TiDB and MySQL: Behavior Differences | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link rel="preload"as="script"href="/js/app.js">
+</head><body ><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+
+<div id="page-loader" class="center-element">
+    <svg id="hexagon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129.78 150.37">
+        <path id="hexagon-base" d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" transform="translate(1667.43 13.09)"/>
+        <path id="hexagon-line-animation" d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" transform="translate(1667.43 13.09)"/>
+    </svg>
+</div>
+<div id="page-content"style="display:none">
+<header role="navigation" class="fixed-top">
+    <div class="container">
+        <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        <div class="nav-wrapper">
+            <div class="navigation">
+                <ul>
+                <li ><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+                <li  class="sel" ><a class="a-en" class="tidb-academy"
+                    href="/tidb-academy">TiDB Academy</a></li>
+                <li ><a class="a-en" href="/docs">Docs</a></li>
+                <li ><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+                <li ><a class="a-en" href="/blog">Blog</a></li>
+                <li ><a class="link-download link-download-en" href="/download">Free Download</a></li>
+                </ul>
+            </div>
+            <div class="global-search">
+                <div class="search-wrapper">
+                <span class="icon-search"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#fff" viewBox="0 0 67.125 67.125"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"/><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"/></svg></span>
+                <input data-lang="en" type="search" id="search-input" placeholder="Search...">
+                </div>
+            </div>
+        </div>
+        <div class="nav-btn nav-slider">
+            <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 459 459"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"/></svg></i>
+        </div>
+    </div>
+</header>
+
+
+
+<nav class="mobile-sidebar">
+    <div class="nav-header">
+        <div class="logo-wrap">
+        <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        </div>
+    </div>
+    <ul class="ul-base">
+        <li ><a href="/tidb-cloud/">Cloud</a></li>
+        <li  class="sel" ><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+        <li ><a href="/docs">Docs</a></li>
+        <li ><a href="/success-stories">Success Stories</a></li>
+        <li ><a href="/blog">Blog</a></li>
+        <li><a class="link-download" href="/download">Free Download</a></li>
+    </ul>
+    <div class="nav-footer">
+        <div class="contact-list-wrap">
+        <div class="flex-list">
+            <h4 class="list-title"><strong>Contact</strong></h4>
+            <ul class="social ul-base">
+            <li><a href="https://twitter.com/PingCAP" class="twitter" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="18"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg></a></li>
+            <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg></a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="18"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg></a></li>
+            <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg></a></li>
+            </ul>
+        </div>
+        <div class="subscribe">
+            
+            <a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+        </div>
+        </div>
+        <div class="container">
+        <a href="" class="btn-lang" id="lang">中文</a>
+        </div>
+    </div>
+</nav>
+
+<div class="navbar-wrapper">
+    <nav>
+        <ul class="container container-navbar">
+          <li class="navbar__item navbar__item-logo">
+            <a href="/tidb-academy/mysql_dbas/introduction/course-overview/">
+              <img src="/images/tidb-academy-logo.png" alt="TiDB Academy">
+            </a>
+            </li>
+          <li class="navbar__item j-dropdown">
+        <img class="avatar j-avatar" src="/images/svgs/icon-avatar.svg" alt="avatar" /><span id="j-username" class="username"></span>
+            </li>
+        </ul>
+    </nav>
+    <div class="dropdown container">
+        <ul>
+            
+            <li class="dropdown__item"><a href="/tidb-academy/profile/">Academy Profile</a></li>
+            <li class="dropdown__item"><a href="javascript:void(0)" id="qsLogoutBtn">Sign Out</a></li>
+        </ul>
+    </div>
+</div><div class="doc">
+<div class="container" style="padding-top: 100px;"><div class="sidebar">
+    <div class="sticky-sidebar">
+        <div class="title">  </div>
+        
+        <div class="st_tree nav-toc"><ul><li class="has-child "><a href="#">
+                <span>Introduction:</span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/introduction/course-overview/"><span>Course Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/introduction/format-and-housekeeping/"><span>Format and Housekeeping</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/introduction/google-cloud-platform/"><span>Setting up Google Cloud Platform</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/introduction/distributed-databases/"><span>Introduction to Distributed Databases</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>TiDB Overview: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/tidb-overview/tidb-platform/"><span>TiDB Platform</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/tidb-overview/optional-components-tispark/"><span>Optional Components: TiSpark</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/tidb-overview/the-kost-stack/"><span>The KOST Stack</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/tidb-overview/lab/"><span>Lab: Deploying TiDB Platform on GKE</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/tidb-overview/lab-recap/"><span>Recap: Deploying TiDB Platform on GKE</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>MySQL Compatibility:</span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/mysql-compatibility/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/mysql-compatibility/behavior-differences/"><span>Behavior Differences</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/mysql-compatibility/default-differences/"><span>Default Differences</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/mysql-compatibility/lab/"><span>Lab: Loading Sample Data</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/mysql-compatibility/lab-recap/"><span>Recap: Loading Sample Data</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Query Optimization:</span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/query-optimization/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/query-optimization/explain/"><span>EXPLAIN</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/query-optimization/lab/"><span>Lab: Optimize Queries</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/query-optimization/lab-recap/"><span>Lab Recap: Optimize Queries</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/query-optimization/coprocessor/"><span>The Coprocessor</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>HTAP: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/htap/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/htap/spark/"><span>TiDB &#43; Apache Spark</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/htap/lab/"><span>Lab: HTAP</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/htap/lab-recap/"><span>Lab Recap: HTAP</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Backup and Restore: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/backup/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/backup/restore-from-accidental-delete-lab/"><span>Lab: Restore from Accidental Delete</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/backup/restore-from-accidental-delete-lab-recap/"><span>Lab Recap: Restore from Accidental Delete</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/backup/backup-and-restore-lab/"><span>Lab: Backup and Restore</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/backup/backup-and-restore-lab-recap/"><span>Lab Recap: Backup and Restore</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Schema Changes:</span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/ddl/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/ddl/f1-ddl-algorithm/"><span>Google&#39;s F1 DDL Algorithm</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/ddl/lab/"><span>Lab: ALTER TABLE online</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/ddl/lab-recap/"><span>Lab Recap: ALTER TABLE online</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Scaling the TiDB Platform: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/scaling/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/scaling/patterns/"><span>Scaling Patterns</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/scaling/lab/"><span>Lab: Scaling TiDB</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/scaling/lab-recap/"><span>Lab Recap: Scaling TiDB</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/scaling/pd/"><span>Placement Driver</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Updates, Upgrades and Migrations: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/upgrades/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/upgrades/updates/"><span>Updates</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/upgrades/upgrades/"><span>Upgrades</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/upgrades/migration/"><span>Migration from MySQL</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Data Migration (DM):</span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/dm/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/dm/example/"><span>Example Usage</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>RocksDB: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/rocksdb/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/rocksdb/architecture/"><span>Architecture</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Monitoring and Observability: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/monitoring/overview/"><span>Overview</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/monitoring/observability/"><span>Observability</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/monitoring/lab/"><span>Lab: Prometheus and Grafana</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/monitoring/lab-recap/"><span>Lab Recap: Prometheus and Grafana</span></a>
+            </li></ul>
+</li><li class="has-child "><a href="#">
+                <span>Conclusion: </span>
+                <i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/conclusion/course-summary/"><span>Course Summary</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/conclusion/shutdown/"><span>Shutdown your TiDB Cluster</span></a>
+            </li><li class="leaf-child ">
+                <a href="/tidb-academy/mysql_dbas/conclusion/whats-next/"><span>What&#39;s Next?</span></a>
+            </li></ul>
+</li></ul>
+</div>
+    </div>
+</div>
+<div class="archive academy-archive" style="max-width: 80%;">
+          <div class="content markdown-body">
+
+<h1 id="tidb-and-mysql-behavior-differences">TiDB and MySQL: Behavior Differences</h1>
+
+<iframe src="https://player.vimeo.com/video/294641901" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+<h3 id="resources">Resources</h3>
+
+<ul>
+<li><a href="https://pingcap.com/docs/sql/mysql-compatibility/#features-that-are-different-from-mysql">MySQL Compatibility</a></li>
+<li><a href="https://github.com/pingcap/tidb/issues/7546">Support for built-in JSON functions</a></li>
+<li><a href="https://github.com/pingcap/tidb/issues/7623">Support for aggregate functions</a></li>
+</ul>
+
+<h3 id="transcript">Transcript</h3>
+
+<p>In the previous video, we talked about TiDB compatibility with MySQL and how some features were not present. For example: stored procedures, triggers, views.</p>
+
+<p>Let&rsquo;s now talk about something more subtle: the feature also exists in TiDB, but works differently. In many cases this is TiDB is a distributed database, and needs to work a little bit differently. Let&rsquo;s take a look at the TiDB manual and talk specifics.</p>
+
+<h4 id="auto-increment-ids">Auto increment IDs</h4>
+
+<p>The auto-increment ID feature in TiDB is only guaranteed to be automatically incremental and unique but is not guaranteed to be allocated sequentially. Each TiDB server is allocated auto-increment IDs in batches of 30 thousand. It is not a good practice to rely on auto-increment values to be sequential, but there are some applications that do do it, for example - as a shortcut for sorting rows by date.</p>
+
+<h4 id="performance-schema">Performance schema</h4>
+
+<p>TiDB is instrumented for collecting various performance counters about its execution, but with TiDB nodes being stateless (and without having membership) you would only be able to see statistics for an individual server at runtime. So instead in TiDB, we use a combination of best-of-breed tools with Prometheus and Grafana to centralize metrics. We will cover this in more detail when we get to &lsquo;monitoring&rsquo;. For the time being, simply know that while you can read from performance_schema tables in TiDB most will return zero results.</p>
+
+<h4 id="built-in-functions">Built-in functions</h4>
+
+<p>TiDB supports most of MySQL&rsquo;s built-in functions, such as those used when manipulating dates, manipulating strings and converting between formats.
+ There are some exceptions to this such as geospatial functions which similar to not supporting spatial indexes, TiDB does not support yet.
+ There are also some edge cases such as a <code>SOUNDEX</code>, where the function has not been added yet due to a relatively infrequent usage.
+ At the time of recording, TiDB also does not support all of the JSON functions added in MySQL 5.7, and all aggregate functions. Both are in the process of being addressed.</p>
+
+<h4 id="ddl">DDL</h4>
+
+<p>DDL is a major advantage of TiDB over MySQL, one that is not spoken about enough. In TiDB DDL uses the online asynchronous schema change algorithm first written about in Google&rsquo;s F1. It ensures that your regular operations are not impacted while DDL is being performed on the TiDB Platform. We will cover DDL in more detail later in this course, but what is relevant for now is that TiDB <em>does not</em> allow you to create multiple indexes or columns at the same time, as you may be used to doing in MySQL. It also does not support adding, changing or dropping the primary key on a table.</p>
+
+<h4 id="transaction-model">Transaction Model</h4>
+
+<p>Internally TiDB uses optimistic locking for transactions, which means that some transaction conflicts will only be checked as part of a commit process. This is similar to Group Replication in MySQL (but not regular InnoDB + Replication), and it is important that your application check for errors from commit.</p>
+
+<h4 id="large-transactions">Large Transactions</h4>
+
+<p>Due to the distributed + 2-phase commit requirement of TiDB, large transactions that modify data can be particularly problematic. TiDB intentionally sets some limits on transaction sizes to limit impact:</p>
+
+<ul>
+<li>Each Key-Value entry is no more than 6MB</li>
+<li>The total number of Key-Value entry is no more than 300,000</li>
+<li>The total size of Key-Value entry is no more than 100MB</li>
+</ul>
+
+<p>(There are similar limits on Google Cloud Spanner, by which TiDB&rsquo;s architecture is inspired.)</p>
+
+<h4 id="load-data">Load data</h4>
+
+<p>Related to the point above, loading large files into a table in a single transaction is not ideally suited.
+ TiDB commits rows from load data every 20,000 rows.</p>
+
+<h4 id="storage-engines">Storage engines</h4>
+
+<p>TiDB actually supports a similar architecture to MySQL, in which TiKV is the distributed storage engine that sits below TiDB. But in most cases, you will be using TiKV, and for compatibility reasons when you create a table it will look like it&rsquo;s InnoDB. TiKV does behave similarly to InnoDB in many respects since it is a transactional, strongly consistent engine. You can not mix-and-match engines, and there is for example no MyISAM-like equivalent in TiDB.</p>
+
+<h4 id="explain">EXPLAIN</h4>
+
+<p>The output of the query execution plan returned from the <code>EXPLAIN</code> command differs from MySQL. We will walk through examples when we get to query optimization.</p>
+
+<p>So that&rsquo;s it for major behavior differences. We covered a lot in this video, and if you have any lurking questions, I recommend giving the MySQL Compatibility documentation a read over before proceeding on.</p>
+</div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <div class="flex-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>Product</strong></h4>
+                <ul>
+                <li><a href="/docs/">TiDB</a></li>
+                <li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+                <li><a href="/docs/ROADMAP/">Roadmap</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>Docs</strong></h4>
+                <ul>
+                <li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+                <li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+                <li><a href="/docs/FAQ/">FAQ</a></li>
+                <li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+                <li><a href="/docs/releases/rn/">Release Notes</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>Resources</strong></h4>
+                <ul>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/weekly/">Weekly</a></li>
+                <li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+                <li><a href="/community/organization">TiDB Community</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>Company</strong></h4>
+                <ul>
+                <li><a href="/about/">About</a></li>
+                <li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+                <li><a href="/news/">News</a></li>
+                <li><a href="/contact-us/">Contact Us</a></li>
+                <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                <li><a href="/terms-of-service/">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="contact-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>Connect</strong></h4>
+                <ul>
+                <li><a href="https://twitter.com/PingCAP" class="twitter" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="19"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg> Twitter</a></li>
+                <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg> LinkedIn</a></li>
+                <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg>Reddit</a></li>
+                <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="20"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg>Google Group</a></li>
+                <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg>Stack Overflow</a></li>
+                </ul>
+            </div>
+            <div class="subscribe">
+                
+                <a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+            </div>
+        </div>
+    </div>
+    <div class="container copyright-container">
+        <p class="copyright">&copy; 2019 PingCAP. All Rights Reserved.</p>
+        <a href="" class="copyright-btn-lang" id="lang">中文</a>
+    </div>
+</footer>
+<button class="back-to-top" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 284.929 284.929"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"/></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/auth0-variables.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/vendor/clipboard.min.js/"></script>
+    <script type="text/javascript" src="/js/vendor/login.js"></script>
+    <script type="text/javascript">
+        if(localStorage.avatar) {
+            $('#j-username').text(localStorage.username)
+            $('.j-avatar').attr('src', localStorage.avatar)
+        }
+    </script><script type="text/javascript"src="https://download.pingcap.com/js/docsearch.min.js"></script>
+<script type="text/javascript"src="/js/app.js"></script></body>
+</html>

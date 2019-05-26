@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="This is the speech Max Liu gave at Percona Live Open Source Database Conference 2016." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="How we build TiDB" property="og:title"/>
+<meta content="This is the speech Max Liu gave at Percona Live Open Source Database Conference 2016." property="og:description"/>
+<meta content="https://pingcap.com/blog/2016-10-17-how-we-build-tidb/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="This is the speech Max Liu gave at Percona Live Open Source Database Conference 2016." name="twitter:description"/>
+<meta content="How we build TiDB" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>How we build TiDB | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li class="sel"><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li class="sel"><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="blogArticle__container">
+<div class="archive"><div class="article-nav">
+<a href="/blog/#Engineering">BLOG HOME</a> <span> &gt; </span>Engineering</div><div class="content markdown-body">
+<h1 class="title">How we build TiDB</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Mon, Oct 17, 2016</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>Max Liu</li>
+</ul>
+<div class="blog-text">
+<p><span id="top">This is the speech Max Liu gave at <strong>Percona Live Open Source Database Conference 2016</strong>. </span></p>
+<p>The slides are <a href="https://www.percona.com/live/plam16/sessions/how-we-build-tidb">here</a>.</p>
+<ul>
+<li><a href="#1">Speaker introduction</a></li>
+<li><a href="#2">Why another database?</a></li>
+<li><a href="#3">What to build?</a></li>
+<li><a href="#4">How to design?</a>
+<ul>
+<li><a href="#5">The principles or the philosophy</a>
+<ul>
+<li><a href="#6">Disaster recovery</a></li>
+<li><a href="#7">Easy to use</a></li>
+<li><a href="#8">The community and ecosystem</a></li>
+</ul></li>
+<li><a href="#9">Loose coupling – the logical architecture</a></li>
+<li><a href="#10">The alternatives</a></li>
+</ul></li>
+<li><a href="#11">How to develop</a>
+<ul>
+<li><a href="#12">The architecture</a></li>
+<li><a href="#13">TiKV core technologies</a>
+<ul>
+<li><a href="#14">TiKV software stack</a></li>
+<li><a href="#15">Placement Driver</a></li>
+<li><a href="#16">Raft</a></li>
+<li><a href="#17">MVCC</a></li>
+<li><a href="#18">Transaction</a></li>
+</ul></li>
+<li><a href="#19">TiDB core technologies</a>
+<ul>
+<li><a href="#20">Mapping table data to Key-Value store</a></li>
+<li><a href="#21">Predicate push-down</a></li>
+<li><a href="#22">Schema changes</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#23">How to test?</a></li>
+<li><a href="#24">The future plan</a></li>
+</ul>
+<h2 id="span-id-1-speaker-introduction-span"><span id="1">Speaker introduction</span></h2>
+<p>First, about me. I am an infrastructure engineer and I am also the CEO of PingCAP. Currently, my team and I are working on two open source projects: TiDB and TiKV. Ti is short for Titanium, which is a chemical element known for its corrosion resistance and it is widely used in high-end technologies.</p>
+<p>So today we will cover the following topics:</p>
+<ul>
+<li>Why another database?</li>
+<li>What kind of database we want to build?</li>
+<li>How to design such a database, including the principles, the architecture, and design decisions?</li>
+<li>How to develop such a database, including the architecture and the core technologies for TiKV and TiDB?</li>
+<li>How to test the database to ensure the quality and stability?</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-2-why-another-database-span"><span id="2">Why another database</span></h2>
+<p>Before we start, let's go back to the very beginning and ask yourself a question: Why another database. We all know that there are many databases, such as the traditional Relational database and NoSQL. So why another one?</p>
+<ul>
+<li>Relational databases like MySQL, Oracle, PostgreSQL, etcetera: they are very difficult to scale. Even though we have sharding solutions, YouTube/vitess, MySQL proxy, but none of them supports distributed transactions and cross-node join.</li>
+<li>NoSQL like HBase, MongoDB, and Cassandra: They scale well, but they don't support SQL and consistent transactions.</li>
+<li>NewSQL, represented by Google Spanner and F1, which is as scalable as NoSQL systems and it maintains the ACID transactions. That's exactly what we need. Inspired by Spanner and F1, we are making a NewSQL database. Of course, it's open source.</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-3-what-to-build-span"><span id="3">What to build?</span></h2>
+<p>So we are building a NewSQL database with the following features:</p>
+<ul>
+<li>First of all, it supports SQL. We have been using SQL for decades and many of our applications are using SQL. We cannot just give it up.</li>
+<li>Second, it must be very easy to scale. You can easily increase the capacity or balance the load by adding more machines.</li>
+<li>Third, it supports ACID transaction, which is one of the key features of relational database. With a strong consistency guarantee, developers can write correct logic with less code.</li>
+<li>Last, it is highly available in case of machine failures or even downtime of an entire data center. And it can recover automatically.</li>
+</ul>
+<p>In short, we want to build a distributed, consistent, scalable, SQL Database. We name it TiDB.</p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-4-how-to-design-span"><span id="4">How to design?</span></h2>
+<p>Now we have a clear picture of what kind of database we want to build, the next step is how, how to design it, how to develop it and how to test it. In the next few slides, I am going to talk about how to design TiDB.</p>
+<p>In this section, I will introduce how we design TiDB, including the principles, the architecture and design decisions.</p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-5-the-principles-or-the-philosophy-span"><span id="5">The principles or the philosophy</span></h2>
+<p>Before we design, we have several principles or philosophy in mind:</p>
+<ul>
+<li>TiDB must be user-oriented.
+
+<ul>
+<li>It must ensure that no data is ever lost and the system can automatically recover from machine failures or even downtime of the entire datacenters.</li>
+<li>It should be easy to use.</li>
+<li>It should be cross-platform and can run on any environment, no matter it's on premise, cloud or container.</li>
+<li>As an open source project, we are dedicated to being an important part of the big community through our active engagement, contribution and collaboration.</li>
+</ul></li>
+<li>We need TiDB to be easy to maintain so we chose the loose coupling approach. We design the database to be highly layered with a SQL layer and a Key-Value layer. If there is a bug in SQL layer, we can just update the SQL layer.</li>
+<li>The alternatives: Although our project is inspired by Google Spanner and F1, we are different from those projects. When we design TiDB and TiKV, we have our own practices and decisions in choosing different technologies.</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-6-disaster-recovery-span"><span id="6">Disaster recovery</span></h3>
+<p>The first and foremost design principle is to build a database where no data is lost. To ensure the safety of the data, we found that multiple replicas are just not enough and we still need to keep Binlog in both the SQL layer and the Key-Value layer. And of course, we must make sure that we always have a backup in case the entire cluster crashes.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-7-easy-to-use-span"><span id="7">Easy to use</span></h3>
+<p>The second design principle is about the usability. After years of struggling among different workarounds and trade-offs, we are fully aware of the pain points of the users. So when it comes to us to design a database, we are going to make it easy to use and there should be no scary sharding keys, no partition, no explicit handmade local index or global index, and making scale transparent to the users.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="cross-platform">Cross-platform</h3>
+<p>The database we are building also needs to be cross-platform. The database can run on the on premise devices. Here is a picture of TiDB running on a Raspberry Pi cluster with 20 nodes.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>It can also support the popular containers such as Docker. And we are making it work with Kubernetes. Of course, it can be run on any cloud platform, whether it's public, private or hybrid.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-8-the-community-and-ecosystem-span"><span id="8">The community and ecosystem</span></h3>
+<p>The next design principle is about the community and ecosystem. We want to stand on the shoulders of the giants instead of creating something new and scary. TiDB supports MySQL protocol and is compatible with most of the MySQL drivers (ODBC, JDBC) and SQL syntax, MySQL clients and ORM, and the following MySQL management tools and bench tools.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="etcd">etcd</h4>
+<p>etcd is a great project. In our Key-Value store, TiKV, which I will dive deep into later, we have been working with the etcd team very closely. We share the Raft implementation, and we do code reviews on Raft module for each other.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="rocksdb">RocksDB</h4>
+<p>RocksDB is also a great project. It's mature, fast, tunable, and widely used in very large scale production environments, especially in facebook . TiKV uses RocksDB as it's local storage. While we were testing it in our system, we found some bugs. The RocksDB team fixed those bugs very quickly.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="namazu">Namazu</h4>
+<p>A few months ago, we need a tool to simulate slow, unstable disk, and the team member found Namazu. But at that time, Namazu didn't support hooking fsync. When the team member raised this request to their team, they responded immediately and implement the feature in just a few hours and they are very open to implement other features as well. We are deeply impressed by their responsiveness and their efficiency.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="rust-community">Rust community</h4>
+<p>The Rust community is amazing. Besides the good developing experience of using Rust, we also build the Prometheus driver in Rust to collect the metrics.</p>
+<p>We are so glad to be a part of this great family. So many thanks to the Rust team, gRPC, Prometheus and Grafana.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="spark-connector">Spark connector</h4>
+<p>We are using the Spark connector in TiDB. TiDB is great for small or medium queries and Spark is better for complex queries with lots of data. We believe we can learn a lot from the Spark community too, and of course we would like to contribute as much as possible.</p>
+<p>So overall, we'd like to be a part of the big open source community and would like to engage, contribute and collaborate to build great things together.</p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-9-loose-coupling-the-logical-architecture-span"><span id="9">Loose coupling – the logical architecture</span></h2>
+<p>This diagram shows the logical architecture of the database.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>As I mentioned earlier about our design principle, we are adopting the loose coupling approach. From the diagram, we can see that it is highly-layered. We have TiDB to work as the MySQL server, and TiKV to work as the distributed Key-Value layer. Inside TiDB, we have the MySQL Server layer and the SQL layer. Inside TiKV, we have transaction, MVCC, Raft, and the Local Key-Value Storage, RocksDB.</p>
+<p>For TiKV, we are using Raft to ensure the data consistency and the horizontal scalability. Raft is a consensus algorithm that equals to Paxos in fault-tolerance and performance. Our implementation is ported from etcd, which is widely used, very well tested and highly stable. I will cover the technical details later.</p>
+<p>From the architecture, you can also see that we don't have a distributed file system. We are using RocksDB as the local store.</p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-10-the-alternatives-span"><span id="10">The alternatives</span></h2>
+<p>In the next few slides, I am going to talk about design decisions about using the alternative technologies compared with Spanner and F1, as well as the pros and cons of these alternatives.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="atomic-clocks-gps-clocks-vs-timestamp-allocator">Atomic clocks / GPS clocks VS TimeStamp Allocator</h4>
+<p>If you've read the Spanner paper, you might know that Spanner has TrueTime API, which uses the atomic clocks and GPS receivers to keep the time consistent between different data centers.</p>
+<p>The first alternative technology we chose is to replace the TrueTime API with the TimeStamp Allocator. It goes without any doubt that time is important and that Real time is vital in distributed systems. But can we get real time? What about clock drift?</p>
+<p>The sad truth is that we can't get real time precisely because of clock drift, even if we use GPS or Atomic Clocks.</p>
+<p>In TiDB, we don't have Atomic clocks and GPS clocks. We are using the Timestamp Allocator introduced in Percolator, a paper published by Google in 2006.</p>
+<p>The pros of using the Timestamp Allocator are its easy implementation and no dependency on any hardware. The disadvantage lies in that if there are multiple datacenters, especially if these DCs are geologically distributed, the latency is really high.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="distributed-file-system-vs-rocksdb">Distributed file system VS RocksDB</h4>
+<p>Spanner uses Colossus File System, the successor to the Google File System (GFS), as its distributed file system. But in TiKV, we don't depend on any distributed file system. We use RocksDB. RocksDB is an embeddable persistent key-value store for fast storage. The primary design point for RocksDB is its great performance for server workloads. It's easy for tuning Read, Write and Space Amplification. The pros lie in that it's very simple, very fast and easy to tune. However, it's not easy to work with Kubernetes properly.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="paxos-vs-raft">Paxos VS Raft</h4>
+<p>The next choice we have made is to use the Raft consensus algorithm instead of Paxos. The key features of Raft are: Strong leader, leader election and membership changes. Our Raft implementation is ported from etcd. The pros are that it's easy to understand and implement, widely used and very well tested. As for Cons, I didn't see any real cons.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="c-vs-go-amp-rust">C++ VS Go &amp; Rust</h4>
+<p>As for the programming languages, we are using Go for TiDB and Rust for TiKV. We chose Go because it's very good for fast development and concurrency, and Rust for high quality and performance. As for the Cons, there are not as many third-party libraries.</p>
+<p>That's all about how we design TiDB. I have introduced the principles, the architecture, and design decisions about using the alternative technologies. The next step is to develop TiDB.</p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-11-how-to-develop-span"><span id="11">How to develop</span></h2>
+<p>In this section, I will introduce the architecture and the core technologies for TiKV and TiDB.</p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-12-the-architecture-span"><span id="12">The architecture</span></h2>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-3.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>About TiKV architecture: Let's take a look from the bottom.</p>
+<ul>
+<li>The bottom layer, RocksDB.</li>
+<li>The next layer, Raft KV, it's a distributed layer.</li>
+<li>MVCC, Multiversion concurrency control. I believe many of you are pretty familiar with MVCC. TiKV is a multi-versioned database. MVCC enables us to support lock-free reads and ACID transactions.</li>
+<li>Transaction: The transaction model is inspired by Google's Percolator. It's mainly a two-phase commit protocol with some practical optimizations. This model relies on a timestamp allocator to assign monotone increasing timestamp for each transaction, so the conflicts can be detected.  I will cover the details later.</li>
+<li>KV API: it's a set of programming interfaces and allows developers to put or get data.</li>
+<li>Placement Driver: Placement driver is a very important part, and it helps to achieve geo-replication, horizontal scalability and consistent distributed transactions. It's kind-of the brain of the cluster.</li>
+</ul>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-4.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>About the TiDB architecture:</p>
+<ul>
+<li>MySQL clients: The top layer is a set of MySQL clients. These clients send requests to the next layer. You can still use any MySQL driver that you are already familiar with.</li>
+<li>Load Balancer: This is an optional layer. Such as HAProxy or LVS.</li>
+<li>TiDB Server: It's stateless, and a client may connect to any TiDB server. Within the TiDB server, the top layer is MySQL Protocol, it provides MySQL protocol support; the next layer is SQL optimizer, which is used to translate MySQL requests to TiDB SQL plan.</li>
+<li>The bottom layer is KV API and Distributed SQL API. If the lower level storage engine supports coprocessor, TiDB SQL Layer will use DistSQL API, which is much more efficient than KV API. TiDB supports pluggable storage engines. We recommend TiKV as the default storage engine.</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-13-tikv-core-technologies-span"><span id="13">TiKV core technologies</span></h2>
+<p>Let's take a look at the TiKV core technologies.</p>
+<p>We build TiKV to be a distributed key-value layer to store data.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-14-tikv-software-stack-span"><span id="14"> TiKV software stack</span></h3>
+<p>Let's take a look at the software stack.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-5.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>First, we can see that there is a client connecting to TiKV. We also have several nodes. And within each node, we have stores, one per physical disk. Within each store, we have many regions. Region is the basic unit of data movement and is replicated by Raft. Each region is replicated to several nodes.  A Raft group consists of the replicas of one Region. And region is more like a logical concept, in a single store, many regions may share the same Rocksdb instance.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-15-placement-driver-span"><span id="15">Placement Driver</span></h3>
+<p>About Placement Driver, this concept comes from the original paper of Google Spanner. It provides the God's view of the entire cluster. It has the following responsibilities:</p>
+<ul>
+<li>Stores the metadata: Clients have cache of the placement information of each region.</li>
+<li>Maintains the replication constraint, 3 replicas by default.</li>
+<li>Handles the data movement to balance the workload automatically.  When placement driver notices that the load is too high, it will rebalance the data or transfer the leadership by using Raft</li>
+</ul>
+<p>And thanks to Raft, within itself, Placement Driver is a cluster too and it is also highly available.</p>
+<p><a href="#top">Back to the top</a></p>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('How we build TiDB', 'download-tidb-btn-middle')"><button>Download TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('How we build TiDB', 'subscribe-blog-btn-middle')"><button>Subscribe to Blog</button></a>
+</div>
+<h3 id="span-id-16-raft-span"><span id="16">Raft</span></h3>
+<p>In TiKV, we use the Raft for scaling and replication. We have multiple Raft groups. Workload is distributed among multiple regions. There could be millions of regions in one big cluster. Once a region is too large, it will be split into two smaller regions, just like cell division.</p>
+<p>In the next few slides, I will show you the scaling-out process.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="scale-out">Scale-out</h4>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-6.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>In this diagram, we have 4 nodes, namely Node A, Node B, Node C, and Node D. And we have 3 regions, Region 1, Region 2 and Region 3. We can see that there are 3 regions on Node A.</p>
+<p>To balance the data, we add a new node, Node E. The first step we do is to transfer the leadership from the replica of Region 1 on Node A to the replica on Node B.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-7.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Step 2, we add a Replica of Region 1 to Node E.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-8.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Step 3, remove the replica of Region 1 from Node A.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-9.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Now the data is balanced and the cluster scales out from 4 nodes to 5 nodes.</p>
+<p>This is how TiKV scales out. Let's see how it handles auto-failover.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-17-mvcc-span"><span id="17">MVCC</span></h3>
+<ul>
+<li>Each transaction sees a snapshot of the database at the beginning time of this transaction. Any changes made by this transaction will not be seen by other transactions until the transaction is committed.</li>
+<li>Data is tagged with versions in the following format: Key_version: value.</li>
+<li>MVCC also ensures Lock-free snapshot reads.</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-18-transaction-span"><span id="18">Transaction</span></h3>
+<p>These are Transaction APIs. As a programmer, I want to write code like this:</p>
+<p>txn := store.Begin() // start a transaction</p>
+<p>txn.Set([]byte("key1"), []byte("value1"))</p>
+<p>txn.Set([]byte("key2"), []byte("value2"))</p>
+<p>err = txn.Commit() // commit transaction</p>
+<p>if err != nil {</p>
+<p>txn.Rollback()</p>
+<p>}</p>
+<p>Speak of Transaction, It's mainly a two-phase commit protocol with some practical optimizations. In the transaction model, there are 3 column families, namely, cf:lock, cf:write and cf:data.</p>
+<ul>
+<li>cf: lock:  An uncommitted transaction is writing this cell and contains the location/pointer of primary lock. For each transaction, we choose a primary lock to indicate the state of the transaction.</li>
+<li>cf: write: It stores the commit timestamp of the data</li>
+<li>cf: data: Stores the data itself</li>
+</ul>
+<p>Let's see an example: If Bob wants transfer 7 dollars to Joe.</p>
+<ol>
+<li><p>Initial state: Joe has 2 dollars in his account, Bob has 10 dollars.
+<img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-10.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+<li><p>The transfer transaction begins by locking Bob's account by writing the lock column. This lock is the primary for the transaction. The transaction also writes data at its start timestamp, 7.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-11.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+<li><p>The transaction now locks Joe's account and writes Joe's new balance. The lock is secondary for the transaction and contains a reference to the primary lock; So we can use this secondary lock to find the primary lock.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-12.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+<li><p>The transaction has now reached the commit point: it erases the primary lock and replaces it with a write record at a new timestamp (called the commit timestamp): 8. The write record contains a pointer to the timestamp where the data is stored. Future readers of the column "bal" in row "Bob" will see the value $3.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-13.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+<li><p>The transaction completes by adding write records and deleting locks at the secondary cells. In this case, there is only one secondary: Joe.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-14.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>So this is how it looks like when the transaction is done.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-15.png" src="/images/svgs/loader-spinner.svg"/></p></li>
+</ol>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-19-tidb-core-technologies-span"><span id="19">TiDB core technologies</span></h2>
+<p>That's it about the TiKV core technologies. Let's move on to TiDB.</p>
+<p>TiDB has a protocol layer that is compatible with MySQL. And it will do the following things:</p>
+<ul>
+<li>Mapping table data to Key-Value store to connect to the key-value storage engine.</li>
+<li>Predicate push-down, to accelerate queries</li>
+<li>Online DDL</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-20-mapping-table-data-to-key-value-store-span"><span id="20">Mapping table data to Key-Value store</span></h3>
+<p>Let's use an example to show how a SQL table is mapped to Key-Value pairs.</p>
+<p>If we have a simple user table in database. It has 2 rows and 3 columns: user id, name and email. And user id is the primary key.</p>
+<p>INSERT INTO user VALUES (1, "bob", "huang@pingcap.com");</p>
+<p>INSERT INTO user VALUES (2, "tom", "tom@pingcap.com");</p>
+<p>If we map this table to key-value pairs, it should be put in the following way.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-16.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Of course, TiDB supports secondary index. It's a global index. TiDB puts data and index updates into the same transaction, so all the indexes in TiDB are transactional and fully consistent. And it's transparent to the users.</p>
+<p>Indexes are just key-value pairs that the values point to the row key. After we create indexes for the user name, the key-value storage looks like this:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-17.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>The key of the index consists of two parts: the name and the user id as the suffix. So here "bob" is the name, and 1 is the user id, and the value points to the row key.</p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-21-predicate-push-down-span"><span id="21">Predicate push-down</span></h3>
+<p>For some operations like count some columns in a table, TiDB pushes down these operations to the corresponding TiKV nodes, the TiKV nodes do the computing and then TiDB merges the final results. This diagram shows the process of a simple predicate push-down.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-18.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><a href="#top">Back to the top</a></p>
+<h3 id="span-id-22-schema-changes-span"><span id="22">Schema changes</span></h3>
+<p>This slide is about schema changes. Why online schema change is a must-have feature? It's because we need the full data availability all the time and minimal performance impact so that the ops people can have a good-night's sleep.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="something-the-same-as-google-f1">Something the same as Google F1</h4>
+<p>The main features of TiDB that impact schema changes are:</p>
+<ul>
+<li>Distributed
+
+<ul>
+<li>An instance of TiDB consists of many individual TiDB servers</li>
+</ul></li>
+<li>Relational schema
+
+<ul>
+<li>Each TiDB server has a copy of a relational schema that describes tables, columns, indexes, and constraints.</li>
+<li>Any modification to the schema requires a distributed schema change to update all servers.</li>
+</ul></li>
+<li>Shared data storage
+
+<ul>
+<li>All TiDB servers in all datacenters have access to all data stored in TiKV.</li>
+<li>There is no partitioning of data among TiDB servers.</li>
+</ul></li>
+<li>No global membership
+
+<ul>
+<li>Because TiDB servers are stateless, there is no need for TiDB to implement a global membership protocol.This means there is no reliable mechanism to determine currently running TiDB servers, and explicit global synchronization is not possible.</li>
+</ul></li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="something-different-from-google-f1">Something different from Google F1</h4>
+<p>But TiDB is also different from Google F1 at the following aspects:</p>
+<ul>
+<li>TiDB speaks MySQL protocol</li>
+<li>The statements inside of a single transaction cannot cross different TiDB servers</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="one-more-thing-before-schema-change">One more thing before schema change</h4>
+<p>One more thing before schema change. Let's take a look at the big picture of SQL in TiDB:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-19.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Here is an overview of a TiDB instance during a schema change:</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-20.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="schema-change-adding-index">Schema change: Adding index</h4>
+<p>So let's see how the schema changes when it comes to adding an index.</p>
+<p>Servers using different schema versions may corrupt the database if we are not careful.</p>
+<p>Consider a schema change from schema S1 to schema S2 that adds index I on table T. Assume two different servers, M1 and M2, execute the following sequence of operations:</p>
+<ol>
+<li><p>Server M2, using schema S2, inserts a new row r to table T. Because S2 contains index I, server M2 also adds a new index entry corresponding to r to the key–value store.</p></li>
+<li><p>Server M1, using schema S1, deletes r. Because S1 does not contain I, M1 removes r from the key–value store but fails to remove the corresponding index entry in I.</p></li>
+</ol>
+<p>The second delete corrupts the database. For example, an index-only scan would return incorrect results that include column values for the deleted row r.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="schema-states">Schema states</h4>
+<p>Basically schema changes is a multiple state multiple phase protocol. There are two states which we consider to be non-intermediate: absent and public.</p>
+<p>There are two internal, intermediate states: delete-only and write-only</p>
+<p>Delete-only: A delete-only table, column, or index cannot have their key–value pairs read by user transactions and</p>
+<ol>
+<li><p>If E is a table or column, it can be modified only by the delete operations.</p></li>
+<li><p>If E is an index, it is modified only by the delete and update operations. Moreover, the update operations can delete key–value pairs corresponding to updated index keys, but they cannot create any new one.</p></li>
+</ol>
+<p>For the write-only state, it is defined for columns and indexes as follows:</p>
+<p>A write-only column or index can have their key–value pairs modified by the insert, delete, and update operations, but none of their pairs can be read by user transactions.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="schema-change-flow-add-index">Schema change flow: Add index</h4>
+<p>There are 4 steps to add an index.</p>
+<p>Step 1, we mark the state to delete-only, wait for one schema lease, after all of the TiDB servers reach the same state, we move to</p>
+<p>Step 2, mark the state as write-only, wait for one schema lease,</p>
+<p>Step 3, mark the state as Fill Index and we start a mapreduce job to fill the index. After finishing the index filling job, we wait for one schema lease,</p>
+<p>then Step 4,  switch to the final state where all of the new queries can use the newly added index.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="tidb-status-of-adding-index-delete-only">TiDB: status of Adding index (delete-only)</h4>
+<p>Here is one of the screenshots for adding an index.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-21.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>We can use any MySQL client to query the status of the online DDL job. Just simply run the "show status" statement and we can see that the current state is "delete-only" as I highlighted and that the action is "add index". There is some other information such as who is doing the DDL job, the state of the current job and the current schema version.</p>
+<p><a href="#top">Back to the top</a></p>
+<h4 id="tidb-status-of-adding-index-add-index">TiDB: status of Adding index (add index)</h4>
+<p>This screenshot shows that the current state is "write reorganization" as I highlighted.</p>
+<p><img alt="" class="lazy" data-original="/images/blog/how-we-build-tidb-22.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-23-how-to-test-span"><span id="23">How to test?</span></h2>
+<p>In this section, I will introduce how we are testing the system.</p>
+<ul>
+<li>The test cases come from community. There are a lots of test cases in MySQL drivers/connectors, ORMs and applications.</li>
+<li>Fault injection is performed on both hardware and software to increase the test coverage.</li>
+<li>About the network, we simulate the latency, failure, partition to detect if there are bugs in our database when the network is not reliable.</li>
+<li>We use Jepsen and Namazu for distributed testing.</li>
+</ul>
+<p><a href="#top">Back to the top</a></p>
+<h2 id="span-id-24-the-future-plan-span"><span id="24">The future plan</span></h2>
+<p>Here is our future plan:</p>
+<ul>
+<li>We are planning to use GPS and Atomic clocks in the future.</li>
+<li>We are improving our query optimizer to get better and faster query results.</li>
+<li>We will improve the compatibility with MySQL.</li>
+<li>The supports for the JSON and document storage types are also on our roadmap.</li>
+<li>We are planning to support pushing down more aggregation and built-in functions.</li>
+<li>In the future, we will replace the customized RPC implementation with gRPC.</li>
+</ul>
+<p>So that's all. Thank you! Any questions?</p>
+<p><a href="#top">Back to the top</a></p>
+</div>
+</div>
+<div class="article-toc"></div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_twitter_share" data-site="" href="http://twitter.com/share?url=https%3a%2f%2fpingcap.com%2fblog%2f2016-10-17-how-we-build-tidb%2f" target="_blank">
+<img src="/images/svgs/twitter-icon.svg"/>
+</a>
+<a class="ssba_reddit_share" data-site="reddit" href="http://reddit.com/submit?url=https%3a%2f%2fpingcap.com%2fblog%2f2016-10-17-how-we-build-tidb%2f&amp;title=How%20we%20build%20TiDB" target="_blank">
+<img src="/images/svgs/reddit-icon.svg"/>
+</a>
+<a class="ssba_facebook_share" data-site="" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fpingcap.com%2fblog%2f2016-10-17-how-we-build-tidb%2f" target="_blank">
+<img src="/images/svgs/facebook-icon.svg"/>
+</a>
+<a class="ssba_linkedin_share" data-site="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fpingcap.com%2fblog%2f2016-10-17-how-we-build-tidb%2f" target="_blank">
+<img src="/images/svgs/linkedin-icon.svg"/>
+</a>
+<a class="ssba_hackernews_share" data-site="hackernews" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fpingcap.com%2fblog%2f2016-10-17-how-we-build-tidb%2f&amp;t=How%20we%20build%20TiDB" target="_blank">
+<img src="/images/svgs/hacker-news-icon.svg"/>
+</a>
+</div>
+</div>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('How we build TiDB', 'download-tidb-btn-bottom')"><button>Download
+                        TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('How we build TiDB', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                        Blog</button></a>
+</div>
+</div>
+<div class="sidebar-page">
+<div class="sticky-sidebar">
+<p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Learn how to deploy, operate, and monitor the cluster version of TiDB-Binlog." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB-Binlog Cluster User Guide" property="og:title"/>
+<meta content="Learn how to deploy, operate, and monitor the cluster version of TiDB-Binlog." property="og:description"/>
+<meta content="https://pingcap.com/docs/v2.1/tools/tidb-binlog-cluster/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Learn how to deploy, operate, and monitor the cluster version of TiDB-Binlog." name="twitter:description"/>
+<meta content="TiDB-Binlog Cluster User Guide" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB-Binlog Cluster User Guide | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/docs-cn/v2.1/tools/tidb-binlog-cluster" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="doc">
+<div class="container"><div class="sidebar">
+<div class="sticky-sidebar">
+<div class="title"> Documentation </div>
+<div class="st_tree nav-toc"><ul><li class="leaf-child ">
+<a href="/docs/overview/"><span>Introduction</span></a>
+</li><li class="has-child "><a href="#">
+<span>Concepts</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/architecture/"><span>Architecture</span></a>
+</li><li class="has-child "><a href="#">
+<span>Key Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/key-features/#horizontal-scalability"><span>Horizontal Scalability</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#mysql-compatible-syntax"><span>MySQL Compatible Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#replicate-from-and-to-mysql"><span>Replicate from and to MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#distributed-transactions-with-strong-consistency"><span>Distributed Transactions with Strong Consistency</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#cloud-native-architecture"><span>Cloud Native Architecture</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#minimize-etl-with-htap"><span>Minimize ETL with HTAP</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fault-tolerance--recovery-with-raft"><span>Fault Tolerance &amp; Recovery with Raft</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#automatic-rebalancing"><span>Automatic Rebalancing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#deployment-and-orchestration-with-ansible-kubernetes-docker"><span>Deployment and Orchestration with Ansible, Kubernetes, Docker</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#json-support"><span>JSON Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#spark-integration"><span>Spark Integration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#read-historical-data-without-restoring-from-backup"><span>Read Historical Data Without Restoring from Backup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fast-import-and-restore-of-data"><span>Fast Import and Restore of Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#hybrid-of-column-and-row-storage"><span>Hybrid of Column and Row Storage</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#sql-plan-management"><span>SQL Plan Management</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#open-source"><span>Open Source</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#online-schema-changes"><span>Online Schema Changes</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>How-to</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Get Started</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Start a Local Cluster</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-binary/"><span>From Binary</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-homebrew/"><span>From Homebrew</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-dbdeployer/"><span>From DBdeployer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-kubernetes/"><span>In Kubernetes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-docker-compose/"><span>In Docker Compose</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/explore-sql/"><span>Explore SQL with TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/import-example-database/"><span>Import Example Database</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/read-historical-data/"><span>Read Historical Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/tidb-binlog/"><span>TiDB-Binlog Tutorial</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/data-migration/"><span>TiDB Data Migration Tutorial</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Deploy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/hardware-recommendations/"><span>Hardware Recommendations</span></a>
+</li><li class="has-child "><a href="#">
+<span>From Binary Tarball</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/testing-environment/"><span>For Testing Environments</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/production-environment/"><span>For Production Environments</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Orchestrated Deployment</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible/"><span>Ansible Deployment (Recommended)</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/offline-ansible/"><span>Ansible Offline Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/docker/"><span>Docker Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/kubernetes/"><span>Kubernetes Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations/"><span>Overview of Ansible Operations</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Geographic Redundancy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/location-awareness/"><span>Configure Location Awareness</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/tispark/"><span>TiSpark</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/data-migration-with-ansible/"><span>Data Migration with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/time-zone/"><span>Time Zone</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/memory-control/"><span>Memory Control</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Secure</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Transport Layer Security (TLS)</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-clients/"><span>Enable TLS For MySQL Clients</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-between-components/"><span>Enable TLS Between TiDB Components</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/generate-self-signed-certificates/"><span>Generate Self-signed Certificates</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Monitor</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/monitor-a-cluster/"><span>Monitor a TiDB Cluster</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Migrate</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/overview/"><span>Overview</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-mysql/"><span>Migrate the Full Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/incrementally-from-mysql/"><span>Migrate the Incremental Data</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/tools/lightning/csv/"><span>Migrate from CSV</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Maintain</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/backup-and-restore/"><span>Backup and Restore</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/identify-slow-queries/"><span>Identify Slow Queries</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Scale</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/horizontally/"><span>Scale a TiDB Cluster</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/with-ansible/"><span>Scale using Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Upgrade</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/from-previous-version/"><span>Upgrade to TiDB 3.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/to-tidb-2.1/"><span>Upgrade to TiDB 2.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/data-migration/"><span>Upgrade Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/rolling-updates-with-ansible/"><span>Rolling updates with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Troubleshoot</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/cluster-setup/"><span>Troubleshoot Cluster Setup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/data-migration/"><span>Troubleshoot Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/tidb-lightning/"><span>Troubleshoot TiDB-Lightning</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Reference</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/mysql-compatibility/"><span>MySQL Compatibility</span></a>
+</li><li class="has-child "><a href="#">
+<span>SQL</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>SQL Language Structure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/literal-values/"><span>Literal Values</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/schema-object-names/"><span>Schema Object Names</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/keywords-and-reserved-words/"><span>Keywords and Reserved Words</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/user-defined-variables/"><span>User-Defined Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/expression-syntax/"><span>Expression Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/comment-syntax/"><span>Comment Syntax</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Data Types</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#numeric-types"><span>Numeric Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#date-and-time-types"><span>Date and Time Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#string-types"><span>String Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#json-types"><span>JSON Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-enum-data-type"><span>The ENUM Data Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-set-type"><span>The SET Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#data-type-default-values"><span>Data Type Default Values</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Functions and Operators</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/reference/"><span>Function and Operator Reference</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/type-conversion/"><span>Type Conversion in Expression Evaluation</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/operators/"><span>Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/control-flow-functions/"><span>Control Flow Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/string-functions/"><span>String Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/numeric-functions-and-operators/"><span>Numeric Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/date-and-time-functions/"><span>Date and Time Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/bit-functions-and-operators/"><span>Bit Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/cast-functions-and-operators/"><span>Cast Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/encryption-and-compression-functions/"><span>Encryption and Compression Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/information-functions/"><span>Information Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/json-functions/"><span>JSON Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/aggregate-group-by-functions/"><span>Aggregate (GROUP BY) Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/miscellaneous-functions/"><span>Miscellaneous Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/precision-math/"><span>Precision Math</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>SQL Statements</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-column/"><span>ADD COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-index/"><span>ADD INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/admin/"><span>ADMIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-table/"><span>ALTER TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-user/"><span>ALTER USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/analyze-table/"><span>ANALYZE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/begin/"><span>BEGIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/commit/"><span>COMMIT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-database/"><span>CREATE DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-index/"><span>CREATE INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table-like/"><span>CREATE TABLE LIKE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table/"><span>CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-user/"><span>CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-view/"><span>CREATE VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/deallocate/"><span>DEALLOCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/delete/"><span>DELETE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/desc/"><span>DESC</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/describe/"><span>DESCRIBE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/do/"><span>DO</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-column/"><span>DROP COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-database/"><span>DROP DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-index/"><span>DROP INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-table/"><span>DROP TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-user/"><span>DROP USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-view/"><span>DROP VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/execute/"><span>EXECUTE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain-analyze/"><span>EXPLAIN ANALYZE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain/"><span>EXPLAIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-privileges/"><span>FLUSH PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-status/"><span>FLUSH STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-tables/"><span>FLUSH TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/grant-privileges/"><span>GRANT &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/insert/"><span>INSERT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/kill/"><span>KILL [TIDB]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/load-data/"><span>LOAD DATA</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/modify-column/"><span>MODIFY COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/prepare/"><span>PREPARE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-index/"><span>RENAME INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-table/"><span>RENAME TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/replace/"><span>REPLACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/revoke-privileges/"><span>REVOKE &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rollback/"><span>ROLLBACK</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/select/"><span>SELECT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-names/"><span>SET [NAMES|CHARACTER SET]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-password/"><span>SET PASSWORD</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-transaction/"><span>SET TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-variable/"><span>SET [GLOBAL|SESSION] &lt;variable&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-character-set/"><span>SHOW CHARACTER SET</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-collation/"><span>SHOW COLLATION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-columns-from/"><span>SHOW [FULL] COLUMNS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-table/"><span>SHOW CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-user/"><span>SHOW CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-databases/"><span>SHOW DATABASES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-engines/"><span>SHOW ENGINES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-errors/"><span>SHOW ERRORS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-fields-from/"><span>SHOW [FULL] FIELDS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-grants/"><span>SHOW GRANTS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-indexes/"><span>SHOW INDEXES [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-index/"><span>SHOW INDEX [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-keys/"><span>SHOW KEYS [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-privileges/"><span>SHOW PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-processlist/"><span>SHOW [FULL] PROCESSSLIST</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-schemas/"><span>SHOW SCHEMAS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-tables/"><span>SHOW [FULL] TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-table-status/"><span>SHOW TABLE STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-variables/"><span>SHOW [GLOBAL|SESSION] VARIABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-warnings/"><span>SHOW WARNINGS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/start-transaction/"><span>START TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/trace/"><span>TRACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/truncate/"><span>TRUNCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/update/"><span>UPDATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/use/"><span>USE</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/constraints/"><span>Constraints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/generated-columns/"><span>Generated Columns</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/character-set/"><span>Character Set</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configuration</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>tidb-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/mysql-variables/"><span>MySQL System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/tidb-specific-variables/"><span>TiDB Specific System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration/"><span>Configuration Flags</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration-file/"><span>Configuration File</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>pd-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/pd-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>tikv-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tikv-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Security</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/security/compatibility/"><span>Security Compatibility with MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/privilege-system/"><span>The TiDB Access Privilege System</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/user-account-management/"><span>TiDB User Account Management</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Transactions</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-model/"><span>Transaction Model</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-isolation/"><span>Isolation Levels</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>System Databases</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/mysql/"><span>mysql</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/information-schema/"><span>information_schema</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/error-codes/"><span>Errors Codes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/supported-clients/"><span>Supported Client Drivers</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/garbage-collection/"><span>Garbage Collection (GC)</span></a>
+</li><li class="has-child "><a href="#">
+<span>Performance</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/sql-optimizer-overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/understanding-the-query-execution-plan/"><span>Understanding the Query Execution Plan</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/statistics/"><span>Introduction to Statistics</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/optimizer-hints/"><span>Optimizer Hints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/tune-tikv/"><span>Tune TiKV</span></a>
+</li><li class="leaf-child ">
+<a href="https://pingcap.com/blog/2017-07-24-tidbbestpractice/"><span>TiDB Best Practices</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tispark/"><span>TiSpark</span></a>
+</li><li class="has-child "><a href="#">
+<span>Tools</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/syncer/"><span>Syncer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/mydumper/"><span>mydumper</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/loader/"><span>Loader</span></a>
+</li><li class="has-child "><a href="#">
+<span>Data Migration</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/#usage-restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/deploy/"><span>Deploy</span></a>
+</li><li class="has-child "><a href="#">
+<span>Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#table-routing"><span>Table Routing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#black-and-white-table-lists"><span>Black and White Lists</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#binlog-event-filter"><span>Binlog Event Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#column-mapping"><span>Column Mapping</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#synchronization-delay-monitoring"><span>Synchronization Delay Monitoring</span></a>
+</li><li class="has-child "><a href="#">
+<span>Sharding Support</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/"><span>Introduction</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/#restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/manually-handling-sharding-ddl-locks/"><span>Handle Sharding DDL Locks Manually</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Usage Scenarios</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/simple-synchronization/"><span>Simple Scenario</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/shard-merge/"><span>Shard Merge Scenario</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/task-configuration-file/"><span>Task Configuration</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/manage-tasks/"><span>Manage the Task</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/cluster-operations/"><span>Cluster Operations</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL compatible database </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Lightning</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/deployment/"><span>Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/checkpoints/"><span>Checkpoints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/table-filter/"><span>Table Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/csv/"><span>CSV Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/monitor/"><span>Monitor</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Binlog</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/deploy/"><span>Deploy</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/operation/"><span>Maintain</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/upgrade/"><span>Upgrade</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-control/"><span>PD Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-recover/"><span>PD Recover</span></a>
+</li><li class="leaf-child ">
+<a href="https://github.com/tikv/tikv/blob/master/docs/tools/tikv-control.md"><span>TiKV Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-control/"><span>TiDB Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/download/"><span>Download</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Key Monitoring Metrics</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tidb/"><span>TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/pd/"><span>PD</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tikv/"><span>TiKV</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/adopters/"><span>Adopters</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>FAQs</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/faq/tidb/"><span>TiDB FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/tidb-lightning/"><span>TiDB-Lightning FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/upgrades/"><span>Upgrade FAQs</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Support  </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/support-resources/"><span>Support Resources</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/report-issue/"><span>Report an Issue</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Contribute</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/contribute/#contribute-to-tidb"><span>Contribute to TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/contribute/#improve-the-docs"><span>Improve the Docs</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/roadmap/"><span>Roadmap</span></a>
+</li><li class="has-child "><a href="#">
+<span>Releases</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>v3.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-rc.1/"><span>3.0.0-rc.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-beta.1/"><span>3.0.0-beta.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0beta/"><span>3.0.0-beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.1</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.1.10/"><span>2.1.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.9/"><span>2.1.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.8/"><span>2.1.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.7/"><span>2.1.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.6/"><span>2.1.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.5/"><span>2.1.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.4/"><span>2.1.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.3/"><span>2.1.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.2/"><span>2.1.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.1/"><span>2.1.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1ga/"><span>2.1 GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc5/"><span>2.1 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc4/"><span>2.1 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc3/"><span>2.1 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc2/"><span>2.1 RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc1/"><span>2.1 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21beta/"><span>2.1 Beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.0.11/"><span>2.0.11</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0.10/"><span>2.0.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/209/"><span>2.0.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/208/"><span>2.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/207/"><span>2.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/206/"><span>2.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/205/"><span>2.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/204/"><span>2.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/203/"><span>2.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/202/"><span>2.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/201/"><span>2.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0ga/"><span>2.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc5/"><span>2.0 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc4/"><span>2.0 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc3/"><span>2.0 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc1/"><span>2.0 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11beta/"><span>1.1 Beta</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11alpha/"><span>1.1 Alpha</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v1.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/108/"><span>1.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/107/"><span>1.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/106/"><span>1.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/105/"><span>1.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/104/"><span>1.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/103/"><span>1.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/102/"><span>1.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/101/"><span>1.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/ga/"><span>1.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/prega/"><span>Pre-GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc4/"><span>RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc3/"><span>RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc2/"><span>RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc1/"><span>RC1</span></a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 id="tidb-binlog-cluster-user-guide">TiDB-Binlog Cluster User Guide</h1>
+<p>This document introduces the architecture and the deployment of TiDB-Binlog of the cluster version.</p>
+<p>TiDB-Binlog is an enterprise tool used to collect the binlog data of TiDB and provide real-time backup and synchronization.</p>
+<p>TiDB-Binlog has the following features:</p>
+<ul>
+<li><strong>Data synchronization:</strong> synchronize the data in the TiDB cluster to other databases</li>
+<li><strong>Real-time backup and restoration:</strong> back up the data in the TiDB cluster and restore the TiDB cluster when the cluster fails</li>
+</ul>
+<h2 id="tidb-binlog-architecture">TiDB-Binlog architecture</h2>
+<p>The TiDB-Binlog architecture is as follows:</p>
+<p><img alt="TiDB-Binlog architecture" class="lazy" data-original="/images/docs/tidb_binlog_cluster_architecture.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>The TiDB-Binlog cluster is composed of Pump and Drainer.</p>
+<h3 id="pump">Pump</h3>
+<p>Pump is used to record the binlogs generated in TiDB, sort the binlogs based on the commit time of the transaction, and send binlogs to Drainer for consumption.</p>
+<h3 id="drainer">Drainer</h3>
+<p>Drainer collects and merges binlogs from each Pump, converts the binlog to SQL or data of a specific format, and synchronizes the data to the downstream.</p>
+<h2 id="main-features">Main features</h2>
+<ul>
+<li>Multiple Pumps form a cluster which can scale out horizontally.</li>
+<li>TiDB uses the built-in Pump Client to send the binlog to each Pump.</li>
+<li>Pump stores binlogs and sends the binlogs to Drainer in order.</li>
+<li>Drainer reads binlogs of each Pump, merges and sorts the binlogs, and sends the binlogs to the downstream.</li>
+</ul>
+<h2 id="hardware-requirements">Hardware requirements</h2>
+<p>Pump and Drainer can be deployed and run on common 64-bit hardware server platforms with the Intel x86-64 architecture.</p>
+<p>The server hardware requirements for development, testing, and the production environment are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>The Number of Servers</th>
+<th>CPU</th>
+<th>Disk</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pump</td>
+<td>3</td>
+<td>8 core+</td>
+<td>SSD, 200 GB+</td>
+<td>16G</td>
+</tr>
+<tr>
+<td>Drainer</td>
+<td>1</td>
+<td>8 core+</td>
+<td>SAS, 100 GB+ (If you need to output a local file, use SSD and increase the disk size)</td>
+<td>16G</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>You need to use TiDB v2.0.8-binlog, v2.1.0-rc.5 or the later version. Otherwise, the TiDB cluster is not compatible with the cluster version of TiDB-Binlog.</li>
+<li>When TiDB is running, you need to guarantee that at least one Pump is running normally.</li>
+<li>To enable TiDB-Binlog, add the <code>enable-binlog</code> startup parameter to TiDB.</li>
+<li>Drainer does not support the <code>rename</code> DDL operation on the table of <code>ignore schemas</code> (the schemas in the filter list).</li>
+<li>If you want to start Drainer in the existing TiDB cluster, generally, you need to make a full backup of the cluster data, obtain <code>savepoint</code>, import the data to the target database, and then start Drainer to synchronize the incremental data from <code>savepoint</code>.</li>
+<li>Drainer supports synchronizing binlogs to MySQL, TiDB, Kafka or the local files. If you need to synchronize binlogs to other destinations, you can set Drainer to synchronize the binlog to Kafka and read the data in Kafka for customization processing. See <a href="/docs/tools/binlog-slave-client">Binlog Slave Client User Guide</a>.</li>
+<li>If TiDB-Binlog is used for recovering the incremental data, you can set the downstream to <code>pb</code> (local files in the proto buffer format). Drainer converts the binlog to data in the specified proto buffer format and writes the data to local files. In this way, you can use <a href="/docs/tools/reparo">Reparo</a> to recover the incremental data.</li>
+<li>Pump/Drainer has two states: <code>paused</code> and <code>offline</code>. If you press Ctrl + C or kill the process, both Pump and Drainer become <code>paused</code>. The paused Pump do not need to send all the binlog data to Drainer. If you need to exit from Pump for a long period of time (or do not use Pump any more), use <code>binlogctl</code> to make Pump offline. The same goes for Drainer.</li>
+<li>If the downstream is MySQL/TiDB, you can use <a href="/docs/tools/sync-diff-inspector">sync-diff-inspector</a> to verify the data after data synchronization.</li>
+</ul>
+<h2 id="tidb-binlog-deployment">TiDB-Binlog deployment</h2>
+<p>This section shows two methods of deploying TiDB-Binlog:</p>
+<ul>
+<li><a href="#deploy-tidb-binlog-using-tidb-ansible">Deploy TiDB-Binlog using TiDB-Ansible</a></li>
+<li><a href="#deploy-tidb-binlog-using-binary">Deploy TiDB-Binlog using Binary</a></li>
+</ul>
+<p>It is recommended to deploy TiDB-Binlog using TiDB-Ansible. If you just want to do a simple testing, you can deploy TiDB-Binlog using Binary.</p>
+<h3 id="deploy-tidb-binlog-using-tidb-ansible">Deploy TiDB-Binlog using TiDB-Ansible</h3>
+<h4 id="step-1-download-tidb-ansible">Step 1: Download TiDB-Ansible</h4>
+<ol>
+<li><p>Use the TiDB user account to log in to the central control machine and go to the <code>/home/tidb</code> directory. The information about the branch of TiDB-Ansible and the corresponding TiDB version is as follows. If you have questions regarding which version to use, email to <a href="mailto:info@pingcap.com">info@pingcap.com</a> for more information or <a href="https://github.com/pingcap/tidb-ansible/issues/new">file an issue</a>.</p>
+<table>
+<thead>
+<tr>
+<th>tidb-ansible branch</th>
+<th>TiDB version</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>release-2.0</td>
+<td>2.0 version</td>
+<td>The latest 2.0 stable version. You can use it in the production environment.</td>
+</tr>
+<tr>
+<td>release-2.1</td>
+<td>2.1 version</td>
+<td>The latest 2.1 stable version. You can use it in the production environment (recommended).</td>
+</tr>
+<tr>
+<td>master</td>
+<td>master version</td>
+<td>This version includes the latest features with a daily update.</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Use the following command to download the corresponding branch of TiDB-Ansible from the <a href="https://github.com/pingcap/tidb-ansible">TiDB-Ansible project</a> on GitHub. The default folder name is <code>tidb-ansible</code>.</p>
+<ul>
+<li><p>Download the 2.0 version:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git clone -b release-2.0-new-binlog https://github.com/pingcap/tidb-ansible.git</code></pre></div></li>
+<li><p>Download the 2.1 version:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git clone -b release-2.1 https://github.com/pingcap/tidb-ansible.git</code></pre></div></li>
+<li><p>Download the master version:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git clone https://github.com/pingcap/tidb-ansible.git</code></pre></div></li>
+</ul></li>
+</ol>
+<h4 id="step-2-deploy-pump">Step 2: Deploy Pump</h4>
+<ol>
+<li><p>Modify the <code>tidb-ansible/inventory.ini</code> file.</p>
+<ol>
+<li><p>Set <code>enable_binlog = True</code> to start <code>binlog</code> of the TiDB cluster.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#75715e">## binlog trigger</span>
+<span style="color:#a6e22e">enable_binlog</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">True</span></code></pre></div></li>
+<li><p>Add the deployment machine IPs for <code>pump_servers</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#75715e">## Binlog Part</span>
+<span style="color:#66d9ef">[pump_servers]</span>
+<span style="color:#a6e22e">172.16.10.72</span>
+<span style="color:#a6e22e">172.16.10.73</span>
+<span style="color:#a6e22e">172.16.10.74</span></code></pre></div>
+<p>Pump retains the data of the latest 5 days by default. You can modify the value of the <code>gc</code> variable in the <code>tidb-ansible/conf/pump.yml</code> file and remove the related comments. Take modifying the variable value to 7 as an example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">global:
+  <span style="color:#75715e"># an integer value to control the expiry date of the binlog data, which indicates for how long (in days) the binlog data would be stored</span>
+  <span style="color:#75715e"># must be bigger than 0</span>
+  gc: <span style="color:#ae81ff">7</span></code></pre></div>
+<p>Make sure the space of the deployment directory is sufficient for storing Binlog. For more details, see <a href="/docs/op-guide/ansible-deployment#configure-the-deployment-directory">Configure the deployment directory</a>. You can also set a separate deployment directory for Pump.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#75715e">## Binlog Part</span>
+<span style="color:#66d9ef">[pump_servers]</span>
+<span style="color:#a6e22e">pump1 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.72 deploy_dir=/data1/pump</span>
+<span style="color:#a6e22e">pump2 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.73 deploy_dir=/data1/pump</span>
+<span style="color:#a6e22e">pump3 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.74 deploy_dir=/data1/pump</span></code></pre></div></li>
+</ol></li>
+<li><p>Deploy and start the TiDB cluster with Pump components.</p></li>
+</ol>
+<p>After configuring the <code>inventory.ini</code> file as described above, choose one of the following two methods for deployment.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">**Method 1**: Adding a Pump component to an existing TiDB cluster requires step-by-step steps as follows.
+
+ 1. Deploy pump_servers and node_exporters
+
+     ```
+    Ansible-playbook deploy.yml -l ${pump1_ip}, ${pump2_ip}, [${alias1_name}, ${alias2_name}]
+     ```
+
+ 2. Start pump_servers
+
+     ```
+     Ansible-playbook start.yml --tags=pump
+     ```
+
+ 3. Update and restart tidb_servers
+
+     ```
+     Ansible-playbook rolling_update.yml --tags=tidb
+     ```
+
+ 4. Update monitoring information
+
+     ```
+    Ansible-playbook rolling_update_monitor.yml --tags=prometheus
+     ```
+
+    **Method 2**: Deploy a TiDB cluster with Pump components from scratch
+
+    For how to use Ansible to deploy the TiDB cluster, see [Deploy TiDB Using Ansible](../op-guide/ansible-deployment.md).  </pre></div>
+<ol>
+<li><p>Check the Pump status.</p>
+<p>Use <code>binlogctl</code> to check the Pump status. Change the <code>pd-urls</code> parameter to the PD address of the cluster. If <code>State</code> is <code>online</code>, Pump is started successfully.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible
+$ resources/bin/binlogctl -pd-urls<span style="color:#f92672">=</span>http://172.16.10.72:2379 -cmd pumps
+    
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> pump: <span style="color:#f92672">{</span>NodeID: ip-172-16-10-72:8250, Addr: <span style="color:#ae81ff">172</span>.16.10.72:8250, State: online, MaxCommitTS: <span style="color:#ae81ff">403051525690884099</span>, UpdateTime: <span style="color:#ae81ff">2018</span>-12-25 <span style="color:#ae81ff">14</span>:23:37 +0800 CST<span style="color:#f92672">}</span>
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> pump: <span style="color:#f92672">{</span>NodeID: ip-172-16-10-73:8250, Addr: <span style="color:#ae81ff">172</span>.16.10.73:8250, State: online, MaxCommitTS: <span style="color:#ae81ff">403051525703991299</span>, UpdateTime: <span style="color:#ae81ff">2018</span>-12-25 <span style="color:#ae81ff">14</span>:23:36 +0800 CST<span style="color:#f92672">}</span>
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> pump: <span style="color:#f92672">{</span>NodeID: ip-172-16-10-74:8250, Addr: <span style="color:#ae81ff">172</span>.16.10.74:8250, State: online, MaxCommitTS: <span style="color:#ae81ff">403051525717360643</span>, UpdateTime: <span style="color:#ae81ff">2018</span>-12-25 <span style="color:#ae81ff">14</span>:23:35 +0800 CST<span style="color:#f92672">}</span></code></pre></div></li>
+</ol>
+<h4 id="step-3-deploy-drainer">Step 3: Deploy Drainer</h4>
+<ol>
+<li><p>Obtain <code>initial_commit_ts</code>.</p>
+<p>Run the following command to use <code>binlogctl</code> to generate the <code>tso</code> information which is needed for the initial start of Drainer:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible
+$ resources/bin/binlogctl -pd-urls<span style="color:#f92672">=</span>http://127.0.0.1:2379 -cmd generate_meta
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> <span style="color:#f92672">[</span>pd<span style="color:#f92672">]</span> create pd client with endpoints <span style="color:#f92672">[</span>http://192.168.199.118:32379<span style="color:#f92672">]</span>
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> <span style="color:#f92672">[</span>pd<span style="color:#f92672">]</span> leader switches to: http://192.168.199.118:32379, previous:
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> <span style="color:#f92672">[</span>pd<span style="color:#f92672">]</span> init cluster id <span style="color:#ae81ff">6569368151110378289</span>
+<span style="color:#ae81ff">2018</span>/06/21 <span style="color:#ae81ff">11</span>:24:47 meta.go:117: <span style="color:#f92672">[</span>info<span style="color:#f92672">]</span> meta: &amp;<span style="color:#f92672">{</span>CommitTS:400962745252184065<span style="color:#f92672">}</span></code></pre></div>
+<p>After this command is executed, <code>meta: &amp;{CommitTS:400962745252184065}</code> is generated. The value of CommitTS is used as the value of the <code>initial-commit-ts</code> parameter needed for the initial start of Drainer.</p></li>
+<li><p>Back up and restore all the data.</p>
+<p>It is recommended to use <a href="/docs/tools/mydumper">mydumper</a> to make a full backup of TiDB and then use <a href="/docs/tools/loader">Loader</a> to export the data to the downstream. For more details, see <a href="/docs/op-guide/backup-restore">Backup and Restore</a>.</p></li>
+<li><p>Modify the <code>tidb-ansible/inventory.ini</code> file.</p>
+<p>Add the deployment machine IPs for <code>drainer_servers</code>. Set <code>initial_commit_ts</code> to the value you have obtained, which is only used for the initial start of Drainer.</p>
+<ul>
+<li><p>Assume that the downstream is MySQL with the alias <code>drainer_mysql</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[drainer_servers]</span>
+<span style="color:#a6e22e">drainer_mysql ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.71 initial_commit_ts="402899541671542785"</span></code></pre></div></li>
+<li><p>Assume that the downstream is <code>pb</code> with the alias <code>drainer_pb</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[drainer_servers]</span>
+<span style="color:#a6e22e">drainer_pb ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.71 initial_commit_ts="402899541671542785"</span></code></pre></div></li>
+</ul></li>
+<li><p>Modify the configuration file.</p>
+<ul>
+<li><p>Assume that the downstream is MySQL:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible/conf
+$ cp drainer.toml drainer_mysql_drainer.toml
+$ vi drainer_mysql_drainer.toml</code></pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>Name the configuration file as <code>alias_drainer.toml</code>. Otherwise, the customized configuration file cannot be found during the deployment process.</p>
+</blockquote>
+<p>Set <code>db-type</code> to <code>mysql</code> and configure the downstream MySQL information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># downstream storage, equal to --dest-db-type</span>
+<span style="color:#75715e"># Valid values are "mysql", "pb", "kafka", and "flash".</span>
+<span style="color:#a6e22e">db</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">type</span> = <span style="color:#e6db74">"mysql"</span>
+
+<span style="color:#75715e"># the downstream MySQL protocol database</span>
+[<span style="color:#a6e22e">syncer</span>.<span style="color:#a6e22e">to</span>]
+<span style="color:#a6e22e">host</span> = <span style="color:#e6db74">"172.16.10.72"</span>
+<span style="color:#a6e22e">user</span> = <span style="color:#e6db74">"root"</span>
+<span style="color:#a6e22e">password</span> = <span style="color:#e6db74">"123456"</span>
+<span style="color:#a6e22e">port</span> = <span style="color:#ae81ff">3306</span>
+<span style="color:#75715e"># Time and size limits for flash batch write</span>
+<span style="color:#75715e"># time-limit = "30s"</span>
+<span style="color:#75715e"># size-limit = "100000"</span></code></pre></div></li>
+<li><p>Assume that the downstream is <code>pb</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible/conf
+$ cp drainer.toml drainer_pb_drainer.toml
+$ vi drainer_pb_drainer.toml</code></pre></div>
+<p>Set <code>db-type</code> to <code>pb</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># downstream storage, equal to --dest-db-type</span>
+<span style="color:#75715e"># Valid values are "mysql", "pb", "kafka", and "flash".</span>
+<span style="color:#a6e22e">db</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">type</span> = <span style="color:#e6db74">"pb"</span>
+
+<span style="color:#75715e"># Uncomment this if you want to use `pb` or `sql` as `db-type`.</span>
+<span style="color:#75715e"># `Compress` compresses the output file, like the `pb` and `sql` file. Now it supports the `gzip` algorithm only. </span>
+<span style="color:#75715e"># The value can be `gzip`. Leave it empty to disable compression. </span>
+[<span style="color:#a6e22e">syncer</span>.<span style="color:#a6e22e">to</span>]
+<span style="color:#a6e22e">compression</span> = <span style="color:#e6db74">""</span>
+<span style="color:#75715e"># default data directory: "{{ deploy_dir }}/data.drainer"</span>
+<span style="color:#a6e22e">dir</span> = <span style="color:#e6db74">"data.drainer"</span></code></pre></div></li>
+</ul></li>
+<li><p>Deploy Drainer.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ansible-playbook deploy_drainer.yml</code></pre></div></li>
+<li><p>Start Drainer.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ansible-playbook start_drainer.yml</code></pre></div></li>
+</ol>
+<h3 id="deploy-tidb-binlog-using-binary">Deploy TiDB-Binlog using Binary</h3>
+<h4 id="download-the-official-binary">Download the official Binary</h4>
+<p>Run the following command to download the binary:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://download.pingcap.org/tidb-<span style="color:#f92672">{</span>version<span style="color:#f92672">}</span>-linux-amd64.tar.gz
+wget https://download.pingcap.org/tidb-<span style="color:#f92672">{</span>version<span style="color:#f92672">}</span>-linux-amd64.sha256
+
+<span style="color:#75715e"># Check the file integrity. If the result is OK, the file is correct.
+</span><span style="color:#75715e"></span>sha256sum -c tidb-<span style="color:#f92672">{</span>version<span style="color:#f92672">}</span>-binlog-linux-amd64.sha256</code></pre></div>
+<p>For TiDB v2.1.0 GA or later versions, Pump and Drainer are already included in the TiDB download package. For other TiDB versions, you need to download Pump and Drainer separately using the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://download.pingcap.org/tidb-binlog-<span style="color:#f92672">{</span>version<span style="color:#f92672">}</span>-linux-amd64.tar.gz
+wget https://download.pingcap.org/tidb-binlog-<span style="color:#f92672">{</span>version<span style="color:#f92672">}</span>-linux-amd64.sha256
+
+<span style="color:#75715e"># Check the file integrity. If the result is OK, the file is correct.
+</span><span style="color:#75715e"></span>sha256sum -c tidb-binlog-<span style="color:#f92672">{</span>version<span style="color:#f92672">}</span>-linux-amd64.sha256</code></pre></div>
+<h4 id="the-usage-example">The usage example</h4>
+<p>Assuming that you have three PD nodes, one TiDB node, two Pump nodes, and one Drainer node, the information of each node is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">TiDB="192.168.0.10"
+PD1="192.168.0.16"
+PD2="192.168.0.15"
+PD3="192.168.0.14"
+Pump="192.168.0.11"
+Pump="192.168.0.12"
+Drainer="192.168.0.13"</pre></div>
+<p>The following part shows how to use Pump and Drainer based on the nodes above.</p>
+<ol>
+<li><p>Deploy Pump using the binary.</p>
+<ul>
+<li><p>Taking deploying Pump on “192.168.0.11” as an example, the description for command line parameters of Pump is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Usage of Pump:
+-L string
+    the output information level of logs: debug, info, warn, error, fatal ("info" by default)
+-V
+    the print version information
+-addr string
+    the RPC address through which Pump provides the service (-addr="192.168.0.11:8250")
+-advertise-addr string
+    the RPC address through which Pump provides the external service (-advertise-addr="192.168.0.11:8250")
+-config string
+    the path of the configuration file. If you specify the configuration file, Pump reads the configuration in the configuration file first. If the corresponding configuration also exits in the command line parameters, Pump uses the configuration of the command line parameters to cover that of the configuration file.
+-data-dir string
+    the path where the Pump data is stored
+-enable-tolerant
+    After `tolerant` is enabled, Pump (enabled by default) does not report an error if the binlog fails to write into Pump.
+-gc int
+    the number of days to retain the data in Pump (7 by default)
+-heartbeat-interval int
+    the interval of the heartbeats Pump sends to PD (in seconds)
+-log-file string
+    the file path of logs
+-log-rotate string
+    the switch frequency of logs (hour/day)
+-metrics-addr string
+    the Prometheus Pushgateway address. If not set, it is forbidden to report the monitoring metrics.
+-metrics-interval int
+    the report frequency of the monitoring metrics (15 by default, in seconds)
+-pd-urls string
+    the address of the PD cluster nodes (-pd-urls="http://192.168.0.16:2379,http://192.168.0.15:2379,http://192.168.0.14:2379")</pre></div></li>
+<li><p>Taking deploying Pump on “192.168.0.11” as an example, the Pump configuration file is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># Pump Configuration</span>
+
+<span style="color:#75715e"># the bound address of Pump</span>
+<span style="color:#a6e22e">addr</span> = <span style="color:#e6db74">"192.168.0.11:8250"</span>
+
+<span style="color:#75715e"># the address through which Pump provides the service</span>
+<span style="color:#a6e22e">advertise</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">addr</span> = <span style="color:#e6db74">"192.168.0.11:8250"</span>
+
+<span style="color:#75715e"># the number of days to retain the data in Pump (7 by default)</span>
+<span style="color:#a6e22e">gc</span> = <span style="color:#ae81ff">7</span>
+
+<span style="color:#75715e"># the directory where the Pump data is stored</span>
+<span style="color:#a6e22e">data</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">dir</span> = <span style="color:#e6db74">"data.pump"</span>
+
+<span style="color:#75715e"># the interval of the heartbeats Pump sends to PD (in seconds)</span>
+<span style="color:#a6e22e">heartbeat</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">interval</span> = <span style="color:#ae81ff">2</span>
+    
+<span style="color:#75715e"># the address of the PD cluster nodes</span>
+<span style="color:#a6e22e">pd</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">urls</span> = <span style="color:#e6db74">"http://192.168.0.16:2379,http://192.168.0.15:2379,http://192.168.0.14:2379"</span>
+
+<span style="color:#75715e"># [storage]</span>
+<span style="color:#75715e"># Set to true (by default) to ensure reliability. Make sure the binlog data is updated to the disk</span>
+<span style="color:#75715e"># sync-log = true</span></code></pre></div></li>
+<li><p>The example of starting Pump:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./bin/pump -config pump.toml</code></pre></div>
+<p>If the command line parameters is the same with the configuration file parameters, the values of command line parameters are used.</p></li>
+</ul></li>
+<li><p>Deploy Drainer using binary.</p>
+<ul>
+<li><p>Taking deploying Drainer on “192.168.0.13” as an example, the description for command line parameters of Drainer is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Usage of Drainer:
+-L string
+    the output information level of logs: debug, info, warn, error, fatal ("info" by default)
+-V
+    the print version information
+-addr string
+    the address through which Drainer provides the service (-addr="192.168.0.13:8249")
+-c int
+    the number of the concurrency of the downstream for synchronization. The bigger the value, the better throughput performance of the concurrency (1 by default).
+-config string
+    the directory of the configuration file. Drainer reads the configuration file first.
+    If the corresponding configuration exists in the command line parameters, Drainer uses the configuration of the command line parameters to cover that of the configuration file.
+-data-dir string
+    the directory where the Drainer data is stored ("data.drainer" by default)
+-dest-db-type string
+    the downstream service type of Drainer
+    The value can be "mysql", "kafka", "pb", and "flash". ("mysql" by default)
+-detect-interval int
+    the interval of checking the online Pump in PD (10 by default, in seconds)
+-disable-detect
+    whether to disable the conflict monitoring
+-disable-dispatch
+    whether to disable the SQL feature of splitting a single binlog file. If it is set to "true", each binlog file is restored to a single transaction for synchronization based on the order of binlogs. 
+    It is set to "False", when the downstream is MySQL.
+-ignore-schemas string
+    the db filter list ("INFORMATION_SCHEMA,PERFORMANCE_SCHEMA,mysql,test" by default)
+    It does not support the Rename DDL operation on tables of `ignore schemas`.
+-initial-commit-ts
+    If Drainer does not have the related breakpoint information, you can configure the related breakpoint information using this parameter.
+    0 by default
+-log-file string
+    the path of the log file
+-log-rotate string
+    the switch frequency of log files, hour/day
+-metrics-addr string
+    the Prometheus Pushgateway address
+    It it is not set, the monitoring metrics are not reported.
+-metrics-interval int
+    the report frequency of the monitoring metrics (15 by default, in seconds)
+-pd-urls string
+    the address of the PD cluster nodes (-pd-urls="http://192.168.0.16:2379,http://192.168.0.15:2379,http://192.168.0.14:2379")
+-safe-mode
+    whether to enable the safe mode (divides the Update statement to Delete + Replace)
+-txn-batch int
+    the number of SQL statements of a transaction which are output to the downstream database (1 by default)</pre></div></li>
+<li><p>Taking deploying Drainer on “192.168.0.13” as an example, the Drainer configuration file is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># Drainer Configuration.</span>
+
+<span style="color:#75715e"># the address through which Drainer provides the service ("192.168.0.13:8249")</span>
+<span style="color:#a6e22e">addr</span> = <span style="color:#e6db74">"192.168.0.13:8249"</span>
+
+<span style="color:#75715e"># the interval of checking the online Pump in PD (10 by default, in seconds)</span>
+<span style="color:#a6e22e">detect</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">interval</span> = <span style="color:#ae81ff">10</span>
+
+<span style="color:#75715e"># the directory where the Drainer data is stored "data.drainer" by default)</span>
+<span style="color:#a6e22e">data</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">dir</span> = <span style="color:#e6db74">"data.drainer"</span>
+
+<span style="color:#75715e"># the address of the PD cluster nodes</span>
+<span style="color:#a6e22e">pd</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">urls</span> = <span style="color:#e6db74">"http://192.168.0.16:2379,http://192.168.0.15:2379,http://192.168.0.14:2379"</span>
+
+<span style="color:#75715e"># the directory of the log file</span>
+<span style="color:#a6e22e">log</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">file</span> = <span style="color:#e6db74">"drainer.log"</span>
+
+ <span style="color:#75715e"># Drainer compress data when the binlog is obtained form Pump.The value can be "gzip". If it is not configured, it will not be compressed.</span>
+<span style="color:#75715e"># compressor = "gzip"</span>
+
+<span style="color:#75715e"># Syncer Configuration</span>
+[<span style="color:#a6e22e">syncer</span>]
+ <span style="color:#75715e"># If this item is set, it will use its sql-mode to analyze DDL statements</span>
+<span style="color:#75715e"># sql-mode = "STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"</span>
+
+<span style="color:#75715e"># the number of SQL statements of a transaction which are output to the downstream database (20 by default)</span>
+<span style="color:#a6e22e">txn</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">batch</span> = <span style="color:#ae81ff">20</span>
+
+<span style="color:#75715e"># the number of the concurrency of the downstream for synchronization. The bigger the value,</span>
+<span style="color:#75715e"># the better throughput performance of the concurrency (16 by default)</span>
+<span style="color:#a6e22e">worker</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">count</span> = <span style="color:#ae81ff">16</span>
+
+<span style="color:#75715e"># whether to disable the SQL feature of splitting a single binlog file. If it is set to "true",</span>
+<span style="color:#75715e"># each binlog file is restored to a single transaction for synchronization based on the order of binlogs.</span>
+<span style="color:#75715e"># If the downstream service is MySQL, set it to "False".</span>
+<span style="color:#a6e22e">disable</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">dispatch</span> = <span style="color:#66d9ef">false</span>
+
+<span style="color:#75715e"># the downstream service type of Drainer ("mysql" by default)</span>
+<span style="color:#75715e"># Valid value: "mysql", "kafka", "pb", "flash"</span>
+<span style="color:#a6e22e">db</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">type</span> = <span style="color:#e6db74">"mysql"</span>
+
+<span style="color:#75715e"># the db filter list ("INFORMATION_SCHEMA,PERFORMANCE_SCHEMA,mysql,test" by default)</span>
+<span style="color:#75715e"># Does not support the Rename DDL operation on tables of `ignore schemas`.</span>
+<span style="color:#a6e22e">ignore</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">schemas</span> = <span style="color:#e6db74">"INFORMATION_SCHEMA,PERFORMANCE_SCHEMA,mysql"</span>
+
+<span style="color:#75715e"># `replicate-do-db` has priority over `replicate-do-table`. When they have the same `db` name,</span>
+<span style="color:#75715e"># regular expressions are supported for configuration.</span>
+<span style="color:#75715e"># The regular expression should start with "~".</span>
+
+<span style="color:#75715e"># replicate-do-db = ["~^b.*","s1"]</span>
+
+<span style="color:#75715e"># [[syncer.replicate-do-table]]</span>
+<span style="color:#75715e"># db-name ="test"</span>
+<span style="color:#75715e"># tbl-name = "log"</span>
+
+<span style="color:#75715e"># [[syncer.replicate-do-table]]</span>
+<span style="color:#75715e"># db-name ="test"</span>
+<span style="color:#75715e"># tbl-name = "~^a.*"</span>
+
+<span style="color:#75715e"># Ignore the replication of some tables</span>
+<span style="color:#75715e"># [[syncer.ignore-table]]</span>
+<span style="color:#75715e"># db-name = "test"</span>
+<span style="color:#75715e"># tbl-name = "log"</span>
+
+<span style="color:#75715e"># the server parameters of the downstream database when `db-type` is set to "mysql"</span>
+[<span style="color:#a6e22e">syncer</span>.<span style="color:#a6e22e">to</span>]
+<span style="color:#a6e22e">host</span> = <span style="color:#e6db74">"192.168.0.13"</span>
+<span style="color:#a6e22e">user</span> = <span style="color:#e6db74">"root"</span>
+<span style="color:#a6e22e">password</span> = <span style="color:#e6db74">""</span>
+<span style="color:#a6e22e">port</span> = <span style="color:#ae81ff">3306</span>
+
+<span style="color:#75715e"># the directory where the binlog file is stored when `db-type` is set to `pb`</span>
+<span style="color:#75715e"># [syncer.to]</span>
+<span style="color:#75715e"># dir = "data.drainer"</span>
+
+<span style="color:#75715e"># the Kafka configuration when `db-type` is set to "kafka"</span>
+<span style="color:#75715e"># [syncer.to]</span>
+<span style="color:#75715e"># zookeeper-addrs = "127.0.0.1:2181"</span>
+<span style="color:#75715e"># kafka-addrs = "127.0.0.1:9092"</span>
+<span style="color:#75715e"># kafka-version = "0.8.2.0"</span>
+
+<span style="color:#75715e"># the topic name of the Kafka cluster that saves the binlog data. The default value is &lt;cluster-id&gt;_obinlog</span>
+<span style="color:#75715e"># To run multiple Drainers to replicate data to the same Kafka cluster, you need to set different `topic-name`s for each Drainer.</span>
+<span style="color:#75715e"># topic-name = ""</span></code></pre></div></li>
+<li><p>The example of starting Drainer:</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>If the downstream is MySQL/TiDB, to guarantee the data integrity, you need to obtain the <code>initial-commit-ts</code> value and make a full backup of the data and restore the data before the initial start of Drainer. For details, see <a href="#step-3-deploy-drainer">Deploy Drainer</a>.</p>
+</blockquote>
+<p>When Drainer is started for the first time, use the <code>initial-commit-ts</code> parameter.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./bin/drainer -config drainer.toml -initial-commit-ts <span style="color:#f92672">{</span>initial-commit-ts<span style="color:#f92672">}</span></code></pre></div>
+<p>If the command line parameter and the configuration file parameter are the same, the parameter value in the command line is used.</p></li>
+</ul></li>
+</ol>
+<h2 id="tidb-binlog-operations">TiDB-Binlog operations</h2>
+<h3 id="pump-drainer-state">Pump/Drainer state</h3>
+<p>Pump/Drainer state description:</p>
+<ul>
+<li><code>online</code>: running normally.</li>
+<li><code>pausing</code>: in the pausing process. It turns into this state after you use <code>kill</code> or press Ctrl + C to exit from the process.</li>
+<li><code>paused</code>: has been stopped. While Pump is in this state, it rejects the request of writing binlog into it and does not provide the binlog for Drainer any more. When Drainer is in this state, it does not synchronize data to the downstream. After Pump and Drainer exit normally from all the threads, they switch the state to <code>paused</code> and then exits from the process.</li>
+<li><code>closing</code>: in the offline process. <code>binlogctl</code> is used to get Pump/Drainer offline and Pump/Drainer is in this state before the process exits. In this state, Pump does not accept new requests of writing binlog into it and waits for all the binlog data to be used up by Drainer.</li>
+<li><code>offline</code>: becomes offline. After Pump sents all the binlog data that it saves to Drainer, its state is switched to <code>offline</code>. Drainer’s state can be switched to <code>offline</code> after all the threads have exited.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong></p>
+<ul>
+<li>When Pump/Drainer is <code>pausing</code> or <code>paused</code>, the data synchronization is interrupted.</li>
+<li>When Pump is <code>closing</code>, you need to guarantee that all the data has been consumed by all the Drainers that are not <code>offline</code>. So before making Pump offline, you need to guarantee all the Drainers are <code>online</code>; otherwise, Pump cannot get offline normally.</li>
+<li>The binlog data that Pump saves is processed by GC only when it has been consumed by all the Drainers that are not <code>offline</code>.</li>
+<li>Close Drainer only when it will not be used any more.</li>
+</ul>
+</blockquote>
+<p>For how to pause, close, check, and modify the state of Drainer, see the <a href="#binlogctl-guide">binlogctl guide</a> as follows.</p>
+<h3 id="binlogctl-guide"><code>binlogctl</code> guide</h3>
+<p><a href="https://github.com/pingcap/tidb-tools/tree/master/tidb-binlog/binlogctl"><code>binlogctl</code></a> is an operations tool for TiDB-Binlog with the following features:</p>
+<ul>
+<li>Obtaining the current <code>ts</code></li>
+<li>Checking the Pump/Drainer state</li>
+<li>Modifying the Pump/Drainer state</li>
+<li>Pausing or closing Pump/Drainer</li>
+</ul>
+<h4 id="usage-scenarios-of-binlogctl">Usage scenarios of <code>binlogctl</code></h4>
+<ul>
+<li>It is the first time you run Drainer and you need to obtain the current <code>ts</code>.</li>
+<li>When Pump/Drainer exits abnormally, its state is not updated and the service is affected. You can use this tool to modify the state.</li>
+<li>An error occurs during synchronization and you need to check the running status and the Pump/Drainer state.</li>
+<li>While maintaining the cluster, you need to pause or close Pump/Drainer.</li>
+</ul>
+<h4 id="download-binlogctl">Download <code>binlogctl</code></h4>
+<p>Download <code>binlogctl</code> via:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://download.pingcap.org/binlogctl-new-linux-amd64.tar.gz
+wget https://download.pingcap.org/binlogctl-new-linux-amd64.sha256
+
+<span style="color:#75715e"># Check the file integrity. It should return OK.
+</span><span style="color:#75715e"></span>sha256sum -c tidb-binlog-new-linux-amd64.sha256</code></pre></div>
+<h4 id="binlogctl-usage-description"><code>binlogctl</code> usage description</h4>
+<p>Command line parameters:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Usage of binlogctl:
+-V
+    Outputs the binlogctl version information
+-cmd string
+    the command mode, including "generate_meta", "pumps", "drainers", "update-pump" ,"update-drainer", "pause-pump", "pause-drainer", "offline-pump", and "offline-drainer"
+-data-dir string
+    the file path where the checkpoint file of Drainer is stored ("binlog_position" by default)
+-node-id string
+    ID of Pump/Drainer
+-pd-urls string
+    the address of PD. If multiple addresses exist, use "," to separate each ("http://127.0.0.1:2379" by default)
+-ssl-ca string
+    the file path of SSL CAs
+-ssl-cert string
+    the file path of the X509 certificate file in the PEM format
+-ssl-key string
+    the file path of X509 key file of the PEM format
+-time-zone string
+    If a time zone is set, the corresponding time of the obtained `tso` is printed in the "generate_meta" mode. For example, "Asia/Shanghai" is the CST time zone and "Local" is the local time zone</pre></div>
+<p>Command example:</p>
+<ul>
+<li><p>Check the state of all the Pumps or Drainers:
+Set ‘cmd’ to ‘pumps’ or ‘drainers’ to check the state of all the Pumps or Drainers. For example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bin/binlogctl -pd-urls<span style="color:#f92672">=</span>http://127.0.0.1:2379 -cmd pumps
+
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> pump: <span style="color:#f92672">{</span>NodeID: ip-172-16-30-67:8250, Addr: <span style="color:#ae81ff">172</span>.16.30.192:8250, State: online, MaxCommitTS: <span style="color:#ae81ff">405197570529820673</span>, UpdateTime: <span style="color:#ae81ff">2018</span>-12-25 <span style="color:#ae81ff">14</span>:23:37 +0800 CST<span style="color:#f92672">}</span></code></pre></div></li>
+<li><p>Modify the Pump/Drainer state:</p>
+<p>Set ‘cmd’ to ‘update-pump’ or ‘update-drainer’ to update the states of Pump or Drainer.</p>
+<p>The Pump/Drainer states include <code>online</code>, <code>pausing</code>, <code>paused</code>, <code>closing</code> and <code>offline</code>. For example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bin/binlogctl -pd-urls<span style="color:#f92672">=</span>http://127.0.0.1:2379 -cmd update-pump -node-id ip-127-0-0-1:8250 -state paused</code></pre></div>
+<p>This command modifies the Pump/Drainer state saved in PD.</p></li>
+<li><p>Pause or close Pump/Drainer:
+Set ‘cmd’ as <code>pause-pump</code>,<code>pause-drainer</code>,<code>offline-pump</code> or <code>offline-drainer</code> to pause Pump, pause Drainer, offline Pump or offline Drainer. For example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bin/binlogctl -pd-urls<span style="color:#f92672">=</span>http://127.0.0.1:2379 -cmd pause-pump -node-id ip-127-0-0-1:8250</code></pre></div>
+<p><code>binlogctl</code> sends the HTTP request to Pump/Drainer, and Pump/Drainer exits from the process after receiving the command and sets its state to <code>paused</code>/<code>offline</code>.</p></li>
+<li><p>Generate the meta file that Drainer needs to start:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bin/binlogctl -pd-urls<span style="color:#f92672">=</span>http://127.0.0.1:2379 -cmd generate_meta
+
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> <span style="color:#f92672">[</span>pd<span style="color:#f92672">]</span> create pd client with endpoints <span style="color:#f92672">[</span>http://192.168.199.118:32379<span style="color:#f92672">]</span>
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> <span style="color:#f92672">[</span>pd<span style="color:#f92672">]</span> leader switches to: http://192.168.199.118:32379, previous:
+INFO<span style="color:#f92672">[</span><span style="color:#ae81ff">0000</span><span style="color:#f92672">]</span> <span style="color:#f92672">[</span>pd<span style="color:#f92672">]</span> init cluster id <span style="color:#ae81ff">6569368151110378289</span>
+<span style="color:#ae81ff">2018</span>/06/21 <span style="color:#ae81ff">11</span>:24:47 meta.go:117: <span style="color:#f92672">[</span>info<span style="color:#f92672">]</span> meta: &amp;<span style="color:#f92672">{</span>CommitTS:400962745252184065<span style="color:#f92672">}</span></code></pre></div>
+<p>This command generates a <code>{data-dir}/savepoint</code> file. This file stores the <code>tso</code> information which is needed for the initial start of Drainer.</p></li>
+</ul>
+<h2 id="tidb-binlog-monitoring">TiDB-Binlog monitoring</h2>
+<p>After you have deployed TiDB-Binlog using Ansible successfully, you can go to the Grafana Web (default address: <a href="http://grafana_ip:3000">http://grafana_ip:3000</a>, default account: admin, password: admin) to check the state of Pump and Drainer.</p>
+<p>For TiDB-Binlog monitoring metrics, see <a href="/docs/tools/tidb-binlog-monitor">TiDB-Binlog Monitoring Metrics</a>.</p>
+<h2 id="tidb-binlog-upgrade">TiDB-Binlog upgrade</h2>
+<p>The new TiDB versions (v2.0.8-binlog, v2.1.0-rc.5 or later) are not compatible with the <a href="/docs/tools/tidb-binlog-kafka">Kafka version</a> or <a href="/docs/tools/tidb-binlog">local version</a> of TiDB-Binlog. If TiDB is upgraded to one of the new versions, it is required to use the cluster version of TiDB-Binlog. If the Kafka or local version of TiDB-Binlog is used before upgrading, you need to upgrade your TiDB-Binlog to the cluster version.</p>
+<p>The corresponding relationship between TiDB-Binlog versions and TiDB versions is shown in the following table:</p>
+<table>
+<thead>
+<tr>
+<th align="left">TiDB-Binlog version</th>
+<th align="left">TiDB version</th>
+<th align="left">Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Local</td>
+<td align="left">TiDB 1.0 or earlier</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Kafka</td>
+<td align="left">TiDB 1.0 ~ TiDB 2.1 RC5</td>
+<td align="left">TiDB 1.0 supports both the local and Kafka versions of TiDB-Binlog.</td>
+</tr>
+<tr>
+<td align="left">Cluster</td>
+<td align="left">TiDB v2.0.8-binlog, TiDB 2.1 RC5 or later</td>
+<td align="left">TiDB v2.0.8-binlog is a special 2.0 version supporting the cluster version of TiDB-Binlog.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="upgrade-process">Upgrade process</h3>
+<ul>
+<li>If importing the full data is acceptable, you can abandon the old version and deploy TiDB-Binlog following this document.</li>
+<li><p>If you want to resume synchronization from the original checkpoint, perform the following steps to upgrade TiDB-Binlog:</p>
+<ol>
+<li>Deploy the new version of Pump.</li>
+<li>Stop the TiDB cluster service.</li>
+<li>Upgrade TiDB and the configuration, and write the binlog data to the new Pump cluster.</li>
+<li>Reconnect the TiDB cluster to the service.</li>
+<li>Make sure that the old version of Drainer has synchronized the data in the old version of Pump to the downstream completely.</li>
+<li>Start the new version of Drainer.</li>
+<li>Close the Pump and Drainer of the old versions and the dependent Kafka and Zookeeper.</li>
+</ol></li>
+</ul>
+</div>
+<div class="article-toc"></div>
+<div class="git-info">
+<a class="link" href="https://github.com/pingcap/docs/blob/master/v2.1/tools/tidb-binlog-cluster.md">"TiDB-Binlog Cluster User Guide"</a>
+                was last updated
+                <span>Apr 24 2019</span>:
+                <a class="link" href="https://github.com/pingcap/docs/commit/0cf5dddaa90da93c3d1ce7698e8c8f05839eb8e4">
+                    *: update the Note format (#1079) <span class="hash">(0cf5ddd)</span>
+</a>
+</div></div>
+<div class="sidebar-page">
+<div class="sticky-sidebar"><a class="improve-doc" href="https://github.com/pingcap/docs/edit/master/v2.1/tools/tidb-binlog-cluster.md" target="_blank">
+<svg fill="#142848" height="14" viewbox="0 0 275.836 275.836" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M191.344 20.922l-95.155 95.155a5.99 5.99 0 0 0-1.565 2.734l-8.167 31.454a6.003 6.003 0 0 0 7.315 7.316l31.454-8.168a6.003 6.003 0 0 0 2.734-1.565l95.153-95.153.005-.004.004-.005 19.156-19.156a5.998 5.998 0 0 0 .001-8.484L218.994 1.758a5.998 5.998 0 0 0-8.485 0l-19.155 19.155-.005.004-.005.005zm-70.713 117.286l-19.993 5.192 5.191-19.993 89.762-89.762 14.801 14.802-89.761 89.761zm94.12-123.723l14.801 14.802-10.675 10.675-14.801-14.802 10.675-10.675z"></path><path d="M238.037 65.022a6 6 0 0 0-6 6v192.813H43.799V34.417h111.063a6 6 0 0 0 0-12H37.799a6 6 0 0 0-6 6v241.419a6 6 0 0 0 6 6h200.238a6 6 0 0 0 6-6V71.022a6 6 0 0 0-6-6z"></path></svg>
+    Edit this page
+</a>
+<a class="request-docs-changes" href="https://github.com/pingcap/docs/issues/new?body=File:%20[v2.1%2ftools%2ftidb-binlog-cluster.md](https%3a%2f%2fpingcap.com%2fdocs%2fv2.1%2ftools%2ftidb-binlog-cluster%2f)" target="_blank">
+<svg height="14px" version="1.1" viewbox="0 0 192 192" width="14px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="none" fill-rule="nonzero" font-family="none" font-size="none" font-weight="none" stroke="none" stroke-dasharray="" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-width="1" style="mix-blend-mode: normal" text-anchor="none"><path d="M0,192v-192h192v192z" fill="none"></path><g fill="#142848"><path d="M162.34375,42.34375l-90.34375,90.34375l-34.34375,-34.34375l-11.3125,11.3125l45.65625,45.65625l101.65625,-101.65625z"></path></g></g></svg>
+
+    Request docs changes
+</a><p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/docs-cn/v2.1/tools/tidb-binlog-cluster" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Last week, we landed 48 PRs in the TiDB repositories, 10 PRs in the TiSpark repositories, and 13 PRs in the TiKV and PD repositories." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="Weekly update (December 18 ~ December 24, 2017)" property="og:title"/>
+<meta content="Last week, we landed 48 PRs in the TiDB repositories, 10 PRs in the TiSpark repositories, and 13 PRs in the TiKV and PD repositories." property="og:description"/>
+<meta content="https://pingcap.com/weekly/2017-12-25-tidb-weekly/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Last week, we landed 48 PRs in the TiDB repositories, 10 PRs in the TiSpark repositories, and 13 PRs in the TiKV and PD repositories." name="twitter:description"/>
+<meta content="Weekly update (December 18 ~ December 24, 2017)" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>Weekly update (December 18 ~ December 24, 2017) | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/weekly" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="weekly">
+<div class="container">
+<div class="sidebar">
+<div class="sticky-sidebar"><div class="title">Weekly<a class="rss" href="/weekly/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><div class="st_tree">
+<ul><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019(20)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-05(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2019-05-20-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 13 ~ May 19, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-05-13-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 06 ~ May 12, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-05-06-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 29 ~ May 05, 2019)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-04(5)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2019-04-29-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 22 ~ April 28, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-04-22-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 15 ~ April 21, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-04-15-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 08 ~ April 14, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-04-08-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 01 ~ April 07, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-04-01-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 25 ~ March 31, 2019)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-03(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2019-03-25-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 18 ~ March 24, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-03-18-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 11 ~ March 17, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-03-11-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 04 ~ March 10, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-03-04-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 25 ~ March 03, 2019)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-02(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2019-02-25-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 18 ~ February 24, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-02-18-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 11 ~ February 17, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-02-11-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 28 ~ February 10, 2019)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-01(5)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2019-01-28-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 21 ~ January 27, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-01-21-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 14 ~ January 20, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-01-14-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 07 ~ January 13, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-01-07-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 31 ~ January 06, 2019)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2019-01-02-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 24 ~ December 30, 2018)</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018(49)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-12(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-12-24-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 17 ~ December 23, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-12-17-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 10 ~ December 16, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-12-10-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 03 ~ December 09, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-12-03-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 26 ~ December 02, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-11(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-11-26-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 19 ~ November 25, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-11-19-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 12 ~ November 18, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-11-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 05 ~ November 11, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-11-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 29 ~ November 04, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-10(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-10-29-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 22 ~ October 28, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-10-22-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 15 ~ October 21, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-10-15-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 24 ~ October 14, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-09(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-09-25-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 17 ~ September 23, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-09-17-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 10 ~ September 16, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-09-10-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 03 ~ September 09, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-09-03-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 27 ~ September 02, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-08(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-08-27-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 20 ~ August 26, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-08-20-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 13 ~ August 19, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-08-13-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 06 ~ August 12, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-08-06-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 30 ~ August 05, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-07(5)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-07-30-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 23 ~ July 29, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-07-23-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 16 ~ July 22, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-07-16-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 09 ~ July 15, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-07-09-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 02 ~ July 08, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-07-02-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 25 ~ July 01, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-06(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-06-25-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 18 ~ June 24, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-06-19-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 11 ~ June 17, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-06-11-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 04 ~ June 10, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-06-04-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 28 ~ June 03, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-05(5)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-05-28-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 21 ~ May 27, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-05-21-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 14 ~ May 20, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-05-14-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 07 ~ May 13, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-05-07-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 30 ~ May 06, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-05-02-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 23 ~ April 29, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-04(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-04-23-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 16 ~ April 22, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-04-16-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 09 ~ April 15, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-04-09-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 02 ~ April 08, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-04-02-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 26 ~ April 01, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-03(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-03-26-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 19 ~ March 25, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-03-19-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 12 ~ March 18, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-03-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 05 ~ March 11, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-03-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 26 ~ March 04, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-02(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-02-26-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 12 ~ February 25, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-02-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 05 ~ February 11, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-02-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 29 ~ February 04, 2018)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-01(5)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2018-01-29-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 22 ~ January 28, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-01-22-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 15 ~ January 21, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-01-15-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 08 ~ January 14, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-01-08-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 01 ~ January 07, 2018)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2018-01-02-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 25 ~ December 31, 2017)</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017(43)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-12(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-12-25-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 18 ~ December 24, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-12-18-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 11 ~ December 17, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-12-11-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 04 ~ December 10, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-12-04-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 27 ~ December 03, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-11(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-11-27-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 20 ~ November 26, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-11-20-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 13 ~ November 19, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-11-13-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 06 ~ November 12, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-11-06-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 30 ~ November 05, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-10(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-10-30-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 23 ~ October 29, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-10-23-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 9 ~ October 22, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-10-09-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 25 ~ October 08, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-09(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-09-25-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 18 ~ September 24, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-09-18-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 11 ~ September 17, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-09-11-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 04 ~ September 10, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-09-04-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 28 ~ September 03, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-08(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-08-28-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 21 ~ August 27, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-08-21-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 14 ~ August 20, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-08-14-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 07 ~ August 13, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-08-07-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 31 ~ August 06, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-07(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-07-31-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 24 ~ July 30, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-07-24-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 17 ~ July 23, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-07-17-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 10 ~ July 16, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-07-04-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 26 ~ July 02, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-06(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-06-26-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 19 ~ June 25, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-06-20-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 12 ~ June 18, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-06-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (June 06 ~ June 11, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-06-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 22 ~ June 05, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-05(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-05-22-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 15 ~ May 21, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-05-15-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 08 ~ May 14, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-05-08-tidb-weekly/"><i class="icon-file"></i>Weekly update (May 01 ~ May 07, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-05-02-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 24 ~ April 30, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-04(2)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-04-17-tidb-weekly/"><i class="icon-file"></i>Weekly update (April 10 ~ April 16, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-04-10-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 27 ~ April 09, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-03(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-03-27-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 20 ~ March 26, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-03-20-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 13 ~ March 19, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-03-13-tidb-weekly/"><i class="icon-file"></i>Weekly update (March 06 ~ March 12, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-03-06-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 27 ~ March 05, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-02(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-02-27-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 19 ~ February 26, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-02-13-tidb-weekly/"><i class="icon-file"></i>Weekly update (February 06 ~ February 12, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-02-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 23 ~ February 05, 2017)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-01(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2017-01-24-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 09 ~ January 22, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-01-08-tidb-weekly/"><i class="icon-file"></i>Weekly update (January 02 ~ January 08, 2017)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2017-01-01-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 26 ~ January 01, 2017)</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016(22)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-12(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2016-12-26-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 19 ~ December 25, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-12-19-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 12 ~ December 18, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-12-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (December 05 ~ December 11, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-12-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 28 ~ December 04, 2016)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-11(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2016-11-28-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 21 ~ November 27, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-11-21-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 14 ~ November 20, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-11-14-tidb-weekly/"><i class="icon-file"></i>Weekly update (November 07 ~ November 13, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-11-07-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 31 ~ November 06, 2016)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-10(3)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2016-10-31-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 24 ~ October 30, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-10-24-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 17 ~ October 23, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-10-17-tidb-weekly/"><i class="icon-file"></i>Weekly update (October 01 ~ October 16, 2016)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-09(5)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2016-09-30-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 26 ~ September 30, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-09-26-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 19 ~ September 25, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-09-19-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 12 ~ September 18, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-09-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (September 05 ~ September 11, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-09-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 29 ~ September 04, 2016)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-08(4)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2016-08-29-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 22 ~ August 28, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-08-22-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 13 ~ August 21, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-08-12-tidb-weekly/"><i class="icon-file"></i>Weekly update (August 05 ~ August 12, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-08-05-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 30 ~ August 05, 2016)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-07(2)</a>
+<ul><li class="leaf-child">
+<a href="/weekly/2016-07-29-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 23 ~ July 29, 2016)</a>
+</li><li class="leaf-child">
+<a href="/weekly/2016-07-23-tidb-weekly/"><i class="icon-file"></i>Weekly update (July 17 ~ July 22, 2016)</a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Mon, Dec 25, 2017</li>
+</ul>
+<div class="blog-text">
+<h1 id="weekly-update-in-tidb">Weekly update in TiDB</h1>
+<p>Last week, we landed <a href="https://github.com/pingcap/tidb/pulls?utf8=%E2%9C%93&amp;q=is:pr%20is:merged%20merged:2017-12-18..2017-12-24">48 PRs</a> in the TiDB repositories.</p>
+<h2 id="added">Added</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tidb/pull/5145">Support the builtin aggregation function <code>bit_or</code>.</a></li>
+</ul>
+<h2 id="removed">Removed</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tidb/pull/5468">Remove the old JSON type.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5467">Remove the <code>HashSemiJoin</code> plan and executor.</a></li>
+</ul>
+<h2 id="fixed">Fixed</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tidb/pull/5470">Support showing the current <code>auto_increment</code> id in the result of <code>show create table</code>.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5455">Fix a bug of <code>NewIndexLookUpJoin's Next()</code>.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5446">Fix the trigger condition for <code>AutoAnalyze</code>.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5442">Only rebuild the range when using prepared cache.</a></li>
+</ul>
+<h2 id="improved">Improved</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tidb/pull/5471">Merge <code>ApplyExec</code> and <code>NestedLoopJoin</code> into <code>NestedLoopApply</code>.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5464/files">Refine the <code>UnionAll</code> plan building.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5461">Metrics: record details of the RPC type and store id.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5460">Replace <code>JSON</code> with <code>BinaryJSON</code>.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5438">Collect and store the query feedback.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5435">Make the function <code>ExtractColumns</code> more efficient.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5428">Add <code>BinaryJSON</code> functions.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5425">Enhance the index join, making it can be used for more scenarios.</a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5375">Graceful shutdown will wait clients to close.</a></li>
+<li>Support <code>Chunk</code> in executors:
+
+<ul>
+<li><a href="https://github.com/pingcap/tidb/pull/5465"><code>LoadData</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5459"><code>GrantExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5458"><code>RevokeExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5457"><code>DeallocateExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5453"><code>SimpleExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5452"><code>AnalyzeExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5443"><code>TableScanExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5412"><code>ShowDDLjobsExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5395"><code>TableDualExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5370"><code>ReplaceExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5368"><code>DeleteExec</code></a></li>
+<li><a href="https://github.com/pingcap/tidb/pull/5312"><code>MergeJoinExec</code></a></li>
+</ul></li>
+</ul>
+<h1 id="weekly-update-in-tispark">Weekly update in TiSpark</h1>
+<p>Last week, we landed <a href="https://github.com/pingcap/tispark/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+is%3Amerged+merged%3A2017-12-18..2017-12-24">10 PRs</a> in the TiSpark repositories.</p>
+<h2 id="added-1">Added</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tispark/pull/155">Add counting single column tests.</a></li>
+<li><a href="https://github.com/pingcap/tispark/pull/149">Add <code>request.timezone.offset</code> config.</a></li>
+<li><a href="https://github.com/pingcap/tispark/pull/141">Add the test framework for each issue.</a></li>
+<li><a href="https://github.com/pingcap/tispark/pull/139">Add index related integration tests.</a></li>
+<li><a href="https://github.com/pingcap/tispark/pull/136">Add debug utils.</a></li>
+<li><a href="https://github.com/pingcap/tispark/pull/126">Add null data for DAG test cases.</a></li>
+</ul>
+<h2 id="removed-1">Removed</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tispark/pull/147">Remove timezone in the <code>TisparkTest.sql</code> file.</a></li>
+</ul>
+<h2 id="fixed-1">Fixed</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tispark/pull/154">Fix the Load tests problem.</a></li>
+<li><a href="https://github.com/pingcap/tispark/pull/151">Fix the test framework concerning null tests.</a></li>
+</ul>
+<h1 id="weekly-update-in-tikv-and-pd">Weekly update in TiKV and PD</h1>
+<p>Last week, we landed <a href="https://github.com/search?utf8=%E2%9C%93&amp;q=repo%3Apingcap%2Ftikv+repo%3Apingcap%2Fpd+is%3Apr+is%3Amerged+merged%3A2017-12-17..2017-12-23&amp;type=Issues">13 PRs</a> in the TiKV and PD repositories.</p>
+<h2 id="added-2">Added</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tikv/pull/2491">Support Raft Learner.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2592">Add transaction tests with <code>fail-rs</code>.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2599">Add more configurations for the RocksDB column family.</a></li>
+<li><a href="https://github.com/pingcap/pd/pull/893">Add more complex configurations for the PD simulator.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2607">Coprocessor: collect output counts for each executor.</a></li>
+</ul>
+<h2 id="fixed-2">Fixed</h2>
+<ul>
+<li><a href="https://github.com/pingcap/pd/pull/892">PD: support <code>join</code> without scheme.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2595">Return the stale epoch error for retry.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2602">Add the <code>require</code> option to the <code>addr</code> command flag.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2604">Update <code>rustc_serialize</code> to pass newer Rust version compilation.</a></li>
+</ul>
+<h2 id="improved-1">Improved</h2>
+<ul>
+<li><a href="https://github.com/pingcap/tikv/pull/2577">Coprocessor: speed up the CM sketch test.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2580">Add <code>key_only</code> to avoid fetching the data value.</a></li>
+<li><a href="https://github.com/pingcap/tikv/pull/2601">Avoid calling Raft status to reduce allocation.</a></li>
+</ul>
+<h1 id="new-contributors-thanks">New contributors (Thanks!)</h1>
+<p>TiKV:</p>
+<ul>
+<li><a href="https://github.com/july2993">Jiahao Huang</a></li>
+<li><a href="https://github.com/hoverbear">Andrew Hobden</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/weekly" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js/" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

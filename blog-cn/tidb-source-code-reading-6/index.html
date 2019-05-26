@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="在先前的 TiDB 源码阅读系列文章（四）中，我们介绍了 Insert 语句，想必大家已经了解了 TiDB 是如何写入数据，本篇文章介绍一下 Select 语句是如何执行的。Enjoy~" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB 源码阅读系列文章（六）Select 语句概览" property="og:title"/>
+<meta content="在先前的 TiDB 源码阅读系列文章（四）中，我们介绍了 Insert 语句，想必大家已经了解了 TiDB 是如何写入数据，本篇文章介绍一下 Select 语句是如何执行的。Enjoy~" property="og:description"/>
+<meta content="https://pingcap.com/blog-cn/tidb-source-code-reading-6/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="在先前的 TiDB 源码阅读系列文章（四）中，我们介绍了 Insert 语句，想必大家已经了解了 TiDB 是如何写入数据，本篇文章介绍一下 Select 语句是如何执行的。Enjoy~" name="twitter:description"/>
+<meta content="TiDB 源码阅读系列文章（六）Select 语句概览" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB 源码阅读系列文章（六）Select 语句概览 | PingCAP</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/index.html"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                        University</a></li>
+<li><a href="/docs-cn" onclick="trackViews('navbar-docs', 'docs-cn_view')">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a class="link-download" href="mailto:info@pingcap.com">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/docs-cn">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a class="link-download" href="mailto:info@pingcap.com">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP University</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe">
+<style media="screen" type="text/css">
+    #mc_embed_signup .response {
+        margin-top: 12px;
+        line-height: 1.4;
+        font-size: 0.65rem;
+    }
+</style>
+<div id="mc_embed_signup">
+<form action="//pingcap.us16.list-manage.com/subscribe/post?u=ab57beb8a88391cf6193c1b48&amp;id=7c67af4f9d" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+<div id="mc_embed_signup_scroll">
+<div class="form-inline">
+<input class="form-control" id="mce-EMAIL" name="EMAIL" placeholder="Subscribe to our newsletter" type="email" value=""/>
+<input class="btn btn-subscribe f-tc" id="mc-embedded-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+</div>
+<div class="clear" id="mce-responses">
+<div class="response" id="mce-error-response" style="display: none;"></div>
+<div class="response" id="mce-success-response" style="display: none;"></div>
+</div>
+<div aria-hidden="true" style="position: absolute; left: -5000px;">
+<input name="b_ab57beb8a88391cf6193c1b48_7c67af4f9d" tabindex="-1" type="text" value=""/>
+</div>
+</div>
+</form>
+</div>
+<script src="https://download.pingcap.com/js/mc-validate.js" type="text/javascript"></script>
+<script type="text/javascript">
+;(function($) {
+    window.fnames = new Array()
+    window.ftypes = new Array()
+    fnames[0] = 'EMAIL'
+    ftypes[0] = 'email'
+    fnames[1] = 'FNAME'
+    ftypes[1] = 'text'
+    fnames[2] = 'LNAME'
+    ftypes[2] = 'text'
+})(jQuery)
+var $mcj = jQuery.noConflict(true)
+</script>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><a class="tag all" href="#">ALL (115)</a>
+<div class="tag-list"><a class="tag " data-tag="Binlog" href="#Binlog">Binlog (2)
+                </a><a class="tag " data-tag="Contributor" href="#Contributor">Contributor (4)
+                </a><a class="tag " data-tag="DM-源码阅读" href="#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">DM-源码阅读 (5)
+                </a><a class="tag " data-tag="MVCC" href="#MVCC">MVCC (2)
+                </a><a class="tag " data-tag="PD" href="#PD">PD (4)
+                </a><a class="tag " data-tag="Prometheus" href="#Prometheus">Prometheus (2)
+                </a><a class="tag " data-tag="Raft" href="#Raft">Raft (10)
+                </a><a class="tag " data-tag="RocksDB" href="#RocksDB">RocksDB (3)
+                </a><a class="tag " data-tag="Rust" href="#Rust">Rust (2)
+                </a><a class="tag " data-tag="SQL" href="#SQL">SQL (4)
+                </a><a class="tag " data-tag="Spanner" href="#Spanner">Spanner (2)
+                </a><a class="tag " data-tag="TiDB" href="#TiDB">TiDB (42)
+                </a><a class="tag " data-tag="TiDB-Ecosystem-Tools" href="#TiDB-Ecosystem-Tools">TiDB-Ecosystem-Tools (3)
+                </a><a class="tag " data-tag="TiDB-Operator" href="#TiDB-Operator">TiDB-Operator (3)
+                </a><a class="tag sel" data-tag="TiDB-源码阅读" href="#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB-源码阅读 (24)
+                </a><a class="tag " data-tag="TiKV" href="#TiKV">TiKV (20)
+                </a><a class="tag " data-tag="TiKV-源码解析" href="#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90">TiKV-源码解析 (7)
+                </a><a class="tag " data-tag="TiSpark" href="#TiSpark">TiSpark (2)
+                </a><a class="tag " data-tag="gRPC" href="#gRPC">gRPC (2)
+                </a><a class="tag " data-tag="事务" href="#%e4%ba%8b%e5%8a%a1">事务 (2)
+                </a><a class="tag " data-tag="分布式系统测试" href="#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a><a class="tag " data-tag="工具" href="#%e5%b7%a5%e5%85%b7">工具 (4)
+                </a><a class="tag " data-tag="性能" href="#%e6%80%a7%e8%83%bd">性能 (2)
+                </a><a class="tag " data-tag="性能优化" href="#%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化 (2)
+                </a><a class="tag " data-tag="数据同步" href="#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5">数据同步 (2)
+                </a><a class="tag " data-tag="架构" href="#%e6%9e%b6%e6%9e%84">架构 (3)
+                </a><a class="tag sel" data-tag="社区" href="#%e7%a4%be%e5%8c%ba">社区 (46)
+                </a><a class="tag " data-tag="集群调度" href="#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6">集群调度 (2)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">TiDB 源码阅读系列文章（六）Select 语句概览</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Fri, Mar 30, 2018</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>申砾</li>
+</ul>
+<div class="blog-text">
+<p>在先前的 <a href="https://pingcap.com/blog-cn/tidb-source-code-reading-4/">TiDB 源码阅读系列文章（四）</a> 中，我们介绍了 Insert 语句，想必大家已经了解了 TiDB 是如何写入数据，本篇文章介绍一下 Select 语句是如何执行。相比 Insert，Select 语句的执行流程会更复杂，本篇文章会第一次进入优化器、Coprocessor 模块进行介绍。</p>
+<h2 id="表结构和语句">表结构和语句</h2>
+<p>表结构沿用上篇文章的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t <span style="color:#960050;background-color:#1e0010">{</span>
+  id   VARCHAR(<span style="color:#ae81ff">31</span>),
+  name VARCHAR(<span style="color:#ae81ff">50</span>),
+  age  int,
+  <span style="color:#66d9ef">key</span> id_idx (id)
+<span style="color:#960050;background-color:#1e0010">}</span>;</code></pre></div>
+<p><code>Select</code> 语句只会讲解最简单的情况：全表扫描+过滤，暂时不考虑索引等复杂情况，更复杂的情况会在后续章节中介绍。语句为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span> name <span style="color:#66d9ef">FROM</span> t <span style="color:#66d9ef">WHERE</span> age <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">10</span>;</code></pre></div>
+<h2 id="语句处理流程">语句处理流程</h2>
+<p>相比 Insert 的处理流程，Select 的处理流程中有 3 个明显的不同：</p>
+<ol>
+<li><p>需要经过 Optimize</p>
+<p>Insert 是比较简单语句，在查询计划这块并不能做什么事情（对于 Insert into Select 语句这种，实际上只对 Select 进行优化），而 Select 语句可能会无比复杂，不同的查询计划之间性能天差地别，需要非常仔细的进行优化。</p></li>
+<li><p>需要和存储引擎中的计算模块交互</p>
+<p>Insert 语句只涉及对 Key-Value 的 Set 操作，Select 语句可能要查询大量的数据，如果通过 KV 接口操作存储引擎，会过于低效，必须要通过计算下推的方式，将计算逻辑发送到存储节点，就近进行处理。</p></li>
+<li><p>需要对客户端返回结果集数据</p>
+<p>Insert 语句只需要返回是否成功以及插入了多少行即可，而 Select 语句需要返回结果集。</p></li>
+</ol>
+<p>本篇文章会重点说明这些不同的地方，而相同的步骤会尽量化简。</p>
+<h2 id="parsing">Parsing</h2>
+<p>Select 语句的语法解析规则在 <a href="https://github.com/pingcap/tidb/blob/source-code/parser/parser.y#L3906">这里</a>。相比 Insert 语句，要复杂很多，大家可以对着 <a href="https://dev.mysql.com/doc/refman/5.7/en/select.html">MySQL 文档</a> 看一下具体的解析实现。需要特别注意的是 From 字段，这里可能会非常复杂，其语法定义是递归的。</p>
+<p>最终语句被解析成 <a href="https://github.com/pingcap/tidb/blob/source-code/ast/dml.go#L451">ast.SelectStmt</a> 结构：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SelectStmt</span> <span style="color:#66d9ef">struct</span> {
+        <span style="color:#a6e22e">dmlNode</span>
+        <span style="color:#a6e22e">resultSetNode</span>
+        <span style="color:#75715e">// SelectStmtOpts wraps around select hints and switches.
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">*</span><span style="color:#a6e22e">SelectStmtOpts</span>
+        <span style="color:#75715e">// Distinct represents whether the select has distinct option.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">Distinct</span> <span style="color:#66d9ef">bool</span>
+        <span style="color:#75715e">// From is the from clause of the query.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">From</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TableRefsClause</span>
+        <span style="color:#75715e">// Where is the where clause in select statement.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">Where</span> <span style="color:#a6e22e">ExprNode</span>
+        <span style="color:#75715e">// Fields is the select expression list.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">Fields</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FieldList</span>
+        <span style="color:#75715e">// GroupBy is the group by expression list.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">GroupBy</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">GroupByClause</span>
+        <span style="color:#75715e">// Having is the having condition.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">Having</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">HavingClause</span>
+        <span style="color:#75715e">// OrderBy is the ordering expression list.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">OrderBy</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">OrderByClause</span>
+        <span style="color:#75715e">// Limit is the limit clause.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">Limit</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Limit</span>
+        <span style="color:#75715e">// LockTp is the lock type
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">LockTp</span> <span style="color:#a6e22e">SelectLockType</span>
+        <span style="color:#75715e">// TableHints represents the level Optimizer Hint
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">TableHints</span> [](<span style="color:#960050;background-color:#1e0010">#</span>)<span style="color:#f92672">*</span><span style="color:#a6e22e">TableOptimizerHint</span>
+}</code></pre></div>
+<p>对于本文所提到的语句 <code>SELECT name FROM t WHERE age &gt; 10; </code> name 会被解析为 Fields，<code>WHERE age &gt; 10</code> 被解析为 Where 字段，<code>FROM t</code> 被解析为 From 字段。</p>
+<h2 id="planning">Planning</h2>
+<p>在 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/logical_plan_builder.go#L1452">planBuilder.buildSelect()</a> 方法中，我们可以看到 ast.SelectStmt 是如何转换成一个 plan 树，最终的结果是一个 LogicalPlan，每一个语法元素都被转换成一个逻辑查询计划单元，例如 <code>WHERE c &gt; 10</code> 会被处理为一个 plan.LogicalSelection 的结构：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sel</span>.<span style="color:#a6e22e">Where</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">p</span> = <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">buildSelection</span>(<span style="color:#a6e22e">p</span>, <span style="color:#a6e22e">sel</span>.<span style="color:#a6e22e">Where</span>, <span style="color:#66d9ef">nil</span>)
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+        }
+    }  </code></pre></div>
+<p>具体的结构如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// LogicalSelection represents a where or having predicate.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">LogicalSelection</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">baseLogicalPlan</span>
+
+	<span style="color:#75715e">// Originally the WHERE or ON condition is parsed into a single expression,
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// but after we converted to CNF(Conjunctive normal form), it can be
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// split into a list of AND conditions.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Conditions</span> []<span style="color:#a6e22e">expression</span>.<span style="color:#a6e22e">Expression</span>
+}</code></pre></div>
+<p>其中最重要的就是这个 Conditions 字段，代表了 Where 语句需要计算的表达式，这个表达式求值结果为 True 的时候，表明这一行符合条件。</p>
+<p>其他字段的 AST 转 LogicalPlan 读者可以自行研究一下，经过这个 buildSelect() 函数后，AST 变成一个 Plan 的树状结构树，下一步会在这个结构上进行优化。</p>
+<h2 id="optimizing">Optimizing</h2>
+<p>让我们回到 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/optimizer.go#L61">plan.Optimize() 函数</a>，Select 语句得到的 Plan 是一个 LogicalPlan，所以 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/optimizer.go#L81">这里</a> 可以进入 doOptimize 这个函数，这个函数比较短，其内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doOptimize</span>(<span style="color:#a6e22e">flag</span> <span style="color:#66d9ef">uint64</span>, <span style="color:#a6e22e">logic</span> <span style="color:#a6e22e">LogicalPlan</span>) (<span style="color:#a6e22e">PhysicalPlan</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">logic</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">logicalOptimize</span>(<span style="color:#a6e22e">flag</span>, <span style="color:#a6e22e">logic</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+	}
+	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">AllowCartesianProduct</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">existsCartesianProduct</span>(<span style="color:#a6e22e">logic</span>) {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">ErrCartesianProductUnsupported</span>)
+	}
+	<span style="color:#a6e22e">physical</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dagPhysicalOptimize</span>(<span style="color:#a6e22e">logic</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+	}
+	<span style="color:#a6e22e">finalPlan</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">eliminatePhysicalProjection</span>(<span style="color:#a6e22e">physical</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">finalPlan</span>, <span style="color:#66d9ef">nil</span>
+}</code></pre></div>
+<p>大家可以关注两个步骤：logicalOptimize 和 dagPhysicalOptimize，分别代表逻辑优化和物理优化，这两种优化的基本概念和区别本文不会描述，请大家自行研究（这个是数据库的基础知识）。下面分别介绍一下这两个函数做了什么事情。</p>
+<h3 id="逻辑优化">逻辑优化</h3>
+<p>逻辑优化由一系列优化规则组成，对于这些规则会按顺序不断应用到传入的 LogicalPlan Tree 中，见 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/optimizer.go#L131">logicalOptimize() 函数</a>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">logicalOptimize</span>(<span style="color:#a6e22e">flag</span> <span style="color:#66d9ef">uint64</span>, <span style="color:#a6e22e">logic</span> <span style="color:#a6e22e">LogicalPlan</span>) (<span style="color:#a6e22e">LogicalPlan</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">rule</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">optRuleList</span> {
+		<span style="color:#75715e">// The order of flags is same as the order of optRule in the list.
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// We use a bitmask to record which opt rules should be used. If the i-th bit is 1, it means we should
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// apply i-th optimizing rule.
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">flag</span><span style="color:#f92672">&amp;</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">&lt;&lt;</span>uint(<span style="color:#a6e22e">i</span>)) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+			<span style="color:#66d9ef">continue</span>
+		}
+		<span style="color:#a6e22e">logic</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">rule</span>.<span style="color:#a6e22e">optimize</span>(<span style="color:#a6e22e">logic</span>)
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+		}
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">logic</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+}</code></pre></div>
+<p>目前 TiDB 已经支持下列优化规则：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">optRuleList</span> = []<span style="color:#a6e22e">logicalOptRule</span>{
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">columnPruner</span>{}, 
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">maxMinEliminator</span>{},
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">projectionEliminater</span>{},
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">buildKeySolver</span>{},
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">decorrelateSolver</span>{},
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ppdSolver</span>{},
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">aggregationOptimizer</span>{},
+	<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">pushDownTopNOptimizer</span>{},
+}</code></pre></div>
+<p>这些规则并不会考虑数据的分布，直接无脑的操作 Plan 树，因为大多数规则应用之后，一定会得到更好的 Plan（不过上面有一个规则并不一定会更好，读者可以想一下是哪个）。</p>
+<p>这里选一个规则介绍一下，其他优化规则请读者自行研究或者是等待后续文章。</p>
+<p>columnPruner（列裁剪） 规则，会将不需要的列裁剪掉，考虑这个 SQL: <code>select c from t;</code> 对于 <code>from t</code> 这个全表扫描算子（也可能是索引扫描）来说，只需要对外返回 c 这一列的数据即可，这里就是通过列裁剪这个规则实现，整个 Plan 树从树根到叶子节点递归调用这个规则，每层节点只保留上面节点所需要的列即可。</p>
+<p>经过逻辑优化，我们可以得到这样一个查询计划：</p>
+<p><img alt="logical-select.png" class="lazy" data-original="/images/blog-cn/tidb-source-code-reading-6/1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>其中 <code>FROM t</code> 变成了 DataSource 算子，<code>WHERE age &gt; 10</code> 变成了 Selection 算子，这里留一个思考题，<code>SELECT name</code> 中的列选择去哪里了？</p>
+<h3 id="物理优化">物理优化</h3>
+<p>在物理优化阶段，会考虑数据的分布，决定如何选择物理算子，比如对于 <code>FROM t WHERE age &gt; 10</code> 这个语句，假设在 age 字段上有索引，需要考虑是通过 TableScan + Filter 的方式快还是通过 IndexScan 的方式比较快，这个选择取决于统计信息，也就是 age &gt; 10 这个条件究竟能过滤掉多少数据。</p>
+<p>我们看一下 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/optimizer.go#L148">dagPhysicalOptimize</a> 这个函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">dagPhysicalOptimize</span>(<span style="color:#a6e22e">logic</span> <span style="color:#a6e22e">LogicalPlan</span>) (<span style="color:#a6e22e">PhysicalPlan</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">logic</span>.<span style="color:#a6e22e">preparePossibleProperties</span>()
+	<span style="color:#a6e22e">logic</span>.<span style="color:#a6e22e">deriveStats</span>()
+	<span style="color:#a6e22e">t</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">logic</span>.<span style="color:#a6e22e">convert2PhysicalPlan</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">requiredProp</span>{<span style="color:#a6e22e">taskTp</span>: <span style="color:#a6e22e">rootTaskType</span>, <span style="color:#a6e22e">expectedCnt</span>: <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">MaxFloat64</span>})
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+	}
+	<span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">plan</span>()
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">ResolveIndices</span>()
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">p</span>, <span style="color:#66d9ef">nil</span>
+}</code></pre></div>
+<p>这里的 convert2PhysicalPlan 会递归调用下层节点的 convert2PhysicalPlan 方法，生成物理算子并且估算其代价，然后从中选择代价最小的方案，这两个函数比较重要：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// convert2PhysicalPlan implements LogicalPlan interface.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">baseLogicalPlan</span>) <span style="color:#a6e22e">convert2PhysicalPlan</span>(<span style="color:#a6e22e">prop</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">requiredProp</span>) (<span style="color:#a6e22e">t</span> <span style="color:#a6e22e">task</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+	<span style="color:#75715e">// Look up the task with this prop in the task map.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// It's used to reduce double counting.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">t</span> = <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">getTask</span>(<span style="color:#a6e22e">prop</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">t</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">t</span>, <span style="color:#66d9ef">nil</span>
+	}
+	<span style="color:#a6e22e">t</span> = <span style="color:#a6e22e">invalidTask</span>
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">prop</span>.<span style="color:#a6e22e">taskTp</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">rootTaskType</span> {
+		<span style="color:#75715e">// Currently all plan cannot totally push down.
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">storeTask</span>(<span style="color:#a6e22e">prop</span>, <span style="color:#a6e22e">t</span>)
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">t</span>, <span style="color:#66d9ef">nil</span>
+	}
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">pp</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">genPhysPlansByReqProp</span>(<span style="color:#a6e22e">prop</span>) {
+		<span style="color:#a6e22e">t</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">getBestTask</span>(<span style="color:#a6e22e">t</span>, <span style="color:#a6e22e">pp</span>)
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+		}
+	}
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">storeTask</span>(<span style="color:#a6e22e">prop</span>, <span style="color:#a6e22e">t</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">t</span>, <span style="color:#66d9ef">nil</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">baseLogicalPlan</span>) <span style="color:#a6e22e">getBestTask</span>(<span style="color:#a6e22e">bestTask</span> <span style="color:#a6e22e">task</span>, <span style="color:#a6e22e">pp</span> <span style="color:#a6e22e">PhysicalPlan</span>) (<span style="color:#a6e22e">task</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">tasks</span> <span style="color:#f92672">:=</span> make([]<span style="color:#a6e22e">task</span>, <span style="color:#ae81ff">0</span>, len(<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">children</span>))
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">child</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">children</span> {
+		<span style="color:#a6e22e">childTask</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">child</span>.<span style="color:#a6e22e">convert2PhysicalPlan</span>(<span style="color:#a6e22e">pp</span>.<span style="color:#a6e22e">getChildReqProps</span>(<span style="color:#a6e22e">i</span>))
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+		}
+		<span style="color:#a6e22e">tasks</span> = append(<span style="color:#a6e22e">tasks</span>, <span style="color:#a6e22e">childTask</span>)
+	}
+	<span style="color:#a6e22e">resultTask</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pp</span>.<span style="color:#a6e22e">attach2Task</span>(<span style="color:#a6e22e">tasks</span><span style="color:#f92672">...</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resultTask</span>.<span style="color:#a6e22e">cost</span>() &lt; <span style="color:#a6e22e">bestTask</span>.<span style="color:#a6e22e">cost</span>() {
+		<span style="color:#a6e22e">bestTask</span> = <span style="color:#a6e22e">resultTask</span>
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">bestTask</span>, <span style="color:#66d9ef">nil</span>
+}</code></pre></div>
+<p>上面两个方法的返回值都是一个叫 task 的结构，而不是物理计划，这里引入一个概念，叫 <strong><code>Task</code></strong>，TiDB 的优化器会将 PhysicalPlan 打包成为 Task。Task 的定义在 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/task.go">task.go</a> 中，我们看一下注释：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// task is a new version of `PhysicalPlanInfo`. It stores cost information for a task.
+</span><span style="color:#75715e">// A task may be CopTask, RootTask, MPPTask or a ParallelTask.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">task</span> <span style="color:#66d9ef">interface</span> {
+	<span style="color:#a6e22e">count</span>() <span style="color:#66d9ef">float64</span>
+	<span style="color:#a6e22e">addCost</span>(<span style="color:#a6e22e">cost</span> <span style="color:#66d9ef">float64</span>)
+	<span style="color:#a6e22e">cost</span>() <span style="color:#66d9ef">float64</span>
+	copy() <span style="color:#a6e22e">task</span>
+	<span style="color:#a6e22e">plan</span>() <span style="color:#a6e22e">PhysicalPlan</span>
+	<span style="color:#a6e22e">invalid</span>() <span style="color:#66d9ef">bool</span>
+}</code></pre></div>
+<p>在 TiDB 中，Task 的定义是能在单个节点上不依赖于和其他节点进行数据交换即可进行的一系列操作，目前只实现了两种 Task：</p>
+<ul>
+<li><p>CopTask 是需要下推到存储引擎（TiKV）上进行计算的物理计划，每个收到请求的 TiKV 节点都会做相同的操作</p></li>
+<li><p>RootTask 是保留在 TiDB 中进行计算的那部分物理计划</p></li>
+</ul>
+<p>如果了解过 TiDB 的 Explain 结果，那么可以看到每个 Operator 都会标明属于哪种 Task，比如下面这个例子：</p>
+<p><img alt="explain.jpg" class="lazy" data-original="/images/blog-cn/tidb-source-code-reading-6/2.jpg" src="/images/svgs/loader-spinner.svg"/></p>
+<p>整个流程是一个树形动态规划的算法，大家有兴趣可以跟一下相关的代码自行研究或者等待后续的文章。</p>
+<p>经过整个优化过程，我们已经得到一个物理查询计划，这个 <code>SELECT name FROM t WHERE age &gt; 10;</code> 语句能够指定出来的查询计划大概是这样子的：</p>
+<p><img alt="simple-select.png" class="lazy" data-original="/images/blog-cn/tidb-source-code-reading-6/3.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>读者可能会比较奇怪，为什么只剩下这样一个物理算子？<code>WHERR age &gt; 10</code> 哪里去了？实际上 age &gt; 10 这个过滤条件被合并进了 PhysicalTableScan，因为 <code>age &gt; 10</code> 这个表达式可以下推到 TiKV 上进行计算，所以会把 TableScan 和 Filter 这样两个操作合在一起。哪些表达式会被下推到 TiKV 上的 Coprocessor 模块进行计算呢？对于这个 Query 是在下面 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/predicate_push_down.go#L72">这个地方</a> 进行识别：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// PredicatePushDown implements LogicalPlan PredicatePushDown interface.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">ds</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">DataSource</span>) <span style="color:#a6e22e">PredicatePushDown</span>(<span style="color:#a6e22e">predicates</span> []<span style="color:#a6e22e">expression</span>.<span style="color:#a6e22e">Expression</span>) ([]<span style="color:#a6e22e">expression</span>.<span style="color:#a6e22e">Expression</span>, <span style="color:#a6e22e">LogicalPlan</span>) {
+	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ds</span>.<span style="color:#a6e22e">pushedDownConds</span>, <span style="color:#a6e22e">predicates</span> = <span style="color:#a6e22e">expression</span>.<span style="color:#a6e22e">ExpressionsToPB</span>(<span style="color:#a6e22e">ds</span>.<span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">GetSessionVars</span>().<span style="color:#a6e22e">StmtCtx</span>, <span style="color:#a6e22e">predicates</span>, <span style="color:#a6e22e">ds</span>.<span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">GetClient</span>())
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">predicates</span>, <span style="color:#a6e22e">ds</span>
+}</code></pre></div>
+<p>在 <code>expression.ExpressionsToPB</code> 这个方法中，会把能下推 TiKV 上的表达式识别出来（TiKV 还没有实现所有的表达式，特别是内建函数只实现了一部分），放到 DataSource.pushedDownConds 字段中。接下来我们看一下 DataSource 是如何转成 PhysicalTableScan，见 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/physical_plan_builder.go#L523">DataSource.convertToTableScan()</a> 方法。这个方法会构建出 PhysicalTableScan，并且调用 <a href="https://github.com/pingcap/tidb/blob/source-code/plan/physical_plan_builder.go#L610">addPushDownSelection()</a> 方法，将一个 PhysicalSelection 加到 PhysicalTableScan 之上，一起放进 copTask 中。</p>
+<p>这个查询计划是一个非常简单的计划，不过我们可以用这个计划来说明 TiDB 是如何执行查询操作。</p>
+<h2 id="executing">Executing</h2>
+<p>一个查询计划如何变成一个可执行的结构以及如何驱动这个结构执行查询已经在前面的两篇文章中做了描述，这里不再敷述，这一节我会重点介绍具体的执行过程以及 TiDB 的分布式执行框架。</p>
+<h3 id="coprocessor-框架">Coprocessor 框架</h3>
+<p>Coprocessor 这个概念是从 HBase 中借鉴而来，简单来说是一段注入在存储引擎中的计算逻辑，等待 SQL 层发来的计算请求（序列化后的物理执行计划），处理本地数据并返回计算结果。在 TiDB 中，计算是以 Region 为单位进行，SQL 层会分析出要处理的数据的 Key Range，再将这些 Key Range 根据 PD 中拿到的 Region 信息划分成若干个 Key Range，最后将这些请求发往对应的 Region。</p>
+<p>SQL 层会将多个 Region 返回的结果进行汇总，再经过所需的 Operator 处理，生成最终的结果集。</p>
+<h4 id="distsql">DistSQL</h4>
+<p>请求的分发与汇总会有很多复杂的处理逻辑，比如出错重试、获取路由信息、控制并发度以及结果返回顺序，为了避免这些复杂的逻辑与 SQL 层耦合在一起，TiDB 抽象了一个统一的分布式查询接口，称为 DistSQL API，位于 <a href="https://github.com/pingcap/tidb/blob/source-code/distsql/distsql.go">distsql</a> 这个包中。</p>
+<p>其中最重要的方法是 <a href="https://github.com/pingcap/tidb/blob/source-code/distsql/distsql.go#L305">SelectDAG</a> 这个函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// SelectDAG sends a DAG request, returns SelectResult.
+</span><span style="color:#75715e">// In kvReq, KeyRanges is required, Concurrency/KeepOrder/Desc/IsolationLevel/Priority are optional.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">SelectDAG</span>(<span style="color:#a6e22e">goCtx</span> <span style="color:#a6e22e">goctx</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">kvReq</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">kv</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">fieldTypes</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">types</span>.<span style="color:#a6e22e">FieldType</span>) (<span style="color:#a6e22e">SelectResult</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#75715e">// kvReq 中包含了计算所涉及的数据的 KeyRanges
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 这里通过 TiKV Client 向 TiKV 集群发送计算请求
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">resp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">GetClient</span>().<span style="color:#a6e22e">Send</span>(<span style="color:#a6e22e">goCtx</span>, <span style="color:#a6e22e">kvReq</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resp</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">"client returns nil response"</span>)
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">kvReq</span>.<span style="color:#a6e22e">Streaming</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">streamResult</span>{
+			<span style="color:#a6e22e">resp</span>:       <span style="color:#a6e22e">resp</span>,
+			<span style="color:#a6e22e">rowLen</span>:     len(<span style="color:#a6e22e">fieldTypes</span>),
+			<span style="color:#a6e22e">fieldTypes</span>: <span style="color:#a6e22e">fieldTypes</span>,
+			<span style="color:#a6e22e">ctx</span>:        <span style="color:#a6e22e">ctx</span>,
+		}, <span style="color:#66d9ef">nil</span>
+	}
+	<span style="color:#75715e">// 这里将结果进行了封装
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">selectResult</span>{
+		<span style="color:#a6e22e">label</span>:      <span style="color:#e6db74">"dag"</span>,
+		<span style="color:#a6e22e">resp</span>:       <span style="color:#a6e22e">resp</span>,
+		<span style="color:#a6e22e">results</span>:    make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">newResultWithErr</span>, <span style="color:#a6e22e">kvReq</span>.<span style="color:#a6e22e">Concurrency</span>),
+		<span style="color:#a6e22e">closed</span>:     make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}),
+		<span style="color:#a6e22e">rowLen</span>:     len(<span style="color:#a6e22e">fieldTypes</span>),
+		<span style="color:#a6e22e">fieldTypes</span>: <span style="color:#a6e22e">fieldTypes</span>,
+		<span style="color:#a6e22e">ctx</span>:        <span style="color:#a6e22e">ctx</span>,
+	}, <span style="color:#66d9ef">nil</span>
+}</code></pre></div>
+<p>TiKV Client 中的具体逻辑我们暂时跳过，这里只关注 SQL 层拿到了这个 <code>selectResult</code> 后如何读取数据，下面这个接口是关键。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// SelectResult is an iterator of coprocessor partial results.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SelectResult</span> <span style="color:#66d9ef">interface</span> {
+	<span style="color:#75715e">// NextRaw gets the next raw result.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">NextRaw</span>(<span style="color:#a6e22e">goctx</span>.<span style="color:#a6e22e">Context</span>) ([]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>)
+	<span style="color:#75715e">// NextChunk reads the data into chunk.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">NextChunk</span>(<span style="color:#a6e22e">goctx</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">chunk</span>.<span style="color:#a6e22e">Chunk</span>) <span style="color:#66d9ef">error</span>
+	<span style="color:#75715e">// Close closes the iterator.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Close</span>() <span style="color:#66d9ef">error</span>
+	<span style="color:#75715e">// Fetch fetches partial results from client.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// The caller should call SetFields() before call Fetch().
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Fetch</span>(<span style="color:#a6e22e">goctx</span>.<span style="color:#a6e22e">Context</span>)
+	<span style="color:#75715e">// ScanKeys gets the total scan row count.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ScanKeys</span>() <span style="color:#66d9ef">int64</span></code></pre></div>
+<p>selectResult 实现了 SelectResult 这个接口，代表了一次查询的所有结果的抽象，计算是以 Region 为单位进行，所以这里全部结果会包含所有涉及到的 Region 的结果。调用 Chunk 方法可以读到一个 Chunk 的数据，通过不断调用 NextChunk 方法，直到 Chunk 的 NumRows 返回 0 就能拿到所有结果。NextChunk 的实现会不断获取每个 Region 返回的 SelectResponse，把结果写入 Chunk。</p>
+<h4 id="root-executor">Root Executor</h4>
+<p>能推送到 TiKV 上的计算请求目前有 TableScan、IndexScan、Selection、TopN、Limit、PartialAggregation 这样几个，其他更复杂的算子，还是需要在单个 tidb-server 上进行处理。所以整个计算是一个多 tikv-server 并行处理 + 单个 tidb-server 进行汇总的模式。</p>
+<h2 id="总结">总结</h2>
+<p>Select 语句的处理过程中最复杂的地方有两点，一个是查询优化，一个是如何分布式地执行，这两部分后续都会有文章来更进一步介绍。下一篇文章会脱离具体的 SQL 逻辑，介绍一下如何看懂某一个特定的模块。</p>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/blog-cn/tidb-source-code-reading-6/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a></li>
+<li><a href="/docs-cn/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs-cn/ROADMAP/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="/docs-cn/op-guide/docker-compose/">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/FAQ/">常见问题解答</a></li>
+<li><a href="/docs-cn/tools/syncer/">TiDB 周边工具</a></li>
+<li><a href="/docs-cn/releases/rn/">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://zhuanlan.zhihu.com/newsql" target="_blank">知乎专栏</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                    University</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="/about-cn/recruit/join/" onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe">
+<style media="screen" type="text/css">
+    #mc_embed_signup .response {
+        margin-top: 12px;
+        line-height: 1.4;
+        font-size: 0.65rem;
+    }
+</style>
+<div id="mc_embed_signup">
+<form action="//pingcap.us16.list-manage.com/subscribe/post?u=ab57beb8a88391cf6193c1b48&amp;id=7c67af4f9d" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+<div id="mc_embed_signup_scroll">
+<div class="form-inline">
+<input class="form-control" id="mce-EMAIL" name="EMAIL" placeholder="Subscribe to our newsletter" type="email" value=""/>
+<input class="btn btn-subscribe f-tc" id="mc-embedded-subscribe" name="subscribe" type="submit" value="Subscribe"/>
+</div>
+<div class="clear" id="mce-responses">
+<div class="response" id="mce-error-response" style="display: none;"></div>
+<div class="response" id="mce-success-response" style="display: none;"></div>
+</div>
+<div aria-hidden="true" style="position: absolute; left: -5000px;">
+<input name="b_ab57beb8a88391cf6193c1b48_7c67af4f9d" tabindex="-1" type="text" value=""/>
+</div>
+</div>
+</form>
+</div>
+<script src="https://download.pingcap.com/js/mc-validate.js" type="text/javascript"></script>
+<script type="text/javascript">
+;(function($) {
+    window.fnames = new Array()
+    window.ftypes = new Array()
+    fnames[0] = 'EMAIL'
+    ftypes[0] = 'email'
+    fnames[1] = 'FNAME'
+    ftypes[1] = 'text'
+    fnames[2] = 'LNAME'
+    ftypes[2] = 'text'
+})(jQuery)
+var $mcj = jQuery.noConflict(true)
+</script>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/blog" id="lang">English</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

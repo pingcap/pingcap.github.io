@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="Use Ansible to deploy a TiDB cluster." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="Deploy TiDB Using Ansible" property="og:title"/>
+<meta content="Use Ansible to deploy a TiDB cluster." property="og:description"/>
+<meta content="https://pingcap.com/docs/dev/how-to/deploy/orchestrated/ansible/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="Use Ansible to deploy a TiDB cluster." name="twitter:description"/>
+<meta content="Deploy TiDB Using Ansible" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>Deploy TiDB Using Ansible | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li class="sel"><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/docs-cn/dev/how-to/deploy/orchestrated/ansible" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="doc">
+<div class="container"><div class="sidebar">
+<div class="sticky-sidebar">
+<div class="title"> Documentation </div>
+<div class="st_tree nav-toc"><ul><li class="leaf-child ">
+<a href="/docs/overview/"><span>Introduction</span></a>
+</li><li class="has-child "><a href="#">
+<span>Concepts</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/architecture/"><span>Architecture</span></a>
+</li><li class="has-child "><a href="#">
+<span>Key Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/key-features/#horizontal-scalability"><span>Horizontal Scalability</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#mysql-compatible-syntax"><span>MySQL Compatible Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#replicate-from-and-to-mysql"><span>Replicate from and to MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#distributed-transactions-with-strong-consistency"><span>Distributed Transactions with Strong Consistency</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#cloud-native-architecture"><span>Cloud Native Architecture</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#minimize-etl-with-htap"><span>Minimize ETL with HTAP</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fault-tolerance--recovery-with-raft"><span>Fault Tolerance &amp; Recovery with Raft</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#automatic-rebalancing"><span>Automatic Rebalancing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#deployment-and-orchestration-with-ansible-kubernetes-docker"><span>Deployment and Orchestration with Ansible, Kubernetes, Docker</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#json-support"><span>JSON Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#spark-integration"><span>Spark Integration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#read-historical-data-without-restoring-from-backup"><span>Read Historical Data Without Restoring from Backup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#fast-import-and-restore-of-data"><span>Fast Import and Restore of Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#hybrid-of-column-and-row-storage"><span>Hybrid of Column and Row Storage</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#sql-plan-management"><span>SQL Plan Management</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#open-source"><span>Open Source</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/key-features/#online-schema-changes"><span>Online Schema Changes</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>How-to</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Get Started</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Start a Local Cluster</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-binary/"><span>From Binary</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-homebrew/"><span>From Homebrew</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-dbdeployer/"><span>From DBdeployer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-kubernetes/"><span>In Kubernetes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/local-cluster/install-from-docker-compose/"><span>In Docker Compose</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/explore-sql/"><span>Explore SQL with TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/import-example-database/"><span>Import Example Database</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/read-historical-data/"><span>Read Historical Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/tidb-binlog/"><span>TiDB-Binlog Tutorial</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/get-started/data-migration/"><span>TiDB Data Migration Tutorial</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Deploy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/hardware-recommendations/"><span>Hardware Recommendations</span></a>
+</li><li class="has-child "><a href="#">
+<span>From Binary Tarball</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/testing-environment/"><span>For Testing Environments</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/from-tarball/production-environment/"><span>For Production Environments</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Orchestrated Deployment</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible/"><span>Ansible Deployment (Recommended)</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/offline-ansible/"><span>Ansible Offline Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/docker/"><span>Docker Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/kubernetes/"><span>Kubernetes Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations/"><span>Overview of Ansible Operations</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Geographic Redundancy</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/geographic-redundancy/location-awareness/"><span>Configure Location Awareness</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/tispark/"><span>TiSpark</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/deploy/data-migration-with-ansible/"><span>Data Migration with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/time-zone/"><span>Time Zone</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/configure/memory-control/"><span>Memory Control</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Secure</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>Transport Layer Security (TLS)</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-clients/"><span>Enable TLS For MySQL Clients</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/enable-tls-between-components/"><span>Enable TLS Between TiDB Components</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/secure/generate-self-signed-certificates/"><span>Generate Self-signed Certificates</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Monitor</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/monitor/monitor-a-cluster/"><span>Monitor a TiDB Cluster</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Migrate</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/overview/"><span>Overview</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-mysql/"><span>Migrate the Full Data</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/incrementally-from-mysql/"><span>Migrate the Incremental Data</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/tools/lightning/csv/"><span>Migrate from CSV</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Maintain</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/backup-and-restore/"><span>Backup and Restore</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/maintain/identify-slow-queries/"><span>Identify Slow Queries</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Scale</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/horizontally/"><span>Scale a TiDB Cluster</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/scale/with-ansible/"><span>Scale using Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Upgrade</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/from-previous-version/"><span>Upgrade to TiDB 3.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/to-tidb-2.1/"><span>Upgrade to TiDB 2.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/data-migration/"><span>Upgrade Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/upgrade/rolling-updates-with-ansible/"><span>Rolling updates with Ansible</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Troubleshoot</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/cluster-setup/"><span>Troubleshoot Cluster Setup</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/data-migration/"><span>Troubleshoot Data Migration</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/how-to/troubleshoot/tidb-lightning/"><span>Troubleshoot TiDB-Lightning</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Reference</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/mysql-compatibility/"><span>MySQL Compatibility</span></a>
+</li><li class="has-child "><a href="#">
+<span>SQL</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>SQL Language Structure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/literal-values/"><span>Literal Values</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/schema-object-names/"><span>Schema Object Names</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/keywords-and-reserved-words/"><span>Keywords and Reserved Words</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/user-defined-variables/"><span>User-Defined Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/expression-syntax/"><span>Expression Syntax</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/language-structure/comment-syntax/"><span>Comment Syntax</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Data Types</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#numeric-types"><span>Numeric Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#date-and-time-types"><span>Date and Time Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#string-types"><span>String Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#json-types"><span>JSON Types</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-enum-data-type"><span>The ENUM Data Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#the-set-type"><span>The SET Type</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/data-types/#data-type-default-values"><span>Data Type Default Values</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Functions and Operators</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/reference/"><span>Function and Operator Reference</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/type-conversion/"><span>Type Conversion in Expression Evaluation</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/operators/"><span>Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/control-flow-functions/"><span>Control Flow Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/string-functions/"><span>String Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/numeric-functions-and-operators/"><span>Numeric Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/date-and-time-functions/"><span>Date and Time Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/bit-functions-and-operators/"><span>Bit Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/cast-functions-and-operators/"><span>Cast Functions and Operators</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/encryption-and-compression-functions/"><span>Encryption and Compression Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/information-functions/"><span>Information Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/json-functions/"><span>JSON Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/aggregate-group-by-functions/"><span>Aggregate (GROUP BY) Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/miscellaneous-functions/"><span>Miscellaneous Functions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/functions-and-operators/precision-math/"><span>Precision Math</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>SQL Statements</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-column/"><span>ADD COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/add-index/"><span>ADD INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/admin/"><span>ADMIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-table/"><span>ALTER TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/alter-user/"><span>ALTER USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/analyze-table/"><span>ANALYZE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/begin/"><span>BEGIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/commit/"><span>COMMIT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-database/"><span>CREATE DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-index/"><span>CREATE INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table-like/"><span>CREATE TABLE LIKE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-table/"><span>CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-user/"><span>CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/create-view/"><span>CREATE VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/deallocate/"><span>DEALLOCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/delete/"><span>DELETE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/desc/"><span>DESC</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/describe/"><span>DESCRIBE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/do/"><span>DO</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-column/"><span>DROP COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-database/"><span>DROP DATABASE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-index/"><span>DROP INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-table/"><span>DROP TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-user/"><span>DROP USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/drop-view/"><span>DROP VIEW</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/execute/"><span>EXECUTE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain-analyze/"><span>EXPLAIN ANALYZE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/explain/"><span>EXPLAIN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-privileges/"><span>FLUSH PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-status/"><span>FLUSH STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/flush-tables/"><span>FLUSH TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/grant-privileges/"><span>GRANT &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/insert/"><span>INSERT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/kill/"><span>KILL [TIDB]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/load-data/"><span>LOAD DATA</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/modify-column/"><span>MODIFY COLUMN</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/prepare/"><span>PREPARE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-index/"><span>RENAME INDEX</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rename-table/"><span>RENAME TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/replace/"><span>REPLACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/revoke-privileges/"><span>REVOKE &lt;privileges&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/rollback/"><span>ROLLBACK</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/select/"><span>SELECT</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-names/"><span>SET [NAMES|CHARACTER SET]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-password/"><span>SET PASSWORD</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-transaction/"><span>SET TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/set-variable/"><span>SET [GLOBAL|SESSION] &lt;variable&gt;</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-character-set/"><span>SHOW CHARACTER SET</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-collation/"><span>SHOW COLLATION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-columns-from/"><span>SHOW [FULL] COLUMNS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-table/"><span>SHOW CREATE TABLE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-create-user/"><span>SHOW CREATE USER</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-databases/"><span>SHOW DATABASES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-engines/"><span>SHOW ENGINES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-errors/"><span>SHOW ERRORS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-fields-from/"><span>SHOW [FULL] FIELDS FROM</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-grants/"><span>SHOW GRANTS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-indexes/"><span>SHOW INDEXES [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-index/"><span>SHOW INDEX [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-keys/"><span>SHOW KEYS [FROM|IN]</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-privileges/"><span>SHOW PRIVILEGES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-processlist/"><span>SHOW [FULL] PROCESSSLIST</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-schemas/"><span>SHOW SCHEMAS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-tables/"><span>SHOW [FULL] TABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-table-status/"><span>SHOW TABLE STATUS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-variables/"><span>SHOW [GLOBAL|SESSION] VARIABLES</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/show-warnings/"><span>SHOW WARNINGS</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/start-transaction/"><span>START TRANSACTION</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/trace/"><span>TRACE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/truncate/"><span>TRUNCATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/update/"><span>UPDATE</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/sql/statements/use/"><span>USE</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/constraints/"><span>Constraints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/generated-columns/"><span>Generated Columns</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/sql/character-set/"><span>Character Set</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configuration</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>tidb-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/mysql-variables/"><span>MySQL System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/tidb-specific-variables/"><span>TiDB Specific System Variables</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration/"><span>Configuration Flags</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tidb-server/configuration-file/"><span>Configuration File</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>pd-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/pd-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>tikv-server</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/configuration/tikv-server/configuration/"><span>Configuration Flags</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Security</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/security/compatibility/"><span>Security Compatibility with MySQL</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/privilege-system/"><span>The TiDB Access Privilege System</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/security/user-account-management/"><span>TiDB User Account Management</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Transactions</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-model/"><span>Transaction Model</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/transactions/transaction-isolation/"><span>Isolation Levels</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>System Databases</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/mysql/"><span>mysql</span></a>
+</li><li class="leaf-child sidebar-code">
+<a href="/docs/dev/reference/system-databases/information-schema/"><span>information_schema</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/error-codes/"><span>Errors Codes</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/supported-clients/"><span>Supported Client Drivers</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/garbage-collection/"><span>Garbage Collection (GC)</span></a>
+</li><li class="has-child "><a href="#">
+<span>Performance</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/sql-optimizer-overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/understanding-the-query-execution-plan/"><span>Understanding the Query Execution Plan</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/statistics/"><span>Introduction to Statistics</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/optimizer-hints/"><span>Optimizer Hints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/performance/tune-tikv/"><span>Tune TiKV</span></a>
+</li><li class="leaf-child ">
+<a href="https://pingcap.com/blog/2017-07-24-tidbbestpractice/"><span>TiDB Best Practices</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tispark/"><span>TiSpark</span></a>
+</li><li class="has-child "><a href="#">
+<span>Tools</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/syncer/"><span>Syncer</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/mydumper/"><span>mydumper</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/loader/"><span>Loader</span></a>
+</li><li class="has-child "><a href="#">
+<span>Data Migration</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/overview/#usage-restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/deploy/"><span>Deploy</span></a>
+</li><li class="has-child "><a href="#">
+<span>Features</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#table-routing"><span>Table Routing</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#black-and-white-table-lists"><span>Black and White Lists</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#binlog-event-filter"><span>Binlog Event Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#column-mapping"><span>Column Mapping</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/overview/#synchronization-delay-monitoring"><span>Synchronization Delay Monitoring</span></a>
+</li><li class="has-child "><a href="#">
+<span>Sharding Support</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/"><span>Introduction</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/shard-merge/#restrictions"><span>Restrictions</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/features/manually-handling-sharding-ddl-locks/"><span>Handle Sharding DDL Locks Manually</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Usage Scenarios</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/simple-synchronization/"><span>Simple Scenario</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/usage-scenarios/shard-merge/"><span>Shard Merge Scenario</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Configure</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/configure/task-configuration-file/"><span>Task Configuration</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/manage-tasks/"><span>Manage the Task</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/data-migration/cluster-operations/"><span>Cluster Operations</span></a>
+</li><li class="has-child "><a href="#">
+<span>Migrate from MySQL compatible database </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/how-to/migrate/from-aurora/"><span>Migrate from Aurora</span></a>
+</li></ul>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Lightning</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/deployment/"><span>Deployment</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/checkpoints/"><span>Checkpoints</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/table-filter/"><span>Table Filter</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/csv/"><span>CSV Support</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-lightning/monitor/"><span>Monitor</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>TiDB-Binlog</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/deploy/"><span>Deploy</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/monitor/"><span>Monitor</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/operation/"><span>Maintain</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-binlog/upgrade/"><span>Upgrade</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-control/"><span>PD Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/pd-recover/"><span>PD Recover</span></a>
+</li><li class="leaf-child ">
+<a href="https://github.com/tikv/tikv/blob/master/docs/tools/tikv-control.md"><span>TiKV Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/tidb-control/"><span>TiDB Control</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/tools/download/"><span>Download</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Key Monitoring Metrics</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/overview/"><span>Overview</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tidb/"><span>TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/pd/"><span>PD</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/dev/reference/key-monitoring-metrics/tikv/"><span>TiKV</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/adopters/"><span>Adopters</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>FAQs</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/faq/tidb/"><span>TiDB FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/tidb-lightning/"><span>TiDB-Lightning FAQs</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/faq/upgrades/"><span>Upgrade FAQs</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Support  </span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/support-resources/"><span>Support Resources</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/report-issue/"><span>Report an Issue</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>Contribute</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/contribute/#contribute-to-tidb"><span>Contribute to TiDB</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/contribute/#improve-the-docs"><span>Improve the Docs</span></a>
+</li></ul>
+</li><li class="leaf-child ">
+<a href="/docs/roadmap/"><span>Roadmap</span></a>
+</li><li class="has-child "><a href="#">
+<span>Releases</span>
+<i class="icon-arrow"></i></a><ul><li class="has-child "><a href="#">
+<span>v3.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-rc.1/"><span>3.0.0-rc.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0.0-beta.1/"><span>3.0.0-beta.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/3.0beta/"><span>3.0.0-beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.1</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.1.10/"><span>2.1.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.9/"><span>2.1.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.8/"><span>2.1.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.7/"><span>2.1.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.6/"><span>2.1.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.5/"><span>2.1.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.4/"><span>2.1.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.3/"><span>2.1.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.2/"><span>2.1.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1.1/"><span>2.1.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.1ga/"><span>2.1 GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc5/"><span>2.1 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc4/"><span>2.1 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc3/"><span>2.1 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc2/"><span>2.1 RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21rc1/"><span>2.1 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/21beta/"><span>2.1 Beta</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v2.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/2.0.11/"><span>2.0.11</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0.10/"><span>2.0.10</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/209/"><span>2.0.9</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/208/"><span>2.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/207/"><span>2.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/206/"><span>2.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/205/"><span>2.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/204/"><span>2.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/203/"><span>2.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/202/"><span>2.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/201/"><span>2.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2.0ga/"><span>2.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc5/"><span>2.0 RC5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc4/"><span>2.0 RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc3/"><span>2.0 RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/2rc1/"><span>2.0 RC1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11beta/"><span>1.1 Beta</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/11alpha/"><span>1.1 Alpha</span></a>
+</li></ul>
+</li><li class="has-child "><a href="#">
+<span>v1.0</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child ">
+<a href="/docs/releases/108/"><span>1.0.8</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/107/"><span>1.0.7</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/106/"><span>1.0.6</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/105/"><span>1.0.5</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/104/"><span>1.0.4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/103/"><span>1.0.3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/102/"><span>1.0.2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/101/"><span>1.0.1</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/ga/"><span>1.0</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/prega/"><span>Pre-GA</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc4/"><span>RC4</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc3/"><span>RC3</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc2/"><span>RC2</span></a>
+</li><li class="leaf-child ">
+<a href="/docs/releases/rc1/"><span>RC1</span></a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 id="deploy-tidb-using-ansible">Deploy TiDB Using Ansible</h1>
+<p>This guide describes how to deploy a TiDB cluster using Ansible. For the production environment, it is recommended to deploy TiDB using Ansible.</p>
+<h2 id="overview">Overview</h2>
+<p>Ansible is an IT automation tool that can configure systems, deploy software, and orchestrate more advanced IT tasks such as continuous deployments or zero downtime rolling updates.</p>
+<p><a href="https://github.com/pingcap/tidb-ansible">TiDB-Ansible</a> is a TiDB cluster deployment tool developed by PingCAP, based on Ansible playbook. TiDB-Ansible enables you to quickly deploy a new TiDB cluster which includes PD, TiDB, TiKV, and the cluster monitoring modules.</p>
+<p>You can use the TiDB-Ansible configuration file to set up the cluster topology and complete all the following operation tasks:</p>
+<ul>
+<li>Initialize operating system parameters</li>
+<li>Deploy the whole TiDB cluster</li>
+<li><a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations#start-a-cluster">Start the TiDB cluster</a></li>
+<li><a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations#stop-a-cluster">Stop the TiDB cluster</a></li>
+<li><a href="/docs/dev/how-to/maintain/upgrade/rolling-updates-with-ansible#modify-component-configuration">Modify component configuration</a></li>
+<li><a href="/docs/dev/how-to/maintain/scale/with-ansible">Scale the TiDB cluster</a></li>
+<li><a href="/docs/dev/how-to/upgrade/rolling-updates-with-ansible#upgrade-the-component-version">Upgrade the component version</a></li>
+<li><a href="/docs/dev/reference/tools/tidb-binlog/overview">Enable the cluster binlog</a></li>
+<li><a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations#clean-up-cluster-data">Clean up data of the TiDB cluster</a></li>
+<li><a href="/docs/dev/how-to/deploy/orchestrated/ansible-operations#destroy-a-cluster">Destroy the TiDB cluster</a></li>
+</ul>
+<h2 id="prepare">Prepare</h2>
+<p>Before you start, make sure you have:</p>
+<ol>
+<li><p>Several target machines that meet the following requirements:</p>
+<ul>
+<li><p>4 or more machines</p>
+<p>A standard TiDB cluster contains 6 machines. You can use 4 machines for testing. For more details, see <a href="/docs/dev/how-to/deploy/hardware-recommendations">Software and Hardware Recommendations</a>.</p></li>
+<li><p>CentOS 7.3 (64 bit) or later, x86_64 architecture (AMD64)</p></li>
+<li><p>Network between machines</p></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>When you deploy TiDB using Ansible, <strong>use SSD disks for the data directory of TiKV and PD nodes</strong>. Otherwise, it cannot pass the check. If you only want to try TiDB out and explore the features, it is recommended to <a href="/docs/dev/how-to/get-started/local-cluster/install-from-docker-compose">deploy TiDB using Docker Compose</a> on a single machine.</p>
+</blockquote></li>
+<li><p>A Control Machine that meets the following requirements:</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>The Control Machine can be one of the target machines.</p>
+</blockquote>
+<ul>
+<li>CentOS 7.3 (64 bit) or later with Python 2.7 installed</li>
+<li>Access to the Internet</li>
+</ul></li>
+</ol>
+<h2 id="step-1-install-system-dependencies-on-the-control-machine">Step 1: Install system dependencies on the Control Machine</h2>
+<p>Log in to the Control Machine using the <code>root</code> user account, and run the corresponding command according to your operating system.</p>
+<ul>
+<li><p>If you use a Control Machine installed with CentOS 7, run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># yum -y install epel-release git curl sshpass
+# yum -y install python-pip</pre></div></li>
+<li><p>If you use a Control Machine installed with Ubuntu, run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># apt-get -y install git curl sshpass python-pip</pre></div></li>
+</ul>
+<h2 id="step-2-create-the-tidb-user-on-the-control-machine-and-generate-the-ssh-key">Step 2: Create the <code>tidb</code> user on the Control Machine and generate the SSH key</h2>
+<p>Make sure you have logged in to the Control Machine using the <code>root</code> user account, and then run the following command.</p>
+<ol>
+<li><p>Create the <code>tidb</code> user.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># useradd -m -d /home/tidb tidb</pre></div></li>
+<li><p>Set a password for the <code>tidb</code> user account.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># passwd tidb</pre></div></li>
+<li><p>Configure sudo without password for the <code>tidb</code> user account by adding <code>tidb ALL=(ALL) NOPASSWD: ALL</code> to the end of the sudo file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># visudo
+tidb ALL=(ALL) NOPASSWD: ALL</pre></div></li>
+<li><p>Generate the SSH key.</p>
+<p>Execute the <code>su</code> command to switch the user from <code>root</code> to <code>tidb</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># su - tidb</pre></div>
+<p>Create the SSH key for the <code>tidb</code> user account and hit the Enter key when <code>Enter passphrase</code> is prompted. After successful execution, the SSH private key file is <code>/home/tidb/.ssh/id_rsa</code>, and the SSH public key file is <code>/home/tidb/.ssh/id_rsa.pub</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/tidb/.ssh/id_rsa):
+Created directory '/home/tidb/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/tidb/.ssh/id_rsa.
+Your public key has been saved in /home/tidb/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:eIBykszR1KyECA/h0d7PRKz4fhAeli7IrVphhte7/So tidb@172.16.10.49
+The key's randomart image is:
++---[RSA 2048]----+
+|=+o+.o.          |
+|o=o+o.oo         |
+| .O.=.=          |
+| . B.B +         |
+|o B * B S        |
+| * + * +         |
+|  o + .          |
+| o  E+ .         |
+|o   ..+o.        |
++----[SHA256]-----+</pre></div></li>
+</ol>
+<h2 id="step-3-download-tidb-ansible-to-the-control-machine">Step 3: Download TiDB-Ansible to the Control Machine</h2>
+<ol>
+<li><p>Log in to the Control Machine using the <code>tidb</code> user account and enter the <code>/home/tidb</code> directory. The relationship between the <code>tidb-ansible</code> version and the TiDB version is as follows:</p>
+<table>
+<thead>
+<tr>
+<th align="left">TiDB version</th>
+<th align="left">tidb-ansible tag</th>
+<th align="left">Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">2.0 version</td>
+<td align="left">v2.0.10, v2.0.11</td>
+<td align="left">It is the latest 2.0 stable version which can be used in the production environment.</td>
+</tr>
+<tr>
+<td align="left">2.1 version</td>
+<td align="left">v2.1.1 ~ v2.1.8</td>
+<td align="left">It is the latest 2.1 stable version which can be used in the production environment (recommended).</td>
+</tr>
+<tr>
+<td align="left">3.0 version</td>
+<td align="left">v3.0.0-beta, v3.0.0-beta.1</td>
+<td align="left">It is currently a beta version which is not recommended to use in the production environment.</td>
+</tr>
+<tr>
+<td align="left"><code>master</code> branch</td>
+<td align="left">None</td>
+<td align="left">It includes the newest features and is updated on a daily basis, so it is not recommended to use it in the production environment.</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Download the <a href="https://github.com/pingcap/tidb-ansible/tags">corresponding TiDB-Ansible versions</a> from the <a href="https://github.com/pingcap/tidb-ansible">TiDB-Ansible project</a>. The default folder name is <code>tidb-ansible</code>.</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>It is required to use the corresponding tidb-ansible version when you deploy and upgrade the TiDB cluster. If you deploy TiDB using a mismatched version of tidb-ansible (such as using tidb-ansible v2.1.4 to deploy TiDB v2.1.6), an error might occur.</p>
+</blockquote>
+<ul>
+<li><p>Download the tidb-ansible version with a specified tag:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ git clone -b $tag https://github.com/pingcap/tidb-ansible.git</pre></div></li>
+<li><p>Download the tidb-ansible version that corresponds to the <code>master</code> branch of TiDB:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ git clone https://github.com/pingcap/tidb-ansible.git</pre></div></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>It is required to download <code>tidb-ansible</code> to the <code>/home/tidb</code> directory using the <code>tidb</code> user account. If you download it to the <code>/root</code> directory, a privilege issue occurs.</p>
+</blockquote>
+<p>If you have questions regarding which version to use, email to info@pingcap.com for more information or <a href="https://github.com/pingcap/tidb-ansible/issues/new">file an issue</a>.</p></li>
+</ol>
+<h2 id="step-4-install-ansible-and-its-dependencies-on-the-control-machine">Step 4: Install Ansible and its dependencies on the Control Machine</h2>
+<p>Make sure you have logged in to the Control Machine using the <code>tidb</code> user account.</p>
+<p>It is required to use <code>pip</code> to install Ansible and its dependencies, otherwise a compatibility issue occurs. Currently, the release-2.0, release-2.1, and master branches of TiDB-Ansible are compatible with Ansible 2.4 and Ansible 2.5.</p>
+<ol>
+<li><p>Install Ansible and the dependencies on the Control Machine:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible
+$ sudo pip install -r ./requirements.txt</code></pre></div>
+<p>Ansible and the related dependencies are in the <code>tidb-ansible/requirements.txt</code> file.</p></li>
+<li><p>View the version of Ansible:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ansible --version
+ansible <span style="color:#ae81ff">2</span>.5.0</code></pre></div></li>
+</ol>
+<h2 id="step-5-configure-the-ssh-mutual-trust-and-sudo-rules-on-the-control-machine">Step 5: Configure the SSH mutual trust and sudo rules on the Control Machine</h2>
+<p>Make sure you have logged in to the Control Machine using the <code>tidb</code> user account.</p>
+<ol>
+<li><p>Add the IPs of your target machines to the <code>[servers]</code> section of the <code>hosts.ini</code> file.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible
+$ vi hosts.ini
+<span style="color:#f92672">[</span>servers<span style="color:#f92672">]</span>
+<span style="color:#ae81ff">172</span>.16.10.1
+<span style="color:#ae81ff">172</span>.16.10.2
+<span style="color:#ae81ff">172</span>.16.10.3
+<span style="color:#ae81ff">172</span>.16.10.4
+<span style="color:#ae81ff">172</span>.16.10.5
+<span style="color:#ae81ff">172</span>.16.10.6
+
+<span style="color:#f92672">[</span>all:vars<span style="color:#f92672">]</span>
+username <span style="color:#f92672">=</span> tidb
+ntp_server <span style="color:#f92672">=</span> pool.ntp.org</code></pre></div></li>
+<li><p>Run the following command and input the <code>root</code> user account password of your target machines.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ansible-playbook -i hosts.ini create_users.yml -u root -k</code></pre></div>
+<p>This step creates the <code>tidb</code> user account on the target machines, configures the sudo rules and the SSH mutual trust between the Control Machine and the target machines.</p></li>
+</ol>
+<blockquote>
+<p>To configure the SSH mutual trust and sudo without password manually, see <a href="#how-to-manually-configure-the-ssh-mutual-trust-and-sudo-without-password">How to manually configure the SSH mutual trust and sudo without password</a></p>
+</blockquote>
+<h2 id="step-6-install-the-ntp-service-on-the-target-machines">Step 6: Install the NTP service on the target machines</h2>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>If the time and time zone of all your target machines are same, the NTP service is on and is normally synchronizing time, you can ignore this step. See <a href="#how-to-check-whether-the-ntp-service-is-normal">How to check whether the NTP service is normal</a>.</p>
+</blockquote>
+<p>Make sure you have logged in to the Control Machine using the <code>tidb</code> user account, run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd /home/tidb/tidb-ansible
+$ ansible-playbook -i hosts.ini deploy_ntp.yml -u tidb -b</code></pre></div>
+<p>The NTP service is installed and started using the software repository that comes with the system on the target machines. The default NTP server list in the installation package is used. The related <code>server</code> parameter is in the <code>/etc/ntp.conf</code> configuration file.</p>
+<p>To make the NTP service start synchronizing as soon as possible, the system executes the <code>ntpdate</code> command to set the local date and time by polling <code>ntp_server</code> in the <code>hosts.ini</code> file. The default server is <code>pool.ntp.org</code>, and you can also replace it with your NTP server.</p>
+<h2 id="step-7-configure-the-cpufreq-governor-mode-on-the-target-machine">Step 7: Configure the CPUfreq governor mode on the target machine</h2>
+<p>For details about CPUfreq, see <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/power_management_guide/cpufreq_governors">the CPUfreq Governor documentation</a>.</p>
+<p>Set the CPUfreq governor mode to <code>performance</code> to make full use of CPU performance.</p>
+<h3 id="check-the-governor-modes-supported-by-the-system">Check the governor modes supported by the system</h3>
+<p>You can run the <code>cpupower frequency-info --governors</code> command to check the governor modes which the system supports:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># cpupower frequency-info --governors
+analyzing CPU 0:
+  available cpufreq governors: performance powersave</pre></div>
+<p>Taking the above code for example, the system supports the <code>performance</code> and <code>powersave</code> modes.</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>As the following shows, if it returns “Not Available”, it means that the current system does not support CPUfreq configuration and you can skip this step.</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># cpupower frequency-info --governors
+analyzing CPU 0:
+   available cpufreq governors: Not Available</pre></div>
+<h3 id="check-the-current-governor-mode">Check the current governor mode</h3>
+<p>You can run the <code>cpupower frequency-info --policy</code> command to check the current CPUfreq governor mode:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># cpupower frequency-info --policy
+analyzing CPU 0:
+  current policy: frequency should be within 1.20 GHz and 3.20 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.</pre></div>
+<p>As the above code shows, the current mode is <code>powersave</code> in this example.</p>
+<h3 id="change-the-governor-mode">Change the governor mode</h3>
+<ul>
+<li><p>You can run the following command to change the current mode to <code>performance</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># cpupower frequency-set --governor performance</pre></div></li>
+<li><p>You can also run the following command to set the mode on the target machine in batches:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ ansible -i hosts.ini all -m shell -a "cpupower frequency-set --governor performance" -u tidb -b</pre></div></li>
+</ul>
+<h2 id="step-8-mount-the-data-disk-ext4-filesystem-with-options-on-the-target-machines">Step 8: Mount the data disk ext4 filesystem with options on the target machines</h2>
+<p>Log in to the target machines using the <code>root</code> user account.</p>
+<p>Format your data disks to the ext4 filesystem and mount the filesystem with the <code>nodelalloc</code> and <code>noatime</code> options. It is required to mount the <code>nodelalloc</code> option, or else the Ansible deployment cannot pass the test. The <code>noatime</code> option is optional.</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>If your data disks have been formatted to ext4 and have mounted the options, you can uninstall it by running the <code># umount /dev/nvme0n1</code> command, follow the steps starting from editing the <code>/etc/fstab</code> file, and remount the filesystem with options.</p>
+</blockquote>
+<p>Take the <code>/dev/nvme0n1</code> data disk as an example:</p>
+<ol>
+<li><p>View the data disk.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># fdisk -l
+Disk /dev/nvme0n1: 1000 GB</pre></div></li>
+<li><p>Create the partition table.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># parted -s -a optimal /dev/nvme0n1 mklabel gpt -- mkpart primary ext4 1 -1</pre></div></li>
+<li><p>Format the data disk to the ext4 filesystem.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># mkfs.ext4 /dev/nvme0n1</pre></div></li>
+<li><p>View the partition UUID of the data disk.</p>
+<p>In this example, the UUID of <code>nvme0n1</code> is <code>c51eb23b-195c-4061-92a9-3fad812cc12f</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># lsblk -f
+NAME    FSTYPE LABEL UUID                                 MOUNTPOINT
+sda
+├─sda1  ext4         237b634b-a565-477b-8371-6dff0c41f5ab /boot
+├─sda2  swap         f414c5c0-f823-4bb1-8fdf-e531173a72ed
+└─sda3  ext4         547909c1-398d-4696-94c6-03e43e317b60 /
+sr0
+nvme0n1 ext4         c51eb23b-195c-4061-92a9-3fad812cc12f</pre></div></li>
+<li><p>Edit the <code>/etc/fstab</code> file and add the mount options.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># vi /etc/fstab
+UUID=c51eb23b-195c-4061-92a9-3fad812cc12f /data1 ext4 defaults,nodelalloc,noatime 0 2</pre></div></li>
+<li><p>Mount the data disk.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># mkdir /data1
+# mount -a</pre></div></li>
+<li><p>Check using the following command.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># mount -t ext4
+/dev/nvme0n1 on /data1 type ext4 (rw,noatime,nodelalloc,data=ordered)</pre></div>
+<p>If the filesystem is ext4 and <code>nodelalloc</code> is included in the mount options, you have successfully mount the data disk ext4 filesystem with options on the target machines.</p></li>
+</ol>
+<h2 id="step-9-edit-the-inventory-ini-file-to-orchestrate-the-tidb-cluster">Step 9: Edit the <code>inventory.ini</code> file to orchestrate the TiDB cluster</h2>
+<p>Log in to the Control Machine using the <code>tidb</code> user account, and edit the <code>tidb-ansible/inventory.ini</code> file to orchestrate the TiDB cluster. The standard TiDB cluster contains 6 machines: 2 TiDB nodes, 3 PD nodes and 3 TiKV nodes.</p>
+<ul>
+<li>Deploy at least 3 instances for TiKV.</li>
+<li>Do not deploy TiKV together with TiDB or PD on the same machine.</li>
+<li>Use the first TiDB machine as the monitoring machine.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>It is required to use the internal IP address to deploy. If the SSH port of the target machines is not the default 22 port, you need to add the <code>ansible_port</code> variable. For example, <code>TiDB1 ansible_host=172.16.10.1 ansible_port=5555</code>.</p>
+</blockquote>
+<p>You can choose one of the following two types of cluster topology according to your scenario:</p>
+<ul>
+<li><p><a href="#option-1-use-the-cluster-topology-of-a-single-tikv-instance-on-each-tikv-node">The cluster topology of a single TiKV instance on each TiKV node</a></p>
+<p>In most cases, it is recommended to deploy one TiKV instance on each TiKV node for better performance. However, if the CPU and memory of your TiKV machines are much better than the required in <a href="/docs/dev/how-to/deploy/hardware-recommendations">Hardware and Software Requirements</a>, and you have more than two disks in one node or the capacity of one SSD is larger than 2 TB, you can deploy no more than 2 TiKV instances on a single TiKV node.</p></li>
+<li><p><a href="#option-2-use-the-cluster-topology-of-multiple-tikv-instances-on-each-tikv-node">The cluster topology of multiple TiKV instances on each TiKV node</a></p></li>
+</ul>
+<h3 id="option-1-use-the-cluster-topology-of-a-single-tikv-instance-on-each-tikv-node">Option 1: Use the cluster topology of a single TiKV instance on each TiKV node</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Name</th>
+<th align="left">Host IP</th>
+<th align="left">Services</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">node1</td>
+<td align="left">172.16.10.1</td>
+<td align="left">PD1, TiDB1</td>
+</tr>
+<tr>
+<td align="left">node2</td>
+<td align="left">172.16.10.2</td>
+<td align="left">PD2, TiDB2</td>
+</tr>
+<tr>
+<td align="left">node3</td>
+<td align="left">172.16.10.3</td>
+<td align="left">PD3</td>
+</tr>
+<tr>
+<td align="left">node4</td>
+<td align="left">172.16.10.4</td>
+<td align="left">TiKV1</td>
+</tr>
+<tr>
+<td align="left">node5</td>
+<td align="left">172.16.10.5</td>
+<td align="left">TiKV2</td>
+</tr>
+<tr>
+<td align="left">node6</td>
+<td align="left">172.16.10.6</td>
+<td align="left">TiKV3</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[tidb_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+<span style="color:#a6e22e">172.16.10.2</span>
+
+<span style="color:#66d9ef">[pd_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+<span style="color:#a6e22e">172.16.10.2</span>
+<span style="color:#a6e22e">172.16.10.3</span>
+
+<span style="color:#66d9ef">[tikv_servers]</span>
+<span style="color:#a6e22e">172.16.10.4</span>
+<span style="color:#a6e22e">172.16.10.5</span>
+<span style="color:#a6e22e">172.16.10.6</span>
+
+<span style="color:#66d9ef">[monitoring_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+
+<span style="color:#66d9ef">[grafana_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+
+<span style="color:#66d9ef">[monitored_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+<span style="color:#a6e22e">172.16.10.2</span>
+<span style="color:#a6e22e">172.16.10.3</span>
+<span style="color:#a6e22e">172.16.10.4</span>
+<span style="color:#a6e22e">172.16.10.5</span>
+<span style="color:#a6e22e">172.16.10.6</span></code></pre></div>
+<h3 id="option-2-use-the-cluster-topology-of-multiple-tikv-instances-on-each-tikv-node">Option 2: Use the cluster topology of multiple TiKV instances on each TiKV node</h3>
+<p>Take two TiKV instances on each TiKV node as an example:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Name</th>
+<th align="left">Host IP</th>
+<th align="left">Services</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">node1</td>
+<td align="left">172.16.10.1</td>
+<td align="left">PD1, TiDB1</td>
+</tr>
+<tr>
+<td align="left">node2</td>
+<td align="left">172.16.10.2</td>
+<td align="left">PD2, TiDB2</td>
+</tr>
+<tr>
+<td align="left">node3</td>
+<td align="left">172.16.10.3</td>
+<td align="left">PD3</td>
+</tr>
+<tr>
+<td align="left">node4</td>
+<td align="left">172.16.10.4</td>
+<td align="left">TiKV1-1, TiKV1-2</td>
+</tr>
+<tr>
+<td align="left">node5</td>
+<td align="left">172.16.10.5</td>
+<td align="left">TiKV2-1, TiKV2-2</td>
+</tr>
+<tr>
+<td align="left">node6</td>
+<td align="left">172.16.10.6</td>
+<td align="left">TiKV3-1, TiKV3-2</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[tidb_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+<span style="color:#a6e22e">172.16.10.2</span>
+
+<span style="color:#66d9ef">[pd_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+<span style="color:#a6e22e">172.16.10.2</span>
+<span style="color:#a6e22e">172.16.10.3</span>
+
+<span style="color:#66d9ef">[tikv_servers]</span>
+<span style="color:#a6e22e">TiKV1-1 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.4 deploy_dir=/data1/deploy tikv_port=20171 labels="host=tikv1"</span>
+<span style="color:#a6e22e">TiKV1-2 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.4 deploy_dir=/data2/deploy tikv_port=20172 labels="host=tikv1"</span>
+<span style="color:#a6e22e">TiKV2-1 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.5 deploy_dir=/data1/deploy tikv_port=20171 labels="host=tikv2"</span>
+<span style="color:#a6e22e">TiKV2-2 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.5 deploy_dir=/data2/deploy tikv_port=20172 labels="host=tikv2"</span>
+<span style="color:#a6e22e">TiKV3-1 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.6 deploy_dir=/data1/deploy tikv_port=20171 labels="host=tikv3"</span>
+<span style="color:#a6e22e">TiKV3-2 ansible_host</span><span style="color:#f92672">=</span><span style="color:#e6db74">172.16.10.6 deploy_dir=/data2/deploy tikv_port=20172 labels="host=tikv3"</span>
+
+<span style="color:#75715e"># When you deploy a TiDB cluster of the 3.0 version, you must configure the TiKV status ports in the topology of multiple TiKV instances, as shown in the following example.</span>
+<span style="color:#75715e"># TiKV1-1 ansible_host=172.16.10.4 deploy_dir=/data1/deploy tikv_port=20171 tikv_status_port=20181 labels="host=tikv1"</span>
+<span style="color:#75715e"># TiKV1-2 ansible_host=172.16.10.4 deploy_dir=/data2/deploy tikv_port=20172 tikv_status_port=20182 labels="host=tikv1"</span>
+<span style="color:#75715e"># TiKV2-1 ansible_host=172.16.10.5 deploy_dir=/data1/deploy tikv_port=20171 tikv_status_port=20181 labels="host=tikv2"</span>
+<span style="color:#75715e"># TiKV2-2 ansible_host=172.16.10.5 deploy_dir=/data2/deploy tikv_port=20172 tikv_status_port=20182 labels="host=tikv2"</span>
+<span style="color:#75715e"># TiKV3-1 ansible_host=172.16.10.6 deploy_dir=/data1/deploy tikv_port=20171 tikv_status_port=20181 labels="host=tikv3"</span>
+<span style="color:#75715e"># TiKV3-2 ansible_host=172.16.10.6 deploy_dir=/data2/deploy tikv_port=20172 tikv_status_port=20182 labels="host=tikv3"</span>
+
+<span style="color:#66d9ef">[monitoring_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+
+<span style="color:#66d9ef">[grafana_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+
+<span style="color:#66d9ef">[monitored_servers]</span>
+<span style="color:#a6e22e">172.16.10.1</span>
+<span style="color:#a6e22e">172.16.10.2</span>
+<span style="color:#a6e22e">172.16.10.3</span>
+<span style="color:#a6e22e">172.16.10.4</span>
+<span style="color:#a6e22e">172.16.10.5</span>
+<span style="color:#a6e22e">172.16.10.6</span>
+
+<span style="color:#a6e22e">......</span>
+
+<span style="color:#66d9ef">[pd_servers:vars]</span>
+<span style="color:#a6e22e">location_labels</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">["host"]</span></code></pre></div>
+<p><strong>Edit the parameters in the service configuration file:</strong></p>
+<ol>
+<li><p>For the cluster topology of multiple TiKV instances on each TiKV node, you need to edit the <code>block-cache-size</code> parameter in <code>tidb-ansible/conf/tikv.yml</code>:</p>
+<ul>
+<li><code>rocksdb defaultcf block-cache-size(GB)</code>: MEM * 80% / TiKV instance number * 30%</li>
+<li><code>rocksdb writecf block-cache-size(GB)</code>: MEM * 80% / TiKV instance number * 45%</li>
+<li><code>rocksdb lockcf block-cache-size(GB)</code>: MEM * 80% / TiKV instance number * 2.5% (128 MB at a minimum)</li>
+<li><code>raftdb defaultcf block-cache-size(GB)</code>: MEM * 80% / TiKV instance number * 2.5% (128 MB at a minimum)</li>
+</ul></li>
+<li><p>For the cluster topology of multiple TiKV instances on each TiKV node, you need to edit the <code>high-concurrency</code>, <code>normal-concurrency</code> and <code>low-concurrency</code> parameters in the <code>tidb-ansible/conf/tikv.yml</code> file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">readpool:
+coprocessor:
+    # Notice: if CPU_NUM &gt; 8, default thread pool size for coprocessors
+    # will be set to CPU_NUM * 0.8.
+    # high-concurrency: 8
+    # normal-concurrency: 8
+    # low-concurrency: 8</pre></div>
+<p>Recommended configuration: <code>number of instances * parameter value = CPU_Vcores * 0.8</code>.</p></li>
+<li><p>If multiple TiKV instances are deployed on a same physical disk, edit the <code>capacity</code> parameter in <code>conf/tikv.yml</code>:</p>
+<ul>
+<li><code>capacity</code>: total disk capacity / number of TiKV instances (the unit is GB)</li>
+</ul></li>
+</ol>
+<h2 id="step-10-edit-variables-in-the-inventory-ini-file">Step 10: Edit variables in the <code>inventory.ini</code> file</h2>
+<p>This step describes how to edit the variable of deployment directory and other variables in the <code>inventory.ini</code> file.</p>
+<h3 id="configure-the-deployment-directory">Configure the deployment directory</h3>
+<p>Edit the <code>deploy_dir</code> variable to configure the deployment directory.</p>
+<p>The global variable is set to <code>/home/tidb/deploy</code> by default, and it applies to all services. If the data disk is mounted on the <code>/data1</code> directory, you can set it to <code>/data1/deploy</code>. For example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## Global variables
+</span><span style="color:#75715e"></span><span style="color:#f92672">[</span>all:vars<span style="color:#f92672">]</span>
+deploy_dir <span style="color:#f92672">=</span> /data1/deploy</code></pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>To separately set the deployment directory for a service, you can configure the host variable while configuring the service host list in the <code>inventory.ini</code> file. It is required to add the first column alias, to avoid confusion in scenarios of mixed services deployment.</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">TiKV1-1 ansible_host<span style="color:#f92672">=</span><span style="color:#ae81ff">172</span>.16.10.4 deploy_dir<span style="color:#f92672">=</span>/data1/deploy</code></pre></div>
+<h3 id="edit-other-variables-optional">Edit other variables (Optional)</h3>
+<p>To enable the following control variables, use the capitalized <code>True</code>. To disable the following control variables, use the capitalized <code>False</code>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Variable Name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">cluster_name</td>
+<td align="left">the name of a cluster, adjustable</td>
+</tr>
+<tr>
+<td align="left">tidb_version</td>
+<td align="left">the version of TiDB, configured by default in TiDB-Ansible branches</td>
+</tr>
+<tr>
+<td align="left">process_supervision</td>
+<td align="left">the supervision way of processes, systemd by default, supervise optional</td>
+</tr>
+<tr>
+<td align="left">timezone</td>
+<td align="left">the global default time zone configured when a new TiDB cluster bootstrap is initialized; you can edit it later using the global <code>time_zone</code> system variable and the session <code>time_zone</code> system variable as described in <a href="/docs/dev/how-to/configure/time-zone">Time Zone Support</a>; the default value is <code>Asia/Shanghai</code> and see <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">the list of time zones</a> for more optional values</td>
+</tr>
+<tr>
+<td align="left">enable_firewalld</td>
+<td align="left">to enable the firewall, closed by default; to enable it, add the ports in <a href="/docs/dev/how-to/deploy/hardware-recommendations#network-requirements">network requirements</a> to the white list</td>
+</tr>
+<tr>
+<td align="left">enable_ntpd</td>
+<td align="left">to monitor the NTP service of the managed node, True by default; do not close it</td>
+</tr>
+<tr>
+<td align="left">set_hostname</td>
+<td align="left">to edit the hostname of the managed node based on the IP, False by default</td>
+</tr>
+<tr>
+<td align="left">enable_binlog</td>
+<td align="left">whether to deploy Pump and enable the binlog, False by default, dependent on the Kafka cluster; see the <code>zookeeper_addrs</code> variable</td>
+</tr>
+<tr>
+<td align="left">zookeeper_addrs</td>
+<td align="left">the zookeeper address of the binlog Kafka cluster</td>
+</tr>
+<tr>
+<td align="left">enable_slow_query_log</td>
+<td align="left">to record the slow query log of TiDB into a single file: ({{ deploy_dir }}/log/tidb_slow_query.log). False by default, to record it into the TiDB log</td>
+</tr>
+<tr>
+<td align="left">deploy_without_tidb</td>
+<td align="left">the Key-Value mode, deploy only PD, TiKV and the monitoring service, not TiDB; set the IP of the tidb_servers host group to null in the <code>inventory.ini</code> file</td>
+</tr>
+<tr>
+<td align="left">alertmanager_target</td>
+<td align="left">optional: If you have deployed <code>alertmanager</code> separately, you can configure this variable using the <code>alertmanager_host:alertmanager_port</code> format</td>
+</tr>
+<tr>
+<td align="left">grafana_admin_user</td>
+<td align="left">the username of Grafana administrator; default <code>admin</code></td>
+</tr>
+<tr>
+<td align="left">grafana_admin_password</td>
+<td align="left">the password of Grafana administrator account; default <code>admin</code>; used to import Dashboard and create the API key using Ansible; update this variable if you have modified it through Grafana web</td>
+</tr>
+<tr>
+<td align="left">collect_log_recent_hours</td>
+<td align="left">to collect the log of recent hours; default the recent 2 hours</td>
+</tr>
+<tr>
+<td align="left">enable_bandwidth_limit</td>
+<td align="left">to set a bandwidth limit when pulling the diagnostic data from the target machines to the Control Machine; used together with the <code>collect_bandwidth_limit</code> variable</td>
+</tr>
+<tr>
+<td align="left">collect_bandwidth_limit</td>
+<td align="left">the limited bandwidth when pulling the diagnostic data from the target machines to the Control Machine; unit: Kbit/s; default 10000, indicating 10Mb/s; for the cluster topology of multiple TiKV instances on each TiKV node, you need to divide the number of the TiKV instances on each TiKV node</td>
+</tr>
+<tr>
+<td align="left">prometheus_storage_retention</td>
+<td align="left">the retention time of the monitoring data of Prometheus (30 days by default); this is a new configuration in the <code>group_vars/monitoring_servers.yml</code> file in 2.1.7, 3.0 and the later tidb-ansible versions</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-11-deploy-the-tidb-cluster">Step 11: Deploy the TiDB cluster</h2>
+<p>When <code>ansible-playbook</code> runs Playbook, the default concurrent number is 5. If many deployment target machines are deployed, you can add the <code>-f</code> parameter to specify the concurrency, such as <code>ansible-playbook deploy.yml -f 10</code>.</p>
+<p>The following example uses <code>tidb</code> as the user who runs the service.</p>
+<ol>
+<li><p>Edit the <code>tidb-ansible/inventory.ini</code> file to make sure <code>ansible_user = tidb</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">## Connection
+# ssh via normal user
+ansible_user = tidb</pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>Do not configure <code>ansible_user</code> to <code>root</code>, because <code>tidb-ansible</code> limits the user that runs the service to the normal user.</p>
+</blockquote>
+<p>Run the following command and if all servers return <code>tidb</code>, then the SSH mutual trust is successfully configured:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible -i inventory.ini all -m shell -a 'whoami'</pre></div>
+<p>Run the following command and if all servers return <code>root</code>, then sudo without password of the <code>tidb</code> user is successfully configured:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible -i inventory.ini all -m shell -a 'whoami' -b</pre></div></li>
+<li><p>Run the <code>local_prepare.yml</code> playbook and download TiDB binary to the Control Machine.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook local_prepare.yml</pre></div></li>
+<li><p>Initialize the system environment and modify the kernel parameters.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook bootstrap.yml</pre></div></li>
+<li><p>Deploy the TiDB cluster software.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook deploy.yml</pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>You can use the <code>Report</code> button on the Grafana Dashboard to generate the PDF file. This function depends on the <code>fontconfig</code> package and English fonts. To use this function, log in to the <code>grafana_servers</code> machine and install it using the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ sudo yum install fontconfig open-sans-fonts</pre></div></blockquote></li>
+<li><p>Start the TiDB cluster.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook start.yml</pre></div></li>
+</ol>
+<h2 id="test-the-tidb-cluster">Test the TiDB cluster</h2>
+<p>Because TiDB is compatible with MySQL, you must use the MySQL client to connect to TiDB directly. It is recommended to configure load balancing to provide uniform SQL interface.</p>
+<ol>
+<li><p>Connect to the TiDB cluster using the MySQL client.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql <span style="color:#f92672">-</span>u root <span style="color:#f92672">-</span>h <span style="color:#ae81ff">172</span>.<span style="color:#ae81ff">16</span>.<span style="color:#ae81ff">10</span>.<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span>P <span style="color:#ae81ff">4000</span></code></pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>The default port of TiDB service is 4000.</p>
+</blockquote></li>
+<li><p>Access the monitoring platform using a web browser.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">http://172.16.10.1:3000</pre></div>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>The default account and password: <code>admin</code>/<code>admin</code>.</p>
+</blockquote></li>
+</ol>
+<h2 id="deployment-faqs">Deployment FAQs</h2>
+<p>This section lists the common questions about deploying TiDB using Ansible.</p>
+<h3 id="how-to-customize-the-port">How to customize the port?</h3>
+<p>Edit the <code>inventory.ini</code> file and add the following host variable after the IP of the corresponding service:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Variable Port</th>
+<th align="left">Default Port</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">TiDB</td>
+<td align="left">tidb_port</td>
+<td align="left">4000</td>
+<td align="left">the communication port for the application and DBA tools</td>
+</tr>
+<tr>
+<td align="left">TiDB</td>
+<td align="left">tidb_status_port</td>
+<td align="left">10080</td>
+<td align="left">the communication port to report TiDB status</td>
+</tr>
+<tr>
+<td align="left">TiKV</td>
+<td align="left">tikv_port</td>
+<td align="left">20160</td>
+<td align="left">the TiKV communication port</td>
+</tr>
+<tr>
+<td align="left">PD</td>
+<td align="left">pd_client_port</td>
+<td align="left">2379</td>
+<td align="left">the communication port between TiDB and PD</td>
+</tr>
+<tr>
+<td align="left">PD</td>
+<td align="left">pd_peer_port</td>
+<td align="left">2380</td>
+<td align="left">the inter-node communication port within the PD cluster</td>
+</tr>
+<tr>
+<td align="left">Pump</td>
+<td align="left">pump_port</td>
+<td align="left">8250</td>
+<td align="left">the pump communication port</td>
+</tr>
+<tr>
+<td align="left">Prometheus</td>
+<td align="left">prometheus_port</td>
+<td align="left">9090</td>
+<td align="left">the communication port for the Prometheus service</td>
+</tr>
+<tr>
+<td align="left">Pushgateway</td>
+<td align="left">pushgateway_port</td>
+<td align="left">9091</td>
+<td align="left">the aggregation and report port for TiDB, TiKV, and PD monitor</td>
+</tr>
+<tr>
+<td align="left">Node_exporter</td>
+<td align="left">node_exporter_port</td>
+<td align="left">9100</td>
+<td align="left">the communication port to report the system information of every TiDB cluster node</td>
+</tr>
+<tr>
+<td align="left">Grafana</td>
+<td align="left">grafana_port</td>
+<td align="left">3000</td>
+<td align="left">the port for the external Web monitoring service and client (Browser) access</td>
+</tr>
+<tr>
+<td align="left">Grafana</td>
+<td align="left">grafana_collector_port</td>
+<td align="left">8686</td>
+<td align="left">the grafana_collector communication port, used to export Dashboard as the PDF format</td>
+</tr>
+<tr>
+<td align="left">Kafka_exporter</td>
+<td align="left">kafka_exporter_port</td>
+<td align="left">9308</td>
+<td align="left">the communication port for Kafka_exporter, used to monitor the binlog Kafka cluster</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-to-customize-the-deployment-directory">How to customize the deployment directory?</h3>
+<p>Edit the <code>inventory.ini</code> file and add the following host variable after the IP of the corresponding service:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Component</th>
+<th align="left">Variable Directory</th>
+<th align="left">Default Directory</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Global</td>
+<td align="left">deploy_dir</td>
+<td align="left">/home/tidb/deploy</td>
+<td align="left">the deployment directory</td>
+</tr>
+<tr>
+<td align="left">TiDB</td>
+<td align="left">tidb_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the TiDB log directory</td>
+</tr>
+<tr>
+<td align="left">TiKV</td>
+<td align="left">tikv_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the TiKV log directory</td>
+</tr>
+<tr>
+<td align="left">TiKV</td>
+<td align="left">tikv_data_dir</td>
+<td align="left">{{ deploy_dir }}/data</td>
+<td align="left">the data directory</td>
+</tr>
+<tr>
+<td align="left">TiKV</td>
+<td align="left">wal_dir</td>
+<td align="left">””</td>
+<td align="left">the rocksdb write-ahead log directory, consistent with the TiKV data directory when the value is null</td>
+</tr>
+<tr>
+<td align="left">TiKV</td>
+<td align="left">raftdb_path</td>
+<td align="left">””</td>
+<td align="left">the raftdb directory, being tikv_data_dir/raft when the value is null</td>
+</tr>
+<tr>
+<td align="left">PD</td>
+<td align="left">pd_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the PD log directory</td>
+</tr>
+<tr>
+<td align="left">PD</td>
+<td align="left">pd_data_dir</td>
+<td align="left">{{ deploy_dir }}/data.pd</td>
+<td align="left">the PD data directory</td>
+</tr>
+<tr>
+<td align="left">Pump</td>
+<td align="left">pump_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the Pump log directory</td>
+</tr>
+<tr>
+<td align="left">Pump</td>
+<td align="left">pump_data_dir</td>
+<td align="left">{{ deploy_dir }}/data.pump</td>
+<td align="left">the Pump data directory</td>
+</tr>
+<tr>
+<td align="left">Prometheus</td>
+<td align="left">prometheus_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the Prometheus log directory</td>
+</tr>
+<tr>
+<td align="left">Prometheus</td>
+<td align="left">prometheus_data_dir</td>
+<td align="left">{{ deploy_dir }}/data.metrics</td>
+<td align="left">the Prometheus data directory</td>
+</tr>
+<tr>
+<td align="left">Pushgateway</td>
+<td align="left">pushgateway_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the pushgateway log directory</td>
+</tr>
+<tr>
+<td align="left">Node_exporter</td>
+<td align="left">node_exporter_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the node_exporter log directory</td>
+</tr>
+<tr>
+<td align="left">Grafana</td>
+<td align="left">grafana_log_dir</td>
+<td align="left">{{ deploy_dir }}/log</td>
+<td align="left">the Grafana log directory</td>
+</tr>
+<tr>
+<td align="left">Grafana</td>
+<td align="left">grafana_data_dir</td>
+<td align="left">{{ deploy_dir }}/data.grafana</td>
+<td align="left">the Grafana data directory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-to-check-whether-the-ntp-service-is-normal">How to check whether the NTP service is normal?</h3>
+<ol>
+<li><p>Run the following command. If it returns <code>running</code>, then the NTP service is running:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ sudo systemctl status ntpd.service
+ntpd.service - Network Time Service
+Loaded: loaded (/usr/lib/systemd/system/ntpd.service; disabled; vendor preset: disabled)
+Active: active (running) since 一 2017-12-18 13:13:19 CST; 3s ago</pre></div></li>
+<li><p>Run the ntpstat command. If it returns <code>synchronised to NTP server</code> (synchronizing with the NTP server), then the synchronization process is normal.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ ntpstat
+synchronised to NTP server (85.199.214.101) at stratum 2
+time correct to within 91 ms
+polling server every 1024 s</pre></div></li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>For the Ubuntu system, you need to install the <code>ntpstat</code> package.</p>
+</blockquote>
+<ul>
+<li><p>The following condition indicates the NTP service is not synchronizing normally:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ ntpstat
+unsynchronised</pre></div></li>
+<li><p>The following condition indicates the NTP service is not running normally:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ ntpstat
+Unable to talk to NTP daemon. Is it running?</pre></div></li>
+<li><p>To make the NTP service start synchronizing as soon as possible, run the following command. You can replace <code>pool.ntp.org</code> with other NTP servers.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ sudo systemctl stop ntpd.service
+$ sudo ntpdate pool.ntp.org
+$ sudo systemctl start ntpd.service</pre></div></li>
+<li><p>To install the NTP service manually on the CentOS 7 system, run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ sudo yum install ntp ntpdate
+$ sudo systemctl start ntpd.service
+$ sudo systemctl enable ntpd.service</pre></div></li>
+</ul>
+<h3 id="how-to-modify-the-supervision-method-of-a-process-from-supervise-to-systemd">How to modify the supervision method of a process from <code>supervise</code> to <code>systemd</code>?</h3>
+<p>Run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># process supervision, [systemd, supervise]
+process_supervision = systemd</pre></div>
+<p>For versions earlier than TiDB 1.0.4, the TiDB-Ansible supervision method of a process is <code>supervise</code> by default. The previously installed cluster can remain the same. If you need to change the supervision method to <code>systemd</code>, stop the cluster and run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">ansible-playbook stop.yml
+ansible-playbook deploy.yml -D
+ansible-playbook start.yml</pre></div>
+<h3 id="how-to-manually-configure-the-ssh-mutual-trust-and-sudo-without-password">How to manually configure the SSH mutual trust and sudo without password?</h3>
+<p>Log in to the deployment target machine using the <code>root</code> user account, create the <code>tidb</code> user and set the login password.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># useradd tidb
+# passwd tidb</pre></div>
+<p>To configure sudo without password, run the following command, and add <code>tidb ALL=(ALL) NOPASSWD: ALL</code> to the end of the file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># visudo
+tidb ALL=(ALL) NOPASSWD: ALL</pre></div>
+<p>Use the <code>tidb</code> user to log in to the Control Machine, and run the following command. Replace <code>172.16.10.61</code> with the IP of your deployment target machine, and enter the <code>tidb</code> user password of the deployment target machine as prompted. Successful execution indicates that SSH mutual trust is already created. This applies to other machines as well.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">[tidb@172.16.10.49 ~]$ ssh-copy-id -i ~/.ssh/id_rsa.pub 172.16.10.61</pre></div>
+<p>Log in to the Control Machine using the <code>tidb</code> user account, and log in to the IP of the target machine using SSH. If you do not need to enter the password and can successfully log in, then the SSH mutual trust is successfully configured.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">[tidb@172.16.10.49 ~]$ ssh 172.16.10.61
+[tidb@172.16.10.61 ~]$</pre></div>
+<p>After you login to the deployment target machine using the <code>tidb</code> user, run the following command. If you do not need to enter the password and can switch to the <code>root</code> user, then sudo without password of the <code>tidb</code> user is successfully configured.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">[tidb@172.16.10.61 ~]$ sudo -su root
+[root@172.16.10.61 tidb]#</pre></div>
+<h3 id="error-you-need-to-install-jmespath-prior-to-running-json-query-filter">Error: You need to install jmespath prior to running json_query filter</h3>
+<p>See <a href="#step-4-install-ansible-and-its-dependencies-on-the-control-machine">Install Ansible and its dependencies on the Control Machine</a> and use <code>pip</code> to install Ansible and the related specific dependencies in the Control Machine. The <code>jmespath</code> dependent package is installed by default.</p>
+<p>Enter <code>import jmespath</code> in the Python interactive window of the Control Machine.</p>
+<ul>
+<li>If no error displays, the dependency is successfully installed.</li>
+<li>If the <code>ImportError: No module named jmespath</code> error displays, the Python <code>jmespath</code> module is not successfully installed.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ python
+Python 2.7.5 (default, Nov  6 2016, 00:28:07)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-11)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; import jmespath</pre></div>
+<h3 id="the-zk-node-does-not-exist-error-when-starting-pump-drainer">The <code>zk: node does not exist</code> error when starting Pump/Drainer</h3>
+<p>Check whether the <code>zookeeper_addrs</code> configuration in <code>inventory.ini</code> is the same with the configuration in the Kafka cluster, and whether the namespace is filled in. The description about namespace configuration is as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># ZooKeeper connection string (see ZooKeeper docs for details).
+# ZooKeeper address of the Kafka cluster. Example:
+# zookeeper_addrs = "192.168.0.11:2181,192.168.0.12:2181,192.168.0.13:2181"
+# You can also append an optional chroot string to the URLs to specify the root directory for all Kafka znodes. Example:
+# zookeeper_addrs = "192.168.0.11:2181,192.168.0.12:2181,192.168.0.13:2181/kafka/123"</pre></div></div>
+<div class="article-toc"></div>
+<div class="git-info">
+<a class="link" href="https://github.com/pingcap/docs/blob/master/dev/how-to/deploy/orchestrated/ansible.md">"Deploy TiDB Using Ansible"</a>
+                was last updated
+                <span>May 22 2019</span>:
+                <a class="link" href="https://github.com/pingcap/docs/commit/02c4c53e4f85f3b83e80110e1b29adad2ccffd63">
+                    dev/how-to/deploy/orchestrated: update outdated instruction (#1163) <span class="hash">(02c4c53)</span>
+</a>
+</div></div>
+<div class="sidebar-page">
+<div class="sticky-sidebar"><a class="improve-doc" href="https://github.com/pingcap/docs/edit/master/dev/how-to/deploy/orchestrated/ansible.md" target="_blank">
+<svg fill="#142848" height="14" viewbox="0 0 275.836 275.836" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M191.344 20.922l-95.155 95.155a5.99 5.99 0 0 0-1.565 2.734l-8.167 31.454a6.003 6.003 0 0 0 7.315 7.316l31.454-8.168a6.003 6.003 0 0 0 2.734-1.565l95.153-95.153.005-.004.004-.005 19.156-19.156a5.998 5.998 0 0 0 .001-8.484L218.994 1.758a5.998 5.998 0 0 0-8.485 0l-19.155 19.155-.005.004-.005.005zm-70.713 117.286l-19.993 5.192 5.191-19.993 89.762-89.762 14.801 14.802-89.761 89.761zm94.12-123.723l14.801 14.802-10.675 10.675-14.801-14.802 10.675-10.675z"></path><path d="M238.037 65.022a6 6 0 0 0-6 6v192.813H43.799V34.417h111.063a6 6 0 0 0 0-12H37.799a6 6 0 0 0-6 6v241.419a6 6 0 0 0 6 6h200.238a6 6 0 0 0 6-6V71.022a6 6 0 0 0-6-6z"></path></svg>
+    Edit this page
+</a>
+<a class="request-docs-changes" href="https://github.com/pingcap/docs/issues/new?body=File:%20[dev%2fhow-to%2fdeploy%2forchestrated%2fansible.md](https%3a%2f%2fpingcap.com%2fdocs%2fdev%2fhow-to%2fdeploy%2forchestrated%2fansible%2f)" target="_blank">
+<svg height="14px" version="1.1" viewbox="0 0 192 192" width="14px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g fill="none" fill-rule="nonzero" font-family="none" font-size="none" font-weight="none" stroke="none" stroke-dasharray="" stroke-dashoffset="0" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-width="1" style="mix-blend-mode: normal" text-anchor="none"><path d="M0,192v-192h192v192z" fill="none"></path><g fill="#142848"><path d="M162.34375,42.34375l-90.34375,90.34375l-34.34375,-34.34375l-11.3125,11.3125l45.65625,45.65625l101.65625,-101.65625z"></path></g></g></svg>
+
+    Request docs changes
+</a><p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/docs-cn/dev/how-to/deploy/orchestrated/ansible" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>

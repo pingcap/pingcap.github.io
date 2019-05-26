@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://www.pingcap.com/" rel="canonical"/>
+<meta content="As our business grew quickly, we were overwhelmed trying to tackle the mounting data until we found TiDB, a MySQL-compatible NewSQL hybrid transactional and analytical processing (HTAP) database, built and supported by PingCAP. Now we can harness our data with more confidence than ever before and provide better services for our users to enjoy a better life." name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users" property="og:title"/>
+<meta content="As our business grew quickly, we were overwhelmed trying to tackle the mounting data until we found TiDB, a MySQL-compatible NewSQL hybrid transactional and analytical processing (HTAP) database, built and supported by PingCAP. Now we can harness our data with more confidence than ever before and provide better services for our users to enjoy a better life." property="og:description"/>
+<meta content="https://pingcap.com/success-stories/tidb-in-meituan-dianping/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" property="og:image:secure_url"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="As our business grew quickly, we were overwhelmed trying to tackle the mounting data until we found TiDB, a MySQL-compatible NewSQL hybrid transactional and analytical processing (HTAP) database, built and supported by PingCAP. Now we can harness our data with more confidence than ever before and provide better services for our users to enjoy a better life." name="twitter:description"/>
+<meta content="TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image:src"/>
+<meta content="@pingcap" name="twitter:creator"/>
+<script async="async" src="//script.crazyegg.com/pages/scripts/0076/9903.js" type="text/javascript"></script>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/www.pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/www.pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+
+  
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label
+  });
+}
+</script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users | Amazon Aurora Alternative. HTAP solution for Amazon Aurora</title>
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link as="script" href="/js/app.js" rel="preload"/>
+</head><body><style type="text/css">
+    .center-element {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    #page-loader {
+        transform: translate(-50%, -50%) scale(0.6);
+        -webkit-transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    #hexagon {
+        width: 60px;
+        height: auto;
+        overflow: visible;
+        background-color: transparent;
+    }
+
+    #hexagon #hexagon-base,
+    #hexagon #hexagon-line-animation {
+        fill: transparent;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    }
+
+    #hexagon #hexagon-base {
+        stroke: #cdd5e0;
+    }
+
+    #hexagon #hexagon-line-animation {
+        stroke: #3a59f0;
+        stroke-linecap: round;
+        animation: dash 1.5s linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 1 431.7;
+        }
+        100% {
+            stroke-dasharray: 260.22 173.48;
+            stroke-dashoffset: -867.4;
+        }
+    }
+</style>
+<div class="center-element" id="page-loader">
+<svg id="hexagon" viewbox="0 0 129.78 150.37" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-base" transform="translate(1667.43 13.09)"></path>
+<path d="M-1665.43,90.94V35.83a15.09,15.09,0,0,1,6.78-12.59l48.22-31.83a15.09,15.09,0,0,1,16-.38L-1547,19.13a15.09,15.09,0,0,1,7.39,13V90.94a15.09,15.09,0,0,1-7.21,12.87l-47.8,29.24a15.09,15.09,0,0,1-15.75,0l-47.8-29.24A15.09,15.09,0,0,1-1665.43,90.94Z" id="hexagon-line-animation" transform="translate(1667.43 13.09)"></path>
+</svg>
+</div>
+<div id="page-content" style="display:none">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
+<li><a class="a-en" href="/tidb-academy">TiDB Academy</a></li>
+<li><a class="a-en" href="/docs">Docs</a></li>
+<li><a class="a-en" href="/success-stories">Success
+                    Stories</a></li>
+<li class="sel"><a class="a-en" href="/blog">Blog</a></li>
+<li><a class="link-download link-download-en" href="/download">Free Download</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="en" id="search-input" placeholder="Search..." type="search"/>
+</div>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="/tidb-cloud/">Cloud</a></li>
+<li><a class="tidb-academy" href="/tidb-academy">TiDB Academy</a></li>
+<li><a href="/docs">Docs</a></li>
+<li><a href="/success-stories">Success Stories</a></li>
+<li class="sel"><a href="/blog">Blog</a></li>
+<li><a class="link-download" href="/download">Free Download</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc" style="margin-left: 0.75rem;">Subscribe to Blog</button></a>
+</div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="blogArticle__container">
+<div class="archive"><div class="article-nav">
+<a href="/blog/#MySQL-Scalability">BLOG HOME</a> <span> &gt; </span>MySQL Scalability</div><div class="content markdown-body">
+<h1 class="title">TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img src="/images/svgs/icon-date.svg"/>Thu, Dec 6, 2018</li>
+<li class="meta-item">
+<img src="/images/svgs/icon-writer.svg"/>Yinggang Zhao, Kun Li, Changjun Piao</li>
+</ul>
+<div class="blog-text">
+<p><strong>Industry:</strong> Search and Ecommerce Platform</p>
+<p><strong>Authors:</strong> Yinggang Zhao (Researcher at Meituan-Dianping), Kun Li (Database expert at Meituan-Dianping) and Changjun Piao (Database expert at Meituan-Dianping)</p>
+<h2 id="introduction">Introduction</h2>
+<p>In Chinese, <a href="https://en.wikipedia.org/wiki/Meituan-Dianping">Meituan-Dianping</a> means “better buying, better life,” and since it was formed in 2015 by the <a href="https://www.forbes.com/sites/ywang/2015/10/08/chinas-meituan-dianping-merges-to-create-a-mega-online-to-offline-service-platform/#4353d0323e28">merger of two companies</a>, the platform has facilitated billions of purchases of goods and services with built-in discounts. By gross merchandise volume, Meituan-Dianping is <a href="https://www.crunchbase.com/organization/meituan-com#section-overview">China’s largest group-buying website</a>. Part Groupon, part Yelp, and part Uber Eats, we offer a range of localized services and entertainment, such as food delivery, restaurant reviews, haircuts and manicures, ticket bookings, bike-sharing, and more. <a href="https://www.home.saxo/insights/content-hub/articles/2018/09/07/a-closer-look-at-meituan-dianping">In April 2018, we had 290 million monthly active users, and last year we generated more than 5.8 billion transactions with over $51 billion in gross transaction volume.</a> On September 20, 2018, our company <a href="https://money.cnn.com/2018/09/20/technology/meituan-dianping-ipo/index.html">debuted on the Hong Kong stock exchange at an IPO price of HK$69 per share</a>.</p>
+<p>As our business has grown rapidly, our data volume has also surged. This has placed tremendous pressure on the MySQL database system in our backend. Burdened by handling this immense data, we began to explore a better data storage solution. Fortunately, we found <a href="http://bit.ly/tidb_repo_publication">TiDB</a>, a MySQL-compatible NewSQL hybrid transactional and analytical processing (<a href="https://en.wikipedia.org/wiki/Hybrid_transactional/analytical_processing_(HTAP)">HTAP</a>) database, built and supported by PingCAP. Now we can harness our data with more confidence than ever before and provide better services for our users to enjoy a better life.</p>
+<p>At the beginning of 2018, our <a href="https://en.wikipedia.org/wiki/Database_administrator">DBA</a> (database administrator) team worked together with the architecture storage team to choose and implement a distributed database solution. Since November 2018, 10 TiDB clusters have been deployed in our production environment, with nearly 200 physical nodes. These clusters are deployed for six product divisions or platforms: delivery, transport, quick pass, accommodation, the Meituan platform, and the core development platform. Most of these applications are pure <a href="https://en.wikipedia.org/wiki/Online_transaction_processing">OLTP</a> (online transaction processing) workloads. We are happy to report that all the clusters have been running smoothly since their deployment.</p>
+<p>In this post, we will share two of the scenarios for which we chose TiDB, how we are using it, some issues we’ve had and the corresponding solutions, as well as our experiences collaborating with PingCAP.</p>
+<h2 id="challenges">Challenges</h2>
+<h3 id="scenario-1-offline-analytical-workload-with-huge-writes-and-high-read-qps">Scenario 1: Offline Analytical Workload with Huge Writes and High Read QPS</h3>
+<p>The scenario at Meituan-Dianping with the largest data size for analysis has up to 500GB writes every day. This scenario features:</p>
+<ul>
+<li>Stable write, with each transaction operating on 100 to 200 rows, and 60,000 writes per second.</li>
+<li>The daily write data of 300GB to 500GB, which will gradually increase to 3TB in the future.</li>
+<li>Regular read job with 5,000 QPS every 15 minutes (high frequency but a small amount of data).</li>
+<li>Irregular query (low frequency but a large amount of data).</li>
+</ul>
+<p>Previously, we used MySQL for data storage, but we hit capacity and performance bottlenecks—and we expect the data volume of our service to increase ten times in the future. We tested <a href="https://en.wikipedia.org/wiki/ClickHouse">ClickHouse</a> but found that it failed to cope well with high-frequency SQL queries in high concurrency situations, although it satisfied our demands for storage capacity and running low-frequency SQL statements. Besides, we thought that it was kind of an overkill to use ClickHouse only for full low-frequency SQL queries.</p>
+<h3 id="scenario-2-oltp-workload-sensitive-to-response-time">Scenario 2: OLTP Workload Sensitive to Response Time</h3>
+<p>In addition to offline services with massive data to analyze and query, we have lots of sharded services. Although there are multiple sharding policies used in the industry to overcome the bottlenecks of standalone machine performance and storage, these policies do have some drawbacks:</p>
+<ul>
+<li>No application-friendly distributed transactions.</li>
+<li>For queries across databases, the results of the queries are aggregated on the middleware, which is troublesome.</li>
+<li>If a single database is short of storage space, it needs to split again.</li>
+<li>The applications should consider the rules of data distribution, and although the middleware is applied, the problem cannot really be solved.</li>
+</ul>
+<p>Many of the applications and services in our environment were sharded, and some of them would soon exceed the storage capacity of a standalone machine or were in need of a new sharding policy. All of these services embodied the following characteristics:</p>
+<ul>
+<li>There weren’t too many SQL queries, but the execution of SQL queries was frequent.</li>
+<li>They called for strong consistency of data.</li>
+<li>Generally, some data had a time property.</li>
+</ul>
+<h2 id="exploration">Exploration</h2>
+<p>To overcome these challenges and lay the foundation for the future of our infrastructure, we started to explore a database solution with the following requirements:</p>
+<ul>
+<li><p>Compatibility with our existing software stack and ecosystem to minimize the migration cost and efforts.</p>
+<ul>
+<li>At Meituan-Dianping, MySQL was our primary database solution supporting most of our business scenarios. So compatibility with the MySQL protocol with secondary index support was a must-have feature. The solution also had to be able to deliver performant OLTP services with high concurrency.</li>
+<li>There are many product lines in Meituan-Dianping. The services have a huge volume and demand high-quality service from the storage system. We needed minimal transformation of current software stacks, such as service access, monitoring and alert system, and automated operations platform.</li>
+</ul></li>
+<li><p>Online scalability. Data sharding, merging, and migration need to be automatic and transparent to the online business. The solution should support shard splitting and automatic migration for data sharding, and the services should not be interrupted during data migration.</p></li>
+<li><p>Distributed transactions with strong consistency. A transaction can be executed across shards and nodes and must be strongly consistent.</p></li>
+<li><p>Service availability across data centers. Services can be automatically switched over when any data center is down.</p></li>
+<li><p>Cross-data center write into one table across data centers. Although it’s a thorny problem, supporting writing one table across data centers is an important requirement to support our current and next-phase business plan.</p></li>
+</ul>
+<p>Before diving deep into all kinds of database solutions, we did our homework, unraveling the details of suitable data storage structure and transaction algorithm through different papers, especially the following ones from Google:</p>
+<ul>
+<li><a href="https://www.usenix.org/system/files/conference/osdi12/osdi12-final-16.pdf">Spanner: Google’s Globally-Distributed Database</a></li>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36726.pdf">Large-scale Incremental Processing Using Distributed Transactions and Notifications</a></li>
+<li><a href="https://web.stanford.edu/~ouster/cgi-bin/papers/raft-atc14">In Search of an Understandable Consensus Algorithm</a></li>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41376.pdf">Online, Asynchronous Schema Change in F1</a></li>
+</ul>
+<p>Naturally, TiDB, an open source, NewSQL, scalable hybrid transactional and analytical processing (<a href="https://en.wikipedia.org/wiki/Hybrid_transactional/analytical_processing_(HTAP)">HTAP</a>) database built by the PingCAP team and the open source community, caught our eye. It eventually became our database of choice because of its compatibility with MySQL, cutting-edge technical architecture and foresight, and vibrant community. In the nearly three years between the release of TiDB Alpha and the end of July 2018, at least 200 users had deployed TiDB in their production environments. Many of these users are the leading enterprises in their respective industries.</p>
+<p>More specifically, compared with traditional solutions in the industry, TiDB is a perfect match for all the above requirements in that it is:</p>
+<ul>
+<li>Compatible with the MySQL protocol;</li>
+<li>Flexible in online scaling in and scaling out;</li>
+<li>Supports ACID transactions with strong consistency;</li>
+<li>Supports deployment and fault-tolerance across data centers and multi-node write;</li>
+<li>Handles services on TiDB just like on a standalone MySQL.</li>
+</ul>
+<p>Thus we began to test TiDB for these features.</p>
+<h3 id="evaluation">Evaluation</h3>
+<p>To evaluate if TiDB’s performance and features can meet our requirements, regular functional and performance tests were carried out and compared to those of MySQL. One special test worth mentioning was to validate if each data center has 1 of the 3 replicas so that the crash of one data center will not lead to data loss in the majority of the replicas. We conducted this test against the following standards:</p>
+<ul>
+<li>The horizontal scaling using Raft supports the Learner node so that even if one data center is down, two-thirds of the data replicas are still available.</li>
+<li>The priority tags of TiKV must be reliable to ensure data replicas are distributed evenly among data centers even when the number of machines in each data center is not equal.</li>
+<li>If a data center goes down while the TiDB cluster is highly concurrent, the QPS, the response time, and the number of error reports are not normal and the data is not lost.</li>
+<li>After a Region is manually scheduled to another data center for data balancing, it can move back to the original data center automatically when the original data center is recovered.</li>
+</ul>
+<p>All the test results showed that TiDB totally lived up to our expectations.</p>
+<h3 id="adoption">Adoption</h3>
+<p>Meituan-Dianping is always cautious about adopting new solutions, and TiDB was no exception. The implementation of TiDB went through the following stages of migration: offline analytical scenarios, non-critical workloads, and then mission-critical workloads.</p>
+<p>There are many product lines in Meituan-Dianping. The services all have huge volumes and demand high-quality performance from the storage system. Therefore, it is important to plan for a good storage system, including the following aspects: monitoring and alert, and service deployment and data synchronization between upstream and downstream.</p>
+<h3 id="integration-with-the-current-ecosystem">Integration with the current ecosystem:</h3>
+<h4 id="monitoring-and-alert">Monitoring and Alert</h4>
+<p>Meituan-Dianping currently uses the Mt-Falcon platform (a customized distributed monitoring system inspired by <a href="https://github.com/open-falcon">Open-Falcon</a>) for monitoring and alert. Various plugins have been configured in Mt-Falcon to customize monitoring multiple components, and with <a href="https://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a> deployed, the privileges of different users and the issue of different files can be recognized. This way, machine installation and privilege control will be established as long as we complete the plugin scripts and the necessary files.</p>
+<p><img alt="Monitoring Architecture" class="lazy" data-original="/images/blog/monitoring-architecture.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>Monitoring Architecture</em> </center>
+<h4 id="monitoring-architecture">Monitoring Architecture</h4>
+<p>TiDB uses <a href="https://github.com/prometheus/prometheus">Prometheus</a> plus <a href="https://github.com/grafana/grafana">Grafana</a> as the monitoring system as shown in the above diagram, with a cluster of more than 700 metrics. As the monitoring architecture below shows, each component pushes its metrics to Pushgateway, and Prometheus obtains metrics from Pushgateway.</p>
+<p><img alt="TiDB Monitoring Architecture" class="lazy" data-original="/images/blog/tidb-monitoring-architecture.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>TiDB Monitoring Architecture</em> </center>
+<p>With a set of Prometheus instances deployed in a TiDB cluster, it was inconvenient to gather, analyze, and configure the monitoring metrics in the original TiDB monitoring architecture. Therefore, we decided to converge the monitoring components. As the alert system had been working well on Mt-Falcon, it was unnecessary to build a new one on AlertManager.</p>
+<p>To integrate monitoring and alert on Mt-Falcon, we evaluated three policies:</p>
+<ul>
+<li><p><strong>Policy #1:</strong> Modifying the source code and pushing metrics directly to Mt-Falcon.</p>
+<p><strong>Evaluation:</strong> Since metrics are scattered throughout the TiDB code, which is iterated quickly, it is time-consuming to frequently adjust the monitoring tracking code.</p></li>
+<li><p><strong>Policy #2:</strong> Aggregating the metrics on Pushgateway that can be gathered directly.</p>
+<p><strong>Evaluation:</strong> Pushgateway is a single entry point, so its data maintenance is troublesome.</p></li>
+<li><p><strong>Policy #3:</strong> Fetching the data via the local API of each component (TiDB, PD and TiKV).</p>
+<p><strong>Evaluation:</strong> The crash of one component does not affect other components, and it is easy to implement this policy.</p></li>
+</ul>
+<p>We adopted Policy #3. There is one challenge to this: We need to convert the metric type used in Prometheus to a type that Mt-Falcon can identify. Prometheus supports Counter, Gauge, Histogram, and Summary types of metrics, while Mt-Falcon only supports Counter and Gauge types. The computing expressions of Mt-Falcon are few, so we need to convert the metric types and compute the data in the monitoring script.</p>
+<h4 id="batch-deployment">Batch Deployment</h4>
+<p>During the batch deployment of TiDB using Ansible, we faced a problem: the quickly updated TiDB version brings about frequently updated Ansible, and we only add new code to Ansible instead of modifying the existing code. Consequently, we need to deploy and maintain TiDB clusters of multiple versions online simultaneously. If each cluster has one Ansible directory, it will be a waste of storage space.</p>
+<p>To solve this problem, we create an Ansible directory for each cluster version in the center monitoring machine, and each version is maintained using a specific inventory file.</p>
+<h4 id="heterogeneous-data-synchronization-between-upstream-and-downstream">Heterogeneous Data Synchronization Between Upstream and Downstream</h4>
+<p>At present, MySQL is used with <a href="https://en.wikipedia.org/wiki/Apache_Hive">Hive</a>, and to replace MySQL with TiDB, we need to address two issues:</p>
+<ul>
+<li><p>Data migration from MySQL to TiDB.</p>
+<ul>
+<li><p>This involves data migration and real-time synchronization of incremental data (DTS).</p>
+<p><a href="https://github.com/maxbube/mydumper">Mydumper</a> + <a href="https://github.com/pingcap/docs/blob/master/tools/loader.md">Loader</a> is used to export the data in MySQL and then import the data to TiDB; DM can be used to synchronize the incremental data from MySQL to TiDB.</p></li>
+<li><p>MySQL uses a large number of auto-increment IDs as the primary key. When the data of sharded MySQL is aggregated to TiDB, the conflict of auto-increment IDs should be resolved.</p>
+<p>This issue can be fixed by removing the auto-increment IDs and building the unique primary key on TiDB. The new DM version also has the feature of automatically handling the primary key during the process of merging sharded tables.</p></li>
+</ul></li>
+<li><p>Data migration from Hive to TiDB and from TiDB to Hive.</p>
+<ul>
+<li><p>It is easy to migrate data from Hive to TiDB, since TiDB is highly compatible with MySQL. The Insert statement needs no modification; we just need to adjust it slightly.</p></li>
+<li><p>For data migration from TiDB to Hive, using <a href="https://github.com/pingcap/docs/blob/master/tools/tidb-binlog.md">TiDB-Binlog</a> (Pump + Drainer), an enterprise tool developed by PingCAP, is a good solution. Drainer can export data to Kafka, MySQL, and TiDB. We are currently considering the schema of using Drainer to output data to Kafka in order to synchronize data from TiDB to Hive, as shown in the diagram below.</p>
+<p><img alt="Synchronization Data from TiDB to Hive" class="lazy" data-original="/images/blog/synchronization-data-from-tidb-to-hive.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>Synchronization Data from TiDB to Hive</em> </center></li>
+</ul></li>
+</ul>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users', 'download-tidb-btn-middle')"><button>Download TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users', 'subscribe-blog-btn-middle')"><button>Subscribe to Blog</button></a>
+</div>
+<h3 id="issues-and-solutions">Issues and Solutions</h3>
+<p>After the service went online, some issues occurred. Here are some typical ones:</p>
+<h4 id="issue-1-write-stall-in-tikv">Issue #1: Write Stall in TiKV</h4>
+<p>In the TiKV bottom layer, two <a href="https://en.wikipedia.org/wiki/RocksDB">RocksDB</a> instances are used as the storage engines. The new data is written into L0 (Level 0), and when the data in L0 reaches a specific size, the Write operation slows down and even stalls for self-protection.</p>
+<p>The default configuration in TiKV:</p>
+<ul>
+<li>level0-slowdown-writes-trigger = 20</li>
+<li>level0-stop-writes-trigger = 36</li>
+</ul>
+<p>We once ran into the Write stall problem, and found that the causes for too many files in L0 might be:</p>
+<ul>
+<li>The data size of the Write operation was too large and thus the Compact operation could not be completed.</li>
+<li>TiKV created snapshots more slowly than the requests for creating snapshots were sent. Because of this, the accumulated replicas of creating Regions were released suddenly, and a good many L0 files were created in rocksdb-raft.</li>
+</ul>
+<p><img alt="Write Stall Monitoring" class="lazy" data-original="/images/blog/write-stall-monitoring.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>Write Stall Monitoring</em> </center>
+<p>We resolved the Write stall issue using the following measures:</p>
+<ul>
+<li>Reduce the frequency of Raft Log Compact (increase the values of raft-log-gc-size-limit and raft-log-gc-count-limit).</li>
+<li>Speed up the Snapshot operation (the overall performance, including the hardware performance).</li>
+<li>Set max-sub-compactions to 3.</li>
+<li>Set max-background-jobs to 12.</li>
+<li>Set the three Triggers of L0 to 16, 32, and 64, respectively.</li>
+</ul>
+<h4 id="issue-2-too-much-deleted-data-overwhelms-gc">Issue #2: Too Much Deleted Data Overwhelms GC</h4>
+<p>Currently, TiDB’s <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">GC</a> (Garbage Collection) performs operations on each kv-instance in the single-thread framework. When too much data is deleted by a transaction, GC slows down and takes even more time than the Write operation.</p>
+<p>For the time being, this problem can be solved by adding more TiKV instances. In the long run, GC needs to be able to work in a multi-threaded way. PingCAP has implemented this feature in  TiDB 2.1.</p>
+<h4 id="issue-3-response-time-of-the-insert-statement-gets-longer">Issue #3: Response Time of the Insert Statement Gets Longer</h4>
+<p>At the beginning, the response time of the Insert statement for H80 was about 20ms. As the service continued to run, the response time gradually increased to more than 200ms. We troubleshot this problem and found its cause: as the number of Regions rises quickly, Raftstore has more work to do. Because Raftstore is single-threaded, and each Region sent a heartbeat regularly, the performance deteriorated.</p>
+<p>The solutions for this issue are as follows:</p>
+<ul>
+<li><p>Temporary solution</p>
+<p>Extend the heartbeat interval from 1s to 2s. This policy has had positive results, as shown in the picture below:</p>
+<p><img alt="Response Time Before and After Optimization of the Insert Statement" class="lazy" data-original="/images/blog/response-time-before-and-after-optimization-of-the-insert-statement.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>Response Time Before and After Optimization of the Insert Statement</em> </center></li>
+<li><p>Permanent solution</p>
+<ul>
+<li>Reduce the number of Regions and merge empty Regions. TiDB 2.1 has implemented the Region Merge feature.</li>
+<li>Change Raftstore to be multithreaded. PingCAP engineers are working on it, and this feature will be released in the next version of TiDB.</li>
+</ul></li>
+</ul>
+<h2 id="result">Result</h2>
+<p>In the more than half a year that we have deployed TiDB in the production environment, our confidence in TiDB and PingCAP has grown, and we truly believe that TiDB is a database with great promise.</p>
+<p>What’s more, the PingCAP engineers and support team are very professional, dedicated, and highly motivated! They respond to our issues quickly and efficiently.</p>
+<h2 id="what-s-next">What’s Next</h2>
+<p>We plan to deploy TiDB in more and more application systems and grow together with TiDB. At present, three DBAs from Meituan-Dianping and several storage experts are fully committed to collaborating with PingCAP on the underlying storage, computing mechanism in the middle layer, access to the service layer, data model selection of the storage plans, and so on.
+In the long term, we will build a mightier ecosystem together with PingCAP. Here are some of our initiatives:</p>
+<ul>
+<li><p><strong>TitanDB</strong></p>
+<p>TitanDB is the next big plan for TiDB: a next-generation storage engine. Since it saves the storage space a Value occupies, it can resolve the size limit problem for a single row and raise the upper limit for the storage capacity of a standalone TiKV. With TitanDB, a large-scale TiDB deployment will become more cost effective.</p></li>
+<li><p><strong>TiDB Cloud (based on Docker &amp; Kubernetes)</strong></p>
+<p>Adapting to the trend of cloud computing, PingCAP open sourced <a href="https://github.com/pingcap/tidb-operator">TiDB Operator</a> to the community in August 2018. TiDB Cloud offers not only highly automated operations for databases, but also database multi-tenancy based on hardware isolation using Docker.</p></li>
+<li><p><strong>TiDB HTAP Platform</strong></p>
+<p>Based on the original computing engine of TiDB Server, PingCAP engineers have built <a href="https://github.com/pingcap/tispark">TiSpark</a>, a thin layer for running Apache Spark on top of TiDB/TiKV to answer complex OLAP queries. This addition makes the TiDB platform a complete <a href="https://en.wikipedia.org/wiki/Hybrid_transactional/analytical_processing_(HTAP)">HTAP</a> database. This architecture has drastically decreased the data replicas of core services in the company’s data cycle, which saves costs and improves the cost-effectiveness of OLAP applications. We plan to migrate some analytical query systems with real-time or near real-time requirements to TiDB.</p>
+<p><img alt="TiDB Platform Architecture" class="lazy" data-original="/images/blog/tidb-platform-architecture.png" src="/images/svgs/loader-spinner.svg"/>
+</p><center> <em>TiDB Platform Architecture</em> </center></li>
+<li><p><strong>Follow-on physical backup policy and multi-write across data centers</strong></p>
+<p>We will adopt TiDB in more application scenarios like physical backup and multiwrite across data centers.</p></li>
+</ul>
+<p>We look forward to a new era of HTAP database led by TiDB and PingCAP！</p>
+</div>
+</div>
+<div class="article-toc"></div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_twitter_share" data-site="" href="http://twitter.com/share?url=https%3a%2f%2fpingcap.com%2fsuccess-stories%2ftidb-in-meituan-dianping%2f" target="_blank">
+<img src="/images/svgs/twitter-icon.svg"/>
+</a>
+<a class="ssba_reddit_share" data-site="reddit" href="http://reddit.com/submit?url=https%3a%2f%2fpingcap.com%2fsuccess-stories%2ftidb-in-meituan-dianping%2f&amp;title=TiDB%2c%20the%20Key%20to%20a%20Better%20Life%20for%20Meituan-Dianping%e2%80%99s%20290%20Million%20Monthly%20Users" target="_blank">
+<img src="/images/svgs/reddit-icon.svg"/>
+</a>
+<a class="ssba_facebook_share" data-site="" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fpingcap.com%2fsuccess-stories%2ftidb-in-meituan-dianping%2f" target="_blank">
+<img src="/images/svgs/facebook-icon.svg"/>
+</a>
+<a class="ssba_linkedin_share" data-site="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fpingcap.com%2fsuccess-stories%2ftidb-in-meituan-dianping%2f" target="_blank">
+<img src="/images/svgs/linkedin-icon.svg"/>
+</a>
+<a class="ssba_hackernews_share" data-site="hackernews" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fpingcap.com%2fsuccess-stories%2ftidb-in-meituan-dianping%2f&amp;t=TiDB%2c%20the%20Key%20to%20a%20Better%20Life%20for%20Meituan-Dianping%e2%80%99s%20290%20Million%20Monthly%20Users" target="_blank">
+<img src="/images/svgs/hacker-news-icon.svg"/>
+</a>
+</div>
+</div>
+<div class="trackable-btns">
+<a href="/download" onclick="trackViews('TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users', 'download-tidb-btn-bottom')"><button>Download
+                        TiDB</button></a>
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm" onclick="trackViews('TiDB, the Key to a Better Life for Meituan-Dianping’s 290 Million Monthly Users', 'subscribe-blog-btn-bottom')"><button>Subscribe to
+                        Blog</button></a>
+</div>
+</div>
+<div class="sidebar-page">
+<div class="sticky-sidebar">
+<p class="toc-title">What’s on this page</p>
+<div id="smart_toc_wrapper"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Product</strong></h4>
+<ul>
+<li><a href="/docs/">TiDB</a></li>
+<li><a href="/docs/tispark/tispark-user-guide/">TiSpark</a></li>
+<li><a href="/docs/ROADMAP/">Roadmap</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Docs</strong></h4>
+<ul>
+<li><a href="/docs/op-guide/docker-compose/">Quick Start</a></li>
+<li><a href="/blog/2017-07-24-tidbbestpractice/">Best Practices</a></li>
+<li><a href="/docs/FAQ/">FAQ</a></li>
+<li><a href="/docs/tools/syncer/">TiDB Utilities</a></li>
+<li><a href="/docs/releases/rn/">Release Notes</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Resources</strong></h4>
+<ul>
+<li><a href="/blog/">Blog</a></li>
+<li><a href="/weekly/">Weekly</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="/community/organization">TiDB Community</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>Company</strong></h4>
+<ul>
+<li><a href="/about/">About</a></li>
+<li><a href="https://angel.co/pingcap-1/jobs" target="_blank">Careers</a></li>
+<li><a href="/news/">News</a></li>
+<li><a href="/contact-us/">Contact Us</a></li>
+<li><a href="/privacy-policy/">Privacy Policy</a></li>
+<li><a href="/terms-of-service/">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Connect</strong></h4>
+<ul>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg>Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg>Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg>Stack Overflow</a></li>
+</ul>
+</div>
+<div class="subscribe">
+<a href="https://share.hsforms.com/1e2W03wLJQQKPd1d9rCbj_Q2npzm"><button class="btn btn-subscribe f-tc">Subscribe to Blog</button></a>
+</div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2019 PingCAP. All Rights Reserved.</p>
+<a class="copyright-btn-lang" href="/blog-cn" id="lang">中文</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/vendor/clipboard.min.js" type="text/javascript"></script><script src="https://download.pingcap.com/js/docsearch.min.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script></body>
+</html>
