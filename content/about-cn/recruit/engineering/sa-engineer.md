@@ -32,7 +32,7 @@ aliases:
 
 1. 能独立完成运维监控报警体系建设，并熟悉常见监控和报警相关工具，如 Nagios/Zabbix/Graphite/Grafana/Prometheus 等；
 
-2. 熟悉 Docker、K8S 容器化相关技术，有大规模生产环境使用经验；
+2. 熟悉 Docker、K8s 容器化相关技术，有大规模生产环境使用经验；
 
 3. 喜欢尝试 DevOps 等自动化运维相关领域的新技术新产品；
 
