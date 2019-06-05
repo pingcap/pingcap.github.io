@@ -1,0 +1,145 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "TechDay 2019" }}
+    TechDay 2019
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/techday.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/agenda.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+{{- end -}}
+
+{{- define "main" -}}
+<div class="techday2018">
+    <section class="banner__section techday2019-banner">
+        <div class="agenda-timeline">
+            <div class="red-spot-t">
+                <div class="city-top">
+                    6.23 北京
+                </div>
+            </div>
+            <div class="red-spot-b">
+                <div class="city-bottom">
+                    6.30 上海
+                </div>
+            </div>
+            <div class="red-spot-t">
+                <div class="city-top">
+                    7.06 成都
+                </div>
+            </div>
+
+            <div class="red-spot-b">
+                <div class="city-bottom">
+                    7.14 深圳
+                </div>
+            </div>
+            <div class="red-spot-t">
+                <div class="city-top">
+                    7.20 武汉
+                </div>
+            </div>
+            <div class="red-spot-b">
+                <div class="city-bottom">
+                    7.27 杭州
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-hackathon">
+        <div class="section-container">
+            <h2 class="section-title">TiDB TechDay 2019</h2>
+            <p class="intro-tl">TiDB Hackathon 是由 PingCAP 举办的黑客马拉松大赛，选手需围绕整个 TiDB 生态做出一个完整的作品并由评审最终评选出获奖者。赛制参考了国内外知名的
+              Hackathon 举办模式，参赛队伍需在规定时间（48 小时）内完成作品并展示。</p>
+        </div>
+    </section>
+
+    <section class="agenda__section">
+        <h1 class="section-title">会议日程</h1>
+        <div class="schedule-tabs">
+            {{- partial "community-cn/techday-schedule-tab.html" -}}
+        </div>
+        <div class="schedules" id="beijing-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.beijing "city" "beijing" "time" .Site.Data.techday.schedule_2019.beijing_time "addr" .Site.Data.techday.schedule_2019.beijing_addr) -}}
+        </div>
+        <div class="schedules" id="shanghai-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shanghai "city" "shanghai" "time" .Site.Data.techday.schedule_2019.shanghai_time "addr" .Site.Data.techday.schedule_2019.shanghai_addr) -}}
+        </div>
+        <div class="schedules" id="chengdu-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.chengdu "city" "chengdu" "time" .Site.Data.techday.schedule_2019.chengdu_time "addr" .Site.Data.techday.schedule_2019.chengdu_addr) -}}
+        </div>
+        <div class="schedules" id="shenzhen-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shenzhen "city" "shenzhen" "time" .Site.Data.techday.schedule_2019.shenzhen_time "addr" .Site.Data.techday.schedule_2019.shenzhen_addr) -}}
+        </div>
+        <div class="schedules" id="wuhan-schedule">
+          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shenzhen "city" "wuhan" "time" .Site.Data.techday.schedule_2019.wuhan_time "addr" .Site.Data.techday.schedule_2019.wuhan_addr) -}}
+        </div>
+        <div class="schedules" id="hangzhou-schedule">
+          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shenzhen "city" "hangzhou" "time" .Site.Data.techday.schedule_2019.hangzhou_time "addr" .Site.Data.techday.schedule_2019.hangzhou_addr) -}}
+        </div>
+    </section>
+
+    <section class="sponsor__section section-dark-bg">
+      <div class="sponsors section-container">
+        <h1 class="section-title">支持媒体</h1>
+        <div class="sponsors__list">
+          <div class="sponsor">
+            <img src="/images/community/sponsors/geek.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/csdn.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/kaiyuanzhongguo.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/segmentfault.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/51cto.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/juejin.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/dbaplus.png" />
+          </div>
+          <div class="sponsor">
+            <img src="/images/community/sponsors/tgo.jpg" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hackathon-review">
+        <div class="section-container">
+            <h2 class="section-title">往期回顾</h2>
+            {{- partial "community-cn/review-card.html" (dict "reviews" .Site.Data.techday.reviews) -}}
+        </div>
+    </section>
+    
+    <section class="back-to-community-section">
+        <a href="/community-cn/#activities">
+            <button class="back-to-community">
+              更多社区活动
+            </button>
+        </a>
+    </section>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript" src="/js/community.js"></script>
+<script type="text/javascript" src="/js/vendor/calendar.js"></script>
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+  $('.lazy').lazyload({
+    effect: 'fadeIn',
+    threshold: 200
+  })
+</script>
+{{- end -}}

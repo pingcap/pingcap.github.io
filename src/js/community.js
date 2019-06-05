@@ -59,7 +59,9 @@ $(document).ready(function() {
   }
 
   var element = document.getElementById('calendar')
-  calendar(element, events, settings)
+  if (element) {
+    calendar(element, events, settings)
+  }
 
   // setClndrHeight()
   calcBannerTitleImg()
@@ -104,5 +106,16 @@ $(document).ready(function() {
     $('.cld-labels').show()
     $('.event-list').hide()
     $('.event').remove()
+  })
+
+  console.log('hello from techday day')
+  var contentTabID = $('input:checked').val()
+  console.log('contenttab: ', contentTabID)
+  $('.schedules').hide()
+  $('#' + contentTabID).show()
+  $('input').on('click', function() {
+    contentTabID = $('input:checked').val()
+    $('.schedules').hide()
+    $('#' + contentTabID).show()
   })
 })
