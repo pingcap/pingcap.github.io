@@ -257,7 +257,7 @@ $(document).ready(function() {
   })
 
   // Copy to Clipboard
-  if ($('doc').length > 0) {
+  if ($('.doc').length > 0) {
     var $code = document.querySelectorAll('.highlight')
 
     for (let i = 0; i < $code.length; i++) {
