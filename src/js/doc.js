@@ -256,9 +256,8 @@ $(document).ready(function() {
     return false
   })
 
+  // Copy to Clipboard
   if ($('.doc').length > 0) {
-    console.log('has docs')
-    // Copy to Clipboard
     var $code = document.querySelectorAll('.highlight')
 
     for (let i = 0; i < $code.length; i++) {
