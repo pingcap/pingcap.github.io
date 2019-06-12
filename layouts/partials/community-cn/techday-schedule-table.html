@@ -25,12 +25,12 @@
                         {{- if gt (len $i.speaker) 1 -}}
                             {{- range $idx2, $i2 := $i.speaker }}
                             <div class="multi-speakers">
-                                <img src="/images/community/huangdongxu.png" class="multi-img" alt="Avatar" />
+                                <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="Avatar" />
                                 <span class="speaker">{{ index $i.speaker $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
                             </div>
                             {{- end -}}
                         {{- else -}}
-                            <img src="/images/community/huangdongxu.png" alt="Avatar" />
+                            <img src="{{ $i.image }}" alt="Avatar" />
                             <span class="speaker">{{ index $i.speaker 0 }} | {{ $i.speaker_title }}</span>
                         {{- end -}}
                     </td>

@@ -108,14 +108,35 @@ $(document).ready(function() {
     $('.event').remove()
   })
 
-  console.log('hello from techday day')
   var contentTabID = $('input:checked').val()
-  console.log('contenttab: ', contentTabID)
+
   $('.schedules').hide()
   $('#' + contentTabID).show()
   $('input').on('click', function() {
     contentTabID = $('input:checked').val()
     $('.schedules').hide()
     $('#' + contentTabID).show()
+  })
+
+  $('.city').click(function() {
+    $('.city').removeClass('schedule-btn-checked')
+    $('.red-spot-t').removeClass('schedule-circle-checked')
+    $('.red-spot-b').removeClass('schedule-circle-checked')
+    $(this).addClass('schedule-btn-checked')
+    $('.schedules').hide()
+    // console.log('checked label: ', $('input:checked').val())
+    // $('input:checked').attr('checked', 'checked')
+    $('#' + $(this).attr('id') + '-schedule').show()
+    $('#' + $(this).attr('id') + 'Tab').attr('checked', 'checked')
+    $(this)
+      .parent()
+      .addClass('schedule-circle-checked')
+    console.log('this: ', $(this)[0].parentElement.className)
+    $('html, body').animate(
+      {
+        scrollTop: $('.agenda__section').offset().top - 60,
+      },
+      1000
+    )
   })
 })
