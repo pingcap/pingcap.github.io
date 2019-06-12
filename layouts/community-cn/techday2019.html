@@ -1,0 +1,166 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "TechDay 2019" }}
+    TechDay 2019
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/techday.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/agenda.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+{{- end -}}
+
+{{- define "main" -}}
+<div class="techday2018">
+    <section class="banner__section techday2019-banner">
+        <div class="agenda-timeline pc-timeline">
+            <div class="red-spot-t">
+                <div class="city-top city" id="beijing">
+                    6.23 北京
+                </div>
+            </div>
+            <div class="red-spot-b">
+                <div class="city-bottom city" id="shanghai">
+                    6.30 上海
+                </div>
+            </div>
+            <div class="red-spot-t">
+                <div class="city-top city" id="chengdu">
+                    7.06 成都
+                </div>
+            </div>
+
+            <div class="red-spot-b">
+                <div class="city-bottom city" id="shenzhen">
+                    7.14 深圳
+                </div>
+            </div>
+            <div class="red-spot-t">
+                <div class="city-top city" id="wuhan">
+                    7.20 武汉
+                </div>
+            </div>
+            <div class="red-spot-b">
+                <div class="city-bottom city" id="hangzhou">
+                    7.27 杭州
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mobile-agenda-hackathon">
+        <div class="mobile-timeline">
+            <div class="red-spot-t">
+                <div class="city-top city" id="beijing">
+                    6.23 北京
+                </div>
+            </div>
+            <div class="red-spot-b">
+                <div class="city-bottom city" id="shanghai">
+                    6.30 上海
+                </div>
+            </div>
+            <div class="red-spot-t">
+                <div class="city-top city" id="chengdu">
+                    7.06 成都
+                </div>
+            </div>
+
+            <div class="red-spot-b">
+                <div class="city-bottom city" id="shenzhen">
+                    7.14 深圳
+                </div>
+            </div>
+            <div class="red-spot-t">
+                <div class="city-top city" id="wuhan">
+                    7.20 武汉
+                </div>
+            </div>
+            <div class="red-spot-b">
+                <div class="city-bottom city" id="hangzhou">
+                    7.27 杭州
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-hackathon">
+        <div class="section-container">
+            <h2 class="section-title">TiDB TechDay 2019</h2>
+            <p class="intro-tl">最新剧透：TiDB 3.0 GA 版本将在本月底正式发布！借此机会，为了让更多的社区伙伴能够近距离与我们展开交流，并快速 Get 3.0 GA
+              的技术细节和正确使用姿势，我们启动「TiDB TechDay 2019 全国巡讲」，打破「一年一城」的传统，巡回北京、上海、成都、深圳、武汉、杭州 6 座城市，用一整天的时间为当地朋友深入拆解 TiDB 3.0
+              以及今年技术层面的各个大招展示：从 TiDB 最新的 OLAP 架构，到云原生 TiDB demo、TiKV 性能大幅提升等等。各地用户伙伴也会一起交流分享 TiDB
+              实践经验，另外关于全球开源社区运营维护，我们又有了新的想法，也将与各地的社区伙伴们聊聊。当然 TechDay 2019 限定 T-Shirt & 贴纸也会有的！<br /><br />
+              相信在社区伙伴们的力量加持下，我们可以接着做更多做不到的事情。期待与大家见面～
+            </p>
+        </div>
+    </section>
+
+    <section class="agenda__section">
+        <h1 class="section-title">会议日程</h1>
+        <div class="schedule-tabs">
+            {{- partial "community-cn/techday-schedule-tab.html" -}}
+        </div>
+        <div class="schedules" id="beijing-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.beijing "city" "beijing" "time" .Site.Data.techday.schedule_2019.beijing_time "addr" .Site.Data.techday.schedule_2019.beijing_addr) -}}
+        </div>
+        <div class="schedules" id="shanghai-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shanghai "city" "shanghai" "time" .Site.Data.techday.schedule_2019.shanghai_time "addr" .Site.Data.techday.schedule_2019.shanghai_addr) -}}
+        </div>
+        <div class="schedules" id="chengdu-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.chengdu "city" "chengdu" "time" .Site.Data.techday.schedule_2019.chengdu_time "addr" .Site.Data.techday.schedule_2019.chengdu_addr) -}}
+        </div>
+        <div class="schedules" id="shenzhen-schedule">
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shenzhen "city" "shenzhen" "time" .Site.Data.techday.schedule_2019.shenzhen_time "addr" .Site.Data.techday.schedule_2019.shenzhen_addr) -}}
+        </div>
+        <div class="schedules" id="wuhan-schedule">
+          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.wuhan "city" "wuhan" "time" .Site.Data.techday.schedule_2019.wuhan_time "addr" .Site.Data.techday.schedule_2019.wuhan_addr) -}}
+        </div>
+        <div class="schedules" id="hangzhou-schedule">
+          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.hangzhou "city" "hangzhou" "time" .Site.Data.techday.schedule_2019.hangzhou_time "addr" .Site.Data.techday.schedule_2019.hangzhou_addr) -}}
+        </div>
+    </section>
+
+    <section class="sponsor__section section-dark-bg">
+      <div class="sponsors section-container">
+        <h1 class="section-title">支持媒体</h1>
+        <div class="sponsors__list">
+          {{- range $idx, $i := .Site.Data.techday.sponsors -}}
+              <div class="sponsor">
+                <img src="{{ $i.image }}" />
+              </div>
+          {{- end -}}
+        </div>
+      </div>
+    </section>
+
+    <section class="hackathon-review">
+        <div class="section-container">
+            <h2 class="section-title">往期回顾</h2>
+            {{- partial "community-cn/review-card.html" (dict "reviews" .Site.Data.techday.reviews) -}}
+        </div>
+    </section>
+    
+    <section class="back-to-community-section">
+        <a href="/community-cn/#activities">
+            <button class="back-to-community">
+              更多社区活动
+            </button>
+        </a>
+    </section>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript" src="/js/community.js"></script>
+<script type="text/javascript" src="/js/vendor/calendar.js"></script>
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+  $('.lazy').lazyload({
+    effect: 'fadeIn',
+    threshold: 200
+  })
+</script>
+{{- end -}}

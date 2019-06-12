@@ -1,0 +1,96 @@
+{{ $schedule := .schedule }}
+{{ $city := .city }}
+{{ $theme_bg_color := "_bg_theme" | printf "%s%s" $city }}
+{{ $theme_font_color := "_font_theme" | printf "%s%s" $city }}
+{{ $time := .time }}
+{{ $addr := .addr }}
+
+<div class="schedule-table">
+    <div class="city-info">{{ $time }}</div>
+    <div class="city-info">{{ $addr }}</div>
+    <table class="pc-agenda-table">
+        {{- range $idx, $i := $schedule -}}
+            {{- if $i.highlight_bg -}}
+                <tr>
+                    <td class="col-time">{{ $i.time }}</td>
+                    <td class="{{ $theme_bg_color }}" colspan="2">{{ $i.talk_title }}</td>
+                </tr>
+            {{- else -}}
+                <tr>
+                    <td class="col-time">{{ $i.time }}</td>
+                    <td class="{{ $theme_font_color }} col-talk-title">{{ $i.talk_title }}
+                        <span class="tooltiptext">{{ $i.talk_detail }}</span>
+                    </td>
+                    {{- if $i.tba -}}
+                        <td class="col-speaker">
+                            敬请期待
+                        </td>
+                    {{- else -}}
+                        <td class="col-speaker">
+                            {{- if gt (len $i.speaker) 1 -}}
+                                {{- range $idx2, $i2 := $i.speaker }}
+                                <div class="multi-speakers">
+                                    <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="Avatar" />
+                                    <span class="speaker">{{ index $i.speaker $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
+                                </div>
+                                {{- end -}}
+                            {{- else -}}
+                                <img src="{{ $i.image }}" alt="Avatar" />
+                                <span class="speaker">{{ index $i.speaker 0 }} | {{ $i.speaker_title }}</span>
+                            {{- end -}}
+                        </td>
+                    {{- end -}}
+                </tr>
+            {{- end -}}
+        {{- end -}}
+    </table>
+
+    <table class="mobile-agenda-table">
+        {{- range $idx, $i := $schedule -}}
+            {{- if $i.highlight_bg -}}
+                <tr>
+                    <td class="col-time">{{ $i.time }}</td>
+                    <td class="{{ $theme_bg_color }}" colspan="2">{{ $i.talk_title }}</td>
+                </tr>
+            {{- else -}}
+                <tr>
+                    <td class="col-time" rowspan="2">{{ $i.time }}</td>
+                    <td class="{{ $theme_font_color }} col-talk-title">{{ $i.talk_title }}
+                        <span class="tooltiptext">{{ $i.talk_detail }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    {{- if $i.tba -}}
+                        <td class="col-speaker">
+                            敬请期待
+                        </td>
+                    {{- else -}}
+                        <td class="col-speaker">
+                            {{- if gt (len $i.speaker) 1 -}}
+                                {{- range $idx2, $i2 := $i.speaker }}
+                                <div class="multi-speakers">
+                                    <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="Avatar" />
+                                    <span class="speaker">{{ index $i.speaker $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
+                                </div>
+                                {{- end -}}
+                            {{- else -}}
+                                <img src="{{ $i.image }}" alt="Avatar" />
+                                <span class="speaker">{{ index $i.speaker 0 }} | {{ $i.speaker_title }}</span>
+                            {{- end -}}
+                        </td>
+                    {{- end -}}
+                    
+                </tr>
+                <tr>
+
+                </tr>
+            {{- end -}}
+        {{- end -}}
+    </table>
+</div>
+
+<a href="#">
+    <button class="techday-signup-btn {{ $theme_bg_color }}">
+        立即报名
+   </button>
+</a>
