@@ -50,7 +50,11 @@ copy_images_from_media_to_dist() {
   media_path=$(echo $parent_dir/$repo_name/media)
   # echo $media_path
   # echo $parent_dir/images/$repo_name
-  [ -d $media_path ] && mv $media_path $parent_dir/images/$repo_name # cp -R
+  if [ $repo_name == 'meetup' ]; then
+    [ -d $media_path ] && mv $media_path/* $parent_dir/images/$repo_name
+  else
+    [ -d $media_path ] && mv $media_path $parent_dir/images/$repo_name # cp -R
+  fi
 }
 
 # mv all content in media to dist/images

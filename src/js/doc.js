@@ -257,48 +257,50 @@ $(document).ready(function() {
   })
 
   // Copy to Clipboard
-  var $code = document.querySelectorAll('.highlight')
+  if ($('.doc').length > 0) {
+    var $code = document.querySelectorAll('.highlight')
 
-  for (let i = 0; i < $code.length; i++) {
-    addCopy($code[i])
-  }
-
-  var clipboard = new ClipboardJS('.copy', {
-    target: function(trigger) {
-      $('.copy').text('Copy')
-      $('.copy').css('color', '#94a3ea')
-      trigger.innerText = 'Copied'
-      $(trigger).css('color', 'rgb(231, 234, 148)')
-      return trigger.nextElementSibling
-    },
-  })
-
-  // remove text highlight from the selected target text
-  clipboard.on('success', function(e) {
-    e.clearSelection()
-  })
-
-  // highlight the blockquote in docs/docs-cn
-  $('blockquote').each(function() {
-    var $this = $(this)
-    var quoteLabel = $(this).find('p strong')[0].innerText
-    switch (quoteLabel) {
-      case 'Note:':
-      case '注意：':
-        $(this).addClass('label-note')
-        break
-      case 'Warning:':
-      case '警告：':
-        $(this).addClass('label-warning')
-        break
-      case 'Tip:':
-      case '建议：':
-        $(this).addClass('label-tips')
-        break
-      case 'Error:':
-      case '错误：':
-        $(this).addClass('label-error')
-        break
+    for (let i = 0; i < $code.length; i++) {
+      addCopy($code[i])
     }
-  })
+
+    var clipboard = new ClipboardJS('.copy', {
+      target: function(trigger) {
+        $('.copy').text('Copy')
+        $('.copy').css('color', '#94a3ea')
+        trigger.innerText = 'Copied'
+        $(trigger).css('color', 'rgb(231, 234, 148)')
+        return trigger.nextElementSibling
+      },
+    })
+
+    // remove text highlight from the selected target text
+    clipboard.on('success', function(e) {
+      e.clearSelection()
+    })
+
+    // highlight the blockquote in docs/docs-cn
+    $('blockquote').each(function() {
+      var $this = $(this)
+      var quoteLabel = $(this).find('p strong')[0].innerText
+      switch (quoteLabel) {
+        case 'Note:':
+        case '注意：':
+          $(this).addClass('label-note')
+          break
+        case 'Warning:':
+        case '警告：':
+          $(this).addClass('label-warning')
+          break
+        case 'Tip:':
+        case '建议：':
+          $(this).addClass('label-tips')
+          break
+        case 'Error:':
+        case '错误：':
+          $(this).addClass('label-error')
+          break
+      }
+    })
+  }
 })
