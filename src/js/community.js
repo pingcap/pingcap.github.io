@@ -120,9 +120,11 @@ $(document).ready(function() {
 
   $('.city').click(function() {
     $('.city').removeClass('schedule-btn-checked')
+    $('.city').removeClass('mobile-btn-checked')
     $('.red-spot-t').removeClass('schedule-circle-checked')
     $('.red-spot-b').removeClass('schedule-circle-checked')
     $(this).addClass('schedule-btn-checked')
+    $(this).addClass('mobile-btn-checked')
     $('.schedules').hide()
     // console.log('checked label: ', $('input:checked').val())
     // $('input:checked').attr('checked', 'checked')
