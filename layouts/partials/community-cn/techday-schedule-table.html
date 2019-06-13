@@ -30,13 +30,16 @@
                             {{- if gt (len $i.speaker) 1 -}}
                                 {{- range $idx2, $i2 := $i.speaker }}
                                 <div class="multi-speakers">
-                                    <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="Avatar" />
-                                    <span class="speaker">{{ index $i.speaker $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
+                                    <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="avatar" />
+                                    <span class="speaker">{{ index $i.speaker $idx2 }}</span>
+                                    <span> {{ index $i.company $idx2 }} |
+                                      {{ index $i.speaker_title $idx2 }}</span><br />
                                 </div>
                                 {{- end -}}
                             {{- else -}}
-                                <img src="{{ $i.image }}" alt="Avatar" />
-                                <span class="speaker">{{ index $i.speaker 0 }} | {{ $i.speaker_title }}</span>
+                                <img src="{{ $i.image }}" alt="avatar" />
+                                <span class="speaker">{{ index $i.speaker 0 }} </span>
+                                <span>{{ $i.company }} | {{ $i.speaker_title }}</span>
                             {{- end -}}
                         </td>
                     {{- end -}}
@@ -65,17 +68,19 @@
                             敬请期待
                         </td>
                     {{- else -}}
-                        <td class="col-speaker">
+                        <td class="col-speaker" style="border-top-style:hidden;">
                             {{- if gt (len $i.speaker) 1 -}}
                                 {{- range $idx2, $i2 := $i.speaker }}
                                 <div class="multi-speakers">
-                                    <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="Avatar" />
-                                    <span class="speaker">{{ index $i.speaker $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
+                                    <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="avatar" />
+                                    <span class="speaker">{{ index $i.speaker $idx2 }}</span><br />
+                                    <span>{{ index $i.company $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
                                 </div>
                                 {{- end -}}
                             {{- else -}}
-                                <img src="{{ $i.image }}" alt="Avatar" />
-                                <span class="speaker">{{ index $i.speaker 0 }} | {{ $i.speaker_title }}</span>
+                                <img src="{{ $i.image }}" alt="avatar" />
+                                <span class="speaker">{{ index $i.speaker 0 }}</span><br />
+                                <span>{{ $i.company }} | {{ $i.speaker_title }}</span>
                             {{- end -}}
                         </td>
                     {{- end -}}
@@ -90,7 +95,7 @@
 </div>
 
 <a href="#">
-    <button class="techday-signup-btn {{ $theme_bg_color }}">
+    <button class="techday-signup-btn {{ $theme_bg_color }} {{ $city }}">
         立即报名
    </button>
 </a>

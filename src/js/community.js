@@ -87,6 +87,8 @@ $(document).ready(function() {
         },
         1000
       )
+    } else if (hash.slice(-9) == '-schedule') {
+      console.log('schedule')
     }
   }
   // displays events in this selected day
@@ -114,8 +116,65 @@ $(document).ready(function() {
   $('#' + contentTabID).show()
   $('input').on('click', function() {
     contentTabID = $('input:checked').val()
+    console.log('contentID: ', contentTabID)
     $('.schedules').hide()
     $('#' + contentTabID).show()
+    $('.city').removeClass('schedule-btn-checked')
+    $('.city').removeClass('mobile-btn-checked')
+    $('.red-spot-t').removeClass('schedule-circle-checked')
+    $('.red-spot-b').removeClass('schedule-circle-checked')
+    $(this).addClass('schedule-btn-checked')
+    $(this).addClass('mobile-btn-checked')
+    switch (contentTabID) {
+      case 'beijing-schedule':
+        $('.schedule-tabs').css('border-bottom', '1px solid #e66667')
+        $('#beijing').addClass('schedule-btn-checked')
+        $('#beijing').addClass('mobile-btn-checked')
+        $('#beijing')
+          .parent()
+          .addClass('schedule-circle-checked')
+        break
+      case 'shanghai-schedule':
+        $('.schedule-tabs').css('border-bottom', '1px solid #6dc1b3')
+        $('#shanghai').addClass('schedule-btn-checked')
+        $('#shanghai').addClass('mobile-btn-checked')
+        $('#shanghai')
+          .parent()
+          .addClass('schedule-circle-checked')
+        break
+      case 'chengdu-schedule':
+        $('.schedule-tabs').css('border-bottom', '1px solid #d68e51')
+        $('#chengdu').addClass('schedule-btn-checked')
+        $('#chengdu').addClass('mobile-btn-checked')
+        $('#chengdu')
+          .parent()
+          .addClass('schedule-circle-checked')
+        break
+      case 'shenzhen-schedule':
+        $('.schedule-tabs').css('border-bottom', '1px solid #7389b1')
+        $('#shenzhen').addClass('schedule-btn-checked')
+        $('#shenzhen').addClass('mobile-btn-checked')
+        $('#shenzhen')
+          .parent()
+          .addClass('schedule-circle-checked')
+        break
+      case 'wuhan-schedule':
+        $('.schedule-tabs').css('border-bottom', '1px solid #7769c3')
+        $('#wuhan').addClass('schedule-btn-checked')
+        $('#wuhan').addClass('mobile-btn-checked')
+        $('#wuhan')
+          .parent()
+          .addClass('schedule-circle-checked')
+        break
+      case 'hangzhou-schedule':
+        $('.schedule-tabs').css('border-bottom', '1px solid #4ba3c9')
+        $('#hangzhou').addClass('schedule-btn-checked')
+        $('#hangzhou').addClass('mobile-btn-checked')
+        $('#hangzhou')
+          .parent()
+          .addClass('schedule-circle-checked')
+        break
+    }
   })
 
   $('.city').click(function() {
@@ -126,14 +185,50 @@ $(document).ready(function() {
     $(this).addClass('schedule-btn-checked')
     $(this).addClass('mobile-btn-checked')
     $('.schedules').hide()
-    // console.log('checked label: ', $('input:checked').val())
     // $('input:checked').attr('checked', 'checked')
-    $('#' + $(this).attr('id') + '-schedule').show()
-    $('#' + $(this).attr('id') + 'Tab').attr('checked', 'checked')
+    var btnID = $(this).attr('id')
+    $('#' + btnID + '-schedule').show()
+    switch (btnID) {
+      case 'beijing':
+        $('.schedule-tabs').css('border-bottom', '1px solid #e66667')
+        $('input:radio[name=tabs]')
+          .filter('[value=beijing-schedule]')
+          .prop('checked', true)
+        break
+      case 'shanghai':
+        $('.schedule-tabs').css('border-bottom', '1px solid #6dc1b3')
+        $('input:radio[name=tabs]')
+          .filter('[value=shanghai-schedule]')
+          .prop('checked', true)
+        break
+      case 'chengdu':
+        $('.schedule-tabs').css('border-bottom', '1px solid #d68e51')
+        $('input:radio[name=tabs]')
+          .filter('[value=chengdu-schedule]')
+          .prop('checked', true)
+        break
+      case 'shenzhen':
+        $('.schedule-tabs').css('border-bottom', '1px solid #7389b1')
+        $('input:radio[name=tabs]')
+          .filter('[value=shenzhen-schedule]')
+          .prop('checked', true)
+        break
+      case 'wuhan':
+        $('.schedule-tabs').css('border-bottom', '1px solid #7769c3')
+        $('input:radio[name=tabs]')
+          .filter('[value=wuhan-schedule]')
+          .prop('checked', true)
+        break
+      case 'hangzhou':
+        $('.schedule-tabs').css('border-bottom', '1px solid #4ba3c9')
+        $('input:radio[name=tabs]')
+          .filter('[value=hangzhou-schedule]')
+          .prop('checked', true)
+        break
+    }
     $(this)
       .parent()
       .addClass('schedule-circle-checked')
-    console.log('this: ', $(this)[0].parentElement.className)
     $('html, body').animate(
       {
         scrollTop: $('.agenda__section').offset().top - 60,
