@@ -3,6 +3,7 @@
 {{ $theme_bg_color := "_bg_theme" | printf "%s%s" $city }}
 {{ $theme_font_color := "_font_theme" | printf "%s%s" $city }}
 {{ $time := .time }}
+{{ $link := .link }}
 {{ $addr := .addr }}
 
 <div class="schedule-table">
@@ -74,13 +75,13 @@
                                 <div class="multi-speakers">
                                     <img src="{{ index $i.image $idx2 }}" class="multi-img" alt="avatar" />
                                     <span class="speaker">{{ index $i.speaker $idx2 }}</span><br />
-                                    <span>{{ index $i.company $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
+                                    <span class="speaker-info">{{ index $i.company $idx2 }} | {{ index $i.speaker_title $idx2 }}</span><br/>
                                 </div>
                                 {{- end -}}
                             {{- else -}}
                                 <img src="{{ $i.image }}" alt="avatar" />
                                 <span class="speaker">{{ index $i.speaker 0 }}</span><br />
-                                <span>{{ $i.company }} | {{ $i.speaker_title }}</span>
+                                <span class="speaker-info">{{ $i.company }} | {{ $i.speaker_title }}</span>
                             {{- end -}}
                         </td>
                     {{- end -}}
@@ -94,7 +95,7 @@
     </table>
 </div>
 
-<a href="#">
+<a href="{{ $link }}">
     <button class="techday-signup-btn {{ $theme_bg_color }} {{ $city }}">
         立即报名
    </button>
