@@ -2,21 +2,13 @@ function calcBannerTitleImg() {
   if (window.matchMedia('(max-width: 700px)').matches) {
     $('.signable img').attr(
       'src',
-      'https://download.pingcap.com/images/community/activities/meetup.svg'
+      'https://download.pingcap.com/images/banners/techday2019-mobile.jpg'
     )
-    // $('.signable img').attr(
-    //   'src',
-    //   'https://download.pingcap.com/images/mobileDevCon.png'
-    // )
   } else {
     $('.signable img').attr(
       'src',
-      'https://download.pingcap.com/images/community/activities/meetup-active-img.jpg'
+      'https://download.pingcap.com/images/community/activities/techday2019-pc.png'
     )
-    // $('.signable img').attr(
-    //   'src',
-    //   'https://download.pingcap.com/images/PCdevCon.png'
-    // )
   }
 }
 
