@@ -2,7 +2,10 @@ $(document).ready(function() {
   var slides_per_view
   var slides_per_group
 
-  if (window.matchMedia('(max-width: 600px)').matches) {
+  if (
+    window.matchMedia('(max-width: 600px)').matches ||
+    $('.homepage-slogan-mask').length
+  ) {
     slides_per_view = 1
     slides_per_group = 1
   } else {

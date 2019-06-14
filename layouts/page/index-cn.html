@@ -5,13 +5,30 @@
     {{$.Scratch.Set "data_i18_cn" true }}
     {{$.Scratch.Set "data_i18_link" "/en" }}
     {{- partial "head/preload-css" (dict "href" "/css/index.css") -}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
     <div class="banner-container">
-        <a href="https://university.pingcap.com/" target="_blank"
-          onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
-            src="https://download.pingcap.com/images/banner-university.jpg" /></a>
+        <div class="multi_slides_carousel">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a href="/communinty-cn/techday2019">
+                            <img class="moment-img"
+                              src="https://download.pingcap.com/images/techday-carousel-img.jpg" />
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="https://university.pingcap.com/" target="_blank"
+                          onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
+                            class="moment-img" src="https://download.pingcap.com/images/university-carousel-img.png"
+                            /></a>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
     </div>
     <section class="homepage-slogan-mask homepage-slogan-mask-cn-mobile">
         <div class="container">
@@ -28,9 +45,23 @@
                 <a href="http://github.com/pingcap" class="btn btn-secondary" target="_blank"> GitHub </a>
             </div>
             <div class="tidb-planet-banner-pc">
-              <a href="https://university.pingcap.com/" target="_blank"
-                onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
-                  src="https://download.pingcap.com/images/banner-university.jpg" /></a>
+                <div class="multi_slides_carousel">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <a href="/communinty-cn/techday2019">
+                                    <img class="moment-img" src="/images/carousel-techday.jpg" />
+                                </a>
+                            </div>
+                            <div class="swiper-slide">
+                                <a href="https://university.pingcap.com/" target="_blank"
+                                  onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
+                                    class="moment-img" src="/images/carousel-university.png" /></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -146,4 +177,9 @@
         <div class="bottom"></div>
     </section>
     {{ partial "layout/cta-footer-cn.html" . }}
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
 {{- end -}}
