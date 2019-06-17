@@ -44,6 +44,8 @@
 
                 {{ $temp := .File.Path }}
 
+                {{ readFile .File.Path }}
+
                 {{- range $idx, $i := $total_versions -}}
                     {{ $file_path := $trimed_URL | printf "%s/%s%s" "./dist/docs" $i }}
 
@@ -102,7 +104,7 @@
                     {{- end -}}
                     <br />
 
-                    {{- if (fileExists "dist/docs/v3.0/architecture/index.html") -}}
+                    {{- if (fileExists "./dist/docs/v3.0/architecture/index.html") -}}
                         test html yes
                     {{- else -}}
                         test html no
