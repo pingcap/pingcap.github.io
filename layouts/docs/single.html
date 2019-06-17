@@ -44,16 +44,14 @@
 
                 {{ $temp := .File.Path }}
 
-                {{ readFile .File.Path }}
-
                 {{- range $idx, $i := $total_versions -}}
-                    {{ $file_path := $trimed_URL | printf "%s/%s%s" "./dist/docs" $i }}
+                    {{ $file_path := "index.html" | printf "%s/%s%s%s" "./dist/docs" $i $trimed_URL }}
 
                     {{ $temp_path := replaceRE "(v\\d+\\.\\d+|dev)" $i $temp | printf "%s%s" "/"}}
 
                     {{ printf "%#v" $file_path}}
 
-                    {{ printf "%#v" $temp_path}}
+                    <!-- {{ printf "%#v" $temp_path}}
 
                     {{- if (fileExists $file_path) -}}
                         hello1
@@ -109,7 +107,7 @@
                     {{- else -}}
                         test html no
                     {{- end -}}
-                    <br />
+                    <br /> -->
 
                     {{- if not (fileExists $file_path) -}}
                         in fileExists
