@@ -16,7 +16,7 @@
     <div class="container">
         <!-- category: memoir/ record -->
         {{ if in .Permalink "meetup/recording" }}
-            {{ $meetup_articles := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir"}}
+            {{ $meetup_articles := where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "memoir" }}
             {{- partial "navs/tags-nav.html" (dict "type" "single" "title" "热门标签" "posts" $meetup_articles "global" .) -}}
         {{ else }}
             {{ $meetup := where (where .Site.Pages "Section" "meetup") ".Params.title" "!=" nil }}
