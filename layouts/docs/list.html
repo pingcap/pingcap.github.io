@@ -40,6 +40,7 @@
 
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 
+                
                 {{ printf "%#v" .File.Path }}
 
                 {{ $temp := .File.Path }}
@@ -53,29 +54,33 @@
 
                     {{ printf "%#v" $temp_path}}
 
-                    {{- if fileExists "/docs/v3.0/how-to/deploy/hardware-recommendations.md" -}}
+                    <!-- {{- if (fileExists "./dist/docs/v3.0/adopters") -}}
+                        yes exist
+                    {{- end -}} -->
+
+                    {{- if (fileExists $file_path) -}}
                         hello1
                     {{- else -}}
-                        no1 
+                        newno1 
                     {{- end -}}
 
-                    {{- if fileExists "./dist/docs/v3.0/how-to/deploy/hardware-recommendations.md" -}}
+                    <!-- {{- if (fileExists "./dist/docs/dev/adopters.md") -}}
                         hello2
                     {{- else -}}
-                        no2 
+                        newno2 
                     {{- end -}}
 
-                    {{- if fileExists "docs/v3.0/how-to/deploy/hardware-recommendations.md" -}}
+                    {{- if (fileExists "docs/dev/adopters.md") -}}
                         hello3
                     {{- else -}}
-                        no3
+                        newno3
                     {{- end -}}
 
-                    {{- if fileExists "./dist/docs//v3.0/how-to/deploy/hardware-recommendations" -}}
+                    {{- if (fileExists "./dist/docs/dev/adopters") -}}
                         hello4
                     {{- else -}}
-                        no4
-                    {{- end -}}
+                        newno4
+                    {{- end -}} -->
 
                     {{- if not (fileExists $file_path) -}}
                         in fileExists

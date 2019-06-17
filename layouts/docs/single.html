@@ -53,25 +53,31 @@
 
                     {{ printf "%#v" $temp_path}}
 
-                    {{- if fileExists "/docs/v3.0/how-to/deploy/hardware-recommendations.md" -}}
+                    {{- if (fileExists $file_path) -}}
+                        hello1
+                    {{- else -}}
+                        newno1 
+                    {{- end -}}
+
+                    {{- if (fileExists "/docs/v3.0/architecture.md") -}}
                         hello1
                     {{- else -}}
                         no1 
                     {{- end -}}
 
-                    {{- if fileExists "./dist/docs/v3.0/how-to/deploy/hardware-recommendations.md" -}}
+                    {{- if (fileExists "./dist/docs/v3.0/architecture.md") -}}
                         hello2
                     {{- else -}}
                         no2 
                     {{- end -}}
 
-                    {{- if fileExists "docs/v3.0/how-to/deploy/hardware-recommendations.md" -}}
+                    {{- if (fileExists "docs/v3.0/architecture.md") -}}
                         hello3
                     {{- else -}}
                         no3
                     {{- end -}}
 
-                    {{- if fileExists "./dist/docs//v3.0/how-to/deploy/hardware-recommendations" -}}
+                    {{- if (fileExists "./dist/docs/v3.0/architecture") -}}
                         hello4
                     {{- else -}}
                         no4
