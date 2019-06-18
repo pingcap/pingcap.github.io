@@ -257,27 +257,49 @@ $(document).ready(function() {
   })
 
   // Copy to Clipboard
-  var $code = document.querySelectorAll('.highlight')
+  if ($('.doc').length > 0) {
+    if ($('.copyable-code-block').length) {
+      $('.copyable-code-block').each(function() {
+        var preTag = $(this).next('div.highlight')[0].childNodes[0]
+        var $preTag = $(preTag)
+        $preTag.css('position', 'relative')
 
-  for (let i = 0; i < $code.length; i++) {
-    addCopy($code[i])
-  }
+        var codeTag = $(this).next('div.highlight')[0].childNodes[0]
+          .childNodes[0]
+        var $codeTag = $(codeTag)
 
-  var clipboard = new ClipboardJS('.copy', {
-    target: function(trigger) {
-      $('.copy').text('Copy')
-      $('.copy').css('color', '#94a3ea')
-      trigger.innerText = 'Copied'
-      $(trigger).css('color', 'rgb(231, 234, 148)')
-      return trigger.nextElementSibling
-    },
-  })
+        if ($(this).hasClass('shell-root')) {
+          $codeTag.addClass('shell-root-mark')
+          $codeTag.addClass('cmd-mark')
+        } else if ($(this).hasClass('shell-regular')) {
+          $codeTag.addClass('cmd-mark')
+          $codeTag.addClass('shell-regular-mark')
+        } else if ($(this).hasClass('sql')) {
+          $codeTag.addClass('sql-mark')
+          $codeTag.addClass('cmd-mark')
+        }
 
-  // remove text highlight from the selected target text
-  clipboard.on('success', function(e) {
-    e.clearSelection()
-  })
+        addCopy($(this).next('div.highlight')[0])
+      })
+    } else {
+      var $code = document.querySelectorAll('.highlight')
 
+      for (let i = 0; i < $code.length; i++) {
+        addCopy($code[i])
+      }
+    }
+
+    var clipboard = new ClipboardJS('.copy', {
+      target: function(trigger) {
+        $('.copy').text('Copy')
+        $('.copy').css('color', '#94a3ea')
+        trigger.innerText = 'Copied'
+        $(trigger).css('color', 'rgb(231, 234, 148)')
+        return trigger.nextElementSibling
+      },
+    })
+
+<<<<<<< HEAD
   // highlight the blockquote in docs/docs-cn
   $('blockquote').each(function() {
     var $this = $(this)
@@ -324,4 +346,37 @@ $(document).ready(function() {
       $('.dropdown-menu').slideToggle('fast')
     }
   })
+=======
+    // remove text highlight from the selected target text
+    clipboard.on('success', function(e) {
+      e.clearSelection()
+    })
+
+    // highlight the blockquote in docs/docs-cn
+    $('blockquote').each(function() {
+      var $this = $(this)
+      if ($(this).find('p strong')[0]) {
+        var quoteLabel = $(this).find('p strong')[0].innerText
+        switch (quoteLabel) {
+          case 'Note:':
+          case '注意：':
+            $(this).addClass('label-note')
+            break
+          case 'Warning:':
+          case '警告：':
+            $(this).addClass('label-warning')
+            break
+          case 'Tip:':
+          case '建议：':
+            $(this).addClass('label-tips')
+            break
+          case 'Error:':
+          case '错误：':
+            $(this).addClass('label-error')
+            break
+        }
+      }
+    })
+  }
+>>>>>>> src
 })
