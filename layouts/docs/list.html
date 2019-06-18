@@ -40,50 +40,18 @@
 
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 
-                
-                {{ printf "%#v" .File.Path }}
-
-                {{ $temp := .File.Path }}
+                {{ $tempFilePath := .File.Path }}
+                <p>.File.Path: {{ $tempFilePath }}</p>
+                <p>trimed_URL: {{ $trimed_URL }}</p>
 
                 {{- range $idx, $i := $total_versions -}}
-                    {{ $file_path := $trimed_URL | printf "%s/%s%s" "./dist/docs" $i }}
+                    <p>.File.Path2: {{ $tempFilePath }}</p>
 
-                    {{ $temp_path := replaceRE "(v\\d+\\.\\d+|dev)" $i $temp | printf "%s%s" "/"}}
-
-                    {{ printf "%#v" $file_path}}
-
-                    {{ printf "%#v" $temp_path}}
-
-                    <!-- {{- if (fileExists "./dist/docs/v3.0/adopters") -}}
-                        yes exist
-                    {{- end -}} -->
-
-                    {{- if (fileExists $file_path) -}}
-                        hello1
-                    {{- else -}}
-                        newno1 
-                    {{- end -}}
-
-                    <!-- {{- if (fileExists "./dist/docs/dev/adopters.md") -}}
-                        hello2
-                    {{- else -}}
-                        newno2 
-                    {{- end -}}
-
-                    {{- if (fileExists "docs/dev/adopters.md") -}}
-                        hello3
-                    {{- else -}}
-                        newno3
-                    {{- end -}}
-
-                    {{- if (fileExists "./dist/docs/dev/adopters") -}}
-                        hello4
-                    {{- else -}}
-                        newno4
-                    {{- end -}} -->
+                    {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
+                    <p>$temp_path: {{ $temp_path }}</p>
 
                     {{- if not (fileExists $file_path) -}}
-                        in fileExists
+                        <p>in doesnot_exist_ver</p>
                         {{ $.Scratch.Add "doesnot_exist_ver" $i }}
                     {{- end -}}
                 {{- end -}}

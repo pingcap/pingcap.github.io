@@ -40,77 +40,18 @@
 
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 
-                {{ printf "%#v" .File.Path }}
-
-                {{ $temp := .File.Path }}
+                {{ $tempFilePath := .File.Path }}
+                <p>.File.Path: {{ $tempFilePath }}</p>
+                <p>trimed_URL: {{ $trimed_URL }}</p>
 
                 {{- range $idx, $i := $total_versions -}}
-                    {{ $file_path := "index.html" | printf "%s/%s%s%s" "./dist/docs" $i $trimed_URL }}
+                    <p>.File.Path2: {{ $tempFilePath }}</p>
 
-                    {{ $temp_path := replaceRE "(v\\d+\\.\\d+|dev)" $i $temp | printf "%s%s" "/"}}
-
-                    {{ printf "%#v" $file_path}}
-
-                    <!-- {{ printf "%#v" $temp_path}}
-
-                    {{- if (fileExists $file_path) -}}
-                        hello1
-                    {{- else -}}
-                        newno1 
-                    {{- end -}}
-                    <br />
-
-                    {{- if (fileExists "/docs/v3.0/architecture.md") -}}
-                        hello1
-                    {{- else -}}
-                        no1 
-                    {{- end -}}
-                    <br />
-
-                    {{- if (fileExists "./dist/docs/v3.0/architecture.md") -}}
-                        hello2
-                    {{- else -}}
-                        no2 
-                    {{- end -}}
-                    <br />
-
-                    {{- if (fileExists "docs/v3.0/architecture.md") -}}
-                        hello3
-                    {{- else -}}
-                        no3
-                    {{- end -}}
-                    <br />
-
-                    {{- if (fileExists "/docs/v3.0/architecture") -}}
-                        last try yes
-                    {{- else -}}
-                        last try no
-                    {{- end -}}
-                    <br />
-
-                     {{- if (fileExists "docs/v3.0/architecture") -}}
-                        last try yes2
-                    {{- else -}}
-                        last try no2
-                    {{- end -}}
-                    <br />
-
-                    {{- if (fileExists "./dist/docs/v3.0/architecture") -}}
-                        hello4
-                    {{- else -}}
-                        no4
-                    {{- end -}}
-                    <br />
-
-                    {{- if (fileExists "./dist/docs/v3.0/architecture/index.html") -}}
-                        test html yes
-                    {{- else -}}
-                        test html no
-                    {{- end -}}
-                    <br /> -->
+                    {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
+                    <p>$temp_path: {{ $temp_path }}</p>
 
                     {{- if not (fileExists $file_path) -}}
-                        in fileExists
+                        <p>in doesnot_exist_ver</p>
                         {{ $.Scratch.Add "doesnot_exist_ver" $i }}
                     {{- end -}}
                 {{- end -}}
