@@ -258,10 +258,35 @@ $(document).ready(function() {
 
   // Copy to Clipboard
   if ($('.doc').length > 0) {
-    var $code = document.querySelectorAll('.highlight')
+    if ($('.copyable-code-block').length) {
+      $('.copyable-code-block').each(function() {
+        var preTag = $(this).next('div.highlight')[0].childNodes[0]
+        var $preTag = $(preTag)
+        $preTag.css('position', 'relative')
 
-    for (let i = 0; i < $code.length; i++) {
-      addCopy($code[i])
+        var codeTag = $(this).next('div.highlight')[0].childNodes[0]
+          .childNodes[0]
+        var $codeTag = $(codeTag)
+
+        if ($(this).hasClass('shell-root')) {
+          $codeTag.addClass('shell-root-mark')
+          $codeTag.addClass('cmd-mark')
+        } else if ($(this).hasClass('shell-regular')) {
+          $codeTag.addClass('cmd-mark')
+          $codeTag.addClass('shell-regular-mark')
+        } else if ($(this).hasClass('sql')) {
+          $codeTag.addClass('sql-mark')
+          $codeTag.addClass('cmd-mark')
+        }
+
+        addCopy($(this).next('div.highlight')[0])
+      })
+    } else {
+      var $code = document.querySelectorAll('.highlight')
+
+      for (let i = 0; i < $code.length; i++) {
+        addCopy($code[i])
+      }
     }
 
     var clipboard = new ClipboardJS('.copy', {
@@ -282,24 +307,26 @@ $(document).ready(function() {
     // highlight the blockquote in docs/docs-cn
     $('blockquote').each(function() {
       var $this = $(this)
-      var quoteLabel = $(this).find('p strong')[0].innerText
-      switch (quoteLabel) {
-        case 'Note:':
-        case '注意：':
-          $(this).addClass('label-note')
-          break
-        case 'Warning:':
-        case '警告：':
-          $(this).addClass('label-warning')
-          break
-        case 'Tip:':
-        case '建议：':
-          $(this).addClass('label-tips')
-          break
-        case 'Error:':
-        case '错误：':
-          $(this).addClass('label-error')
-          break
+      if ($(this).find('p strong')[0]) {
+        var quoteLabel = $(this).find('p strong')[0].innerText
+        switch (quoteLabel) {
+          case 'Note:':
+          case '注意：':
+            $(this).addClass('label-note')
+            break
+          case 'Warning:':
+          case '警告：':
+            $(this).addClass('label-warning')
+            break
+          case 'Tip:':
+          case '建议：':
+            $(this).addClass('label-tips')
+            break
+          case 'Error:':
+          case '错误：':
+            $(this).addClass('label-error')
+            break
+        }
       }
     })
   }
