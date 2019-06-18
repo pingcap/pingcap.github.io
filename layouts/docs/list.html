@@ -41,17 +41,12 @@
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 
                 {{ $tempFilePath := .File.Path }}
-                <p>.File.Path: {{ $tempFilePath }}</p>
-                <p>trimed_URL: {{ $trimed_URL }}</p>
 
                 {{- range $idx, $i := $total_versions -}}
-                    <p>.File.Path2: {{ $tempFilePath }}</p>
 
                     {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
-                    <p>$file_path: {{ $file_path }}</p>
 
                     {{- if not (fileExists $file_path) -}}
-                        <p>in doesnot_exist_ver</p>
                         {{ $.Scratch.Add "doesnot_exist_ver" $i }}
                     {{- end -}}
                 {{- end -}}
@@ -62,7 +57,7 @@
 
                 {{ with .Site.GetPage "page" "docs/dev/overview.md" }}{{.Content}}{{ end }}
             </div>
-            <!-- <div class="article-toc"></div> -->
+            <div class="article-toc"></div>
         </div>
 
         <div class="sidebar-page sticky-sidebar">
