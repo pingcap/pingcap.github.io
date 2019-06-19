@@ -20,7 +20,7 @@
 <div class="doc">
     <div class="container">
         {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .URL) 0 }}
-        {{ printf "%#v" $current_version }}
+
         {{- if eq $current_version "/dev" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
         {{- else if eq $current_version "/v3.0" -}}
@@ -49,7 +49,7 @@
 
                 {{ $doesnot_exist_ver := ($.Scratch.Get "doesnot_exist_ver") }}
                 
-              {{- .Content -}}
+                {{- .Content -}}
             </div>
             <div class="article-toc"></div>
             {{- partial "archives/git-info.html" (dict "repo" "docs" "global" .) -}}
