@@ -3,6 +3,7 @@
 {{ $doesnot_exist_ver := .doesnot_exist_ver }}
 {{ $trimed_URL := .trimed_URL}}
 {{ $current_version := replaceRE "\\/" "" (cond (eq $current_version nil) "dev" $current_version) }}
+{{ $type := .type}}
 
 <div class="version-switcher">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -11,7 +12,8 @@
   <div class="dropdown-menu visibility-hide" id="dropdown-menu-items">
       {{- range $idx, $i := $total_versions -}}
           <a class="dropdown-item {{ if in $doesnot_exist_ver $i }}unclickable-btn{{ end }}"
-            href=" {{ if in $doesnot_exist_ver $i }}#{{ else }}/docs/{{ $i }}{{ $trimed_URL }}{{ end }}">{{ $i }}</a>
+            href="
+            {{ if in $doesnot_exist_ver $i }}#{{ else }}/{{ $type }}/{{ $i }}{{ $trimed_URL }}{{ end }}">{{ $i }}</a>
       {{- end -}}
   </div>
 </div>
