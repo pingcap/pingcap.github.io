@@ -24,13 +24,14 @@
         
         {{- if eq $current_version "/dev" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
-        {{- else if eq $current_version "/v3.0" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation") }}
         {{- else if eq $current_version "/v2.1" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v21_toc "title" "Documentation") }}
+        {{- else -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation") }}
         {{- end -}}
         <div class="archive">
             <div class="content markdown-body">
+                
                 {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
                 {{ $trimed_URL := strings.TrimPrefix $prefix .URL }}
 
@@ -49,7 +50,7 @@
 
                 {{ $doesnot_exist_ver := $.Scratch.Get "doesnot_exist_ver" }}
 
-                {{ with .Site.GetPage "page" "docs/dev/overview.md" }}{{.Content}}{{ end }}
+                {{ with .Site.GetPage "page" "docs/v3.0/overview.md" }}{{.Content}}{{ end }}
             </div>
             <div class="article-toc"></div>
         </div>

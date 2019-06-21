@@ -25,10 +25,10 @@
 
         {{- if eq $current_version "/dev" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_dev_toc "title" "文档") }}
-        {{- else if eq $current_version "/v3.0" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v30_toc "title" "文档") }}
         {{- else if eq $current_version "/v2.1" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v21_toc "title" "文档") }}
+        {{- else -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v30_toc "title" "文档") }}
         {{- end -}}
 
         <div class="archive">
@@ -51,7 +51,7 @@
 
                 {{ $doesnot_exist_ver := $.Scratch.Get "doesnot_exist_ver" }}
 
-                {{ with .Site.GetPage "page" "docs-cn/dev/overview.md" }}{{- .Content -}}{{ end }}
+                {{ with .Site.GetPage "page" "docs-cn/v3.0/overview.md" }}{{- .Content -}}{{ end }}
             </div>
             <div class="article-toc"></div>
         </div>
