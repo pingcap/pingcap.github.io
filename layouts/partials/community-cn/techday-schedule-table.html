@@ -5,6 +5,7 @@
 {{ $time := .time }}
 {{ $link := .link }}
 {{ $addr := .addr }}
+{{ $activity_end := .activity_end }}
 
 <div class="schedule-table">
     <div class="city-info">{{ $time }}</div>
@@ -96,7 +97,13 @@
 </div>
 
 <a href="{{ $link }}">
-    <button class="techday-signup-btn {{ $theme_bg_color }} {{ $city }}">
-        立即报名
-   </button>
+    {{- if $activity_end -}} 
+        <button class="techday-signup-btn {{ $theme_bg_color }}" style="cursor: not-allowed;">
+            活动已结束
+        </button>
+    {{- else -}}
+        <button class="techday-signup-btn {{ $theme_bg_color }} {{ $city }}">
+            立即报名 
+        </button>
+    {{- end -}}
 </a>
