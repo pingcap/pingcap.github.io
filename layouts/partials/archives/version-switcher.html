@@ -1,8 +1,9 @@
 {{ $total_versions := .total_versions }}
+{{ $stable_version := .stable_version }}
 {{ $current_version := .current_version }}
 {{ $doesnot_exist_ver := .doesnot_exist_ver }}
 {{ $trimed_URL := .trimed_URL}}
-{{ $current_version := replaceRE "\\/" "" (cond (eq $current_version nil) "v3.0" $current_version) }}
+{{ $current_version := replaceRE "\\/" "" (cond (eq $current_version nil) $stable_version $current_version) }}
 {{ $type := .type}}
 
 <div class="version-switcher">
@@ -13,7 +14,11 @@
       {{- range $idx, $i := $total_versions -}}
           <a class="dropdown-item {{ if in $doesnot_exist_ver $i }}unclickable-btn{{ end }}"
             href="
-            {{ if in $doesnot_exist_ver $i }}#{{ else }}/{{ $type }}/{{ $i }}{{ $trimed_URL }}{{ end }}">{{ $i }}</a>
+            {{ if in $doesnot_exist_ver $i }}#{{ else }}/{{ $type }}/{{ $i }}{{ $trimed_URL }}{{ end }}">{{ $i }}
+            <!-- {{- if in $doesnot_exist_ver $i -}} 
+                <span class="tooltiptext">This doc does not exist in {{ $i }}</span>
+            {{- end -}} -->
+        </a>
       {{- end -}}
   </div>
 </div>
