@@ -16,25 +16,52 @@
 {{- end -}}
 
 {{- define "main" -}}
-{{- $versions := .Site.Params.versions.docs.all }}
-{{- $latest   := .Site.Params.versions.docs.latest }}
+{{ $stable_version := $.Scratch.Get "stable_version" }}
+{{ $total_versions := .Site.Params.versions.docs.total_versions }}
 <div class="doc" id="list_page">
     <div class="container">
-        {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_toc "title" "Documentation" "versions" $versions "latest" $latest) }}
-
+        {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .URL) 0 }}
+        
+        {{- if eq $current_version "/dev" -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
+        {{- else if eq $current_version "/v2.1" -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v21_toc "title" "Documentation") }}
+        {{- else -}}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation") }}
+        {{- end -}}
         <div class="archive">
             <div class="content markdown-body">
-                {{ with .Site.GetPage "page" "docs/dev/overview.md" }}{{.Content}}{{ end }}
+                
+                {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
+                {{ $trimed_URL := strings.TrimPrefix $prefix .URL }}
+
+                {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
+
+                {{ $tempFilePath := .File.Path }}
+
+                {{- range $idx, $i := $total_versions -}}
+
+                    {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
+
+                    {{- if not (fileExists $file_path) -}}
+                        {{ $.Scratch.Add "doesnot_exist_ver" $i }}
+                    {{- end -}}
+                {{- end -}}
+
+                {{ $doesnot_exist_ver := $.Scratch.Get "doesnot_exist_ver" }}
+
+                {{ with .Site.GetPage "page" "docs/v3.0/overview.md" }}{{.Content}}{{ end }}
             </div>
             <div class="article-toc"></div>
         </div>
 
         <div class="sidebar-page sticky-sidebar">
-            {{ with .Site.GetPage "page" "docs/overview.md" }}
+            {{ partial "archives/version-switcher.html" (dict "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs") }}
+            {{ with .Site.GetPage "page" "docs/dev/overview.md" }}
                 {{ partial "archives/improve-doc.html" (dict "repo" "docs" "global" .) }}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
             {{ end }}
-            {{ partial "archives/download-pdf.html" }}
+            {{ partial "archives/download-pdf.html" (dict "version" $current_version) }}
             <p class="toc-title">What’s on this page</p>
             <div id="smart_toc_wrapper"></div>
         </div>

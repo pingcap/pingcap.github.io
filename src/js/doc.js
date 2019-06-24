@@ -299,11 +299,6 @@ $(document).ready(function() {
       },
     })
 
-    // remove text highlight from the selected target text
-    clipboard.on('success', function(e) {
-      e.clearSelection()
-    })
-
     // highlight the blockquote in docs/docs-cn
     $('blockquote').each(function() {
       var $this = $(this)
@@ -330,4 +325,27 @@ $(document).ready(function() {
       }
     })
   }
+
+  // hide dropdown Menu if user clicks other divs when the status of dropdown menu is open
+  $('.doc').click(function(e) {
+    if (
+      e.target.id != 'dropdownMenuButton' &&
+      e.target.id != 'dropdown-menu-items' &&
+      e.target.classList.value != 'dropdown-item'
+    ) {
+      if (!$('.dropdown-menu').hasClass('visibility-hide')) {
+        $('.dropdown-menu').slideToggle('fast')
+        $('.dropdown-menu').addClass('visibility-hide')
+      }
+    }
+  })
+
+  // handles docs version switch
+  $('.version-switcher').click(function() {
+    if ($('.dropdown-menu').hasClass('visibility-hide')) {
+      $('.dropdown-menu').removeClass('visibility-hide')
+    } else {
+      $('.dropdown-menu').slideToggle('fast')
+    }
+  })
 })
