@@ -31,9 +31,15 @@
         {{- end -}}
         <div class="archive">
             <div class="content markdown-body">
-                
-                {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
-                {{ $trimed_URL := strings.TrimPrefix $prefix .URL }}
+                {{ .Scratch.Set "prefix" "/docs"}}
+
+                {{ if $current_version }}
+                    {{ .Scratch.Add "prefix" $current_version }}
+                    {{ .Scratch.Add "prefix" "/" }}
+                    {{ .Scratch.Add "data_i18_link" $current_version }}
+                {{ end }}
+
+                {{ $trimed_URL := strings.TrimPrefix (.Scratch.Get "prefix") .URL }}
 
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 
