@@ -28,7 +28,6 @@ function createEventListConsole(eventTitles, eventLinks) {
 $(document).ready(function() {
   var events = []
   if ($('.feature-activity').length) {
-    console.log('has feature activity')
     $('.feature-activity').each(function() {
       var date = $(this)[0].children[1].innerText
       var y = new Date(date).getFullYear()
