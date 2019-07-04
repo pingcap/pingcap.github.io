@@ -10,13 +10,16 @@ replace_dist_html_link() {
   echo "inside replace dist html link"
   local doc_tmp_path=$1
   local repo_name=$2
+  echo $doc_tmp_path
+  echo $repo_name
   if [ -d "$doc_tmp_path" ];then
+    echo "in if"
     for html in "$doc_tmp_path"/*
     do
       # echo "$html"
       # [ "$html" = "." -o "$html" = ".." ] && continue
       if [ -d "$html" ];then
-        # echo "process sub dir: " $html
+        echo "process sub dir: " $html
         replace_dist_html_link "$html" $repo_name
       elif [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
         set +e
@@ -36,7 +39,7 @@ replace_dist_html_link() {
 
 cn_tmp_docs_path="dist/docs-cn"
 en_tmp_docs_path="dist/docs"
-replace_dist_html_link "$cn_tmp_docs_path" docs-cn
+
 replace_dist_html_link "$en_tmp_docs_path" docs
 
 cn_tmp_blogs_path="dist/blog-cn"
@@ -48,6 +51,7 @@ replace_dist_html_link "dist/success-stories" blog
 
 replace_dist_html_link "dist/meetup" meetup
 replace_dist_html_link "dist/weekly" weekly
+replace_dist_html_link "$cn_tmp_docs_path" docs-cn
 
 
 parent_dir="`echo $(pwd) | sed 's;/scripts;;g'`/dist"
