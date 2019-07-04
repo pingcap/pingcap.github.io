@@ -88,7 +88,6 @@ function genTableJSONFromMarkdown(source, target, prefix) {
 
 var args = process.argv.slice(2)
 
-console.log('in gen-nav: ', args)
 if (args.length != 3) {
   console.log(
     'Usage: node <this> arg1 arg2 arg3 # arg1 markdown source path, arg2 json file path arg3 url prefix'
