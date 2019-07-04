@@ -4,7 +4,10 @@
 
 set -e
 
+echo "processing docs"
+
 replace_dist_html_link() {
+  echo "inside replace dist html link"
   local doc_tmp_path=$1
   local repo_name=$2
   if [ -d "$doc_tmp_path" ];then
