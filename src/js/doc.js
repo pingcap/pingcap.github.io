@@ -3,6 +3,7 @@
 // Document Pages
 
 import './vendor/jquery.SimpleTree.js'
+import ClipboardJS from './vendor/clipboard.min.js'
 import { run as toc_run } from './vendor/toc'
 
 // Open the first folder
@@ -39,6 +40,15 @@ function processStickyTree() {
       }
     },
   })
+
+  if ($('#list_page').length == 0) {
+    $('.sticky-sidebar').animate(
+      {
+        scrollTop: $('li.leaf-child.active').offset().top - 300,
+      },
+      1000
+    )
+  }
 
   // Open the first item in docs/docs-cn/weekly/recruit list page
   const $firstLI = $('#list_page .st_tree > ul > li:first-child')
