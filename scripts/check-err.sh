@@ -1,3 +1,4 @@
+echo "check-err"
 if cat gulp-build.log|grep 'Error'; then
   echo 'Encouter Error';
   exit -1;
