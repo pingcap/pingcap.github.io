@@ -34,6 +34,8 @@ replace_dist_html_link() {
         set -e
       fi
     done
+  elif
+    echo "in else"
   fi
 }
 
