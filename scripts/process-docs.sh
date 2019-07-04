@@ -4,26 +4,20 @@
 
 set -e
 
-echo "processing docs"
-
 replace_dist_html_link() {
-  echo "inside replace dist html link"
   local doc_tmp_path=$1
   local repo_name=$2
-  echo $doc_tmp_path
-  echo $repo_name
   if [ -d "$doc_tmp_path" ];then
-    echo "in if"
     for html in "$doc_tmp_path"/*
     do
       # echo "$html"
       # [ "$html" = "." -o "$html" = ".." ] && continue
       if [ -d "$html" ];then
-        echo "process sub dir: " $html
+        # echo "process sub dir: " $html
         replace_dist_html_link "$html" $repo_name
       elif [[ ! -d "$html" ]] && echo "$html" | grep -E '\.html$' > /dev/null;then
         set +e
-        echo $html
+        # echo $html
         if grep -E 'href=\"\S+\.md' $html | grep -E -v 'href=\"http' > /dev/null;then
           echo "process..."
           python scripts/convert_html.py $html $repo_name
@@ -34,8 +28,6 @@ replace_dist_html_link() {
         set -e
       fi
     done
-  elif
-    echo "in else"
   fi
 }
 
