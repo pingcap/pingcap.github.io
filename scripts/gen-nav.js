@@ -4,7 +4,6 @@ const anchorTitleRe = /(\s*)[\+\-]\s*\[(.*)\]\((.*)\)/
 const titleRe = /^(\s*)[\+\-]\s*([^[]*)/
 
 function genTableJSONFromMarkdown(source, target, prefix) {
-  console.log('in genTableJSONFromMarkdown')
   const contents = fs.readFileSync(source, 'utf8')
   const reResult = tableRe.exec(contents)
   let NavData = { children: [] }
