@@ -44,7 +44,10 @@ function processStickyTree() {
   if ($('#list_page').length == 0) {
     $('.sticky-sidebar').animate(
       {
-        scrollTop: $('li.leaf-child.active').offset().top - 300,
+        scrollTop:
+          $('li.leaf-child.active').offset().top -
+          $('.sticky-sidebar').offset().top -
+          200,
       },
       1000
     )
