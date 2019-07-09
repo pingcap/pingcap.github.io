@@ -29,9 +29,13 @@ $(function() {
           var pathname = window.location.pathname,
             hash = window.location.hash
 
+          // some hrefs have '#', some don't have one.
+          // find the macthed article
           if (
             decodeURIComponent(href.toLocaleLowerCase()) ===
-            decodeURIComponent((pathname + hash).toLocaleLowerCase())
+              decodeURIComponent((pathname + hash).toLocaleLowerCase()) ||
+            decodeURIComponent(href.toLocaleLowerCase()) ===
+              decodeURIComponent(pathname.toLocaleLowerCase())
           ) {
             var $i = $(this),
               $p
