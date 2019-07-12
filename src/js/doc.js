@@ -44,7 +44,7 @@ function processStickyTree() {
   var pathname = window.location.pathname
   var banned_path_arr = [
     '/docs-cn/v3.0/reference/tools/data-migration/overview/',
-    '/docs-cn/v2.0/reference/tools/data-migration/overview/',
+    '/docs-cn/v2.1/reference/tools/data-migration/overview/',
     '/docs-cn/dev/reference/tools/data-migration/overview/',
   ]
 
