@@ -51,13 +51,15 @@
                 {{- end -}}
             </div>
         </div>
-        <!-- <a href="/meetup/list" class="link link-more">查看更多 {{ partial "svgs/icon-right-arrow.svg" (dict "fill" "#202884" "width" 16 "height" 16 ) }}</a> -->
-        <a href="/meetup/list">
-          <button class="readMore-btn">
-            <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
-            <span class="btn-text">查看更多</span>
-          </button>
-        </a>
+        {{- range first 1 (where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "review") -}}
+           <a href="{{ .URL }}">
+             <button class="readMore-btn">
+               <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
+               <span class="btn-text">查看更多</span>
+             </button>
+           </a>
+        {{- end -}}
+        
     </div>
 </section>
 <section class="meetup-landing-page-memoir reading__section">

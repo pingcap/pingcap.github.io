@@ -1,0 +1,352 @@
+@import './instructors.less';
+@import './common-style.less';
+@import '../variables.less';
+@import '../colors.less';
+@import '../tidb-planet/modal.less';
+@import '../doc.less';
+@import './techday-agenda.less';
+
+.techday2018-banner {
+  background: url('https://download.pingcap.com/images/banners/techday2018-pc.jpg') no-repeat;
+  padding-top: 37%;
+}
+
+.techday2017-banner {
+  background: url('https://download.pingcap.com/images/banners/techday2017-pc.jpg') no-repeat;
+  padding-top: 37%;
+}
+
+.techday2019-banner {
+  background: url('https://download.pingcap.com/images/banners/techday2019-pc2.jpg') no-repeat;
+  padding-top: 37%;
+}
+
+.techday-agenda__section {
+  max-width: 1124px !important;
+}
+
+.recording {
+  margin: 1rem 0;
+  position: relative;
+}
+
+.recording::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  border-top: 1px solid #ddd;
+}
+
+.extend-reading-btn {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  color: @sectionTitleColor;
+  font-size: 16px;
+}
+
+.right-text {
+  display: inline-block;
+  float: right;
+  width: calc(~"100% - 350px");
+  padding: 0 2rem;
+  text-align: left;
+  overflow: auto;
+  max-height: 180px;
+}
+
+.rt-title {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.rt-content {
+  font-size: 16px;
+  line-height: 1.7;
+  overflow: auto;
+}
+
+.agenda-timeline {
+  border-top: 1px solid white;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  color: white;
+  margin-top: -5rem;
+
+  .red-spot-t,
+  .red-spot-b {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid white;
+    background-color: #162D71;
+    margin: -7px auto 0;
+    position: relative;
+  }
+
+  .red-spot-t::before {
+    content: '';
+    height: 2rem;
+    border-left: 1px solid #fff;
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+  }
+
+  .red-spot-b::after {
+    content: '';
+    height: 2rem;
+    border-left: 1px solid #fff;
+    position: absolute;
+    top: 13px;
+    left: 50%;
+  }
+
+  .city-top {
+    position: absolute;
+    top: calc(~"-2rem - 37px");
+    margin-left: -52px;
+    left: 50%;
+    font-size: 16px;
+    width: 110px;
+    height: 37px;
+    border: 1px solid;
+    border-radius: 30px;
+    padding: 0 20px;
+    line-height: 37px;
+  }
+
+  .city-bottom {
+    position: absolute;
+    top: calc(~"2rem + 13px");
+    left: 50%;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 1px solid;
+    height: 37px;
+    line-height: 37px;
+    padding: 0 20px;
+    width: 110px;
+    margin-left: -53px;
+  }
+
+  .city {
+    &:hover {
+      background-color: #10A6FA;
+      border-color: #10A6FA;
+      cursor: pointer;
+    }
+  }
+
+  .breath-light {
+    animation: breath 1s ease-in-out infinite alternate;
+  }
+}
+
+.mobile-agenda-hackathon {
+  display: none;
+}
+
+.schedule-btn-checked {
+  background-color: #10A6FA;
+  border-color: #10A6FA !important;
+}
+
+.schedule-circle-checked {
+  background-color: #10A6FA !important;
+}
+
+@keyframes breath {
+  0% {
+    opacity: 1;
+    box-shadow: 0 1px 2px rgba(0, 147, 223, 0.4), 0 1px 1px rgba(0, 147, 223, 0.1) inset;
+  }
+
+  100% {
+    opacity: 1;
+    border: 1px solid rgba(59, 235, 235, 0.7);
+    box-shadow: 0 1px 30px #0093df, 0 1px 20px #0093df inset;
+  }
+}
+
+@media (max-width: 1024px) {
+  .agenda-timeline {
+    margin-top: -3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pc-timeline {
+    display: none;
+  }
+
+  .mobile-agenda-hackathon {
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .mobile-timeline {
+    border-top: 1px solid #3351FF;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    color: #3351ff;
+    margin-top: 5rem;
+    margin-bottom: 4rem;
+
+    .breath-light {
+      animation: breath 1s ease-in-out infinite alternate;
+    }
+
+    .red-spot-t:first-child {
+      margin-left: 50px;
+    }
+
+    .red-spot-b:last-child {
+      margin-right: 50px;
+    }
+
+    .red-spot-t,
+    .red-spot-b {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid #3351ff;
+      background-color: #fff;
+      margin: -5px auto 0;
+      position: relative;
+    }
+
+    .red-spot-t::before {
+      content: '';
+      height: 1rem;
+      border-left: 1px solid #3351FF;
+      position: absolute;
+      top: -1rem;
+      left: 50%;
+    }
+
+    .red-spot-b::after {
+      content: '';
+      height: 1rem;
+      border-left: 1px solid #3351FF;
+      position: absolute;
+      top: 8px;
+      left: 50%;
+    }
+
+    .city-top {
+      position: absolute;
+      top: calc(~"-1rem - 26px");
+      margin-left: -44px;
+      left: 50%;
+      font-size: 12px;
+      width: 79px;
+      height: 26px;
+      border: 1px solid;
+      border-radius: 30px;
+      padding: 3px 10px 2px 13px;
+    }
+
+    .city-bottom {
+      position: absolute;
+      top: calc(~"1rem + 7px");
+      left: 50%;
+      font-size: 12px;
+      border-radius: 30px;
+      border: 1px solid;
+      padding: 3px 10px 2px 13px;
+      width: 79px;
+      height: 26px;
+      margin-left: -38px;
+    }
+
+    .city {
+      &:hover {
+        background-color: #10A6FA;
+        border-color: #10A6FA;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .mobile-btn-checked {
+    color: white !important;
+  }
+
+  .techday-review-card {
+    box-shadow: 0 2px 5px 0 #ddd !important;
+
+    .techday-review-desc {
+      padding: 15px !important;
+    }
+  }
+}
+
+
+@media (max-width: 600px) {
+  .techday2018-banner {
+    background: url('https://download.pingcap.com/images/banners/techday2018-mobile.jpg') no-repeat;
+    padding-top: 62%;
+  }
+
+  .techday2017-banner {
+    background: url('https://download.pingcap.com/images/banners/techday2017-mobile.jpg') no-repeat;
+    padding-top: 62%;
+  }
+
+  .techday2019-banner {
+    background: url('https://download.pingcap.com/images/banners/techday2019-mobile.jpg') no-repeat;
+    padding-top: 62%;
+  }
+
+  .thumbnail {
+    display: block;
+    width: 100%;
+  }
+
+  .right-text {
+    display: block;
+    width: 100%;
+    float: none;
+    padding: 1rem 0;
+    text-align: left;
+    overflow: auto;
+    max-height: none;
+  }
+
+  .rt-title {
+    font-size: 16px;
+  }
+
+  .rt-content {
+    font-size: 14px;
+  }
+
+  .extend-reading-btn {
+    bottom: 10px;
+    font-size: 14px;
+    right: 0;
+  }
+}
+
+@media (max-width: 320px) {
+  .mobile-timeline {
+    .red-spot-t:first-child {
+      margin-left: 46px;
+    }
+
+    .red-spot-b:last-child {
+      margin-right: 46px;
+    }
+  }
+}

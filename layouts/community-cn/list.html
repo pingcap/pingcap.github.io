@@ -64,6 +64,15 @@
                     </div>
                 {{- end -}}
 
+                {{- range $idx, $i := .Site.Data.community_activities.upcoming_activities -}}
+                    <div class="feature-activity" style="display:none;">
+                        <p>{{ $i.topic }}</p>
+                        <p>{{ $i.date }}</p>
+                        <p>{{ $i.signup_link }}</p>
+                        <p>{{ $i.addr }}</p>
+                    </div>
+                {{- end -}}
+
               {{- range $idx, $i := .Site.Data.community_activities.activities -}}
                   {{- if .active -}}
                       <div class="signable">
@@ -90,7 +99,7 @@
                           </svg>
                       </a>
                   </div>
-                </div>
+              </div>
             </div>
             <div class="activities__list">
                 {{- range $idx, $i := .Site.Data.community_activities.activities -}}
@@ -167,7 +176,7 @@
         <img src="/images/tidb-planet/robot.svg" />
     </div>
 
-    <div class="tooltiptext f-hide">
+    <div class="qr-tooltiptext f-hide">
         欢迎加入 TiDB 社区～
         <div class="tidb-robot-qrCode">
             <img src="/images/community/tidb-robot-qrCode.jpg" />

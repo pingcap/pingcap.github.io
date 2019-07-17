@@ -15,7 +15,6 @@ $(document).ready(function() {
   })
 
   if ($('.swiper-container .swiper-slide').length <= 3) {
-    console.log('hello there')
     mySwiper.destroy()
     $('.swiper-pagination').hide()
   }

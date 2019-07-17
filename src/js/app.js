@@ -110,11 +110,11 @@ function toggleWeChatQRCode() {
 
   $('.tidb-planet-robot').click(e => {
     e.preventDefault()
-    $('.tooltiptext').toggleClass('f-hide')
+    $('.qr-tooltiptext').toggleClass('f-hide')
   })
   $('.tidb-planet-robot').on('touchstart', e => {
     e.preventDefault()
-    $('.tooltiptext').toggleClass('f-hide')
+    $('.qr-tooltiptext').toggleClass('f-hide')
   })
 }
 
