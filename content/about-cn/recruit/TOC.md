@@ -29,6 +29,7 @@
   - [社区运营](market/community-operation.md)
 - I18N
   - [Content Strategist](i18n/content-strategist.md)
+  - [Demand Generation Specialist](i18n/demand-generation-specialist.md)
 - Campus
   - [Infrastructure Engineer](campus/campus-2019-infrastructure-engineer.md)
   - [Content Strategist](campus/campus-2019-content-strategist.md)
