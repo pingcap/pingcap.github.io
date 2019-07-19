@@ -13,14 +13,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     {{- partial "head/ga" . -}}
+    {{- block "headTpl" . -}}{{- end -}}
     {{- partial "head/meta-seo" . -}}
     {{- partial "head/preload-assets" . -}}
     {{- partial "head/preload-css" (dict "href" "/css/main.css") -}}
     {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/docsearch.min.css") -}}
     {{- partial "tracking-code/ga-events-js.html" -}}
-    {{- block "headTpl" . -}}{{- end -}}
     {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
-    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | {{ if $data_i18_cn }}PingCAP{{ else }}SQL at Scale{{ end }}</title>
+    <title>{{ block "title" . }}{{- .Title -}}{{ end }} | {{- if and $data_i18_cn (ne ($.Scratch.Get "nav_active") "docs") -}} PingCAP {{- else -}} {{ $.Scratch.Get "metaTitle" }} {{- end -}}
+    </title>
     <script type="text/javascript">
     if (location.pathname === '/') {
         if (location.hostname === 'pingcap.github.io') {
