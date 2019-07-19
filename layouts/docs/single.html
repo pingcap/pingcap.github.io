@@ -8,10 +8,6 @@
     {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
     {{$.Scratch.Set "nav_active" "docs"}}
     {{$.Scratch.Set "data_i18_link" "/docs-cn" }}
-    {{$v0 := (strings.TrimPrefix "docs/" .File.Path )}}
-    {{$v1 := (strings.TrimSuffix ".md" $v0 )}}
-    {{$v := (printf "%s%s" "/docs-cn/" $v1)}}
-    {{$.Scratch.Set "data_i18_link" $v }}
 {{- end -}}
 
 {{- define "main" -}}
@@ -30,6 +26,10 @@
         {{- end -}}
         <div class="archive">
             <div class="content markdown-body">
+                {{ if $current_version }}
+                    {{ .Scratch.Add "data_i18_link" $current_version }}
+                {{ end }}
+                
                 {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
 
                 {{ $trimed_URL := strings.TrimPrefix $prefix .URL }}
