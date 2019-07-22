@@ -1,4 +1,0 @@
----
-type: community
-layout: list
----
