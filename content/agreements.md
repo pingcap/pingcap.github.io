@@ -1,7 +1,8 @@
 ---
-type: agreements
+type: page
+layout: agreements
+url: /agreements/eula-gcp-marketplace
 title: End User Agreement for GCP
-layout: eula-gcp-marketplace
 ---
 
 # <u>PingCAP Click-Through End User License Agreement</u>
