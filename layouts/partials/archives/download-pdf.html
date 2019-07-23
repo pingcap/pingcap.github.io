@@ -2,11 +2,11 @@
 {{ $version := replaceRE "\\/" "" .version }}
 
 {{- if .isCn -}}
-    <a href="http://download.pingcap.org/tidb-manual-cn-{{ $version }}.pdf?v={{ now.Unix }}"
+    <a href="http://download.pingcap.org/tidb-manual-cn-{{ if $version }}{{ $version }}{{ else }}v3.0{{ end }}.pdf?v={{ now.Unix }}"
       download="tidb-manual-cn-{{ $version }}.pdf" class="pdf-link"
       onclick="trackOutboundLink('http://download.pingcap.org/tidb-manual-cn-{{ $version }}.pdf?v={{ now.Unix }}'); return false;">
 {{- else -}}
-    <a href="http://download.pingcap.org/tidb-manual-en-{{ $version }}.pdf?v={{ now.Unix }}" download="tidb-manual-en-{{ $version }}.pdf" class="pdf-link" onclick="trackOutboundLink('http://download.pingcap.org/tidb-manual-en-{{ $version }}.pdf?v={{ now.Unix }}'); return false;">
+    <a href="http://download.pingcap.org/tidb-manual-en-{{ if $version }}{{ $version }}{{ else }}v3.0{{ end }}.pdf?v={{ now.Unix }}" download="tidb-manual-en-{{ $version }}.pdf" class="pdf-link" onclick="trackOutboundLink('http://download.pingcap.org/tidb-manual-en-{{ $version }}.pdf?v={{ now.Unix }}'); return false;">
 {{- end -}}
 {{- partial "svgs/icon-pdf.svg" (dict "fill" "#142848" "width" 14 "height" 14 ) -}}
 {{ if .isCn }} 下载 {{ else }} Download {{ end }} PDF
