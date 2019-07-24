@@ -55,16 +55,14 @@ jobs:
               rsync -avz --delete dist/ "${DEPLOY_AWS_USER}@${DEPLOY_AWS_HOST}:${DEPLOY_AWS_PATH}" || true;
               curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
             fi
+
       - add_ssh_keys:
           fingerprints:
             - "6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82"
 
-      - deploy:
-          name: "Publish github.io"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "src" ];
-              then chmod +x ./scripts/push-gh-pages.sh;sh ./scripts/push-gh-pages.sh;
-            fi
-      - add_ssh_keys:
-          fingerprints:
-            - "24:20:cc:d5:38:31:29:8e:5d:41:c5:14:6d:aa:f8:9b"
+      # - deploy:
+      #     name: "Publish github.io"
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" == "src" ];
+      #         then chmod +x ./scripts/push-gh-pages.sh;sh ./scripts/push-gh-pages.sh;
+      #       fi
