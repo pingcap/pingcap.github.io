@@ -126,6 +126,33 @@ const particlesConfig = {
   retina_detect: true,
 }
 
+function calcOfficePosition() {
+  var mapW = $('.pc-map').width()
+  var mapH = $('.pc-map').height()
+
+  $('.m-silicon').css('left', 0.16 * mapW)
+  $('.m-silicon').css('top', 0.37 * mapH)
+
+  $('.m-beijing').css('right', 0.19 * mapW)
+  $('.m-beijing').css('top', 0.28 * mapH)
+
+  $('.m-shanghai').css('right', 0.19 * mapW)
+  $('.m-shanghai').css('top', 0.34 * mapH)
+
+  $('.m-hangzhou').css('right', 0.2 * mapW)
+  $('.m-hangzhou').css('top', 0.37 * mapH)
+
+  $('.m-shenzhen').css('right', 0.21 * mapW)
+  $('.m-shenzhen').css('top', 0.42 * mapH)
+
+  $('.m-chengdu').css('right', 0.28 * mapW)
+  $('.m-chengdu').css('top', 0.34 * mapH)
+
+  $('.m-guangzhou').css('right', 0.225 * mapW)
+  $('.m-guangzhou').css('top', 0.41 * mapH)
+  
+}
+
 $(document).ready(function() {
   $('#video-control').click(function(e) {
     const videoEl = document.getElementById('video')
@@ -146,4 +173,17 @@ $(document).ready(function() {
     particlesJS('particles-js', particlesConfig, function() {
       console.log('callback - particles.js config loaded')
     })
+
+  $('.pc-map').on('load', calcOfficePosition())
+
+  $('.m-office').hover(function(){
+    $(this).addClass('m-office-hovered')
+    var idx = $(this).index()
+    let addr = $('.office-info')[idx-1]
+    let $addr = $(addr)
+    $(addr).addClass('underline')
+  }, function(){
+    $(this).removeClass('m-office-hovered')
+    $('.office-info').removeClass('underline')
+  })
 })

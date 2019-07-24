@@ -22,6 +22,11 @@ section[class^="meetup-landing-page-"] {
     max-width: @videoWidth;
   }
 
+  .title {
+    color: #172D72;
+    font-size: 26px;
+  }
+
   // h2 {
   //   display: inline-block;
   //   position: relative;
@@ -57,27 +62,204 @@ section[class^="meetup-landing-page-"] {
     margin-right: auto;
     font-size: 0.8rem;
     line-height: 1.7;
+  }
+}
+
+section[class^="about-"] {
+  .desc,
+  .desc-en {
+    max-width: 1124px;
+    font-size: 0.8rem;
+    margin: 3rem auto;
+    line-height: 1.7;
 
     a {
       color: @themeBlue;
     }
+
+    .desc-en {
+      text-align: center;
+    }
   }
 
-  .link {
-    display: flex;
-    align-items: center;
-    margin: 2rem auto 0;
-    color: @purpleBlue;
+  .round-corner-btn {
+    width: 220px;
+    height: 60px;
+    background: #3351FF;
+    padding: 18px;
+    color: white;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 30px;
+    margin-top: 3.5rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 8px #487ECB;
 
-    svg {
-      margin-left: 0.6rem;
+    .arrow {
+      visibility: hidden;
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      transform: translateY(-40%);
+      transition: left 0.5s ease;
+    }
+
+    .text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: left 0.5s ease;
     }
 
     &:hover {
-      color: @tidbRed;
+      background: #172D72;
+      box-shadow: none;
 
-      svg {
-        fill: @tidbRed;
+      .arrow {
+        visibility: visible;
+        left: 30%;
+      }
+
+      .text {
+        left: 60%;
+      }
+    }
+  }
+}
+
+.banner-bg {
+  background-color: #202884;
+  height: auto;
+  width: 100%;
+
+  .banner-img {
+    max-width: 700px;
+    padding: calc(~'@{headerHeight} + 2.3rem') 0 3rem;
+    margin: 0 auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.about-timeline {
+  background: @grayWhite;
+  position: relative;
+  height: 1550px;
+
+  .time-line {
+    height: 1250px;
+    position: absolute;
+    left: 50%;
+    top: 10rem;
+    border-left: 1px solid #3351FF;
+
+    .start-node {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #3351ff;
+      bottom: 0;
+      margin-left: -8px;
+    }
+
+    .event {
+      position: relative;
+      background: #fafafa;
+      left: -30px;
+      margin: 3rem 0 4rem;
+
+      .event-detail {
+        position: absolute;
+        border: 1px dotted #35f;
+        padding: 1rem;
+        left: 12rem;
+        min-width: 15rem;
+        top: 50%;
+        transform: translate(0, -50%);
+        text-align: left;
+
+        .time {
+          font-size: 0.8rem;
+          color: #3355ff;
+          font-weight: 600;
+        }
+
+        .detail {
+          font-size: 15px;
+          margin-top: 5px;
+          line-height: 1.5;
+        }
+      }
+    }
+
+    .line-with-year-left,
+    .line-with-year-right,
+    .line-without-year-left,
+    .line-without-year-right {
+      &::after {
+        position: absolute;
+        content: '';
+        border-top: 1px solid #3355ff;
+        bottom: 50%;
+      }
+
+      .node-with-year {
+        border: 1px solid #3355ff;
+        border-radius: 30px;
+        color: #3355ff;
+        padding: 5px 10px;
+        font-size: 13px;
+        position: relative;
+        width: 60px;
+      }
+
+      .node-without-year {
+        border-left: 1px solid #3355ff;
+        height: 10px;
+        margin-left: 29px;
+      }
+    }
+
+    .line-with-year-right {
+      &::after {
+        width: 8rem;
+        left: 60px;
+      }
+    }
+
+    .line-without-year-right {
+      &::after {
+        width: calc(~'8rem + 30px');
+      }
+    }
+
+    .line-with-year-left {
+      .event-detail {
+        right: 12rem;
+        left: auto;
+      }
+
+      &::after {
+        right: 60px;
+        width: 8rem;
+      }
+    }
+
+    .line-without-year-left {
+      .event-detail {
+        right: 12rem;
+        left: auto;
+      }
+
+      &::after {
+        right: 30px;
+        width: calc(~'8rem + 30px');
       }
     }
   }
@@ -90,6 +272,7 @@ section[class^="meetup-landing-page-"] {
   padding: 0;
 
   .video-wrapper {
+    position: relative;
     margin-top: 30px;
     width: @videoWidth;
     height: @videoHeight;
@@ -114,6 +297,13 @@ section[class^="meetup-landing-page-"] {
 }
 
 .about-company {
+  .desc {
+    margin: 0 auto !important;
+    text-align: justify;
+  }
+}
+
+.about-company-en {
   background: @grayWhite;
 }
 
@@ -134,13 +324,20 @@ section[class^="meetup-landing-page-"] {
 .about-culture {
   background: @grayWhite;
 
+  .desc {
+    text-align: justify;
+  }
+
   .details {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-around;
     flex-wrap: wrap;
     width: 100%;
-    margin-top: 1.5rem;
+
+    .desc {
+      text-align: center;
+    }
 
     h3 {
       font-size: 1rem;
@@ -154,17 +351,12 @@ section[class^="meetup-landing-page-"] {
       font-weight: 400;
     }
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
     .item {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       margin-top: 3rem;
+      width: 33%;
     }
 
     .item-short {
@@ -175,7 +367,7 @@ section[class^="meetup-landing-page-"] {
 
     .image-wrap {
       .icon {
-        height: 48px;
+        height: 100px;
         vertical-align: middle;
       }
 
@@ -192,28 +384,82 @@ section[class^="meetup-landing-page-"] {
 
 .about-contact {
   background: white;
+  position: relative;
 
   .info {
-    padding: 0.5rem 0 2rem;
-    font-size: 0.7rem;
+    padding: 3rem 0;
+    font-size: 0.8rem;
+    display: flex;
+    width: 100%;
+    line-height: 1.7;
+    position: relative;
+    justify-content: space-around;
 
-    .row {
+    .col-1 {
+      width: 55%;
+      text-align: left;
+      position: relative;
+
+      &::after {
+        content: " ";
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1px;
+        padding: 5rem 0;
+        background: #BFBFBF;
+        margin-left: 125px;
+      }
+    }
+
+    .office-info {
+      padding: 1px 0;
       display: flex;
+      flex-flow: row wrap;
+    }
+
+    .col-2 {
+      text-align: left;
+      line-height: 1.7;
+      height: 100%;
+    }
+
+    .office-name {
+      font-weight: 600;
     }
 
     .item {
-      margin-top: 0.5rem;
+      margin-bottom: 1rem;
       position: relative;
       padding: 0 2rem 0 0;
+    }
+  }
+
+  .info-2 {
+    display: none;
+  }
+
+  .info-en {
+    font-size: 0.7rem;
+    width: auto;
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    &::before {
+      display: none;
+    }
+
+    .item {
+      padding-right: 2.4rem;
 
       h3 {
         margin: 0 0 6px;
-        font-size: 0.7rem;
+        font-size: .7rem;
         font-weight: 600;
-      }
-
-      .text-tel {
-        min-width: 145px;
       }
 
       &::before {
@@ -228,20 +474,281 @@ section[class^="meetup-landing-page-"] {
     }
 
     .item-long {
-      max-width: 380px;
-      width: 100%;
       padding-right: 0;
     }
   }
+}
 
-  .info-en {
-    .item {
-      padding-right: 2.4rem;
+.pc-map,
+.mobile-map {
+  width: 100%;
+  margin: 2rem;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .m-office {
+    position: absolute;
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    background: #3351FF;
+
+    button {
+      position: absolute;
+      width: 88px;
+      background: #3355ff;
+      border: none;
+      color: white;
+      padding: 10px 10px;
+      border-radius: 4px;
+      transition: transform 0.2s ease-in-out;
     }
 
-    .item-long {
-      padding-right: 0;
+    .line {
+      position: absolute;
+      border: 1px solid #35f;
     }
+  }
+
+  .m-office-hovered {
+    // background: #E30C34;
+
+    button {
+      transform: scale(1.2);
+      // background: #E30C34;
+      box-shadow: 1px 1px 10px #BFBFBF;
+    }
+
+    // .line {
+    //   border-color: #E30C34;
+    //   animation: stretchLine 0.5s ease-in-out alternate;
+    // }
+  }
+
+  .m-silicon {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 100px;
+      transform: rotate(125deg);
+    }
+
+    button {
+      left: -131px;
+      top: 75px;
+    }
+  }
+
+  .m-beijing {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 160px;
+      transform: rotate(315deg);
+    }
+
+    button {
+      left: 115px;
+      top: -115px;
+    }
+  }
+
+  .m-shanghai {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 120px;
+    }
+
+    button {
+      left: 120px;
+      top: -10px;
+    }
+  }
+
+  .m-hangzhou {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 170px;
+      transform: rotate(45deg);
+    }
+
+    button {
+      left: 120px;
+      top: 100px;
+    }
+  }
+
+  .m-chengdu {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 90px;
+      transform: rotate(145deg);
+    }
+
+    button {
+      left: -130px;
+      top: 55px;
+    }
+  }
+
+  .m-guangzhou {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 120px;
+      transform: rotate(125deg);
+    }
+
+    button {
+      left: -100px;
+      top: 100px;
+    }
+  }
+
+  .m-shenzhen {
+    .line {
+      transform-origin: left;
+      top: 6px;
+      left: 6px;
+      width: 170px;
+      transform: rotate(60deg);
+    }
+
+    button {
+      left: 90px;
+      top: 140px;
+    }
+  }
+}
+
+.mobile-map {
+  display: none;
+}
+
+.underline {
+  color: #3355ff;
+
+  .office-addr {
+    text-decoration: underline;
+  }
+}
+
+.floating-ele {
+  width: 100%;
+  position: relative;
+  min-height: 14rem;
+
+  img {
+    position: absolute;
+  }
+
+  .ele1 {
+    top: 2rem;
+    left: 10%;
+    width: 16px;
+    animation: angleMove1 3s infinite 0.5s alternate;
+  }
+
+  .ele2 {
+    top: 10rem;
+    left: 15%;
+    animation: angleMove2 2s infinite alternate;
+  }
+
+  .ele3 {
+    top: 6rem;
+    left: 30%;
+    width: 10px;
+    animation: angleMove1 2s infinite 1s alternate;
+  }
+
+  .ele4 {
+    top: 9.5rem;
+    right: 50%;
+    width: 25px;
+    animation: angleMove2 3s infinite 1.5s alternate;
+    animation: eleScale 3s infinite alternate;
+  }
+
+  .ele5 {
+    top: 8rem;
+    right: 10%;
+    animation: angleMove1 2.5s infinite alternate;
+  }
+
+  .ele6 {
+    top: 12rem;
+    left: 70%;
+    width: 13px;
+    animation: angleMove1 3s infinite 1s alternate;
+  }
+
+  .ele7 {
+    top: 2rem;
+    left: 75%;
+    animation: angleMove2 2s infinite alternate;
+  }
+
+  .ele8 {
+    top: 7rem;
+    right: 35%;
+    width: 14px;
+    animation: angleMove1 2s infinite alternate;
+  }
+
+  .ele9 {
+    top: 8rem;
+    right: 30%;
+    animation: angleMove1 2s infinite alternate;
+  }
+}
+
+@keyframes stretchLine {
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes angleMove1 {
+  from {
+    transform: translate(20px, 20px);
+  }
+
+  to {
+    transform: translate(30px, 10px);
+  }
+}
+
+@keyframes angleMove2 {
+  from {
+    transform: translate(-5px, -5px);
+  }
+
+  to {
+    transform: translate(-10px, -10px);
+  }
+}
+
+@keyframes eleScale {
+  from {
+    transform: scale(0.7);
+  }
+
+  to {
+    transform: scale(1);
   }
 }
 
@@ -275,12 +782,30 @@ section[class^="meetup-landing-page-"] {
   z-index: -1;
 }
 
+@media (min-width: 1700px) {
+  .about-timeline {
+    height: 1700px;
+
+    .time-line {
+      height: 1350px;
+    }
+  }
+
+  .banner-bg {
+    .banner-img {
+      max-width: 1000px;
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .intro-video {
+    height: 300px;
+
     .video-wrapper {
       width: 100%;
       height: auto;
-      margin-top: 60px;
+      margin-top: 0;
 
       #video {
         width: 100%;
@@ -289,13 +814,62 @@ section[class^="meetup-landing-page-"] {
     }
   }
 
-  .about-contact .info .row,
-  .about-culture .details .row {
-    flex-direction: column;
+  .about-culture .details {
+    .item {
+      width: 45%;
+    }
+
+    .image-wrap .icon {
+      height: 60px;
+    }
   }
 
-  .about-culture .details .row {
-    align-items: center;
+  .about-contact {
+    .info {
+      padding: 3rem 1rem;
+
+      .col-1 {
+        width: 100%;
+
+        &::after {
+          display: none;
+        }
+
+        .office-info {
+          display: flex;
+          flex: row wrap;
+          justify-content: flex-start;
+          width: 100%;
+
+          .office-name {
+            width: 27%;
+          }
+
+          .office-addr {
+            width: 70%;
+          }
+        }
+      }
+
+      .col-2 {
+        display: none;
+      }
+    }
+
+    .pc-map {
+      display: none;
+    }
+
+    .mobile-map {
+      display: block;
+    }
+
+    .info-2 {
+      margin-top: 2rem;
+      display: block;
+      line-height: 1.7;
+      font-size: 0.8rem;
+    }
   }
 
   .about-contact-en .container {
@@ -306,9 +880,125 @@ section[class^="meetup-landing-page-"] {
     left: 1rem;
   }
 
-  .map-shotcut {
-    height: 270px;
-    background: url("https://download.pingcap.com/images/map-office-2955-campus-mobile.png");
-    background-size: cover;
+  .about-timeline {
+    height: 1300px;
+
+    .time-line {
+      height: 1100px;
+      top: 10rem;
+
+      .start-node {
+        width: 10px;
+        height: 10px;
+        margin-left: -5px;
+      }
+
+      .event {
+        left: -25px;
+        margin: 3rem 0 4.5rem;
+
+        .event-detail {
+          padding: 5px;
+          left: 4rem;
+          min-width: 8rem;
+
+          .time {
+            font-size: 14px;
+          }
+
+          .detail {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .line-with-year-left,
+      .line-with-year-right,
+      .line-without-year-left,
+      .line-without-year-right {
+        .node-with-year {
+          padding: 3px;
+          font-size: 12px;
+          width: 50px;
+        }
+
+        .node-without-year {
+          margin-left: 24px;
+        }
+      }
+
+      .line-with-year-right {
+        &::after {
+          width: 15px;
+          left: 50px;
+        }
+      }
+
+      .line-without-year-right {
+        &::after {
+          width: calc(~'4rem - 25px');
+        }
+      }
+
+      .line-with-year-left {
+        .event-detail {
+          right: 4rem;
+          left: auto;
+        }
+
+        &::after {
+          right: 50px;
+          width: 15px;
+        }
+      }
+
+      .line-without-year-left {
+        .event-detail {
+          right: 4rem;
+          left: auto;
+        }
+
+        &::after {
+          right: 25px;
+          width: calc(~'4rem - 25px');
+        }
+      }
+    }
+  }
+
+  section[class^="about-"] {
+    .desc {
+      padding: 0 1rem !important;
+    }
+
+    .title {
+      font-size: 1.1rem;
+    }
+
+    .round-corner-btn {
+      width: 160px;
+      height: 50px;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .about-timeline {
+    height: 1250px;
+
+    .time-line {
+      height: 1050px;
+      top: 10rem;
+
+      .event {
+        .event-detail {
+          min-width: 7rem;
+        }
+      }
+    }
+  }
+
+  .about-contact .info .col-1 .office-info .office-name {
+    width: 29%;
   }
 }
