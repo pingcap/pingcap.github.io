@@ -1,6 +1,6 @@
 ---
 type: page
-layout: tidb-slack
+layout: tidbslack
 title: TiDB Slack
 url: /tidbslack
 image: /images/pingcap-opengraph.jpg

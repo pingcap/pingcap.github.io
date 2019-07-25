@@ -14,8 +14,7 @@ jobs:
     branches:
       only:
         - src
-        - yini/web-preview
-        - yini/newVersionSwitcher
+        - yini/website-preview
 
     steps:
       - checkout
@@ -56,6 +55,7 @@ jobs:
               rsync -avz --delete dist/ "${DEPLOY_AWS_USER}@${DEPLOY_AWS_HOST}:${DEPLOY_AWS_PATH}" || true;
               curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
             fi
+
       - add_ssh_keys:
           fingerprints:
             - "6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82"
