@@ -2,7 +2,7 @@
 title: 平面视觉设计师
 tags:
   - Design
-location: 北京，上海，广州，杭州，成都，深圳
+location: 北京，上海
 avatar: designer
 position: true
 
