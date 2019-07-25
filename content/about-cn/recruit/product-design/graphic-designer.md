@@ -1,7 +1,7 @@
 ---
 title: 平面视觉设计师
 tags:
-  - Design
+  - Product & Design
 location: 北京，上海
 avatar: designer
 position: true
