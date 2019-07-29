@@ -12,7 +12,6 @@
   - [前端开发工程师](engineering/fe-engineer.md)
   - [QA 研发工程师](engineering/qa-engineer.md)
   - [工程效率研发工程师](engineering/engineering-efficiency-engineer.md)
-  - [TiDB 产品经理](engineering/product-manager.md)
   - [运维工程师](engineering/sa-engineer.md)
 - Business
   - [资深行业销售总监](business/sales-director.md)
@@ -25,11 +24,15 @@
   - [资深/高级/中级 TiDB 交付 DBA](business/tidb-delivery-dba.md)
   - [高级大数据平台工程师](business/olap-ops-engineer.md)
   - [资深渠道合作总监](business/channel-sales-director.md)
-- MKT
-  - [社区运营](market/community-operation.md)
+- Product & Design
+  - [数据库产品经理](product-design/database-product-manager.md)
+  - [网站产品经理](product-design/website-product-manager.md)
+  - [平面视觉设计师](product-design/graphic-designer.md)
 - I18N
   - [Content Strategist](i18n/content-strategist.md)
   - [Demand Generation Specialist](i18n/demand-generation-specialist.md)
+- MKT
+  - [社区运营](market/community-operation.md)
 - Campus
   - [Infrastructure Engineer](campus/campus-2019-infrastructure-engineer.md)
   - [Content Strategist](campus/campus-2019-content-strategist.md)
