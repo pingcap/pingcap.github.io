@@ -8,7 +8,7 @@ avatar: marketing
 position: true
 aliases:
   - /recruit-cn/campus/campus-2019-marketing-specialist/
-  - /recruit/campus/campus-2019-marketing-specialist/
+  - /about-cn/recruit/campus/campus-2019-marketing-specialist/
 ---
 
 # 市场专员

@@ -9,7 +9,7 @@ position: true
 aliases:
   - /recruit/campus/hr-intern/campus-2019-infrastructure-engineer/
   - /recruit-cn/campus/campus-2019-infrastructure-engineer/
-  - /recruit/campus/campus-2019-infrastructure-engineer/
+  - /about-cn/recruit/campus/campus-2019-infrastructure-engineer/
 ---
 
 # Infrastructure Engineer
