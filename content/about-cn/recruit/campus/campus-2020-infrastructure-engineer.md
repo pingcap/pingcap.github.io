@@ -1,6 +1,6 @@
 ---
 title: Infrastructure Engineer
-season: 2019 校招 
+season: 2020 校招 
 tags:
   - Campus
 location: 北京，上海，广州，杭州，深圳，成都
@@ -9,6 +9,7 @@ position: true
 aliases:
   - /recruit/campus/hr-intern/campus-2019-infrastructure-engineer/
   - /recruit-cn/campus/campus-2019-infrastructure-engineer/
+  - /recruit/campus/campus-2019-infrastructure-engineer/
 ---
 
 # Infrastructure Engineer

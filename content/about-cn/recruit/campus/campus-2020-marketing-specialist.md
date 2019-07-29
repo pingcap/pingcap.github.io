@@ -1,6 +1,6 @@
 ---
 title: Marketing Specialist
-season: 2019 校招 
+season: 2020 校招 
 tags:
   - Campus
 location: 北京
@@ -8,6 +8,7 @@ avatar: marketing
 position: true
 aliases:
   - /recruit-cn/campus/campus-2019-marketing-specialist/
+  - /recruit/campus/campus-2019-marketing-specialist/
 ---
 
 # 市场专员

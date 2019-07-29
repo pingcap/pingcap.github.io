@@ -1,6 +1,6 @@
 ---
 title: OPS Engineer
-season: 2019 校招 
+season: 2020 校招 
 tags:
   - Campus
 location: 北京
@@ -8,6 +8,7 @@ avatar: support
 position: true
 aliases:
   - /recruit-cn/campus/campus-2019-ops-engineer/
+  - /recruit/campus/campus-2019-ops-engineer/
 ---
 
 # 数据库工程师

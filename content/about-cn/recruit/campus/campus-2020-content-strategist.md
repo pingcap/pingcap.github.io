@@ -1,6 +1,6 @@
 ---
 title: Content Strategist
-season: 2019 校招 
+season: 2020 校招 
 tags:
   - Campus
 location: 北京
