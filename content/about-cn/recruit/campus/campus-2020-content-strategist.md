@@ -8,7 +8,7 @@ avatar: writer
 position: true
 aliases:
   - /recruit/campus/campus-2019-content-strategist/
-  - /recruit-cn/campus/campus-2019-content-strategist/
+  - /about-cn/recruit-cn/campus/campus-2019-content-strategist/
 ---
 
 # Content Strategist

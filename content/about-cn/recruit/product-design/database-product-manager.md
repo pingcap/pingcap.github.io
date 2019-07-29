@@ -7,7 +7,7 @@ avatar: pm
 position: true
 aliases:
   - /recruit-cn/engineering/product-manager/
-  - /recruit/engineering/product-manager/
+  - /about-cn/recruit/engineering/product-manager/
 ---
 
 # 数据库产品经理

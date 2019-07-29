@@ -8,7 +8,7 @@ avatar: support
 position: true
 aliases:
   - /recruit-cn/campus/campus-2019-ops-engineer/
-  - /recruit/campus/campus-2019-ops-engineer/
+  - /about-cn/recruit/campus/campus-2019-ops-engineer/
 ---
 
 # 数据库工程师

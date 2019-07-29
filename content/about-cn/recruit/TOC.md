@@ -37,7 +37,7 @@
   - [Infrastructure Engineer](campus/campus-2020-infrastructure-engineer.md)
   - [Content Strategist](campus/campus-2020-content-strategist.md)
   - [Marketing Specialist](campus/campus-2020-marketing-specialist.md)
-  - [TiDB DBA](campus/campus-2020-ops-engineer.md)
+  - [TiDB DBA](campus/campus-2020-tidb-dba.md)
   - [HR Management Trainee](campus/campus-2020-hr-management-trainee.md)
   - [Infrastructure Engineer Intern](campus/infrastructure-engineer-intern.md)
   - [HR Intern](campus/hr-intern.md)
