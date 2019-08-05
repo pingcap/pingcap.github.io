@@ -176,6 +176,8 @@ $(document).ready(function() {
 
   $('.pc-map').on('load', calcOfficePosition())
 
+  $(window).resize(calcOfficePosition)
+
   $('.m-office').hover(function(){
     $(this).addClass('m-office-hovered')
     var idx = $(this).index()
