@@ -31,6 +31,7 @@ $(document).ready(function() {
     slidesPerGroup: slides_per_group,
     spaceBetween: spaceBetween,
     loop: true,
+    loopAdditionalSlides: 3,
     navigation: {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
