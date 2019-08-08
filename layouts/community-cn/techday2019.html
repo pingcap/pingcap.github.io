@@ -10,7 +10,7 @@
     {{- partial "head/preload-css" (dict "href" "/css/community/techday.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/agenda.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css") -}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
@@ -99,28 +99,35 @@
         </div>
     </section>
 
+    <section class="site-record__section section-dark-bg">
+        <div class="instructors section-container">
+            <h1 class="section-title">分享实录</h1>
+            {{- partial "community-cn/site-record.html" (dict "records" .Site.Data.techday.share_records "cardBg" "dark") -}}
+        </div>
+    </section>
+
     <section class="agenda__section techday-agenda__section">
         <h1 class="section-title">会议日程</h1>
         <div class="schedule-tabs">
             {{- partial "community-cn/techday-schedule-tab.html" -}}
         </div>
         <div class="schedules" id="beijing-schedule">
-            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.beijing "city" "beijing" "time" .Site.Data.techday.schedule_2019.beijing_time "addr" .Site.Data.techday.schedule_2019.beijing_addr "link" .Site.Data.techday.schedule_2019.beijing_link "activity_end" true) -}}
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.beijing "activity_end" true) -}}
         </div>
         <div class="schedules" id="shanghai-schedule">
-            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shanghai "city" "shanghai" "time" .Site.Data.techday.schedule_2019.shanghai_time "addr" .Site.Data.techday.schedule_2019.shanghai_addr "link" .Site.Data.techday.schedule_2019.shanghai_link "activity_end" true) -}}
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shanghai "activity_end" true) -}}
         </div>
         <div class="schedules" id="chengdu-schedule">
-            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.chengdu "city" "chengdu" "time" .Site.Data.techday.schedule_2019.chengdu_time "addr" .Site.Data.techday.schedule_2019.chengdu_addr "link" .Site.Data.techday.schedule_2019.chengdu_link "activity_end" true) -}}
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.chengdu "activity_end" true) -}}
         </div>
         <div class="schedules" id="shenzhen-schedule">
-            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shenzhen "city" "shenzhen" "time" .Site.Data.techday.schedule_2019.shenzhen_time "addr" .Site.Data.techday.schedule_2019.shenzhen_addr "link" .Site.Data.techday.schedule_2019.shenzhen_link "activity_end" true) -}}
+            {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.shenzhen "activity_end" true) -}}
         </div>
         <div class="schedules" id="wuhan-schedule">
-          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.wuhan "city" "wuhan" "time" .Site.Data.techday.schedule_2019.wuhan_time "addr" .Site.Data.techday.schedule_2019.wuhan_addr "link" .Site.Data.techday.schedule_2019.wuhan_link "activity_end" true) -}}
+          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.wuhan "activity_end" true) -}}
         </div>
         <div class="schedules" id="hangzhou-schedule">
-          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.hangzhou "city" "hangzhou" "time" .Site.Data.techday.schedule_2019.hangzhou_time "addr" .Site.Data.techday.schedule_2019.hangzhou_addr "link" .Site.Data.techday.schedule_2019.hangzhou_link "activity_end" true) -}}
+          {{- partial "community-cn/techday-schedule-table.html" (dict "schedule" .Site.Data.techday.schedule_2019.hangzhou "activity_end" true) -}}
         </div>
     </section>
 
@@ -136,6 +143,15 @@
         </div>
       </div>
     </section>
+
+    <!-- <section>
+        <div class="section-container">
+            <div class="container">
+                <h2 class="section-title">精彩瞬间</h2>
+                {{- partial "layout/multi_slides_carousel.html" (dict "moments_images" .Site.Data.techday.moments_2019) -}}
+          </div>
+        </div>
+    </section> -->
 
     <section class="hackathon-review">
         <div class="section-container">
@@ -155,6 +171,9 @@
 {{- end -}}
 
 {{- define "footJS" -}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
+<script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
+<script type="text/javascript" src="/js/video_on_modal.js"></script>
 <script type="text/javascript" src="/js/community.js"></script>
 <script type="text/javascript" src="/js/vendor/calendar.js"></script>
 <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>

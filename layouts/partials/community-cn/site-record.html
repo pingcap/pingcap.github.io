@@ -4,20 +4,28 @@
     {{- range $idx, $i := .records -}}
     <div class="record {{ if eq $cardBg "dark" }}card-dark-bg{{ end }}">
         <a href="{{ $i.link }}">
-            <div class="thumbnail">
-                {{- if $i.video -}}
+            {{- if $i.video -}}
+                <div class="thumbnail">
                     <img class="j-video-btn cursor-pointer dark-cover" src="{{ $i.image }}" data-video="{{ $i.video }}"
                       data-tencent-video="{{ $i.tencent_video }}" />
                     <div class="play-icon j-video-btn" data-video="{{ $i.video }}"
                       data-tencent-video="{{ $i.tencent_video }}"></div>
-                {{- else if $i.image -}}
-                    <img src="{{ $i.image }}" />
-                {{- end -}}
-            </div>
+                </div>
 
-            <p class="talk-title">
-                {{ $i.title }}
-            </p>
+                <p class="talk-title j-video-btn cursor-pointer dark-cover" src="{{ $i.image }}" data-video="{{ $i.video }}"
+                    data-tencent-video="{{ $i.tencent_video }}">
+                    {{ $i.title }}
+                </p>
+            {{- else if $i.image -}}
+                <div class="thumbnail">
+                    <img src="{{ $i.image }}" />
+                </div>
+
+                <p class="talk-title">
+                    {{ $i.title }}
+                </p>
+            {{- end -}}
+
         </a>
     </div>
     {{- end -}}
