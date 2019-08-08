@@ -17,7 +17,7 @@
 {{ $total_versions := .Site.Params.versions.docs.total_versions }}
 <div class="doc" id="list_page">
     <div class="container">
-        {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .URL) 0 }}
+        {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .RelPermalink) 0 }}
 
         {{- if eq $current_version "/dev" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_dev_toc "title" "文档") }}
@@ -37,7 +37,7 @@
                     {{ .Scratch.Add "data_i18_link" $current_version }}
                 {{ end }}
 
-                {{ $trimed_URL := strings.TrimPrefix (.Scratch.Get "prefix") .URL }}
+                {{ $trimed_URL := strings.TrimPrefix (.Scratch.Get "prefix") .RelPermalink }}
 
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 

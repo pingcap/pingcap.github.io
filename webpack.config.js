@@ -1,5 +1,5 @@
-import webpack from 'webpack'
-import path from 'path'
+const webpack = require('webpack')
+const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -8,7 +8,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
-export default {
+module.exports = {
   entry: {
     app: [path.join(__dirname, 'src', 'js', 'app')],
     doc: [path.join(__dirname, 'src', 'js', 'doc')],
