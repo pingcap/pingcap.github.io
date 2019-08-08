@@ -56,8 +56,7 @@
             });
 
             const hash = decodeURIComponent(location.hash)
-            
-            // process tab checked with hash
+
             if(hash) {
                 $('dt').removeClass('is-active')
                 $('dd').css('display', 'none')
@@ -67,7 +66,7 @@
                 for(i = 0; i < $('dt').length; i++) {
                     let str = $('dt')[i].innerText
                     newStr = str.replace(/\s+/g,"").replace(/\W/,"-")
-                     newStr = "#" + newStr.toLowerCase()
+                    newStr = "#" + newStr.toLowerCase()
                     
                     if(newStr == hash) {
                         var $tab = $($('dt')[i])
@@ -77,7 +76,9 @@
                         break
                     }
                 }
-                 $('html, body').animate({
+                
+                // scrolls to checked tab
+                $('html, body').animate({
                     scrollTop: $('#positions-tabs').offset().top - 200
                 }, 1000)
             }
