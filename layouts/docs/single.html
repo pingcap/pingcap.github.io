@@ -16,7 +16,7 @@
 {{ $stable_version := $.Scratch.Get "stable_version" }}
 <div class="doc">
     <div class="container">
-        {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .URL) 0 }}
+        {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .RelPermalink) 0 }}
 
         {{- if eq $current_version "/dev" -}}
             {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
@@ -33,7 +33,7 @@
                 
                 {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
 
-                {{ $trimed_URL := strings.TrimPrefix $prefix .URL }}
+                {{ $trimed_URL := strings.TrimPrefix $prefix .RelPermalink }}
 
                 {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
 
