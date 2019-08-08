@@ -23,8 +23,6 @@ $(document).ready(function() {
       delay: 3000,
       disableOnInteraction: false,
     },
-    loop: true,
-    loopAdditionalSlides: 3,
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
@@ -32,6 +30,8 @@ $(document).ready(function() {
     slidesPerView: slides_per_view,
     slidesPerGroup: slides_per_group,
     spaceBetween: spaceBetween,
+    loop: true,
+    loopAdditionalSlides: 3,
     navigation: {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',

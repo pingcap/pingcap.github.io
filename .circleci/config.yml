@@ -17,6 +17,10 @@ jobs:
         - yini/website-preview
 
     steps:
+      # notice netlify to deploy yini/preview branch
+      # when be triggered by webhook from submodule
+      - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5cb97398aed249fc2447b1f1
+
       - checkout
 
       - run: sudo apt-get install -y rsync && sudo apt-get install Python-bs4
@@ -40,10 +44,6 @@ jobs:
             - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
 
       - run: npm run build
-
-      # notice netlify to deploy yini/preview branch
-      # when be triggered by webhook from submodule
-      - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5cb97398aed249fc2447b1f1
 
       - deploy:
           name: "Publish Website"
