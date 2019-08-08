@@ -1,3 +1,41 @@
+function calcCarousel(slides_per_view, slides_per_group, spaceBetween) {
+  if (window.matchMedia('(max-width: 600px)').matches) {
+    var mySwiperSecond = new Swiper('.swiper-container-second', {
+      slidesPerView: 4,
+      spaceBetween: 10,
+      watchSlidesVisibility: true,
+    })
+  
+    var mySwiper = new Swiper('.swiper-container', {
+      spaceBetween: 20,
+      thumbs: {
+        swiper: mySwiperSecond,
+      }
+    })
+  } else {
+    var mySwiper = new Swiper('.swiper-container', {
+      direction: 'horizontal',
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      slidesPerView: slides_per_view,
+      slidesPerGroup: slides_per_group,
+      spaceBetween: spaceBetween,
+      loop: true,
+      loopAdditionalSlides: 3,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    })
+  }
+}
+
 $(document).ready(function() {
   var slides_per_view
   var slides_per_group
@@ -17,24 +55,7 @@ $(document).ready(function() {
     spaceBetween = 20
   }
 
-  var mySwiper = new Swiper('.swiper-container', {
-    direction: 'horizontal',
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    slidesPerView: slides_per_view,
-    slidesPerGroup: slides_per_group,
-    spaceBetween: spaceBetween,
-    loop: true,
-    loopAdditionalSlides: 3,
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  })
+  calcCarousel(slides_per_view, slides_per_group, spaceBetween)
+
+  $(window).resize(calcCarousel(slides_per_view, slides_per_group, spaceBetween))
 })
