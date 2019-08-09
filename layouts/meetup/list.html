@@ -37,7 +37,7 @@
                 {{- range first 3 .Data.Pages.ByDate.Reverse -}}
                 <div class="item">
                     <div class="layout-text-on-hover">
-                        <a href="{{.URL}}" class="link-abs"></a>
+                        <a href="{{ .RelPermalink }}" class="link-abs"></a>
                         <div class="image">
                             <img class="lazy" width="100%" data-original="{{.Params.image|default .Site.Data.meetup.default_cover}}" src="/images/svgs/loader-spinner.svg" alt="cover">
                         </div>
@@ -52,7 +52,7 @@
             </div>
         </div>
         {{- range first 1 (where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "review") -}}
-           <a href="{{ .URL }}">
+           <a href="{{ .RelPermalink }}">
              <button class="readMore-btn">
                <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
                <span class="btn-text">查看更多</span>

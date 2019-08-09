@@ -9,7 +9,7 @@
     {{- else -}}
         <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
     {{- end -}}
-            <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
+            <h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
             {{- if $hasMetaData -}}
                 <ul class="blog-post-meta">
                 <li class="meta-item">
@@ -53,7 +53,7 @@
                 </ul>
             {{- end -}}
             {{- if $hasBrief -}}
-                <a href="{{ .URL }}">
+                <a href="{{ .RelPermalink }}">
                     <div class="brief">
                         <p>{{- .Params.summary -}}</p>
                     </div>
