@@ -1,13 +1,28 @@
 {{ $schedule := .schedule.table }}
-{{ $city := .schedule.city }}
-{{ $theme_bg_color := "_bg_theme" | printf "%s%s" $city }}
-{{ $theme_font_color := "_font_theme" | printf "%s%s" $city }}
+{{ $city_en := (index .schedule.city 0) }}
+{{ $city_cn := (index .schedule.city 1) }}
+{{ $theme_bg_color := "_bg_theme" | printf "%s%s" $city_en }}
+{{ $theme_font_color := "_font_theme" | printf "%s%s" $city_en }}
 {{ $time := .schedule.time }}
 {{ $link := .schedule.link }}
 {{ $addr := .schedule.addr }}
+{{ $video_link := .schedule.video_link }}
+{{ $image_link := .schedule.image_link }}
 {{ $activity_end := .activity_end }}
+{{ $video_landing_img := .schedule.video_landing_img }}
 
 <div class="schedule-table">
+    <div class="review-video">
+        {{- if $video_link -}}
+            <video id="video" preload="auto" controls poster="{{ $video_landing_img }}">
+                <source src="{{ $video_link }}" type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'
+                /> Your browser does not support the video tag.
+            </video>
+        {{- else if $image_link -}}
+            <img src="{{ $image_link }}" />
+        {{- end -}}
+        <p class="view-desc">活动已结束，2 分钟快速回顾 TiDB TechDay 2019 - {{ $city_cn }}站</p>
+    </div>
     <div class="city-info">{{ $time }}</div>
     <div class="city-info">{{ $addr }}</div>
     <table class="pc-agenda-table">
@@ -102,7 +117,7 @@
             活动已结束
         </button>
     {{- else -}}
-        <button class="techday-signup-btn {{ $theme_bg_color }} {{ $city }}">
+        <button class="techday-signup-btn {{ $theme_bg_color }} {{ $city_en }}">
             立即报名 
         </button>
     {{- end -}}
