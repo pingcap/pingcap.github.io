@@ -1,23 +1,23 @@
 function calcCarousel(slides_per_view, slides_per_group, spaceBetween) {
-  if (window.matchMedia('(max-width: 600px)').matches && !$('.homepage-slogan-mask').length) {
-    var mySwiperThumbs = new Swiper('.swiper-container-thumbs', {
-      slidesPerView: 4,
-      spaceBetween: 10,
-      watchSlidesVisibility: true,
-      watchSlidesProgress: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    })
+  // if (window.matchMedia('(max-width: 600px)').matches && !$('.homepage-slogan-mask').length) {
+  //   var mySwiperThumbs = new Swiper('.swiper-container-thumbs', {
+  //     slidesPerView: 4,
+  //     spaceBetween: 10,
+  //     watchSlidesVisibility: true,
+  //     watchSlidesProgress: true,
+  //     navigation: {
+  //       nextEl: '.swiper-button-next',
+  //       prevEl: '.swiper-button-prev',
+  //     },
+  //   })
   
-    var mySwiper = new Swiper('.swiper-container', {
-      spaceBetween: 20,
-      thumbs: {
-        swiper: mySwiperThumbs,
-      }
-    })
-  } else {
+  //   var mySwiper = new Swiper('.swiper-container', {
+  //     spaceBetween: 20,
+  //     thumbs: {
+  //       swiper: mySwiperThumbs,
+  //     }
+  //   })
+  // } else {
     var mySwiper = new Swiper('.swiper-container', {
       direction: 'horizontal',
       autoplay: {
@@ -38,7 +38,7 @@ function calcCarousel(slides_per_view, slides_per_group, spaceBetween) {
         prevEl: '.swiper-button-prev',
       },
     })
-  }
+  // }
 }
 
 $(document).ready(function() {
