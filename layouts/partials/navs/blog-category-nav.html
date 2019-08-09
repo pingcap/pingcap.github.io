@@ -1,7 +1,7 @@
 <div class="nav-tags" data-type="{{.type}}">
     {{- range $name, $taxonomy := .global.Site.Taxonomies.categories -}}
-        <div class="category" data-tag="{{ replace $name '-' ' ' }}">
-            <a href="#{{ replace $name '-' ' ' }}" class="tag" data-tag="{{ replace $name '-' ' ' }}">
+        <div class="category" data-tag="{{ $name }}">
+            <a href="#{{ $name }}" class="tag" data-tag="{{ $name }}">
                 <div class="category__icon">
                     {{- if eq $name "Engineering" -}}
                         <img src="/images/svgs/engineering-icon.svg" />
@@ -18,7 +18,7 @@
                 </div>
                 <div class="category__content">
                     <div class="title">
-                      {{- $name -}}
+                      {{- replace $name "-" " " -}}
                     </div>
                     {{- if eq $name "Engineering" -}}
                         <div class="summary">
