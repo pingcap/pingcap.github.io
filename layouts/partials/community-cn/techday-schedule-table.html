@@ -1,6 +1,6 @@
 {{ $schedule := .schedule.table }}
-{{ $city_en := (index .schedule.city 0) }}
-{{ $city_cn := (index .schedule.city 1) }}
+{{ $city_en := .schedule.city }}
+{{ $video_desc := .schedule.video_desc }}
 {{ $theme_bg_color := "_bg_theme" | printf "%s%s" $city_en }}
 {{ $theme_font_color := "_font_theme" | printf "%s%s" $city_en }}
 {{ $time := .schedule.time }}
@@ -21,7 +21,7 @@
         {{- else if $image_link -}}
             <img src="{{ $image_link }}" />
         {{- end -}}
-        <p class="view-desc">活动已结束，2 分钟快速回顾 TiDB TechDay 2019 - {{ $city_cn }}站</p>
+        <p class="view-desc">{{ $video_desc }}</p>
     </div>
     <div class="city-info">{{ $time }}</div>
     <div class="city-info">{{ $addr }}</div>
