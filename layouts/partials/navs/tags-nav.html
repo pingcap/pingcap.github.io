@@ -13,14 +13,14 @@
         {{- range $name, $taxonomy := .global.Site.Taxonomies.tags -}}
             {{- $.global.Scratch.Set "tagCounter" 0 -}}
             {{- range $.posts -}}
-                {{- if in .Params.tags $name -}}
+                {{- if in .Params.tags (replace $name "-" " ") -}}
                     {{- $.global.Scratch.Add "tagCounter" 1 -}}
                 {{- end -}}
             {{- end -}}
             {{- $count := $.global.Scratch.Get "tagCounter" -}}
             {{- if (gt $count  1) -}}
-                <a href="#{{ replace $name " " "-"}}" class="tag {{ if in $.global.Params.tags $name }}sel{{end}}" data-tag="{{ replace $name " " "-"}}">
-                {{- replace $name " " "-" -}}&nbsp;({{ $count }})
+                <a href="#{{ $name }}" class="tag {{ if in $.global.Params.tags $name }}sel{{end}}" data-tag="{{ $name }}">
+                {{- $name -}}&nbsp;({{ $count }})
                 </a>
             {{- end -}}
         {{end}}

@@ -1,24 +1,26 @@
 function calcCarousel(slides_per_view, slides_per_group, spaceBetween) {
   if (window.matchMedia('(max-width: 600px)').matches && !$('.homepage-slogan-mask').length) {
-    var mySwiperThumbs = new Swiper('.swiper-container-thumbs', {
-      slidesPerView: 4,
+    $('.swiper-button-prev').addClass('thumbs-prev')
+    $('.swiper-button-next').addClass('thumbs-next')
+
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
       spaceBetween: 10,
+      slidesPerView: 4,
       watchSlidesVisibility: true,
       watchSlidesProgress: true,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
-    })
-  
-    var mySwiper = new Swiper('.swiper-container', {
-      spaceBetween: 20,
+    });
+    var galleryTop = new Swiper('.gallery-top', {
+      spaceBetween: 10,
       thumbs: {
-        swiper: mySwiperThumbs,
-      }
+        swiper: galleryThumbs,
+      },
     })
   } else {
-    var mySwiper = new Swiper('.swiper-container', {
+    var mySwiper = new Swiper('.gallery-top', {
       direction: 'horizontal',
       autoplay: {
         delay: 3000,
@@ -62,5 +64,5 @@ $(document).ready(function() {
 
   calcCarousel(slides_per_view, slides_per_group, spaceBetween)
 
-  $(window).resize(calcCarousel(slides_per_view, slides_per_group, spaceBetween))
+  // $(window).resize(calcCarousel(slides_per_view, slides_per_group, spaceBetween))
 })
