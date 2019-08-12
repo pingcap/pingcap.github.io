@@ -6,6 +6,7 @@ function calcCarousel(slides_per_view, slides_per_group, spaceBetween) {
     var galleryThumbs = new Swiper('.gallery-thumbs', {
       spaceBetween: 10,
       slidesPerView: 4,
+      slidesPerGroup: 4,
       watchSlidesVisibility: true,
       watchSlidesProgress: true,
       navigation: {
