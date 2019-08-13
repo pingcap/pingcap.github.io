@@ -19,7 +19,7 @@
             {{- end -}}
             {{- $count := $.global.Scratch.Get "tagCounter" -}}
             {{- if (gt $count  1) -}}
-                <a href="#{{ $name }}" class="tag {{ if in $.global.Params.tags $name }}sel{{end}}" data-tag="{{ $name }}">
+                <a href="#{{ $name }}" class="tag {{ if in $.global.Params.tags (replace $name "-" " ") }}sel{{end}}" data-tag="{{ $name }}">
                 {{- $name -}}&nbsp;({{ $count }})
                 </a>
             {{- end -}}
