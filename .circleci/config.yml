@@ -50,6 +50,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "src" ]; then
               ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
+              echo "${DEPLOY_PATH}";
               rsync -avz --delete dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}" || true;
               ssh-keyscan "${DEPLOY_AWS_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
               rsync -avz --delete dist/ "${DEPLOY_AWS_USER}@${DEPLOY_AWS_HOST}:${DEPLOY_AWS_PATH}" || true;
