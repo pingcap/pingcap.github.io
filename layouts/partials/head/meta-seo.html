@@ -1,7 +1,11 @@
 {{- if isset .Params "summary" -}}
     {{ $.Scratch.Add "summary" .Params.summary }}
 {{- else if not ($.Scratch.Get "summary") -}}
-    {{ $.Scratch.Add "summary" "Amazon Aurora alternative without vendor lock-in. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database." }}
+    {{- if ($.Scratch.Get "data_i18_cn") -}}
+        {{ $.Scratch.Add "summary" "TiDB 是由 PingCAP 研发的一款定位于在线事务处理/在线分析处理（HTAP）的开源融合型数据库产品，实现了一键水平伸缩，强一致性的多副本数据安全，分布式事务，实时 OLAP 等重要特性，目前已广泛应用于金融服务、互联网、制造等行业。" }}
+    {{- else -}}
+        {{ $.Scratch.Add "summary" "Amazon Aurora alternative without vendor lock-in. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database." }}
+    {{- end -}}
 {{- end -}}
 
 {{- if isset .Params "image" -}}
