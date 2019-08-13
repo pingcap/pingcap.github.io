@@ -2,12 +2,12 @@ function calcBannerTitleImg() {
   if (window.matchMedia('(max-width: 700px)').matches) {
     $('.signable img').attr(
       'src',
-      'https://download.pingcap.com/images/banners/techday2019-mobile.jpg'
+      'https://download.pingcap.com/images/community/activities/meetup.svg'
     )
   } else {
     $('.signable img').attr(
       'src',
-      'https://download.pingcap.com/images/community/activities/techday2019-pc.png'
+      'https://download.pingcap.com/images/community/activities/meetup-active-img.jpg'
     )
   }
 }
