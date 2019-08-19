@@ -18,7 +18,7 @@ jobs:
 
     steps:
       # Notice netlify to deploy yini/preview branch when be triggered by webhook
-      - run: curl -X POST https://api.netlify.com/build_hooks/5cb97398aed249fc2447b1f1
+      - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5cb97398aed249fc2447b1f1
 
       - add_ssh_keys:
           fingerprints:
@@ -87,8 +87,7 @@ jobs:
             - ~/.opam
 
       # Get and configure qshell
-      - run: curl http://devtools.qiniu.com/qshell-linux-x64-v2.4.0.zip -o qshell.zip && unzip qshell.zip
-      - run: mv qshell-linux-x64-v2.4.0 /usr/local/bin/qshell
+      - run: mv ./qiniu-aws-upload-utils/release/linux/qshell /usr/local/bin/qshell
       - run: qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} test
 
       # Get and configure awscli
