@@ -9,7 +9,11 @@
 
           <div class="card__cover">
             <div class="card__companyName">
-              <a href="{{ .websiteLink }}" data-url="{{ .websiteLink }}">{{ .name }}</a>
+              {{- if .websiteLink }} 
+                <a href="{{ .websiteLink }}" data-url="{{ .websiteLink }}">{{ .name }}</a>
+              {{- else -}}
+                {{ .name }}
+              {{- end -}}
             </div>
             <p class="quote-text">{{ .summary }}</p>  
           </div>
