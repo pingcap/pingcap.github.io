@@ -176,7 +176,7 @@ $(document).ready(function() {
     $(this).addClass('schedule-btn-checked')
     $(this).addClass('mobile-btn-checked')
     $('.schedules').hide()
-    // $('input:checked').attr('checked', 'checked')
+    
     var btnID = $(this).attr('id')
     $('#' + btnID + '-schedule').show()
     switch (btnID) {
