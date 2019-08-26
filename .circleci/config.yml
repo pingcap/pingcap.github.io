@@ -59,7 +59,6 @@ jobs:
               rsync -avz --delete dist/ "${DEPLOY_AWS_USER}@${DEPLOY_AWS_HOST}:${DEPLOY_AWS_PATH}" || true;
               curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
             fi
-            
 
       # - deploy:
       #     name: "Publish github.io"
@@ -96,7 +95,8 @@ jobs:
 
       # Dune
       - run: eval $(opam env) && cd qiniu-aws-upload-utils && dune build bin/qiniu_aws_upload_utils.exe
-      - run: cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe ./qiniu_aws_upload_utils
+      - run: cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe /usr/local/bin/qiniu_aws_upload_utils
 
       # Upload
-      - run: ./qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} static
+      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} static
+      - run: cd content/blog && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} media -replace-first-path-to images/blog
