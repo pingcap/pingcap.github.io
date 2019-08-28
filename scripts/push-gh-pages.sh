@@ -1,7 +1,10 @@
 set -e
 
 ls dist/
+find ./dist|grep html| xargs sed -i "" 's/<head>/<head>\\n<meta name="robots" content="noindex">/g'
+
 cd dist
+cat 404.html
 
 git config --global user.email "ghlndsl@126.com"
 git config --global user.name "gaohailang ci"
