@@ -4,7 +4,6 @@ ls dist/
 find ./dist|grep html| xargs sed -i 's/<head>/<head>\n<meta name="robots" content="noindex">/g'
 
 cd dist
-cat 404.html
 
 git config --global user.email "ghlndsl@126.com"
 git config --global user.name "gaohailang ci"
@@ -13,6 +12,5 @@ git init
 git remote add origin "$remote"
 git checkout -b master
 git add .
-git status
 git commit -m "Update Release gh-pages[ci skip]"
 ssh-agent bash -c 'ssh-add ~/.ssh/id_rsa_6aa6ace89eee7def1892940bb02c3482;git push -f origin master'
