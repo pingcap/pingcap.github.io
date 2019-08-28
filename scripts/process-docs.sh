@@ -22,7 +22,7 @@ replace_dist_html_link() {
           # echo "process..."
           python scripts/convert_html.py $html $repo_name
         elif grep -E 'img src=\"[\.\/]*media\/' $html > /dev/null;then
-          # echo "process..."
+          echo "process img..."
           python scripts/convert_html.py $html $repo_name
         fi
         set -e
