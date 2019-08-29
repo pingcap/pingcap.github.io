@@ -67,36 +67,36 @@ jobs:
               then chmod +x ./scripts/push-gh-pages.sh; sh ./scripts/push-gh-pages.sh;
             fi
 
-      # Start to sync static folder
-      # - run: git clone https://itssohardtobewhoyouare@bitbucket.org/itssohardtobewhoyouare/qiniu-aws-upload-utils.git
+      Start to sync static folder
+      - run: git clone https://itssohardtobewhoyouare@bitbucket.org/itssohardtobewhoyouare/qiniu-aws-upload-utils.git
 
-      # - run: echo | sh <(curl -sL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)
+      - run: echo | sh <(curl -sL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)
 
-      # - restore_cache:
-      #     keys:
-      #       - opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
-      #       - opam-cache-
+      - restore_cache:
+          keys:
+            - opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
+            - opam-cache-
 
-      # - run: export TERM=xterm && opam init -y --disable-sandboxing -c 4.07.1 && opam switch -y 4.07.1
-      # - run: opam install -y dune core stdio
+      - run: export TERM=xterm && opam init -y --disable-sandboxing -c 4.07.1 && opam switch -y 4.07.1
+      - run: opam install -y dune core stdio
 
-      # - save_cache:
-      #     key: opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
-      #     paths:
-      #       - ~/.opam
+      - save_cache:
+          key: opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
+          paths:
+            - ~/.opam
 
-      # Get and configure qshell
-      # - run: sudo mv ./qiniu-aws-upload-utils/release/linux/qshell /usr/local/bin/qshell
-      # - run: qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} test
+      Get and configure qshell
+      - run: sudo mv ./qiniu-aws-upload-utils/release/linux/qshell /usr/local/bin/qshell
+      - run: qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} test
 
-      # Get and configure awscli
-      # - run: pip3 install awscli
-      # - run: printf "%s\n" ${AWS_ACCESS_KEY} ${AWS_SECRET_KEY} ${AWS_REGION} "json" | aws configure
+      Get and configure awscli
+      - run: pip3 install awscli
+      - run: printf "%s\n" ${AWS_ACCESS_KEY} ${AWS_SECRET_KEY} ${AWS_REGION} "json" | aws configure
 
-      # Dune
-      # - run: eval $(opam env) && cd qiniu-aws-upload-utils && dune build bin/qiniu_aws_upload_utils.exe
-      # - run: sudo cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe /usr/local/bin/qiniu_aws_upload_utils
+      Dune
+      - run: eval $(opam env) && cd qiniu-aws-upload-utils && dune build bin/qiniu_aws_upload_utils.exe
+      - run: sudo cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe /usr/local/bin/qiniu_aws_upload_utils
 
-      # Upload
-      # - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} static
-      # - run: cd content/blog && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} media -replace-first-path-to images/blog
+      Upload
+      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} static
+      - run: cd content/blog && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} media -replace-first-path-to images/blog
