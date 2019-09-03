@@ -98,5 +98,5 @@ jobs:
       - run: sudo cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe /usr/local/bin/qiniu_aws_upload_utils
 
       # Upload
-      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} static
-      - run: cd content/weekly && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} media -replace-first-path-to images/weekly
+      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} static
+      - run: cd content/weekly && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/weekly
