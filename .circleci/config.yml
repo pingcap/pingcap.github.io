@@ -17,13 +17,20 @@ jobs:
         - yini/website-preview
 
     steps:
-      # notice netlify to deploy yini/preview branch
-      # when be triggered by webhook from submodule
+      # Notice netlify to deploy yini/preview branch when be triggered by webhook
       - run: curl -X POST -d '' https://api.netlify.com/build_hooks/5cb97398aed249fc2447b1f1
+
+      - add_ssh_keys:
+          fingerprints:
+            - '1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66'
+            - '6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82'
 
       - checkout
 
-      - run: sudo apt-get install -y rsync && sudo apt-get install Python-bs4
+      # Dependencies required for deploy
+      # python3-pip for awscli
+      # m4 for ocaml
+      - run: sudo apt-get -y install rsync Python-bs4 python3-pip m4
 
       # Download and cache dependencies and submodules
       - restore_cache:
@@ -38,15 +45,11 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-          
-      - add_ssh_keys:
-          fingerprints:
-            - "1b:b6:ef:e0:fb:85:6d:8f:78:87:a6:ce:1f:34:ec:66"
 
       - run: npm run build
 
       - deploy:
-          name: "Publish Website"
+          name: 'Publish Website'
           command: |
             if [ "${CIRCLE_BRANCH}" == "src" ]; then
               ssh-keyscan "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null;
@@ -57,13 +60,48 @@ jobs:
               curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
             fi
 
-      - add_ssh_keys:
-          fingerprints:
-            - "6a:a6:ac:e8:9e:ee:7d:ef:18:92:94:0b:b0:2c:34:82"
-
       - deploy:
           name: "Publish github.io"
           command: |
             if [ "${CIRCLE_BRANCH}" == "src" ];
-              then chmod +x ./scripts/push-gh-pages.sh;sh ./scripts/push-gh-pages.sh;
+              then chmod +x ./scripts/push-gh-pages.sh; sh ./scripts/push-gh-pages.sh;
             fi
+
+      # Start to sync static folder
+      - run: git clone https://itssohardtobewhoyouare@bitbucket.org/itssohardtobewhoyouare/qiniu-aws-upload-utils.git
+
+      - run: echo | sh <(curl -sL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)
+
+      - restore_cache:
+          keys:
+            - opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
+            - opam-cache-
+
+      - run: export TERM=xterm && opam init -y --disable-sandboxing -c 4.07.1 && opam switch -y 4.07.1
+      - run: opam install -y dune core stdio
+
+      - save_cache:
+          key: opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
+          paths:
+            - ~/.opam
+
+      # Get and configure qshell
+      - run: sudo mv ./qiniu-aws-upload-utils/release/linux/qshell /usr/local/bin/qshell
+      - run: qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} test
+
+      # Get and configure awscli
+      - run: sudo pip3 install awscli
+      - run: printf "%s\n" ${AWS_ACCESS_KEY} ${AWS_SECRET_KEY} ${AWS_REGION} "json" | aws configure
+
+      # Dune
+      - run: eval $(opam env) && cd qiniu-aws-upload-utils && dune build bin/qiniu_aws_upload_utils.exe
+      - run: sudo cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe /usr/local/bin/qiniu_aws_upload_utils
+
+      # Upload
+      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} static
+      - run: cd content/blog && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/blog
+      - run: cd content/blog-cn && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/blog-cn
+      - run: cd content/docs && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/docs
+      - run: cd content/docs-cn && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/docs-cn
+      - run: cd content/meetup && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/meetup
+      - run: cd content/weekly && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/weekly

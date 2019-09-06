@@ -4,6 +4,8 @@ set -e
 find ./dist|grep html| xargs sed -i 's/<head>/<head>\n<meta name="robots" content="noindex">/g'
 
 ls dist/
+find ./dist|grep html| xargs sed -i 's/<head>/<head>\n<meta name="robots" content="noindex">/g'
+
 cd dist
 
 git config --global user.email "ghlndsl@126.com"
