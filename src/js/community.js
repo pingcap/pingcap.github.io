@@ -54,6 +54,11 @@ $(document).ready(function() {
     calendar(element, events, settings)
   }
 
+  const closeModal = () => {
+    $('.modal-overlay').fadeOut()
+    $('.modal-overlay, .modal').removeClass('active')
+  }
+
   // setClndrHeight()
   calcBannerTitleImg()
   $(window).resize(calcBannerTitleImg)
@@ -223,6 +228,49 @@ $(document).ready(function() {
     $('html, body').animate(
       {
         scrollTop: $('.agenda__section').offset().top - 60,
+      },
+      1000
+    )
+  })
+
+ // toggle answers when click question in hackathon2019
+  $('.question').click(function() {
+    $(this).parent().siblings().children('.question').removeClass('expand')
+    $(this).next().slideToggle();
+    $(this).toggleClass('expand')
+    $(this).parent().siblings().children('.answer').slideUp();
+  })
+
+  $('.j-open-schedule-modal').click(function() {
+    console.log('clicked')
+    $('.j-schedule-overlay').fadeIn()
+    $('.j-schedule-overlay, .modal').addClass('active')
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-schedule-mobile.png')
+    }
+  })
+
+  $('.j-open-grading-modal').click(function() {
+    console.log('clicked')
+    $('.j-grading-overlay').fadeIn()
+    $('.j-grading-overlay, .modal').addClass('active')
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-grading-mobile.png')
+    }
+  })
+
+  $('.close-modal')
+    .off('click')
+    .on('click', function(e) {
+      closeModal()
+      e.preventDefault()
+      e.stopPropagation()
+    })
+
+  $('.learning-material').click(function() {
+    $('html, body').animate(
+      {
+        scrollTop: $('.learning-section').offset().top - 100,
       },
       1000
     )
