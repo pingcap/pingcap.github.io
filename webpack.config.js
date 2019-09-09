@@ -10,20 +10,23 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = {
   entry: {
-    app: [path.join(__dirname, 'src', 'js', 'app')],
-    doc: [path.join(__dirname, 'src', 'js', 'doc')],
-    about: [path.join(__dirname, 'src', 'js', 'about')],
-    recruit: [path.join(__dirname, 'src', 'js', 'recruit')],
-    tidb_planet: [path.join(__dirname, 'src', 'js', 'tidb_planet')],
-    devcon: [path.join(__dirname, 'src', 'js', 'devcon')],
-    community: [path.join(__dirname, 'src', 'js', 'community')],
-    tidb_planet_user: [path.join(__dirname, 'src', 'js', 'tidb_planet_user')],
-    multi_slides_carousel: [
-      path.join(__dirname, 'src', 'js', 'multi_slides_carousel'),
-    ],
-    carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
-    video_on_modal: [path.join(__dirname, 'src', 'js', 'video_on_modal')],
-    carousel: [path.join(__dirname, 'src', 'js', 'carousel')],
+    app: path.join(__dirname, 'src', 'js', 'app'),
+    doc: path.join(__dirname, 'src', 'js', 'doc'),
+    about: path.join(__dirname, 'src', 'js', 'about'),
+    recruit: path.join(__dirname, 'src', 'js', 'recruit'),
+    tidb_planet: path.join(__dirname, 'src', 'js', 'tidb_planet'),
+    devcon: path.join(__dirname, 'src', 'js', 'devcon'),
+    community: path.join(__dirname, 'src', 'js', 'community'),
+    tidb_planet_user: path.join(__dirname, 'src', 'js', 'tidb_planet_user'),
+    multi_slides_carousel: path.join(
+      __dirname,
+      'src',
+      'js',
+      'multi_slides_carousel'
+    ),
+    carousel: path.join(__dirname, 'src', 'js', 'carousel'),
+    video_on_modal: path.join(__dirname, 'src', 'js', 'video_on_modal'),
+    anchor: path.join(__dirname, 'src', 'js', 'anchor'),
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),
