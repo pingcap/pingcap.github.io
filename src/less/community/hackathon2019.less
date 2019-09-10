@@ -1,15 +1,5 @@
 @import '../variables.less';
 
-// (value / 1.25) / 22px  = rem
-// 1rem = 22px
-
-// 50 = 1.8rem
-// 40 = 1.4rem
-// 30 = 1.1rem
-// 24 = 0.9rem
-// 20 = 0.7rem
-// 18 = 0.65rem
-
 @impactFontFamily: Impact,-apple-system,BlinkMacSystemFont,Helvetica,"Segoe UI","Noto Sans CJK SC",Arial,Ubuntu,sans-serif,"Apple Color Emoji";
 
 .banner__section {
@@ -24,6 +14,23 @@
 .hackathon2019-banner {
   background: url('https://download.pingcap.com/images/banners/hackathon2019-banner-pc.jpg') no-repeat;
   padding-top: 34%;
+  position: relative;
+
+  .banner-btn {
+    position: absolute;
+    background-color: #E30C34;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 18px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+   &:hover {
+     background-color: #0D309E;
+   }
+  }
 }
 
 .section-title {
@@ -58,6 +65,7 @@
 .about-hackathon19 {
   margin: 2rem;
   padding: 5rem;
+  line-height: 1.7;
 
   .hackathon-intro {
     text-align: center;
@@ -98,6 +106,7 @@
     height: 300px;
     margin: 15px 0;
     text-align: center;
+    line-height: 1.7;
 
     .tutor-avatar {
       width: 140px;
@@ -116,7 +125,7 @@
       .role {
         position: absolute;
         font-size: .7rem;
-        padding: 0 15px;
+        padding: 2px 15px;
         background: #FFBA00;
         border-radius: 30px;
         top: 10px;
@@ -131,10 +140,11 @@
     .name {
       font-size: 0.9rem;
       margin-top: 2rem;
+      font-weight: 600;
     }
 
     .title {
-      font-size: 0.7rem;
+      font-size: 14px;
       padding: 0 1.5rem;
     }
   }
@@ -167,7 +177,7 @@
 
       .award {
         padding-top: 75px;
-        font-size: 0.85rem;
+        font-size: 18px;
         color: rgba(13, 34, 86, 0.68);
       }
 
@@ -217,7 +227,6 @@
 .modal {
   background: none !important;
   max-width: 700px !important;
-  // max-width: none !important;
   box-shadow: none !important;
 }
 
@@ -259,32 +268,33 @@
       margin: 2rem 2rem 3rem 3rem;
 
       .name {
-        font-size: 1.1rem;
+        font-size: 18px;
         font-weight: 600;
         padding: 5px;
       }
 
       .time {
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 600;
         padding: 5px;
       }
 
       .detail {
         padding: 10px 5px 40px;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 2;
       }
 
       .btn-link {
         background-color: white;
-        padding: 2px 18px;
+        padding: 5px 18px;
         border-radius: 30px;
         color: #0D2256;
         position: absolute;
         bottom: 1.7rem;
         left: 3.5rem;
-        font-size: 16px;
+        font-size: 14px;
+        cursor: pointer;
         transition: all 0.2s ease;
 
         &:hover {
@@ -317,6 +327,8 @@
     border: 1px solid rgba(13, 48, 158, 0.17);
     border-radius: 10px;
     overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
     .thumbnail {
       width: 298px;
@@ -349,11 +361,14 @@
         line-height: 1.6;
       }
     }
+
+    &:hover {
+      box-shadow: 0 3px 10px 3px #ddd;
+    }
   }
 }
 
 .schedule-on-modal {
-  // max-width: 100%;
   height: auto;
 
   img {
@@ -397,15 +412,7 @@
       display: inline-block;
       position: absolute;
       color: #3A58F0;
-      // border: 1px solid #3A58F0;
-      // border-radius: 50%;
-      // width: 20px;
-      // height: 20px;
       right: 0;
-      // top: 50%;
-      // transform: translate(-50%, -50%);
-      // text-align: center;
-      // padding: 0 0 1px 1px;
     }
 
     &:hover {
@@ -436,7 +443,7 @@
   }
 
   .answer {
-    color: rgba(255, 255, 255, 0.5);
+    color: white;
     font-size: 18px;
     padding: 1rem 2rem;
     display: none;
@@ -483,6 +490,58 @@
         border-color: #E30C34;
       }
     }
+
+    .contact-us-hack19 {
+      position: relative;
+
+      .qr-tooltiptext {
+        width: 200px;
+        background-color: #3351ff;
+        color: white;
+        text-align: right;
+        padding: 10px;
+        position: absolute;
+        z-index: 1;
+        font-size: 12px;
+        line-height: 1.7;
+        border-radius: 5px 5px 5px 0;
+        right: -230px;
+        top: -100%;
+        opacity: 1;
+        -webkit-transition: opacity 0.3s;
+        transition: opacity 0.3s;
+
+        .tidb-robot-qrCode {
+          padding: 20px 30px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            display: block;
+          }
+        }
+      }
+
+      .qr-tooltiptext::after {
+        content: '';
+        position: absolute;
+        bottom: 60%;
+        left: -6px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent #3351ff #3351ff transparent;
+        transform: rotate(155deg) skew(30deg);
+      }
+    }
+
+    .important-btn {
+      color: #0D2256;
+      background-color: white; 
+
+      &:hover {
+        color: white;
+      }
+    }
   }
 }
 
@@ -523,6 +582,7 @@
     height: auto;
     border-radius: 10px;
     transition: all 0.2s ease;
+    // box-shadow: 0 3px 10px 3px #ddd;
 
     img {
       width: 100%;
@@ -531,7 +591,7 @@
     }
 
     &:hover {
-      box-shadow: 3px 3px 13px #DDDDDD;
+      box-shadow: 0 5px 14px 3px rgba(0, 0, 0, 0.3);
     }
   }
 }
@@ -540,6 +600,12 @@
   .hackathon2019-banner {
     background: url('https://download.pingcap.com/images/banners/hackathon2019-banner-mobile.jpg') no-repeat;
     padding-top: 62%;
+
+    .banner-btn {
+      padding: 5px 15px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
   }
 
   .about-hackathon19 {
@@ -567,23 +633,24 @@
 
     .title {
       line-height: 1.7;
-      padding: 0 1.2rem;
+      padding: 0 21px;
     }
   }
 
   .awards {
     .award-list {
       .award-item {
-        height: 180px;
-        width: 150px;
+        height: 190px;
+        width: 155px;
         margin: 10px;
 
         .bg-img {
-          width: 50px;
+          width: 40px;
         }
 
         .award {
           padding-top: 30px;
+          font-size: 16px;
         }
 
         .bonus-item {
@@ -598,16 +665,20 @@
   }
 
   .step-list {
-    margin: 0 auto 7rem;
+    margin: 0 auto 4rem;
 
     .step-item .step-info {
+      .name {
+        font-size: 16px;
+      }
+
       .time {
-        font-size: 15px;
+        font-size: 14px;
       }
 
       .detail,
       .btn-link {
-        font-size: 14px;
+        font-size: 12px;
       }
     }
   }
@@ -667,19 +738,51 @@
   .participant-section {
     padding-bottom: 45%;
 
-    .btns .btn-item {
-      margin: 10px;
-      padding: 7px;
-      width: 100px;
+    .btns {
+      margin: -1rem auto;
+
+      .btn-item {
+        margin: 10px;
+        padding: 7px;
+        width: 100px;
+        font-size: 14px;
+        position: relative;
+      }
+    }
+
+    .contact-us-hack19 .qr-tooltiptext {
+      right: auto;
+      top: 4rem !important;
+      left: -5rem !important;
+
+      .tidb-robot-qrCode {
+        padding: 10px;
+      }
+
+      &::after {
+        left: 50% !important;
+        bottom: auto !important;
+        transform: rotate(240deg) skew(30deg) !important;
+        top: -4px !important;;
+      }
     }
   }
 
   .participant-title {
     padding-top: 2rem;
   }
+
+  .modal {
+    max-width: 320px !important;
+  }
 }
 
 @media (max-width: 320px) {
+  .hackathon2019-banner .banner-btn {
+    padding: 5px 15px;
+    margin-top: 5px;
+  }
+
   .partners .logo-list img {
     margin: 5px;
   }
@@ -700,5 +803,23 @@
     width: 15px;
     height: 15px;
     margin-bottom: 15px;
+  }
+
+  .tutor-members .tutor .title {
+    padding: 0;
+  }
+
+  .awards .award-list .award-item {
+    .bg-img {
+      width: 45px;
+    }
+
+    .bonus-item {
+      margin: 10px 0 0;
+    }
+  }
+
+  .modal {
+    max-width: 300px;
   }
 }

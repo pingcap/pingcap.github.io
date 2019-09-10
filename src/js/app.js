@@ -108,7 +108,7 @@ function toggleWeChatQRCode() {
     $('#wechat-mobile .qr_code_outer').toggleClass('f-hide')
   })
 
-  $('.tidb-planet-robot').click(e => {
+  $('.tidb-planet-robot, .contact-us-hack19').click(e => {
     e.preventDefault()
     $('.qr-tooltiptext').toggleClass('f-hide')
   })
