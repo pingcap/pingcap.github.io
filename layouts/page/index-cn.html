@@ -13,19 +13,15 @@
         <div class="multi_slides_carousel">
             <div class="swiper-container gallery-top">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <a href="/about-cn/recruit/join/#campus"
-                            onclick="trackViews('homepage-20CampusRecruit-banner', 'pingcap-20CampusRecruit_view')">
-                            <img class="moment-img"
-                            src="https://download.pingcap.com/images/recruit-carousel-img.jpg" alt="Recruit banner"/>
-                        </a>
-                    </div>
-                    <div class="swiper-slide">
-                        <a href="https://university.pingcap.com/" target="_blank"
-                          onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
-                            class="moment-img" src="https://download.pingcap.com/images/university-carousel-img.png" alt="University banner"
-                            /></a>
-                    </div>
+                    {{- range $idx, $i := .Site.Data.index_cn_carousel_banner.banners -}}
+                        <div class="swiper-slide">
+                            <a href="{{ $i.link }}" {{ if $i.newTab }}target="_blank"{{ end }}
+                                onclick="trackViews('{{ $i.gaTrackeEventLabel }}', '{{ $i.gaTrackEventClass }}')">
+                                <img class="moment-img"
+                                src="{{ $i.img }}" alt="{{ $i.alt }}"/>
+                            </a>
+                        </div>
+                    {{- end -}}
                 </div>
             </div>
             <div class="swiper-pagination"></div>
@@ -49,19 +45,15 @@
                 <div class="multi_slides_carousel">
                     <div class="swiper-container gallery-top">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <a href="/about-cn/recruit/join/#campus"
-                                    onclick="trackViews('homepage-20CampusRecruit-banner', '20CampusRecruit_view')">
-                                    <img class="moment-img"
-                                    src="https://download.pingcap.com/images/recruit-carousel-img.jpg" alt="Recruit banner" />
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="https://university.pingcap.com/" target="_blank"
-                                  onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
-                                    class="moment-img"
-                                    src="https://download.pingcap.com/images/university-carousel-img.png" alt="University banner" /></a>
-                            </div>
+                            {{- range $idx, $i := .Site.Data.index_cn_carousel_banner.banners -}}
+                                <div class="swiper-slide">
+                                    <a href="{{ $i.link }}" {{ if $i.newTab }}target="_blank"{{ end }}
+                                        onclick="trackViews('{{ $i.gaTrackeEventLabel }}', '{{ $i.gaTrackEventClass }}')">
+                                        <img class="moment-img"
+                                        src="{{ $i.img }}" alt="{{ $i.alt }}"/>
+                                    </a>
+                                </div>
+                            {{- end -}}
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>

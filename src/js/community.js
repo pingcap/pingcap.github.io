@@ -29,6 +29,8 @@ function calcBtnOnHack19Banner() {
   $('.banner-btn').css('top', ratioT * bannerH)
 }
 
+const _ = require('lodash')
+
 $(document).ready(function() {
   var events = []
   if ($('.feature-activity').length) {
@@ -256,6 +258,12 @@ $(document).ready(function() {
     $('.j-grading-overlay, .modal').addClass('active')
     if (window.matchMedia('(max-width: 600px)').matches) {
       $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-grading-mobile.png')
+    }
+  })
+
+  $('.modal-overlay').on('click', function(e) {
+    if ($(this).hasClass('active')) {
+      if (_.isEqual(e.target, e.delegateTarget)) closeModal()
     }
   })
 
