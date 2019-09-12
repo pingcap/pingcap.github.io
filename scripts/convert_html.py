@@ -6,8 +6,14 @@ import os
 import re
 import sys
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info.major == 3:
+    unicode = str
+
+try:
+    reload(sys) # Python 2.7
+    sys.setdefaultencoding('utf-8')
+except NameError:
+    pass
 
 abs_hyper_link_pattern = re.compile(r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}')
 image_rel_src_pattern = re.compile(r'^[\.\/]*media\/')
