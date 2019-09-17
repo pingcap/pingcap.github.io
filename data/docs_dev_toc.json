@@ -1,7 +1,41 @@
 [
   {
     "name": "Introduction",
-    "link": "/docs/dev/overview/"
+    "children": [
+      {
+        "name": "TiDB Introduction",
+        "link": "/docs/dev/overview/"
+      },
+      {
+        "name": "Benchmarks",
+        "children": [
+          {
+            "name": "How to Test TiDB Using Sysbench",
+            "link": "/docs/dev/benchmark/how-to-run-sysbench/"
+          },
+          {
+            "name": "How to Run TPC-C Test on TiDB",
+            "link": "/docs/dev/benchmark/how-to-run-tpcc/"
+          },
+          {
+            "name": "Sysbench Performance Test - v3.0 vs. v2.1",
+            "link": "/docs/dev/benchmark/sysbench-v4/"
+          },
+          {
+            "name": "TPC-C Performance Test - v3.0 vs. v2.1",
+            "link": "/docs/dev/benchmark/tpcc/"
+          },
+          {
+            "name": "DM 1.0-alpha Benchmark Report",
+            "link": "/docs/dev/benchmark/dm-v1-alpha/"
+          },
+          {
+            "name": "DM 1.0-GA Benchmark Report",
+            "link": "/docs/dev/benchmark/dm-v1.0-ga/"
+          }
+        ]
+      }
+    ]
   },
   {
     "name": "Concepts",
@@ -12,7 +46,6 @@
       },
       {
         "name": "Key Features",
-        "link": "/docs/dev/key-features/",
         "children": [
           {
             "name": "Horizontal Scalability",
@@ -93,27 +126,23 @@
         "name": "Get Started",
         "children": [
           {
-            "name": "Start a Local Cluster",
+            "name": "Start a Cluster",
             "children": [
               {
                 "name": "From Binary",
-                "link": "/docs/dev/how-to/get-started/local-cluster/install-from-binary/"
+                "link": "/docs/dev/how-to/get-started/deploy-tidb-from-binary/"
               },
               {
                 "name": "From Homebrew",
-                "link": "/docs/dev/how-to/get-started/local-cluster/install-from-homebrew/"
+                "link": "/docs/dev/how-to/get-started/deploy-tidb-from-homebrew/"
               },
               {
                 "name": "From DBdeployer",
-                "link": "/docs/dev/how-to/get-started/local-cluster/install-from-dbdeployer/"
-              },
-              {
-                "name": "In Kubernetes",
-                "link": "/docs/dev/how-to/get-started/local-cluster/install-from-kubernetes/"
+                "link": "/docs/dev/how-to/get-started/deploy-tidb-from-dbdeployer/"
               },
               {
                 "name": "In Docker Compose",
-                "link": "/docs/dev/how-to/get-started/local-cluster/install-from-docker-compose/"
+                "link": "/docs/dev/how-to/get-started/deploy-tidb-from-docker-compose/"
               }
             ]
           },
@@ -177,10 +206,6 @@
               {
                 "name": "Docker Deployment",
                 "link": "/docs/dev/how-to/deploy/orchestrated/docker/"
-              },
-              {
-                "name": "Kubernetes Deployment",
-                "link": "/docs/dev/how-to/deploy/orchestrated/kubernetes/"
               }
             ]
           },
@@ -200,6 +225,10 @@
           {
             "name": "Data Migration with Ansible",
             "link": "/docs/dev/how-to/deploy/data-migration-with-ansible/"
+          },
+          {
+            "name": "TiDB Binlog Cluster Deployment",
+            "link": "/docs/dev/how-to/deploy/tidb-binlog/"
           }
         ]
       },
@@ -248,6 +277,10 @@
           {
             "name": "Monitor a TiDB Cluster",
             "link": "/docs/dev/how-to/monitor/monitor-a-cluster/"
+          },
+          {
+            "name": "TiDB Binlog Monitoring",
+            "link": "/docs/dev/how-to/monitor/tidb-binlog/"
           }
         ]
       },
@@ -277,7 +310,7 @@
           },
           {
             "name": "Migrate from CSV",
-            "link": "/docs/dev/tools/lightning/csv/"
+            "link": "/docs/dev/reference/tools/tidb-lightning/csv/"
           }
         ]
       },
@@ -295,6 +328,10 @@
           {
             "name": "Identify Slow Queries",
             "link": "/docs/dev/how-to/maintain/identify-slow-queries/"
+          },
+          {
+            "name": "TiDB Binlog Cluster Operations",
+            "link": "/docs/dev/how-to/maintain/tidb-binlog/"
           }
         ]
       },
@@ -315,12 +352,8 @@
         "name": "Upgrade",
         "children": [
           {
-            "name": "Upgrade to TiDB 3.0",
+            "name": "Upgrade to Development Series",
             "link": "/docs/dev/how-to/upgrade/from-previous-version/"
-          },
-          {
-            "name": "Upgrade to TiDB 2.1",
-            "link": "/docs/dev/how-to/upgrade/to-tidb-2.1/"
           },
           {
             "name": "Rolling updates with Ansible",
@@ -328,7 +361,11 @@
           },
           {
             "name": "Upgrade TiDB Data Migration",
-            "link": "/docs/dev/how-to/upgrade/data-migration/"
+            "link": "/docs/dev/reference/tools/data-migration/upgrade/"
+          },
+          {
+            "name": "Upgrade TiDB Binlog Cluster",
+            "link": "/docs/dev/how-to/upgrade/tidb-binlog/"
           }
         ]
       },
@@ -354,6 +391,206 @@
   {
     "name": "Reference",
     "children": [
+      {
+        "name": "Tools",
+        "children": [
+          {
+            "name": "Mydumper",
+            "link": "/docs/dev/reference/tools/mydumper/"
+          },
+          {
+            "name": "Syncer",
+            "link": "/docs/dev/reference/tools/syncer/"
+          },
+          {
+            "name": "Loader",
+            "link": "/docs/dev/reference/tools/loader/"
+          },
+          {
+            "name": "TiDB Data Migration",
+            "children": [
+              {
+                "name": "Overview",
+                "link": "/docs/dev/reference/tools/data-migration/overview/"
+              },
+              {
+                "name": "Restrictions",
+                "link": "/docs/dev/reference/tools/data-migration/overview/#usage-restrictions"
+              },
+              {
+                "name": "Features",
+                "children": [
+                  {
+                    "name": "Table Routing",
+                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#table-routing"
+                  },
+                  {
+                    "name": "Black and White Lists",
+                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#black-and-white-table-lists"
+                  },
+                  {
+                    "name": "Binlog Event Filter",
+                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#binlog-event-filter"
+                  },
+                  {
+                    "name": "Column Mapping",
+                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#column-mapping"
+                  },
+                  {
+                    "name": "Replication Delay Monitoring",
+                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#replication-delay-monitoring"
+                  },
+                  {
+                    "name": "Sharding Support",
+                    "children": [
+                      {
+                        "name": "Introduction",
+                        "link": "/docs/dev/reference/tools/data-migration/features/shard-merge/"
+                      },
+                      {
+                        "name": "Restrictions",
+                        "link": "/docs/dev/reference/tools/data-migration/features/shard-merge/#restrictions"
+                      },
+                      {
+                        "name": "Handle Sharding DDL Locks Manually",
+                        "link": "/docs/dev/reference/tools/data-migration/features/manually-handling-sharding-ddl-locks/"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Usage Scenarios",
+                "children": [
+                  {
+                    "name": "Simple Scenario",
+                    "link": "/docs/dev/reference/tools/data-migration/usage-scenarios/simple-replication/"
+                  },
+                  {
+                    "name": "Shard Merge Scenario",
+                    "link": "/docs/dev/reference/tools/data-migration/usage-scenarios/shard-merge/"
+                  }
+                ]
+              },
+              {
+                "name": "Deploy",
+                "link": "/docs/dev/reference/tools/data-migration/deploy/"
+              },
+              {
+                "name": "Configure",
+                "children": [
+                  {
+                    "name": "Overview",
+                    "link": "/docs/dev/reference/tools/data-migration/configure/overview/"
+                  },
+                  {
+                    "name": "Task Configuration",
+                    "link": "/docs/dev/reference/tools/data-migration/configure/task-configuration-file/"
+                  }
+                ]
+              },
+              {
+                "name": "Monitor",
+                "link": "/docs/dev/reference/tools/data-migration/monitor/"
+              },
+              {
+                "name": "Manage the Task",
+                "link": "/docs/dev/reference/tools/data-migration/manage-tasks/"
+              },
+              {
+                "name": "Cluster Operations",
+                "link": "/docs/dev/reference/tools/data-migration/cluster-operations/"
+              },
+              {
+                "name": "Migrate from MySQL compatible database",
+                "children": [
+                  {
+                    "name": "Migrate from Aurora",
+                    "link": "/docs/dev/how-to/migrate/from-aurora/"
+                  }
+                ]
+              },
+              {
+                "name": "Troubleshoot",
+                "link": "/docs/dev/how-to/troubleshoot/data-migration/"
+              },
+              {
+                "name": "Upgrade",
+                "link": "/docs/dev/reference/tools/data-migration/upgrade/"
+              },
+              {
+                "name": "FAQ",
+                "link": "/docs/dev/faq/data-migration/"
+              }
+            ]
+          },
+          {
+            "name": "TiDB Lightning",
+            "children": [
+              {
+                "name": "Overview",
+                "link": "/docs/dev/reference/tools/tidb-lightning/overview/"
+              },
+              {
+                "name": "Deployment",
+                "link": "/docs/dev/reference/tools/tidb-lightning/deployment/"
+              },
+              {
+                "name": "Configuration",
+                "link": "/docs/dev/reference/tools/tidb-lightning/config/"
+              },
+              {
+                "name": "Checkpoints",
+                "link": "/docs/dev/reference/tools/tidb-lightning/checkpoints/"
+              },
+              {
+                "name": "Table Filter",
+                "link": "/docs/dev/reference/tools/tidb-lightning/table-filter/"
+              },
+              {
+                "name": "CSV Support",
+                "link": "/docs/dev/reference/tools/tidb-lightning/csv/"
+              },
+              {
+                "name": "Web Interface",
+                "link": "/docs/dev/reference/tools/tidb-lightning/web/"
+              },
+              {
+                "name": "Monitor",
+                "link": "/docs/dev/reference/tools/tidb-lightning/monitor/"
+              },
+              {
+                "name": "Troubleshoot",
+                "link": "/docs/dev/how-to/troubleshoot/tidb-lightning/"
+              },
+              {
+                "name": "FAQ",
+                "link": "/docs/dev/faq/tidb-lightning/"
+              }
+            ]
+          },
+          {
+            "name": "PD Control",
+            "link": "/docs/dev/reference/tools/pd-control/"
+          },
+          {
+            "name": "PD Recover",
+            "link": "/docs/dev/reference/tools/pd-recover/"
+          },
+          {
+            "name": "TiKV Control",
+            "link": "/docs/dev/reference/tools/tikv-control/"
+          },
+          {
+            "name": "TiDB Control",
+            "link": "/docs/dev/reference/tools/tidb-control/"
+          },
+          {
+            "name": "Download",
+            "link": "/docs/dev/reference/tools/download/"
+          }
+        ]
+      },
       {
         "name": "MySQL Compatibility",
         "link": "/docs/dev/reference/mysql-compatibility/"
@@ -586,6 +823,10 @@
                 "link": "/docs/dev/reference/sql/functions-and-operators/aggregate-group-by-functions/"
               },
               {
+                "name": "Window Functions",
+                "link": "/docs/dev/reference/sql/functions-and-operators/window-functions/"
+              },
+              {
                 "name": "Miscellaneous Functions",
                 "link": "/docs/dev/reference/sql/functions-and-operators/miscellaneous-functions/"
               },
@@ -609,6 +850,10 @@
               {
                 "name": "`ADMIN`",
                 "link": "/docs/dev/reference/sql/statements/admin/"
+              },
+              {
+                "name": "`ALTER DATABASE`",
+                "link": "/docs/dev/reference/sql/statements/alter-database/"
               },
               {
                 "name": "`ALTER TABLE`",
@@ -747,6 +992,10 @@
                 "link": "/docs/dev/reference/sql/statements/prepare/"
               },
               {
+                "name": "`RECOVER TABLE`",
+                "link": "/docs/dev/reference/sql/statements/recover-table/"
+              },
+              {
                 "name": "`RENAME INDEX`",
                 "link": "/docs/dev/reference/sql/statements/rename-index/"
               },
@@ -867,6 +1116,10 @@
                 "link": "/docs/dev/reference/sql/statements/show-warnings/"
               },
               {
+                "name": "`SPLIT REGION`",
+                "link": "/docs/dev/reference/sql/statements/split-region/"
+              },
+              {
                 "name": "`START TRANSACTION`",
                 "link": "/docs/dev/reference/sql/statements/start-transaction/"
               },
@@ -897,8 +1150,16 @@
             "link": "/docs/dev/reference/sql/generated-columns/"
           },
           {
+            "name": "Partitioning",
+            "link": "/docs/dev/reference/sql/partitioning/"
+          },
+          {
             "name": "Character Set",
             "link": "/docs/dev/reference/sql/character-set/"
+          },
+          {
+            "name": "Views",
+            "link": "/docs/dev/reference/sql/views/"
           }
         ]
       },
@@ -947,6 +1208,31 @@
         ]
       },
       {
+        "name": "Key Monitoring Metrics",
+        "children": [
+          {
+            "name": "Overview",
+            "link": "/docs/dev/reference/key-monitoring-metrics/overview-dashboard/"
+          },
+          {
+            "name": "TiDB",
+            "link": "/docs/dev/reference/key-monitoring-metrics/tidb-dashboard/"
+          },
+          {
+            "name": "PD",
+            "link": "/docs/dev/reference/key-monitoring-metrics/pd-dashboard/"
+          },
+          {
+            "name": "TiKV",
+            "link": "/docs/dev/reference/key-monitoring-metrics/tikv-dashboard/"
+          }
+        ]
+      },
+      {
+        "name": "Alert Rules",
+        "link": "/docs/dev/reference/alert-rules/"
+      },
+      {
         "name": "Security",
         "children": [
           {
@@ -960,6 +1246,10 @@
           {
             "name": "TiDB User Account Management",
             "link": "/docs/dev/reference/security/user-account-management/"
+          },
+          {
+            "name": "Role-Based Access Control",
+            "link": "/docs/dev/reference/security/role-based-access-control/"
           }
         ]
       },
@@ -1007,7 +1297,16 @@
       },
       {
         "name": "Garbage Collection (GC)",
-        "link": "/docs/dev/reference/garbage-collection/"
+        "children": [
+          {
+            "name": "GC Overview",
+            "link": "/docs/dev/reference/garbage-collection/overview/"
+          },
+          {
+            "name": "GC Configuration",
+            "link": "/docs/dev/reference/garbage-collection/configuration/"
+          }
+        ]
       },
       {
         "name": "Performance",
@@ -1029,6 +1328,14 @@
             "link": "/docs/dev/reference/performance/optimizer-hints/"
           },
           {
+            "name": "Check the TiDB Cluster Status Using SQL Statements",
+            "link": "/docs/dev/reference/performance/check-cluster-status-using-sql-statements/"
+          },
+          {
+            "name": "Execution Plan Binding",
+            "link": "/docs/dev/reference/performance/execution-plan-bind/"
+          },
+          {
             "name": "Tune TiKV",
             "link": "/docs/dev/reference/performance/tune-tikv/"
           }
@@ -1043,238 +1350,181 @@
         "link": "/docs/dev/reference/tispark/"
       },
       {
-        "name": "Tools",
-        "children": [
-          {
-            "name": "Mydumper",
-            "link": "/docs/dev/reference/tools/mydumper/"
-          },
-          {
-            "name": "Syncer",
-            "link": "/docs/dev/reference/tools/syncer/"
-          },
-          {
-            "name": "Loader",
-            "link": "/docs/dev/reference/tools/loader/"
-          },
-          {
-            "name": "TiDB Data Migration",
-            "children": [
-              {
-                "name": "Overview",
-                "link": "/docs/dev/reference/tools/data-migration/overview/"
-              },
-              {
-                "name": "Restrictions",
-                "link": "/docs/dev/reference/tools/data-migration/overview/#usage-restrictions"
-              },
-              {
-                "name": "Features",
-                "children": [
-                  {
-                    "name": "Table Routing",
-                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#table-routing"
-                  },
-                  {
-                    "name": "Black and White Lists",
-                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#black-and-white-table-lists"
-                  },
-                  {
-                    "name": "Binlog Event Filter",
-                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#binlog-event-filter"
-                  },
-                  {
-                    "name": "Column Mapping",
-                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#column-mapping"
-                  },
-                  {
-                    "name": "Synchronization Delay Monitoring",
-                    "link": "/docs/dev/reference/tools/data-migration/features/overview/#synchronization-delay-monitoring"
-                  },
-                  {
-                    "name": "Sharding Support",
-                    "children": [
-                      {
-                        "name": "Introduction",
-                        "link": "/docs/dev/reference/tools/data-migration/features/shard-merge/"
-                      },
-                      {
-                        "name": "Restrictions",
-                        "link": "/docs/dev/reference/tools/data-migration/features/shard-merge/#restrictions"
-                      },
-                      {
-                        "name": "Handle Sharding DDL Locks Manually",
-                        "link": "/docs/dev/reference/tools/data-migration/features/manually-handling-sharding-ddl-locks/"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "name": "Usage Scenarios",
-                "children": [
-                  {
-                    "name": "Simple Scenario",
-                    "link": "/docs/dev/reference/tools/data-migration/usage-scenarios/simple-synchronization/"
-                  },
-                  {
-                    "name": "Shard Merge Scenario",
-                    "link": "/docs/dev/reference/tools/data-migration/usage-scenarios/shard-merge/"
-                  }
-                ]
-              },
-              {
-                "name": "Deploy",
-                "link": "/docs/dev/reference/tools/data-migration/deploy/"
-              },
-              {
-                "name": "Configure",
-                "children": [
-                  {
-                    "name": "Overview",
-                    "link": "/docs/dev/reference/tools/data-migration/configure/overview/"
-                  },
-                  {
-                    "name": "Task Configuration",
-                    "link": "/docs/dev/reference/tools/data-migration/configure/task-configuration-file/"
-                  }
-                ]
-              },
-              {
-                "name": "Monitor",
-                "link": "/docs/dev/reference/tools/data-migration/monitor/"
-              },
-              {
-                "name": "Manage the Task",
-                "link": "/docs/dev/reference/tools/data-migration/manage-tasks/"
-              },
-              {
-                "name": "Cluster Operations",
-                "link": "/docs/dev/reference/tools/data-migration/cluster-operations/"
-              },
-              {
-                "name": "Migrate from MySQL compatible database",
-                "children": [
-                  {
-                    "name": "Migrate from Aurora",
-                    "link": "/docs/dev/how-to/migrate/from-aurora/"
-                  }
-                ]
-              },
-              {
-                "name": "Troubleshoot",
-                "link": "/docs/dev/how-to/troubleshoot/data-migration/"
-              }
-            ]
-          },
-          {
-            "name": "TiDB Lightning",
-            "children": [
-              {
-                "name": "Overview",
-                "link": "/docs/dev/reference/tools/tidb-lightning/overview/"
-              },
-              {
-                "name": "Deployment",
-                "link": "/docs/dev/reference/tools/tidb-lightning/deployment/"
-              },
-              {
-                "name": "Checkpoints",
-                "link": "/docs/dev/reference/tools/tidb-lightning/checkpoints/"
-              },
-              {
-                "name": "Table Filter",
-                "link": "/docs/dev/reference/tools/tidb-lightning/table-filter/"
-              },
-              {
-                "name": "CSV Support",
-                "link": "/docs/dev/reference/tools/tidb-lightning/csv/"
-              },
-              {
-                "name": "Monitor",
-                "link": "/docs/dev/reference/tools/tidb-lightning/monitor/"
-              },
-              {
-                "name": "Troubleshoot",
-                "link": "/docs/dev/how-to/troubleshoot/tidb-lightning/"
-              },
-              {
-                "name": "FAQ",
-                "link": "/docs/dev/faq/tidb-lightning/"
-              }
-            ]
-          },
-          {
-            "name": "TiDB Binlog",
-            "children": [
-              {
-                "name": "Overview",
-                "link": "/docs/dev/reference/tools/tidb-binlog/overview/"
-              },
-              {
-                "name": "Deploy",
-                "link": "/docs/dev/reference/tools/tidb-binlog/deploy/"
-              },
-              {
-                "name": "Monitor",
-                "link": "/docs/dev/reference/tools/tidb-binlog/monitor/"
-              },
-              {
-                "name": "Maintain",
-                "link": "/docs/dev/reference/tools/tidb-binlog/operation/"
-              },
-              {
-                "name": "Upgrade",
-                "link": "/docs/dev/reference/tools/tidb-binlog/upgrade/"
-              }
-            ]
-          },
-          {
-            "name": "PD Control",
-            "link": "/docs/dev/reference/tools/pd-control/"
-          },
-          {
-            "name": "PD Recover",
-            "link": "/docs/dev/reference/tools/pd-recover/"
-          },
-          {
-            "name": "TiKV Control",
-            "link": "https://github.com/tikv/tikv/blob/master/docs/tools/tikv-control.md"
-          },
-          {
-            "name": "TiDB Control",
-            "link": "/docs/dev/reference/tools/tidb-control/"
-          },
-          {
-            "name": "Download",
-            "link": "/docs/dev/reference/tools/download/"
-          }
-        ]
-      },
-      {
-        "name": "Key Monitoring Metrics",
-        "children": [
-          {
-            "name": "Overview",
-            "link": "/docs/dev/reference/key-monitoring-metrics/overview-dashboard/"
-          },
-          {
-            "name": "TiDB",
-            "link": "/docs/dev/reference/key-monitoring-metrics/tidb-dashboard/"
-          },
-          {
-            "name": "PD",
-            "link": "/docs/dev/reference/key-monitoring-metrics/pd-dashboard/"
-          },
-          {
-            "name": "TiKV",
-            "link": "/docs/dev/reference/key-monitoring-metrics/tikv-dashboard/"
-          }
-        ]
+        "name": "TiDB Binlog Cluster Overview",
+        "link": "/docs/dev/reference/tidb-binlog-overview/"
       },
       {
         "name": "Adopters",
         "link": "/docs/dev/adopters/"
+      }
+    ]
+  },
+  {
+    "name": "TiDB in Kubernetes",
+    "children": [
+      {
+        "name": "About TiDB Operator",
+        "link": "/docs/dev/tidb-in-kubernetes/tidb-operator-overview/"
+      },
+      {
+        "name": "Get Started",
+        "children": [
+          {
+            "name": "DinD",
+            "link": "/docs/dev/tidb-in-kubernetes/get-started/deploy-tidb-from-kubernetes-dind/"
+          },
+          {
+            "name": "GKE",
+            "link": "/docs/dev/tidb-in-kubernetes/get-started/deploy-tidb-from-kubernetes-gke/"
+          },
+          {
+            "name": "Minikube",
+            "link": "/docs/dev/tidb-in-kubernetes/get-started/deploy-tidb-from-kubernetes-minikube/"
+          }
+        ]
+      },
+      {
+        "name": "Deploy",
+        "children": [
+          {
+            "name": "Prerequisites",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/prerequisites/"
+          },
+          {
+            "name": "TiDB Operator",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/tidb-operator/"
+          },
+          {
+            "name": "TiDB in General Kubernetes",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/general-kubernetes/"
+          },
+          {
+            "name": "TiDB in AWS EKS",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/aws-eks/"
+          },
+          {
+            "name": "TiDB in GCP GKE",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/gcp-gke/"
+          },
+          {
+            "name": "TiDB in Alibaba Cloud ACK",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/alibaba-cloud/"
+          },
+          {
+            "name": "Access TiDB in Kubernetes",
+            "link": "/docs/dev/tidb-in-kubernetes/deploy/access-tidb/"
+          }
+        ]
+      },
+      {
+        "name": "Configure",
+        "children": [
+          {
+            "name": "Cluster Initialization",
+            "link": "/docs/dev/tidb-in-kubernetes/initialize-cluster/"
+          }
+        ]
+      },
+      {
+        "name": "Monitor",
+        "link": "/docs/dev/tidb-in-kubernetes/monitor/tidb-in-kubernetes/"
+      },
+      {
+        "name": "Maintain",
+        "children": [
+          {
+            "name": "Destroy a TiDB cluster",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/destroy-tidb-cluster/"
+          },
+          {
+            "name": "Maintain a Hosting Kubernetes Node",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/kubernetes-node/"
+          },
+          {
+            "name": "Backup and Restore",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/backup-and-restore/"
+          },
+          {
+            "name": "Restore Data with TiDB Lightning",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/lightning/"
+          },
+          {
+            "name": "Collect Logs",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/log-collecting/"
+          },
+          {
+            "name": "Automatic Failover",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/auto-failover/"
+          },
+          {
+            "name": "TiDB Binlog",
+            "link": "/docs/dev/tidb-in-kubernetes/maintain/tidb-binlog/"
+          }
+        ]
+      },
+      {
+        "name": "Scale",
+        "link": "/docs/dev/tidb-in-kubernetes/scale-in-kubernetes/"
+      },
+      {
+        "name": "Upgrade",
+        "children": [
+          {
+            "name": "TiDB Cluster",
+            "link": "/docs/dev/tidb-in-kubernetes/upgrade/tidb-cluster/"
+          },
+          {
+            "name": "TiDB Operator",
+            "link": "/docs/dev/tidb-in-kubernetes/upgrade/tidb-operator/"
+          }
+        ]
+      },
+      {
+        "name": "Reference",
+        "children": [
+          {
+            "name": "Configuration",
+            "children": [
+              {
+                "name": "TiDB Cluster",
+                "link": "/docs/dev/tidb-in-kubernetes/reference/configuration/tidb-cluster/"
+              },
+              {
+                "name": "Backup",
+                "link": "/docs/dev/tidb-in-kubernetes/reference/configuration/backup/"
+              },
+              {
+                "name": "Local PV",
+                "link": "/docs/dev/tidb-in-kubernetes/reference/configuration/local-pv/"
+              },
+              {
+                "name": "TiDB Drainer",
+                "link": "/docs/dev/tidb-in-kubernetes/reference/configuration/tidb-drainer/"
+              }
+            ]
+          },
+          {
+            "name": "Tools",
+            "children": [
+              {
+                "name": "tkctl",
+                "link": "/docs/dev/tidb-in-kubernetes/reference/tools/tkctl/"
+              },
+              {
+                "name": "Tools in Kubernetes",
+                "link": "/docs/dev/tidb-in-kubernetes/reference/tools/in-kubernetes/"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Troubleshoot",
+        "link": "/docs/dev/tidb-in-kubernetes/troubleshoot/"
+      },
+      {
+        "name": "FAQs",
+        "link": "/docs/dev/tidb-in-kubernetes/faq/"
       }
     ]
   },
@@ -1288,6 +1538,10 @@
       {
         "name": "TiDB Lightning FAQs",
         "link": "/docs/dev/faq/tidb-lightning/"
+      },
+      {
+        "name": "Data Migration FAQ",
+        "link": "/docs/dev/faq/data-migration/"
       },
       {
         "name": "Upgrade FAQs",
@@ -1333,6 +1587,26 @@
         "name": "v3.0",
         "children": [
           {
+            "name": "3.0.3",
+            "link": "/docs/dev/releases/3.0.3/"
+          },
+          {
+            "name": "3.0.2",
+            "link": "/docs/dev/releases/3.0.2/"
+          },
+          {
+            "name": "3.0.1",
+            "link": "/docs/dev/releases/3.0.1/"
+          },
+          {
+            "name": "3.0 GA",
+            "link": "/docs/dev/releases/3.0-ga/"
+          },
+          {
+            "name": "3.0.0-rc.3",
+            "link": "/docs/dev/releases/3.0.0-rc.3/"
+          },
+          {
             "name": "3.0.0-rc.2",
             "link": "/docs/dev/releases/3.0.0-rc.2/"
           },
@@ -1353,6 +1627,26 @@
       {
         "name": "v2.1",
         "children": [
+          {
+            "name": "2.1.17",
+            "link": "/docs/dev/releases/2.1.17/"
+          },
+          {
+            "name": "2.1.16",
+            "link": "/docs/dev/releases/2.1.16/"
+          },
+          {
+            "name": "2.1.15",
+            "link": "/docs/dev/releases/2.1.15/"
+          },
+          {
+            "name": "2.1.14",
+            "link": "/docs/dev/releases/2.1.14/"
+          },
+          {
+            "name": "2.1.13",
+            "link": "/docs/dev/releases/2.1.13/"
+          },
           {
             "name": "2.1.12",
             "link": "/docs/dev/releases/2.1.12/"
