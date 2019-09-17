@@ -2,9 +2,18 @@
 <div class="modal-overlay j-{{ .type }}-overlay {{ if ne .type "contributors" }}modal-overlay-transition{{ end }}" data-type="{{ .type }}" style="display: none;">
     {{- if ne .type "contributors" -}}
         <a class="close-modal">
-            <svg viewBox="0 0 20 20">
-                <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
-            </svg>
+            {{- if or (eq .type "schedule") (eq .type "grading") -}}
+                <svg xmlns="http://www.w3.org/2000/svg" width="115" height="115" viewBox="0 0 115 115">
+                    <g id="组_2962" data-name="组 2962" transform="translate(-1563 -3406)">
+                    <circle id="椭圆_91" data-name="椭圆 91" cx="57.5" cy="57.5" r="57.5" transform="translate(1563 3406)" fill="#0d309e"/>
+                    <text id="x" transform="translate(1606 3479)" fill="#fff" font-size="58" font-family="Helvetica"><tspan x="0" y="0">x</tspan></text>
+                    </g>
+                </svg>
+            {{- else -}}
+                <svg viewBox="0 0 20 20">
+                    <path d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+                </svg>
+            {{- end -}}    
         </a>
     {{- end -}}
     <div class="modal modal-{{.type}}">
@@ -42,6 +51,20 @@
 
         {{- if eq .type "capture" -}}
             <div class="j-capture-image"><img src="/images/svgs/loader-spinner.svg" alt="Screen shot" /></div>
+        {{- end -}}
+
+        {{- if eq .type "schedule" -}}
+            <div class="schedule-on-modal">
+                <!-- <img class="lazy" data-original="/images/hacka19/hackathon2019-schedule-pc.png" src="/images/svgs/loader-spinner.svg" alt="Hackathon 2019 schedule" /> -->
+                <img class="lazy" src="{{ .modal_img }}" alt="Hackathon 2019 schedule" />
+            </div>
+        {{- end -}}
+
+        {{- if eq .type "grading" -}}
+            <div class="schedule-on-modal">
+                <!-- <img class="lazy" data-original="/images/hacka19/hackathon2019-schedule-pc.png" src="/images/svgs/loader-spinner.svg" alt="Hackathon 2019 schedule" /> -->
+                <img class="lazy" src="{{ .modal_img }}" alt="Hackathon 2019 schedule" />
+            </div>
         {{- end -}}
 
     </div>

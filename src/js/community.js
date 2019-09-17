@@ -1,17 +1,3 @@
-function calcBannerTitleImg() {
-  if (window.matchMedia('(max-width: 700px)').matches) {
-    $('.signable img').attr(
-      'src',
-      'https://download.pingcap.com/images/community/activities/meetup.svg'
-    )
-  } else {
-    $('.signable img').attr(
-      'src',
-      'https://download.pingcap.com/images/community/activities/meetup-active-img.jpg'
-    )
-  }
-}
-
 function createEventListConsole(eventTitles, eventLinks) {
   $('.cld-days').hide()
   $('.cld-labels').hide()
@@ -24,6 +10,26 @@ function createEventListConsole(eventTitles, eventLinks) {
     $('.event-list').append(event)
   }
 }
+
+// function calcBtnOnHack19Banner() {
+//   var bannerW = $(window).width()
+//   var bannerH, ratioL, ratioT
+
+//   if (window.matchMedia('(max-width: 600px)').matches) {
+//       bannerH = bannerW / 1.6
+//       ratioL = 0.11
+//       ratioT = 0.47
+//   } else {
+//       bannerH = bannerW / 2.66
+//       ratioL = 0.22
+//       ratioT = 0.52
+//   }
+
+//   $('.banner-btn').css('left', ratioL * bannerW)
+//   $('.banner-btn').css('top', ratioT * bannerH)
+// }
+
+const _ = require('lodash')
 
 $(document).ready(function() {
   var events = []
@@ -54,9 +60,10 @@ $(document).ready(function() {
     calendar(element, events, settings)
   }
 
-  // setClndrHeight()
-  calcBannerTitleImg()
-  $(window).resize(calcBannerTitleImg)
+  const closeModal = () => {
+    $('.modal-overlay').fadeOut()
+    $('.modal-overlay, .modal').removeClass('active')
+  }
 
   // scrolls to specific section smoothly
   const hash = decodeURIComponent(location.hash)
@@ -227,4 +234,57 @@ $(document).ready(function() {
       1000
     )
   })
+
+ // toggle answers when click question in hackathon2019
+  $('.question').click(function() {
+    $(this).parent().siblings().children('.question').removeClass('expand')
+    $(this).next().slideToggle();
+    $(this).toggleClass('expand')
+    $(this).parent().siblings().children('.answer').slideUp();
+  })
+
+  $('.j-open-schedule-modal').click(function() {
+    console.log('clicked')
+    $('.j-schedule-overlay').fadeIn()
+    $('.j-schedule-overlay, .modal').addClass('active')
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-schedule-mobile.png')
+    }
+  })
+
+  $('.j-open-grading-modal').click(function() {
+    console.log('clicked')
+    $('.j-grading-overlay').fadeIn()
+    $('.j-grading-overlay, .modal').addClass('active')
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-grading-mobile.png')
+    }
+  })
+
+  $('.modal-overlay').on('click', function(e) {
+    if ($(this).hasClass('active')) {
+      if (_.isEqual(e.target, e.delegateTarget)) closeModal()
+    }
+  })
+
+  $('.close-modal')
+    .off('click')
+    .on('click', function(e) {
+      closeModal()
+      e.preventDefault()
+      e.stopPropagation()
+    })
+
+  $('.learning-material').click(function() {
+    $('html, body').animate(
+      {
+        scrollTop: $('.learning-section').offset().top - 100,
+      },
+      1000
+    )
+  })
+
+  // calcBtnOnHack19Banner()
+
+  // $(window).resize(calcBtnOnHack19Banner)
 })

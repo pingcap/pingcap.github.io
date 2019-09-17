@@ -1,0 +1,252 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Hackathon 2019" }}
+    Hackathon 2019
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "nav_active" "community"}}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/hackathon2019.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/tidb-planet/modal.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+<div class="hackathon-2019">
+    <section class="banner__section hackathon2019-banner">
+        <a href="http://nc9hsk15y2xczuor.mikecrm.com/PiwBPaL" target="_blank"><button class="banner-btn" style="display: none;">立即报名</button></a>
+    </section>
+    <section class="about-hackathon19">
+        <h2 class="section-title">TiDB Hackathon 2019</h2>
+        <p class="hackathon-sub-intro">
+            啤酒 Pizza 不眠夜，头脑风暴，全力燃烧 。
+        </p>
+        <p class="hackathon-sub-intro">
+            最酷的 TiDB 开发者的狂欢，TiDB Hackathon 重磅回归！
+        </p>
+        <p class="hackathon-sub-intro">
+            今年的主题为「Improve」，
+        </p>
+        <p class="hackathon-sub-intro">
+            选手可以在项目中为 TiDB 性能、稳定性、易用性等各方面做出提升，
+        </p>
+        <p class="hackathon-sub-intro">
+            当然也可以围绕 TiDB 生态做一些周边工具提升效率。如：
+        </p>
+        <ul class="wrap-ul">
+            <li class="title-list"> Key Visualizer for TiKV</li>
+            <ul class="sub-list" style="list-style: none;">可视化的 KV 的诊断工具，做到对集群的热点，访问模式一目了然。</ul>
+            <li class="title-list"> 基于历史的查询优化</li>
+            <ul class="sub-list" style="list-style: none;">让 TiDB 的 SQL 优化器能通过稳态的查询历史生成稳定的执行计划，防止执行计划跳变。</ul>
+            <li class="title-list"> Follower Read 与 MVCC 的结合</li>
+            <ul class="sub-list" style="list-style: none;">让 TiDB 的多副本能够承担读流量， 提升整体的吞吐。</ul>
+            <li class="title-list"> TiDB Playground</li>
+            <ul class="sub-list" style="list-style: none;">类似 Go Playground (play.golang.org) 的所见即所得的交互式 TiDB Web 体验工具。</ul>
+            <li class="title-list"> 更期待你能够提出新点子~</li>
+        </ul>
+        <p class="hackathon-sub-intro">
+            本届比赛将弱化地域限制，北京、上海、广州三地联动。
+        </p>
+        <p class="hackathon-sub-intro">
+            奖金依然丰厚，并有大咖导师巡场带教。
+        </p>
+        <p class="hackathon-sub-intro">
+            期待各路大神集结，享受代码世界中的极致自由！
+        </p>
+    </section>
+
+    <section class="tutor-members">
+        <h2 class="section-title section-title-white">评委 / 导师团 </h2>
+        <div class="tutor-list">
+            {{- range $idx, $i := .Site.Data.hackathon.tutors_2019 -}}
+                <div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.avatar }}" alt="Tutor avator" />
+                        {{- if not $i.tba }}
+                            <div class="role {{ if $i.judge }}judge{{ end }}">
+                                {{- if $i.judge -}}
+                                    评委
+                                {{- else -}}
+                                    导师
+                                {{- end -}}
+                            </div>
+                        {{- end -}}
+                    </div>
+                    <div class="name">{{ $i.name }}</div>
+                    <div class="title">{{ $i.title }}</div>
+                </div>
+            {{- end -}}
+        </div>
+    </section>
+
+    <section class="awards">
+        <h2 class="section-title">奖项设置</h2>
+        <div class="award-list">
+            {{- range $idx, $i := .Site.Data.hackathon.awards_2019 -}}
+                <div class="award-item">
+                    <img class="bg-img" src="{{ $i.bg }}" alt="cover" />
+                    <div class="award">{{ $i.award }}</div>
+                    {{- if $i.bonus -}}
+                        <div class="bonus-item"><span>¥</span><span class="bonus">{{ $i.bonus }}</span></div>
+                    {{- else -}}
+                        <div class="gift">{{ $i.gift }}</div>
+                    {{- end -}}
+                    {{- if $i.team_numbers -}}
+                        <div class="team-numbers">({{ $i.team_numbers }} 支队伍)</div>
+                    {{- end -}}
+                    <div class="icon">
+                        <img class="lazy" height=100 data-original="{{ $i.medal }}" src="/images/svgs/loader-spinner.svg" alt="Medal icon" />
+                    </div>
+                </div>
+            {{- end -}}
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">参赛流程</h2>
+        <div class="step-list">
+            {{- range $idx, $i := .Site.Data.hackathon.steps_2019 -}}
+                <div class="step-item">
+                    <p class="watermark">{{ $i.step }}</p>
+                    <div class="step-info">
+                        <p class="name">{{ $i.name }}</p>
+                        <p class="time">{{ $i.time }}</p>
+                        <p class="detail">{{ $i.detail }}</p>
+                        {{- if eq $i.step "1" -}}
+                            <a href="{{ $i.btn_link }}" target="_blank"><p class="btn-link">{{ $i.btn_text }}</p></a>
+                        {{- else if eq $i.step "3" -}}
+                            <p class="btn-link j-open-schedule-modal">{{ $i.btn_text }}</p>
+                            {{- partial "tidb-planet/modal" (dict "type" "schedule" "modal_img" $i.modal_img) -}}
+                        {{- else if eq $i.step "4" -}}
+                            <p class="btn-link j-open-grading-modal">{{ $i.btn_text }}</p>
+                            {{- partial "tidb-planet/modal" (dict "type" "grading" "modal_img" $i.modal_img) -}}
+                        {{- else if eq $i.step "2" -}}
+                            <p class="btn-link learning-material">{{ $i.btn_text }}</p>
+                        {{- end -}}
+                        <p class="step">Step {{ $i.step }}</p>
+                    </div>
+                </div>
+            {{- end -}}
+        </div>
+    </section>
+
+    <section class="learning-section">
+        <h2 class="section-title">学习资料</h2>
+        <div class="cards-list">
+            {{- range $idx, $i := .Site.Data.hackathon.learning_materials_2019 -}}
+                <a href="{{ $i.link }}" target="_blank" class="card-item">
+                    <div class="thumbnail">
+                        <img class="lazy pc-bg" data-original="{{ $i.thumbnail_pc }}" src="/images/svgs/loader-spinner.svg" alt="Cover" />
+                        <img class="lazy mobile-bg" data-original="{{ $i.thumbnail_mobile }}" src="/images/svgs/loader-spinner.svg" alt="Cover" />
+                    </div>
+                    <div class="info">
+                        <h2>{{ $i.title }}</h2>
+                        <p>{{ $i.desc }}</p>
+                    </div>
+                </a>
+            {{- end -}}
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2 class="section-title section-title-white">FAQ</h2>
+        <div class="q-list">
+            {{- range $idx, $i := .Site.Data.hackathon.faq -}}
+                <div>
+                    <div class="question">
+                        {{ $i.q }}
+                    </div>
+                    <div class="answer">{{ $i.a }}</div>
+                </div>
+            {{- end -}}
+        </div>
+    </section>
+
+    <section class="partners">
+        <h2 class="section-title">合作伙伴</h2>
+        <h2 class="sponsor-type">云计算基础设施支持</h2>
+        <div class="logo-list">
+            {{- range $idx, $i := .Site.Data.hackathon.sponsors_2019 -}}
+                <img class="lazy" data-original="{{ $i.img }}" src="/images/svgs/loader-spinner.svg" alt="sponsor logo">
+            {{- end -}}
+        </div>
+        <h2 class="sponsor-type">社区支持</h2>
+        <div class="logo-list">
+            {{- range $idx, $i := .Site.Data.hackathon.partners_2019 -}}
+                <img class="lazy" data-original="{{ $i.img }}" src="/images/svgs/loader-spinner.svg" alt="sponsor logo">
+            {{- end -}}
+        </div>
+    </section>
+
+    <section class="participant-section">
+        <h2 class="section-title section-title-white participant-title">参与 Hackathon 2019</h2>
+        <div class="btns">
+            <a class="btn-item" href="http://nc9hsk15y2xczuor.mikecrm.com/Dz9NzoH" target="_blank">
+                成为志愿者
+            </a>
+            <a href="http://nc9hsk15y2xczuor.mikecrm.com/PiwBPaL" target="_blank" class="btn-item important-btn">
+                报名参赛
+            </a>
+            <div class="btn-item contact-us-hack19">
+                联系我们
+                <div class="qr-tooltiptext f-hide">
+                    <div class="tidb-robot-qrCode">
+                        <img src="/images/community/tidb-robot-qrCode.jpg" alt="TiDB planet qrCode"/>
+                    </div>
+                    <p>有问题，来扫码 (^o^)</p>
+                    <p style="padding-right: 7px;">—— TiDB Robot</p>
+                </div>
+            </div>
+        </div>
+       
+    </section>
+
+    <section>
+        <h2 class="section-title">往期回顾</h2>
+        <div class="reviews-list">
+            <a href="/community-cn/hackathon2018/" class="review-item">
+                <img class="lazy" data-original="https://download.pingcap.com/images/hackathon2019/hack18-review-img.png" src="/images/svgs/loader-spinner.svg" alt="hackathon 2018 banner" />
+            </a>
+            <a href="http://gohack2017.golangfoundation.org/" class="review-item" target="_blank">
+                <img class="lazy" data-original="https://download.pingcap.com/images/hackathon2019/hack17-review-img.png" src="/images/svgs/loader-spinner.svg" alt="hackathon 2017 banner" />
+            </a>
+        </div>
+    </section>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript">
+    function calcBtnOnHack19Banner() {
+        var bannerW = $(window).width()
+        var bannerH, ratioL, ratioT
+
+        if (window.matchMedia('(max-width: 600px)').matches) {
+            bannerH = bannerW / 1.6
+            ratioL = 0.11
+            ratioT = 0.47
+        } else {
+            bannerH = bannerW / 2.66
+            ratioL = 0.22
+            ratioT = 0.52
+        }
+
+        $('.banner-btn').css('left', ratioL * bannerW)
+        $('.banner-btn').css('top', ratioT * bannerH)
+    }
+    $(document).ready(function () {
+        calcBtnOnHack19Banner()
+        $('.banner-btn').css('display', 'block')
+        $(window).resize(calcBtnOnHack19Banner)
+    });
+</script>
+
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+    $('.lazy').lazyload({
+      effect: 'fadeIn',
+      threshold: 200
+    })
+</script>
+<script type="text/javascript" src="/js/community.js"></script>
+{{- end -}}

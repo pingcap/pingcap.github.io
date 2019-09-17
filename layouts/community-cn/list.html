@@ -74,7 +74,8 @@
                       <div class="signable">
                       <a href="{{ $i.link }}">
                           <div class="picture">
-                              <img src="{{ $i.active_image }}" alt="Community activity"/>
+                              <img class="active_image_pc" src="{{ $i.active_image_pc }}" alt="Community activity"/>
+                              <img class="active_image_mobile" src="{{ $i.active_image_mobile }}" alt="Community activity"/>
                           </div>
                           <div class="current-activity-content">
                               <div class="current-activity-summary">{{ $i.summary }}</div>
@@ -97,6 +98,7 @@
                   </div>
               </div>
             </div>
+
             <div class="activities__list">
                 {{- range $idx, $i := .Site.Data.community_activities.activities -}}
                 {{- if not .active -}}
@@ -107,7 +109,7 @@
                               class="lazy"
                               height="65"
                               src="/images/svgs/loader-spinner.svg"
-                              data-original="{{ $i.image }}" alt="Community activity"
+                              data-original="{{ $i.active_image_mobile }}" alt="Community activity"
                             />
                           </div>
                           <div class="name">{{ $i.name }}</div>
