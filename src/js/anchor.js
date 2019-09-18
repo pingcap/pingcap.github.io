@@ -12,7 +12,9 @@
       that.attr('id', newId)
 
       const link = $(
-        `<a class="title-anchor hidden" href="${window.location.href +
+        `<a class="title-anchor hidden" href="${window.location.href.split(
+          '#'
+        )[0] +
           '#' +
           newId}"><img src="/images/svgs/link.svg" /></a>`
       )
