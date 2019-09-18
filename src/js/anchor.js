@@ -7,7 +7,7 @@
       const newId = that
         .text()
         .replace(/\s/g, '-')
-        .replace(/[\.\:：,，\?？、&/]/g, '')
+        .replace(/[\.\:：,，\?？、&/\(\)\+!"]/g, '')
         .toLowerCase()
       that.attr('id', newId)
 
@@ -18,6 +18,11 @@
           '#' +
           newId}"><img src="/images/svgs/link.svg" /></a>`
       )
+      link.click(function(e) {
+        e.preventDefault()
+
+        location.hash = `#${newId}`
+      })
       that.append(link)
 
       that.hover(

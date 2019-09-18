@@ -10,10 +10,11 @@ console.log('🦊 Hello! @PingCAP website')
 // Smooth scrolling when the document is loaded and ready
 function smoothScroll(hash) {
   const y = $('header').height()
+  const marginTop = parseInt($(hash).css('marginTop'))
   if (hash && $(hash).offset())
     $('html, body').animate(
       {
-        scrollTop: $(hash).offset().top - y - 20,
+        scrollTop: $(hash).offset().top - y - marginTop,
       },
       1000
     )
