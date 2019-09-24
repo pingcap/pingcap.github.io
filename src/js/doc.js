@@ -49,11 +49,11 @@ function processStickyTree() {
   ]
 
   if ($('#list_page').length == 0 && !banned_path_arr.includes(pathname)) {
-    $('.sticky-sidebar').animate(
+    $('.docs-nav-toc').animate(
       {
         scrollTop:
           $('li.leaf-child.active').offset().top -
-          $('.sticky-sidebar').offset().top -
+          $('.docs-nav-toc').offset().top -
           200,
       },
       1000

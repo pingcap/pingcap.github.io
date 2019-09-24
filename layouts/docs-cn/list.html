@@ -19,40 +19,41 @@
     <div class="container">
         {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .RelPermalink) 0 }}
 
+        {{ .Scratch.Set "prefix" "/docs-cn" }}
+
+        {{ if $current_version }}
+            {{ .Scratch.Add "prefix" $current_version }}
+            {{ .Scratch.Add "prefix" "/" }}
+            {{ .Scratch.Add "data_i18_link" $current_version }}
+        {{ end }}
+
+        {{ $trimed_URL := strings.TrimPrefix (.Scratch.Get "prefix") .RelPermalink }}
+
+        {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
+
+        {{ $tempFilePath := .File.Path }}
+
+        {{- range $idx, $i := $total_versions -}}
+
+            {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
+
+            {{- if not (fileExists $file_path) -}}
+                {{ $.Scratch.Add "doesnot_exist_ver" $i }}
+            {{- end -}}
+        {{- end -}}
+
+        {{ $doesnot_exist_ver := $.Scratch.Get "doesnot_exist_ver" }}
+
         {{- if eq $current_version "/dev" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_dev_toc "title" "文档") }}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_dev_toc "title" "文档" "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs-cn") }}
         {{- else if eq $current_version "/v2.1" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v21_toc "title" "文档") }}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v21_toc "title" "文档" "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs-cn") }}
         {{- else -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v30_toc "title" "文档") }}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_cn_v30_toc "title" "文档" "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs-cn") }}
         {{- end -}}
 
         <div class="archive">
             <div class="content markdown-body">
-                {{ .Scratch.Set "prefix" "/docs-cn" }}
-
-                {{ if $current_version }}
-                    {{ .Scratch.Add "prefix" $current_version }}
-                    {{ .Scratch.Add "prefix" "/" }}
-                    {{ .Scratch.Add "data_i18_link" $current_version }}
-                {{ end }}
-
-                {{ $trimed_URL := strings.TrimPrefix (.Scratch.Get "prefix") .RelPermalink }}
-
-                {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
-
-                {{ $tempFilePath := .File.Path }}
-
-                {{- range $idx, $i := $total_versions -}}
-
-                    {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
-
-                    {{- if not (fileExists $file_path) -}}
-                        {{ $.Scratch.Add "doesnot_exist_ver" $i }}
-                    {{- end -}}
-                {{- end -}}
-
-                {{ $doesnot_exist_ver := $.Scratch.Get "doesnot_exist_ver" }}
 
                 {{ .Content }}
             </div>
@@ -60,7 +61,6 @@
         </div>
 
         <div class="sidebar-page sticky-sidebar">
-            {{ partial "archives/version-switcher.html" (dict "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs-cn") }}
             {{- partial "archives/download-pdf.html" (dict "isCn" "true" "version" $current_version "stable_version" $stable_version) -}}
             {{ with .Site.GetPage "page" "docs-cn/v3.0/overview.md" }}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") -}}

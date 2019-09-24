@@ -18,37 +18,37 @@
     <div class="container">
         {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .RelPermalink) 0 }}
 
+        {{ if $current_version }}
+            {{ .Scratch.Add "data_i18_link" $current_version }}
+        {{ end }}
+        
+        {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
+
+        {{ $trimed_URL := strings.TrimPrefix $prefix .RelPermalink }}
+
+        {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
+
+        {{ $tempFilePath := .File.Path }}
+
+        {{- range $idx, $i := $total_versions -}}
+
+            {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
+
+            {{- if not (fileExists $file_path) -}}
+                {{ $.Scratch.Add "doesnot_exist_ver" $i }}
+            {{- end -}}
+        {{- end -}}
+
+        {{ $doesnot_exist_ver := ($.Scratch.Get "doesnot_exist_ver") }}
         {{- if eq $current_version "/dev" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation" "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs") }}
         {{- else if eq $current_version "/v2.1" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v21_toc "title" "Documentation") }}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v21_toc "title" "Documentation" "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs") }}
         {{- else -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation") }}
+            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation" "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs") }}
         {{- end -}}
         <div class="archive">
             <div class="content markdown-body">
-                {{ if $current_version }}
-                    {{ .Scratch.Add "data_i18_link" $current_version }}
-                {{ end }}
-                
-                {{ $prefix := $current_version | printf "%s%s" "/docs"  }}
-
-                {{ $trimed_URL := strings.TrimPrefix $prefix .RelPermalink }}
-
-                {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
-
-                {{ $tempFilePath := .File.Path }}
-
-                {{- range $idx, $i := $total_versions -}}
-
-                    {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
-
-                    {{- if not (fileExists $file_path) -}}
-                        {{ $.Scratch.Add "doesnot_exist_ver" $i }}
-                    {{- end -}}
-                {{- end -}}
-
-                {{ $doesnot_exist_ver := ($.Scratch.Get "doesnot_exist_ver") }}
                 {{- .Content -}}
             </div>
             <div class="article-toc"></div>
@@ -56,7 +56,6 @@
         </div>
         <div class="sidebar-page">
             <div class="sticky-sidebar">
-                {{ partial "archives/version-switcher.html" (dict "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs") }}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs" "global" .) -}}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
                 <p class="toc-title">What’s on this page</p>
