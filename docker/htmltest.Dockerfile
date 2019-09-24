@@ -9,15 +9,17 @@ RUN git clone --single-branch --branch yy/deadlink https://github.com/pingcap/pi
 
 WORKDIR /pingcap-website
 
+COPY ./tidb-academy /pingcap-website/content/tidb-academy
+
 RUN mkdir /root/.ssh && echo "StrictHostKeyChecking no" > /root/.ssh/config
 
 RUN apt-get update && apt-get install -y Python-bs4
 
-RUN npm i
+RUN npm i -g gulp-cli && npm i
 
 RUN curl https://htmltest.wjdp.uk | bash
 
-CMD npm run build \
+CMD ./docker/git-submodules.sh; ./scripts/gen-content.sh; export NODE_ENV=production; ./scripts/build-check-err.sh \
   && mkdir -p /htmltest/.htmltest \
   && mv /htmltest/.htmltest .htmltest \
   && ./bin/htmltest \
