@@ -5,7 +5,7 @@
 #   pingcap-website/htmltest
 FROM node:8.11.3
 
-RUN git clone --single-branch --branch yy/deadlink https://github.com/pingcap/pingcap.github.io.git pingcap-website
+RUN git clone --single-branch --branch src https://github.com/pingcap/pingcap.github.io.git pingcap-website
 
 WORKDIR /pingcap-website
 
