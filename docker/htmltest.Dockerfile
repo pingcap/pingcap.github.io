@@ -5,20 +5,19 @@
 #   pingcap-website/htmltest
 FROM node:8.11.3
 
-WORKDIR /pingcap-website
+RUN git clone --single-branch --branch yy/deadlink https://github.com/pingcap/pingcap.github.io.git pingcap-website
 
-RUN git clone https://github.com/pingcap/pingcap.github.io.git
+WORKDIR /pingcap-website
 
 RUN mkdir /root/.ssh && echo "StrictHostKeyChecking no" > /root/.ssh/config
 
 RUN apt-get update && apt-get install -y Python-bs4
 
-RUN cd pingcap.github.io && npm i
+RUN npm i
 
-RUN cd pingcap.github.io && curl https://htmltest.wjdp.uk | bash
+RUN curl https://htmltest.wjdp.uk | bash
 
-CMD cd pingcap.github.io \
-  && npm run build \
+CMD npm run build \
   && mkdir -p /htmltest/.htmltest \
   && mv /htmltest/.htmltest .htmltest \
   && ./bin/htmltest \
