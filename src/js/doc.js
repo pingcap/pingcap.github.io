@@ -48,17 +48,17 @@ function processStickyTree() {
     '/docs-cn/dev/reference/tools/data-migration/overview/',
   ]
 
-  if ($('#list_page').length == 0 && !banned_path_arr.includes(pathname)) {
-    $('.docs-nav-toc').animate(
-      {
-        scrollTop:
-          $('li.leaf-child.active').offset().top -
-          $('.docs-nav-toc').offset().top -
-          200,
-      },
-      1000
-    )
-  }
+  // if ($('#list_page').length == 0 && !banned_path_arr.includes(pathname)) {
+  //   $('.docs-nav-toc').animate(
+  //     {
+  //       scrollTop:
+  //         $('li.leaf-child.active').offset().top -
+  //         $('.docs-nav-toc').offset().top -
+  //         200,
+  //     },
+  //     1000
+  //   )
+  // }
 
   // Open the first item in docs/docs-cn/weekly/recruit list page
   const $firstLI = $('#list_page .st_tree > ul > li:first-child')

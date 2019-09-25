@@ -36,33 +36,108 @@ function processHash() {
 }
 
 // initial algolia search
-function initialSearch(lang) {
-  docsearch({
-    apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
-    indexName: 'pingcap',
-    inputSelector: '#search-input',
-    algoliaOptions: {
-      hitsPerPage: 50,
-      facetFilters: ['tags:' + lang],
-    },
-    debug: false, // Set debug to true if you want to inspect the dropdown
-    transformData: function(hits) {
-      // filter 404 results
-      function is404(h) {
-        var pattern = /404/gi
-        return h && h.lvl1 && pattern.exec(h.lvl1)
+function initialSearch(lang, stableVersion) {
+  let urlParams = new URLSearchParams(window.location.search)
+  let url = window.location.href
+  
+  var re = new RegExp("(v\\d+\\.\\d+|dev)")
+  var version
+  if (url.match(re)) {
+    version = url.match(re)[0]
+  }
+
+  console.log('url', url)
+
+  console.log('v', version)
+  if (urlParams.has('q')) {
+    $('#search-input').val(urlParams.get('q'))
+    const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    const index = client.initIndex('pingcap');
+    // console.log('client', client, index)
+
+    index.search(
+      {
+        query: urlParams.get('q'),
+        hitsPerPage: 100,
+        facetFilters: ['tags:' + lang, 'version:' + version],
+      },
+
+      (err, {hits} = {}) => {
+        if(err) throw err;
+
+        // console.log('hits are:', hits)
+        let formattedHits = docsearch.formatHits(hits);
+        // console.log('formattedHits are:', formattedHits)
+        let previousResult = null;
+        let collatedResults = [];
+        // console.log('results: ', formattedHits)
+        formattedHits.forEach(hit => {
+          if (!hit.category || !hit.title) return;
+          if (!previousResult || previousResult.category !== hit.category) {
+            previousResult = {
+              category: hit.category,
+              hits: [],
+              url: hit.url
+            };
+            collatedResults.push(previousResult);
+          }
+          hit.text = hit.title
+            .replace(hit.category, '')
+            .replace('<span class="aa-suggestion-title-separator" aria-hidden="true"> › </span>', '');
+          if (hit.text) {
+            const previousHit = previousResult.hits[previousResult.hits.length - 1];
+            if (!previousHit || previousHit.text !== hit.text) {
+              previousResult.hits.push(hit);
+            }
+          }
+        });
+
+        console.log('collect:', collatedResults)
+        $('#search-results').append(collatedResults.map(result => (
+          '<div class="search-result">\
+            <div class="search-title">\
+              <a href="' + result.url + '">' + result.category + '</a>\
+            </div>\
+            <div class="search-text">' +
+            result.hits.map(hit => (
+              '<p>' + hit.text + ' <a href="' + hit.url + '">[more&hellip;]</a></p>'
+            )).join('') +
+          '</div></div>'
+        )).join(''));
       }
-      var filteredHits = hits.filter(function(hit) {
-        return !is404(hit.hierarchy)
-      })
-      return filteredHits
-    },
-  })
+    )
+  }
+
+
+  // var res = docsearch({
+  //   apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
+  //   indexName: 'pingcap',
+  //   inputSelector: '#search-input',
+  //   appId: 'BH4D9OD16A',
+  //   algoliaOptions: {
+  //     hitsPerPage: 5,
+  //     facetFilters: ['tags:' + lang],
+  //   },
+  //   debug: false, // Set debug to true if you want to inspect the dropdown
+  //   transformData: function(hits) {
+  //     // filter 404 results
+  //     function is404(h) {
+  //       var pattern = /404/gi
+  //       return h && h.lvl1 && pattern.exec(h.lvl1)
+  //     }
+  //     var filteredHits = hits.filter(function(hit) {
+  //       return !is404(hit.hierarchy)
+  //     })
+  //     return filteredHits
+  //   },
+  // })
+
+  // console.log(res)
 }
 
 // process search ui
 function processSearch() {
-  initialSearch($('#search-input').data('lang'))
+  initialSearch($('#search-input').data('lang'), $('#search-input').data('stable-version'))
   // Hide search suggestions dropdown menu on focusout
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
