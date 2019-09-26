@@ -7,7 +7,7 @@
       const newId = that
         .text()
         .replace(/\s/g, '-')
-        .replace(/[\.\:：,，\?？、&/\(\)\+!"]/g, '')
+        .replace(/[\.\:：,，\?？、&/\(\)（）\+!"]/g, '')
         .toLowerCase()
       that.attr('id', newId)
 
