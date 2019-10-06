@@ -1,9 +1,12 @@
+import { format } from "util"
+
 // JS Goes here - ES6 supported
 
 // Global JS
 
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
+// const _ = require('lodash')
 
 // import '../../dist/css/main.css'
 
@@ -42,97 +45,104 @@ function initialSearch(lang, stableVersion) {
   
   var re = new RegExp("(v\\d+\\.\\d+|dev)")
   var version
+
+  // gets current version
   if (url.match(re)) {
     version = url.match(re)[0]
   }
 
-  console.log('url', url)
-
-  console.log('v', version)
+  // 
   if (urlParams.has('q')) {
     $('#search-input').val(urlParams.get('q'))
-    const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    const client = algoliasearch('2LSDV8XW8G', '883fe294e0ecf37653a8a1e6a3743b36');
     const index = client.initIndex('pingcap');
-    // console.log('client', client, index)
 
     index.search(
       {
         query: urlParams.get('q'),
-        hitsPerPage: 100,
+        hitsPerPage: 50,
         facetFilters: ['tags:' + lang, 'version:' + version],
       },
 
       (err, {hits} = {}) => {
         if(err) throw err;
 
-        // console.log('hits are:', hits)
-        let formattedHits = docsearch.formatHits(hits);
-        // console.log('formattedHits are:', formattedHits)
-        let previousResult = null;
-        let collatedResults = [];
-        // console.log('results: ', formattedHits)
-        formattedHits.forEach(hit => {
-          if (!hit.category || !hit.title) return;
-          if (!previousResult || previousResult.category !== hit.category) {
-            previousResult = {
-              category: hit.category,
-              hits: [],
-              url: hit.url
-            };
-            collatedResults.push(previousResult);
+      // console.log('hits: ', hits)
+
+      var highlightContent = []
+
+      hits.forEach((hit, idx) => {
+        // gets highlight snippet
+        if(hit._snippetResult) {
+          highlightContent[idx] = hit._snippetResult.content.value
+        } else {
+          highlightContent[idx] = ''
+        }
+        
+        // unifies anchor sematic
+        var preKey
+        for (var key in hit.hierarchy) {
+          if(idx == 6 && hit.hierarchy[key] != null) {
+            let newAnchor = hit.hierarchy[key].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
+            hits[idx].anchor = newAnchor
+            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
+          } else if(hit.hierarchy[key] == null) {
+            let newAnchor = hit.hierarchy[preKey].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
+            hits[idx].anchor = newAnchor
+            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
+            continue
           }
+          preKey = key
+        }
+      })
+
+      // formates returned hits
+      let formattedHits = docsearch.formatHits(hits);
+      let previousResult = null;
+      let collatedResults = [];
+
+      // collects hits by lvl0
+      formattedHits.forEach((hit, idx) => {
+        if (!hit.category || !hit.title) return;
+        if (!previousResult || previousResult.category !== hit.category) {
+          previousResult = {
+            category: hit.category,
+            hits: [],
+            url: hit.url
+          };
+          collatedResults.push(previousResult);
+        }
+
+        // assigns content to hit text
+        if(!hit.text) {
           hit.text = hit.title
-            .replace(hit.category, '')
-            .replace('<span class="aa-suggestion-title-separator" aria-hidden="true"> › </span>', '');
-          if (hit.text) {
-            const previousHit = previousResult.hits[previousResult.hits.length - 1];
-            if (!previousHit || previousHit.text !== hit.text) {
-              previousResult.hits.push(hit);
-            }
+        } else if (hit.text) {
+          hit.text = highlightContent[idx]
+        }
+        const previousHit = previousResult.hits[previousResult.hits.length - 1];
+          if (!previousHit || previousHit.text !== hit.text) {
+            previousResult.hits.push(hit);
           }
-        });
+      });
 
-        console.log('collect:', collatedResults)
-        $('#search-results').append(collatedResults.map(result => (
-          '<div class="search-result">\
-            <div class="search-title">\
-              <a href="' + result.url + '">' + result.category + '</a>\
-            </div>\
-            <div class="search-text">' +
-            result.hits.map(hit => (
-              '<p>' + hit.text + ' <a href="' + hit.url + '">[more&hellip;]</a></p>'
-            )).join('') +
-          '</div></div>'
-        )).join(''));
+      // appends results to search-results container
+      $('#search-results').append(collatedResults.map(result => (
+        '<div class="search-category-result">\
+          <h1 class="search-category-title">' + result.category + '</h1>' +
+          result.hits.map(hit => (
+            '<div class="search-result-item">\
+              <p>' +  hit.text + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a>\
+            </div>'
+          )).join('') +
+        '</div>'
+      )).join(''));
+
+      // hides loader spinner when shows the search-results
+      if($('.search-category-result').length) {
+        $('.doc .content img').css('display', 'none')
       }
-    )
+    });
   }
-
-
-  // var res = docsearch({
-  //   apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
-  //   indexName: 'pingcap',
-  //   inputSelector: '#search-input',
-  //   appId: 'BH4D9OD16A',
-  //   algoliaOptions: {
-  //     hitsPerPage: 5,
-  //     facetFilters: ['tags:' + lang],
-  //   },
-  //   debug: false, // Set debug to true if you want to inspect the dropdown
-  //   transformData: function(hits) {
-  //     // filter 404 results
-  //     function is404(h) {
-  //       var pattern = /404/gi
-  //       return h && h.lvl1 && pattern.exec(h.lvl1)
-  //     }
-  //     var filteredHits = hits.filter(function(hit) {
-  //       return !is404(hit.hierarchy)
-  //     })
-  //     return filteredHits
-  //   },
-  // })
-
-  // console.log(res)
 }
 
 // process search ui
