@@ -60,7 +60,7 @@ function initialSearch(lang, stableVersion) {
     index.search(
       {
         query: urlParams.get('q'),
-        hitsPerPage: 50,
+        hitsPerPage: 20,
         facetFilters: ['tags:' + lang, 'version:' + version],
       },
 
@@ -101,6 +101,8 @@ function initialSearch(lang, stableVersion) {
       let previousResult = null;
       let collatedResults = [];
 
+      console.log('hits: ', hits)
+
       // collects hits by lvl0
       formattedHits.forEach((hit, idx) => {
         if (!hit.category || !hit.title) return;
@@ -139,7 +141,7 @@ function initialSearch(lang, stableVersion) {
 
       // hides loader spinner when shows the search-results
       if($('.search-category-result').length) {
-        $('.doc .content img').css('display', 'none')
+        $('.lazy').css('display', 'none')
       }
     });
   }
