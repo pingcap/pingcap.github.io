@@ -60,14 +60,12 @@ function initialSearch(lang, stableVersion) {
     index.search(
       {
         query: urlParams.get('q'),
-        hitsPerPage: 20,
+        hitsPerPage: 100,
         facetFilters: ['tags:' + lang, 'version:' + version],
       },
 
       (err, {hits} = {}) => {
         if(err) throw err;
-
-      // console.log('hits: ', hits)
 
       var highlightContent = []
 
@@ -101,8 +99,6 @@ function initialSearch(lang, stableVersion) {
       let previousResult = null;
       let collatedResults = [];
 
-      console.log('hits: ', hits)
-
       // collects hits by lvl0
       formattedHits.forEach((hit, idx) => {
         if (!hit.category || !hit.title) return;
@@ -118,9 +114,8 @@ function initialSearch(lang, stableVersion) {
         // assigns content to hit text
         if(!hit.text) {
           hit.text = hit.title
-        } else if (hit.text) {
-          hit.text = highlightContent[idx]
         }
+
         const previousHit = previousResult.hits[previousResult.hits.length - 1];
           if (!previousHit || previousHit.text !== hit.text) {
             previousResult.hits.push(hit);
