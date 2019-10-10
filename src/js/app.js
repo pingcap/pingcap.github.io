@@ -98,7 +98,6 @@ function initialSearch(lang, stableVersion) {
         }
       })
 
-
       // formates returned hits
       let formattedHits = docsearch.formatHits(hits);
       let previousResult = null;
@@ -128,25 +127,34 @@ function initialSearch(lang, stableVersion) {
         }
 
         const previousHit = previousResult.hits[previousResult.hits.length - 1];
-          if (!previousHit || previousHit.text !== hit.text) {
+
+        if (hit.text.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0 && hit.subcategory.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0) {
+          return
+        } else if (!previousHit || previousHit.text !== hit.text) {
             previousResult.hits.push(hit);
           }
       });
 
-      console.log('formatted: ', formattedHits)
+      console.log('collected: ', collatedResults)
 
       // appends results to search-results container
-      $('#search-results').append(collatedResults.map(result => (
-        '<div class="search-category-result">\
-          <h1 class="search-category-title">' + result.category + '</h1>' +
-          result.hits.map(hit => (
-            '<div class="search-result-item">' + 
-            (hit.subcategory != hit.text ? '<span class="subcategory">' + hit.subcategory +  ' > </span>' : '') +
-              '<span class="text">' +  hit.text + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>\
-            </div>'
-          )).join('') +
-        '</div>'
-      )).join(''));
+      if(collatedResults.length == 0) {
+        $('#search-results').append(
+          '<div class="search-category-result"> Oops... No Result!</div>'
+        );
+      } else {
+        $('#search-results').append(collatedResults.map(result => (
+          '<div class="search-category-result">\
+            <h1 class="search-category-title">' + result.category + '</h1>' +
+            result.hits.map(hit => (
+              '<div class="search-result-item">' + 
+              (hit.subcategory != hit.text ? '<span class="subcategory">' + hit.subcategory +  ' > </span>' : '') +
+                '<span class="text">' +  hit.text + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>\
+              </div>'
+            )).join('') +
+          '</div>'
+        )).join(''));
+      }
 
       // hides loader spinner when shows the search-results
       if($('.search-category-result').length) {
