@@ -51,7 +51,7 @@ function initialSearch(lang, stableVersion) {
     version = url.match(re)[0]
   }
 
-  // 
+  
   if (urlParams.has('q')) {
     $('#search-input').val(urlParams.get('q'))
     const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
@@ -60,7 +60,7 @@ function initialSearch(lang, stableVersion) {
     index.search(
       {
         query: urlParams.get('q'),
-        hitsPerPage: 100,
+        hitsPerPage: 50,
         facetFilters: ['tags:' + lang, 'version:' + version],
       },
 
@@ -69,35 +69,46 @@ function initialSearch(lang, stableVersion) {
 
       var highlightContent = []
 
+      console.log('hits ', hits)
+
       hits.forEach((hit, idx) => {
         // gets highlight snippet
-        if(hit._snippetResult) {
+        if(hit._highlightResult && hit._highlightResult.content && hit._highlightResult.content.value.length < 500) {
+          highlightContent[idx] = hit._highlightResult.content.value
+        } else if(hit._snippetResult && hit._snippetResult.content) {
           highlightContent[idx] = hit._snippetResult.content.value
         } else {
           highlightContent[idx] = ''
         }
         
-        // unifies anchor sematic
+        // unifies anchor style
         var preKey
         for (var key in hit.hierarchy) {
           if(idx == 6 && hit.hierarchy[key] != null) {
             let newAnchor = hit.hierarchy[key].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
             hits[idx].anchor = newAnchor
             hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-          } else if(hit.hierarchy[key] == null) {
+          } else if(hit.hierarchy[key] == null && hit.hierarchy[preKey] != null) {
             let newAnchor = hit.hierarchy[preKey].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
             hits[idx].anchor = newAnchor
             hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-            continue
+            break
           }
           preKey = key
         }
       })
 
+
       // formates returned hits
       let formattedHits = docsearch.formatHits(hits);
       let previousResult = null;
       let collatedResults = [];
+
+      formattedHits.forEach((hit, idx) => {
+        if(highlightContent[idx]) {
+          hit.text = highlightContent[idx]
+        }
+      })
 
       // collects hits by lvl0
       formattedHits.forEach((hit, idx) => {
@@ -122,13 +133,16 @@ function initialSearch(lang, stableVersion) {
           }
       });
 
+      console.log('formatted: ', formattedHits)
+
       // appends results to search-results container
       $('#search-results').append(collatedResults.map(result => (
         '<div class="search-category-result">\
           <h1 class="search-category-title">' + result.category + '</h1>' +
           result.hits.map(hit => (
-            '<div class="search-result-item">\
-              <p>' +  hit.text + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a>\
+            '<div class="search-result-item">' + 
+            (hit.subcategory != hit.text ? '<span class="subcategory">' + hit.subcategory +  ' > </span>' : '') +
+              '<span class="text">' +  hit.text + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>\
             </div>'
           )).join('') +
         '</div>'
