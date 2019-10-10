@@ -69,8 +69,6 @@ function initialSearch(lang, stableVersion) {
 
       var highlightContent = []
 
-      console.log('hits ', hits)
-
       hits.forEach((hit, idx) => {
         // gets highlight snippet
         if(hit._highlightResult && hit._highlightResult.content && hit._highlightResult.content.value.length < 500) {
@@ -130,10 +128,25 @@ function initialSearch(lang, stableVersion) {
 
         if (hit.text.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0 && hit.subcategory.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0) {
           return
-        } else if (!previousHit || previousHit.text !== hit.text) {
-            previousResult.hits.push(hit);
-          }
+        } else {
+          previousResult.hits.push(hit);
+        }
       });
+
+      // enum duplicate anchors in an docs/docs-cn
+      var idsMap = new Map()
+      collatedResults.forEach(result => {
+        result.hits.forEach(hit => {
+          if(idsMap.has(hit.url)) {
+            const number = idsMap.get(hit.url)
+            idsMap.set(hit.url, number + 1)
+            hit.url = `${hit.url}-${number + 1}`
+          } else {
+            idsMap.set(hit.url, 0)
+            hit.url = `${hit.url}`
+          }
+        })
+      })
 
       console.log('collected: ', collatedResults)
 
