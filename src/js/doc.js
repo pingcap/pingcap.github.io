@@ -280,26 +280,28 @@ $(document).ready(function() {
   if ($('.doc').length > 0) {
     if ($('.copyable-code-block').length) {
       $('.copyable-code-block').each(function() {
-        var preTag = $(this).next('div.highlight')[0].childNodes[0]
-        var $preTag = $(preTag)
-        $preTag.css('position', 'relative')
-
-        var codeTag = $(this).next('div.highlight')[0].childNodes[0]
-          .childNodes[0]
-        var $codeTag = $(codeTag)
-
-        if ($(this).hasClass('shell-root')) {
-          $codeTag.addClass('shell-root-mark')
-          $codeTag.addClass('cmd-mark')
-        } else if ($(this).hasClass('shell-regular')) {
-          $codeTag.addClass('cmd-mark')
-          $codeTag.addClass('shell-regular-mark')
-        } else if ($(this).hasClass('sql')) {
-          $codeTag.addClass('sql-mark')
-          $codeTag.addClass('cmd-mark')
+        if($(this).next('div.highlight')[0]) {
+          var preTag = $(this).next('div.highlight')[0].childNodes[0]
+          var $preTag = $(preTag)
+          $preTag.css('position', 'relative')
+  
+          var codeTag = $(this).next('div.highlight')[0].childNodes[0]
+            .childNodes[0]
+          var $codeTag = $(codeTag)
+  
+          if ($(this).hasClass('shell-root')) {
+            $codeTag.addClass('shell-root-mark')
+            $codeTag.addClass('cmd-mark')
+          } else if ($(this).hasClass('shell-regular')) {
+            $codeTag.addClass('cmd-mark')
+            $codeTag.addClass('shell-regular-mark')
+          } else if ($(this).hasClass('sql')) {
+            $codeTag.addClass('sql-mark')
+            $codeTag.addClass('cmd-mark')
+          }
+  
+          addCopy($(this).next('div.highlight')[0])
         }
-
-        addCopy($(this).next('div.highlight')[0])
       })
     } else {
       var $code = document.querySelectorAll('.highlight')
