@@ -67,70 +67,130 @@ function initialSearch(lang, stableVersion) {
       (err, {hits} = {}) => {
         if(err) throw err;
 
-      var highlightContent = []
+      // var highlightContent = []
 
-      hits.forEach((hit, idx) => {
-        // gets highlight snippet
-        if(hit._highlightResult && hit._highlightResult.content && hit._highlightResult.content.value.length < 500) {
-          highlightContent[idx] = hit._highlightResult.content.value
-        } else if(hit._snippetResult && hit._snippetResult.content) {
-          highlightContent[idx] = hit._snippetResult.content.value
-        } else {
-          highlightContent[idx] = ''
+      console.log('hits: ', hits)
+
+      var newFormattedHits = hits.map(hit => {
+        var newHitArray = {}
+        if(hit.hierarchy.lvl0) {
+          newHitArray['category'] = hit.hierarchy.lvl0
         }
-        
-        // unifies anchor style
-        var preKey
-        for (var key in hit.hierarchy) {
-          if(idx == 6 && hit.hierarchy[key] != null) {
-            let newAnchor = hit.hierarchy[key].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
-            hits[idx].anchor = newAnchor
-            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-          } else if(hit.hierarchy[key] == null && hit.hierarchy[preKey] != null) {
-            let newAnchor = hit.hierarchy[preKey].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
-            hits[idx].anchor = newAnchor
-            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-            break
+
+        if(hit._highlightResult.hierarchy) {
+          // var subTitles = Object.keys(hit._highlightResult.hierarchy).map(lvl => {
+          //   return hit._highlightResult.hierarchy[lvl].value
+          // }).join(' > ');
+
+          // newHitArray['subTitles'] = subTitles
+
+          var lvls = Object.keys(hit._highlightResult.hierarchy)
+          var lvl0 = lvls.shift()
+          let subTitles
+          console.log('keys: ',lvls, lvl0)
+          if(lvls.length > 0) {
+            subTitles = lvls.map(lvl => {
+              return hit._highlightResult.hierarchy[lvl].value
+            }).join(' > ');
+          } else {
+            subTitles = hit._highlightResult.hierarchy[lvl0].value
           }
-          preKey = key
+          newHitArray['subTitles'] = subTitles
         }
+
+        if(hit.content) {
+          if(hit.content.length < 500) {
+            newHitArray['textContent'] = hit._highlightResult.content.value
+          } else {
+            newHitArray['textContent'] = hit._snippetResult.content.value
+          }
+        } else if(!hit.content) {
+          newHitArray['textContent'] = null
+        }
+
+        // unifies anchor style
+        var lastLvl = Object.values(hit.hierarchy).filter(value => value != null).pop()
+        newHitArray['url'] = hit.url.replace(/\#.*$/g, '#' + lastLvl.replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase())
+
+        return newHitArray
       })
+
+      console.log('newFormattedHits', newFormattedHits)
+
+      // console.log('newformatedhits: ', newFormattedHits)
+      // let formattedHits = docsearch.formatHits(hits);
+
+      // console.log('formatted: ', formattedHits)
+
+      // hits.forEach((hit, idx) => {
+      //   // gets highlight snippet
+      //   if(hit._highlightResult && hit._highlightResult.content && hit._highlightResult.content.value.length < 500) {
+      //     highlightContent[idx] = hit._highlightResult.content.value
+      //   } else if(hit._snippetResult && hit._snippetResult.content) {
+      //     highlightContent[idx] = hit._snippetResult.content.value
+      //   } else {
+      //     highlightContent[idx] = ''
+      //   }
+        
+        
+      // })
 
       // formates returned hits
-      let formattedHits = docsearch.formatHits(hits);
-      let previousResult = null;
+      let previousCategories = []
+      let resultsInCategory = []
       let collatedResults = [];
 
-      formattedHits.forEach((hit, idx) => {
-        if(highlightContent[idx]) {
-          hit.text = highlightContent[idx]
-        }
-      })
+
+      // formattedHits.forEach((hit, idx) => {
+      //   if(highlightContent[idx]) {
+      //     hit.text = highlightContent[idx]
+      //   }
+      // })
 
       // collects hits by lvl0
-      formattedHits.forEach((hit, idx) => {
-        if (!hit.category || !hit.title) return;
-        if (!previousResult || previousResult.category !== hit.category) {
-          previousResult = {
+      newFormattedHits.forEach(hit => {
+        console.log('hit', hit.category, previousCategories, previousCategories.includes(hit.category), collatedResults)
+        if(!hit.category) return;
+        if(previousCategories && previousCategories.includes(hit.category)) {
+          collatedResults.forEach((res, i) => {
+            if(res.category == hit.category) {
+              collatedResults[i].hits.push(hit)
+            }
+          })
+        } else {
+          previousCategories.push(hit.category)
+          resultsInCategory = {
             category: hit.category,
-            hits: [],
-            url: hit.url
-          };
-          collatedResults.push(previousResult);
+            hits:[hit],
+          }
+          collatedResults.push(resultsInCategory)
         }
+        // console.log('previous', previousCategories, collatedResults)
+        // if (!previousResult || previousResult.category !== hit.category) {
+        //   previousResult = {
+        //     category: hit.category,
+        //     hits: [],
+        //     url: hit.url
+        //   };
+        //   collatedResults.push(previousResult);
+        // }
 
         // assigns content to hit text
-        if(!hit.text) {
-          hit.text = hit.title
-        }
+        // if(!hit.textContent) {
+        //   hit.text = hit.title
+        // }
 
-        const previousHit = previousResult.hits[previousResult.hits.length - 1];
+        // const previousHit = previousResult.hits[previousResult.hits.length - 1];
 
-        if (hit.text.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0 && hit.subcategory.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0) {
-          return
-        } else {
-          previousResult.hits.push(hit);
-        }
+        // if(!previousHit) {
+        //   previousResult.hits.push(hit);
+        // }
+
+        // if (hit.text.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0 && hit.subcategory.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0) {
+        //   return
+        // } else if (!previousHit || previousHit.text !== hit.text) {
+        //   previousResult.hits.push(hit);
+        // }
       });
 
       // enum duplicate anchors in an docs/docs-cn
@@ -160,10 +220,10 @@ function initialSearch(lang, stableVersion) {
           '<div class="search-category-result">\
             <h1 class="search-category-title">' + result.category + '</h1>' +
             result.hits.map(hit => (
-              '<div class="search-result-item">' + 
-              (hit.subcategory != hit.text ? '<span class="subcategory">' + hit.subcategory +  ' > </span>' : '') +
-                '<span class="text">' +  hit.text + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>\
-              </div>'
+              '<div class="search-result-item">\
+                <span class="subcategory">' + hit.subTitles + 
+                (hit.textContent ? '</span><span class="text"> > ' +  hit.textContent + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>' : '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>') +
+              '</div>'
             )).join('') +
           '</div>'
         )).join(''));
