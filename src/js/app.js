@@ -87,7 +87,7 @@ function initialSearch(lang, stableVersion) {
           var lvls = Object.keys(hit._highlightResult.hierarchy)
           var lvl0 = lvls.shift()
           let subTitles
-          console.log('keys: ',lvls, lvl0)
+          // console.log('keys: ',lvls, lvl0)
           if(lvls.length > 0) {
             subTitles = lvls.map(lvl => {
               return hit._highlightResult.hierarchy[lvl].value
@@ -149,11 +149,13 @@ function initialSearch(lang, stableVersion) {
 
       // collects hits by lvl0
       newFormattedHits.forEach(hit => {
-        console.log('hit', hit.category, previousCategories, previousCategories.includes(hit.category), collatedResults)
+        // console.log('hit', hit.category, previousCategories, previousCategories.includes(hit.category), collatedResults)
         if(!hit.category) return;
         if(previousCategories && previousCategories.includes(hit.category)) {
           collatedResults.forEach((res, i) => {
-            if(res.category == hit.category) {
+            if(res.category == hit.category && 
+              ((hit.subTitles.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0) ||
+              (hit.textContent && hit.textContent.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0))) {
               collatedResults[i].hits.push(hit)
             }
           })
