@@ -18,7 +18,33 @@
         </div>
     </div>
 
-    <div class="organization__section">
+    <div class="community-dynamics">
+        <div class="container">
+            <div class="section-title">社区动态</div>
+            {{ $communityTag := "社区动态" }}
+            {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
+            <div class="flex-lists">
+              {{- range (first 3 $posts) }}
+                <a href="{{ .RelPermalink }}" class="dynamic-item">
+                    <img class="lazy" data-original="{{ .Params.image }}" src="/images/svgs/loader-spinner.svg" alt=""/>
+                    <p>{{ .Params.title }}</p>
+                </a>
+              {{- end -}}
+            </div>
+            {{- partial "archives/readMoreBtn.html" (dict "url" "/blog-cn/#社区动态" "btnText" "查看更多") }}
+        </div>
+    </div>
+
+    <div class="community-members">
+      <div class="container">
+          <div class="section-title">社区成员</div>
+          <div class="developer-group-members">
+            
+          </div>
+      </div>
+    </div>
+
+    <!-- <div class="organization__section">
         <div class="container">
             <div class="section-title">社区架构</div>
             <div class="intro">一个项目经常会有一个围绕着他的社区。这个社区由各自不同角色的用户组成，TiDB 社区主要有以下几个部分：</div>
@@ -170,8 +196,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="appreciation__section">
+    </div> -->
+    <!-- <div class="appreciation__section">
         <div class="container">
             <div class="section-title">致谢</div>
             <div class="appreciation__content">
@@ -198,7 +224,7 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 {{- end -}}
 

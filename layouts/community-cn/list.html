@@ -138,14 +138,7 @@
                 {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
                 {{- partial "archives/article-reading-card.html" (dict "posts" (first 1 $posts.ByDate.Reverse) "hasMetaData" "true" "hasBrief" "true" "global" .) -}}
             </div>
-            <div class="readMoreBtn">
-                <a href="/blog-cn/#社区">
-                    <button class="readMore-btn">
-                        <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" alt="Arrow"/></span>
-                        <span class="btn-text">更多文章</span>
-                    </button>
-                </a>
-            </div>
+            {{- partial "archives/readMoreBtn.html" (dict "url" "/blog-cn/#社区" "btnText" "更多文章") }}
         </div>
       </div>
 
