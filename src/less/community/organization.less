@@ -3,6 +3,21 @@
 @import './devcon2019.less';
 @import './common-style.less';
 
+@lineColor: rgba(255, 255, 255, 0.5);
+@btnHeightLarge: 60px;
+@btnWidthLarge: 220px;
+@btnWidthMedia: 180px;
+@btnWidthSmall: 150px;
+@btnWidthTiny: 90px;
+@btnWidthEtremeSmall: 85px;
+@lineHeight: 40px;
+@developerBlue: #2977C7;
+@userOrange: #D29544;
+@pmcBtnColor: #3EA6CC;
+@devBtnColor: @developerBlue;
+@userBtnColor: @userOrange;
+@comBtnColor: #956D8F;
+
 .community-organization {
   .container {
     max-width: 1124px;
@@ -10,8 +25,224 @@
 }
 
 .organization__banner {
-  padding-top: 37%; /* 316 / 1024 */
+  padding-top: 45%; /* 316 / 1024 */
   background: url('/images/community/banners/organization-banner-pc.jpg') no-repeat;
+}
+
+.banner__content-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+
+  .content {
+    position: absolute;
+    text-align: center;
+    bottom: 3rem;
+    right: 3rem;
+    font-size: 2rem;
+    color: #fff;
+  }
+}
+
+#architecture {
+  position: relative;
+  height: 100%;
+  padding: 0 100px;
+  width: 100%;
+}
+
+button {
+  cursor: pointer;
+  line-height: 1.7;
+  // z-index: 1;
+}
+
+button.branchBtn.userBtn.orgBtn.tr {
+  cursor: text;
+
+  &:hover {
+    background-color: @userOrange;
+  }
+}
+
+.org-tooltiptext {
+  opacity: 0;
+  width: 230px;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  position: absolute;
+  z-index: 10;
+  font-size: .6rem;
+  line-height: 1.7;
+  transition: opacity .3s;
+  top: @lineHeight;
+}
+
+.org-tooltiptext-hover {
+  opacity: 1;
+}
+
+.tt-left {
+  left: -250px;
+  background-color: @developerBlue;
+}
+
+.tt-right {
+  right: -250px;
+  background-color: @userOrange;
+}
+
+.tt-tr {
+  right: -250px;
+  top: -3rem !important;
+  background-color: @pmcBtnColor;
+}
+
+.tt-tl {
+  left: -250px;
+  top: -4rem !important;
+  background-color: @comBtnColor;
+}
+
+.branches {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.branch {
+  height: @lineHeight;
+  width: 1px;
+  background: @lineColor;
+  position: relative;
+
+  .branchBtn {
+    width: @btnWidthLarge;
+    position: absolute;
+    top: @lineHeight;
+    // z-index: 1;
+  }
+}
+
+.tl {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tr {
+  right: -50%;
+  transform: translateX(50%);
+}
+
+.line-divider {
+  position: relative;
+  max-width: 1024px;
+  margin: 7rem auto 0;
+  border-bottom: 1px solid @lineColor;
+
+  &::before {
+    content: '';
+    height: 2rem;
+    border-left: 1px solid @lineColor;
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+  }
+}
+
+.orgBtn {
+  font-size: 16px;
+  padding: 15px;
+  color: white;
+  text-align: center;
+  line-height: 1.7;
+  z-index: 1;
+}
+
+.headBtn {
+  min-width: @btnWidthLarge;
+  position: absolute;
+  left: 50%;
+  top: -4rem;
+  background-color: #3e52cc;
+}
+
+.pmcBtn {
+  background-color: @pmcBtnColor;
+  border: 1px solid @pmcBtnColor;
+}
+
+.pmcBtn-click {
+  background-color: transparent;
+}
+
+.devBtn {
+  background-color: @devBtnColor;
+  border: 1px solid @devBtnColor;
+}
+
+.btn-tooltip {
+  position: relative;
+}
+
+.devSubBtns {
+  position: absolute;
+  margin-top: calc(~'@{btnHeightLarge} + @{lineHeight}');
+}
+
+.branchBtn-hover {
+  background-color: transparent !important;
+}
+
+.devSubBtn,
+.userSubBtn {
+  width: @btnWidthLarge;
+  margin-top: 2rem;
+  position: relative;
+  background: transparent;
+
+  &::before {
+    content: '';
+    height: calc(~'@{lineHeight}  + 2px ');
+    border-left: 1px solid @lineColor;
+    position: absolute;
+    top: calc(~'-@{lineHeight} - 2px ');
+    left: 50%;
+  }
+}
+
+.devSubBtn {
+  border: 1px solid @developerBlue;
+
+  &:hover {
+    background-color: @devBtnColor;
+  }
+}
+
+.userSubBtn {
+  border: 1px solid @userOrange;
+
+  &:hover {
+    background-color: @userOrange;
+  }
+}
+
+.userBtn {
+  background-color: @userBtnColor;
+  border: 1px solid @userBtnColor;
+}
+
+.comBtn {
+  background-color: @comBtnColor;
+  border: 1px solid @comBtnColor;
+}
+
+.comBtn-click {
+  background-color: transparent;
 }
 
 .community-dynamics {
@@ -23,19 +254,19 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+}
 
-  .dynamic-item {
-    width: 300px;
-    margin: 0 20px;
-    height: 300px;
-    position: relative;
+.dynamic-item {
+  width: 300px;
+  margin: 0 20px;
+  height: 300px;
+  position: relative;
 
-    img {
-      width: 100%;
-      height: 200px;
-      display: block;
-      border-radius: 4px;
-    }
+  img {
+    width: 100%;
+    height: 200px;
+    display: block;
+    border-radius: 4px;
   }
 
   p {
@@ -44,471 +275,175 @@
     line-height: 1.7;
     text-align: left;
   }
+
+  &:hover {
+    img {
+      box-shadow: 0 5px 12px #c4c4c4;
+    }
+  }
 }
 
-.banner__content-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
+.developer-group-members,
+.user-group-members {
+  background-color: #F5F6F8;
+  margin-bottom: 6rem;
 
-  .content {
-    max-width: 1124px;
+  .member-header {
+    background-color: @developerBlue;
+    color: #FFFFFF;
+    font-size: 1rem;
+    border-radius: 4px 4px 0 0;
+    padding: 10px 40px;
+  }
+
+  .member-type {
+    padding: 10px 40px;
+    color: @developerBlue;
+    font-size: 16px;
+    margin: 2rem 0 1rem;
     position: relative;
-    text-align: center;
-    margin: 0 auto;
-    padding: 5.5rem 0;
-    font-size: 2rem;
-    color: #fff;
   }
-}
 
-.divider {
-  width: 100%;
-  max-width: 1124px;
-  padding: 0 1rem;
-  margin: 2rem 0 3rem;
+  .user-divider::after {
+    border-bottom: 1px solid @userOrange !important;
+  }
 
-  .line {
+  .user-divider::after,
+  .divider::after {
+    content: '';
     width: 100%;
-    border-top: 1px solid #d6d6d6;
-  }
-}
-
-.organization__section {
-  padding: 1rem 0;
-  text-align: center;
-
-  .intro {
-    max-width: 33rem;
-    margin: 0 auto;
-    padding: 0 4rem;
-    font-size: .8rem;
-    line-height: 1.7;
+    bottom: -15px;
+    left: 0;
+    position: absolute;
+    border-bottom: 1px solid @developerBlue;
+    opacity: 0.5;
   }
 
-  .committer__detail,
-  .be__committer,
-  .contributor__detail {
-    display: flex;
-    flex: row wrap;
+  .members {
+    margin: 10px 40px;
+    justify-content: left;
+    position: relative;
+  }
 
-    .c-title {
-      font-size: 0.8rem;
-      font-weight: 600;
+  .member {
+    width: 50%;
+    justify-content: left;
+    margin: 15px 0;
+    position: relative;
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      display: block;
+      border-radius: 10px;
     }
 
-    .committer-members {
+    .member-info {
       display: flex;
-      flex-flow: row wrap;
-      justify-content: center;
-      align-items: left;
-      margin: 1rem 0 2rem;
+      flex-flow: column wrap;
+      font-size: 16px;
+      // margin-left: 1.5rem;
+      width: 68%;
+      line-height: 1.7;
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
 
-      .c-member {
-        width: 190px;
-        height: 255px;
-        box-shadow: 0 2px 5px #DDDDDD;
-        margin: 0.5rem;
+      .github-icon {
+        background: url('/images/github-grey.svg') no-repeat;
+        width: 25px;
+        height: 25px;
+        background-size: cover;
+        margin: 5px 0 0;
 
-
-        img {
-          width: 100%;
-          display: block;
-          height: 100%;
+        p {
+          margin-left: 2rem;
         }
+      }
+    }
+  }
 
-        .name {
-          margin: 10px 0.2rem 0;
-          font-size: 0.75rem;
-          line-height: 1.7;
-          text-align: center;
+  .member-hover {
+    &:hover {
+      .avatar {
+        box-shadow: 0 2px 5px #c4c4c4;
+      }
 
-          span {
-            font-size: 0.6rem;
+      .member-info {
+        .github-icon {
+          background: url('/images/github.svg') no-repeat;
+          background-size: cover;
+
+          p {
+            color: @developerBlue;
           }
         }
 
-        .company {
-          text-align: center;
-          margin: 0.2rem 0.3rem;
-          font-size: 0.65rem;
-          line-height: 1.7;
+        .user-github-icon {
+          background: url('/images/github-orange.svg') no-repeat !important;
+          background-size: cover !important;
+
+          p {
+            color: @userOrange;
+          }
         }
       }
-
-      .c-member-en {
-        width: 240px;
-        height: 321px;
-      }
-    }
-  }
-
-  .committer__detail {
-    margin: 2.5rem 0 2rem 0;
-  }
-
-  .contributor__detail {
-    margin: 2.5rem 0 2rem 0;
-    text-align: left;
-  }
-
-  .committer-btn,
-  .contributor-btn {
-    text-align: center;
-    margin: 0 1rem;
-
-    button {
-      color: #fff;
-      width: 150px;
-      padding: 15px 15px 15px 35px;
-      font-size: .8rem;
-      position: relative;
-      background: none;
-
-      span {
-        position: absolute;
-        top: 50%;
-        left: 14px;
-        margin-top: -10px;
-
-        img {
-          width: 20px;
-          height: 20px;
-        }
-      }
-    }
-  }
-
-  .committer-btn button {
-    border: 1px solid #3A58F0;
-    background: #3A58F0;
-  }
-
-  .contributor-btn button {
-    border: 1px solid #d04e43;
-    background: #d04e43;
-  }
-}
-
-.architecture {
-  width: 100%;
-  height: auto;
-  margin: 1rem 0 2rem;
-  padding-top: 100px;
-  padding-bottom: 100px;
-  padding-right: 160px;
-  padding-left: 140px;
-  position: relative;
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-
-  .pmc,
-  .maintainer {
-    .tooltiptext {
-      visibility: hidden;
-      width: 250px;
-      background-color: #555;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      position: absolute;
-      z-index: 1;
-      font-size: 0.6rem;
-      line-height: 1.7;
-      bottom: 125%;
-      left: 2%;
-      opacity: 0;
-      -webkit-transition: opacity .3s;
-      transition: opacity .3s;
-    }
-
-    .tooltiptext::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 20%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #555 transparent transparent transparent;
-    }
-
-     &:hover {
-      .tooltiptext {
-        visibility: visible;
-        opacity: 1;
-      }
-
-      background: #DADFF5;
-    }
-  }
-
-  .member,
-  .committee {
-    .rightSide {
-      visibility: hidden;
-      width: 250px;
-      font-size: 0.6rem;
-      line-height: 1.7;
-      background-color: #555;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      right: 2%;
-      opacity: 0;
-      -webkit-transition: opacity .3s;
-      transition: opacity .3s;
-    }
-
-    .rightSide::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      right: 20%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #555 transparent transparent transparent;
-    }
-
-    &:hover {
-      .rightSide {
-        visibility: visible;
-        opacity: 1;
-      }
-
-      background: #DADFF5;
-    }
-  }
-
-  .head-node,
-  .pmc,
-  .developer-group,
-  .committee,
-  .maintainer,
-  .committer,
-  .contributor,
-  .member {
-    border: 1px solid#3a58f0;
-    color: #3a58f0;
-    background: white;
-    font-size: .8rem;
-    position: absolute;
-  }
-
-  .btnLogo {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 11px;
-    margin-top: -10px;
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .developer-group,
-  .head-node {
-    padding: 14px;
-    left: 50%;
-  }
-
-  .pmc,
-  .maintainer {
-    left: 0;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-left: 45px;
-    padding-right: 14px;
-  }
-
-  .committee,
-  .member {
-    right: 0;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-left: 45px;
-    padding-right: 14px;
-  }
-
-  .maintainer,
-  .member {
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-left: 45px;
-    padding-right: 14px;
-  }
-
-  .committer {
-    left: 0;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-left: 45px;
-    padding-right: 14px;
-    background: #3a58f0;
-    color: white;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease;
-
-    &:hover {
-      box-shadow: 0 3px 8px rgb(167, 167, 167);
     }
   }
 
   .contributor {
-    right: 0;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-left: 45px;
-    padding-right: 14px;
-    background: #D04E43;
-    border: #D04E43;
-    color: white;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease;
+    justify-content: space-between;
+  }
+
+  .contributor-info {
+    background-color: #E6EAF2;
+    width: 45%;
+    font-size: 16px;
+    color: @developerBlue;
+    transition: box-shadow 0.5s ease;
 
     &:hover {
-      box-shadow: 0 3px 8px rgb(167, 167, 167);
+      box-shadow: 0 2px 5px #c4c4c4;
+    }
+
+    .name {
+      padding: 10px 10px 10px 40px;
+      width: 40%;
+    }
+
+    img {
+      width: 25px;
+    }
+
+    .githubID {
+      padding: 13px;
     }
   }
 
-  .arrow {
-    position: absolute;
-    top: 50%;
-    margin-top: -30px;
-    margin-left: -440px;
-    width: 20px;
-    left: 50%;
-    height: 20px;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-    background: #000;
-    opacity: .9;
-    z-index: 100;
-  }
-}
+  .contributor-item {
+    width: 45%;
 
-.c-content,
-.pr-content,
-.guide-content {
-  font-size: 0.8rem;
-  text-align: left;
-  line-height: 1.8;
-  padding: 0 3rem 0 3rem;
-
-  p {
-    font-size: 0.8rem;
-    padding-bottom: 1rem;
-
-    a {
-      color: #3a5af0;
-
-      &:hover {
-        color: #053DA6;
-      }
-    }
-  }
-
-  li {
-    font-size: 0.8rem;
-  }
-
-  ul {
-    padding-inline-start: 20px;
-    padding-bottom: 1rem;
-  }
-}
-
-.subtitle-pr,
-.subtitle-guide {
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-
-  &:hover {
-    color: #3A58F0;
-  }
-
-  #pr-collapse,
-  #guide-collapse {
-    width: 15px;
-    display: inline-block;
-  }
-}
-
-.subtitle-selected-bg {
-  color: #3A58F0;
-}
-
-.pr-content,
-.guide-content {
-  padding: 0 0 0 2rem;
-  margin-bottom: 1rem;
-  display: none;
-}
-
-.appreciation__section {
-  padding: 1rem 0;
-  text-align: center;
-  background: #F5F5F5;
-
-  .appreciation__content {
-    text-align: left;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 1.5rem 1.5rem 2rem;
-
-    .image {
-      width: 355px;
-      height: 250px;
-      display: inline-block;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
+    img {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
     }
 
-    .content {
-      width: calc(~'100% - 355px');
-      height: 250px;
-      background: #1A237E;
-      color: white;
-      display: inline-block;
-      float: right;
-      padding: 1.5rem;
+    .text {
+      font-size: 16px;
       line-height: 1.7;
-      font-size: 0.75rem;
+      padding: 20px 0;
+      margin-bottom: 3rem;
     }
-  }
-}
 
-.contributor__section {
-  .goPlanet {
-    margin: 0 auto;
-    text-align: center;
-
-    button {
-      border: 1px solid #3a5af0;
-      color: #3a5af0;
-      width: 260px;
-      font-size: 0.8rem;
-      padding: 14px;
-      margin-top: 3rem;
-      background: none;
+    .text-hover {
+      color: @developerBlue;
       position: relative;
-      cursor: pointer;
+      padding: 40px 0;
 
-      .arrow {
+      .text-arrow {
         width: 16px;
         position: absolute;
         opacity: 0;
@@ -518,573 +453,381 @@
         transition: all 0.3s ease;
       }
 
-      .content {
+      .btn-text2 {
         transition: all 0.3s ease;
       }
 
       &:hover {
-        .arrow {
+        .text-arrow {
           opacity: 1;
           left: 12px;
         }
 
-        .content {
-          padding: 14px 0 14px 20px;
+        .btn-text2 {
+          padding: 14px 0 14px 40px;
         }
-      }
-    }
-  }
-
-  .planet-banner {
-    width: 100%;
-    max-width: 700px;
-    margin: 2.5rem auto 4rem;
-    padding: 0 1.5rem;
-    text-align: center;
-    border: none;
-    position: relative;
-
-    img {
-      width: 100%;
-      height: auto;
-      transition: all 0.2s ease;
-    }
-
-    &:hover {
-      img {
-        box-shadow: 0 0 12px 0 rgb(184, 184, 184);
-        transform: translateY(-2px);
       }
     }
   }
 }
 
-@media (max-width: 1450px) {
-  .organization__section .contributor__detail .committer-members .c-member {
-    width: 185px;
+.user-group-members {
+  .user {
+    background-color: @userOrange;
   }
 
-  .banner__content-container {
-    .content {
-      padding: 4.5rem;
-      font-size: 1.8rem;
-    }
+  .user-type {
+    color: @userOrange !important;
   }
 
-  .architecture {
-    .pm,
-    .maintainer {
-      .tooltiptext {
-        font-size: 0.7rem;
-      }
-    }
+  .ambassador-lists {
+    padding: 10px 40px 4rem;
+    justify-content: flex-start;
 
-    .committee,
-    .member {
-      .rightSide {
-        font-size: 0.7rem;
-      }
+    p {
+      width: 32%;
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 5px 0;
     }
+  }
+}
+
+.question {
+  color: #2977c7;
+  padding: 20px 0;
+
+  &::before {
+    content: '+';
+    color: #2977c7;
+    position: relative;
+    margin-right: 15px;
+  }
+}
+
+.answer {
+  display: none;
+  font-size: 16px;
+
+  li {
+    line-height: 1.7;
+  }
+}
+
+.j-ambassador-mobile {
+  display: none;
+}
+
+.expand {
+  &::before {
+    content: '-';
+  }
+}
+
+@media (max-width: 1800px) {
+  .organization__banner {
+    padding-top: 50%;
+  }
+}
+
+@media (max-width: 1500px) {
+  .organization__banner {
+    padding-top: 60%; /* 316 / 1024 */
+  }
+}
+
+@media (max-width: 1200px) {
+  .organization__banner {
+    padding-top: 74%; /* 316 / 1024 */
   }
 }
 
 @media (max-width: 1024px) {
+  .organization__banner {
+    padding-top: 86%; /* 316 / 1024 */
+    background: url('/images/community/banners/organization-banner-mobile.jpg') no-repeat;
+  }
+
+  .developer-group-members {
+    margin: 0 2rem;
+  }
+
   .banner__content-container {
     .content {
-      padding: 2.5rem;
-      font-size: 1.5rem;
+      bottom: auto;
+      right: auto;
+      left: 50%;
+      font-size: 22px;
+      transform: translate(-50%);
+      top: 3rem;
     }
+  }
+
+  .line-divider {
+    margin: 13rem auto 0;
+  }
+
+  .branches {
+    .branch {
+      height: calc(~'@{lineHeight} - 20px');
+
+      .branchBtn {
+        width: @btnWidthSmall;
+        top: calc(~'@{lineHeight} - 20px');
+      }
+    }
+  }
+
+  .orgBtn {
+    padding: 10px;
+  }
+
+  .devSubBtns {
+    margin-top: calc(~'@{lineHeight}  + 28px');
+  }
+
+  .devSubBtn,
+  .userSubBtn {
+    width: @btnWidthSmall;
+    margin-top: 1rem;
+    position: relative;
+    background: transparent;
+
+    &::before {
+      content: '';
+      height: calc(~'@{lineHeight} - 24px');
+      border-left: 1px solid @lineColor;
+      position: absolute;
+      top: calc(~'-@{lineHeight} + 23px');
+      left: 50%;
+    }
+  }
+
+  .org-tooltiptext {
+    top: calc(~'@{lineHeight} - 20px');
+    width: 170px;
+  }
+
+  .tt-tr {
+    top: -4rem !important;
+  }
+
+  .tt-left {
+    left: -180px;
+  }
+
+  .tt-right {
+    right: -180px;
+  }
+
+  .tt-tl {
+    top: -5rem !important;
   }
 }
 
 @media (max-width: 768px) {
-  .appreciation__section {
-    background: none;
-  }
-
-  .organization__section {
-    .committer__detail,
-    .contributor__detail,
-    .be__committer {
-      display: block;
-
-      .c-title {
-        margin: 2rem 0;
-        font-size: 0.9rem;
-      }
-
-      .committer-members {
-        .c-member-en {
-          width: 220px;
-          height: 275px;
-        }
-      }
-    }
-
-    .committer-btn,
-    .contributor-btn {
-      margin: 2rem;
-
-      button {
-        width: 120px;
-        padding: 10px 0 10px 30px;
-
-        span {
-          left: 10px;
-        }
-      }
-    }
-  }
-
-  .c-content,
-  .pr-content,
-  .guide-content {
-    padding: 0 1.5rem;
-  }
-
-  .appreciation__section {
-    .appreciation__content {
-      margin: 0 1.5rem;
-      padding: 1.5rem 0 2rem;
-    }
-  }
-
-  .contributor__section {
-    .goPlanet button {
-      .content {
-        transition: none;
-      }
-
-      &:hover {
-        .arrow {
-          opacity: 0;
-        }
-
-        .content {
-          padding: 14px;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 700px) {
-  .architecture {
-    padding-top: 80px;
-    padding-right: 90px;
-    padding-left: 70px;
-    padding-bottom: 110px;
-  }
-
-  .banner__content-container {
-    .content {
-      padding: 2.5rem 0;
-      font-size: 1.2rem;
-    }
-  }
-}
-
-@media (max-width: 650px) {
-  .architecture {
-    padding-right: 50px;
-    padding-left: 50px;
-
-    .head-node {
-      padding: 9px;
-      font-size: 0.7rem;
-    }
-
-    .pmc {
-      padding: 5px;
-      width: 84px;
-      height: 84px;
-
-      .tooltiptext {
-        font-size: 0.7rem;
-      }
-
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 37px;
-        left: 50%;
-        padding: 7px 0;
-        font-size: 0.7rem;
-        margin-left: -15px;
-      }
-    }
-
-    .maintainer,
-    .committer {
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 37px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -28px;
-      }
-
-      .btnLogo {
-        top: 10px;
-      }
-
-      .tooltiptext {
-        font-size: 0.7rem;
-      }
-    }
-
-    .contributor {
-      .btnLogo {
-        top: 10px;
-      }
-      
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 37px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -32px;
-      }
-    }
-
-    .committee,
-    .member {
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 31px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -39px;
-      }
-
-      .rightSide {
-        font-size: 0.7rem;
-      }
-    }
-
-    .committee,
-    .maintainer,
-    .committer,
-    .contributor,
-    .member,
-    .developer-group {
-      font-size: 0.7rem;
-      padding: 5px;
-      width: 84px;
-      height: 84px;
-    }
-
-    .btnLogo {
-      display: block;
-      position: absolute;
-      padding: 5px;
-      margin-top: 0;
-      top: 7px;
-      left: 50%;
-      margin-left: -13px;
-
-      img {
-        width: 16px;
-        height: 16px;
-      }
-    }
-  }
-}
-
-@media (max-width: 600px) {
   .organization__banner {
-    width: 100%;
-    padding-top: 62%;
-    background: url('/images/community/banners/organization-banner-mobile.svg') no-repeat;
-    position: relative;
-    background-size: cover;
-    background-position: center;
+    padding-top: 100%; /* 316 / 1024 */
+    background: url('/images/community/banners/organization-banner-mobile.jpg') no-repeat;
   }
 
-  .appreciation__section {
-    .appreciation__content {
-      margin: 0 1.5rem;
-      padding: 1.5rem 0 2rem;
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: center;
+  #architecture {
+    padding: 0 60px;
+  }
 
-      .image {
-        width: 100%;
-        height: auto;
-      }
+  .devSubBtns {
+    margin-top: calc(~'@{lineHeight}  + 37px');
+  }
 
-      .content {
-        min-width: 140px;
-        width: 100%;
-        height: auto;
+  .branches {
+    .branch {
+      .branchBtn {
+        width: @btnWidthTiny;
+        font-size: 14px;
+        height: 57px;
       }
     }
   }
 
- .organization__section {
-   .committer__detail {
-       .committer-members {
-        .c-member {
-          width: 163px;
-          height: 213px;
-          margin: 0.5rem;
-        }
+  .orgBtn {
+    padding: 5px;
+  }
 
-        .c-member-en {
-          width: 178px;
-          height: 231px;
+  .devSubBtn,
+  .userSubBtn {
+    width: @btnWidthTiny;
+    font-size: 14px;
+  }
+
+  .org-tooltiptext {
+    top: calc(~'@{lineHeight} - 20px');
+    width: 100px;
+    font-size: 12px;
+  }
+
+  .tt-tr {
+    top: -4rem !important;
+  }
+
+  .tt-left {
+    left: -100px;
+  }
+
+  .tt-right {
+    right: -100px;
+  }
+
+  .tt-tl {
+    top: -5rem !important;
+  }
+
+  .developer-group-members,
+  .user-group-members {
+    margin: 0 1rem 5rem;
+
+    .members {
+      margin: 10px 10px 10px 20px;
+    }
+
+    .member {
+      width: 100%;
+      margin: 10px 0;
+
+      .member-info {
+        right: 0;
+        font-size: 14px;
+
+        .github-icon {
+          width: 18px;
+          height: 18px;
+
+          p {
+            margin-left: 1.5rem;
+          }
         }
       }
-   }
- }
-
-  .contributor__section .goPlanet button {
-    width: 220px;
-
-    .arrow {
-      width: 12px;
     }
+
+    .member-header {
+      padding: 10px 20px;
+    }
+
+    .member-type {
+      padding: 10px 20px;
+    }
+
+    .contributor-item {
+      width: 100%;
+    }
+  }
+
+  .user-group-members {
+    .ambassador-lists {
+      padding: 10px;
+
+      p {
+        width: 100%;
+      }
+    }
+  }
+
+  .j-ambassador-pc {
+    display: none;
+  }
+
+  .j-ambassador-mobile {
+    display: block;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 414px) {
   .organization__banner {
-    width: 100%;
-    position: relative;
-    background-size: cover;
-    background-position: center;
+    padding-top: 160%;
+  }
+
+  .tt-tr {
+    top: 6rem !important;
+    right: -57px;
+  }
+
+  .tt-tl {
+    top: 6rem !important;
+    left: -57px;
   }
 }
 
-@media (max-width: 380px) {
-  .architecture {
-    padding-right: 50px;
-    padding-left: 50px;
-
-    .head-node {
-      padding: 9px;
+@media (max-width: 375px) {
+  .developer-group-members,
+  .user-group-members {
+    .member .member-info {
+      width: 63%;
     }
+  }
 
-    .pmc {
-      padding: 5px;
-      width: 80px;
-      height: 70px;
+  #architecture {
+    padding: 0 50px;
+  }
 
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 29px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -13px;
-      }
-    }
+  .devSubBtns {
+    margin-top: calc(~'@{lineHeight}  + 37px');
+  }
 
-    .committee {
-      padding: 5px;
-      width: 80px;
-      height: 70px;
-
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 20px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -35px;
-      }
-    }
-
-    .maintainer,
-    .committer {
-      padding: 5px;
-      width: 80px;
-      height: 84px;
-
-      p {
-        margin-left: -28px;
-      }
-    }
-
-    .contributor {
-      padding: 5px;
-      width: 80px;
-      height: 84px;
-
-      p {
-        margin-left: -32px;
-      }
-    }
-
-    .member {
-      padding: 5px;
-      width: 80px;
-      height: 84px;
-
-      p {
-        margin-left: -37px;
-      }
-    }
-
-    .developer-group {
-      padding: 5px;
-      width: 81px;
-      height: 70px;
-    }
-
-    .btnLogo {
-      display: block;
-      position: absolute;
-      padding: 3px;
-      margin-top: 0;
-      top: 7px;
-      left: 50%;
-      margin-left: -13px;
-
-      img {
-        width: 16px;
-        height: 16px;
+  .branches {
+    .branch {
+      .branchBtn {
+        width: @btnWidthEtremeSmall;
+        font-size: 12px;
+        height: 57px;
       }
     }
   }
 
-  .organization__section {
-    .intro {
-      padding: 0 3rem;
-    }
+  .orgBtn {
+    padding: 5px;
+  }
 
-   .committer__detail {
-       .committer-members {
-        .c-member {
-          width: 146px;
-          height: 202px;
-        }
-
-        .c-member-en {
-          width: 170px;
-          height: 230px;
-        }
-      }
-   }
- }
-
- .banner__content-container {
-   .content {
-      padding: 2rem 0;
-      font-size: 1rem;
-   }
- }
+  .devSubBtn,
+  .userSubBtn {
+    width: @btnWidthEtremeSmall;
+    font-size: 12px;
+  }
 }
 
-@media (max-width: 330px) {
-  .architecture {
-    padding-right: 44px;
-    padding-left: 44px;
+@media (max-width: 320px) {
+  .organization__banner {
+    padding-top: 200%;
+  }
 
-    .head-node {
-      padding: 9px;
+  #architecture {
+    padding: 0 40px;
+  }
+
+  .developer-group-members,
+  .user-group-members {
+    margin: 0;
+
+    .member .member-info {
+      width: 60%;
     }
+  }
 
-    .pmc {
-      padding: 5px;
-      width: 60px;
-      height: 60px;
-
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 29px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -13px;
-      }
-    }
-
-    .committee {
-      padding: 5px;
-      width: 80px;
-      height: 60px;
-
-      p {
-        position: absolute;
-        top: 0;
-        margin-top: 20px;
-        left: 50%;
-        padding: 7px 0;
-        margin-left: -35px;
-      }
-    }
-
-    .maintainer,
-    .committer {
-      padding: 5px;
-      width: 70px;
-      height: 80px;
-
-      p {
-        margin-left: -29px;
-      }
-    }
-
-    .contributor {
-      padding: 5px;
-      width: 75px;
-      height: 80px;
-
-      p {
-        margin-left: -32px;
-      }
-    }
-
-    .member {
-      padding: 5px;
-      width: 75px;
-      height: 80px;
-
-      p {
-        margin-left: -35px;
-      }
-    }
-
-    .developer-group {
-      padding: 5px;
-      width: 81px;
-      height: 60px;
-    }
-
-    .btnLogo {
-      display: block;
-      position: absolute;
-      padding: 3px;
-      margin-top: 0;
-      top: 7px;
-      left: 50%;
-      margin-left: -13px;
-
-      img {
-        width: 16px;
-        height: 16px;
+  .branches {
+    .branch {
+      .branchBtn {
+        width: 76px;
+        font-size: 12px;
+        height: 57px;
       }
     }
   }
 
-  .organization__section {
-   .committer__detail {
-       .committer-members {
-        .c-member {
-          width: 120px;
-          height: 175px;
-        }
+  .orgBtn {
+    padding: 0;
+  }
 
-        .c-member-en {
-          width: 170px;
-          height: 230px;
-        }
-      }
-   }
- }
+  .devSubBtn,
+  .userSubBtn {
+    width: 75px;
+    padding: 5px 0;
+  }
 }
