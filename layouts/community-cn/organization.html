@@ -209,18 +209,21 @@
                       </div>
                       <div class="member-type user-type">Ambassador</div>
                       <div class="ambassador-lists j-ambassador-pc flex-lists">
-                        {{- range $idx, $i := .Site.Data.community_organization.user_members.ambassador -}}
+                        {{- range $idx, $i := .Site.Data.community_organization.user_members.ambassador_1 -}}
+                          <p>{{ $i.name }}</p>
+                        {{- end -}}
+                        {{- range $idx, $i := .Site.Data.community_organization.user_members.ambassador_2 -}}
                           <p>{{ $i.name }}</p>
                         {{- end -}}
                       </div>
 
                       <div class="ambassador-lists j-ambassador-mobile">
-                          {{ range $idx, $i := first 10 .Site.Data.community_organization.user_members.ambassador }}
+                          {{- range $idx, $i := .Site.Data.community_organization.user_members.ambassador_1 -}}
                             <p>{{ $i.name }}</p>
                           {{ end }}
                           <div class="more-contributor-list-question question">查看更多名单</div>
                           <div class="answer">
-                            {{ range $idx, $i := after 10 .Site.Data.community_organization.user_members.ambassador }}
+                            {{ range $idx, $i := .Site.Data.community_organization.user_members.ambassador_2 }}
                               <p class="rest-list">{{ $i.name }}</p>
                             {{ end }}
                           </div>
