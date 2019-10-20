@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible"content="IE=edge">
+<meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+{{- partial "head/ga" . -}} {{- block "headTpl" . -}}{{- end -}} {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
+<title>{{ block "title" . }}{{- .Title -}}{{ end }} |&nbsp;{{- if and $data_i18_cn (ne ($.Scratch.Get "nav_active") "docs") -}}PingCAP {{- else -}} {{ $.Scratch.Get "metaTitle" }} {{- end -}}
+</title>
+{{- partial "head/meta-seo" . -}} {{- partial "head/preload-assets" . -}} {{- partial "head/preload-css" (dict "href" "/css/main.css") -}} {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/docsearch.min.css") -}} {{- partial "tracking-code/ga-events-js.html" -}}
+<script type="text/javascript">"/"===location.pathname&&"pingcap.github.io"===location.hostname&&(location.href="/en/")</script>
+<link rel="preload"as="script"href="/js/app.js">
+</head>
+{{- $homepage := $.Scratch.Get "homepage" -}} {{$.Scratch.Set "stable_version" .Site.Params.versions.docs.stable_version }}
+<body {{ if $homepage }}class="homepage"{{ end }}>
+{{- partial "loaders/page-loader.html" -}}
+<div id="page-content"style="display:none">
+{{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}} {{- if $homepage -}} {{- partial "layout/release-banner" . -}} {{- end -}} {{- if $data_i18_cn -}} {{- partial "layout/header-cn" . -}} {{- partial "layout/mobile-sidebar-cn" . -}} {{- else -}} {{- partial "layout/header" . -}} {{- partial "layout/mobile-sidebar" . -}} {{- end -}} {{- block "main" . -}}{{- end -}} {{- if $data_i18_cn -}} {{- partial "layout/footer-cn" . -}} {{- else -}} {{- partial "layout/footer" . -}} {{- end -}} {{- partial "common/back-to-top.html" -}}
+</div>
+<script type="text/javascript">document.getElementById("page-loader").style.display="none",document.getElementById("page-content").style.display="block"</script>
+<div class="overlay"></div>
+<script src="https://download.pingcap.com/js/jquery.min.js"></script>
+{{- block "footJS" . -}}{{- end -}}
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearchLite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript"src="/js/app.js"></script></body>
+</html>

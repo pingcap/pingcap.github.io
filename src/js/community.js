@@ -288,15 +288,23 @@ $(document).ready(function() {
 
   if(window.matchMedia('(min-width: 1024px)').matches) {
     $('.j-hover').hover(function(){
-      $(this).addClass('branchBtn-hover')
+      if($(this).hasClass('userSubBtn')) {
+        $(this).addClass('userSubBtn-hover')
+      } else {
+        $(this).addClass('branchBtn-hover')
+        if($(this).hasClass('j-devSubBtn-hover')) {
+          $(this).children().addClass('devSubBtn-hover')
+        }
+      }
       $(this).siblings().addClass('org-tooltiptext-hover')
     }, function(){
+      $('.orgBtn').removeClass('devSubBtn-hover')
+      $('.orgBtn').removeClass('userSubBtn-hover')
       $(this).removeClass('branchBtn-hover')
       $(this).siblings().removeClass('org-tooltiptext-hover')
     })
   } else {
     $('.j-mobile-hover').click(function() {
-      
       if($(this).hasClass('comBtn')) {
         $('.pmcBtn').removeClass('pmcBtn-click')
         $(this).toggleClass('comBtn-click')
