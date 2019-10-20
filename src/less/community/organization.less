@@ -53,14 +53,15 @@
 }
 
 button {
-  cursor: pointer;
   line-height: 1.7;
-  // z-index: 1;
+  cursor: pointer;
+}
+
+.cursor-text {
+  cursor: default !important;
 }
 
 button.branchBtn.userBtn.orgBtn.tr {
-  cursor: text;
-
   &:hover {
     background-color: @userOrange;
   }
@@ -217,18 +218,18 @@ button.branchBtn.userBtn.orgBtn.tr {
 
 .devSubBtn {
   border: 1px solid @developerBlue;
+}
 
-  &:hover {
-    background-color: @devBtnColor;
-  }
+.devSubBtn-hover {
+  background-color: @devBtnColor;
 }
 
 .userSubBtn {
   border: 1px solid @userOrange;
+}
 
-  &:hover {
-    background-color: @userOrange;
-  }
+.userSubBtn-hover {
+  background-color: @userOrange;
 }
 
 .userBtn {
@@ -400,6 +401,8 @@ button.branchBtn.userBtn.orgBtn.tr {
   .contributor-info {
     background-color: #E6EAF2;
     width: 45%;
+    height: 45px;
+    position: relative;
     font-size: 16px;
     color: @developerBlue;
     transition: box-shadow 0.5s ease;
@@ -409,12 +412,17 @@ button.branchBtn.userBtn.orgBtn.tr {
     }
 
     .name {
-      padding: 10px 10px 10px 40px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 20%;
+      // padding: 10px 10px 10px 40px;
       width: 40%;
     }
 
     img {
       width: 25px;
+      margin-left: 50%;
     }
 
     .githubID {
@@ -557,6 +565,7 @@ button.branchBtn.userBtn.orgBtn.tr {
       bottom: auto;
       right: auto;
       left: 50%;
+      min-width: 300px;
       font-size: 22px;
       transform: translate(-50%);
       top: 3rem;
@@ -564,7 +573,7 @@ button.branchBtn.userBtn.orgBtn.tr {
   }
 
   .line-divider {
-    margin: 13rem auto 0;
+    margin: 12rem auto 0;
   }
 
   .branches {
@@ -685,6 +694,16 @@ button.branchBtn.userBtn.orgBtn.tr {
   .user-group-members {
     margin: 0 1rem 5rem;
 
+    .contributor-info {
+      .name {
+        left: 15%;
+      }
+
+      img {
+        margin-left: 40%;
+      }
+    }
+
     .members {
       margin: 10px 10px 10px 20px;
     }
@@ -740,6 +759,12 @@ button.branchBtn.userBtn.orgBtn.tr {
   }
 }
 
+@media (max-width: 600px) {
+  .organization__banner {
+    padding-top: 150%;
+  }
+}
+
 @media (max-width: 414px) {
   .organization__banner {
     padding-top: 160%;
@@ -756,7 +781,7 @@ button.branchBtn.userBtn.orgBtn.tr {
   }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 405px) {
   .developer-group-members,
   .user-group-members {
     .member .member-info {
@@ -793,7 +818,7 @@ button.branchBtn.userBtn.orgBtn.tr {
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 369px) {
   .organization__banner {
     padding-top: 200%;
   }
