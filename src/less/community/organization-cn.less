@@ -1,0 +1,865 @@
+// import global variables
+@import '../variables.less';
+@import './devcon2019.less';
+@import './common-style.less';
+
+@lineColor: rgba(255, 255, 255, 0.5);
+@btnHeightLarge: 60px;
+@btnWidthLarge: 220px;
+@btnWidthMedia: 180px;
+@btnWidthSmall: 150px;
+@btnWidthTiny: 90px;
+@btnWidthEtremeSmall: 85px;
+@lineHeight: 40px;
+@developerBlue: #2977C7;
+@userOrange: #D29544;
+@pmcBtnColor: #3EA6CC;
+@devBtnColor: @developerBlue;
+@userBtnColor: @userOrange;
+@comBtnColor: #956D8F;
+
+.community-organization {
+  .container {
+    max-width: 1124px;
+  }
+}
+
+.organization__banner {
+  padding-top: 45%; /* 316 / 1024 */
+  background: url('/images/community/banners/organization-cn-banner-pc.jpg') no-repeat;
+}
+
+.banner__content-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+
+  .content {
+    position: absolute;
+    text-align: center;
+    bottom: 4rem;
+    right: 3rem;
+    font-size: 2rem;
+    color: #fff;
+  }
+}
+
+#architecture {
+  position: relative;
+  height: 100%;
+  padding: 0 100px;
+  width: 100%;
+}
+
+button {
+  // line-height: 1.7;
+  cursor: pointer;
+}
+
+.cursor-text {
+  cursor: default !important;
+}
+
+button.branchBtn.userBtn.orgBtn.tr {
+  &:hover {
+    background-color: @userOrange;
+  }
+}
+
+.org-tooltiptext {
+  opacity: 0;
+  width: 230px;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  position: absolute;
+  z-index: 10;
+  font-size: .6rem;
+  line-height: 1.7;
+  transition: opacity .3s;
+  top: @lineHeight;
+}
+
+.org-tooltiptext-hover {
+  opacity: 1;
+}
+
+.tt-left {
+  left: -250px;
+  background-color: @developerBlue;
+}
+
+.tt-right {
+  right: -250px;
+  background-color: @userOrange;
+}
+
+.tt-tr {
+  right: -250px;
+  top: -3.5rem !important;
+  background-color: @pmcBtnColor;
+}
+
+.tt-tl {
+  left: -250px;
+  top: -3.5rem !important;
+  background-color: @comBtnColor;
+}
+
+.branches {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.branch {
+  height: @lineHeight;
+  width: 1px;
+  background: @lineColor;
+  position: relative;
+
+  .branchBtn {
+    width: @btnWidthLarge;
+    position: absolute;
+    top: @lineHeight;
+    // z-index: 1;
+  }
+}
+
+.tl {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tr {
+  right: -50%;
+  transform: translateX(50%);
+}
+
+.line-divider {
+  position: relative;
+  max-width: 1024px;
+  margin: 7rem auto 0;
+  border-bottom: 1px solid @lineColor;
+
+  &::before {
+    content: '';
+    height: 2rem;
+    border-left: 1px solid @lineColor;
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+  }
+}
+
+.orgBtn {
+  font-size: 16px;
+  padding: 15px;
+  color: white;
+  text-align: center;
+  line-height: 1.7;
+  z-index: 1;
+}
+
+.headBtn {
+  min-width: @btnWidthLarge;
+  position: absolute;
+  left: 50%;
+  top: -4rem;
+  background-color: #3e52cc;
+}
+
+.pmcBtn {
+  background-color: @pmcBtnColor;
+  border: 1px solid @pmcBtnColor;
+}
+
+.pmcBtn-click {
+  background-color: transparent;
+}
+
+.devBtn {
+  background-color: @devBtnColor;
+  border: 1px solid @devBtnColor;
+}
+
+.btn-tooltip {
+  position: relative;
+}
+
+.devSubBtns {
+  position: absolute;
+  margin-top: calc(~'@{btnHeightLarge} + @{lineHeight}');
+}
+
+.branchBtn-hover {
+  background-color: transparent !important;
+}
+
+.devSubBtn,
+.userSubBtn {
+  width: @btnWidthLarge;
+  margin-top: 2rem;
+  position: relative;
+  background: transparent;
+
+  &::before {
+    content: '';
+    height: calc(~'@{lineHeight}  + 2px ');
+    border-left: 1px solid @lineColor;
+    position: absolute;
+    top: calc(~'-@{lineHeight} - 2px ');
+    left: 50%;
+  }
+}
+
+.devSubBtn {
+  border: 1px solid @developerBlue;
+}
+
+.devSubBtn-hover {
+  background-color: @devBtnColor;
+}
+
+.userSubBtn {
+  border: 1px solid @userOrange;
+}
+
+.userSubBtn-hover {
+  background-color: @userOrange;
+}
+
+.userBtn {
+  background-color: @userBtnColor;
+  border: 1px solid @userBtnColor;
+}
+
+.comBtn {
+  background-color: @comBtnColor;
+  border: 1px solid @comBtnColor;
+}
+
+.comBtn-click {
+  background-color: transparent;
+}
+
+.community-dynamics {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.flex-lists {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.dynamic-item {
+  width: 300px;
+  margin: 0 20px;
+  height: 300px;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 200px;
+    display: block;
+    border-radius: 4px;
+  }
+
+  p {
+    font-size: 16px;
+    padding: 15px 0;
+    line-height: 1.7;
+    text-align: left;
+  }
+
+  &:hover {
+    img {
+      box-shadow: 0 5px 12px #c4c4c4;
+    }
+  }
+}
+
+.developer-group-members,
+.user-group-members {
+  background-color: #F5F6F8;
+  margin-bottom: 6rem;
+
+  .member-header {
+    background-color: @developerBlue;
+    color: #FFFFFF;
+    font-size: 1rem;
+    border-radius: 4px 4px 0 0;
+    padding: 10px 40px;
+  }
+
+  .member-type {
+    padding: 10px 40px;
+    color: @developerBlue;
+    font-size: 16px;
+    margin: 2rem 0 1rem;
+    position: relative;
+  }
+
+  .user-divider::after {
+    border-bottom: 1px solid @userOrange !important;
+  }
+
+  .user-divider::after,
+  .divider::after {
+    content: '';
+    width: 100%;
+    bottom: -15px;
+    left: 0;
+    position: absolute;
+    border-bottom: 1px solid @developerBlue;
+    opacity: 0.5;
+  }
+
+  .members {
+    margin: 10px 40px;
+    justify-content: left;
+    position: relative;
+  }
+
+  .member {
+    width: 50%;
+    justify-content: left;
+    margin: 15px 0;
+    position: relative;
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .member-info {
+      display: flex;
+      flex-flow: column wrap;
+      font-size: 16px;
+      // margin-left: 1.5rem;
+      width: 68%;
+      line-height: 1.7;
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+
+      .github-icon {
+        background: url('/images/github-grey.svg') no-repeat;
+        width: 25px;
+        height: 25px;
+        background-size: cover;
+        margin: 5px 0 0;
+
+        p {
+          margin-left: 2rem;
+        }
+      }
+    }
+  }
+
+  .member-hover {
+    &:hover {
+      .avatar {
+        box-shadow: 0 2px 5px #c4c4c4;
+      }
+
+      .member-info {
+        .github-icon {
+          background: url('/images/github.svg') no-repeat;
+          background-size: cover;
+
+          p {
+            color: @developerBlue;
+          }
+        }
+
+        .user-github-icon {
+          background: url('/images/github-orange.svg') no-repeat !important;
+          background-size: cover !important;
+
+          p {
+            color: @userOrange;
+          }
+        }
+      }
+    }
+  }
+
+  .contributor {
+    justify-content: space-between;
+  }
+
+  .contributor-info {
+    background-color: #E6EAF2;
+    width: 45%;
+    height: 45px;
+    position: relative;
+    font-size: 16px;
+    color: @developerBlue;
+    transition: box-shadow 0.5s ease;
+
+    &:hover {
+      box-shadow: 0 2px 5px #c4c4c4;
+    }
+
+    .name {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 20%;
+      // padding: 10px 10px 10px 40px;
+      width: 40%;
+    }
+
+    img {
+      width: 25px;
+      margin-left: 50%;
+    }
+
+    .githubID {
+      padding: 13px;
+    }
+  }
+
+  .contributor-item {
+    width: 45%;
+
+    img {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .text {
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 20px 0;
+      margin-bottom: 3rem;
+    }
+
+    .text-hover {
+      color: @developerBlue;
+      position: relative;
+      padding: 40px 0;
+
+      .text-arrow {
+        width: 16px;
+        position: absolute;
+        opacity: 0;
+        top: 50%;
+        left: 2px;
+        margin-top: -0.4rem;
+        transition: all 0.3s ease;
+      }
+
+      .btn-text2 {
+        transition: all 0.3s ease;
+      }
+
+      &:hover {
+        .text-arrow {
+          opacity: 1;
+          left: 12px;
+        }
+
+        .btn-text2 {
+          padding: 14px 0 14px 40px;
+        }
+      }
+    }
+
+    &:hover {
+      .tidb-planet-banner {
+        box-shadow: 0 5px 10px #c4c4c4;
+      }
+    }
+  }
+}
+
+.user-group-members {
+  .user {
+    background-color: @userOrange;
+  }
+
+  .user-type {
+    color: @userOrange !important;
+  }
+
+  .ambassador-lists {
+    padding: 10px 40px 4rem;
+    justify-content: flex-start;
+
+    p {
+      width: 32%;
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 5px 0;
+    }
+  }
+}
+
+.question {
+  color: #2977c7;
+  padding: 20px 0;
+
+  &::before {
+    content: '+';
+    color: #2977c7;
+    position: relative;
+    margin-right: 15px;
+  }
+}
+
+.answer {
+  display: none;
+  font-size: 16px;
+
+  li {
+    line-height: 1.7;
+  }
+}
+
+.j-ambassador-mobile {
+  display: none;
+}
+
+.expand {
+  &::before {
+    content: '-';
+  }
+}
+
+@media (max-width: 1800px) {
+  .organization__banner {
+    padding-top: 50%;
+  }
+}
+
+@media (max-width: 1500px) {
+  .organization__banner {
+    padding-top: 60%; /* 316 / 1024 */
+  }
+}
+
+@media (max-width: 1200px) {
+  .organization__banner {
+    padding-top: 74%; /* 316 / 1024 */
+  }
+}
+
+@media (max-width: 1024px) {
+  .organization__banner {
+    padding-top: 86%; /* 316 / 1024 */
+    background: url('/images/community/banners/organization-cn-banner-mobile.jpg') no-repeat;
+  }
+
+  .developer-group-members {
+    margin: 0 2rem;
+  }
+
+  .banner__content-container {
+    .content {
+      bottom: auto;
+      right: auto;
+      left: 50%;
+      min-width: 300px;
+      font-size: 22px;
+      transform: translate(-50%);
+      top: 3rem;
+    }
+  }
+
+  .line-divider {
+    margin: 12rem auto 0;
+  }
+
+  .branches {
+    .branch {
+      height: calc(~'@{lineHeight} - 20px');
+
+      .branchBtn {
+        width: @btnWidthSmall;
+        top: calc(~'@{lineHeight} - 20px');
+      }
+    }
+  }
+
+  .orgBtn {
+    padding: 10px;
+  }
+
+  .devSubBtns {
+    margin-top: calc(~'@{lineHeight}  + 28px');
+  }
+
+  .devSubBtn,
+  .userSubBtn {
+    width: @btnWidthSmall;
+    margin-top: 1rem;
+    position: relative;
+    background: transparent;
+
+    &::before {
+      content: '';
+      height: calc(~'@{lineHeight} - 24px');
+      border-left: 1px solid @lineColor;
+      position: absolute;
+      top: calc(~'-@{lineHeight} + 23px');
+      left: 50%;
+    }
+  }
+
+  .org-tooltiptext {
+    top: calc(~'@{lineHeight} - 20px');
+    width: 170px;
+  }
+
+  .tt-tr {
+    top: -4rem !important;
+  }
+
+  .tt-left {
+    left: -180px;
+  }
+
+  .tt-right {
+    right: -180px;
+  }
+
+  .tt-tl {
+    top: -4rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .organization__banner {
+    padding-top: 100%; /* 316 / 1024 */
+    background: url('/images/community/banners/organization-banner-mobile.jpg') no-repeat;
+  }
+
+  #architecture {
+    padding: 0 60px;
+  }
+
+  .devSubBtns {
+    margin-top: calc(~'@{lineHeight}  + 37px');
+  }
+
+  .branches {
+    .branch {
+      .branchBtn {
+        width: @btnWidthTiny;
+        font-size: 14px;
+        height: 57px;
+      }
+    }
+  }
+
+  .orgBtn {
+    padding: 5px;
+  }
+
+  .devSubBtn,
+  .userSubBtn {
+    width: @btnWidthTiny;
+    font-size: 14px;
+  }
+
+  .org-tooltiptext {
+    top: calc(~'@{lineHeight} - 20px');
+    width: 100px;
+    font-size: 12px;
+  }
+
+  .tt-tr {
+    top: -4rem !important;
+  }
+
+  .tt-left {
+    left: -100px;
+  }
+
+  .tt-right {
+    right: -100px;
+  }
+
+  .tt-tl {
+    top: -4rem !important;
+  }
+
+  .developer-group-members,
+  .user-group-members {
+    margin: 0 1rem 5rem;
+
+    .contributor-info {
+      .name {
+        left: 15%;
+      }
+
+      img {
+        margin-left: 40%;
+      }
+    }
+
+    .members {
+      margin: 10px 10px 10px 20px;
+    }
+
+    .member {
+      width: 100%;
+      margin: 10px 0;
+
+      .member-info {
+        right: 0;
+        font-size: 14px;
+
+        .github-icon {
+          width: 18px;
+          height: 18px;
+
+          p {
+            margin-left: 1.5rem;
+          }
+        }
+      }
+    }
+
+    .member-header {
+      padding: 10px 20px;
+    }
+
+    .member-type {
+      padding: 10px 20px;
+    }
+
+    .contributor-item {
+      width: 100%;
+    }
+  }
+
+  .user-group-members {
+    .ambassador-lists {
+      padding: 10px;
+
+      p {
+        width: 100%;
+      }
+    }
+  }
+
+  .j-ambassador-pc {
+    display: none;
+  }
+
+  .j-ambassador-mobile {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .organization__banner {
+    padding-top: 150%;
+  }
+}
+
+@media (max-width: 414px) {
+  .organization__banner {
+    padding-top: 160%;
+  }
+
+  .tt-tr {
+    top: 6rem !important;
+    right: -57px;
+  }
+
+  .tt-tl {
+    top: 6rem !important;
+    left: -57px;
+  }
+}
+
+@media (max-width: 405px) {
+  .developer-group-members,
+  .user-group-members {
+    .member .member-info {
+      width: 63%;
+    }
+  }
+
+  #architecture {
+    padding: 0 50px;
+  }
+
+  .devSubBtns {
+    margin-top: calc(~'@{lineHeight}  + 37px');
+  }
+
+  .branches {
+    .branch {
+      .branchBtn {
+        width: @btnWidthEtremeSmall;
+        font-size: 12px;
+        height: 57px;
+      }
+    }
+  }
+
+  .orgBtn {
+    padding: 5px;
+  }
+
+  .devSubBtn,
+  .userSubBtn {
+    width: @btnWidthEtremeSmall;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 369px) {
+  .organization__banner {
+    padding-top: 200%;
+  }
+
+  #architecture {
+    padding: 0 40px;
+  }
+
+  .developer-group-members,
+  .user-group-members {
+    margin: 0;
+
+    .member .member-info {
+      width: 60%;
+    }
+  }
+
+  .branches {
+    .branch {
+      .branchBtn {
+        width: 76px;
+        font-size: 12px;
+        height: 57px;
+      }
+    }
+  }
+
+  .orgBtn {
+    padding: 0;
+  }
+
+  .devSubBtn,
+  .userSubBtn {
+    width: 75px;
+    padding: 5px 0;
+  }
+}

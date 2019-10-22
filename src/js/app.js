@@ -189,9 +189,27 @@ function initialSearch(lang, stableVersion) {
 
       // appends results to search-results container
       if(newHitArray.length == 0) {
-        $('#search-results').append(
-          '<div class="search-category-result"> Oops... No Result!</div>'
-        );
+        if (lang == 'cn') {
+          $('#search-results').append(
+            '<div class="search-category-result">\
+              <p>很抱歉，我们没有找到您期望的内容。</p>\
+              <ul>\
+              <li>请尝试其它搜索词，或者去 AskTUG (TiDB User Group) 提问试试。</li>\
+              <li>如果你想搜索英文内容，请移步至英文文档进行搜索。</li>\
+              </ul>\
+            </div>'
+          );
+        } else if (lang == 'en') {
+          $('#search-results').append(
+            '<div class="search-category-result">\
+              <p>Sorry. We couldn\'t find what you\'re looking for.</p>\
+              <ul>\
+              <li>If come to pages of an unexpected language, go to Chinese documentation and try again.</li>\
+              <li>If you do want to get some English content, PingCAP home page might be a better place for you to go.</li>\
+              </ul>\
+            </div>'
+          );
+        }
       } else {
         $('#search-results').append(newHitArray.map(hit => (
           '<div class="search-category-result">\
