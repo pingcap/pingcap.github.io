@@ -1,9 +1,12 @@
+import { format } from "util"
+
 // JS Goes here - ES6 supported
 
 // Global JS
 
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
+// const _ = require('lodash')
 
 // import '../../dist/css/main.css'
 
@@ -36,50 +39,183 @@ function processHash() {
 }
 
 // initial algolia search
-function initialSearch(lang) {
-  docsearch({
-    apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
-    indexName: 'pingcap',
-    inputSelector: '#search-input',
-    algoliaOptions: {
-      hitsPerPage: 50,
-      facetFilters: ['tags:' + lang],
-    },
-    debug: false, // Set debug to true if you want to inspect the dropdown
-    transformData: function(hits) {
-      // filter 404 results
-      // function is404(h) {
-      //   var pattern = /404/gi
-      //   return h && h.lvl1 && pattern.exec(h.lvl1)
-      // }
-      // var filteredHits = hits.filter(function(hit) {
-      //   return !is404(hit.hierarchy)
-      // })
-      // return filteredHits
+function initialSearch(lang, stableVersion) {
+  let urlParams = new URLSearchParams(window.location.search)
+  let url = window.location.href
+  
+  var re = new RegExp("(v\\d+\\.\\d+|dev)")
+  var version
 
-      hits.forEach((hit, idx) => {
-        var preKey
-        for (var key in hit.hierarchy) {
-          if(idx == 6 && hit.hierarchy[key] != null) {
-            let newAnchor = hit.hierarchy[key].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
-            hits[idx].anchor = newAnchor
-            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-          } else if(hit.hierarchy[key] == null && hit.hierarchy[preKey] != null) {
-            let newAnchor = hit.hierarchy[preKey].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
-            hits[idx].anchor = newAnchor
-            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-            break
+  // gets current version
+  if (url.match(re)) {
+    version = url.match(re)[0]
+  }
+  
+  if (urlParams.has('q')) {
+    $('#search-input').val(urlParams.get('q'))
+    const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    // const client = algoliasearch('KCC6F73SU3', '179de19e41163ab59b94355afce7de4d');
+    const index = client.initIndex('pingcap');
+
+    index.search(
+      {
+        query: urlParams.get('q'),
+        hitsPerPage: 50,
+        facetFilters: ['tags:' + lang, 'version:' + version],
+      },
+
+      (err, {hits} = {}) => {
+        if(err) throw err;
+
+      // var highlightContent = []
+
+      console.log('hits: ', hits)
+
+      var categoryArr = []
+
+      var newHitArray = hits.filter(hit => {
+        // console.log('hit', hit)
+        var category = hit.hierarchy.lvl0 
+        if (category && !categoryArr.includes(category)) {
+          // console.log('hit2', category)
+          categoryArr.push(category)
+          if(!hit.content) {
+            var arr = Object.values(hit._highlightResult.hierarchy)
+            var highlightContent = arr.filter (a => {
+              console.log('a', a)
+              if(a.matchLevel == 'full') {
+                hit['newContent'] = a.value
+              }
+            })
           }
-          preKey = key
+          return hit
         }
       })
-    },
-  })
+
+      console.log('newhit array', newHitArray)
+
+      // var newHitArray = {}
+
+      // var newFormattedHits = hits.map(hit => {
+      //   if(hit.hierarchy.lvl0) {
+      //     newHitArray['category'] = hit.hierarchy.lvl0
+      //   }
+
+      //   if(hit._highlightResult.hierarchy) {
+      //     var lvls = Object.keys(hit._highlightResult.hierarchy)
+      //     var lvl0 = lvls.shift()
+      //     let subTitles
+      //     if(lvls.length > 0) {
+      //       subTitles = lvls.map(lvl => {
+      //         return hit._highlightResult.hierarchy[lvl].value
+      //       }).join(' > ');
+      //     } else {
+      //       subTitles = hit._highlightResult.hierarchy[lvl0].value
+      //     }
+      //     newHitArray['subTitles'] = subTitles
+      //   }
+
+      //   if(hit.content) {
+      //     if(hit.content.length < 500) {
+      //       newHitArray['textContent'] = hit._highlightResult.content.value
+      //     } else {
+      //       newHitArray['textContent'] = hit._snippetResult.content.value
+      //     }
+      //   } else if(!hit.content) {
+      //     newHitArray['textContent'] = null
+      //   }
+
+      //   // unifies anchor style
+      //   var lastLvl = Object.values(hit.hierarchy).filter(value => value != null).pop()
+      //   newHitArray['url'] = hit.url.replace(/\#.*$/g, '#' + lastLvl.replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase())
+
+      //   return newHitArray
+      // })
+
+      // console.log('newFormattedHits', newFormattedHits)
+
+      // formates returned hits
+      // let previousCategories = []
+      // let resultsInCategory = []
+      // let collatedResults = [];
+
+      // console.log('newformatete: ',newFormattedHits)
+
+      // collects hits by lvl0
+
+      // newFormattedHits.forEach(hit => {
+      //   if(!hit.category && !hit.content) return;
+      //   if(!previousCategories || !previousCategories.includes(hit.category)) {
+      //     previousCategories.push(hit.category)
+      //     collatedResults.push(hit)
+      //   }
+      //   if(previousCategories && previousCategories.includes(hit.category)) {
+      //     collatedResults.forEach((res, i) => {
+      //       if(res.category == hit.category && 
+      //         ((hit.subTitles.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0) ||
+      //         (hit.textContent && hit.textContent.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0))) {
+      //         collatedResults[i].hits.push(hit)
+      //       }
+      //     })
+      //   } else {
+      //     previousCategories.push(hit.category)
+      //     resultsInCategory = {
+      //       category: hit.category,
+      //       hitt: hit
+      //     }
+      //     collatedResults.push(resultsInCategory)
+      //   }
+      // });
+
+      // console.log('newformatete: ',collatedResults)
+
+
+      // enum duplicate anchors in an docs/docs-cn
+      // var idsMap = new Map()
+      // collatedResults.forEach(result => {
+      //   result.hits.forEach(hit => {
+      //     if(idsMap.has(hit.url)) {
+      //       const number = idsMap.get(hit.url)
+      //       idsMap.set(hit.url, number + 1)
+      //       hit.url = `${hit.url}-${number + 1}`
+      //     } else {
+      //       idsMap.set(hit.url, 0)
+      //       hit.url = `${hit.url}`
+      //     }
+      //   })
+      // })
+
+      // console.log('collected: ', collatedResults)
+
+      // appends results to search-results container
+      if(newHitArray.length == 0) {
+        $('#search-results').append(
+          '<div class="search-category-result"> Oops... No Result!</div>'
+        );
+      } else {
+        $('#search-results').append(newHitArray.map(hit => (
+          '<div class="search-category-result">\
+            <a href="' + hit.url + '" target="_blank"><h1 class="search-category-title">' + hit.hierarchy.lvl0 + '</h1></a>' +
+              '<div class="item-link">' + hit.url + '</div>\
+              <div class="search-result-item">' + (hit._highlightResult.content ? 
+                (hit._highlightResult.content.value.length > 500 ? hit._snippetResult.content.value : hit._highlightResult.content.value)
+                 : hit.newContent) +
+              '</div>'+
+          '</div>'
+        )).join(''));
+      }
+
+      // hides loader spinner when shows the search-results
+      if($('.search-category-result').length) {
+        $('.lazy').css('display', 'none')
+      }
+    });
+  }
 }
 
 // process search ui
 function processSearch() {
-  initialSearch($('#search-input').data('lang'))
+  initialSearch($('#search-input').data('lang'), $('#search-input').data('stable-version'))
   // Hide search suggestions dropdown menu on focusout
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
