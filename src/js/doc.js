@@ -42,23 +42,20 @@ function processStickyTree() {
   })
 
   var pathname = window.location.pathname
-  var banned_path_arr = [
-    '/docs-cn/v3.0/reference/tools/data-migration/overview/',
-    '/docs-cn/v2.1/reference/tools/data-migration/overview/',
-    '/docs-cn/dev/reference/tools/data-migration/overview/',
-  ]
 
-  // if ($('#list_page').length == 0 && !banned_path_arr.includes(pathname)) {
-  //   $('.docs-nav-toc').animate(
-  //     {
-  //       scrollTop:
-  //         $('li.leaf-child.active').offset().top -
-  //         $('.docs-nav-toc').offset().top -
-  //         200,
-  //     },
-  //     1000
-  //   )
-  // }
+  if ($('#list_page').length == 0) {
+    if($('li.leaf-child.active').length > 0) {
+      $('.sticky-sidebar').animate(
+        {
+          scrollTop:
+            $('li.leaf-child.active').offset().top -
+            $('.sticky-sidebar').offset().top -
+            200,
+        },
+        1000
+      )
+    }
+  }
 
   // Open the first item in docs/docs-cn/weekly/recruit list page
   const $firstLI = $('#list_page .st_tree > ul > li:first-child')

@@ -50,11 +50,11 @@ function initialSearch(lang, stableVersion) {
   if (url.match(re)) {
     version = url.match(re)[0]
   }
-
   
   if (urlParams.has('q')) {
     $('#search-input').val(urlParams.get('q'))
     const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    // const client = algoliasearch('KCC6F73SU3', '179de19e41163ab59b94355afce7de4d');
     const index = client.initIndex('pingcap');
 
     index.search(
@@ -71,162 +71,136 @@ function initialSearch(lang, stableVersion) {
 
       console.log('hits: ', hits)
 
-      var newFormattedHits = hits.map(hit => {
-        var newHitArray = {}
-        if(hit.hierarchy.lvl0) {
-          newHitArray['category'] = hit.hierarchy.lvl0
-        }
+      var categoryArr = []
 
-        if(hit._highlightResult.hierarchy) {
-          // var subTitles = Object.keys(hit._highlightResult.hierarchy).map(lvl => {
-          //   return hit._highlightResult.hierarchy[lvl].value
-          // }).join(' > ');
-
-          // newHitArray['subTitles'] = subTitles
-
-          var lvls = Object.keys(hit._highlightResult.hierarchy)
-          var lvl0 = lvls.shift()
-          let subTitles
-          // console.log('keys: ',lvls, lvl0)
-          if(lvls.length > 0) {
-            subTitles = lvls.map(lvl => {
-              return hit._highlightResult.hierarchy[lvl].value
-            }).join(' > ');
-          } else {
-            subTitles = hit._highlightResult.hierarchy[lvl0].value
+      var newHitArray = hits.filter(hit => {
+        // console.log('hit', hit)
+        var category = hit.hierarchy.lvl0 
+        if (category && !categoryArr.includes(category)) {
+          // console.log('hit2', category)
+          categoryArr.push(category)
+          if(!hit.content) {
+            var arr = Object.values(hit._highlightResult.hierarchy)
+            var highlightContent = arr.filter (a => {
+              console.log('a', a)
+              if(a.matchLevel == 'full') {
+                hit['newContent'] = a.value
+              }
+            })
           }
-          newHitArray['subTitles'] = subTitles
+          return hit
         }
-
-        if(hit.content) {
-          if(hit.content.length < 500) {
-            newHitArray['textContent'] = hit._highlightResult.content.value
-          } else {
-            newHitArray['textContent'] = hit._snippetResult.content.value
-          }
-        } else if(!hit.content) {
-          newHitArray['textContent'] = null
-        }
-
-        // unifies anchor style
-        var lastLvl = Object.values(hit.hierarchy).filter(value => value != null).pop()
-        newHitArray['url'] = hit.url.replace(/\#.*$/g, '#' + lastLvl.replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase())
-
-        return newHitArray
       })
 
-      console.log('newFormattedHits', newFormattedHits)
+      console.log('newhit array', newHitArray)
 
-      // console.log('newformatedhits: ', newFormattedHits)
-      // let formattedHits = docsearch.formatHits(hits);
+      // var newHitArray = {}
 
-      // console.log('formatted: ', formattedHits)
-
-      // hits.forEach((hit, idx) => {
-      //   // gets highlight snippet
-      //   if(hit._highlightResult && hit._highlightResult.content && hit._highlightResult.content.value.length < 500) {
-      //     highlightContent[idx] = hit._highlightResult.content.value
-      //   } else if(hit._snippetResult && hit._snippetResult.content) {
-      //     highlightContent[idx] = hit._snippetResult.content.value
-      //   } else {
-      //     highlightContent[idx] = ''
+      // var newFormattedHits = hits.map(hit => {
+      //   if(hit.hierarchy.lvl0) {
+      //     newHitArray['category'] = hit.hierarchy.lvl0
       //   }
-        
-        
+
+      //   if(hit._highlightResult.hierarchy) {
+      //     var lvls = Object.keys(hit._highlightResult.hierarchy)
+      //     var lvl0 = lvls.shift()
+      //     let subTitles
+      //     if(lvls.length > 0) {
+      //       subTitles = lvls.map(lvl => {
+      //         return hit._highlightResult.hierarchy[lvl].value
+      //       }).join(' > ');
+      //     } else {
+      //       subTitles = hit._highlightResult.hierarchy[lvl0].value
+      //     }
+      //     newHitArray['subTitles'] = subTitles
+      //   }
+
+      //   if(hit.content) {
+      //     if(hit.content.length < 500) {
+      //       newHitArray['textContent'] = hit._highlightResult.content.value
+      //     } else {
+      //       newHitArray['textContent'] = hit._snippetResult.content.value
+      //     }
+      //   } else if(!hit.content) {
+      //     newHitArray['textContent'] = null
+      //   }
+
+      //   // unifies anchor style
+      //   var lastLvl = Object.values(hit.hierarchy).filter(value => value != null).pop()
+      //   newHitArray['url'] = hit.url.replace(/\#.*$/g, '#' + lastLvl.replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase())
+
+      //   return newHitArray
       // })
+
+      // console.log('newFormattedHits', newFormattedHits)
 
       // formates returned hits
-      let previousCategories = []
-      let resultsInCategory = []
-      let collatedResults = [];
+      // let previousCategories = []
+      // let resultsInCategory = []
+      // let collatedResults = [];
 
-
-      // formattedHits.forEach((hit, idx) => {
-      //   if(highlightContent[idx]) {
-      //     hit.text = highlightContent[idx]
-      //   }
-      // })
+      // console.log('newformatete: ',newFormattedHits)
 
       // collects hits by lvl0
-      newFormattedHits.forEach(hit => {
-        // console.log('hit', hit.category, previousCategories, previousCategories.includes(hit.category), collatedResults)
-        if(!hit.category) return;
-        if(previousCategories && previousCategories.includes(hit.category)) {
-          collatedResults.forEach((res, i) => {
-            if(res.category == hit.category && 
-              ((hit.subTitles.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0) ||
-              (hit.textContent && hit.textContent.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0))) {
-              collatedResults[i].hits.push(hit)
-            }
-          })
-        } else {
-          previousCategories.push(hit.category)
-          resultsInCategory = {
-            category: hit.category,
-            hits:[hit],
-          }
-          collatedResults.push(resultsInCategory)
-        }
-        // console.log('previous', previousCategories, collatedResults)
-        // if (!previousResult || previousResult.category !== hit.category) {
-        //   previousResult = {
-        //     category: hit.category,
-        //     hits: [],
-        //     url: hit.url
-        //   };
-        //   collatedResults.push(previousResult);
-        // }
 
-        // assigns content to hit text
-        // if(!hit.textContent) {
-        //   hit.text = hit.title
-        // }
+      // newFormattedHits.forEach(hit => {
+      //   if(!hit.category && !hit.content) return;
+      //   if(!previousCategories || !previousCategories.includes(hit.category)) {
+      //     previousCategories.push(hit.category)
+      //     collatedResults.push(hit)
+      //   }
+      //   if(previousCategories && previousCategories.includes(hit.category)) {
+      //     collatedResults.forEach((res, i) => {
+      //       if(res.category == hit.category && 
+      //         ((hit.subTitles.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0) ||
+      //         (hit.textContent && hit.textContent.indexOf('class="algolia-docsearch-suggestion--highlight"') > 0))) {
+      //         collatedResults[i].hits.push(hit)
+      //       }
+      //     })
+      //   } else {
+      //     previousCategories.push(hit.category)
+      //     resultsInCategory = {
+      //       category: hit.category,
+      //       hitt: hit
+      //     }
+      //     collatedResults.push(resultsInCategory)
+      //   }
+      // });
 
-        // const previousHit = previousResult.hits[previousResult.hits.length - 1];
+      // console.log('newformatete: ',collatedResults)
 
-        // if(!previousHit) {
-        //   previousResult.hits.push(hit);
-        // }
-
-        // if (hit.text.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0 && hit.subcategory.indexOf('class="algolia-docsearch-suggestion--highlight"') < 0) {
-        //   return
-        // } else if (!previousHit || previousHit.text !== hit.text) {
-        //   previousResult.hits.push(hit);
-        // }
-      });
 
       // enum duplicate anchors in an docs/docs-cn
-      var idsMap = new Map()
-      collatedResults.forEach(result => {
-        result.hits.forEach(hit => {
-          if(idsMap.has(hit.url)) {
-            const number = idsMap.get(hit.url)
-            idsMap.set(hit.url, number + 1)
-            hit.url = `${hit.url}-${number + 1}`
-          } else {
-            idsMap.set(hit.url, 0)
-            hit.url = `${hit.url}`
-          }
-        })
-      })
+      // var idsMap = new Map()
+      // collatedResults.forEach(result => {
+      //   result.hits.forEach(hit => {
+      //     if(idsMap.has(hit.url)) {
+      //       const number = idsMap.get(hit.url)
+      //       idsMap.set(hit.url, number + 1)
+      //       hit.url = `${hit.url}-${number + 1}`
+      //     } else {
+      //       idsMap.set(hit.url, 0)
+      //       hit.url = `${hit.url}`
+      //     }
+      //   })
+      // })
 
-      console.log('collected: ', collatedResults)
+      // console.log('collected: ', collatedResults)
 
       // appends results to search-results container
-      if(collatedResults.length == 0) {
+      if(newHitArray.length == 0) {
         $('#search-results').append(
           '<div class="search-category-result"> Oops... No Result!</div>'
         );
       } else {
-        $('#search-results').append(collatedResults.map(result => (
+        $('#search-results').append(newHitArray.map(hit => (
           '<div class="search-category-result">\
-            <h1 class="search-category-title">' + result.category + '</h1>' +
-            result.hits.map(hit => (
-              '<div class="search-result-item">\
-                <span class="subcategory">' + hit.subTitles + 
-                (hit.textContent ? '</span><span class="text"> > ' +  hit.textContent + '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>' : '<a class="item-header" href="' + hit.url + '"> [Read More&hellip;]</a></span>') +
-              '</div>'
-            )).join('') +
+            <a href="' + hit.url + '" target="_blank"><h1 class="search-category-title">' + hit.hierarchy.lvl0 + '</h1></a>' +
+              '<div class="item-link">' + hit.url + '</div>\
+              <div class="search-result-item">' + (hit._highlightResult.content ? 
+                (hit._highlightResult.content.value.length > 500 ? hit._snippetResult.content.value : hit._highlightResult.content.value)
+                 : hit.newContent) +
+              '</div>'+
           '</div>'
         )).join(''));
       }
