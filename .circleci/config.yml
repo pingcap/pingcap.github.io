@@ -60,15 +60,15 @@ jobs:
               curl "http://www.google.com/ping?sitemap=https://pingcap.com/sitemap.xml"
             fi
 
-      - deploy:
-          name: "Publish github.io"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "src" ];
-              then chmod +x ./scripts/push-gh-pages.sh; sh ./scripts/push-gh-pages.sh;
-            fi
+      # - deploy:
+      #     name: "Publish github.io"
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" == "src" ];
+      #         then chmod +x ./scripts/push-gh-pages.sh; sh ./scripts/push-gh-pages.sh;
+      #       fi
 
       # Start to sync static folder
-      - run: git clone https://itssohardtobewhoyouare@bitbucket.org/itssohardtobewhoyouare/qiniu-aws-upload-utils.git
+      - run: git clone https://github.com/PingCAP-FE/qiniu-aws-upload-utils.git
 
       - run: echo | sh <(curl -sL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)
 

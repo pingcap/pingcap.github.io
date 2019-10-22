@@ -6,7 +6,7 @@ function createEventListConsole(eventTitles, eventLinks) {
     var event = document.createElement('div')
     event.className = 'event'
     event.innerHTML =
-      '<a href="' + eventLinks[i] + '">' + eventTitles[i] + '</a>'
+      '<a href="' + eventLinks[i] + '" target=_blank>' + eventTitles[i] + '</a>'
     $('.event-list').append(event)
   }
 }
@@ -243,6 +243,8 @@ $(document).ready(function() {
     $(this).parent().siblings().children('.answer').slideUp();
   })
 
+  // toggle answers when click contributor subtitle in developer group
+
   $('.j-open-schedule-modal').click(function() {
     console.log('clicked')
     $('.j-schedule-overlay').fadeIn()
@@ -284,7 +286,36 @@ $(document).ready(function() {
     )
   })
 
-  // calcBtnOnHack19Banner()
-
-  // $(window).resize(calcBtnOnHack19Banner)
+  if(window.matchMedia('(min-width: 1024px)').matches) {
+    $('.j-hover').hover(function(){
+      if($(this).hasClass('userSubBtn')) {
+        $(this).addClass('userSubBtn-hover')
+      } else {
+        $(this).addClass('branchBtn-hover')
+        if($(this).hasClass('j-devSubBtn-hover')) {
+          $(this).children().addClass('devSubBtn-hover')
+        }
+      }
+      $(this).siblings().addClass('org-tooltiptext-hover')
+    }, function(){
+      $('.orgBtn').removeClass('devSubBtn-hover')
+      $('.orgBtn').removeClass('userSubBtn-hover')
+      $(this).removeClass('branchBtn-hover')
+      $(this).siblings().removeClass('org-tooltiptext-hover')
+    })
+  } else {
+    $('.j-mobile-hover').click(function() {
+      if($(this).hasClass('comBtn')) {
+        $('.pmcBtn').removeClass('pmcBtn-click')
+        $(this).toggleClass('comBtn-click')
+      } else if($(this).hasClass('pmcBtn')) {
+        $(this).toggleClass('pmcBtn-click')
+        $('.comBtn').removeClass('comBtn-click')
+      }
+      if(!$(this).siblings().hasClass('org-tooltiptext-hover')) {
+        $('.org-tooltiptext').removeClass('org-tooltiptext-hover')
+      }
+      $(this).siblings().toggleClass('org-tooltiptext-hover')
+    })
+  }
 })

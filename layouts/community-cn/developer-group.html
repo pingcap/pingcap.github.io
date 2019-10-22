@@ -1,0 +1,85 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Developer Group" }}
+    Developer Group
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/developer-group.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+<div class="developer-group">
+    <div class="banner__section developer-banner">
+        <div class="developer-banner-container">
+            <h1>TiDB Developer Group</h1>
+            <p>TiDB Developer Group （TiDB 社区开发者组织）作为社区发展的基石，由以下角色构成：Maintainer, Committer, Reviewer, Active Contributor, Contributor。每一个角色在社区中都承担相应的职责，他们是推动 TiDB 健壮发展的重要成员。</p>
+        </div>
+    </div>
+    <div class="container developer-group-container">
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.maintainer) -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.committer) -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.reviewer) -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.active_contributor) -}}
+
+        <div class="role-card" id="contributor">
+            <div class="header">Contributor</div>
+            <div class="desc">社区贡献者，在 TiDB 核心 repo 有一个或以上被合并的 PR。</div>
+            <div class="detail">
+                <div class="title question">贡献你的第一个 PR</div>
+                <div class="pr-content answer">
+                    <p>我们鼓励大家通过项目测试、文档撰写、上报 bug 等多种形式参与社区。成为 Contributor 之后还可以获得我们的纪念马克杯，现在就来贡献你的第一个 PR 吧！</p>
+                    <ul>
+                        <li>Fork 项目至你的 GitHub 账户</li>
+                        <li>Git Clone 到本地仓库</li>
+                        <li>创建 master 分支</li>
+                        <li>在本地仓库中编写代码并测试</li>
+                        <li>Push 已经 commit 的代码至远程仓库</li>
+                        <li>创建一个新的 PR</li>
+                        <li>代码审查：提交 PR 之后我们会检查你提交的代码是否有 bug 或语法错误，请留意 PR 下面的留言回复。如果有两位代码审查者点赞，你的 PR 就会被合并，恭喜你成为 TiDB Contributor，快来领取属于你的勇士奖杯！</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="detail">
+                <div class="title question">新手指南</div>
+                <div class="pr-content answer">
+                    <p>对于从来没有或者很少参与大型开源项目的小伙伴来说，我们建议先阅读 TiDB 相关资料，尤其是<a href="https://pingcap.com/blog-cn/tidb-internal-1/">说存储</a>、
+                        <a href="https://pingcap.com/blog-cn/tidb-internal-2/">讲计算</a>、<a href="https://pingcap.com/blog-cn/tidb-internal-3/">谈调度</a>这三篇。再由以下方式上手参与项目：</p>
+                    <ul>
+                        <li>积极帮助社区用户解答技术问题</li>
+                        <li>帮助项目增加测试​</li>
+                        <li>完善技术文档</li>
+                        <li>提供有价值的 Issue</li>
+                        <li>报告或修复未知 / 已知的 Bug​</li>
+                        <li>为项目撰写源码分析、实用案例相关的文章​</li>
+                    </ul>
+
+                    <p>同时也可以参考社区小伙伴撰写的如何 <a href="https://pingcap.com/blog-cn/how-to-contribute/">「从零开始参与大型开源项目」</a></p>
+                    <p>有了这些基础知识之后就可以到我们的 GitHub 上寻找适合的 Issue 了。在标签下选择 'for new contributors' 或 'help wanted'，这两个标签都是对新手比较友好的。如果你对某一个模块特别感兴趣也可以选择模块对应的标签。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-to-community-section">
+        <a href="/community-cn/">
+            <button class="back-to-community">
+              回到社区主页
+            </button>
+        </a>
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/community.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
+{{- end -}}

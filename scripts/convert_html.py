@@ -45,7 +45,7 @@ for img in soup.find_all('img'):
     if src:
         if (not abs_hyper_link_pattern.match(src)) and image_rel_src_pattern.match(src):
             _src = re.sub(r'[\.\/]*media\/', '/', src, count=0, flags=0)
-            _src = os.path.normpath('/images/' + sys.argv[2] + _src)
+            _src = 'https://download.pingcap.com/images/' + sys.argv[2] + _src
             img['data-original']= _src
             img['src'] = '/images/svgs/loader-spinner.svg'
             img['class'] = 'lazy'
