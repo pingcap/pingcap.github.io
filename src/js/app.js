@@ -59,13 +59,15 @@ function initialSearch(lang, stableVersion) {
     index.search(
       {
         query: urlParams.get('q'),
-        hitsPerPage: 50,
+        hitsPerPage: 300,
         facetFilters: ['tags:' + lang, 'version:' + version],
       },
 
       (err, {hits} = {}) => {
         if(err) throw err;
         var categoryArr = []
+
+        console.log('hit', hits)
 
         // selects the first result of each category and puts into the new hit array
         var newHitArray = hits.filter(hit => {
@@ -79,6 +81,8 @@ function initialSearch(lang, stableVersion) {
             return hit
           }
         })
+
+        console.log('new hits', newHitArray)
 
         // appends results to search-results container
         if(newHitArray.length == 0) {
