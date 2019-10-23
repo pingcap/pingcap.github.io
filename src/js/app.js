@@ -114,7 +114,7 @@ function initialSearch(lang, stableVersion) {
               <a href="' + hit.url + '" target="_blank"><h1 class="search-category-title">' + hit.hierarchy.lvl0 + '</h1></a>' +
                 '<div class="item-link">' + hit.url + '</div>\
                 <div class="search-result-item">' +
-                  (hit.content.length > 500 ? hit._snippetResult.content.value : hit.content) +
+                  (hit._highlightResult.content.value.length > 500 ? hit._snippetResult.content.value : hit._highlightResult.content.value) +
                 '</div>'+
             '</div>'
           )).join(''));
