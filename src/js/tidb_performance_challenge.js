@@ -8,7 +8,7 @@ function renderData(data) {
   data
     .sort((a, b) => b.rank - a.rank)
     .map((d, i) => {
-      const percent = (d.score / 10000).toFixed(0)
+      const percent = (d.score / 100).toFixed(0)
       $(`
       <div>
         ${
