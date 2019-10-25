@@ -17,10 +17,9 @@
                 </ul>
             </div>
             <div class="global-search">
-                <div class="search-wrapper">
-                <span class="icon-search">{{ partial "svgs/icon-search.svg" (dict "fill" "#fff" "width" 18 "height" 18 ) }}</span>
-                <input data-lang="en" type="search" id="search-input" placeholder="Search...">
-                </div>
+                {{ $search_doc_version := trim (index (findRE "\\/(v\\d+\\.\\d+|dev)" .RelPermalink) 0) "/" }}
+                {{ $search_doc_version := cond (eq $search_doc_version "") $stable_version $search_doc_version }}
+                {{ partial "layout/search.html" (dict "global" . "search_doc_version" $search_doc_version "lang" "en" "stable_version" $stable_version) }}
             </div>
         </div>
         <div class="nav-btn nav-slider">

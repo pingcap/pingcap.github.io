@@ -34,11 +34,12 @@
   }
 
   .sidebar {
-    min-height: calc(~'100vh - @{pcFooterHeight}');
+    min-height: calc(~'100vh - 250px');
   }
 
   .archive,
   .list {
+    position: relative;
     flex: 1;
     max-width: calc(~'100% - 24rem');
 
@@ -65,6 +66,26 @@
 
     h4 {
       font-size: 18px;
+    }
+  }
+
+  .search-result-archive {
+    max-width: 100% !important;
+    padding-left: 4rem !important;
+
+    .result-header {
+      display: flex;
+      flex-flow: row wrap;
+
+      h1 {
+        font-size: 30px;
+        font-weight: 600;
+        padding-bottom: 20px;
+      }
+
+      .algolia-logo {
+        margin: 8px 2rem auto auto;
+      }
     }
   }
 
@@ -628,6 +649,57 @@ a.letter::before {
   margin-top: -5em;
 }
 
+#search-result-title {
+  font-weight: 500 !important;
+}
+
+.search-category-result {
+  max-width: 1024px;
+  margin-bottom: 3rem;
+
+  .search-text {
+    margin-bottom: 5px;
+  }
+
+  .search-category-title {
+    margin-bottom: 0 !important;
+    font-size: 20px !important;
+    line-height: 1;
+    color: @themeBlue !important;
+  }
+
+  .item-link {
+    color: #888;
+    font-size: 14px;
+    margin: 0.5rem 0;
+  }
+
+  .search-result-item {
+    font-size: 16px;
+
+    .text {
+      color: #7d7d7d;
+      line-height: 1.7;
+    }
+
+    .subcategory {
+      font-weight: 600;
+      line-height: 1.5;
+    }
+  }
+
+  .category-title-link {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+  }
+
+  .algolia-docsearch-suggestion--highlight {
+    background-color: #e1f1f7;
+    color: #2027c7;
+  }
+}
+
 @media (max-width: 1024px) {
   .blog {
     .archive {
@@ -761,6 +833,12 @@ a.letter::before {
 
   .blog .trackable-btns button {
     margin: 10px 0;
+  }
+
+  .search-result-archive .result-header {
+    h1 {
+      padding-bottom: 0 !important;
+    }
   }
 }
 
