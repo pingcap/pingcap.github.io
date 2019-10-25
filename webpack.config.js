@@ -27,6 +27,12 @@ module.exports = {
     carousel: path.join(__dirname, 'src', 'js', 'carousel'),
     video_on_modal: path.join(__dirname, 'src', 'js', 'video_on_modal'),
     anchor: path.join(__dirname, 'src', 'js', 'anchor'),
+    tidb_performance_challenge: path.join(
+      __dirname,
+      'src',
+      'js',
+      'tidb_performance_challenge'
+    ),
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),
