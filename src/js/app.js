@@ -94,7 +94,7 @@ function initialSearch(lang, stableVersion) {
                 <p>很抱歉，我们没有找到您期望的内容。</p>\
                 <ul>\
                 <li>请尝试其它搜索词，或者去 <a href="https://asktug.com/" target="_blank"> AskTUG</a> (TiDB User Group) 提问试试。</li>\
-                <li>如果你想搜索英文内容，请移步至<a href="https://pingcap.com/docs/">英文文档</a>进行搜索。</li>\
+                <li>如果您想搜索英文内容，请移步至<a href="https://pingcap.com/docs/">英文文档</a>进行搜索。</li>\
                 </ul>\
               </div>'
             );
