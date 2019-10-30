@@ -17,6 +17,9 @@ except NameError:
 
 abs_hyper_link_pattern = re.compile(r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}')
 image_rel_src_pattern = re.compile(r'^[\.\/]*media\/')
+stable_version = "v3.0"
+stable_version_tag = "stable"
+doc_stable_version_patter = re.compile(r'\/(v3.0)\/')
 # doc_version_pattern = re.compile(r'\/(v\d+\.\d+|dev)\/')
 
 file_path = sys.argv[1]
@@ -34,6 +37,12 @@ for link in soup.find_all('a'):
             #     doc_version = '/' + m.group(1) + '/'
             # else:
             #     doc_version = ''
+
+            if doc_stable_version_patter.match(href):
+                href = href.replace(stable_version, stable_version_tag)
+                print href
+                print "=========="
+            
 
             href = href.replace('.md', '')
             href = re.sub(r'^[\.\/]*', '/', href, count=0, flags=0)

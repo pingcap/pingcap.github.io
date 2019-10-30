@@ -1,0 +1,5 @@
+{{ $current_version := .cv }}
+
+{{ $file_name := replace (printf "%s%s%s" .lang_prefix (replaceRE "/" "" $current_version) "_toc") "." "" }}
+
+{{ partial "archives/sticky-tree.html" (dict "tree" (index .global.Site.Data $file_name) "title" "文档") }}
