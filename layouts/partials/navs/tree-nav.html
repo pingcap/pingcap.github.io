@@ -1,14 +1,16 @@
 <ul>
     {{- range .tree -}}
         {{- if isset . "children" -}}
-            <li class="has-child {{ if hasPrefix .name "`" }}sidebar-code{{ end }}"><a href="#">
-                <span>{{ trim .name "``" }}</span>
+            <li class="has-child"><a href="#">
+                <span {{ if (findRE "`" .name )}}class="has-code"{{ end }}>{{ .name }}</span>
                 <i class="icon-arrow"></i></a>
                   {{- partial "navs/tree-nav.html" (dict "tree" .children "global" $) -}}
             </li>
         {{- else -}}
-            <li class="leaf-child {{ if hasPrefix .name "`" }}sidebar-code{{ end }}">
-                <a href="{{ .link }}"><span>{{ trim .name "``" }}</span></a>
+            <li class="leaf-child">
+                <a href="{{ .link }}">
+                    <span {{ if (findRE "`" .name )}}class="has-code"{{ end }}>{{ .name }}</span>
+                </a>
             </li>
         {{- end -}}
     {{- end -}}

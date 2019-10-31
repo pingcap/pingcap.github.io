@@ -263,6 +263,12 @@ $(document).ready(function() {
     }
   })
 
+  // if (window.matchMedia('(max-width: 414px)').matches) {
+  //   $('.j-thumbnail-click').click(function() {
+  //     console.log('clicked', $(this)[0].children)
+  //   })
+  // }
+
   $('.modal-overlay').on('click', function(e) {
     if ($(this).hasClass('active')) {
       if (_.isEqual(e.target, e.delegateTarget)) closeModal()

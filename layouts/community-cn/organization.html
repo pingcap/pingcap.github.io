@@ -91,14 +91,14 @@
                             <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
                         </a>
                         <a href="{{ $i.link}}" target="_blank" class="member-info">
-                          <p>{{ $i.name }}</p>
+                          <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
                           <p>{{ $i.title }}</p>
                           <div class="github-icon"><p>{{ $i.githubID }}</p></div>
                         </a>
                       {{- else -}}
                         <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
                         <div class="member-info">
-                            <p>{{ $i.name }}</p>
+                            <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
                             <p>{{ $i.title }}</p>
                         </div>
                       {{- end -}}
@@ -114,14 +114,14 @@
                           <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
                       </a>
                       <a href="{{ $i.link}}" target="_blank" class="member-info">
-                        <p>{{ $i.name }}</p>
+                        <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
                         <p>{{ $i.title }}</p>
                         <div class="github-icon"><p>{{ $i.githubID }}</p></div>
                       </a>
                     {{- else -}}
                       <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
                       <div class="member-info">
-                          <p>{{ $i.name }}</p>
+                          <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
                           <p>{{ $i.title }}</p>
                       </div>
                     {{- end -}}
@@ -135,6 +135,7 @@
                       <p class="name">{{ $i.name }}</p>
                       <img src="/images/github.svg">
                       <p class="githubID">{{ $i.githubID }}</p>
+                      {{ if $i.tag }}<div class="contribution-tag tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</div>{{ end }}
                   </a>
                 {{- end -}}
               </div>
