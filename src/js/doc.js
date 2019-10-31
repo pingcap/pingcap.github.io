@@ -343,6 +343,23 @@ $(document).ready(function() {
         }
       }
     })
+
+    // add code block to tree-nav
+    if($('.has-code').length > 0) {
+      $('.has-code').each(function() {
+        var re = /`.*?`/g
+        let innerText = $(this)[0].innerText
+        let matchedArr = $(this)[0].innerText.match(re)
+        matchedArr.forEach(i => {
+          let len = i.length
+          let trimedText = i.substr(1, len - 2)
+          innerText = innerText.replace(i, '<span class="sidebar-code">' + trimedText + '</span>')
+        })
+
+        $(this)[0].innerText = ''
+        $(this).append(innerText)
+      }) 
+    }
   }
 
   // hide dropdown Menu if user clicks other divs when the status of dropdown menu is open

@@ -246,7 +246,6 @@ $(document).ready(function() {
   // toggle answers when click contributor subtitle in developer group
 
   $('.j-open-schedule-modal').click(function() {
-    console.log('clicked')
     $('.j-schedule-overlay').fadeIn()
     $('.j-schedule-overlay, .modal').addClass('active')
     if (window.matchMedia('(max-width: 600px)').matches) {
@@ -255,13 +254,23 @@ $(document).ready(function() {
   })
 
   $('.j-open-grading-modal').click(function() {
-    console.log('clicked')
     $('.j-grading-overlay').fadeIn()
     $('.j-grading-overlay, .modal').addClass('active')
     if (window.matchMedia('(max-width: 600px)').matches) {
       $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-grading-mobile.png')
     }
   })
+
+  if (window.matchMedia('(max-width: 414px)').matches) {
+    $('.j-thumbnailText-click').click(function() {
+      if ($('.thumbnail-text').hasClass('thumbnail-text-click')) {
+        $('.thumbnail-text').not(this).each(function() {
+          $(this).removeClass('thumbnail-text-click')
+        })
+      }
+      $(this).toggleClass('thumbnail-text-click')
+    })
+  }
 
   $('.modal-overlay').on('click', function(e) {
     if ($(this).hasClass('active')) {
