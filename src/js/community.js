@@ -262,11 +262,13 @@ $(document).ready(function() {
   })
 
   if (window.matchMedia('(max-width: 414px)').matches) {
-    $('.j-thumbnail-click').click(function() {
+    $('.j-thumbnailText-click').click(function() {
       if ($('.thumbnail-text').hasClass('thumbnail-text-click')) {
-        $('.thumbnail-text').removeClass('thumbnail-text-click')
+        $('.thumbnail-text').not(this).each(function() {
+          $(this).removeClass('thumbnail-text-click')
+        })
       }
-      $($(this)[0].children[1]).toggleClass('thumbnail-text-click')
+      $(this).toggleClass('thumbnail-text-click')
     })
   }
 
