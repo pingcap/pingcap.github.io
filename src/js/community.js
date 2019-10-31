@@ -246,7 +246,6 @@ $(document).ready(function() {
   // toggle answers when click contributor subtitle in developer group
 
   $('.j-open-schedule-modal').click(function() {
-    console.log('clicked')
     $('.j-schedule-overlay').fadeIn()
     $('.j-schedule-overlay, .modal').addClass('active')
     if (window.matchMedia('(max-width: 600px)').matches) {
@@ -255,7 +254,6 @@ $(document).ready(function() {
   })
 
   $('.j-open-grading-modal').click(function() {
-    console.log('clicked')
     $('.j-grading-overlay').fadeIn()
     $('.j-grading-overlay, .modal').addClass('active')
     if (window.matchMedia('(max-width: 600px)').matches) {
@@ -263,11 +261,14 @@ $(document).ready(function() {
     }
   })
 
-  // if (window.matchMedia('(max-width: 414px)').matches) {
-  //   $('.j-thumbnail-click').click(function() {
-  //     console.log('clicked', $(this)[0].children)
-  //   })
-  // }
+  if (window.matchMedia('(max-width: 414px)').matches) {
+    $('.j-thumbnail-click').click(function() {
+      if ($('.thumbnail-text').hasClass('thumbnail-text-click')) {
+        $('.thumbnail-text').removeClass('thumbnail-text-click')
+      }
+      $($(this)[0].children[1]).toggleClass('thumbnail-text-click')
+    })
+  }
 
   $('.modal-overlay').on('click', function(e) {
     if ($(this).hasClass('active')) {
