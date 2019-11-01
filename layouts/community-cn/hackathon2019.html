@@ -55,6 +55,32 @@
         </p>
     </section>
 
+    <section class="winners">
+        <h2 class="section-title">赛事奖项归属</h2>
+        <div class="list">
+            {{- range $idx, $i := .Site.Data.hackathon.winners_2019 -}}
+            <div class="winner-team">
+                <div class="thumbnail">
+                    <img class="lazy thumbnail-img" data-original="{{ $i.thumbnail }}" src="/images/svgs/loader-spinner.svg" alt="team-avatar" />
+                    <p class="thumbnail-text j-thumbnailText-click">{{ $i.project_intro }}</p>
+                </div>
+                {{- partial "tidb-planet/modal" (dict "type" "schedule" "modal_img" $i.modal_img) -}}
+                <div class="team-info">
+                    <p class="award">{{ $i.award }} | {{ $i.team_name }}</p>
+                    <p class="project-name">{{ $i.project_name }}</p>
+                </div>
+                <div class="misc">
+                    <img class="lazy award-icon" data-original="{{ $i.medal }}" src="/images/svgs/loader-spinner.svg" alt="medal-icon" />
+                    <a href="{{ $i.github }}" target="_blank"><button class="GitHub-repo">GitHub Repo</button></a>
+                </div>
+            </div>
+            {{- end -}}
+        </div>
+        <a href="https://github.com/pingcap/presentations/blob/master/hackathon-2019/hackathon-2019-projects.md">
+            <button class="more-project-btn">查看完整项目展示</button>
+        </a>
+    </section>
+
     <section class="tutor-members">
         <h2 class="section-title section-title-white">评委 / 导师团 </h2>
         <div class="tutor-list">

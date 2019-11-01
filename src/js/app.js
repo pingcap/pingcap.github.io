@@ -1,9 +1,12 @@
+import { format } from "util"
+
 // JS Goes here - ES6 supported
 
 // Global JS
 
 // Say hello
 console.log('🦊 Hello! @PingCAP website')
+// const _ = require('lodash')
 
 // import '../../dist/css/main.css'
 
@@ -36,50 +39,103 @@ function processHash() {
 }
 
 // initial algolia search
-function initialSearch(lang) {
-  docsearch({
-    apiKey: 'ad5e63b76a221558bdc65ab1abbec7a2',
-    indexName: 'pingcap',
-    inputSelector: '#search-input',
-    algoliaOptions: {
-      hitsPerPage: 50,
-      facetFilters: ['tags:' + lang],
-    },
-    debug: false, // Set debug to true if you want to inspect the dropdown
-    transformData: function(hits) {
-      // filter 404 results
-      // function is404(h) {
-      //   var pattern = /404/gi
-      //   return h && h.lvl1 && pattern.exec(h.lvl1)
-      // }
-      // var filteredHits = hits.filter(function(hit) {
-      //   return !is404(hit.hierarchy)
-      // })
-      // return filteredHits
+function initialSearch(lang, stableVersion) {
+  let urlParams = new URLSearchParams(window.location.search)
+  let url = window.location.href
+  
+  var re = new RegExp("(v\\d+\\.\\d+|dev)")
+  var version
 
-      hits.forEach((hit, idx) => {
-        var preKey
-        for (var key in hit.hierarchy) {
-          if(idx == 6 && hit.hierarchy[key] != null) {
-            let newAnchor = hit.hierarchy[key].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
-            hits[idx].anchor = newAnchor
-            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-          } else if(hit.hierarchy[key] == null && hit.hierarchy[preKey] != null) {
-            let newAnchor = hit.hierarchy[preKey].replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase()
-            hits[idx].anchor = newAnchor
-            hits[idx].url = hits[idx].url.replace(/\#.*$/g, '#' + newAnchor)
-            break
+  // gets current version
+  if (url.match(re)) {
+    version = url.match(re)[0]
+  }
+  
+  if (urlParams.has('q')) {
+    $('#search-input').val(urlParams.get('q'))
+    const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    const index = client.initIndex('pingcap');
+
+    index.search(
+      {
+        query: urlParams.get('q'),
+        hitsPerPage: 300,
+        facetFilters: ['tags:' + lang, 'version:' + version],
+      },
+
+      (err, {hits} = {}) => {
+        if(err) throw err;
+        var categoryArr = []
+
+        console.log('hit', hits)
+
+        // selects the first result of each category and puts into the new hit array
+        var newHitArray = hits.filter(hit => {
+          var category = hit.hierarchy.lvl0
+          if (category && !categoryArr.includes(category)) {
+            categoryArr.push(category)
+
+            // unifies anchor style
+            var lastLvl = Object.values(hit.hierarchy).filter(value => value != null).pop()
+            hit['url'] = hit.url.replace(/\#.*$/g, '#' + lastLvl.replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase())
+            return hit
           }
-          preKey = key
+        })
+
+        console.log('new hits', newHitArray)
+
+        // appends results to search-results container
+        if(newHitArray.length == 0) {
+          if (lang == 'cn') {
+            $('#search-result-title').append('搜索结果')
+            $('#search-results').append(
+              '<div class="search-category-result">\
+                <p>很抱歉，我们没有找到您期望的内容。</p>\
+                <ul>\
+                <li>请尝试其它搜索词，或者去 <a href="https://asktug.com/" target="_blank"> AskTUG</a> (TiDB User Group) 提问试试。</li>\
+                <li>如果您想搜索英文内容，请移步至<a href="https://pingcap.com/docs/">英文文档</a>进行搜索。</li>\
+                </ul>\
+              </div>'
+            );
+          } else if (lang == 'en') {
+            $('#search-result-title').append('Search Results')
+            $('#search-results').append(
+              '<div class="search-category-result">\
+                <p>Sorry. We couldn\'t find what you\'re looking for.</p>\
+                <ul>\
+                <li>If you\'ve come to pages of an unexpected language, go to <a href="https://pingcap.com/docs-cn/">Chinese documentation</a> and try again.</li>\
+                <li>If you do want to get some English content, <a href="https://pingcap.com/">PingCAP home page</a> might be a better place for you to go.</li>\
+                </ul>\
+              </div>'
+            );
+          }
+        } else {
+          $('#search-result-title').append(
+            (lang == 'en' ? 'Search Results' : '搜索结果')
+          )
+          $('#search-results').append(newHitArray.map(hit => (
+            '<div class="search-category-result">\
+              <a href="' + hit.url + '" target="_blank"><h1 class="search-category-title">' + hit.hierarchy.lvl0 + '</h1></a>' +
+                '<div class="item-link">' + hit.url + '</div>\
+                <div class="search-result-item">' +
+                  (hit._highlightResult.content.value.length > 500 ? hit._snippetResult.content.value : hit._highlightResult.content.value) +
+                '</div>'+
+            '</div>'
+          )).join(''));
         }
-      })
-    },
-  })
+
+        // hides loader spinner when shows the search-results
+        if($('.search-category-result').length) {
+          $('.lazy').css('display', 'none')
+        }
+      }
+    );
+  }
 }
 
 // process search ui
 function processSearch() {
-  initialSearch($('#search-input').data('lang'))
+  initialSearch($('#search-input').data('lang'), $('#search-input').data('stable-version'))
   // Hide search suggestions dropdown menu on focusout
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
