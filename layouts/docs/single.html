@@ -18,7 +18,7 @@
 <div class="doc">
     <div class="container">
         {{ $.Scratch.Add "data_i18_link" $current_version }}
-        {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_" "cv" $current_version) }}
+        {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_" "cv" $current_version "sv" $stable_version "tv" $total_versions) }}
         <div class="archive">
             <div class="content markdown-body">
                 {{- .Content -}}
@@ -28,7 +28,6 @@
         </div>
         <div class="sidebar-page">
             <div class="sticky-sidebar">
-                {{ partial "archives/version-switcher.html" (dict "global" . "sv" $stable_version "tv" $total_versions "cv" $current_version) }}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs" "global" .) -}}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
                 <p class="toc-title">What’s on this page</p>
