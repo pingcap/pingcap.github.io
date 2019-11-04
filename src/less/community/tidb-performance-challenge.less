@@ -47,15 +47,19 @@
 
 .tpc-hero {
   margin-top: 3rem;
-  background: url('https://download.pingcap.com/images/tidb-performance-challenge/banner-pc.png')
-    no-repeat center;
-  background-size: cover;
+  background: linear-gradient(30deg, #3cafe7, #030faf);
 
-  @media only screen and (max-width: 767px) {
-    height: 450px;
-    background: url('https://download.pingcap.com/images/tidb-performance-challenge/banner-mobile.png')
+  .hero-body {
+    background: url('https://download.pingcap.com/images/tidb-performance-challenge/banner-pc.png')
       no-repeat center;
     background-size: cover;
+
+    @media only screen and (max-width: 767px) {
+      height: 450px;
+      background: url('https://download.pingcap.com/images/tidb-performance-challenge/banner-mobile.jpg')
+        no-repeat center;
+      background-size: cover;
+    }
   }
 
   .title,
@@ -85,6 +89,10 @@
       color: #fff;
       border: none;
       font-size: @fontSize;
+
+      a:hover {
+        color: #fff;
+      }
     }
 
     .button-receive {
@@ -110,11 +118,15 @@
     line-height: 1.4rem;
 
     &:first-of-type {
-      margin-top: 4rem;
+      margin-top: 3rem;
 
       @media only screen and (max-width: 767px) {
-        margin-top: 3rem;
+        margin-top: 2rem;
       }
+    }
+
+    &:nth-child(odd) {
+      padding-top: 0;
     }
   }
 
@@ -133,6 +145,10 @@
       color: #fff;
       border: none;
       font-size: @fontSize;
+
+      a:hover {
+        color: #fff;
+      }
     }
 
     .button-receive {
@@ -216,6 +232,10 @@
     border-radius: 0;
     font-size: @fontSize;
 
+    a:hover {
+      color: @purple;
+    }
+
     @media only screen and (min-width: 768px) {
       .tpc-arrow-button();
     }
@@ -255,7 +275,14 @@
     justify-content: center;
     align-items: center;
     height: 400px;
-    border: 1px solid rgba(67, 52, 171, 0.5);
+    border: 1px solid rgba(67, 52, 171, 0.2);
+    transition: all 0.5s;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+        0 0 0 1px rgba(10, 10, 10, 0.02);
+    }
 
     @media only screen and (max-width: 767px) {
       height: 200px;
@@ -285,9 +312,9 @@
     }
 
     img {
-      width: 128px;
-      height: 128px;
-      margin-top: 2rem;
+      width: 192px;
+      height: 192px;
+      margin-top: 1rem;
 
       @media only screen and (max-width: 767px) {
         width: 64px;
@@ -330,23 +357,21 @@
         line-height: 40px;
       }
 
-      &.active {
-        background: @purple;
-        color: #fff;
-        z-index: 2 !important;
-      }
-
-      &.first,
-      &.second {
-        z-index: 1;
-      }
-
       &.first {
         left: 1rem;
       }
 
       &.second {
         left: -1rem;
+      }
+
+      &.slider {
+        position: absolute;
+        left: 1rem;
+        width: 50%;
+        background: @purple;
+        color: #fff;
+        transition: left ease 0.5s;
       }
     }
   }

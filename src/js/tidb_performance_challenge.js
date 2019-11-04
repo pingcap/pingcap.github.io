@@ -3,12 +3,12 @@ const rankSeason1URL = 'https://internal.pingcap.net/pcp/api/rank/season/1'
 
 const season = $('#tpc-ranking-switch .first')
 const history = $('#tpc-ranking-switch .second')
+const slider = $('#tpc-ranking-switch .slider')
 
 function renderData(data) {
   data
-    .sort((a, b) => b.rank - a.rank)
+    .sort((a, b) => b.score - a.score)
     .map((d, i) => {
-      const percent = (d.score / 100).toFixed(0)
       $(`
       <div>
         ${
@@ -25,7 +25,7 @@ function renderData(data) {
             <div class="score">${d.score}</div>
           </div>
           <div class="progress-wrapper">
-            <progress class="progress" value="${percent}" max="10000">${percent}%</progress>
+            <progress class="progress" value="${d.score}" max="10000" />
           </div>
         </div>
       </div>
@@ -38,20 +38,16 @@ function getRankData(isSeason) {
 
   if (isSeason) {
     url = rankSeason1URL
+    slider.text('赛季积分')
+    slider.css('left', '1rem')
   } else {
     url = rankURL
+    slider.text('历史积分')
+    slider.css('left', 'calc(50% - 1rem)')
   }
 
   $.getJSON(url, data => {
     $('#ranking-list').empty()
-
-    if (isSeason) {
-      season.addClass('active')
-      history.removeClass('active')
-    } else {
-      history.addClass('active')
-      season.removeClass('active')
-    }
 
     renderData(data)
   })
