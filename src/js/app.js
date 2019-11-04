@@ -53,7 +53,8 @@ function initialSearch(lang, stableVersion) {
   
   if (urlParams.has('q')) {
     $('#search-input').val(urlParams.get('q'))
-    const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    // const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    const client = algoliasearch('KCC6F73SU3', '179de19e41163ab59b94355afce7de4d');
     const index = client.initIndex('pingcap');
 
     index.search(
@@ -92,8 +93,8 @@ function initialSearch(lang, stableVersion) {
               '<div class="search-category-result">\
                 <p>很抱歉，我们没有找到您期望的内容。</p>\
                 <ul>\
-                <li>请尝试其它搜索词，或者去 AskTUG (TiDB User Group) 提问试试。</li>\
-                <li>如果你想搜索英文内容，请移步至英文文档进行搜索。</li>\
+                <li>请尝试其它搜索词，或者去 <a href="https://asktug.com/" target="_blank"> AskTUG</a> (TiDB User Group) 提问试试。</li>\
+                <li>如果您想搜索英文内容，请移步至<a href="https://pingcap.com/docs/">英文文档</a>进行搜索。</li>\
                 </ul>\
               </div>'
             );
@@ -103,8 +104,8 @@ function initialSearch(lang, stableVersion) {
               '<div class="search-category-result">\
                 <p>Sorry. We couldn\'t find what you\'re looking for.</p>\
                 <ul>\
-                <li>If come to pages of an unexpected language, go to Chinese documentation and try again.</li>\
-                <li>If you do want to get some English content, PingCAP home page might be a better place for you to go.</li>\
+                <li>If you\'ve come to pages of an unexpected language, go to <a href="https://pingcap.com/docs-cn/">Chinese documentation</a> and try again.</li>\
+                <li>If you do want to get some English content, <a href="https://pingcap.com/">PingCAP home page</a> might be a better place for you to go.</li>\
                 </ul>\
               </div>'
             );
