@@ -5,6 +5,21 @@ const season = $('#tpc-ranking-switch .first')
 const history = $('#tpc-ranking-switch .second')
 const slider = $('#tpc-ranking-switch .slider')
 
+var sliderTextIsseason, sliderTextHistory
+
+if($('.slider').data('lang') == "cn") {
+  sliderTextIsseason = "赛季积分"
+  sliderTextHistory = "历史积分"
+} else {
+  if(window.matchMedia('(max-width: 768px)').matches) {
+    sliderTextIsseason = "S1 CC"
+    sliderTextHistory = "CC History"
+  } else {
+    sliderTextIsseason = "S1 Contribution Credit"
+    sliderTextHistory = "Contribution Credit History"
+  } 
+}
+
 function renderData(data) {
   data
     .sort((a, b) => b.score - a.score)
@@ -38,11 +53,11 @@ function getRankData(isSeason) {
 
   if (isSeason) {
     url = rankSeason1URL
-    slider.text('赛季积分')
+    slider.text(sliderTextIsseason)
     slider.css('left', '1rem')
   } else {
     url = rankURL
-    slider.text('历史积分')
+    slider.text(sliderTextHistory)
     slider.css('left', 'calc(50% - 1rem)')
   }
 
@@ -57,4 +72,8 @@ season.on('click', () => getRankData(true))
 
 history.on('click', () => getRankData())
 
-$(document).ready(() => getRankData(true))
+$(document).ready(() => 
+  getRankData(true),
+  $('.first')[0].innerText = sliderTextIsseason,
+  $('.second')[0].innerText = sliderTextHistory
+)
