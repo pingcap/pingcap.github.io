@@ -30,7 +30,6 @@
         <div class="sidebar-page sticky-sidebar">
             {{ $current_page := printf "%s%s%s" "docs-cn" $current_version "/overview.md" }}
             {{ with .Site.GetPage "page" $current_page }}
-                {{ partial "archives/version-switcher.html" (dict "global" . "sv" $stable_version "tv" $total_versions "cv" $current_version) }}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
             {{ end }}
             {{ partial "archives/download-pdf.html" (dict "version" $current_version "stable_version" $stable_version) }}

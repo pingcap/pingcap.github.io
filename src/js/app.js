@@ -45,6 +45,7 @@ function initialSearch(lang, stableVersion) {
   
   var re = new RegExp("(v\\d+\\.\\d+|dev)")
   var version
+  var newHitArray = []
 
   // gets current version
   if (url.match(re)) {
@@ -70,7 +71,7 @@ function initialSearch(lang, stableVersion) {
         console.log('hit', hits)
 
         // selects the first result of each category and puts into the new hit array
-        var newHitArray = hits.filter(hit => {
+        newHitArray = hits.filter(hit => {
           var category = hit.hierarchy.lvl0
           if (category && !categoryArr.includes(category)) {
             categoryArr.push(category)
@@ -130,6 +131,21 @@ function initialSearch(lang, stableVersion) {
         }
       }
     );
+  } else {
+    if (lang == 'cn') {
+      $('#search-result-title').append('搜索结果')
+    } else if (lang == 'en') {
+      $('#search-result-title').append('Search Results')
+    }
+    $('#search-results').append(
+      '<div class="search-category-result">\
+      </div>'
+    )
+
+    // hides loader spinner when shows the search-results
+    if($('.search-category-result').length) {
+      $('.lazy').css('display', 'none')
+    }
   }
 }
 

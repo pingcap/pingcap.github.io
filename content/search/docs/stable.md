@@ -1,6 +1,6 @@
 ---
 type: search
-layout: docs/v3.0
+layout: docs/stable
 title: Search Result
 image: /images/pingcap-opengraph.jpg
 ---
