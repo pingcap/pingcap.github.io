@@ -8,7 +8,7 @@
     {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
     {{$.Scratch.Set "nav_active" "docs"}}
     {{$.Scratch.Set "data_i18_cn" true }}
-    {{$.Scratch.Set "data_i18_link" "/docs" }}
+    {{$.Scratch.Set "data_i18_link" "/docs/" }}
     {{$.Scratch.Set "metaTitle" "TiDB 官方用户文档"}}
 {{- end -}}
 
@@ -18,7 +18,7 @@
 {{ $current_version := default "stable" (index (findRE "\\/(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
 <div class="doc">
     <div class="container">
-        {{ $.Scratch.Add "data_i18_link" $current_version }}
+        {{ $.Scratch.Add "data_i18_link" (trim $current_version "/") }}
         {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_cn_" "cv" $current_version "sv" $stable_version "tv" $total_versions) }}
 
         <div class="archive">

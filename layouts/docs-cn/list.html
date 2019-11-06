@@ -30,6 +30,7 @@
         </div>
 
         <div class="sidebar-page sticky-sidebar">
+            {{ partial "archives/download-pdf.html" (dict "version" $current_version "isCn" "true") }}
             {{ $current_page := printf "%s%s%s" "docs-cn" $current_version "/overview.md" }}
             {{ with .Site.GetPage "page" $current_page }}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") -}}

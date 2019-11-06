@@ -39,7 +39,7 @@ function processHash() {
 }
 
 // initial algolia search
-function initialSearch(lang, stableVersion) {
+function initialSearch(lang) {
   let urlParams = new URLSearchParams(window.location.search)
   let url = window.location.href
   
@@ -151,7 +151,7 @@ function initialSearch(lang, stableVersion) {
 
 // process search ui
 function processSearch() {
-  initialSearch($('#search-input').data('lang'), $('#search-input').data('stable-version'))
+  initialSearch($('#search-input').data('lang'))
   // Hide search suggestions dropdown menu on focusout
   $('#search-input').focusout(function() {
     $('.ds-dropdown-menu').hide()
