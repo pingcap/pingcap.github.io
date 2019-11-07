@@ -15,10 +15,10 @@
 {{- define "main" -}}
 {{ $stable_version := $.Scratch.Get "stable_version" }}
 {{ $total_versions := $.Scratch.Get "total_versions" }}
-{{ $current_version := default "stable" (index (findRE "\\/(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
+{{ $current_version := default "stable" (index (findRE "(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
 <div class="doc">
     <div class="container">
-        {{ $.Scratch.Add "data_i18_link" (trim $current_version "/") }}
+        {{ $.Scratch.Add "data_i18_link" $current_version }}
         {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_cn_" "cv" $current_version "sv" $stable_version "tv" $total_versions) }}
 
         <div class="archive">

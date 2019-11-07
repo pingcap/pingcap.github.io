@@ -15,11 +15,11 @@
 {{- define "main" -}}
 {{ $stable_version := $.Scratch.Get "stable_version" }}
 {{ $total_versions := $.Scratch.Get "total_versions" }}
-{{ $current_version := default "/stable" (index (findRE "\\/(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
+{{ $current_version := default "stable" (index (findRE "(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
 
 <div class="doc" id="list_page">
     <div class="container">
-        {{ $.Scratch.Add "data_i18_link" (trim $current_version "/") }}
+        {{ $.Scratch.Add "data_i18_link" $current_version }}
         {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_cn_" "cv" $current_version "sv" $stable_version "tv" $total_versions) }}
 
         <div class="archive">
@@ -30,8 +30,9 @@
         </div>
 
         <div class="sidebar-page sticky-sidebar">
-            {{ partial "archives/download-pdf.html" (dict "version" $current_version "isCn" "true") }}
-            {{ $current_page := printf "%s%s%s" "docs-cn" $current_version "/overview.md" }}
+            {{ $download_pdf := cond (eq $current_version "stable") $stable_version $current_version }}
+            {{ partial "archives/download-pdf.html" (dict "version" $download_pdf "isCn" "true") }}
+            {{ $current_page := printf "%s%s%s" "docs-cn/" $current_version "/overview.md" }}
             {{ with .Site.GetPage "page" $current_page }}
                 {{- partial "archives/improve-doc.html" (dict "repo" "docs-cn" "global" . "isCn" "true") -}}
                 {{- partial "archives/request-docs-changes.html" (dict "repo" "docs-cn" "global" . "isCn" "true" "link" .Permalink "prefixRepo" "docs-cn/") -}}

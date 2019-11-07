@@ -17,7 +17,7 @@
                 </ul>
             </div>
             <div class="global-search">
-                {{ $search_doc_version := trim (index (findRE "\\/(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) "/" }}
+                {{ $search_doc_version := index (findRE "(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0 }}
                 {{ $search_doc_version := cond (eq $search_doc_version "") $stable_version_tag $search_doc_version }}
                 {{ partial "layout/search.html" (dict "global" . "search_doc_version" $search_doc_version "lang" "en" "stable_version_tag" $stable_version_tag) }}
             </div>
