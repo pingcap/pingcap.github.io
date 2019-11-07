@@ -1,13 +1,14 @@
 {{ $i := .item}}
+{{ $user := .user}}
 
 <div class="role-card" id="{{ $i.id }}">
-    <div class="header">{{ $i.role}}</div>
+    <div class="header {{ if $user }}userColor{{ end }}">{{ $i.role}}</div>
     <div class="desc">{{ $i.desc }}</div>
     {{- range $idx2, $j := $i.detail -}}
         <div class="detail">
-            <ul class="dot-blue">
+            <ul class="dot-blue {{ if $user }}user-dot-orange{{ end }}">
                 <li>
-                    <span class="title">{{ $j.title }}</span>
+                    <span class="title {{ if $user }}user-title{{ end }}">{{ $j.title }}</span>
                     <ul class="lists">
                         {{- range $j.lists}}
                             <li>{{ . }}</li>
