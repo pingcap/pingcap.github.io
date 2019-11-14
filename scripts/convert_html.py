@@ -40,10 +40,7 @@ for link in soup.find_all('a'):
 
             if doc_stable_version_patter.match(href):
                 href = href.replace(stable_version, stable_version_tag)
-                print href
-                print "=========="
             
-
             href = href.replace('.md', '')
             href = re.sub(r'^[\.\/]*', '/', href, count=0, flags=0)
             href = os.path.normpath('/' + folder + href)
