@@ -1,0 +1,72 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Developer Group" }}
+    Developer Group
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/developer-group.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+<div class="developer-group">
+    <div class="banner__section developer-banner">
+        <div class="developer-banner-container">
+            <h1>TiDB Developer Group</h1>
+            <p>As the cornerstone of community development, the TiDB Developer Group consists of these roles: Maintainer, Committer, Reviewer, Active Contributor, and Contributor. Each role takes corresponding responsibilities in the community. Collectively they play an important role in the robust development of TiDB.</p>
+        </div>
+    </div>
+    <div class="container developer-group-container">
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.maintainer_en) -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.committer_en) -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.reviewer_en) -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.active_contributor_en) -}}
+
+        <div class="role-card" id="contributor">
+            <div class="header">Contributor</div>
+            <div class="desc">Community contributors with at least one PR merged to any repository under <a href="https://github.com/pingcap">PingCAP</a></div>
+            <div class="detail">
+                <div class="title question">Contribute your first PR</div>
+                <div class="pr-content answer">
+                    <p>Your journey of becoming a contributor and committer starts from here: improving docs, improving code, giving talks, organizing meetups, etc. You can get your unique TiDB mug designed only for TiDB contributors. Start contributing now!</p>
+                    <ol>
+                        <li>Fork the project to your GitHub account</li>
+                        <li>Git Clone to your local repository</li>
+                        <li>Create a new branch based on the master branch</li>
+                        <li>Code and test in your local repository</li>
+                        <li>Commit and push your commit to the remote repository</li>
+                        <li>File a PR</li>
+                        <li>After we receive your PR, we will review your code, so please keep an eye on the conversations and comments of your PR. If you receive two LGTMs, your PR is approved and is to be merged! Congratulations on being a new TiDB contributor! Contact <community@pingcap.com> for your special swags as contributors.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="detail">
+                <div class="title question">New to the Community?</div>
+                <div class="pr-content answer">
+                    <p>If you have never been working on any open source projects, we recommend that you start from reading TiDB related materials, especially the TiDB Internal series of<a href="https://pingcap.com/blog/2017-07-11-tidbinternal1/">Storage</a>、
+                        <a href="https://pingcap.com/blog/2017-07-11-tidbinternal2/">Computing</a>、<a href="https://pingcap.com/blog/2017-07-20-tidbinternal3/">Scheduling</a>Then, get involved in the project by:</p>
+                    <ul>
+                        <li>Looking for GitHub issues with the 'for new contributors' or 'help wanted' labels. These labels are usually easy and fun to start with.</li>
+                        <li>Contributing to the  documentation.</li>
+                        <li>Reporting issues or fixing unknown/known bugs</li>
+                        <li>Sharing your story with TiDB by creating case studies, technical blogs or give a talk at a local meetup or conferences.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/community.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
+{{- end -}}

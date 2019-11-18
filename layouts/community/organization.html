@@ -1,197 +1,201 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Community Organization" }}
+    Community Organization
+{{- end -}}
+
 {{- define "headTpl" -}}
     {{$.Scratch.Set "nav_active" "community"}}
     {{ $.Scratch.Set "data_i18_link" "/community-cn/organization" }}
-    {{- partial "head/preload-css" (dict "href" "/css/community/organization.css") -}}
-    {{ $.Scratch.Set "metaTitle" "TiDB" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/organization-cn.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
 <div class="community-organization">
     <div class="banner__section organization__banner">
         <div class="banner__content-container">
-            <div class="content"> TiDB Community Organization </div>
+            <div id="architecture">
+              <div class="line-divider">
+                <div class="headBtn orgBtn tl">Community Organization</div>
+                <div class="branches">
+                  <div class="branch">
+                      <button class="branchBtn pmcBtn orgBtn j-hover j-mobile-hover tl cursor-text">PMC</button>
+                      <div class="org-tooltiptext tt-tr_en org-tooltiptext_en ">The Project Management Committee (PMC) functions as the core management team that oversees the TiDB community. The PMC decides the roadmap of the project and makes major decisions related to the community.</div>
+                  </div>
+                  <div class="branch">
+                    <a href="/community/developer-group/"><button class="branchBtn devBtn orgBtn tl j-hover">Developer Group</button></a>
+                    <div class="devSubBtns tr">
+                      {{- range $idx, $i := .Site.Data.community_organization.architecture.developer_group_en -}}
+                        <div class="btn-tooltip">
+                          <a href="{{ $i.link }}" class="j-hover j-devSubBtn-hover"><button class="devBtn devSubBtn orgBtn">{{ $i.name }}</button></a>
+                          <div class="org-tooltiptext tt-left">{{ $i.desc }}</div>
+                        </div>
+                      {{- end -}}
+                    </div>
+                  </div>
+                  <div class="branch">
+                    <button class="branchBtn userBtn orgBtn tr cursor-text">User Group</button>
+                      <div class="devSubBtns tl">
+                          {{- range $idx, $i := .Site.Data.community_organization.architecture.user_group_en -}}
+                            <div class="btn-tooltip">
+                              <button class="devBtn userSubBtn orgBtn j-hover j-mobile-hover cursor-text">{{ $i.name }}</button>
+                              <div class="org-tooltiptext tt-right">{{ $i.desc }}</div>
+                            </div>
+                          {{- end -}}
+                      </div>
+                  </div>
+                  <div class="branch">
+                      <button class="branchBtn comBtn orgBtn tr j-hover j-mobile-hover cursor-text">Organization Committee</button>
+                      <div class="org-tooltiptext tt-tl_en org-tooltiptext_en">The  Organization Committee consists of organizers in charge of event or activity operations; They are the  executors of PMC’s strategies and decisions. Specifically, the members are the leaders of user groups or community event organizers across regions.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="content"> TiDB Community Organization</div>
         </div>
     </div>
 
-    <div class="organization__section">
-        <div class="container">
-            <div class="section-title">Community Organization</div>
-            <div class="intro">Open source projects live and breathe the open source community with different types of roles. The TiDB community has the following organizations:</div>
-            <div class="architecture">
-                <img class="skeleton" src="/images/community/organization/lines-mobilei7.svg" alt="line skeleton" />
-                <button class="head-node">TiDB Community Organization </button>
-                <button class="pmc">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/pmc.svg" alt="PMC icon" /></div>
-                  <p>PMC</p>
-                  <span class="tooltiptext">The Project Management Committee (PMC) is to manage and oversee the entire TiDB community. The PMC consists of Core Maintainers and Organizer Committee Chair. </span>
-                </button>
-                <button class="developer-group">
-                  <p>Community Developer Group</p></button>
-                <button class="committee">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/org-committee.svg" alt="Committee icon" /></div>
-                  <p>Organizer Committee</p>
-                  <span class="rightSide">The Organizer Committee is to manage the organizers, to execute the PMC strategies and decisions. The Organizer Committee consists of User Group Leader and Organizers.</span>
-                </button>
-                <button class="maintainer">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/maintainer.svg" alt="Maintainer icon" /></div>
-                  <p>Maintainer</p>
-                  <span class="tooltiptext">Maintainer is the planner and designer of the project. Maintainers come from Committers and has the right to commit, merge and approve the Pull Requests (PR) with LGTM (Looks Good To Me).</span>
-                </button>
-                <button class="committer">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/committer.svg" alt="Committer icon" /></div>
-                  <p>Committer</p>
-                </button>
-                <button class="contributor">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/contributor.svg" alt="Contributor icon" /></div>
-                  <p>Contributor</p>
-                </button>
-                <button class="member">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/org-member.svg" alt="Member icon" /></div>
-                  <p>Community Member</p>
-                  <span class="rightSide">The Community Members consist of those who are enthusiastic about the TiDB community and are actively engaged in the project features and discussions.</span>
-                </button>
-            </div>
-            <div class="divider"><div class="line"></div></div>
-            <div class="committer__detail">
-                <div class="committer-btn">
-                    <button>
-                        <span><img src="/images/community/organization/icons/committer.svg" alt="Committer icon" /></span>
-                        Committer
-                    </button>
+    <div class="community-members">
+      <div class="container">
+          <div class="section-title">Community Members</div>
+          <div class="developer-group-members">
+            <div class="member-header">Developer Group</div>
+            <div class="member-list">
+              <div class="member-type">Maintainer</div>
+              <div class="flex-lists members divider">
+                {{- range $idx, $i := .Site.Data.community_organization.developer_members.maintainer_en -}}
+                  <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                      {{- if $i.githubID -}}
+                        <a href="{{ $i.link }}" target="_blank">
+                            <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                        </a>
+                        <a href="{{ $i.link}}" target="_blank" class="member-info">
+                          <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                          <p>{{ $i.title }}</p>
+                          <div class="github-icon"><p>{{ $i.githubID }}</p></div>
+                        </a>
+                      {{- else -}}
+                        <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                        <div class="member-info">
+                            <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                            <p>{{ $i.title }}</p>
+                        </div>
+                      {{- end -}}
+                  </div>
+                {{- end -}}
+              </div>
+              <div class="member-type">Committer</div>
+              <div class="flex-lists members divider">
+                {{- range $idx, $i := .Site.Data.community_organization.developer_members.committer_en -}}
+                  <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                      {{- if $i.githubID -}}
+                      <a href="{{ $i.link }}" target="_blank">
+                          <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                      </a>
+                      <a href="{{ $i.link}}" target="_blank" class="member-info">
+                        <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                        <p>{{ $i.title }}</p>
+                        <div class="github-icon"><p>{{ $i.githubID }}</p></div>
+                      </a>
+                    {{- else -}}
+                      <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                      <div class="member-info">
+                          <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                          <p>{{ $i.title }}</p>
+                      </div>
+                    {{- end -}}
+                  </div>
+                {{- end -}}
+              </div>
+              <div class="member-type">Active Contributor</div>
+              <div class="flex-lists divider members contributor">
+                  {{- range $idx, $i := .Site.Data.community_organization.developer_members.active_contributor_en -}}
+                  <a href="{{ $i.link }}" target="_blank" class="contributor-info member flex-lists">
+                      <p class="name name-en">{{ $i.name }}</p>
+                      <img class="github-icon" src="/images/github.svg">
+                      <p class="githubID">{{ $i.githubID }}</p>
+                      {{ if $i.tag }}<div class="contribution-tag tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</div>{{ end }}
+                  </a>
+                {{- end -}}
+              </div>
+              <div class="member-type">Contributor</div>
+              <div class="flex-lists members contributor">
+                <div class="contributor-item">
+                  <img class="lazy" data-original="https://download.pingcap.com/images/appreciate.jpg" src="/images/svgs/loader-spinner.svg" alt="cover">
+                  <p class="text">When one of your PRs is merged, you formally become a TiDB contributor. We have prepared a special mug for every contributor. Congratulations and thank you for taking the first step! In the TiDB planet, your name will always shine.</p>
                 </div>
-                <div class="c-content">
-                  <p>Committers are developers of the projects and are elected from contributors. Currently, the TiDB community has the following committers:</p>
-                  <div class="committer-members">
-                      <div class="c-member c-member-en">
-                        <div class="avatar">
-                          <img src="/images/community/organization/yubai.jpg" alt="Member Avatar" />
-                        </div>
-                        <div class="name">Kai LI<span></span></div>
-                        <div class="company">mobike.com | Technical Director of the Infrastructure Architecture team</div>
-                      </div>
-                      <div class="c-member c-member-en">
-                        <div class="avatar">
-                          <img src="/images/community/organization/wudi.jpg" alt="Member Avatar" />
-                        </div>
-                        <div class="name">Di WU</div>
-                        <div class="company">Toutiao.com | Head of Database Middleware/Distributed Database</div>
-                      </div>
-                      <div class="c-member c-member-en">
-                        <div class="avatar">
-                          <img src="/images/community/organization/liyulai.jpeg" alt="Member Avatar" />
+                <div class="contributor-item">
+                    <a href="https://pingcap.com/tidb-planet/" target="_blank">
+                      <img class="lazy tidb-planet-banner" data-original="https://download.pingcap.com/images/tidb-planet.jpeg" src="/images/svgs/loader-spinner.svg" alt="cover">
+                      <p class="text text-hover">
+                          <span class="text-arrow"><img src="/images/svgs/light-blue-right-arrow.svg" alt="Arrow"/></span>
+                          <span class="btn-text2">View the entire list of TiDB Contributors</span>
+                      </p>
+                    </a>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="developer-group-members user-group-members">
+              <div class="member-header user">User Group 成员</div>
+              <div class="member-list">
+                  <div class="member-list">
+                      <div class="member-type user-type">Leader</div>
+                      <div class="flex-lists members user-divider">
+                        {{- range $idx, $i := .Site.Data.community_organization.user_members.leader_en -}}
+                          <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                            {{- if $i.githubID -}}
+                              <a href="{{ $i.link }}" target="_blank">
+                                  <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              </a>
+                              <a href="{{ $i.link}}" target="_blank" class="member-info">
+                                <p>{{ $i.name }}</p>
+                                <p>{{ $i.title }}</p>
+                                <div class="github-icon user-github-icon"><p>{{ $i.githubID }}</p></div>
+                              </a>
+                            {{- else -}}
+                              <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              <div class="member-info">
+                                  <p>{{ $i.name }}</p>
+                                  <p>{{ $i.title }}</p>
+                              </div>
+                            {{- end -}}
                           </div>
-                        <div class="name">Yulai LI</div>
-                        <div class="company">SpeedyCloud | Architect</div>
+                        {{- end -}}
                       </div>
-                      <div class="c-member c-member-en">
-                        <div class="avatar">
-                          <img src="/images/community/organization/duchuan.jpeg" alt="Member Avatar" />
-                        </div>
-                        <div class="name">Chuan DU</div>
-                        <div class="company">Tencent Cloud | Senior Engineer</div>
-                      </div>
-                      <div class="c-member c-member-en">
-                        <div class="avatar">
-                          <img src="/images/community/organization/sunxiaoguang.jpeg" alt="Member Avatar" />
-                        </div>
-                        <div class="name">Xiaoguang SUN</div>
-                        <div class="company">Zhihu.com | Head of the Search Engineering Architecture team</div>
-                      </div>
-                      <div class="c-member c-member-en">
-                        <div class="avatar">
-                          <img src="https://download.pingcap.com/images/community/organization/Jun-Seok-Heo.jpeg" alt="Member Avatar" />
-                        </div>
-                        <div class="name">Jun-Seok Heo</div>
-                        <div class="company">Samsung Electronics | Cloud Database Engineering</div>
+                      <div class="member-type user-type">Co-Leader</div>
+                      <div class="flex-lists members">
+                        {{- range $idx, $i := .Site.Data.community_organization.user_members.co_leader_en -}}
+                          <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                            {{- if $i.githubID -}}
+                              <a href="{{ $i.link }}" target="_blank">
+                                  <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              </a>
+                              <a href="{{ $i.link}}" target="_blank"target="_blank" class="member-info">
+                                <p>{{ $i.name }}</p>
+                                <p>{{ $i.title }}</p>
+                                <div class="github-icon user-github-icon"><p>{{ $i.githubID }}</p></div>
+                              </a>
+                            {{- else -}}
+                              <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              <div class="member-info">
+                                  <p>{{ $i.name }}</p>
+                                  <p>{{ $i.title }}</p>
+                              </div>
+                            {{- end -}}
+                          </div>
+                        {{- end -}}
                       </div>
                   </div>
-                </div>
+              </div>
             </div>
-            <div class="be__committer">
-                <div class="c-title"> How to become a TiDB Committer?</div>
-                <div class="c-content">
-                  <p>First of all, you need to get involved and be a Contributor. A new Committer must be nominated by any existing Maintainer or PMC member, and is generated through the voting of PMC members. A Committer must have accomplished one or more of the following items:</p>
-                  <ul>
-                    <li>Your commits have been approved and merged by Maintainers for over ten times. </li>
-                    <li>You have implemented a complete feature.</li>
-                    <li>You have fixed a vital bug.</li>
-                  </ul>
-                </div>
-            </div>
-            <div class="divider"><div class="line"></div></div>
-            <div class="contributor__detail">
-                <div class="contributor-btn">
-                  <button>
-                      <span><img src="/images/community/organization/icons/contributor.svg" alt="Contributor icon"/></span>
-                      Contributor
-                  </button>
-                </div>
-                <div class="c-content">
-                  <p>If a PR submitted to the <a href="https://github.com/pingcap/tidb">TiDB</a>/<a href="https://github.com/pingcap/tikv">TiKV</a>/
-                      <a href="https://github.com/pingcap/tispark">TiSpark</a>/<a href="https://github.com/pingcap/pd">PD</a>/
-                      <a href="https://github.com/pingcap/tidb-operator">TiDB Operator</a>/<a href="https://github.com/pingcap/parser">Parser</a>/
-                      <a href="https://github.com/pingcap/docs">Docs</a>/<a href="https://github.com/pingcap/docs-cn">Docs-cn</a> projects by you is approved and merged, then you become a TiDB Contributor.</p>
-                  <div class="subtitle-pr"><div id="pr-collapse"> + </div> Your First Contribution </div>
-                  <div class="pr-content">
-                    <p>Your journey of becoming a contributor and committer starts from here: improving docs, improving code, giving talks, organizing meetups, etc. You can get your unique TiDB mug designed only for TiDB contributors. Start contributing now!</p>
-                    <ul>
-                      <li>Fork the project to your GitHub account</li>
-                      <li>Git Clone to your local repository</li>
-                      <li>Create a new branch based on the master branch</li>
-                      <li>Code and test in your local repository</li>
-                      <li>Commit and push your commit to the remote repository</li>
-                      <li>File a PR</li>
-                      <li>Code review: After we receive your PR, we will review your code, so please keep an eye on the conversations and comments of your PR. If you receive two LGTMs, your PR is approved and is to be merged! Congratulations on being a new TiDB contributor! Contact community@pingcap.com for your special swags as contributors. </li>
-                    </ul>
-                  </div>
-                  <div class="subtitle-guide"><div id="guide-collapse"> + </div>New to the Community? </div>
-                  <div class="guide-content">
-                    <p>If you have never been working on any open source projects, you can still contribute to the community. You can </p>
-                    <ul>
-                      <li>Try TiDB! If you like it, star, share, and recommend it.</li>
-                      <li>Look for GitHub issues with the 'for new contributors' or 'help wanted' labels. These lables are ususally easy and fun to start with.</li> 
-                      <li>Dig deeper, read a design doc, e.g. <a href="https://www.pingcap.com/blog/2016-10-17-how-we-build-tidb/">How we build TiDB</a>. </li>
-                      <li>Start with improving the documentation. You can search <a href="https://github.com/pingcap/docs/issues">open issues</a> to find inspiration for what to work on.</li>
-                      <li>Report bugs by creating issues or fix known issues</li>
-                      <li>There's always code that can be clarified and variables or functions that can be renamed or commented.</li>
-                      <li>Share your story with TiDB by creating case studies, technical blogs or give a talk at a local meetup or conferences.</li>
-                    </ul>
-                  </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 </div>
 {{- end -}}
 
 {{- define "footJS" -}}
-    <script type="text/javascript">
-      function lines() {
-        if (window.matchMedia('(max-width: 360px)').matches) {
-          $('.architecture .skeleton').attr(
-            'src',
-            'https://download.pingcap.com/images/lines-mobilei5.svg'
-          )
-        } else if (window.matchMedia('(max-width: 700px)').matches) {
-          $('.architecture .skeleton').attr(
-            'src',
-            'https://download.pingcap.com/images/lines-mobilei7.svg'
-          )
-        } else {
-          $('.architecture .skeleton').attr(
-            'src',
-            'https://download.pingcap.com/images/lines-pc.svg'
-          )
-        }
-      }
-
-      $(document).ready(function() {
-        lines()
-        $(window).resize(lines)
-      })
-        
-    </script>
-    <script type="text/javascript" src="/js/devcon.js"></script>
+    <script type="text/javascript" src="/js/community.js"></script>
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
     <script type="text/javascript">
         $(".lazy").lazyload({

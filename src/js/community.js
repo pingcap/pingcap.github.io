@@ -300,6 +300,7 @@ $(document).ready(function() {
       1000
     )
   })
+  
 
   if(window.matchMedia('(min-width: 1024px)').matches) {
     $('.j-hover').hover(function(){
