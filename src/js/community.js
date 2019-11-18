@@ -323,13 +323,20 @@ $(document).ready(function() {
     $('.j-mobile-hover').click(function() {
       if($(this).hasClass('comBtn')) {
         $('.pmcBtn').removeClass('pmcBtn-click')
+        $('.userBtn').removeClass('userBtn-click')
         $(this).toggleClass('comBtn-click')
       } else if($(this).hasClass('pmcBtn')) {
         $(this).toggleClass('pmcBtn-click')
+        $('.userBtn').removeClass('userBtn-click')
         $('.comBtn').removeClass('comBtn-click')
+      } else if($(this).hasClass('userBtn')) {
+        $(this).toggleClass('userBtn-click')
+        $('.comBtn').removeClass('comBtn-click')
+        $('.pmcBtn').removeClass('pmcBtn-click')
       }
-      if(!$(this).siblings().hasClass('org-tooltiptext-hover')) {
+      if(!($(this)).siblings().hasClass('org-tooltiptext-hover')) {
         $('.org-tooltiptext').removeClass('org-tooltiptext-hover')
+        $('div').removeClass('org-tooltiptext-hover')
       }
       $(this).siblings().toggleClass('org-tooltiptext-hover')
     })
