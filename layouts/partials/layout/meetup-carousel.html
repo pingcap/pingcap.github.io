@@ -1,14 +1,16 @@
+{{ $type := .type }}
 <div class="meetup-carousel">
     <div class="swiper-container">
-        <div class="swiper-pagination"></div>
+        {{- if eq $type "meetup" -}}
+        <div class="swiper-pagination right-swiper-pagination"></div>
         <div class="swiper-wrapper">
-            {{- range $idx, $i := .Site.Data.meetup.next_meetup_or_activity -}}
+            {{- range $idx, $i := .global.Site.Data.meetup.next_meetup_or_activity -}}
                 <div class="swiper-slide">
                     <p class="topic">{{ $i.topic }}</p>
                     <div class="address">{{ $i.addr }}</div>
                     <div class="meetup-date">{{ $i.date }}</div>
                     <div>
-                        <a href="{{ if $i.review_link }}{{ $i.review_link }}{{ else }}{{ $i.signup_link }}{{ end }}">
+                        <a href="{{ if $i.review_link }}{{ $i.review_link }}{{ else }}{{ $i.signup_link }}{{ end }}" target="_blank">
                             <button class="meetup-register">
                                 {{- if $i.signup_link -}}
                                     报名加入 
@@ -21,5 +23,27 @@
                 </div>
             {{- end -}}
         </div>
+        {{- else if eq $type "paper" -}}
+        <div class="swiper-pagination right-swiper-pagination"></div>
+        <div class="swiper-wrapper">
+            {{- range $idx, $i := .global.Site.Data.paper_reading.upcoming_reading -}}
+                <div class="swiper-slide">
+                    <p class="topic">{{ $i.topic }}</p>
+                    <div class="meetup-date"><span class="date">{{ $i.date }}</span> | <span>{{ $i.speaker }}</span></div>
+                    <div>
+                        <a href="{{ if $i.review_link }}{{ $i.review_link }}{{ else }}{{ $i.signup_link }}{{ end }}" target="_blank">
+                            <button class="meetup-register">
+                                {{- if $i.video -}}
+                                    观看直播
+                                {{- else if and (not $i.video) $i.review_link -}} 
+                                    直播结束 
+                                {{- end -}}
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {{- end -}}
+        </div>
+        {{- end -}}
     </div>
 </div>
