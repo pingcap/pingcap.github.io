@@ -226,6 +226,7 @@ function processMeetupDate() {
       endTime < new Date() &&
       $this.find('.meetup-register')[0].innerText !== '活动回顾'
     ) {
+      $this.find('a')[0].removeAttribute('href')
       $this.find('.meetup-register').text('报名结束')
       $this.find('.meetup-register').addClass('unclickable-btn')
     }

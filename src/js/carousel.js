@@ -8,7 +8,7 @@ function processDateExpiration() {
       endTime < new Date() &&
       $this.find('.meetup-register')[0].innerText !== '观看直播'
     ) {
-      console.log('end')
+      $this.find('a')[0].removeAttribute('href')
       $this.find('.meetup-register').text('直播结束')
       $this.find('.meetup-register').addClass('unclickable-btn')
     } else {
