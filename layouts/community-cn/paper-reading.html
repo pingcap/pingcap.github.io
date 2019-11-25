@@ -7,7 +7,7 @@
     {{ $.Scratch.Set "nav_active" "community" }}
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
-    {{- partial "head/preload-css" (dict "href" "/css/community/paper-reading.css") -}}
+    {{ partial "head/preload-css" (dict "href" "/css/community/paper-reading.css") }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
 {{- end -}}
 
@@ -16,7 +16,7 @@
     <div class="banner__section hero">
         <div class="reading-calendar">
             <h2>Paper Reading</h2>
-            {{- partial "layout/meetup-carousel.html" (dict "type" "paper" "global" .) -}}
+            {{ partial "layout/meetup-carousel.html" (dict "type" "paper" "global" .) }}
         </div>
     </div>
     <div class="desc-container">
@@ -32,7 +32,7 @@
                         <td>Speaker</td>
                         <td>Introduction</td>
                     </tr>
-                    {{- range $idx, $i := .Site.Data.paper_reading.paper_reviews -}}
+                    {{ range $idx, $i := .Site.Data.paper_reading.paper_reviews }}
                     <tr>
                         <td>{{ $i.date }}</td>
                         <td>{{ $i.speaker }}</td>
@@ -45,20 +45,20 @@
                                         </a>
                                     </span>
                                 </div>
-                                {{- if $i.video -}}
+                                {{ if $i.video }}
                                 <button class="video-btn review-arrow-button {{if eq 0 (mod $idx 2)}}gray-bg{{end}}">
                                     <a href="{{ $i.video }}" target="_blank">
                                         <span>观看回放</span>
                                     </a>
                                 </button>
-                                {{- end -}}
+                                {{ end }}
                                 </a>
                             </div>
                             
                             <p>{{ $i.desc }}</p>
                         </td>
                     </tr>
-                    {{- end -}}
+                    {{ end }}
                 </table>
             </div>
 
@@ -68,25 +68,25 @@
                         <td>Info</td>
                         <td>Introduction</td>
                     </tr>
-                    {{- range $idx, $i := .Site.Data.paper_reading.paper_reviews -}}
+                    {{ range $idx, $i := .Site.Data.paper_reading.paper_reviews }}
                     <tr class="{{if eq 0 (mod $idx 2)}}gray-bg{{end}}">
                         <td class="date">Date: <br />{{ $i.date }}</td>
                         <td rowspan="2" class="desc-td">
                             <div class="paper-title"><a href="{{ $i.paper_link }}" target="_blank">{{ $i.title }}</a></div>
                             <p>{{ $i.desc }}</p>
-                            {{- if $i.video -}}
+                            {{ if $i.video }}
                             <button>
                                 <a href="{{ $i.video }}" target="_blank">
                                     <span>观看回放</span>
                                 </a>
                             </button>
-                            {{- end -}}
+                            {{ end }}
                         </td>
                     </tr>
                     <tr class="{{if eq 0 (mod $idx 2)}}gray-bg{{end}}">
                         <td class="speaker">Speaker:<br /> {{ $i.speaker }}</td>
                     </tr>
-                    {{- end -}}
+                    {{ end }}
                 </table>
             </div>
         </div>

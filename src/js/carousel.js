@@ -3,7 +3,6 @@ function processDateExpiration() {
     const $this = $(this)
     var date = $this.find('.date')[0]
     var endTime = new Date(date.innerText).setHours(0, 0, 0, 0)
-    console.log('enttime: ', endTime, new Date())
     if (
       endTime < new Date() &&
       $this.find('.meetup-register')[0].innerText !== '观看直播'
@@ -39,7 +38,6 @@ $(document).ready(function() {
   }
 
   if (window.location.pathname == '/community-cn/paper-reading/') {
-    console.log('hhhh')
     processDateExpiration()
   }
 })
