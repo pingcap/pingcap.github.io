@@ -7,10 +7,14 @@
         {{ range $idx, $j := $i.desc }}
             <div class="desc">{{ $j }}</div>
         {{ end }}
-        {{ if .desc_extra }}
-            <div class="desc">表达式专项兴趣小组：<a class="sig" href="https://github.com/pingcap/community/tree/master/special-interest-groups/sig-expr" target="_blank">Expression Special Interest Group</a>（已完结）</div>
-        {{ end }}
     </div>
+    {{ if .desc_extra }}
+        <div class="detail">
+            <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}">
+                <li style="color: #3e3e3e;">表达式专项兴趣小组：<a class="sig" href="https://github.com/pingcap/community/tree/master/special-interest-groups/sig-expr" target="_blank">Expression Special Interest Group</a>（已完结）</li>
+            </ul>
+        </div>
+    {{ end }}
     {{ if and (eq $type "sig") $i.detail }}
         {{ range $idx2, $j2 := $i.detail }}
             <div class="detail">
