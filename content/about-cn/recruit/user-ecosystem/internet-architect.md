@@ -1,13 +1,14 @@
 ---
 title: 资深互联网架构师
 tags:
-  - Business
+  - User Ecosystem
 location: 北京，上海，杭州
 avatar: business
 position: true
 aliases:
   - /recruit-cn/sales/internet-architect/
   - /recruit-cn/business/internet-architect/
+  - /about-cn/recruit/business/internet-architect/
 ---
 
 # 资深互联网架构师

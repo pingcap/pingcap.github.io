@@ -1,7 +1,7 @@
 ---
 title: 资深/高级/中级 TiDB DBA
 tags:
-  - Business
+  - User Ecosystem
 location: 北京 
 avatar: support
 position: true
@@ -9,6 +9,7 @@ aliases:
   - /recruit/sales/tidb-dba/
   - /recruit/engineer/tidb-dba/
   - /recruit-cn/business/tidb-dba/
+  - /about-cn/recruit/business/tidb-dba/
 ---
 
 # 资深/高级/中级 TiDB DBA

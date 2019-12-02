@@ -2,6 +2,7 @@
 
 @developerColor: #2977C7;
 @userColor: #d29544;
+@sigColor: #2F1596;
 
 .developer-banner {
   padding-top: 37%;
@@ -11,6 +12,10 @@
 .user-banner {
   padding-top: 37%;
   background: url('https://download.pingcap.com/images/community/banners/user-group-pc.jpg') no-repeat;
+}
+
+.developer-group-container {
+  margin-bottom: 4rem !important;
 }
 
 .developer-banner-container {
@@ -25,6 +30,10 @@
     margin-left: -4rem !important;
   }
 
+  .user-h1 {
+    margin-top: -7rem !important;
+  }
+
   h1,
   p {
     position: absolute;
@@ -35,7 +44,7 @@
 
   h1 {
     font-size: 2.8rem;
-    margin-top: -7rem;
+    margin-top: -3rem;
   }
 
   p {
@@ -45,12 +54,125 @@
   }
 }
 
-.userColor {
+.dev-desc {
+  max-width: 1024px;
+  font-size: 16px;
+  padding: 15px 20px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.desc-1 {
+  .dev-desc;
+  margin-top: 3rem;
+}
+
+.sig-pic {
+  max-width: 1024px;
+  display: relative;
+  margin: 4rem auto;
+  padding: 10px;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .sig-pic-pc {
+    @media only screen and (max-width: 414px) {
+      display: none;
+    }
+  }
+
+  .sig-pic-mobile {
+    display: none;
+
+    @media only screen and (max-width: 414px) {
+      display: block;
+    }
+  }
+
+  @media only screen and (max-width: 414px) {
+    margin: 2rem auto;
+  }
+}
+
+.user-color {
   background: @userColor !important;
 }
 
+.sig-color {
+  background: @sigColor !important;
+}
+
+.sig {
+  color: @sigColor;
+  text-decoration: none;
+  transition: 0.5s;
+
+  @media only screen and (min-width: 768px) {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.item-detail {
+  color: #3e3e3e !important;
+  padding-left: 10px;
+  line-height: 1.7;
+}
+
+.review-arrow-button {
+  transition: 0.5s;
+  border: none;
+  background: transparent;
+  color: @sigColor;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  margin: 15px 0 20px;
+  width: 100px;
+
+  span {
+    transition: 0.5s;
+    margin-left: -30px;
+  }
+
+  &:after {
+    content: '➔';
+    position: absolute;
+    opacity: 0;
+    top: 50%;
+    left: -10px;
+    transition: 0.5s;
+    color: @sigColor;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover {
+    span {
+      margin-left: 20px;
+    }
+  }
+
+  &:hover:after {
+    opacity: 1;
+    left: 10px;
+  }
+
+  @media only screen and(max-width:768px) {
+    font-size: 14px;
+  }
+}
+
+.user-role-card {
+  margin: 5rem !important;
+}
+
 .role-card {
-  margin: 5rem;
+  margin: 1rem 5rem 5rem;
   background-color: #F5F6F8;
 
   .header {
@@ -61,9 +183,16 @@
   }
 
   .desc {
-    padding: 25px 40px;
+    padding: 10px 0;
     font-size: 16px;
     line-height: 1.7;
+  }
+
+  .desc-row {
+    display: flex;
+    padding: 25px 40px;
+    flex-flow: row wrap;
+    justify-content: space-between;
   }
 
   .detail {
@@ -78,8 +207,16 @@
       color: @userColor !important;
     }
 
+    .sig-title {
+      color: @sigColor;
+    }
+
     .user-dot-orange {
       color: @userColor !important;
+    }
+
+    .sig-dot-orange {
+      color: @sigColor !important;
     }
 
     .dot-blue {
@@ -204,6 +341,10 @@
   }
 
   .developer-group-container {
+    margin-top: 6rem !important;
+  }
+
+  .user-group-container {
     margin-top: 16rem !important;
   }
 
@@ -238,7 +379,7 @@
         padding: 15px 20px;
       }
 
-      .desc {
+      .desc-row {
         font-size: 14px;
         padding: 25px 20px;
       }
@@ -247,6 +388,10 @@
         font-size: 14px;
         padding: 0 5px 20px;
       }
+  }
+
+  .user-role-card {
+    margin: 2rem 20px !important;
   }
 
   .guide-content,
@@ -271,6 +416,10 @@
 
 @media (max-width: 414px) {
   .developer-group-container {
+    margin-top: 3rem !important;
+  }
+
+  .user-group-container {
     margin-top: 15rem !important;
   }
 
@@ -295,7 +444,11 @@
 
 @media (max-width: 375px) {
   .developer-group-container {
-    margin-top: 15rem !important;
+    margin-top: 2rem !important;
+  }
+
+  .user-group-container {
+    margin-top: 17rem !important;
   }
 }
 

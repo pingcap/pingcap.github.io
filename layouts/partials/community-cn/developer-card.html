@@ -1,21 +1,50 @@
 {{ $i := .item}}
-{{ $user := .user}}
+{{ $type := .type}}
 
-<div class="role-card" id="{{ $i.id }}">
-    <div class="header {{ if $user }}userColor{{ end }}">{{ $i.role}}</div>
-    <div class="desc">{{ $i.desc }}</div>
-    {{- range $idx2, $j := $i.detail -}}
+<div class="role-card {{ if eq $type "user"}}user-role-card{{ end }}" id="{{ $i.id }}">
+    <div class="header {{ if $type }}{{ $type }}-color{{ end }}">{{ $i.role}}</div>
+    <div class="desc-row">
+        {{ range $idx, $j := $i.desc }}
+            <div class="desc">{{ $j }}</div>
+        {{ end }}
+    </div>
+    {{ if .desc_extra }}
         <div class="detail">
-            <ul class="dot-blue {{ if $user }}user-dot-orange{{ end }}">
-                <li>
-                    <span class="title {{ if $user }}user-title{{ end }}">{{ $j.title }}</span>
-                    <ul class="lists">
-                        {{- range $j.lists}}
-                            <li>{{ . }}</li>
-                        {{- end -}}
-                    </ul>
-                </li>
+            <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}">
+                <li style="color: #3e3e3e;">表达式专项兴趣小组：<a class="sig" href="https://github.com/pingcap/community/tree/master/special-interest-groups/sig-expr" target="_blank">Expression Special Interest Group</a>（已完结）</li>
             </ul>
         </div>
-    {{- end -}}
+    {{ end }}
+    {{ if and (eq $type "sig") $i.detail }}
+        {{ range $idx2, $j2 := $i.detail }}
+            <div class="detail">
+                <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}">
+                    <li>
+                        <a class="sig" href="{{ $j2.github_link }}"><span class="title {{ if $type }}{{ $type }}-title{{ end }}">{{ $j2.title }}: </span></a>
+                        <span class="item-detail">{{ $j2.desc }}</span>
+                    </li>
+                    <button class="review-arrow-button">
+                        <a href="{{ $j2.slack_link }}" target="_blank">
+                            <span>立即加入</span>
+                        </a>
+                    </button>
+                </ul>
+            </div>
+        {{ end }}
+    {{ else }}
+        {{ range $idx2, $j2 := $i.detail }}
+            <div class="detail">
+                <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}">
+                    <li>
+                        <span class="title {{ if $type }}{{ $type }}-title{{ end }}">{{ $j2.title }}</span>
+                        <ul class="lists">
+                            {{- range $j2.lists}}
+                                <li>{{ . }}</li>
+                            {{- end -}}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        {{ end }}
+    {{ end }}
 </div>

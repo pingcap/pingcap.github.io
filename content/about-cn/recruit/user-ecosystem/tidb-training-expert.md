@@ -1,12 +1,13 @@
 ---
 title: PingCAP University 培训专家
 tags:
-  - Business
+  - User Ecosystem
 location: 北京，上海
 avatar: training
 position: true
 aliases:
   - /recruit-cn/business/tidb-training-expert/
+  - /about-cn/recruit/business/tidb-training-expert/
 ---
 
 # PingCAP University 培训专家

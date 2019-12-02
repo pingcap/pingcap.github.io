@@ -45,8 +45,8 @@ for link in soup.find_all('a'):
             href = re.sub(r'^[\.\/]*', '/', href, count=0, flags=0)
             href = os.path.normpath('/' + folder + href)
             link['href'] = href
-            print href
-            print "========"
+            # print href
+            # print "========"
 
 for img in soup.find_all('img'):
     src = img['src']

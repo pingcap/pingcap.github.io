@@ -1,12 +1,13 @@
 ---
 title: 用户生态技术运营
 tags:
-  - Business
+  - User Ecosystem
 location: 北京，上海
 avatar: marketing
 position: true
 aliases:
   - /recruit-cn/business/user-ecosystem-technical-operations/
+  - /about-cn/recruit/business/user-ecosystem-technical-operations/
 ---
 
 # 用户生态技术运营

@@ -1,7 +1,7 @@
 ---
 title: 招聘主管
 tags:
-  - 'General & Administrative'
+  - General & Administrative
 location: 北京，上海，广州，杭州，成都
 avatar: hr
 position: true

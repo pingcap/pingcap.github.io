@@ -1,7 +1,7 @@
 ---
 title: 分公司行政主管
 tags:
-  - 'General & Administrative'
+  - General & Administrative
 location: 杭州，深圳
 avatar: admin
 position: true
