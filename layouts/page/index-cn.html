@@ -5,27 +5,23 @@
     {{$.Scratch.Set "data_i18_cn" true }}
     {{$.Scratch.Set "data_i18_link" "/en" }}
     {{- partial "head/preload-css" (dict "href" "/css/index.css") -}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
     <div class="banner-container">
         <div class="multi_slides_carousel">
-            <div class="swiper-container">
+            <div class="swiper-container gallery-top">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <a href="/about-cn/recruit/join/#campus"
-                            onclick="trackViews('homepage-20CampusRecruit-banner', 'pingcap-20CampusRecruit_view')">
-                            <img class="moment-img"
-                            src="https://download.pingcap.com/images/recruit-carousel-img.jpg" />
-                        </a>
-                    </div>
-                    <div class="swiper-slide">
-                        <a href="https://university.pingcap.com/" target="_blank"
-                          onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
-                            class="moment-img" src="https://download.pingcap.com/images/university-carousel-img.png"
-                            /></a>
-                    </div>
+                    {{- range $idx, $i := .Site.Data.index_cn_carousel_banner.banners -}}
+                        <div class="swiper-slide">
+                            <a href="{{ $i.link }}" {{ if $i.newTab }}target="_blank"{{ end }}
+                                onclick="trackViews('{{ $i.gaTrackEventLabel }}', '{{ $i.gaTrackEventClass }}')">
+                                <img class="moment-img"
+                                src="{{ $i.img }}" alt="{{ $i.alt }}"/>
+                            </a>
+                        </div>
+                    {{- end -}}
                 </div>
             </div>
             <div class="swiper-pagination"></div>
@@ -47,21 +43,17 @@
             </div>
             <div class="tidb-planet-banner-pc">
                 <div class="multi_slides_carousel">
-                    <div class="swiper-container">
+                    <div class="swiper-container gallery-top">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <a href="/about-cn/recruit/join/#campus"
-                                    onclick="trackViews('homepage-20CampusRecruit-banner', '20CampusRecruit_view')">
-                                    <img class="moment-img"
-                                    src="https://download.pingcap.com/images/recruit-carousel-img.jpg" />
-                                </a>
-                            </div>
-                            <div class="swiper-slide">
-                                <a href="https://university.pingcap.com/" target="_blank"
-                                  onclick="trackViews('homepage-university-banner', 'pingcap-university_view')"><img
-                                    class="moment-img"
-                                    src="https://download.pingcap.com/images/university-carousel-img.png" /></a>
-                            </div>
+                            {{- range $idx, $i := .Site.Data.index_cn_carousel_banner.banners -}}
+                                <div class="swiper-slide">
+                                    <a href="{{ $i.link }}" {{ if $i.newTab }}target="_blank"{{ end }}
+                                        onclick="trackViews('{{ $i.gaTrackEventLabel }}', '{{ $i.gaTrackEventClass }}')">
+                                        <img class="moment-img"
+                                        src="{{ $i.img }}" alt="{{ $i.alt }}"/>
+                                    </a>
+                                </div>
+                            {{- end -}}
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>
@@ -144,7 +136,7 @@
                         <h3 class="title">故障自恢复及异地多活</h3>
                         <h4 class="subtitle">数据：永远在线的资产</h4>
                         <p class="desc">
-                            TiDB 使用多副本进行数据存储，并依赖业界最先进的 Raft 多数派选举算法确保数据 100% 强一致性和高可用。 副本可跨地域部署在的不同的数据中心，主副本故障时自动切换，无需人工介入，自动保障业务的连续性，实现真正意义上的异地多活。
+                            TiDB 使用多副本进行数据存储，并依赖业界最先进的 Raft 多数派选举算法确保数据 100% 强一致性和高可用。 副本可跨地域部署在不同的数据中心，主副本故障时自动切换，无需人工介入，自动保障业务的连续性，实现真正意义上的异地多活。
                         </p>
                     </div>
                 </div>
@@ -184,6 +176,6 @@
 {{- end -}}
 
 {{- define "footJS" -}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
     <script type="text/javascript" src="/js/multi_slides_carousel.js"></script>
 {{- end -}}

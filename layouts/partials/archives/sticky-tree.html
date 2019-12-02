@@ -1,10 +1,10 @@
 <div class="sidebar">
-    <div class="sticky-sidebar">
+    <div class="sticky-sidebar {{ if .type }}docs-sticky-sidebar{{ end }}">
         <div class="title"> {{ .title }} </div>
-        <!-- <div class="st_tree nav-toc">
-        {{- partial "navs/version-nav.html" (dict "versions" .versions "latest" .latest) }}
-        </div> -->
-        <div class="st_tree nav-toc">
+        {{- if .type -}}
+            {{ partial "archives/version-switcher.html" (dict "global" . "permalink" .permalink "content_file_path" .content_file_path "sv" .sv "tv" .tv "cv" .cv) }}
+        {{- end -}}
+        <div class="st_tree nav-toc {{ if .type }}docs-nav-toc{{ end }}">
         {{- partial "navs/tree-nav.html" (dict "tree" .tree "global" .) -}}
         </div>
     </div>

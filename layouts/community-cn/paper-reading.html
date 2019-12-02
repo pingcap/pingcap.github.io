@@ -1,0 +1,107 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "Paper Reading" }}
+    Paper Reading
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
+    {{ partial "head/preload-css" (dict "href" "/css/community/paper-reading.css") }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
+{{- end -}}
+
+{{- define "main" -}}
+<div class="developer-group">
+    <div class="banner__section hero">
+        <div class="reading-calendar">
+            <h2>Paper Reading</h2>
+            {{ partial "layout/meetup-carousel.html" (dict "type" "paper" "global" .) }}
+        </div>
+    </div>
+    <div class="desc-container">
+        <p class="desc">Paper Reading 是 PingCAP 的线上活动之一。在这里我们会带领大家一起阅读数据库领域经典的论文，欢迎大家参与到线上直播与我们一起讨论。</p>
+    </div>
+    <div class="section-container">
+        <div class="container">
+            <div class="section-title">往期回顾</div>
+            <div class="review-table-pc">
+                <table cellspacing="0" cellpadding="0">
+                    <tr class="t-header">
+                        <td>Date</td>
+                        <td>Speaker</td>
+                        <td>Introduction</td>
+                    </tr>
+                    {{ range $idx, $i := .Site.Data.paper_reading.paper_reviews }}
+                    <tr>
+                        <td>{{ $i.date }}</td>
+                        <td>{{ $i.speaker }}</td>
+                        <td>
+                            <div class="links">
+                                <div class="paper-title">
+                                    <span class="p-title">
+                                        <a href="{{ $i.paper_link }}" target="_blank">
+                                            {{ $i.title }}
+                                        </a>
+                                    </span>
+                                </div>
+                                {{ if $i.video }}
+                                <button class="video-btn review-arrow-button {{if eq 0 (mod $idx 2)}}gray-bg{{end}}">
+                                    <a href="{{ $i.video }}" target="_blank">
+                                        <span>观看回放</span>
+                                    </a>
+                                </button>
+                                {{ end }}
+                                </a>
+                            </div>
+                            
+                            <p>{{ $i.desc }}</p>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </table>
+            </div>
+
+            <div class="review-table-mobile">
+                <table cellspacing="0" cellpadding="0">
+                    <tr class="t-header">
+                        <td>Info</td>
+                        <td>Introduction</td>
+                    </tr>
+                    {{ range $idx, $i := .Site.Data.paper_reading.paper_reviews }}
+                    <tr class="{{if eq 0 (mod $idx 2)}}gray-bg{{end}}">
+                        <td class="date">Date: <br />{{ $i.date }}</td>
+                        <td rowspan="2" class="desc-td">
+                            <div class="paper-title"><a href="{{ $i.paper_link }}" target="_blank">{{ $i.title }}</a></div>
+                            <p>{{ $i.desc }}</p>
+                            {{ if $i.video }}
+                            <button>
+                                <a href="{{ $i.video }}" target="_blank">
+                                    <span>观看回放</span>
+                                </a>
+                            </button>
+                            {{ end }}
+                        </td>
+                    </tr>
+                    <tr class="{{if eq 0 (mod $idx 2)}}gray-bg{{end}}">
+                        <td class="speaker">Speaker:<br /> {{ $i.speaker }}</td>
+                    </tr>
+                    {{ end }}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="back-to-community-section">
+        <a href="/community-cn/">
+            <button class="back-to-community">
+              回到社区主页
+            </button>
+        </a>
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/carousel.js"></script>
+{{- end -}}

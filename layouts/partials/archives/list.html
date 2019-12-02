@@ -9,15 +9,15 @@
     {{- else -}}
         <div class="article" data-tag="{{ range .Params.tags }}{{ replace . " " "-" }} {{ end }}">
     {{- end -}}
-            <h1 class="title"><a href="{{ .URL }}">{{ .Title }}</a></h1>
+            <h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
             {{- if $hasMetaData -}}
                 <ul class="blog-post-meta">
                 <li class="meta-item">
-                    <img src="/images/svgs/icon-date.svg">
+                    <img src="/images/svgs/icon-date.svg" alt="Date icon" />
                     {{- .Date.Format "2006-01-02" -}}
                 </li>
                 <li class="meta-item">
-                    <img src="/images/svgs/icon-writer.svg">
+                    <img src="/images/svgs/icon-writer.svg" alt="Pen icon" />
                     {{- if isset .Params "author" -}}
                         {{ $len := len .Params.author }}
                         {{- range $idx, $i := .Params.author -}}
@@ -53,7 +53,7 @@
                 </ul>
             {{- end -}}
             {{- if $hasBrief -}}
-                <a href="{{ .URL }}">
+                <a href="{{ .RelPermalink }}">
                     <div class="brief">
                         <p>{{- .Params.summary -}}</p>
                     </div>

@@ -1,24 +1,43 @@
-{{ $total_versions := .total_versions }}
-{{ $stable_version := .stable_version }}
-{{ $current_version := .current_version }}
-{{ $doesnot_exist_ver := .doesnot_exist_ver }}
-{{ $trimed_URL := .trimed_URL}}
-{{ $current_version := replaceRE "\\/" "" (cond (eq $current_version nil) $stable_version $current_version) }}
-{{ $type := .type}}
+{{ $stable_version := .sv }}
+{{ $total_versions := .tv }}
+{{ $current_version := .cv }}
+{{ $permalink := .permalink }}
+{{ $content_file_path := .content_file_path }}
+
+{{ $doesnot_exist_ver := slice ""}}
+
+{{- range $idx, $i := $total_versions -}}
+
+    {{ $file_path := printf "%s%s" "./content/" (replaceRE "(v\\d+\\.\\d+|dev|stable)" $i $content_file_path)}}
+    
+    {{- if not (fileExists $file_path) -}}
+        {{ $doesnot_exist_ver = $doesnot_exist_ver | append $i }}
+    {{- end -}}
+{{- end -}}
 
 <div class="version-switcher">
-  <button type="button" id="dropdownMenuButton">
-      {{ $current_version }}
-  </button>
-  <div class="dropdown-menu visibility-hide" id="dropdown-menu-items">
-      {{- range $idx, $i := $total_versions -}}
-          <a class="dropdown-item {{ if in $doesnot_exist_ver $i }}unclickable-btn{{ end }}"
-            href="
-            {{ if in $doesnot_exist_ver $i }}#{{ else }}/{{ $type }}/{{ $i }}{{ $trimed_URL }}{{ end }}">{{ $i }}
-            <!-- {{- if in $doesnot_exist_ver $i -}} 
-                <span class="tooltiptext">This doc does not exist in {{ $i }}</span>
-            {{- end -}} -->
-        </a>
-      {{- end -}}
-  </div>
+    <button type="button" id="dropdownMenuButton">
+        {{- if eq $current_version "stable" -}}
+            {{ $stable_version }}
+        {{- else -}}
+            {{ $current_version }}
+        {{- end -}}
+    </button>
+    <div class="dropdown-menu visibility-hide" id="dropdown-menu-items">
+        {{- range $idx, $i := $total_versions -}}
+            {{ $exist_url := replaceRE "(v\\d+\\.\\d+|dev|stable)" $i $permalink}}
+            <a class="dropdown-item {{ if in $doesnot_exist_ver $i }}unclickable-btn{{ end }}"
+                href="
+                {{ if in $doesnot_exist_ver $i }}#{{ else }}{{ $exist_url }}{{ end }}">
+                {{- if eq $i "stable" -}}
+                    {{ $stable_version }} (stable)
+                {{- else -}}
+                    {{ $i }}
+                {{- end -}}
+                {{- if in $doesnot_exist_ver $i -}} 
+                    <span class="tooltiptext">This doc does not exist in {{ $i }}</span>
+                {{- end -}}
+            </a>
+        {{- end -}}
+    </div>
 </div>

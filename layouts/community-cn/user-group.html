@@ -1,0 +1,52 @@
+{{- define "title" -}}
+    {{ $.Scratch.Set "metaTitle" "User Group" }}
+    User Group
+{{- end -}}
+
+{{- define "headTpl" -}}
+    {{ $.Scratch.Set "nav_active" "community" }}
+    {{ $.Scratch.Set "data_i18_cn" true }}
+    {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
+    {{- partial "head/preload-css" (dict "href" "/css/community/developer-group.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+<div class="developer-group">
+    <div class="banner__section user-banner">
+        <div class="developer-banner-container">
+            <h1 class="user-h1">TiDB User Group</h1>
+            <p class="user-p">TiDB User Group（简称 TUG）是由 TiDB 用户发起的独立用户社区，以线上的 AskTUG 问答社区和线下的 TUG 技术沙龙为大本营。
+                用户在 TUG 社区可以学习前沿技术知识，发表技术见解，结识圈内朋友，共同建设 TiDB 项目。
+                目前全国共有北京、上海、杭州、华南（以深圳为中心）和西南（以成都为中心）五个 TUG 区域。TUG 核心成员由以下角色构成：Leader、Co-Leader、Ambassador。</p>
+        </div>
+    </div>
+    <div class="container developer-group-container">
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.leader "user" "true") -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.co_leader "user" "true") -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.ambassador "user" "true") -}}
+    </div>
+
+    <div class="container tug-desc">
+        <p>如果你对 TUG 社区感兴趣，欢迎到 <a href="https://asktug.com/" target="_blank">AskTUG</a> 问答社区 了解更多信息，和更多 TiDB 用户交流。</p>
+    </div>
+
+    <div class="back-to-community-section">
+        <a href="/community-cn/">
+            <button class="back-to-community">
+              回到社区主页
+            </button>
+        </a>
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/community.js"></script>
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
+{{- end -}}

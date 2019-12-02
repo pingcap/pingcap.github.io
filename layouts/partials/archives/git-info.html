@@ -1,5 +1,6 @@
 {{ $prefix := print "content/" .repo "___"}}
-{{ $filter_name := replace .global.File.Path (print .repo "/") $prefix }}
+{{ $file_path := cond (in .global.File.Path "stable") (replace .global.File.Path "stable" .sv) .global.File.Path }}
+{{ $filter_name := replace $file_path (print .repo "/") $prefix }}
 
 {{- range $item := .global.Site.Data.sub_git_info -}}
     {{- if and $item $item.name -}}

@@ -1,0 +1,37 @@
+{{- define "headTpl" -}}
+    <style type="text/css" media="screen">
+        .st_tree {
+            display: none;
+        }
+    </style>
+    {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
+    {{$.Scratch.Set "nav_active" "docs"}}
+    {{$.Scratch.Set "data_i18_link" "/docs-cn/" }}
+    {{ $.Scratch.Set "metaTitle" "TiDB" }}
+{{- end -}}
+
+{{- define "main" -}}
+{{ $stable_version := $.Scratch.Get "stable_version" }}
+{{ $total_versions := $.Scratch.Get "total_versions" }}
+{{ $current_version := default "/stable" (index (findRE "(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
+<div class="doc">
+    <div class="container">
+        {{ $.Scratch.Add "data_i18_link" (trim $current_version "/") }}
+        {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_" "cv" $current_version "sv" $stable_version "tv" $total_versions) }}
+        {{- partial "archives/search-results-list" -}}
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+
+<script type="text/javascript" src="/js/doc.js"></script>
+
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+    $(".lazy").lazyload({
+        threshold: 200,
+        effect : "fadeIn"
+    });
+</script>
+{{- end -}}

@@ -2,6 +2,8 @@ const fs = require('fs')
 const tableRe = /^[\-\+]\s?.*(\n^\s*[\-\+].*)*/m
 const anchorTitleRe = /(\s*)[\+\-]\s*\[(.*)\]\((.*)\)/
 const titleRe = /^(\s*)[\+\-]\s*([^[]*)/
+const stable_version = 'v3.0'
+const stable_version_tag = 'stable'
 
 function genTableJSONFromMarkdown(source, target, prefix) {
   const contents = fs.readFileSync(source, 'utf8')
@@ -21,6 +23,9 @@ function genTableJSONFromMarkdown(source, target, prefix) {
         if (/^https?:\/\//.test(r1[3])) {
           link = r1[3]
         } else {
+          if (/\/v3.0\//.test(r1[3])) {
+            r1[3] = r1[3].replace(stable_version, stable_version_tag)
+          }
           link = prefix + r1[3].replace('.md', '/')
         }
       } else if (r2) {

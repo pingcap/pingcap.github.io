@@ -1,0 +1,93 @@
+{{- define "headTpl" -}}
+    {{$.Scratch.Set "data_i18_cn" true }}
+    {{- partial "head/preload-css" (dict "href" "/css/solutions.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/common-style.css") -}}
+{{- end -}}
+
+{{- define "main" -}}
+    <section class="banner__section intel-solution-banner">
+        <a href="https://download.pingcap.org/solution-intel.pdf" target="_blank"><button class="banner-btn">白皮书下载</button></a>
+    </section>
+    <section>
+        <div class="solution-brief">
+            <h2 class="section-title">方案概述</h2>
+            <p>
+                TiDB 是平凯星辰 PingCAP 公司设计的开源分布式 HTAP (Hybrid Transactional/Analytical Processing) 数据库，结合了传统的 RDBMS 和 NoSQL 的最佳特性。TiDB 兼容 MySQL，支持无限的水平扩展，具备强一致性和高可用性。TiDB 的目标是为 OLTP (Online Transactional Processing) 和 OLAP (Online Analytical Processing) 场景提供一站式的解决方案。
+            </p><br/>
+            <p>
+                在 TiDB 内核设计与产品实现中，与基于 Intel 架构的多项领先技术做了深度适配与优化，包括从充分利用 Intel CPU SSE 指令集加速，到针对 Intel NVMe PCI-E SSD 以及傲腾 Optane 高性能存储系统进行充分优化。基于平凯星辰 PingCAP TiDB 的英特尔® 精选解决方案使用了经过工作负载优化并经过验证的组件，可帮助企业用户优化 TiDB 数据库部署的性能以及成本表现，同时显著缩短评估、测试和配置基础架构所需的时间。
+            </p><br/>
+            <p>
+                具体而言，基于平凯星辰 PingCAP TiDB 的英特尔® 精选解决方案搭载了英特尔® 至强® 金牌处理器 5118/6140、英特尔® 固态盘 DC P4510 系列、英特尔® 以太网适配器 X710-DA2，使企业能够快速利用可靠、全面的解决方案。
+            </p>
+            <p>
+                平凯星辰 PingCAP 的核心研发团队及开源社区正在积极与 Intel 实验室保持协作，未来随着双方的联合创新，预期将有更多更强的 TiDB 产品能力提升问世。
+            </p>
+            <div class="intelSelect-logo">
+                <img class="lazy" data-original="https://download.pingcap.com/images/intelSelect-logo.png" src="/images/svgs/loader-spinner.svg" alt="intel select logo"/>
+            </div>
+        </div>
+    </section>
+    <section class="section-padding">
+        <div class="solution-architecture">
+            <h2 class="section-title">方案架构</h2>
+            <div class="arch-img">
+                <img class="lazy" data-original="https://download.pingcap.com/images/solution-architecture.jpg" src="/images/svgs/loader-spinner.svg" alt="TiDB 方案架构"/>
+            </div>
+        </div>
+    </section>
+    <section class="dark-bg">
+        <div class="lt-corner-bg">
+            <img src="/images/svgs/solution-value-bg.svg" />
+        </div>
+        <div class="rb-corner-bg">
+            <img src="/images/svgs/solution-value-bg.svg" />
+        </div>
+        <div class="solution-values">
+            <h2 class="section-title font-white">方案价值</h2>
+            <div class="values-list">
+                {{- range $idx, $i := .Site.Data.solutions.intel.values -}}
+                    <div class="value-item">
+                        <img class="lazy" data-original="{{ $i.img }}" src="/images/svgs/loader-spinner.svg" alt="{{ $i.desc }}" />
+                        <p class="value-desc">{{ $i.desc }}</p>
+                    </div>
+                {{- end -}}
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="solution-application">
+            <h2 class="section-title">应用场景及性能</h2>
+            <p>开源分布式 HTAP (Hybrid Transactional/Analytical Processing) 数据库 TiDB 为企业运行在线事务处理和在线分析处理业务提供了可行方案。经验证，这些通过预先调整和测试的方案配置能够加快用户部署 TiDB 数据库，并提升性能、安全性、可用性等方面的表现。更多的联合性能测试数据及推荐配置详情请您可访问 <a href="https://www.intel.cn/content/www/cn/zh/architecture-and-technology/intel-select-solution-based-on-pingcap-tidb.html?wapkw=pingcap" target="_blank">Intel 网站</a>，下载官方白皮书或 <a href="mailto:info@pingcap.com">联系 PingCAP 官方</a>，获得更多详情介绍。</p>
+                <a href="https://download.pingcap.org/solution-intel.pdf" target="_blank"><button>下载白皮书</button></a>
+        </div>
+    </section>
+    <section class="section-padding section-dark-bg">
+        <div class="solution-cases">
+            <h2 class="section-title">部分客户案例</h2>
+            <div class="cases-list">
+                {{- range $idx, $i := .Site.Data.solutions.intel.cases -}}
+                    <div class="case-item">
+                        <div class="logo">
+                            <img class="lazy" data-original="{{ $i.logo }}" src="/images/svgs/loader-spinner.svg" alt="{{ $i.title }} logo" />
+                        </div>
+                        <div class="title">{{ $i.title }}</div>
+                        <div class="desc">{{ $i.desc }}</div>
+                        <a href="{{ $i.link }}"><div class="readMore"><span class="arrow"><img src="/images/svgs/blue-right-arrow.svg"/></span><span class="btn-text">查看案例</span></div></a>
+                    </div>
+                {{- end -}}
+            </div>
+            <a href="mailto:info@pingcap.com"><button class="contact-us-btn">联系我们</button></a>
+        </div>
+    </section>
+{{- end -}}
+
+{{- define "footJS" -}}
+    <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript">
+        $(".lazy").lazyload({
+            effect : "fadeIn",
+            threshold: 200
+        });
+    </script>
+{{- end -}}

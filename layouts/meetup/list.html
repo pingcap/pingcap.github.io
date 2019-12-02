@@ -8,17 +8,17 @@
     {{$.Scratch.Set "data_i18_cn" true }}
     {{$.Scratch.Set "data_i18_link" "/weekly" }}
     {{- partial "head/preload-css" (dict "href" "/css/meetup.css") -}}
-    {{- partial "head/preload-css" (dict "href" "/css/community/homepage.css")}}
     {{- partial "head/preload-css" (dict "href" "/css/community/devcon2019.css")}}
     {{- partial "head/preload-css" (dict "href" "/css/blog.css") -}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css">
+    {{ $.Scratch.Set "summary" "我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。" }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
 <section class="meetup-landing-page-banner">
     <div class="mkdf-elements-holder-item-inner">
         <h2>PingCAP Infra Meetup</h2>
-        {{- partial "layout/meetup-carousel.html" . -}}
+        {{- partial "layout/meetup-carousel.html" (dict "type" "meetup" "global" .) -}}
     </div>
 </section>
 <section class="meetup-landing-page-intro">
@@ -37,7 +37,7 @@
                 {{- range first 3 .Data.Pages.ByDate.Reverse -}}
                 <div class="item">
                     <div class="layout-text-on-hover">
-                        <a href="{{.URL}}" class="link-abs"></a>
+                        <a href="{{ .RelPermalink }}" class="link-abs"></a>
                         <div class="image">
                             <img class="lazy" width="100%" data-original="{{.Params.image|default .Site.Data.meetup.default_cover}}" src="/images/svgs/loader-spinner.svg" alt="cover">
                         </div>
@@ -52,9 +52,9 @@
             </div>
         </div>
         {{- range first 1 (where (where (where .Site.Pages "Section" "meetup") ".Params.meetup_type" "!=" nil) ".Params.meetup_type" "==" "review") -}}
-           <a href="{{ .URL }}">
+           <a href="{{ .RelPermalink }}">
              <button class="readMore-btn">
-               <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
+               <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" alt="Arrow" /></span>
                <span class="btn-text">查看更多</span>
              </button>
            </a>
@@ -71,23 +71,13 @@
         </div>
     </div>
 
-    <a href="/meetup/recording">
-        <button class="readMore-btn">
-            <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" /></span>
-            <span class="btn-text">更多文章</span>
-        </button>
-    </a>
+    {{- partial "archives/readMoreBtn.html" (dict "url" "/meetup/recording" "btnText" "更多文章") }}
+
 </section>
 <section class="meetup-landing-page-lecturer">
     <div class="instructors section-container">
       <h1 class="section-title">大咖讲师</h1>
       {{- partial "community-cn/instructors.html" (dict "instructors" .Site.Data.meetup.featured_speakers "type" "meetup") -}}
-    </div>
-</section>
-
-<section class="meetup-landing-page-banner-footer">
-    <div class="section-container">
-        <img src="https://download.pingcap.com/images/banners/meetup-footer-banner.png" alt="meetup tags">
     </div>
 </section>
 
@@ -98,11 +88,15 @@
         </button>
     </a>
 </section>
+
+<section class="meetup-landing-page-banner-footer footer-section">
+    <div class="section-container banner-footer-mobile"></div>
+</section>
 {{- end -}}
 
 {{- define "footJS" -}}
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
     <script type="text/javascript" src="/js/carousel.js"></script>
     <script type="text/javascript" src="/js/devcon.js"></script>
     <script type="text/javascript">

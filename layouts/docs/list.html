@@ -7,63 +7,33 @@
     {{- partial "head/preload-css" (dict "href" "https://download.pingcap.com/style/github-markdown.css") -}}
     {{- partial "head/preload-css" (dict "href" "/css/doc.css") -}}
     {{$.Scratch.Set "nav_active" "docs"}}
-    {{$.Scratch.Set "data_i18_link" "/docs-cn" }}
+    {{$.Scratch.Set "data_i18_link" "/docs-cn/" }}
     {{ $.Scratch.Set "metaTitle" "TiDB Documentation" }}
 {{- end -}}
 
 {{- define "main" -}}
 {{ $stable_version := $.Scratch.Get "stable_version" }}
-{{ $total_versions := .Site.Params.versions.docs.total_versions }}
+{{ $total_versions := $.Scratch.Get "total_versions" }}
+{{ $current_version := default "stable" (index (findRE "(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0) }}
 <div class="doc" id="list_page">
     <div class="container">
-        {{ $current_version := index (findRE "\\/(v\\d+\\.\\d+|dev)" .URL) 0 }}
-        
-        {{- if eq $current_version "/dev" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_dev_toc "title" "Documentation") }}
-        {{- else if eq $current_version "/v2.1" -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v21_toc "title" "Documentation") }}
-        {{- else -}}
-            {{ partial "archives/sticky-tree.html" (dict "tree" .Site.Data.docs_v30_toc "title" "Documentation") }}
-        {{- end -}}
+        {{ $.Scratch.Add "data_i18_link" $current_version }}
+        {{ partial "navs/docs-nav.html" (dict "global" . "lang_prefix" "docs_" "cv" $current_version "sv" $stable_version "tv" $total_versions) }}
+
         <div class="archive">
             <div class="content markdown-body">
-                {{ .Scratch.Set "prefix" "/docs"}}
-
-                {{ if $current_version }}
-                    {{ .Scratch.Add "prefix" $current_version }}
-                    {{ .Scratch.Add "prefix" "/" }}
-                    {{ .Scratch.Add "data_i18_link" $current_version }}
-                {{ end }}
-
-                {{ $trimed_URL := strings.TrimPrefix (.Scratch.Get "prefix") .URL }}
-
-                {{ $.Scratch.Set "doesnot_exist_ver" (slice "") }}
-
-                {{ $tempFilePath := .File.Path }}
-
-                {{- range $idx, $i := $total_versions -}}
-
-                    {{ $file_path := printf "%s%s%s" "./content" "/" (replaceRE "(v\\d+\\.\\d+|dev)" $i $tempFilePath)}}
-
-                    {{- if not (fileExists $file_path) -}}
-                        {{ $.Scratch.Add "doesnot_exist_ver" $i }}
-                    {{- end -}}
-                {{- end -}}
-
-                {{ $doesnot_exist_ver := $.Scratch.Get "doesnot_exist_ver" }}
-
                 {{ .Content }}
             </div>
             <div class="article-toc"></div>
         </div>
 
         <div class="sidebar-page sticky-sidebar">
-            {{ partial "archives/version-switcher.html" (dict "stable_version" $stable_version "total_versions" $total_versions "current_version" $current_version "doesnot_exist_ver" $doesnot_exist_ver "trimed_URL" $trimed_URL "type" "docs") }}
-            {{ with .Site.GetPage "page" "docs/dev/overview.md" }}
-                {{ partial "archives/improve-doc.html" (dict "repo" "docs" "global" .) }}
-                {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/") -}}
+            {{ $current_page := printf "%s%s%s" "docs/" $current_version "/overview.md" }}
+            {{ with .Site.GetPage "page" $current_page }}
+                {{- partial "archives/request-docs-changes.html" (dict "repo" "docs" "global" . "link" .Permalink "prefixRepo" "docs/" "sv" $stable_version) -}}
             {{ end }}
-            {{ partial "archives/download-pdf.html" (dict "version" $current_version "stable_version" $stable_version) }}
+            {{ $download_pdf := cond (eq $current_version "stable") $stable_version $current_version }}
+            {{ partial "archives/download-pdf.html" (dict "version" $download_pdf) }}
             <p class="toc-title">What’s on this page</p>
             <div id="smart_toc_wrapper"></div>
         </div>
@@ -74,5 +44,5 @@
 {{- define "footJS" -}}
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
     <script type="text/javascript" src="/js/doc.js"></script>
-    <script type="text/javascript" src="/js/vendor/clipboard.min.js"></script>
+    <script type="text/javascript" src="/js/anchor.js"></script>
 {{- end -}}

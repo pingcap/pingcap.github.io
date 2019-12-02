@@ -1,5 +1,5 @@
 {{ $nav_active := $.Scratch.Get "nav_active" }}
-{{ $stable_version := $.Scratch.Get "stable_version" }}
+{{ $stable_version_tag := "stable" }}
 <header role="navigation" class="fixed-top">
     <div class="container">
         <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
@@ -9,7 +9,7 @@
                 <li {{ if eq $nav_active "cloud"}}class="sel"{{end}}><a class="a-en" href="/tidb-cloud/">Cloud</a></li>
                 <li {{ if eq $nav_active "academy"}} class="sel" {{end}}><a class="a-en" class="tidb-academy"
                     href="/tidb-academy">TiDB Academy</a></li>
-                <li {{ if eq $nav_active "docs"}}class="sel" {{end}}><a class="a-en" href="/docs/{{ $stable_version }}">Docs</a></li>
+                <li {{ if eq $nav_active "docs"}}class="sel" {{end}}><a class="a-en" href="/docs/{{ $stable_version_tag }}">Docs</a></li>
                 <li {{ if eq $nav_active "cases"}}class="sel" {{end}}><a class="a-en" href="/success-stories">Success
                     Stories</a></li>
                 <li {{ if eq $nav_active "blog"}}class="sel" {{end}}><a class="a-en" href="/blog">Blog</a></li>
@@ -17,10 +17,9 @@
                 </ul>
             </div>
             <div class="global-search">
-                <div class="search-wrapper">
-                <span class="icon-search">{{ partial "svgs/icon-search.svg" (dict "fill" "#fff" "width" 18 "height" 18 ) }}</span>
-                <input data-lang="en" type="search" id="search-input" placeholder="Search...">
-                </div>
+                {{ $search_doc_version := index (findRE "(v\\d+\\.\\d+|dev|stable)" .RelPermalink) 0 }}
+                {{ $search_doc_version := default "stable" $search_doc_version }}
+                {{ partial "layout/search.html" (dict "global" . "search_doc_version" $search_doc_version "lang" "en" "stable_version_tag" $stable_version_tag) }}
             </div>
         </div>
         <div class="nav-btn nav-slider">

@@ -1,7 +1,11 @@
 {{- if isset .Params "summary" -}}
     {{ $.Scratch.Add "summary" .Params.summary }}
-{{- else -}}
-    {{ $.Scratch.Add "summary" "Amazon Aurora alternative without vendor lock-in. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database." }}
+{{- else if not ($.Scratch.Get "summary") -}}
+    {{- if ($.Scratch.Get "data_i18_cn") -}}
+        {{ $.Scratch.Add "summary" "TiDB 是由 PingCAP 研发的一款定位于在线事务处理/在线分析处理（HTAP）的开源融合型数据库产品，实现了一键水平伸缩，强一致性的多副本数据安全，分布式事务，实时 OLAP 等重要特性，目前已广泛应用于金融服务、互联网、制造等行业。" }}
+    {{- else -}}
+        {{ $.Scratch.Add "summary" "Amazon Aurora alternative without vendor lock-in. TiDB is an open source MySQL-compatible distributed database that handles hybrid transactional and analytical processing (HTAP) workloads and can empower Amazon Aurora users with an HTAP database." }}
+    {{- end -}}
 {{- end -}}
 
 {{- if isset .Params "image" -}}
@@ -21,7 +25,6 @@
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
 <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-<!-- <link rel="canonical" href="https://www.pingcap.com/"> -->
 <meta name="description" content="{{ $.Scratch.Get "summary" }}">
 <meta name="robots" content="noodp">
 <meta name="keywords" content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative">
@@ -29,15 +32,21 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ .Title }} | {{ $.Scratch.Get "ogTitle" }}">
 <meta property="og:description" content="{{ $.Scratch.Get "summary" }}">
-<meta property="og:url" content="{{ .Page.URL | absURL }}">
+<meta property="og:url" content="{{ .Page.Permalink | absURL }}">
 <meta property="og:site_name" content="MySQL at Scale. No more manual sharding">
 <meta property="og:image" content="{{ $.Scratch.Get "image" }}">
 <meta property="og:image:secure_url" content="{{ $.Scratch.Get "image" }}">
+{{- if isset .Params "image" -}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="og:image:width" content="1200">
+<meta name="og:image:height" content="600">
+{{- else -}}
 <meta name="twitter:card" content="summary">
+{{- end -}}
 <meta name="twitter:description" content="{{ $.Scratch.Get "summary" }}">
 <meta name="twitter:title" content="{{ .Title }} | {{ $.Scratch.Get "ogTitle" }}">
 <meta name="twitter:site" content="@pingcap">
-<meta name="twitter:image:src" content="{{ $.Scratch.Get "image" }}">
+<meta name="twitter:image" content="{{ $.Scratch.Get "image" }}">
 <meta name="twitter:creator" content="@pingcap">
 
 <!-- Start of CrazyEgg Embed Code -->

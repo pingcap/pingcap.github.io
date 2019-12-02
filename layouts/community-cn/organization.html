@@ -7,229 +7,246 @@
     {{$.Scratch.Set "nav_active" "community"}}
     {{ $.Scratch.Set "data_i18_cn" true }}
     {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
-    {{- partial "head/preload-css" (dict "href" "/css/community/organization.css") -}}
+    {{- partial "head/preload-css" (dict "href" "/css/community/organization-cn.css") -}}
 {{- end -}}
 
 {{- define "main" -}}
 <div class="community-organization">
     <div class="banner__section organization__banner">
         <div class="banner__content-container">
-            <div class="content"> TiDB 社区组织架构</div>
-        </div>
-    </div>
-
-    <div class="organization__section">
-        <div class="container">
-            <div class="section-title">社区架构</div>
-            <div class="intro">一个项目经常会有一个围绕着他的社区。这个社区由各自不同角色的用户组成，TiDB 社区主要有以下几个部分：</div>
-            <div class="architecture">
-                <img class="skeleton" src="/images/community/organization/lines-mobilei7.svg">
-                <button class="head-node">TiDB Community Organization</button>
-                <button class="pmc">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/pmc.svg" /></div>
-                  <p>PMC</p>
-                  <span class="tooltiptext">项目管理委员会，为项目核心管理团队，参与 Roadmap 制定及社区相关的重大决议。</span>
-                </button>
-                <button class="developer-group">
-                  <p>Community Developer Group</p></button>
-                <button class="committee">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/org-committee.svg" /></div>
-                  <p>Organizer Committee</p>
-                  <span class="rightSide">负责组织、执行、输出、推广社区技术内容的组织者们​，成员包括各地区用户 组组长以及社区活动负责人。</span>
-                </button>
-                <button class="maintainer">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/maintainer.svg" /></div>
-                  <p>Maintainer</p>
-                  <span class="tooltiptext">项目的规划和设计者，拥有 TiDB 的提交、合并主干分支、对 PR 点赞（LGTM）的权限，从 Committer
-                    中产生。</span>
-                </button>
-                <button class="committer">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/committer.svg" /></div>
-                  <p>Committer</p>
-                </button>
-                <button class="contributor">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/contributor.svg" /></div>
-                  <p>Contributor</p>
-                </button>
-                <button class="member">
-                  <div class="btnLogo"><img src="/images/community/organization/icons/org-member.svg" /></div>
-                  <p>Community Member</p>
-                  <span class="rightSide">社区成员，对项目非常关心，并且在关于项目的特性以及 pull requests 的讨论中非常活跃的人。</span>
-                </button>
-            </div>
-            <div class="divider"><div class="line"></div></div>
-            <div class="committer__detail">
-                <div class="committer-btn">
-                    <button>
-                        <span><img src="/images/community/organization/icons/committer.svg" /></span>
-                        Committer
-                    </button>
-                </div>
-                <div class="c-content">
-                  <p>Committer 是实际的项目开发者，从 Contributor 中产生。
-                      目前，TiDB 项目已有 6 位 Committers，感谢他们为 TiDB 性能提升做出的贡献。</p>
-                  <div class="committer-members">
-                      <div class="c-member">
-                        <div class="avatar">
-                          <img src="/images/community/organization/yubai.jpg">
-                        </div>
-                        <div class="name">李凯 <span>（知乎 ID 郁白）</span></div>
-                        <div class="company">摩拜 | 基础架构技术总监</div>
-                      </div>
-                      <div class="c-member">
-                        <div class="avatar">
-                          <img src="/images/community/organization/wudi.jpg">
-                        </div>
-                        <div class="name">吴镝</div>
-                        <div class="company">今日头条 | 数据库中间件/分布式数据库负责人</div>
-                      </div>
-                      <div class="c-member">
-                        <div class="avatar">
-                          <img src="/images/community/organization/liyulai.jpeg">
+            <div id="architecture">
+              <div class="line-divider">
+                <div class="headBtn orgBtn tl">Community Organization</div>
+                <div class="branches">
+                  <div class="branch">
+                      <button class="branchBtn pmcBtn orgBtn j-hover j-mobile-hover tl cursor-text">PMC</button>
+                      <div class="org-tooltiptext tt-tr">项目管理委员会，为项目核心管理团队，参与 roadmap 制定与社区相关的重大决议。</div>
+                  </div>
+                  <div class="branch">
+                      <a href="/community-cn/developer-group/"><button class="branchBtn devBtn orgBtn tl j-hover">Developer Group</button></a>
+                      <div class="devSubBtns tr">
+                        {{- range $idx, $i := .Site.Data.community_organization.architecture.developer_group -}}
+                          <div class="btn-tooltip">
+                            <a href="{{ $i.link }}" class="j-hover j-devSubBtn-hover"><button class="devBtn devSubBtn orgBtn">{{ $i.name }}</button></a>
+                            <div class="org-tooltiptext tt-left">{{ $i.desc }}</div>
                           </div>
-                        <div class="name">李雨来</div>
-                        <div class="company">SpeedyCloud | 架构师</div>
-                      </div>
-                      <div class="c-member">
-                        <div class="avatar">
-                          <img src="/images/community/organization/duchuan.jpeg">
-                        </div>
-                        <div class="name">杜川</div>
-                        <div class="company">腾讯云 | 高级工程师</div>
-                      </div>
-                      <div class="c-member">
-                        <div class="avatar">
-                          <img src="/images/community/organization/sunxiaoguang.jpeg">
-                        </div>
-                        <div class="name">孙晓光</div>
-                        <div class="company">知乎 | 搜索工程架构团队负责人</div>
-                      </div>
-                      <div class="c-member">
-                        <div class="avatar">
-                          <img src="/images/community/organization/Jun-Seok-Heo.jpeg">
-                        </div>
-                        <div class="name">Jun-Seok Heo</div>
-                        <div class="company">Samsung Electronics | Cloud Database Engineering</div>
+                        {{- end -}}
+                    </div>
+                  </div>
+                  <div class="branch">
+                    <a href="/community-cn/user-group/"><button class="branchBtn userBtn orgBtn tl j-hover">User Group</button></a>
+                      <div class="devSubBtns tl">
+                          {{- range $idx, $i := .Site.Data.community_organization.architecture.user_group -}}
+                            <div class="btn-tooltip">
+                              <a href="{{ $i.link }}" class="j-hover j-devSubBtn-hover"><button class="devBtn userSubBtn orgBtn j-hover">{{ $i.name }}</button></a>
+                              <div class="org-tooltiptext tt-right">{{ $i.desc }}</div>
+                            </div>
+                          {{- end -}}
                       </div>
                   </div>
-                </div>
-            </div>
-            <div class="be__committer">
-                <div class="c-title"> 如何成为 TiDB Committer?</div>
-                <div class="c-content">
-                  <p>新 Committer 由现有 Maintainer 或在任 PMC 推荐，由 PMC 投票通过产生，需达成以下单个或多个成就（包括但不仅限于）：</p>
-                  <ul>
-                    <li>有超过 10 次经 Maintainer 认可的 Commit 合并记录</li>
-                    <li>完成某个完整的 Feature</li>
-                    <li>Fix 重要 Bug​</li>
-                  </ul>
-                </div>
-            </div>
-            <div class="divider"><div class="line"></div></div>
-            <div class="contributor__detail">
-                <div class="contributor-btn">
-                  <button>
-                      <span><img src="/images/community/organization/icons/contributor.svg" /></span>
-                      Contributor
-                  </button>
-                </div>
-                <div class="c-content">
-                  <p>在 <a href="https://github.com/pingcap/tidb">TiDB</a> / <a href="https://github.com/pingcap/tikv">TiKV</a> / 
-                    <a href="https://github.com/pingcap/tispark">TiSpark</a> / <a href="https://github.com/pingcap/pd">PD</a> / 
-                    <a href="https://github.com/pingcap/docs">Docs</a> / 
-                    <a href="https://github.com/pingcap/docs-cn">Docs-cn</a> / ... 项目中成功提交 PR 并经过讨论成功被 Merge 即可成为 Contributor。</p>
-                  <div class="subtitle-pr"><div id="pr-collapse"> + </div> 贡献你的第一个 PR</div>
-                  <div class="pr-content">
-                    <p>我们鼓励大家通过项目测试、文档撰写、上报 bug 等多种形式参与社区。成为 contributor 之后还可以获得我们的纪念马克杯，现在就来贡献你的第一个 PR 吧！</p>
-                    <ul>
-                      <li>Fork 项目至你的 GitHub 账户</li>
-                      <li>Git Clone 到本地仓库</li>
-                      <li>创建 master 分支</li>
-                      <li>在本地仓库中编写代码并测试</li>
-                      <li>Push 已经 commit 的代码至远程仓库</li>
-                      <li>创建一个新的 PR</li>
-                      <li>代码审查：提交 PR 之后我们会检查你提交的代码是否有 bug 或语法错误，请留意 PR 下面的留言回复。如果有两位代码审查者点赞，你的 PR 就会被合并，恭喜你成为 TiDB contributor，快来领取属于你的勇士奖杯！</li>
-                    </ul>
+                  <div class="branch">
+                      <button class="branchBtn comBtn orgBtn tr j-hover j-mobile-hover cursor-text">Organization Committee</button>
+                      <div class="org-tooltiptext tt-tl">项目组织委员会，负责执行、输出，推广技术内容的组织者们，成员包括各地区用户组组长以及社区活动负责人。</div>
                   </div>
-                  <div class="subtitle-guide"><div id="guide-collapse"> + </div> 新手指南</div>
-                  <div class="guide-content">
-                    <p>对于从来没有或者很少参与大型开源项目的小伙伴来说，我们建议先阅读 TiDB 相关资料，尤其是<a href="https://pingcap.com/blog-cn/tidb-internal-1/">说存储</a>、
-                      <a href="https://pingcap.com/blog-cn/tidb-internal-2/">讲计算</a>、<a href="https://pingcap.com/blog-cn/tidb-internal-3/">谈调度</a>这三篇。再由以下方式上手参与项目：</p>
-                    <ul>
-                      <li>积极帮助社区用户解答技术问题</li>
-                      <li>帮助项目增加测试​</li>
-                      <li>完善技术文档</li>
-                      <li>提供有价值的 Issue</li>
-                      <li>报告或修复未知 / 已知的 Bug​</li>
-                      <li>为项目撰写源码分析、实用案例相关的文章​</li>
-                    </ul>
+                </div>
+              </div>
+            </div>
+            <div class="content"> TiDB 社区组织架构 </div>
+        </div>
+    </div>
 
-                    <p>同时也可以参考社区小伙伴撰写的如何 <a href="https://pingcap.com/blog-cn/how-to-contribute/">「从零开始参与大型开源项目」</a></p>
-                    <p>有了这些基础知识之后就可以到我们的 GitHub 上寻找适合的 Issue 了。在标签下选择 'for new contributors' 或 'help wanted'，这两个标签都是对新手比较友好的。如果你对某一个模块特别感兴趣也可以选择模块对应的标签。</p>
+    <div class="community-dynamics">
+        <div class="container">
+            <div class="section-title">社区动态</div>
+            {{ $communityTag := "社区动态" }}
+            {{ $posts := where (where (where (index .Site.Taxonomies.tags $communityTag).Pages "Section" "blog-cn") ".Params.title" "!=" nil) ".Params.category" "!=" "case" }}
+            <div class="flex-lists">
+              {{- range (first 3 $posts) }}
+                <a href="{{ .RelPermalink }}" class="dynamic-item">
+                    {{- if .Params.image -}}
+                      <img class="lazy" data-original="{{ .Params.image }}" src="/images/svgs/loader-spinner.svg" alt="cover"/>
+                    {{- else -}}
+                      <img class="lazy" data-original="https://download.pingcap.com/images/community-banner-mobile.jpg" src="/images/svgs/loader-spinner.svg" alt="cover"/>
+                    {{- end -}}
+                    <p>{{ .Params.title }}</p>
+                </a>
+              {{- end -}}
+            </div>
+            {{- partial "archives/readMoreBtn.html" (dict "url" "/blog-cn/#社区动态" "btnText" "查看更多") }}
+        </div>
+    </div>
+
+    <div class="community-members">
+      <div class="container">
+          <div class="section-title">社区成员</div>
+          <div class="developer-group-members">
+            <div class="member-header">Developer Group 成员</div>
+            <div class="member-list">
+              <div class="member-type">Maintainer</div>
+              <div class="flex-lists members divider">
+                {{- range $idx, $i := .Site.Data.community_organization.developer_members.maintainer -}}
+                  <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                      {{- if $i.githubID -}}
+                        <a href="{{ $i.link }}" target="_blank">
+                            <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                        </a>
+                        <a href="{{ $i.link}}" target="_blank" class="member-info">
+                          <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                          <p>{{ $i.title }}</p>
+                          <div class="github-icon"><p>{{ $i.githubID }}</p></div>
+                        </a>
+                      {{- else -}}
+                        <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                        <div class="member-info">
+                            <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                            <p>{{ $i.title }}</p>
+                        </div>
+                      {{- end -}}
                   </div>
+                {{- end -}}
+              </div>
+              <div class="member-type">Committer</div>
+              <div class="flex-lists members divider">
+                {{- range $idx, $i := .Site.Data.community_organization.developer_members.committer -}}
+                  <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                      {{- if $i.githubID -}}
+                      <a href="{{ $i.link }}" target="_blank">
+                          <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                      </a>
+                      <a href="{{ $i.link}}" target="_blank" class="member-info">
+                        <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                        <p>{{ $i.title }}</p>
+                        <div class="github-icon"><p>{{ $i.githubID }}</p></div>
+                      </a>
+                    {{- else -}}
+                      <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                      <div class="member-info">
+                          <p>{{ $i.name }}{{ if $i.tag }}<span class="tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</span>{{ end }}</p>
+                          <p>{{ $i.title }}</p>
+                      </div>
+                    {{- end -}}
+                  </div>
+                {{- end -}}
+              </div>
+              <div class="member-type">Active Contributor</div>
+              <div class="flex-lists divider members contributor">
+                  {{- range $idx, $i := .Site.Data.community_organization.developer_members.active_contributor -}}
+                  <a href="{{ $i.link }}" target="_blank" class="contributor-info member flex-lists">
+                      <p class="name">{{ $i.name }}</p>
+                      <img src="/images/github.svg">
+                      <p class="githubID">{{ $i.githubID }}</p>
+                      {{ if $i.tag }}<div class="contribution-tag tag-{{ lower (replace $i.tag " " "-") }}">{{ $i.tag }}</div>{{ end }}
+                  </a>
+                {{- end -}}
+              </div>
+              <div class="member-type">Contributor</div>
+              <div class="flex-lists members contributor">
+                <div class="contributor-item">
+                  <img class="lazy" data-original="https://download.pingcap.com/images/appreciate.jpg" src="/images/svgs/loader-spinner.svg" alt="cover">
+                  <p class="text">当你的一个 PR 被合并之后，你就正式成为 TiDB Contributor 了。我们为每一个 contributor 都准备了纪念马克杯，感谢你们踏出了第一步！在 TiDB 星球里，你们的名字也将一直闪耀。</p>
                 </div>
+                <div class="contributor-item">
+                    <a href="https://pingcap.com/tidb-planet/" target="_blank">
+                      <img class="lazy tidb-planet-banner" data-original="https://download.pingcap.com/images/tidb-planet.jpeg" src="/images/svgs/loader-spinner.svg" alt="cover">
+                      <p class="text text-hover">
+                          <span class="text-arrow"><img src="/images/svgs/light-blue-right-arrow.svg" alt="Arrow"/></span>
+                          <span class="btn-text2">查看 TiDB Contributor 完整名单</span>
+                      </p>
+                    </a>
+                  </div>
+              </div>
             </div>
-        </div>
+          </div>
+
+          <div class="developer-group-members user-group-members">
+              <div class="member-header user">User Group 成员</div>
+              <div class="member-list">
+                  <div class="member-list">
+                      <div class="member-type user-type">Leader</div>
+                      <div class="flex-lists members user-divider">
+                        {{- range $idx, $i := .Site.Data.community_organization.user_members.leader -}}
+                          <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                            {{- if $i.githubID -}}
+                              <a href="{{ $i.link }}" target="_blank">
+                                  <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              </a>
+                              <a href="{{ $i.link}}" target="_blank" class="member-info">
+                                <p>{{ $i.name }}</p>
+                                <p>{{ $i.title }}</p>
+                                <div class="github-icon user-github-icon"><p>{{ $i.githubID }}</p></div>
+                              </a>
+                            {{- else -}}
+                              <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              <div class="member-info">
+                                  <p>{{ $i.name }}</p>
+                                  <p>{{ $i.title }}</p>
+                              </div>
+                            {{- end -}}
+                          </div>
+                        {{- end -}}
+                      </div>
+                      <div class="member-type user-type">Co-Leader</div>
+                      <div class="flex-lists members user-divider">
+                        {{- range $idx, $i := .Site.Data.community_organization.user_members.co_leader -}}
+                          <div class="member flex-lists {{if $i.githubID }}member-hover{{ end }}">
+                            {{- if $i.githubID -}}
+                              <a href="{{ $i.link }}" target="_blank">
+                                  <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              </a>
+                              <a href="{{ $i.link}}" target="_blank"target="_blank" class="member-info">
+                                <p>{{ $i.name }}</p>
+                                <p>{{ $i.title }}</p>
+                                <div class="github-icon user-github-icon"><p>{{ $i.githubID }}</p></div>
+                              </a>
+                            {{- else -}}
+                              <img class="lazy avatar" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                              <div class="member-info">
+                                  <p>{{ $i.name }}</p>
+                                  <p>{{ $i.title }}</p>
+                              </div>
+                            {{- end -}}
+                          </div>
+                        {{- end -}}
+                      </div>
+                      <div class="member-type user-type">Ambassador</div>
+                      <div class="ambassador-lists j-ambassador-pc flex-lists">
+                        {{- range .Site.Data.community_organization.user_members.ambassador_1 -}}
+                          <p>{{ . }}</p>
+                        {{- end -}}
+                        {{- range .Site.Data.community_organization.user_members.ambassador_2 -}}
+                          <p>{{ . }}</p>
+                        {{- end -}}
+                      </div>
+
+                      <div class="ambassador-lists j-ambassador-mobile">
+                          {{- range .Site.Data.community_organization.user_members.ambassador_1 -}}
+                            <p>{{ . }}</p>
+                          {{- end -}}
+                          <div class="more-contributor-list-question question">查看更多名单</div>
+                          <div class="answer">
+                            {{- range .Site.Data.community_organization.user_members.ambassador_2 -}}
+                              <p class="rest-list">{{ . }}</p>
+                            {{- end -}}
+                          </div>
+                        </div>
+                  </div>
+              </div>
+            </div>
+      </div>
     </div>
-    <div class="appreciation__section">
-        <div class="container">
-            <div class="section-title">致谢</div>
-            <div class="appreciation__content">
-                <div class="image">
-                    <img class="lazy" data-original="https://download.pingcap.com/images/appreciate.jpeg" src="/images/svgs/loader-spinner.svg">
-                </div>
-                <div class="content">当你的一个 PR 被合并之后，你就正式成为 TiDB Contributor 了。我们为每一个 contributor 都准备了纪念马克杯，感谢你们踏出了第一步！在 TiDB 星球里，你们的名字也将一直闪耀。</div>
-            </div>
-        </div>
-    </div>
-    <div class="contributor__section">
-        <div class="container">
-            <div class="goPlanet">
-                <a href="/tidb-planet/village/" target="_blank">
-                  <button>
-                    <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg"/></span>
-                    <span class="content">TiDB Contributor 完整名单</span>
-                  </button>
-                </a>
-            </div>
-            <div class="planet-banner">
-                <a href="/tidb-planet" target="_blank">
-                    <img class="lazy" data-original="https://download.pingcap.com/images/tidb-planet.jpeg" src="/images/svgs/loader-spinner.svg"/>
-                </a>
-            </div>
-        </div>
+
+    <div class="back-to-community-section">
+        <a href="/community-cn/">
+            <button class="back-to-community">
+              回到社区主页
+            </button>
+        </a>
     </div>
 </div>
 {{- end -}}
 
 {{- define "footJS" -}}
-    <script type="text/javascript">
-      function lines() {
-        if (window.matchMedia('(max-width: 360px)').matches) {
-          $('.architecture .skeleton').attr(
-            'src',
-            'https://download.pingcap.com/images/lines-mobilei5.svg'
-          )
-        } else if (window.matchMedia('(max-width: 700px)').matches) {
-          $('.architecture .skeleton').attr(
-            'src',
-            'https://download.pingcap.com/images/lines-mobilei7.svg'
-          )
-        } else {
-          $('.architecture .skeleton').attr(
-            'src',
-            'https://download.pingcap.com/images/lines-pc.svg'
-          )
-        }
-      }
-
-      $(document).ready(function() {
-        lines()
-        $(window).resize(lines)
-      })
-        
-    </script>
-    <script type="text/javascript" src="/js/devcon.js"></script>
+    <script type="text/javascript" src="/js/community.js"></script>
     <script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
     <script type="text/javascript">
         $(".lazy").lazyload({

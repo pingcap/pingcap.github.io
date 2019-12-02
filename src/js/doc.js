@@ -42,22 +42,19 @@ function processStickyTree() {
   })
 
   var pathname = window.location.pathname
-  var banned_path_arr = [
-    '/docs-cn/v3.0/reference/tools/data-migration/overview/',
-    '/docs-cn/v2.1/reference/tools/data-migration/overview/',
-    '/docs-cn/dev/reference/tools/data-migration/overview/',
-  ]
 
-  if ($('#list_page').length == 0 && !banned_path_arr.includes(pathname)) {
-    $('.sticky-sidebar').animate(
-      {
-        scrollTop:
-          $('li.leaf-child.active').offset().top -
-          $('.sticky-sidebar').offset().top -
-          200,
-      },
-      1000
-    )
+  if ($('#list_page').length == 0) {
+    if($('li.leaf-child.active').length > 0) {
+      $('.docs-nav-toc').animate(
+        {
+          scrollTop:
+            $('li.leaf-child.active').offset().top -
+            $('.sticky-sidebar').offset().top -
+            200,
+        },
+        1000
+      )
+    }
   }
 
   // Open the first item in docs/docs-cn/weekly/recruit list page
@@ -280,26 +277,28 @@ $(document).ready(function() {
   if ($('.doc').length > 0) {
     if ($('.copyable-code-block').length) {
       $('.copyable-code-block').each(function() {
-        var preTag = $(this).next('div.highlight')[0].childNodes[0]
-        var $preTag = $(preTag)
-        $preTag.css('position', 'relative')
-
-        var codeTag = $(this).next('div.highlight')[0].childNodes[0]
-          .childNodes[0]
-        var $codeTag = $(codeTag)
-
-        if ($(this).hasClass('shell-root')) {
-          $codeTag.addClass('shell-root-mark')
-          $codeTag.addClass('cmd-mark')
-        } else if ($(this).hasClass('shell-regular')) {
-          $codeTag.addClass('cmd-mark')
-          $codeTag.addClass('shell-regular-mark')
-        } else if ($(this).hasClass('sql')) {
-          $codeTag.addClass('sql-mark')
-          $codeTag.addClass('cmd-mark')
+        if($(this).next('div.highlight')[0]) {
+          var preTag = $(this).next('div.highlight')[0].childNodes[0]
+          var $preTag = $(preTag)
+          $preTag.css('position', 'relative')
+  
+          var codeTag = $(this).next('div.highlight')[0].childNodes[0]
+            .childNodes[0]
+          var $codeTag = $(codeTag)
+  
+          if ($(this).hasClass('shell-root')) {
+            $codeTag.addClass('shell-root-mark')
+            $codeTag.addClass('cmd-mark')
+          } else if ($(this).hasClass('shell-regular')) {
+            $codeTag.addClass('cmd-mark')
+            $codeTag.addClass('shell-regular-mark')
+          } else if ($(this).hasClass('sql')) {
+            $codeTag.addClass('sql-mark')
+            $codeTag.addClass('cmd-mark')
+          }
+  
+          addCopy($(this).next('div.highlight')[0])
         }
-
-        addCopy($(this).next('div.highlight')[0])
       })
     } else {
       var $code = document.querySelectorAll('.highlight')
@@ -344,6 +343,23 @@ $(document).ready(function() {
         }
       }
     })
+
+    // add code block to tree-nav
+    if($('.has-code').length > 0) {
+      $('.has-code').each(function() {
+        var re = /`.*?`/g
+        let innerText = $(this)[0].innerText
+        let matchedArr = $(this)[0].innerText.match(re)
+        matchedArr.forEach(i => {
+          let len = i.length
+          let trimedText = i.substr(1, len - 2)
+          innerText = innerText.replace(i, '<span class="sidebar-code">' + trimedText + '</span>')
+        })
+
+        $(this)[0].innerText = ''
+        $(this).append(innerText)
+      }) 
+    }
   }
 
   // hide dropdown Menu if user clicks other divs when the status of dropdown menu is open

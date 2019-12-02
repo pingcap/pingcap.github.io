@@ -1,17 +1,3 @@
-function calcBannerTitleImg() {
-  if (window.matchMedia('(max-width: 700px)').matches) {
-    $('.signable img').attr(
-      'src',
-      'https://download.pingcap.com/images/banners/techday2019-mobile.jpg'
-    )
-  } else {
-    $('.signable img').attr(
-      'src',
-      'https://download.pingcap.com/images/community/activities/techday2019-pc.png'
-    )
-  }
-}
-
 function createEventListConsole(eventTitles, eventLinks) {
   $('.cld-days').hide()
   $('.cld-labels').hide()
@@ -20,10 +6,30 @@ function createEventListConsole(eventTitles, eventLinks) {
     var event = document.createElement('div')
     event.className = 'event'
     event.innerHTML =
-      '<a href="' + eventLinks[i] + '">' + eventTitles[i] + '</a>'
+      '<a href="' + eventLinks[i] + '" target=_blank>' + eventTitles[i] + '</a>'
     $('.event-list').append(event)
   }
 }
+
+// function calcBtnOnHack19Banner() {
+//   var bannerW = $(window).width()
+//   var bannerH, ratioL, ratioT
+
+//   if (window.matchMedia('(max-width: 600px)').matches) {
+//       bannerH = bannerW / 1.6
+//       ratioL = 0.11
+//       ratioT = 0.47
+//   } else {
+//       bannerH = bannerW / 2.66
+//       ratioL = 0.22
+//       ratioT = 0.52
+//   }
+
+//   $('.banner-btn').css('left', ratioL * bannerW)
+//   $('.banner-btn').css('top', ratioT * bannerH)
+// }
+
+const _ = require('lodash')
 
 $(document).ready(function() {
   var events = []
@@ -54,9 +60,10 @@ $(document).ready(function() {
     calendar(element, events, settings)
   }
 
-  // setClndrHeight()
-  calcBannerTitleImg()
-  $(window).resize(calcBannerTitleImg)
+  const closeModal = () => {
+    $('.modal-overlay').fadeOut()
+    $('.modal-overlay, .modal').removeClass('active')
+  }
 
   // scrolls to specific section smoothly
   const hash = decodeURIComponent(location.hash)
@@ -176,7 +183,7 @@ $(document).ready(function() {
     $(this).addClass('schedule-btn-checked')
     $(this).addClass('mobile-btn-checked')
     $('.schedules').hide()
-    // $('input:checked').attr('checked', 'checked')
+    
     var btnID = $(this).attr('id')
     $('#' + btnID + '-schedule').show()
     switch (btnID) {
@@ -227,4 +234,103 @@ $(document).ready(function() {
       1000
     )
   })
+
+ // toggle answers when click question in hackathon2019
+  $('.question').click(function() {
+    $(this).parent().siblings().children('.question').removeClass('expand')
+    $(this).next().slideToggle();
+    $(this).toggleClass('expand')
+    $(this).parent().siblings().children('.answer').slideUp();
+  })
+
+  // toggle answers when click contributor subtitle in developer group
+
+  $('.j-open-schedule-modal').click(function() {
+    $('.j-schedule-overlay').fadeIn()
+    $('.j-schedule-overlay, .modal').addClass('active')
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-schedule-mobile.png')
+    }
+  })
+
+  $('.j-open-grading-modal').click(function() {
+    $('.j-grading-overlay').fadeIn()
+    $('.j-grading-overlay, .modal').addClass('active')
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      $('.schedule-on-modal img').attr('src', 'https://download.pingcap.com/images/hackathon2019/hackathon2019-grading-mobile.png')
+    }
+  })
+
+  if (window.matchMedia('(max-width: 414px)').matches) {
+    $('.j-thumbnailText-click').click(function() {
+      if ($('.thumbnail-text').hasClass('thumbnail-text-click')) {
+        $('.thumbnail-text').not(this).each(function() {
+          $(this).removeClass('thumbnail-text-click')
+        })
+      }
+      $(this).toggleClass('thumbnail-text-click')
+    })
+  } else {
+    $('.j-thumbnailText-click').hover(function() {
+      $(this).addClass('thumbnail-text-click')
+    }, function() {
+      $(this).removeClass('thumbnail-text-click')
+    })
+  }
+
+  $('.modal-overlay').on('click', function(e) {
+    if ($(this).hasClass('active')) {
+      if (_.isEqual(e.target, e.delegateTarget)) closeModal()
+    }
+  })
+
+  $('.close-modal')
+    .off('click')
+    .on('click', function(e) {
+      closeModal()
+      e.preventDefault()
+      e.stopPropagation()
+    })
+
+  $('.learning-material').click(function() {
+    $('html, body').animate(
+      {
+        scrollTop: $('.learning-section').offset().top - 100,
+      },
+      1000
+    )
+  })
+
+  if(window.matchMedia('(min-width: 1024px)').matches) {
+    $('.j-hover').hover(function(){
+      if($(this).hasClass('userSubBtn')) {
+        $(this).addClass('userSubBtn-hover')
+      } else {
+        $(this).addClass('branchBtn-hover')
+        if($(this).hasClass('j-devSubBtn-hover')) {
+          $(this).children().addClass('devSubBtn-hover')
+        }
+      }
+      $(this).siblings().addClass('org-tooltiptext-hover')
+    }, function(){
+      $('.orgBtn').removeClass('devSubBtn-hover')
+      $('.orgBtn').removeClass('userSubBtn-hover')
+      $(this).removeClass('branchBtn-hover')
+      $(this).siblings().removeClass('org-tooltiptext-hover')
+    })
+  } else {
+    $('.j-mobile-hover').click(function() {
+      if($(this).hasClass('comBtn')) {
+        $('.pmcBtn').removeClass('pmcBtn-click')
+        $(this).toggleClass('comBtn-click')
+      } else if($(this).hasClass('pmcBtn')) {
+        $(this).toggleClass('pmcBtn-click')
+        $('.comBtn').removeClass('comBtn-click')
+      }
+      if(!$(this).siblings().hasClass('org-tooltiptext-hover')) {
+        $('.org-tooltiptext').removeClass('org-tooltiptext-hover')
+      }
+      $(this).siblings().toggleClass('org-tooltiptext-hover')
+    })
+  }
 })
