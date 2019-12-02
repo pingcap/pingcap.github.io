@@ -7,6 +7,7 @@ avatar: training
 position: true
 aliases:
   - /recruit-cn/business/tidb-training-expert/
+  - /about-cn/recruit/business/tidb-training-expert/
 ---
 
 # PingCAP University 培训专家

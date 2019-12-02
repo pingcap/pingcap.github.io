@@ -8,6 +8,7 @@ position: true
 aliases:
   - /recruit-cn/sales/internet-architect/
   - /recruit-cn/business/internet-architect/
+  - /about-cn/recruit/business/internet-architect/
 ---
 
 # 资深互联网架构师

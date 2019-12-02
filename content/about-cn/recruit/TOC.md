@@ -17,13 +17,14 @@
   - [资深商务经理](business/senior-business-manager.md)
   - [资深行业销售总监](business/sales-director.md)
   - [资深售前技术总监](business/presales-director.md)
-  - [资深互联网架构师](business/internet-architect.md)
-  - [用户生态技术运营](business/user-ecosystem-technical-operations.md)
   - [首席项目经理](business/chief-project-manager.md)
-  - [PingCAP University 培训专家](business/tidb-training-expert.md)
-  - [资深/高级/中级 TiDB DBA](business/tidb-dba.md)
   - [资深/高级/中级 TiDB 交付 DBA](business/tidb-delivery-dba.md)
   - [资深渠道合作总监](business/channel-sales-director.md)
+- User Ecosystem
+  - [资深互联网架构师](user-ecosystem/internet-architect.md)
+  - [用户生态技术运营](user-ecosystem/user-ecosystem-technical-operations.md)
+  - [PingCAP University 培训专家](user-ecosystem/tidb-training-expert.md)
+  - [资深/高级/中级 TiDB DBA](user-ecosystem/tidb-dba.md)
 - Product & Design
   - [数据库产品经理](product-design/database-product-manager.md)
   - [网站产品经理](product-design/website-product-manager.md)
