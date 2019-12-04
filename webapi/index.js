@@ -19,6 +19,7 @@ server.use(bodyParser.json())
 const fs = require('fs')
 
 let contributorsData
+let tidbContributorData
 
 fs.stat(`${__dirname}/../data/contributors.json`, (err, stats) => {
   if (err) throw err
@@ -40,8 +41,34 @@ fs.stat(`${__dirname}/../data/contributors.json`, (err, stats) => {
   }
 })
 
+fs.stat(`${__dirname}/../data/tidb_contributors.json`, (err, stats) => {
+  if (err) throw err
+  else {
+    tidbContributorData = JSON.parse(
+      fs.readFileSync(`${__dirname}/../data/tidb_contributors.json`, 'utf8')
+    )
+
+    fs.watchFile(`${__dirname}/../data/tidb_contributors.json`, function(
+      curr,
+      prev
+    ) {
+      console.log('the current mtime is: ' + curr.mtime)
+      console.log('the previous mtime was: ' + prev.mtime)
+      tidbContributorData = JSON.parse(
+        fs.readFileSync(`${__dirname}/../data/tidb_contributors.json`, 'utf8')
+      )
+    })
+  }
+})
+
 server.get('/api/contributors', (req, res) => {
   if (contributorsData) res.json({ code: 200, data: contributorsData })
+  else res.json({ code: 500, data: null })
+})
+
+server.get('/api/tidb-contributors', (req, res) => {
+  console.log('getting tidb contributors...')
+  if (tidbContributorData) res.json({ code: 200, data: tidbContributorData })
   else res.json({ code: 500, data: null })
 })
 

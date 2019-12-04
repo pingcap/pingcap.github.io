@@ -43,7 +43,7 @@ function initialSearch(lang) {
   let urlParams = new URLSearchParams(window.location.search)
   let url = window.location.href
 
-  var re = new RegExp("(v\\d+\\.\\d+|dev|stable)")
+  var re = new RegExp('(v\\d+\\.\\d+|dev|stable)')
   var version
   var newHitArray = []
 
@@ -54,9 +54,12 @@ function initialSearch(lang) {
 
   if (urlParams.has('q')) {
     $('#search-input').val(urlParams.get('q'))
-    const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
+    const client = algoliasearch(
+      'BH4D9OD16A',
+      'ad5e63b76a221558bdc65ab1abbec7a2'
+    )
     // const client = algoliasearch('2N81NWJ6CR', '98d2e757b08fb5b7b0d30d89d0c855f2');
-    const index = client.initIndex('pingcap');
+    const index = client.initIndex('pingcap')
 
     index.search(
       {
@@ -65,12 +68,9 @@ function initialSearch(lang) {
         facetFilters: ['tags:' + lang, 'version:' + version],
       },
 
-      (err, {hits} = {}) => {
-        if(err) throw err;
+      (err, { hits } = {}) => {
+        if (err) throw err
         var categoryArr = []
-
-        console.log('client', client)
-        console.log('hit', hits)
 
         // selects the first result of each category and puts into the new hit array
         newHitArray = hits.filter(hit => {
@@ -79,16 +79,23 @@ function initialSearch(lang) {
             categoryArr.push(category)
 
             // unifies anchor style
-            var lastLvl = Object.values(hit.hierarchy).filter(value => value != null).pop()
-            hit['url'] = hit.url.replace(/\#.*$/g, '#' + lastLvl.replace(/\s+/g, '-').replace(/[^-\w\u4E00-\u9FFF]*/g, '').toLowerCase())
+            var lastLvl = Object.values(hit.hierarchy)
+              .filter(value => value != null)
+              .pop()
+            hit['url'] = hit.url.replace(
+              /\#.*$/g,
+              '#' +
+                lastLvl
+                  .replace(/\s+/g, '-')
+                  .replace(/[^-\w\u4E00-\u9FFF]*/g, '')
+                  .toLowerCase()
+            )
             return hit
           }
         })
 
-        console.log('new hits', newHitArray)
-
         // appends results to search-results container
-        if(newHitArray.length == 0) {
+        if (newHitArray.length == 0) {
           if (lang == 'cn') {
             $('#search-result-title').append('搜索结果')
             $('#search-results').append(
@@ -99,7 +106,7 @@ function initialSearch(lang) {
                 <li>如果您想搜索英文内容，请移步至<a href="https://pingcap.com/docs/">英文文档</a>进行搜索。</li>\
                 </ul>\
               </div>'
-            );
+            )
           } else if (lang == 'en') {
             $('#search-result-title').append('Search Results')
             $('#search-results').append(
@@ -110,29 +117,42 @@ function initialSearch(lang) {
                 <li>If you do want to get some English content, <a href="https://pingcap.com/">PingCAP home page</a> might be a better place for you to go.</li>\
                 </ul>\
               </div>'
-            );
+            )
           }
         } else {
           $('#search-result-title').append(
-            (lang == 'en' ? 'Search Results' : '搜索结果')
+            lang == 'en' ? 'Search Results' : '搜索结果'
           )
-          $('#search-results').append(newHitArray.map(hit => (
-            '<div class="search-category-result">\
-              <a href="' + hit.url + '" target="_blank"><h1 class="search-category-title">' + hit.hierarchy.lvl0 + '</h1></a>' +
-                '<div class="item-link">' + hit.url + '</div>\
+          $('#search-results').append(
+            newHitArray
+              .map(
+                hit =>
+                  '<div class="search-category-result">\
+              <a href="' +
+                  hit.url +
+                  '" target="_blank"><h1 class="search-category-title">' +
+                  hit.hierarchy.lvl0 +
+                  '</h1></a>' +
+                  '<div class="item-link">' +
+                  hit.url +
+                  '</div>\
                 <div class="search-result-item">' +
-                  (hit._highlightResult.content.value.length > 500 ? hit._snippetResult.content.value : hit._highlightResult.content.value) +
-                '</div>'+
-            '</div>'
-          )).join(''));
+                  (hit._highlightResult.content.value.length > 500
+                    ? hit._snippetResult.content.value
+                    : hit._highlightResult.content.value) +
+                  '</div>' +
+                  '</div>'
+              )
+              .join('')
+          )
         }
 
         // hides loader spinner when shows the search-results
-        if($('.search-category-result').length) {
+        if ($('.search-category-result').length) {
           $('.lazy').css('display', 'none')
         }
       }
-    );
+    )
   } else {
     if (lang == 'cn') {
       $('#search-result-title').append('搜索结果')
@@ -145,7 +165,7 @@ function initialSearch(lang) {
     )
 
     // hides loader spinner when shows the search-results
-    if($('.search-category-result').length) {
+    if ($('.search-category-result').length) {
       $('.lazy').css('display', 'none')
     }
   }
@@ -321,8 +341,45 @@ function tabCheckedInDocs() {
   })
 }
 
+// get TiDB contributors count
+function getTidbContributorCount() {
+  const url = 'https://pingcap.com/api/tidb-contributors'
+  var count
+  var countArr = []
+  $.ajax({
+    url,
+    crossDomain: true,
+    success: function(res) {
+      window.tidbContributors = res.data
+      if (res.data) {
+        count = res.data.length
+        const countLen = count.toString().length
+        let s, q
+        for (let i = countLen; i > 0; i--) {
+          s = parseInt(count / Math.pow(10, i - 1))
+          count = count % Math.pow(10, i - 1)
+          countArr.push(s)
+        }
+
+        $('#tidb-contributor-count').append(
+          countArr.map(
+            c =>
+              '<div class="numb">\
+                <p>' +
+              c +
+              '</p>\
+              </div>'
+          )
+        )
+      }
+    },
+  })
+}
+
 $(document).ready(function() {
   processHash()
+
+  getTidbContributorCount()
 
   // Handle hash change
   $(window).on('hashchange', processHash)

@@ -37,6 +37,10 @@ const repos = [
   'tidb-binlog'
 ]
 
+const tidbRepo = [
+  'tidb'
+]
+
 const owner = 'pingcap'
 const per_page = 100
 
@@ -83,6 +87,14 @@ async function main() {
   // const result = await octokit.misc.getRateLimit({})
   // console.log(result)
   let contributors = {}
+  let tidb_contributors = {}
+
+
+  for(let r of tidbRepo) {
+    const tidbContributors = await getRepoContributors(r)
+    const tidb_created_at = await genRepoCreatedTime(r)
+    await genTiDBJSON(tidbContributors, tidb_created_at)
+  }
 
   for(let r of repos) {
     const specRepoContributors = await getRepoContributors(r)
@@ -91,10 +103,13 @@ async function main() {
   }
 
   const sortedList = _.sortBy(_.toArray(contributors), c => c.contributions)
-  console.log('number of all contributors', sortedList.length)
+  const tidbSortedList = _.sortBy(_.toArray(tidb_contributors), c => c.contributions)
+  // console.log('number of all contributors', sortedList.length)
+  // console.log('number of all contributors', tidbSortedList.length)
 
   // write to file
-  fs.writeFileSync('data/contributors.json', JSON.stringify(_.reverse(sortedList)), 'utf8')
+  fs.writeFileSync(`${__dirname}/../data/tidb_contributors.json`, JSON.stringify(_.reverse(tidbSortedList)), 'utf8')
+  fs.writeFileSync(`${__dirname}/../data/contributors.json`, JSON.stringify(_.reverse(sortedList)), 'utf8')
 
   // generate contributors.json file
   async function genJSON(specRepoContributors, date) {
@@ -110,6 +125,24 @@ async function main() {
         }
       } else {
         contributors[login].contributions += contributions
+      }
+    })
+  }
+
+  // generate tidb_contributors.json file
+  async function genTiDBJSON(tidbContributors, date) {
+    tidbContributors.forEach(c => {
+      const { login, avatar_url, contributions } = c
+
+      if(!contributors[login]) {
+        tidb_contributors[login] = {
+          login,
+          avatar_url,
+          contributions,
+          date
+        }
+      } else {
+        tidb_contributors[login].contributions += contributions
       }
     })
   }

@@ -20,7 +20,13 @@
             <div class="detail">
                 <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}">
                     <li>
-                        <a class="sig" href="{{ $j2.github_link }}"><span class="title {{ if $type }}{{ $type }}-title{{ end }}">{{ $j2.title }}: </span></a>
+                        {{ if $j2.github_link }}
+                            <a class="sig" href="{{ $j2.github_link }}" target="_blank">
+                                <span class="title {{ if $type }}{{ $type }}-title{{ end }}">{{ $j2.title }}: </span>
+                            </a>
+                        {{ else }}
+                            <span class="title {{ if $type }}{{ $type }}-title{{ end }}">{{ $j2.title }}: </span>
+                        {{ end }}
                         <span class="item-detail">{{ $j2.desc }}</span>
                     </li>
                     <button class="review-arrow-button">
