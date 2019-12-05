@@ -1,5 +1,6 @@
 {{ $i := .item}}
 {{ $type := .type}}
+{{ $en := .en }}
 
 <div class="role-card {{ if eq $type "user"}}user-role-card{{ end }}" id="{{ $i.id }}">
     <div class="header {{ if $type }}{{ $type }}-color{{ end }}">{{ $i.role}}</div>
@@ -12,6 +13,13 @@
         <div class="detail">
             <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}">
                 <li style="color: #3e3e3e;"><a class="sig" href="https://github.com/pingcap/community/tree/master/working-groups" target="_blank">查看所有 WG</a></li>
+            </ul>
+        </div>
+    {{ end }}
+    {{ if .desc_extra_en }}
+        <div class="detail">
+            <ul class="dot-blue {{ if $type }}{{ $type }}-dot-orange{{ end }}" style="line-height: 1.7;">
+                <li style="color: #3e3e3e;"><a class="sig" href="https://github.com/pingcap/community/tree/master/working-groups" target="_blank">View All WGs</a></li>
             </ul>
         </div>
     {{ end }}
@@ -31,7 +39,7 @@
                     </li>
                     <button class="review-arrow-button">
                         <a href="{{ $j2.slack_link }}" target="_blank">
-                            <span>立即加入</span>
+                            <span>{{ if $en }}Join Now{{ else }}立即加入{{ end }}</span>
                         </a>
                     </button>
                 </ul>

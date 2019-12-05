@@ -5,7 +5,7 @@
 
 {{- define "headTpl" -}}
     {{ $.Scratch.Set "nav_active" "community" }}
-    {{ $.Scratch.Set "data_i18_link" "/community/organization" }}
+    {{ $.Scratch.Set "data_i18_link" "/community-cn/developer-group/" }}
     {{- partial "head/preload-css" (dict "href" "/css/community/developer-group.css") -}}
 {{- end -}}
 
@@ -17,7 +17,19 @@
         </div>
     </div>
     <div class="container developer-group-container">
-        <p class="desc-1" style="margin-bottom: 3rem;">As the cornerstone of community development, the TiDB Developer Group consists of these roles: Maintainer, Committer, Reviewer, Active Contributor, and Contributor. Each role takes corresponding responsibilities in the community. Collectively they play an important role in the robust development of TiDB.</p>
+        <p class="desc-1">
+            As the cornerstone of community development, the TiDB Developer Group consists of these roles: Maintainer, Committer, Reviewer, Active Contributor, and Contributor. Each role takes corresponding responsibilities in the community. Collectively they play an important role in the robust development of TiDB.
+        </p>
+        <p class="dev-desc">
+            To allow more people to join the community, the “Special Interest Group” (SIG) and “Working Group” (WG) are now introduced into the community structure.
+        </p>
+        <div class="sig-pic">
+            <img class="lazy sig-pic-pc" data-original="https://download.pingcap.com/images/community/organization/sig-pc.png" src="/images/svgs/loader-spinner.svg">
+            <img class="lazy sig-pic-mobile" data-original="https://download.pingcap.com/images/community/organization/sig-mobile.png" src="/images/svgs/loader-spinner.svg">
+         </div>
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.sig_en "type" "sig" "en" "true") -}}
+        {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.wg_en "type" "sig" "desc_extra_en" "true") -}}
+        <h1 class="section-title">社区角色</h1>
         {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.maintainer_en "type" "dev") -}}
         {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.committer_en "type" "dev") -}}
         {{- partial "community-cn/developer-card.html" (dict "item" .Site.Data.community_organization.reviewer_en "type" "dev") -}}
@@ -25,7 +37,11 @@
 
         <div class="role-card" id="contributor">
             <div class="header">Contributor</div>
-            <div class="desc">Community contributors with at least one PR merged to any repository under <a href="https://github.com/pingcap">PingCAP.</a></div>
+            <div class="desc-row">
+                <div class="desc">
+                    Community contributors with at least one PR merged to any repository under <a href="https://github.com/pingcap">PingCAP.</a>
+                </div>
+            </div>
             <div class="detail">
                 <div class="title question">Contribute your first PR</div>
                 <div class="pr-content answer">
