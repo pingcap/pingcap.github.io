@@ -5,10 +5,10 @@
 {{ $content_file_path := .content_file_path }}
 
 {{ $doesnot_exist_ver := slice ""}}
-
+ 
 {{- range $idx, $i := $total_versions -}}
 
-    {{ $file_path := printf "%s%s" "./content/" (replaceRE "(v\\d+\\.\\d+|dev|stable)" $i $content_file_path)}}
+    {{ $file_path := printf "%s%s" "./content/" (replaceRE "(/v\\d+\\.\\d+|\\/dev|\\/stable)" (printf "%s%s" "/" $i) $content_file_path)}}
     
     {{- if not (fileExists $file_path) -}}
         {{ $doesnot_exist_ver = $doesnot_exist_ver | append $i }}
@@ -19,18 +19,22 @@
     <button type="button" id="dropdownMenuButton">
         {{- if eq $current_version "stable" -}}
             {{ $stable_version }}
+        {{- else if eq $current_version "v3.1" -}}
+            v3.1-beta
         {{- else -}}
             {{ $current_version }}
         {{- end -}}
     </button>
     <div class="dropdown-menu visibility-hide" id="dropdown-menu-items">
         {{- range $idx, $i := $total_versions -}}
-            {{ $exist_url := replaceRE "(v\\d+\\.\\d+|dev|stable)" $i $permalink}}
+            {{ $exist_url := replaceRE "(/v\\d+\\.\\d+|\\/dev|\\/stable)" (printf "%s%s" "/" $i) $permalink}}
             <a class="dropdown-item {{ if in $doesnot_exist_ver $i }}unclickable-btn{{ end }}"
                 href="
                 {{ if in $doesnot_exist_ver $i }}#{{ else }}{{ $exist_url }}{{ end }}">
                 {{- if eq $i "stable" -}}
                     {{ $stable_version }} (stable)
+                {{- else if eq $i "v3.1" -}}
+                    v3.1-beta
                 {{- else -}}
                     {{ $i }}
                 {{- end -}}
