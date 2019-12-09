@@ -83,7 +83,7 @@ jobs:
             - opam-cache-
 
       - run: export TERM=xterm && opam init -y --disable-sandboxing -c 4.07.1 && opam switch -y 4.07.1
-      - run: opam install -y dune core stdio
+      - run: opam install -y dune core
 
       - save_cache:
           key: opam-cache-{{ checksum "qiniu-aws-upload-utils/dune-project" }}
@@ -103,10 +103,10 @@ jobs:
       - run: sudo cp ./qiniu-aws-upload-utils/_build/default/bin/qiniu_aws_upload_utils.exe /usr/local/bin/qiniu_aws_upload_utils
 
       # Upload
-      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} static
-      - run: cd content/blog && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/blog
-      - run: cd content/blog-cn && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/blog-cn
-      - run: cd content/docs && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/docs
-      - run: cd content/docs-cn && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/docs-cn
-      - run: cd content/meetup && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/meetup
-      - run: cd content/weekly && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/weekly
+      - run: qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} static -cdn-refresh https://download.pingcap.com/
+      - run: cd content/blog && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/blog -cdn-refresh https://download.pingcap.com/
+      - run: cd content/blog-cn && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/blog-cn -cdn-refresh https://download.pingcap.com/
+      - run: cd content/docs && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/docs -cdn-refresh https://download.pingcap.com/
+      - run: cd content/docs-cn && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/docs-cn -cdn-refresh https://download.pingcap.com/
+      - run: cd content/meetup && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/meetup -cdn-refresh https://download.pingcap.com/
+      - run: cd content/weekly && qiniu_aws_upload_utils verify-and-sync -qiniu true -qiniu-bucket ${QINIU_BUCKET_NAME} -aws true -aws-bucket ${AWS_BUCKET_NAME} media -replace-first-path-to images/weekly -cdn-refresh https://download.pingcap.com/
