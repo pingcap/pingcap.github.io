@@ -1,0 +1,135 @@
+{{- define "headTpl" -}}
+{{- partial "head/preload-css" (dict "href" "/css/user-words.css") -}}
+{{$.Scratch.Set "nav_active" "cases"}}
+{{$.Scratch.Set "data_i18_link" "/" }}
+{{$.Scratch.Set "data_i18_cn" true }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
+{{- end -}}
+
+{{- define "main" -}}
+<div class="user-words">
+    <div class="banner">
+
+    </div>
+    <div class="nested-carousel">
+        <div class="swiper-container outer-carousel">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide section-bg-1">
+                    <div class="swiper-container inner-carousel">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide card">
+                                
+                            </div>
+                            <div class="swiper-slide card">
+                                
+                            </div>
+                            <div class="swiper-slide card">
+                                
+                            </div>
+                            <div class="swiper-slide card">
+                                
+                            </div>
+                            <div class="swiper-slide card">
+                                
+                            </div>
+                            <div class="swiper-slide card">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination inner-pagination"></div>
+                </div>
+                <div class="swiper-slide section-bg-2">
+                </div>
+                <div class="swiper-slide section-bg-3">
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination outer-pagination"></div>
+    </div>
+    <div class="banner">
+        
+    </div>
+</div>
+{{- end -}}
+
+{{- define "footJS" -}}
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
+<script>
+    // var wholeCarousel = new Swiper('.whole-carousel', {
+    //     direction: 'vertical',
+    //     mousewheel: true,
+    //     height: window.innerHeight,
+    //     slidesPerView: 1,
+    // })
+
+    var outerCarousel = new Swiper('.outer-carousel', {
+        direction: 'vertical',
+        mousewheel: true,
+        height: window.innerHeight,
+        slidesPerView: 1,
+        pagination: {
+            el: '.outer-pagination',
+            clickable: true,
+        },
+    })
+
+    var innerCarousel = new Swiper('.inner-carousel', {
+        direction: 'horizontal',
+        slidesPerView: 3,
+        spaceBetween: 40,
+        slidesPerGroup: 3,
+        pagination: {
+            el: '.inner-pagination',
+            clickable: true,
+        },
+    })
+
+    $('.card').hover(function() {
+        outerCarousel.mousewheel.disable()
+    }, function() {
+        outerCarousel.mousewheel.enable()
+    })
+
+    // const el = document.querySelector('.outer-carousel');
+    // console.log('el', el)
+
+    // function mouseWheelEvent() {
+    //     outerCarousel.mousewheel.enable()
+    // }
+
+    // $('.section-bg-3').hover(function() {
+    //     outerCarousel.mousewheel.disable()
+    //     el.addEventListener('wheel', function(e) {
+    //         if(e.deltaY > 0) {
+    //             console.log('down')
+    //         } else {
+    //             console.log('up')
+    //             outerCarousel.mousewheel.enable()
+    //         }
+    //     })
+    // }, function() {
+    //     el.removeEventListener("wheel", mouseWheelEvent)
+    // })
+
+    // $('.section-bg-3').hover(function() {
+    //     outerCarousel.mousewheel.disable()
+    // },function() {
+    //     outerCarousel.mousewheel.enable()
+    // })
+
+    // $(window).on('wheel', function(e) {
+    //     var delta = e.originalEvent.deltaY
+
+    //     if(delta > 1) {
+    //         console.log('up')
+    //     } else {
+    //         console.log('down')
+    //     }
+
+    //     return false
+    // })
+    // alert(outerCarousel.mousewheel.enabled)
+</script>
+{{- end -}}
