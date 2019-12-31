@@ -44,7 +44,7 @@
                             <span>{{ $i.title }}</span>
                         </div>
                         <div class="avatar">
-                            <img class="lazy avatar" data-original="{{ $i.avatar }}"
+                            <img class="lazy" data-original="{{ $i.avatar }}"
                                 src="/images/svgs/loader-spinner.svg" alt="avatar" />
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                             <span>{{ $i.title }}</span>
                         </div>
                         <div class="avatar">
-                            <img class="lazy avatar" data-original="{{ $i.avatar }}"
+                            <img class="lazy" data-original="{{ $i.avatar }}"
                                 src="/images/svgs/loader-spinner.svg" alt="avatar" />
                         </div>
                     </div>
@@ -113,11 +113,11 @@
                         <span>{{ $i.company }}</span>
                         <span>{{ $i.title }}</span>
                     </div>
-                    <div class="avatar">
-                        <img class="lazy avatar" data-original="{{ $i.avatar }}"
-                            src="/images/svgs/loader-spinner.svg" alt="avatar" />
-                    </div>
                 </div>
+
+                <div class="avatar">
+                    <img class="lazy" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
+                  </div>
             </div>
             {{ end }}
           </div>
@@ -182,9 +182,15 @@
 {{- end -}}
 
 {{- define "footJS" -}}
+<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+  $('.lazy').lazyload({
+    effect: 'fadeIn',
+    threshold: 200
+  })
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
-
-<script>
+<script type="text/javascript">
     var swiperOne = new Swiper('.swiper-one', {
         direction: 'horizontal',
         autoplay: {
