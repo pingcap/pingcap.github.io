@@ -1,135 +1,331 @@
 {{- define "headTpl" -}}
 {{- partial "head/preload-css" (dict "href" "/css/user-words.css") -}}
-{{$.Scratch.Set "nav_active" "cases"}}
-{{$.Scratch.Set "data_i18_link" "/" }}
-{{$.Scratch.Set "data_i18_cn" true }}
+{{ $.Scratch.Set "nav_active" "cases" }}
+{{ $.Scratch.Set "data_i18_link" "/" }}
+{{ $.Scratch.Set "data_i18_cn" true }}
+{{ $.Scratch.Set "no_footer" true }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
 {{- end -}}
 
 {{- define "main" -}}
-<div class="user-words">
-    <div class="banner">
+<div class="uw-container">
+    <div class="panel">
+        <section class="hero">
+            <div class="title">TiDB 非官方使用指南</div>
+            <div class="slogan">
+                <p>我们邀请了 47 家用户代表</p>
+                <p>汇成了这份“非官方使用指南”</p>
+                <p>这些实操中闯过的关和踩过的坑</p>
+                <p>创造了 TiDB 的更多可能</p></br>
 
+                <p>一切伟大，都源于开始</p>
+                <p>2020 到来了，感谢大家</p>
+            </div>
+        </section>
     </div>
-    <div class="nested-carousel">
-        <div class="swiper-container outer-carousel">
+    <div class="panel" id="one">
+      <section class="s1">
+        <div class="section-title">
+            他们说 TiDB 解决了很多问题，希望这里也有你的燃眉之急
+        </div>
+        <div class="swiper-container swiper-one">
             <div class="swiper-wrapper">
-                <div class="swiper-slide section-bg-1">
-                    <div class="swiper-container inner-carousel">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide card">
-                                
-                            </div>
-                            <div class="swiper-slide card">
-                                
-                            </div>
-                            <div class="swiper-slide card">
-                                
-                            </div>
-                            <div class="swiper-slide card">
-                                
-                            </div>
-                            <div class="swiper-slide card">
-                                
-                            </div>
-                            <div class="swiper-slide card">
-                                
-                            </div>
+                {{ range $i := .Site.Data.user_words.section1 }}
+                <div class="swiper-slide">
+                    <div class="card">
+                        <div class="words">
+                            {{ $i.words }}
+                        </div>
+                        <div class="name">
+                            {{ $i.name }}
+                        </div>
+                        <div class="misc">
+                            <span>{{ $i.company }}</span>
+                            <span>{{ $i.title }}</span>
+                        </div>
+                        <div class="avatar">
+                            <img class="lazy avatar" data-original="{{ $i.avatar }}"
+                                src="/images/svgs/loader-spinner.svg" alt="avatar" />
                         </div>
                     </div>
-                    <div class="swiper-pagination inner-pagination"></div>
                 </div>
-                <div class="swiper-slide section-bg-2">
+                {{ end }}
+            </div>
+          </div>
+          <div class="swiper-pagination pagination-one"></div>
+
+          <div class="swiper-button-prev button-prev-one"></div>
+          <div class="swiper-button-next button-next-one"></div>
+      </section>
+    </div>
+    <div class="panel" id="two">
+      <section class="s2">
+        <div class="section-title">
+            这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
+        </div>
+        <div class="swiper-container swiper-two">
+            <div class="swiper-wrapper">
+                {{ range $i := .Site.Data.user_words.section2 }}
+                <div class="swiper-slide">
+                    <div class="card">
+                        <div class="words">
+                            {{ $i.words }}
+                        </div>
+                        <div class="name">
+                            {{ $i.name }}
+                        </div>
+                        <div class="misc">
+                            <span>{{ $i.company }}</span>
+                            <span>{{ $i.title }}</span>
+                        </div>
+                        <div class="avatar">
+                            <img class="lazy avatar" data-original="{{ $i.avatar }}"
+                                src="/images/svgs/loader-spinner.svg" alt="avatar" />
+                        </div>
+                    </div>
                 </div>
-                <div class="swiper-slide section-bg-3">
+                {{ end }}
+            </div>
+          </div>
+
+        <div class="swiper-pagination pagination-two"></div>
+        <div class="swiper-button-prev button-prev-two"></div>
+        <div class="swiper-button-next button-next-two"></div>
+      </section>
+    </div>
+    <div class="panel" id="three">
+      <section class="s3">
+        <div class="section-title">
+            这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
+        </div>
+        <div class="swiper-container swiper-three">
+          <div class="swiper-wrapper">
+            {{ range $i := .Site.Data.user_words.section3 }}
+            <div class="swiper-slide">
+                <div class="card">
+                    <div class="words">
+                        {{ $i.words }}
+                    </div>
+                    <div class="name">
+                        {{ $i.name }}
+                    </div>
+                    <div class="misc">
+                        <span>{{ $i.company }}</span>
+                        <span>{{ $i.title }}</span>
+                    </div>
+                    <div class="avatar">
+                        <img class="lazy avatar" data-original="{{ $i.avatar }}"
+                            src="/images/svgs/loader-spinner.svg" alt="avatar" />
+                    </div>
                 </div>
             </div>
+            {{ end }}
+          </div>
         </div>
-        <div class="swiper-pagination outer-pagination"></div>
+        <div class="swiper-pagination pagination-three"></div>
+        <div class="swiper-button-prev button-prev-three"></div>
+        <div class="swiper-button-next button-next-three"></div>
+      </section>
     </div>
-    <div class="banner">
+
+    <div id="slider-control">
+      <a href="#one" class="active">
+        <div class="dot"></div>
+      </a>
+      <a href="#two">
+        <div class="dot"></div>
+      </a>
+      <a href="#three">
+        <div class="dot"></div>
+      </a>
+    </div>
+    <div class="panel last-panel">
+        <div class="user-case">
+            <div class="datas">
+                <div class="data">
+                    <p class="num num1"><span>10000</span><span>台</span></p>
+                    <p class="desc">集群规模</p>
+                </div>
+                <div class="data">
+                    <p class="num num2"><span>10000</span><span>个</span></p>
+                    <p class="desc">物理节点</p>
+                </div>
+                <div class="data">
+                    <p class="num num3"><span>20000</span><span>T</span></p>
+                    <p class="desc">数据量</p>
+                </div>
+                <div class="data">
+                    <p class="num num4"><span>1200</span><span>亿</span></p>
+                    <p class="desc">单表的数据量规模</p>
+                </div>
+            </div>
+            <div class="intro">
+                <p>2019 年</p>
+                <p>TiDB 被应用于互联网、游戏、银行、保险、证券、航空、电信等多个领域</p>
+                <p>经受住了 500 余家企业用户的上线环境打磨</p>
+                <p>护航 XX+ 电商及金融机构应对 6.18、11.11 大促流量高峰</p></br>
         
+                <p>TiDB 过硬的产品实力背后，有社区开发者持续贡献的支撑</p>
+                <p>也有一线用户在实操中对其的不断打磨</p>
+                <p>感谢所有热爱、信任 TiDB 的伙伴们</p>
+            </div>
+        </div>
+        <div class="logos">
+            <img class="lazy avatar" data-original="/images/user-words/logos-pc.jpg"
+                src="/images/svgs/loader-spinner.svg" alt="avatar" />
+        </div>
+        {{- partial "layout/footer-cn" . -}}
     </div>
 </div>
+
+
 {{- end -}}
 
 {{- define "footJS" -}}
-<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
+
 <script>
-    // var wholeCarousel = new Swiper('.whole-carousel', {
-    //     direction: 'vertical',
-    //     mousewheel: true,
-    //     height: window.innerHeight,
-    //     slidesPerView: 1,
-    // })
-
-    var outerCarousel = new Swiper('.outer-carousel', {
-        direction: 'vertical',
-        mousewheel: true,
-        height: window.innerHeight,
-        slidesPerView: 1,
-        pagination: {
-            el: '.outer-pagination',
-            clickable: true,
-        },
-    })
-
-    var innerCarousel = new Swiper('.inner-carousel', {
+    var swiperOne = new Swiper('.swiper-one', {
         direction: 'horizontal',
-        slidesPerView: 3,
-        spaceBetween: 40,
-        slidesPerGroup: 3,
+        autoplay: {
+            delay: 10000,
+            disableOnInteraction: false,
+        },
         pagination: {
-            el: '.inner-pagination',
+            el: '.pagination-one',
             clickable: true,
+        },
+        slidesPerView: 3,
+        slidesPerGroup: 3,
+        spaceBetween: 20,
+        loop: true,
+        loopAdditionalSlides: 3,
+        navigation: {
+            nextEl: '.button-next-one',
+            prevEl: '.button-prev-one',
         },
     })
 
-    $('.card').hover(function() {
-        outerCarousel.mousewheel.disable()
-    }, function() {
-        outerCarousel.mousewheel.enable()
+    var swiperTwo = new Swiper('.swiper-two', {
+        direction: 'horizontal',
+        autoplay: {
+            delay: 10000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.pagination-two',
+            clickable: true,
+        },
+        slidesPerView: 3,
+        slidesPerGroup: 3,
+        spaceBetween: 20,
+        loop: true,
+        loopAdditionalSlides: 3,
+        navigation: {
+            nextEl: '.button-next-two',
+            prevEl: '.button-prev-two',
+        },
     })
 
-    // const el = document.querySelector('.outer-carousel');
-    // console.log('el', el)
+    var swiperThree = new Swiper('.swiper-three', {
+        direction: 'horizontal',
+        autoplay: {
+            delay: 10000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.pagination-three',
+            clickable: true,
+        },
+        slidesPerView: 3,
+        slidesPerGroup: 3,
+        spaceBetween: 20,
+        loop: true,
+        loopAdditionalSlides: 3,
+        navigation: {
+            nextEl: '.button-next-three',
+            prevEl: '.button-prev-three',
+        },
+    })
+    
+    var innerHeight = window.innerHeight
+    // console.log('innerHeight', innerHeight)
 
-    // function mouseWheelEvent() {
-    //     outerCarousel.mousewheel.enable()
-    // }
+    var elA = document.querySelector('.panel .s1')
+    var elB = document.querySelector('.panel .s2')
+    var container = document.querySelector('.uw-container')
 
-    // $('.section-bg-3').hover(function() {
-    //     outerCarousel.mousewheel.disable()
-    //     el.addEventListener('wheel', function(e) {
-    //         if(e.deltaY > 0) {
-    //             console.log('down')
-    //         } else {
-    //             console.log('up')
-    //             outerCarousel.mousewheel.enable()
-    //         }
-    //     })
-    // }, function() {
-    //     el.removeEventListener("wheel", mouseWheelEvent)
-    // })
+    container.addEventListener('scroll', function() {
+        var scrollTop = container.scrollTop
 
-    // $('.section-bg-3').hover(function() {
-    //     outerCarousel.mousewheel.disable()
-    // },function() {
-    //     outerCarousel.mousewheel.enable()
-    // })
+        updateTranslate(scrollTop)
+        updateSliderControl(scrollTop)
+    })
 
-    // $(window).on('wheel', function(e) {
-    //     var delta = e.originalEvent.deltaY
+    function updateTranslate(scrollTop) {
+        var delta1 = scrollTop - innerHeight
+        if (delta1 > innerHeight) {
+            delta1 = innerHeight
+        } else if (delta1 < 0) {
+            delta1 = 0
+        }
+        elA.style.transform = `translateY(${delta1 * 0.6}px)`
 
-    //     if(delta > 1) {
-    //         console.log('up')
-    //     } else {
-    //         console.log('down')
-    //     }
+        var delta2 = scrollTop - 2 * innerHeight
+        if (delta2 > innerHeight) {
+            delta2 = innerHeight
+        } else if (delta2 < 0) {
+            delta2 = 0
+        }
+        elB.style.transform = `translateY(${delta2 * 0.6}px)`
+    }
 
-    //     return false
-    // })
-    // alert(outerCarousel.mousewheel.enabled)
+    function updateSliderControl(scrollTop) {
+        var slidersContainer = document.querySelector('#slider-control')
+        var links = document.querySelectorAll('#slider-control a')
+
+        if (scrollTop < innerHeight || scrollTop > 3 * innerHeight) {
+
+            console.log('hidden', scrollTop)
+            slidersContainer.style.visibility = 'hidden'
+        } else {
+
+            console.log('visible', scrollTop)
+            slidersContainer.style.visibility = 'visible'
+        }
+
+        for (var i = 0; i < links.length; i++) {
+            var link = links[i]
+
+            var section = document.querySelector(link.getAttribute('href'))
+            var sectionTop = section.offsetTop
+            var sectionBottom = sectionTop + innerHeight
+
+            if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
+            link.className = 'active'
+            } else {
+            link.className = ''
+            }
+        }
+    }
+    updateSliderControl(0)
+
+    function addSmoothScrolling() {
+        var links = document.querySelectorAll('#slider-control a')
+
+        for (let i = 0; i < links.length; i++) {
+            let link = links[i]
+
+            link.addEventListener('click', function(event) {
+            event.preventDefault()
+
+            container.scrollTo({
+                top: innerHeight * (i + 1),
+                behavior: 'smooth'
+            })
+            })
+        }
+    }
+    addSmoothScrolling()
 </script>
 {{- end -}}
