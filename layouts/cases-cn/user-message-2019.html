@@ -8,6 +8,13 @@
 {{- end -}}
 
 {{- define "main" -}}
+<!-- <div class="words-modal">
+    {{ range $i := .Site.Data.user_words.section1 }}
+    <div class="word-modal">
+        {{ $i.words }}
+    </div>
+    {{ end }}
+</div> -->
 <div class="uw-container">
     <div class="panel">
         <section class="hero">
@@ -33,9 +40,11 @@
                 {{ range $i := .Site.Data.user_words.section1 }}
                 <div class="swiper-slide">
                     <div class="card">
+                        <div class="quote quote1"></div>
                         <div class="words">
                             {{ $i.words }}
                         </div>
+                        <div class="read-more s1-color s1-">Read More</div>
                         <div class="name">
                             {{ $i.name }}
                         </div>
@@ -44,8 +53,7 @@
                             <span>{{ $i.title }}</span>
                         </div>
                         <div class="avatar">
-                            <img class="lazy" data-original="{{ $i.avatar }}"
-                                src="/images/svgs/loader-spinner.svg" alt="avatar" />
+                            <img src="{{ $i.avatar }}" alt="avatar" />
                         </div>
                     </div>
                 </div>
@@ -56,6 +64,7 @@
 
           <div class="swiper-button-prev button-prev-one"></div>
           <div class="swiper-button-next button-next-one"></div>
+          <div class="down-arrow"></div>
       </section>
     </div>
     <div class="panel" id="two">
@@ -68,9 +77,11 @@
                 {{ range $i := .Site.Data.user_words.section2 }}
                 <div class="swiper-slide">
                     <div class="card">
+                        <div class="quote quote2"></div>
                         <div class="words">
                             {{ $i.words }}
                         </div>
+                        <div class="read-more s2-color s2-">Read More</div>
                         <div class="name">
                             {{ $i.name }}
                         </div>
@@ -79,8 +90,7 @@
                             <span>{{ $i.title }}</span>
                         </div>
                         <div class="avatar">
-                            <img class="lazy" data-original="{{ $i.avatar }}"
-                                src="/images/svgs/loader-spinner.svg" alt="avatar" />
+                            <img src="{{ $i.avatar }}" alt="avatar" />
                         </div>
                     </div>
                 </div>
@@ -91,6 +101,7 @@
         <div class="swiper-pagination pagination-two"></div>
         <div class="swiper-button-prev button-prev-two"></div>
         <div class="swiper-button-next button-next-two"></div>
+        <div class="down-arrow"></div>
       </section>
     </div>
     <div class="panel" id="three">
@@ -103,9 +114,11 @@
             {{ range $i := .Site.Data.user_words.section3 }}
             <div class="swiper-slide">
                 <div class="card">
+                    <div class="quote quote3"></div>
                     <div class="words">
                         {{ $i.words }}
                     </div>
+                    <div class="read-more s3-color s3-">Read More</div>
                     <div class="name">
                         {{ $i.name }}
                     </div>
@@ -113,11 +126,10 @@
                         <span>{{ $i.company }}</span>
                         <span>{{ $i.title }}</span>
                     </div>
+                    <div class="avatar">
+                        <img src="{{ $i.avatar }}" alt="avatar" />
+                    </div>
                 </div>
-
-                <div class="avatar">
-                    <img class="lazy" data-original="{{ $i.avatar }}" src="/images/svgs/loader-spinner.svg" alt="avatar"/>
-                  </div>
             </div>
             {{ end }}
           </div>
@@ -127,7 +139,6 @@
         <div class="swiper-button-next button-next-three"></div>
       </section>
     </div>
-
     <div id="slider-control">
       <a href="#one" class="active">
         <div class="dot"></div>
@@ -171,38 +182,39 @@
             </div>
         </div>
         <div class="logos">
-            <img class="lazy avatar" data-original="/images/user-words/logos-pc.jpg"
-                src="/images/svgs/loader-spinner.svg" alt="avatar" />
         </div>
+        {{- partial "archives/readMoreBtn.html" (dict "url" "/cases-cn/" "btnText" "更多案例文章") }}
         {{- partial "layout/footer-cn" . -}}
     </div>
 </div>
-
-
 {{- end -}}
 
 {{- define "footJS" -}}
-<script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
-<script type="text/javascript">
-  $('.lazy').lazyload({
-    effect: 'fadeIn',
-    threshold: 200
-  })
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
 <script type="text/javascript">
+    var slides_per_view
+    var slides_per_group
+
+    if (window.matchMedia('(max-width: 768px)').matches) {
+        slides_per_view = 1
+        slides_per_group = 1
+    } else {
+        slides_per_view = 3
+        slides_per_group = 3
+    }
+
     var swiperOne = new Swiper('.swiper-one', {
         direction: 'horizontal',
-        autoplay: {
-            delay: 10000,
-            disableOnInteraction: false,
-        },
+        // autoplay: {
+        //     delay: 10000,
+        //     disableOnInteraction: false,
+        // },
         pagination: {
             el: '.pagination-one',
             clickable: true,
         },
-        slidesPerView: 3,
-        slidesPerGroup: 3,
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
         spaceBetween: 20,
         loop: true,
         loopAdditionalSlides: 3,
@@ -214,16 +226,16 @@
 
     var swiperTwo = new Swiper('.swiper-two', {
         direction: 'horizontal',
-        autoplay: {
-            delay: 10000,
-            disableOnInteraction: false,
-        },
+        // autoplay: {
+        //     delay: 10000,
+        //     disableOnInteraction: false,
+        // },
         pagination: {
             el: '.pagination-two',
             clickable: true,
         },
-        slidesPerView: 3,
-        slidesPerGroup: 3,
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
         spaceBetween: 20,
         loop: true,
         loopAdditionalSlides: 3,
@@ -235,16 +247,16 @@
 
     var swiperThree = new Swiper('.swiper-three', {
         direction: 'horizontal',
-        autoplay: {
-            delay: 10000,
-            disableOnInteraction: false,
-        },
+        // autoplay: {
+        //     delay: 10000,
+        //     disableOnInteraction: false,
+        // },
         pagination: {
             el: '.pagination-three',
             clickable: true,
         },
-        slidesPerView: 3,
-        slidesPerGroup: 3,
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
         spaceBetween: 20,
         loop: true,
         loopAdditionalSlides: 3,
@@ -261,8 +273,16 @@
     var elB = document.querySelector('.panel .s2')
     var container = document.querySelector('.uw-container')
 
+    function removeModal() {
+        $('.word-modal').remove()
+    }
+
     container.addEventListener('scroll', function() {
         var scrollTop = container.scrollTop
+
+        if(('.word-modal').length > 0) {
+            removeModal()
+        }
 
         updateTranslate(scrollTop)
         updateSliderControl(scrollTop)
@@ -292,11 +312,11 @@
 
         if (scrollTop < innerHeight || scrollTop > 3 * innerHeight) {
 
-            console.log('hidden', scrollTop)
+            // console.log('hidden', scrollTop)
             slidersContainer.style.visibility = 'hidden'
         } else {
 
-            console.log('visible', scrollTop)
+            // console.log('visible', scrollTop)
             slidersContainer.style.visibility = 'visible'
         }
 
@@ -333,5 +353,30 @@
         }
     }
     addSmoothScrolling()
+
+    $('.words').each(function() {
+        const $this = $(this)
+        if($this[0].scrollHeight == $this[0].clientHeight) {
+            $this.next().css('visibility', 'hidden')
+        }
+    })
+
+    $('.read-more').click(function() {
+        // console.log('in', i)
+        const $this = $(this)
+        var bgColor = $this.attr('class').split(' ')[2]
+        console.log('classes: ', bgColor[2])
+        var words = $this.prev()[0].innerText
+        console.log('click', $this, words)
+        // console.log('click', $this.next().css('display', 'block'))
+        $('.panel').append('\
+        <div class="word-modal ' + bgColor + 'bg"><p>' + words +'</p></div>\
+        ')
+
+        $('.word-modal').click(function() {
+            console.log('click')
+            removeModal()
+        })
+    })
 </script>
 {{- end -}}
