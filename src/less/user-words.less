@@ -34,6 +34,18 @@
   color: @s3-bg;
 }
 
+.uw-container {
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+.section-bg {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70% 80%;
+}
+
 .word-modal {
   height: 100vh;
   width: 100vw;
@@ -42,9 +54,7 @@
   align-items: center;
   justify-content: center;
   top: 0;
-  cursor: pointer;
-  opacity: 0.9;
-  background-color: #000;
+  opacity: 0.95;
   z-index: 6;
 
   p {
@@ -52,29 +62,8 @@
     color: white;
     max-width: 768px;
     line-height: 1.7;
-    font-size: @size-7;
-
-    @media only screen and (max-width: 768px) {
-      font-size: @size-8;
-    }
-
-    @media only screen and (max-width: 320px) {
-      font-size: @size-9;
-    }
+    font-size: @size-8;
   }
-}
-
-.uw-container {
-  width: 100%;
-  height: 100vh;
-  overflow-x: hidden;
-  scroll-snap-type: y mandatory;
-}
-
-.section-bg {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 70% 80%;
 }
 
 .hero {
@@ -93,7 +82,7 @@
   background-size: cover;
 
   .title {
-    padding-top: 13rem;
+    padding-top: 6rem;
     font-size: @size-1;
     font-weight: bold;
     margin-bottom: 4rem;
@@ -104,9 +93,9 @@
     line-height: 2;
   }
 
-  @media only screen and (max-width: 1024px) {
+  @media only screen and (max-width: 768px) {
     .title {
-      padding-top: 8rem;
+      padding-top: 11rem;
       font-size: @size-3;
     }
 
@@ -121,9 +110,8 @@
 }
 
 .panel {
-  height: 700px;
+  height: 750px;
   width: 100%;
-  scroll-snap-align: start;
   position: relative;
 
   section {
@@ -132,14 +120,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    // padding: 0 1.5rem;
   }
 
   .section-title {
     position: absolute;
     text-align: center;
     color: white;
-    top: 5rem;
+    top: 3rem;
     font-weight: bold;
     font-size: @size-6;
 
@@ -152,18 +139,11 @@
       left: 50%;
       transform: translateX(-50%);
     }
-
-    @media only screen and (max-width: 1024px) {
-      font-size: @size-7;
-      left: 50%;
-      width: 280px;
-      transform: translateX(-50%);
-    }
   }
 
   .swiper-container {
     z-index: 0;
-    height: 60%;
+    height: 450px;
     max-width: 1024px;
     margin: 3rem;
     padding: 0;
@@ -172,15 +152,10 @@
       margin: 0;
       padding: 0 2rem;
     }
-
-    @media only screen and (max-width: 320px) {
-      height: 57%;
-      margin-top: 3rem;
-    }
   }
 
   .swiper-slide {
-    height: 90%;
+    height: 400px;
     margin: 1rem 0;
     background-color: white;
     position: relative;
@@ -234,7 +209,10 @@
     .name,
     .misc {
       line-height: 1.7;
-      padding: 0.5rem 0;
+    }
+
+    .read-more {
+      display: none;
     }
 
     .quote {
@@ -263,14 +241,9 @@
       font-size: @size-7;
       text-align: left;
       line-height: 1.7;
-      margin: 0.5rem 0;
-      height: 63%;
-      overflow: hidden;
-    }
-
-    .read-more {
-      font-size: @size-8;
-      cursor: pointer;
+      margin: 1.5rem 0 1rem;
+      height: 220px;
+      overflow: auto;
     }
 
     .name {
@@ -298,68 +271,11 @@
         height: 100%;
       }
     }
-
-    @media only screen and (max-width: 1500px) {
-      .words {
-        height: 65%;
-      }
-    }
-
-    @media only screen and (max-width: 1024px) {
-      .words {
-        height: 67%;
-      }
-    }
-
-    @media only screen and (max-width: 320px) {
-      .words,
-      .name {
-        font-size: @size-8;
-        padding: 0;
-      }
-
-      .words {
-        height: 63%;
-      }
-
-      .read-more,
-      .misc {
-        font-size: @size-9;
-        padding: 0;
-      }
-
-      .avatar {
-        height: 40px;
-        width: 40px;
-        bottom: -15px;
-      }
-
-      .quote {
-        width: 30px;
-        height: 22px;
-      }
-    }
-  }
-
-  .down-arrow {
-    display: none;
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    bottom: 2%;
-    background-image: url('/images/user-words/down-arrow.svg');
-    .section-bg;
-
-    transform: rotate(-90deg);
-
-    @media only screen and (max-width: 1024px) {
-      display: block;
-    }
   }
 }
 
-.last-panel {
-  height: auto;
+.hero-panel {
+  height: 600px;
 }
 
 .s1 {
@@ -394,26 +310,6 @@
   @media only screen and (max-width: 1024px) {
     display: none;
   }
-}
-
-#slider-control a {
-  padding: 3px;
-}
-
-#slider-control .dot {
-  width: 3px;
-  height: 25px;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
-#slider-control .active .dot {
-  background-color: transparent;
-  width: 10px;
-  height: 25px;
-  border-radius: 8px;
-  border: 1px solid #fff;
-  margin-left: -3px;
 }
 
 .user-case {
@@ -546,6 +442,111 @@
 
       .btn-text {
         padding: 14px 0 14px 20px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .mobile-container {
+    // scroll-snap-type: y mandatory;
+    height: 100vh;
+
+    .hero-panel {
+      height: 100%;
+    }
+
+    .panel {
+      // scroll-snap-align: start;
+      height: 100%;
+
+      .swiper-container {
+        height: 450px;
+      }
+
+      .swiper-slide {
+        height: 400px;
+      }
+
+      .swiper-pagination {
+        bottom: 14%;
+      }
+
+      .section-title {
+        font-size: @size-7;
+        left: 50%;
+        width: 280px;
+        transform: translateX(-50%);
+        top: 5rem;
+      }
+
+      .card {
+        .words {
+          overflow: hidden !important;
+          height: 215px;
+          margin: 1rem 0;
+        }
+
+        .read-more {
+          font-size: @size-8;
+          display: block;
+        }
+
+        .quote {
+          height: 25px;
+          width: 33px;
+        }
+      }
+
+      .down-arrow {
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        bottom: 7%;
+        background-image: url('/images/user-words/down-arrow.svg');
+        .section-bg;
+
+        transform: rotate(-90deg);
+      }
+    }
+
+    .last-panel {
+      height: auto;
+    }
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .mobile-container {
+    .panel {
+      .swiper-container {
+        height: 300px;
+        margin-top: 3rem;
+      }
+
+      .swiper-slide {
+        height: 250px;
+      }
+
+      .swiper-pagination {
+        bottom: 10%;
+      }
+
+      .down-arrow {
+        bottom: 5%;
+      }
+
+      .card {
+        .words {
+          height: 100px;
+        }
+
+        .words,
+        .name,
+        .misc,
+        .read-more {
+          font-size: @size-9;
+        }
       }
     }
   }
