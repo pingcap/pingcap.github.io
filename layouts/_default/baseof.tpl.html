@@ -15,7 +15,6 @@
     {{- partial "head/ga" . -}}
     {{- block "headTpl" . -}}{{- end -}}
     {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
-    {{- $no_footer := $.Scratch.Get "no_footer" -}}
     <title>{{ block "title" . }}{{- .Title -}}{{ end }} |&nbsp;{{- if and $data_i18_cn (ne ($.Scratch.Get "nav_active") "docs") -}}PingCAP {{- else -}} {{ $.Scratch.Get "metaTitle" }} {{- end -}}
     </title>
     {{- partial "head/meta-seo" . -}}
@@ -56,9 +55,7 @@
         {{- block "main" . -}}{{- end -}}
         
         {{- if $data_i18_cn -}}
-            {{- if not $no_footer }}
-                {{- partial "layout/footer-cn" . -}}
-            {{- end -}}
+            {{- partial "layout/footer-cn" . -}}
         {{- else -}}
             {{- partial "layout/footer" . -}}
         {{- end -}}

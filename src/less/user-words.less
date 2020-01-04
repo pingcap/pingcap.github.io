@@ -34,10 +34,12 @@
   color: @s3-bg;
 }
 
-.uw-container {
+.pc-container {
   width: 100%;
-  height: 100vh;
-  overflow-x: hidden;
+}
+
+.mobile-container {
+  display: none;
 }
 
 .section-bg {
@@ -299,19 +301,6 @@
   .section-bg;
 }
 
-#slider-control {
-  position: fixed;
-  padding: 3px;
-  top: 50%;
-  right: 30px;
-  transform: translateY(-50%);
-  z-index: 5;
-
-  @media only screen and (max-width: 1024px) {
-    display: none;
-  }
-}
-
 .user-case {
   background-color: #211d35;
   color: white;
@@ -365,34 +354,51 @@
         margin: 1rem 0;
       }
     }
-
-    @media only screen and (max-width: 1024px) {
-      justify-content: space-around;
-      padding: 2rem;
-
-      .data {
-        margin: 1.5rem 0;
-      }
-
-      .desc {
-        margin: 0.5rem 0;
-      }
-    }
   }
 
   .intro {
     max-width: 1024px;
     margin: 0 auto;
-    padding: 3rem 1rem 5rem;
+    padding: 3rem 1rem;
     text-align: center;
     font-size: @size-7;
     line-height: 2;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .datas {
+      justify-content: space-around;
+      padding: 2.5rem 1rem 1rem;
+
+      .data {
+        margin: 1rem 1.5rem 0;
+        width: 100px;
+
+        .num {
+          height: 80px;
+
+          span:nth-child(1) {
+            font-size: 1rem;
+            margin: 0 10px;
+          }
+        }
+
+        .desc {
+          margin: 0.5rem 0;
+          font-size: @size-8;
+        }
+      }
+    }
+
+    .intro {
+      font-size: @size-8;
+    }
   }
 }
 
 .logos {
   max-width: 1248px;
-  height: 1300px;
+  height: 1000px;
   margin: 0 auto;
   padding: 2rem 0;
   background-image: url('/images/user-words/logo-pc.jpg');
@@ -448,16 +454,19 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .pc-container {
+    display: none;
+  }
+
   .mobile-container {
-    // scroll-snap-type: y mandatory;
     height: 100vh;
+    display: block;
 
     .hero-panel {
       height: 100%;
     }
 
     .panel {
-      // scroll-snap-align: start;
       height: 100%;
 
       .swiper-container {
@@ -474,6 +483,7 @@
 
       .section-title {
         font-size: @size-7;
+        line-height: 1.7;
         left: 50%;
         width: 280px;
         transform: translateX(-50%);
@@ -508,10 +518,6 @@
 
         transform: rotate(-90deg);
       }
-    }
-
-    .last-panel {
-      height: auto;
     }
   }
 }
