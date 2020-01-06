@@ -1,5 +1,6 @@
 import { format } from "util"
 
+import { dynamicAddSubscribeForm } from './mailchimp'
 // JS Goes here - ES6 supported
 
 // Global JS
@@ -56,10 +57,10 @@ function initialSearch(lang) {
   if (urlParams.has('q')) {
     $('#search-input').val(urlParams.get('q'))
     const client = algoliasearch(
-      'EQ7E5XJTQ3',
-      'ce9da09f7c5d33f4c076c8f32fc6d0f8'
+      'F9LNQGQBWG',
+      '53f6829641294d401e37fb6aacda703c'
     )
-    // const client = algoliasearch('2N81NWJ6CR', '98d2e757b08fb5b7b0d30d89d0c855f2');
+    // const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
     const index = client.initIndex('pingcap')
 
     index.search(
@@ -379,6 +380,8 @@ function getTidbContributorCount() {
 
 $(document).ready(function() {
   processHash()
+
+  if ($('body').data('lang') === 'cn') dynamicAddSubscribeForm()
 
   getTidbContributorCount()
 
