@@ -3,6 +3,7 @@
 {{ $.Scratch.Set "nav_active" "cases" }}
 {{ $.Scratch.Set "data_i18_link" "/" }}
 {{ $.Scratch.Set "data_i18_cn" true }}
+{{ $.Scratch.Set "no_footer" true }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/css/swiper.css">
 {{- end -}}
 
@@ -157,125 +158,171 @@
 
         <div class="swiper-slide">
             <div class="panel" id="one">
-            <section class="s1">
-                <div class="section-title">
-                    他们说 TiDB 解决了很多问题，希望这里也有你的燃眉之急
-                </div>
-                <div class="swiper-container swiper-one">
-                    <div class="swiper-wrapper">
-                        {{ range $i := .Site.Data.user_words.section1 }}
-                        <div class="swiper-slide">
-                            <div class="card">
-                                <div class="quote quote1"></div>
-                                <div class="words">
-                                    {{ $i.words }}
-                                </div>
-                                <div class="read-more s1-color s1-">Read More</div>
-                                <div class="name">
-                                    {{ $i.name }}
-                                </div>
-                                <div class="misc">
-                                    <span>{{ $i.company }}</span>
-                                    <span>{{ $i.title }}</span>
-                                </div>
-                                <div class="avatar">
-                                    <img src="{{ $i.avatar }}" alt="avatar" />
+                <section class="s1">
+                    <div class="section-title">
+                        他们说 TiDB 解决了很多问题，希望这里也有你的燃眉之急
+                    </div>
+                    <div class="swiper-container swiper-one-mobile">
+                        <div class="swiper-wrapper">
+                            {{ range $i := .Site.Data.user_words.section1 }}
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        {{ $i.words }}
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        {{ $i.name }}
+                                    </div>
+                                    <div class="misc">
+                                        <span>{{ $i.company }}</span>
+                                        <span>{{ $i.title }}</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="{{ $i.avatar }}" alt="avatar" />
+                                    </div>
                                 </div>
                             </div>
+                            {{ end }}
                         </div>
-                        {{ end }}
                     </div>
-                </div>
-                <div class="swiper-pagination pagination-one"></div>
-
-                <div class="swiper-button-prev button-prev-one"></div>
-                <div class="swiper-button-next button-next-one"></div>
-                <div class="down-arrow"></div>
-            </section>
+                    <div class="swiper-pagination pagination-one-mobile"></div>
+                    <div class="down-arrow"></div>
+                </section>
             </div>
         </div>
 
         <div class="swiper-slide">
             <div class="panel" id="two">
-            <section class="s2">
-                <div class="section-title">
-                    这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
-                </div>
-                <div class="swiper-container swiper-two">
-                    <div class="swiper-wrapper">
-                        {{ range $i := .Site.Data.user_words.section2 }}
-                        <div class="swiper-slide">
-                            <div class="card">
-                                <div class="quote quote2"></div>
-                                <div class="words">
-                                    {{ $i.words }}
-                                </div>
-                                <div class="read-more s2-color s2-">Read More</div>
-                                <div class="name">
-                                    {{ $i.name }}
-                                </div>
-                                <div class="misc">
-                                    <span>{{ $i.company }}</span>
-                                    <span>{{ $i.title }}</span>
-                                </div>
-                                <div class="avatar">
-                                    <img src="{{ $i.avatar }}" alt="avatar" />
+                <section class="s2">
+                    <div class="section-title">
+                        这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
+                    </div>
+                    <div class="swiper-container swiper-two-mobile">
+                        <div class="swiper-wrapper">
+                            {{ range $i := .Site.Data.user_words.section2 }}
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        {{ $i.words }}
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        {{ $i.name }}
+                                    </div>
+                                    <div class="misc">
+                                        <span>{{ $i.company }}</span>
+                                        <span>{{ $i.title }}</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="{{ $i.avatar }}" alt="avatar" />
+                                    </div>
                                 </div>
                             </div>
+                            {{ end }}
                         </div>
-                        {{ end }}
                     </div>
-                </div>
 
-                <div class="swiper-pagination pagination-two"></div>
-                <div class="swiper-button-prev button-prev-two"></div>
-                <div class="swiper-button-next button-next-two"></div>
-                <div class="down-arrow"></div>
-            </section>
+                    <div class="swiper-pagination pagination-two-mobile"></div>
+                    <div class="down-arrow"></div>
+                </section>
             </div>
         </div>
 
         <div class="swiper-slide">
             <div class="panel" id="three">
-            <section class="s3">
-                <div class="section-title">
-                    这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
-                </div>
-                <div class="swiper-container swiper-three">
-                <div class="swiper-wrapper">
-                    {{ range $i := .Site.Data.user_words.section3 }}
-                    <div class="swiper-slide">
-                        <div class="card">
-                            <div class="quote quote3"></div>
-                            <div class="words">
-                                {{ $i.words }}
+                <section class="s3">
+                    <div class="section-title">
+                        面对大家的期待，我们还在努力完善，也希望能得到更多的反馈
+                    </div>
+                    <div class="swiper-container swiper-three-mobile">
+                        <div class="swiper-wrapper">
+                            {{ range $i := .Site.Data.user_words.section3 }}
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        {{ $i.words }}
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        {{ $i.name }}
+                                    </div>
+                                    <div class="misc">
+                                        <span>{{ $i.company }}</span>
+                                        <span>{{ $i.title }}</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="{{ $i.avatar }}" alt="avatar" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="read-more s3-color s3-">Read More</div>
-                            <div class="name">
-                                {{ $i.name }}
-                            </div>
-                            <div class="misc">
-                                <span>{{ $i.company }}</span>
-                                <span>{{ $i.title }}</span>
-                            </div>
-                            <div class="avatar">
-                                <img src="{{ $i.avatar }}" alt="avatar" />
-                            </div>
+                            {{ end }}
                         </div>
                     </div>
-                    {{ end }}
-                </div>
-                </div>
-                <div class="swiper-pagination pagination-three"></div>
-                <div class="swiper-button-prev button-prev-three"></div>
-                <div class="swiper-button-next button-next-three"></div>
-            </section>
+                    <div class="swiper-pagination pagination-three-mobile"></div>
+                </section>
             </div>
-        </div>        
+        </div>
+        
+        <div class="swiper-slide">
+            <div class="panel">
+                <div class="user-case">
+                    <div class="datas">
+                        <div class="data">
+                            <p class="num num1"><span>10000+</span><span>台</span></p>
+                            <p class="desc">集群规模</p>
+                        </div>
+                        <div class="data">
+                            <p class="num num2"><span>1000+</span><span>个</span></p>
+                            <p class="desc">物理节点</p>
+                        </div>
+                        <div class="data">
+                            <p class="num num3"><span>110</span><span>T</span></p>
+                            <p class="desc">数据量</p>
+                        </div>
+                        <div class="data">
+                            <p class="num num4"><span>20000</span><span>亿</span></p>
+                            <p class="desc">单表的典型数据量规模</p>
+                        </div>
+                    </div>
+                    <div class="intro">
+                        <p>2019 年</p>
+                        <p>TiDB 被应用于互联网、游戏、银行、保险、证券、航空、电信等多个领域</p>
+                        <p>经受住了近 1000 家企业用户的上线环境打磨</p>
+                        <p>护航 XX+ 电商及金融机构应对 6.18、11.11 大促流量高峰</p></br>
+                
+                        <p>TiDB 过硬的产品实力背后，有社区开发者持续贡献的支撑</p>
+                        <p>也有一线用户在实操中对其的不断打磨</p>
+                        <p>感谢所有热爱、信任 TiDB 的伙伴们</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel">
+                <div class="logo">
+                    <img src="/images/user-words/logo-mobile1.png" alt="logo" />
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel">
+                <div class="logo logo2">
+                    <img src="/images/user-words/logo-mobile2.png" alt="logo" />
+                </div>
+                {{- partial "archives/readMoreBtn.html" (dict "url" "/cases-cn/" "btnText" "更多案例文章") }}
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="user-case">
+
+<div class="user-case pc-user-case">
     <div class="datas">
         <div class="data">
             <p class="num num1"><span>10000+</span><span>台</span></p>
@@ -305,22 +352,25 @@
         <p>感谢所有热爱、信任 TiDB 的伙伴们</p>
     </div>
 </div>
-<div class="logos logo-pc"></div>
-{{- partial "archives/readMoreBtn.html" (dict "url" "/cases-cn/" "btnText" "更多案例文章") }}
+<div class="pc-logos logos"></div>
+<div class="pc-readMoreBtn">
+    {{- partial "archives/readMoreBtn.html" (dict "url" "/cases-cn/" "btnText" "更多案例文章") }}
+</div>
+</div>
+
 {{- end -}}
 
 {{- define "footJS" -}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.0/js/swiper.min.js"></script>
 <script type="text/javascript">
-    var slides_per_view
-    var slides_per_group
+    var slides_per_view, slides_per_group, pagination_one, pagination_two, pagination_three
+
 
     if (window.matchMedia('(max-width: 768px)').matches) {
         slides_per_view = 1
         slides_per_group = 1
     } else {
         slides_per_view = 3
-        slides_per_group = 3
     }
 
     function removeModal() {
@@ -329,19 +379,13 @@
 
     var swiperOne = new Swiper('.swiper-one', {
         direction: 'horizontal',
-        // autoplay: {
-        //     delay: 10000,
-        //     disableOnInteraction: false,
-        // },
         pagination: {
             el: '.pagination-one',
             clickable: true,
         },
-        slidesPerView: slides_per_view,
-        slidesPerGroup: slides_per_group,
+        slidesPerView: 3,
         spaceBetween: 20,
-        loop: true,
-        loopAdditionalSlides: 3,
+        loop: false,
         navigation: {
             nextEl: '.button-next-one',
             prevEl: '.button-prev-one',
@@ -350,19 +394,12 @@
 
     var swiperTwo = new Swiper('.swiper-two', {
         direction: 'horizontal',
-        // autoplay: {
-        //     delay: 10000,
-        //     disableOnInteraction: false,
-        // },
         pagination: {
             el: '.pagination-two',
             clickable: true,
         },
         slidesPerView: slides_per_view,
-        slidesPerGroup: slides_per_group,
         spaceBetween: 20,
-        loop: true,
-        loopAdditionalSlides: 3,
         navigation: {
             nextEl: '.button-next-two',
             prevEl: '.button-prev-two',
@@ -371,34 +408,54 @@
 
     var swiperThree = new Swiper('.swiper-three', {
         direction: 'horizontal',
-        // autoplay: {
-        //     delay: 10000,
-        //     disableOnInteraction: false,
-        // },
         pagination: {
             el: '.pagination-three',
             clickable: true,
         },
         slidesPerView: slides_per_view,
-        slidesPerGroup: slides_per_group,
         spaceBetween: 20,
-        loop: true,
-        loopAdditionalSlides: 3,
         navigation: {
             nextEl: '.button-next-three',
             prevEl: '.button-prev-three',
         },
     })
 
+    var swiperOneMobile = new Swiper('.swiper-one-mobile', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-one-mobile',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+    })
+
+    var swiperTwoMobile = new Swiper('.swiper-two-mobile', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-two-mobile',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+    })
+
+    var swiperThreeMobile = new Swiper('.swiper-three-mobile', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-three-mobile',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+    })
+
     var mobileContainer = new Swiper('.mobile-container', {
         direction: 'vertical',
-        // autoplay: {
-        //     delay: 10000,
-        //     disableOnInteraction: false,
-        // },
         slidesPerView: 1,
-        parallax: true,
-        speed: 600,
         on: {
             slideChange: function(){
                 removeModal()

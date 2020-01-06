@@ -94,21 +94,6 @@
     font-size: @size-7;
     line-height: 2;
   }
-
-  @media only screen and (max-width: 768px) {
-    .title {
-      padding-top: 11rem;
-      font-size: @size-3;
-    }
-
-    background-image: url('/images/user-words/hero-mobile.png');
-  }
-
-  @media only screen and (max-width: 320px) {
-    .title {
-      font-size: @size-5;
-    }
-  }
 }
 
 .panel {
@@ -149,11 +134,6 @@
     max-width: 1024px;
     margin: 3rem;
     padding: 0;
-
-    @media only screen and (max-width: 1024px) {
-      margin: 0;
-      padding: 0 2rem;
-    }
   }
 
   .swiper-slide {
@@ -175,10 +155,6 @@
       background: transparent;
       width: 10px;
       height: 10px;
-    }
-
-    @media only screen and (max-width: 1024px) {
-      bottom: 10%;
     }
   }
 
@@ -220,7 +196,7 @@
     .quote {
       position: absolute;
       top: -10px;
-      width: 55px;
+      width: 53px;
       height: 40px;
       background-repeat: no-repeat;
       background-size: cover;
@@ -241,8 +217,9 @@
 
     .words {
       font-size: @size-7;
-      text-align: left;
+      text-align: justify;
       line-height: 1.7;
+      padding: 0 0.5rem;
       margin: 1.5rem 0 1rem;
       height: 220px;
       overflow: auto;
@@ -364,36 +341,6 @@
     font-size: @size-7;
     line-height: 2;
   }
-
-  @media only screen and (max-width: 768px) {
-    .datas {
-      justify-content: space-around;
-      padding: 2.5rem 1rem 1rem;
-
-      .data {
-        margin: 1rem 1.5rem 0;
-        width: 100px;
-
-        .num {
-          height: 80px;
-
-          span:nth-child(1) {
-            font-size: 1rem;
-            margin: 0 10px;
-          }
-        }
-
-        .desc {
-          margin: 0.5rem 0;
-          font-size: @size-8;
-        }
-      }
-    }
-
-    .intro {
-      font-size: @size-8;
-    }
-  }
 }
 
 .logos {
@@ -405,10 +352,22 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+}
 
-  @media only screen and (max-width: 768px) {
-    background-image: url('/images/user-words/logo-mobile.jpg');
+.logo {
+  width: 100%;
+  height: 100%;
+  padding-top: 15%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
+}
+
+.logo2 {
+  height: 90%;
 }
 
 .readMoreBtn {
@@ -420,7 +379,7 @@
     width: 160px;
     font-size: 0.8rem;
     padding: 14px;
-    margin-top: 3rem;
+    margin-top: 10px;
     background: none;
     position: relative;
     cursor: pointer;
@@ -453,8 +412,22 @@
   }
 }
 
+@media only screen and (max-width: 1024px) {
+  .swiper-container {
+    margin: 0;
+    padding: 0 2rem;
+  }
+
+  .swiper-pagination {
+    bottom: 10%;
+  }
+}
+
 @media only screen and (max-width: 768px) {
-  .pc-container {
+  .pc-container,
+  .pc-user-case,
+  .pc-logos,
+  .pc-readMoreBtn {
     display: none;
   }
 
@@ -470,11 +443,13 @@
       height: 100%;
 
       .swiper-container {
-        height: 450px;
+        height: 400px;
+        margin: 0;
+        padding: 0 2rem;
       }
 
       .swiper-slide {
-        height: 400px;
+        height: 350px;
       }
 
       .swiper-pagination {
@@ -493,7 +468,7 @@
       .card {
         .words {
           overflow: hidden !important;
-          height: 215px;
+          height: 190px;
           margin: 1rem 0;
         }
 
@@ -518,6 +493,70 @@
 
         transform: rotate(-90deg);
       }
+    }
+  }
+
+  .user-case {
+    height: 100%;
+
+    .datas {
+      justify-content: space-around;
+      padding: 2.5rem 1rem 0;
+
+      .data {
+        margin: 0 1.5rem;
+        width: 100px;
+
+        .num {
+          height: 100px;
+
+          span:nth-child(1) {
+            font-size: 1rem;
+            margin: 0 10px;
+          }
+        }
+
+        .desc {
+          margin: 0.5rem 0;
+          font-size: @size-8;
+        }
+      }
+    }
+
+    .intro {
+      padding: 1rem 1rem 0;
+      font-size: @size-8;
+    }
+  }
+
+  .hero {
+    .title {
+      padding-top: 11rem;
+      font-size: @size-3;
+    }
+
+    background-image: url('/images/user-words/hero-mobile.png');
+  }
+}
+
+@media only screen and (max-width: 414px) {
+  .user-case .datas {
+    padding: 5.5rem 1.5rem 2.5rem;
+
+    .data .num {
+      height: 80px;
+    }
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .user-case {
+    .datas {
+      padding: 3.5rem 1.5rem .5rem;
+    }
+
+    .intro {
+      padding: 40px 2rem 0;
     }
   }
 }
@@ -555,5 +594,33 @@
         }
       }
     }
+  }
+
+  .hero {
+    .title {
+      font-size: @size-5;
+    }
+  }
+
+  .user-case .datas {
+    padding: 3.5rem 0 0;
+
+    .data {
+      margin: 0 1.5rem 0.5rem;
+
+      .num {
+        height: 40px;
+      }
+
+      .desc {
+        font-size: @size-9;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .user-case .intro {
+    padding: 0 1rem 0;
   }
 }
