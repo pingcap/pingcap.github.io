@@ -31,15 +31,14 @@
     </script>
 </head>
 
+ {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
 {{- $homepage := $.Scratch.Get "homepage" -}}
 {{ $.Scratch.Set "stable_version" .Site.Params.versions.docs.stable_version }}
 {{ $.Scratch.Set "total_versions" .Site.Params.versions.docs.total_versions }}
-<body {{ if $homepage }}class="homepage"{{ end }}>
+<body data-lang="{{- if $data_i18_cn -}}cn{{- else -}}en{{- end -}}" {{ if $homepage }}class="homepage"{{ end }}>
     <!-- {{- partial "loaders/page-loader.html" -}} -->
 
     <div id="page-content">
-        {{- $data_i18_cn := $.Scratch.Get "data_i18_cn" -}}
-
         {{- if $homepage -}}
             {{- partial "layout/release-banner" . -}}
         {{- end  -}}

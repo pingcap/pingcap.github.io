@@ -1,5 +1,6 @@
 import { format } from "util"
 
+import { dynamicAddSubscribeForm } from './mailchimp'
 // JS Goes here - ES6 supported
 
 // Global JS
@@ -379,6 +380,8 @@ function getTidbContributorCount() {
 
 $(document).ready(function() {
   processHash()
+
+  if ($('body').data('lang') === 'cn') dynamicAddSubscribeForm()
 
   getTidbContributorCount()
 
