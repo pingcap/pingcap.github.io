@@ -2,7 +2,8 @@
 {{ $date := .date}}
 
 {{- range $idx, $i := $schedule -}}
-<div class="schedule {{ if eq $date "day2" }}hide-schedule {{ end }}{{ $date }}" id="{{ replace (replace $i.name  "/" "-" ) " " "-" }}">
+<div class="schedule {{ if eq $date "day2" }}hide-schedule {{ end }}{{ $date }}"
+    id="{{ replace (replace $i.name  "/" "-" ) " " "-" }}">
     <div class="venue-title">{{ $i.name }}</div>
     <table class="schedule-table">
         <tr class="head">
@@ -12,44 +13,49 @@
             <td></td>
         </tr>
         {{- range $idx2, $j := $i.schedules -}}
-            {{- if $j.TBA -}}
-                <tr>
-                    <td>{{ $j.time }}</td>
-                    <td colspan="3">
-                        <p class="TBA">敬请期待</p>
-                    </td>
-                </tr>
-            {{- else if $j.break -}}
-                <tr>
-                    <td>{{ $j.time }}</td>
-                    <td colspan="3">
-                        <p class="TBA">【休息】</p>
-                    </td>
-                </tr>
+        {{- if $j.TBA -}}
+        <tr>
+            <td>{{ $j.time }}</td>
+            <td colspan="3">
+                <p class="TBA">敬请期待</p>
+            </td>
+        </tr>
+        {{- else if $j.break -}}
+        <tr>
+            <td>{{ $j.time }}</td>
+            <td colspan="3">
+                <p class="TBA">【中场休息】</p>
+            </td>
+        </tr>
+        {{- else -}}
+        <tr class="{{ if $j.talk_detail }}collapsable{{ end }}">
+            <td>{{ $j.time }}</td>
+            <td>{{ $j.talk_title }}</td>
+            {{- if $j.company -}}
+            <td><span class="speaker">{{ $j.speaker }} | </span>{{ $j.company }}</td>
             {{- else -}}
-                <tr class="{{ if $j.talk_detail }}collapsable{{ end }}">
-                    <td>{{ $j.time }}</td>
-                    <td>{{ $j.talk_title }}</td>
-                    <td>{{ $j.speaker }}</td>
-                    {{- if $j.talk_detail -}}
-                    <td class="add-icon"> + </td>
-                    {{- else -}}
-                    <td></td>
-                    {{- end -}}
-                </tr>
-                {{- if $j.talk_detail -}}
-                <tr class="detail-block">
-                    <td></td>
-                    <td colspan="3">
-                        <ul style="list-style: none;">
-                            {{- range $idx2, $k := $j.talk_detail -}}
-                            <li class="pagraphList">{{ $k }}</li>
-                            {{- end -}}
-                        </ul>
-                    </td>
-                </tr>
-                {{- end -}}
+            <td>{{ $j.speaker }}</td>
             {{- end -}}
+
+            {{- if $j.talk_detail -}}
+            <td class="add-icon"> + </td>
+            {{- else -}}
+            <td></td>
+            {{- end -}}
+        </tr>
+        {{- if $j.talk_detail -}}
+        <tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;">
+                    {{- range $idx2, $k := $j.talk_detail -}}
+                    <li class="pagraphList">{{ $k }}</li>
+                    {{- end -}}
+                </ul>
+            </td>
+        </tr>
+        {{- end -}}
+        {{- end -}}
         {{- end -}}
     </table>
 </div>

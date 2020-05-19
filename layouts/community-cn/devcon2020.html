@@ -1,6 +1,6 @@
 {{- define "title" -}}
 {{ $.Scratch.Set "metaTitle" "DevCon 2019" }}
-DevCon 2019
+DevCon 2020
 {{- end -}}
 
 {{- define "headTpl" -}}
@@ -58,18 +58,28 @@ DevCon 2019
             <div class="venues">
                 <div class="day1">
                     {{- range $idx, $i := .Site.Data.devcon.venues_2020.day1 -}}
-                    <a class="venue" href="#{{ replace (replace $i.name "/" "-" ) " " "-" }}">
-                        <img src="{{ $i.icon }}" alt="{{ $i.name }}">
-                        <p>{{ $i.name }}</p>
-                    </a>
+                    <div class="venue-detail">
+                        <div class="time">{{ $i.time }}</div>
+                        {{- range $j := $i.venues -}}
+                        <a class="venue" href="#{{ replace (replace $j.name "/" "-" ) " " "-" }}">
+                            <img src="{{ $j.icon }}" alt="{{ $j.name }}">
+                            <p>{{ $j.name }}</p>
+                        </a>
+                        {{- end -}}
+                    </div>
                     {{- end -}}
                 </div>
                 <div class="day2 hide-schedule">
                     {{- range $idx, $i := .Site.Data.devcon.venues_2020.day2 -}}
-                    <a class="venue" href="#{{ replace (replace $i.name "/" "-" ) " " "-" }}">
-                        <img src="{{ $i.icon }}" alt="{{ $i.name }}">
-                        <p>{{ $i.name }}</p>
-                    </a>
+                    <div class="venue-detail">
+                        <div class="time">{{ $i.time }}</div>
+                        {{- range $j := $i.venues -}}
+                        <a class="venue" href="#{{ replace (replace $j.name "/" "-" ) " " "-" }}">
+                            <img src="{{ $j.icon }}" alt="{{ $j.name }}">
+                            <p>{{ $j.name }}</p>
+                        </a>
+                        {{- end -}}
+                    </div>
                     {{- end -}}
                 </div>
             </div>
@@ -84,6 +94,7 @@ DevCon 2019
             <h1 class="dc20-title">嘉宾介绍</h1>
             <div class="tutor-list">
                 {{- range $idx, $i := .Site.Data.devcon.instructors_2020 -}}
+                {{- if not $i.noAvatar -}}
                 <div class="tutor">
                     <div class="tutor-avatar">
                         <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.avatar }}"
@@ -93,6 +104,7 @@ DevCon 2019
                     <div class="title">{{ $i.company }} | {{ $i.title }}</div>
                 </div>
                 {{- end -}}
+                {{- end -}}
             </div>
         </section>
     </div>
@@ -101,7 +113,7 @@ DevCon 2019
         <h1 class="dc20-title">媒体/社区支持</h1>
         <div class="medias">
             {{- range $idx, $i := .Site.Data.devcon.support_meida2020 -}}
-                <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i }}" />
+            <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i }}" />
             {{- end -}}
         </div>
     </section>
