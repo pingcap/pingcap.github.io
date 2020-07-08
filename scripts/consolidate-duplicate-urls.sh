@@ -29,5 +29,4 @@ consolidate_duplicate_urls() {
 for v in ${old_versions[@]}
 do
     consolidate_duplicate_urls dist/docs-cn/$v $v
-    consolidate_duplicate_urls dist/docs/$v $v
 done
