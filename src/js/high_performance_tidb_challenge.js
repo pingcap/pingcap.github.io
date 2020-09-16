@@ -1,4 +1,4 @@
-const rankURL = 'http://bots.tidb.io/ti-challenge-bot/program/2/ranks'
+const rankURL = 'https://bots.tidb.io/ti-challenge-bot/program/2/ranks'
 
 function renderData() {
   $.getJSON(rankURL, resData => {
@@ -55,34 +55,36 @@ function getURLParams() {
   }
 
   let registerBtnURLBanner =
-      'https://forms.pingcap.com/f/high-performance-challenge-cn?' +
-      'utm_source=' +
-      utmSource +
-      '&utm_medium=' +
-      utmMediuBanner +
-      '&utm_campaign=' +
-      utmCampaign
+    'https://forms.pingcap.com/f/high-performance-challenge-cn?' +
+    'utm_source=' +
+    utmSource +
+    '&utm_medium=' +
+    utmMediuBanner +
+    '&utm_campaign=' +
+    utmCampaign
 
   let registerBtnURLStep =
-      'https://forms.pingcap.com/f/high-performance-challenge-cn?' +
-      'utm_source=' +
-      utmSource +
-      '&utm_medium=' +
-      utmMediumStep +
-      '&utm_campaign=' +
-      utmCampaign
+    'https://forms.pingcap.com/f/high-performance-challenge-cn?' +
+    'utm_source=' +
+    utmSource +
+    '&utm_medium=' +
+    utmMediumStep +
+    '&utm_campaign=' +
+    utmCampaign
 
   document.getElementById('register-btn-banner').href = registerBtnURLBanner
   document.getElementById('register-btn-step').href = registerBtnURLStep
 }
 
-$(document).ready(
-  renderData(),
-  getURLParams(),
+$(document).ready(function() {
+  renderData()
+  getURLParams()
 
-  $('.list-card').click(function() {
-    $('.detail-mobile').css('display', 'none')
-    let index = $('.list-card').index($(this)) + 1
-    $('.detail-' + index).css('display', 'block')
-  })
-)
+  if (window.matchMedia('(max-width:550px)').matches) {
+    $('.list-card').click(function() {
+      $('.detail-mobile').css('display', 'none')
+      let index = $('.list-card').index($(this)) + 1
+      $('.detail-' + index).css('display', 'block')
+    })
+  }
+})
