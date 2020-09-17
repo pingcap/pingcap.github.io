@@ -80,11 +80,14 @@ $(document).ready(function() {
   renderData()
   getURLParams()
 
-  if (window.matchMedia('(max-width:550px)').matches) {
-    $('.list-card').click(function() {
-      $('.detail-mobile').css('display', 'none')
-      let index = $('.list-card').index($(this)) + 1
-      $('.detail-' + index).css('display', 'block')
-    })
-  }
+  $('.list-card').click(function() {
+    $('.detail-js').css('display', 'none')
+
+    if (window.matchMedia('(max-width:550px)').matches) {
+      $('.detail-js').addClass('detail-mobile')
+    }
+
+    let index = $('.list-card').index($(this)) + 1
+    $('.detail-' + index).css('display', 'block')
+  })
 })
