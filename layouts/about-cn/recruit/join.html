@@ -45,7 +45,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#positions-tabs').gridtab({
-                grid: 9,
+                grid: 10,
                 tabPadding: 12,
                 contentPadding: 0,
                 config: {
@@ -56,19 +56,19 @@
             });
 
             const hash = decodeURIComponent(location.hash)
-            
+
             // process tab checked with hash
             if(hash && hash != '#positions') {
                 $('dt').removeClass('is-active')
                 $('dd').css('display', 'none')
-                
+
                 let newStr
-                
+
                 for(i = 0; i < $('dt').length; i++) {
                     let str = $('dt')[i].innerText
                     newStr = str.replace(/\s+/g,"").replace(/\W/,"-")
                      newStr = "#" + newStr.toLowerCase()
-                    
+
                     if(newStr == hash) {
                         var $tab = $($('dt')[i])
                         $tab.addClass('is-active')

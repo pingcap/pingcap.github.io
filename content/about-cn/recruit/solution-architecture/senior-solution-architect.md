@@ -1,10 +1,10 @@
 ---
 title: 高级行业方案架构师
 tags:
-  - Business
+  - Solution & Architecture
 location: 北京，上海
 avatar: business
-position: true 
+position: true
 
 ---
 # 高级行业方案架构师

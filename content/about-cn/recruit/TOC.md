@@ -23,7 +23,6 @@
   - [运维工程师](engineering/sa-engineer.md)
   - [资深安全工程师](engineering/security-engineer.md)
 - Business
-  - [高级行业方案架构师](business/senior-solution-architect.md)
   - [高级解决方案架构师](business/senior-solution-architect-overseas.md)
   - [资深商务经理](business/senior-business-manager.md)
   - [资深行业销售总监](business/sales-director.md)
@@ -36,6 +35,8 @@
   - [Customer Success Engineer](business/customer-success-engineer.md)
   - [Inside Sales](business/commercial-sales.md)
   - [Sales Development Representative](business/commercial-sdr.md)
+- Solution & Architecture
+  - [高级行业方案架构师](solution-architecture/senior-solution-architect.md)
 - User Ecosystem
   - [资深互联网架构师](user-ecosystem/internet-architect.md)
   - [用户生态技术运营](user-ecosystem/user-ecosystem-technical-operations.md)
