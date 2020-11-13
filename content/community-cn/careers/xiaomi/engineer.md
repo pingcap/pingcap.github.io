@@ -3,7 +3,7 @@ title: 分布式数据库研发（偏内核）
 tags:
   - 小米
 location: 北京
-avatar: cloud
+avatar: xiaomi
 position: true
 ---
 

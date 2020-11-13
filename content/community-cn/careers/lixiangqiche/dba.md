@@ -3,7 +3,7 @@ title: 高级/资深 DBA
 tags:
   - 理想汽车
 location: 北京-望京
-avatar: cloud
+avatar: lixiangqiche
 position: true
 ---
 

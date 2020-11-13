@@ -3,7 +3,7 @@ title: Database Administrator
 tags:
   - Paypay
 location: Minato-ku, Tokyo, JAPAN
-avatar: cloud
+avatar: paypay
 position: true
 ---
 

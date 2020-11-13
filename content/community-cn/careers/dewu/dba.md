@@ -3,7 +3,7 @@ title: 中高级/资深 DBA 工程师
 tags:
   - 得物
 location: 上海
-avatar: cloud
+avatar: dewu
 position: true
 ---
 

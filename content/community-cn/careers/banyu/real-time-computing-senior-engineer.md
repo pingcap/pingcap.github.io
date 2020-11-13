@@ -3,7 +3,7 @@ title: 实时计算高级研发工程师
 tags:
   - 伴鱼
 location: 北京
-avatar: cloud
+avatar: banyu
 position: true
 ---
 

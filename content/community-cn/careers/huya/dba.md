@@ -3,7 +3,7 @@ title: DBA 工程师
 tags:
   - 虎牙
 location: 广州
-avatar: cloud
+avatar: huya
 position: true
 ---
 

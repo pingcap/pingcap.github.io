@@ -3,7 +3,7 @@ title: 微服务平台开发工程师
 tags:
   - 知乎
 location: 北京
-avatar: cloud
+avatar: zhihu
 position: true
 ---
 

@@ -3,7 +3,7 @@ title: 大数据实时处理平台研发工程师
 tags:
   - 知乎
 location: 北京
-avatar: cloud
+avatar: zhihu
 position: true
 ---
 

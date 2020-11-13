@@ -2,8 +2,8 @@
 title: 高级数据库管理员
 tags:
   - Bigo
-location: ['广州', '北京']
-avatar: cloud
+location: 广州，北京
+avatar: bigo
 position: true
 ---
 

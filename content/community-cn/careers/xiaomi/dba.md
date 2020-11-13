@@ -3,7 +3,7 @@ title: DBA 工程师
 tags:
   - 小米
 location: 北京
-avatar: cloud
+avatar: xiaomi
 position: true
 ---
 

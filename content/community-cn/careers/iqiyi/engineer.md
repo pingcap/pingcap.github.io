@@ -3,7 +3,7 @@ title: 高级数据库研发运维工程师
 tags:
   - 爱奇艺
 location: 北京
-avatar: cloud
+avatar: iqiyi
 position: true
 ---
 

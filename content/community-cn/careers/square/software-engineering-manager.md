@@ -3,7 +3,7 @@ title: Software Engineering Manager, Platform, Cash App
 tags:
   - Square
 location: Sydney NSW, Australia
-avatar: cloud
+avatar: square
 position: true
 ---
 

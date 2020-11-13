@@ -3,7 +3,7 @@ title: 数据库资深工程师
 tags:
   - 新东方
 location: 北京
-avatar: cloud
+avatar: edu
 position: true
 ---
 

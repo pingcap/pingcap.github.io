@@ -3,7 +3,7 @@ title: 资深 DBA 工程师
 tags:
   - Bilibili
 location: 上海
-avatar: cloud
+avatar: bilibili
 position: true
 ---
 
