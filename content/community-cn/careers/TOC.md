@@ -7,6 +7,11 @@
   - [Database Administrator](paypay/dba.md)
 - Square
   - [Software Engineering Manager, Platform, Cash App](square/software-engineering-manager.md)
+- UCloud
+  - [Go 研发工程师](ucloud/go-engineer-paas.md)
+  - [Go 研发工程师](ucloud/go-engineer-tidb.md)
+- 爱奇艺
+  - [高级数据库研发运维工程师](iqiyi/engineer.md)
 - 伴鱼
   - [实时计算高级研发工程师](banyu/real-time-computing-senior-engineer.md)
   - [对象存储高级研发工程师](banyu/storage-senior-engineer.md)
@@ -17,14 +22,15 @@
   - [资深 DBA 工程师](bilibili/senior-dba.md)
 - 得物
   - [中高级/资深 DBA 工程师](dewu/dba.md)
-- 新东方
-  - [数据库资深工程师](edu/engineer.md)
 - 虎牙
   - [DBA 工程师](huya/dba.md)
-- 爱奇艺
-  - [高级数据库研发运维工程师](iqiyi/engineer.md)
 - 理想汽车
   - [高级/资深 DBA](lixiangqiche/dba.md)
+- 涂鸦智能
+  - [golang 资深工程师](tuyazhineng/senior-golang-engineer.md)
+  - [golang 开发工程师](tuyazhineng/golang-engineer.md)
+- 新东方
+  - [数据库资深工程师](edu/engineer.md)
 - 小嘿科技
   - [数据库工程师](xiaoheikeji/engineer.md)
 - 小米
