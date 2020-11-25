@@ -36,15 +36,9 @@
                         <div class="select">
                             <select id="version" onChange="handleVersionChange()">
                                 <option value="" disabled selected class="disabled">选择 TiDB 版本</option>
-                                <option>v4.0.0</option>
-                                <option>v4.0.1</option>
-                                <option>v4.0.2</option>
-                                <option>v4.0.3</option>
-                                <option>v4.0.4</option>
-                                <option>v4.0.5</option>
-                                <option>v4.0.6</option>
-                                <option>v4.0.7</option>
-                                <option>v4.0.8</option>
+                                {{- range $idx, $version := .Site.Data.tidb_download_pkg.versions -}}
+                                <option>{{ $version }}</option>
+                                {{- end -}}
                             </select>
                         </div>
                     </div>
