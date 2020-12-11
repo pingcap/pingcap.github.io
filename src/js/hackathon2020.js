@@ -16,9 +16,38 @@ function closeModal() {
   $('.modal-overlay, .modal').removeClass('active')
 }
 
+function processDate() {
+  const date = new Date()
+  const today =
+    date.getFullYear() + '.' + (date.getMonth() + 1) + '.' + date.getDate()
+  const milestones = [
+    '2020.12.15',
+    '2021.1.10',
+    '2021.1.11',
+    '2021.1.16',
+    '2021.1.17',
+  ]
+  const moments = $('.moment-item')
+
+  if (today <= milestones[0]) {
+    $(moments[0]).addClass('active')
+  } else if (today <= milestones[1]) {
+    $(moments[1]).addClass('active')
+  } else if (today < milestones[3]) {
+    $(moments[2]).addClass('active')
+  } else if (today < milestones[4]) {
+    $(moments[3]).addClass('active')
+  } else {
+    $(moments[4]).addClass('active')
+  }
+}
+
 $(document).ready(function() {
   // auto active nav item with hash
   processNavbar()
+
+  // auto active current milestone in moments
+  processDate()
 
   $('.navbar__item').click(function() {
     $(this)
