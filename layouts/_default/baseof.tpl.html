@@ -49,7 +49,7 @@
         {{- end -}}
 
         {{- block "main" . -}}{{- end -}}
-        
+
         {{- if $data_i18_cn -}}
             {{- if not $no_footer -}}
                 {{- partial "layout/footer-cn" . -}}
@@ -69,16 +69,24 @@
     <script src="https://download.pingcap.com/js/jquery.min.js"></script>
     {{- block "footJS" . -}}{{- end -}}
 
-    <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-
     <!-- Add sentry scripts to track website errors -->
-    <script src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js" 
-        integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" 
+    <script src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"
+        integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
-        Sentry.init({ 
-            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        Sentry.init({
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163',
+            ignoreErrors: [
+                // ignore can't find variable: SYSTEM
+                /Can\'t find variable:/,
+                // ignore platform or devices not allowed error
+                /NotAllowedError/,
+                // ignore poor network
+                'Swiper is not defined',
+                /is not defined/,
+                /Cannot read property .* of null/
+            ],
+            ignoreUrls: [/.netlify.app/]
         });
     </script>
 </body>

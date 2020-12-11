@@ -16,35 +16,37 @@ if (slider.data('lang') === 'cn') {
 }
 
 function renderData(data) {
-  data
-    .sort((a, b) => b.score - a.score)
-    .forEach((d, i) =>
-      $(
-        '<div>' +
-          (i < 3
-            ? '<div class="medal medal' + (i + 1) + '"></div>'
-            : '<div class="index">' + (i + 1) + '</div>') +
-          '<div class="github"></div>\
+  if (data) {
+    data
+      .sort((a, b) => b.score - a.score)
+      .forEach((d, i) =>
+        $(
+          '<div>' +
+            (i < 3
+              ? '<div class="medal medal' + (i + 1) + '"></div>'
+              : '<div class="index">' + (i + 1) + '</div>') +
+            '<div class="github"></div>\
           <div class="main">\
             <div class="info">\
               <div class="name">' +
-          d.name +
-          (!d.community ? ' <span class="ti"></span>' : '') +
-          (d.type === 'team' ? ' <span class="team">Team</span>' : '') +
-          '</div>\
+            d.name +
+            (!d.community ? ' <span class="ti"></span>' : '') +
+            (d.type === 'team' ? ' <span class="team">Team</span>' : '') +
+            '</div>\
               <div class="score">' +
-          d.score +
-          '</div>\
+            d.score +
+            '</div>\
             </div>\
             <div class="progress-wrapper">\
               <progress class="progress" value="' +
-          d.score +
-          '" max="10000" />\
+            d.score +
+            '" max="10000" />\
             </div>\
           </div>\
         </div>'
-      ).appendTo('#ranking-list')
-    )
+        ).appendTo('#ranking-list')
+      )
+  }
 }
 
 function getRankData(isSeason) {

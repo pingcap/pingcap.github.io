@@ -1,4 +1,5 @@
 import { dynamicAddSubscribeForm } from './mailchimp'
+import 'url-search-params-polyfill'
 // JS Goes here - ES6 supported
 
 // Global JS
@@ -31,160 +32,6 @@ function processHash() {
   if (location.href.search('#access_token') < 0) {
     smoothScroll(hash)
   }
-}
-
-// initial algolia search
-function initialSearch(lang, docs_type) {
-  let urlParams = new URLSearchParams(window.location.search)
-  let url = window.location.href
-
-  var re = new RegExp('(v\\d+\\.\\d+|dev|stable)')
-  var version
-  var newHitArray = []
-  const regex = /\//gi
-  const type = docs_type.replace(regex, '')
-
-  // gets current version
-  if (url.match(re)) {
-    version = url.match(re)[0]
-  }
-
-  const doc_index = lang + '-' + version
-
-  if (urlParams.has('q')) {
-    $('#search-input').val(urlParams.get('q'))
-    const client = algoliasearch(
-      'YTQ9N1XXRW',
-      '17e3740f6f5e5925ed393ae40710894f'
-    )
-    // community plan AppID and search API key
-    // const client = algoliasearch('BH4D9OD16A', 'ad5e63b76a221558bdc65ab1abbec7a2');
-    const index = client.initIndex(doc_index)
-    var newHitArray = []
-
-    index
-      .search(urlParams.get('q'), {
-        hitsPerPage: 300,
-        facetFilters: ['docs_type:' + type],
-      })
-      .then(({ hits }) => {
-        // selects the first result of each category and puts into the new hit array
-        var categoryArr = []
-        newHitArray = hits.filter(hit => {
-          var category = hit.hierarchy.lvl0
-          if (category && !categoryArr.includes(category)) {
-            categoryArr.push(category)
-
-            // unifies anchor style
-            var lastLvl = Object.values(hit.hierarchy)
-              .filter(value => value != null)
-              .pop()
-            hit['url'] = hit.url.replace(
-              /\#.*$/g,
-              '#' +
-                lastLvl
-                  .replace(/\s+/g, '-')
-                  .replace(/[^-\w\u4E00-\u9FFF]*/g, '')
-                  .toLowerCase()
-            )
-            return hit
-          }
-        })
-
-        // appends results to search-results container
-        if (newHitArray.length == 0) {
-          if (lang == 'cn') {
-            $('#search-result-title').append('搜索结果')
-            $('#search-results').append(
-              '<div class="search-category-result">\
-                        <p>很抱歉，我们没有找到您期望的内容。</p>\
-                        <ul>\
-                        <li>请尝试其它搜索词，或者去 <a href="https://asktug.com/" target="_blank"> AskTUG</a> (TiDB User Group) 提问试试。</li>\
-                        <li>如果您想搜索英文内容，请移步至<a href="https://pingcap.com/docs/">英文文档</a>进行搜索。</li>\
-                        </ul>\
-                      </div>'
-            )
-          } else if (lang == 'en') {
-            $('#search-result-title').append('Search Results')
-            $('#search-results').append(
-              '<div class="search-category-result">\
-                        <p>Sorry. We couldn\'t find what you\'re looking for.</p>\
-                        <ul>\
-                        <li>If you\'ve come to pages of an unexpected language, go to <a href="https://pingcap.com/docs-cn/">Chinese documentation</a> and try again.</li>\
-                        <li>If you do want to get some English content, <a href="https://pingcap.com/">PingCAP home page</a> might be a better place for you to go.</li>\
-                        </ul>\
-                      </div>'
-            )
-          }
-        } else {
-          $('#search-result-title').append(
-            lang == 'en' ? 'Search Results' : '搜索结果'
-          )
-          $('#search-results').append(
-            newHitArray
-              .map(
-                hit =>
-                  '<div class="search-category-result">\
-                      <a href="' +
-                  hit.url +
-                  '" target="_blank"><h1 class="search-category-title">' +
-                  hit.hierarchy.lvl0 +
-                  '</h1></a>' +
-                  '<div class="item-link">' +
-                  hit.url +
-                  '</div>\
-                        <div class="search-result-item">' +
-                  (hit._highlightResult.content.value.length > 500
-                    ? hit._snippetResult.content.value
-                    : hit._highlightResult.content.value) +
-                  '</div>' +
-                  '</div>'
-              )
-              .join('')
-          )
-        }
-
-        // hides loader spinner when shows the search-results
-        if ($('.search-category-result').length) {
-          $('.lazy').css('display', 'none')
-        }
-      })
-  } else {
-    if (lang == 'cn') {
-      $('#search-result-title').append('搜索结果')
-    } else if (lang == 'en') {
-      $('#search-result-title').append('Search Results')
-    }
-    $('#search-results').append(
-      '<div class="search-category-result">\
-      </div>'
-    )
-
-    // hides loader spinner when shows the search-results
-    if ($('.search-category-result').length) {
-      $('.lazy').css('display', 'none')
-    }
-  }
-}
-
-// process search ui
-function processSearch() {
-  if ($('#search-input').data('lang') == 'en') {
-    initialSearch(
-      $('#search-input').data('lang'),
-      $('#search-input').data('type')
-    )
-  }
-
-  // Hide search suggestions dropdown menu on focusout
-  $('#search-input').focusout(function() {
-    $('.ds-dropdown-menu').hide()
-  })
-  // Show search suggestions dropdown menu on change
-  $('#search-input').change(function(e) {
-    e.preventDefault()
-    if (e.target && e.target.value) $('.ds-dropdown-menu').show()
-  })
 }
 
 // Process release banner
@@ -314,8 +161,6 @@ $(document).ready(function() {
   $(window).scroll(handleWindowScroll)
 
   if ($('.homepage').length) processReleaseBanner()
-
-  processSearch()
 
   toggleWeChatQRCode()
 
