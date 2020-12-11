@@ -1,0 +1,39 @@
+
+<div class="modal-overlay j-{{.type}}-overlay" style="display: none;">
+    <div class="modal modal-{{.type}}">
+		<div class="modal__header align-left">
+			<h1 class="title">{{ .title }}</h1>
+			<div class="upper-first">{{ .type }}</div>
+		</div>
+		<div class="modal__content modal__content-{{ .type }}">
+			{{- if eq .type "schedule" -}}
+			<div class="list-flex">
+				{{- range $idx, $s := .modal_content -}}
+				<div class="agenda-item align-left">
+					<h2 class="title">-- {{ $s.day }}</h2>
+					<ul>
+						{{- range $idx, $i := $s.list -}}
+							<li>
+								<div class="time">{{- $i.time -}}</div>
+								<div class="content">{{- $i.content -}}</div>
+							</li>
+						{{- end -}}
+					</ul>
+				</div>
+				{{- end -}}
+			</div>
+			{{- end -}}
+
+			{{- if eq .type "grading" -}}
+				<ul>
+					{{- range $idx, $i := .modal_content -}}
+						<li class="grading-item align-left">
+							{{ $i.label }}: {{ $i.content }}
+						</li>
+					{{- end -}}
+				</ul>
+			{{- end -}}
+                
+        </div>
+    </div>
+</div>

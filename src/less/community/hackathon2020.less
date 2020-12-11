@@ -1,0 +1,873 @@
+@import '../variables.less';
+
+@primaryBlue: #4444fd;
+@secondaryGreen: #37f4ad;
+@mainColor: #333;
+
+@REM: 16px;
+@H3: 1.125em;
+
+.h-center {
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.v-center {
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+}
+
+.align-left {
+  text-align: left;
+}
+
+.upper-first {
+  text-transform: capitalize;
+}
+
+.hackathon2020 {
+  background-color: #f7f8f9;
+  font-size: @REM;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .btn {
+    width: 8.5em;
+    padding: 0.6em 1.2em;
+    border: 1px solid @primaryBlue;
+    border-radius: 4px;
+    background-color: @primaryBlue;
+    font-size: @H3;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+
+    &.secondary {
+      background-color: @secondaryGreen;
+      border: 1px solid @secondaryGreen;
+      color: @mainColor;
+    }
+  }
+
+  .modal-overlay {
+    background-color: rgba(26, 26, 36, 0.8);
+  }
+
+  .modal {
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  .modal__header {
+    position: relative;
+    width: 100%;
+    height: 10em;
+    padding: 3em;
+    background: center / cover no-repeat
+      url('https://download.pingcap.com/images/community/hackathon2020/bg-banner.jpg');
+
+    .title {
+      color: #fff;
+      font-size: 1.875em;
+    }
+
+    .upper-first {
+      font-size: 1.25em;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 8em;
+      width: 16em;
+      top: 1em;
+      right: 3em;
+      background: center / contain no-repeat
+        url('https://download.pingcap.com/images/community/hackathon2020/modal-header-inner.svg');
+    }
+  }
+
+  .modal__content {
+    padding: 3em;
+    max-height: 27em;
+    overflow: auto;
+    color: @mainColor;
+  }
+
+  .modal__content-schedule {
+    .list-flex {
+      justify-content: flex-start;
+    }
+
+    .agenda-item {
+      width: 50%;
+
+      .title {
+        margin-bottom: 1em;
+        font-size: 1.5em;
+        color: @mainColor;
+      }
+
+      .time {
+        width: 5em;
+      }
+
+      .content {
+        width: 18em;
+      }
+
+      ul {
+        li {
+          display: flex;
+          line-height: 2;
+        }
+      }
+    }
+  }
+
+  .modal__content-grading {
+    padding-left: 5em;
+
+    .grading-item {
+      position: relative;
+      line-height: 3;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: -2em;
+        .v-center();
+        display: block;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 50%;
+        background: center / cover no-repeat
+          url('https://download.pingcap.com/images/community/hackathon2020/spot.svg');
+      }
+    }
+  }
+}
+
+.hackathon2020__section {
+  padding-top: 4em;
+  text-align: center;
+  line-height: 1.5;
+
+  .container {
+    padding: 1em 0.75em;
+  }
+}
+
+.section__title {
+  display: inline-block;
+  margin-bottom: 2 * @REM;
+  position: relative;
+  color: @mainColor;
+  font-size: 1.5em;
+  font-weight: 600;
+  text-align: center;
+  z-index: 0;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.875 * @REM;
+    z-index: -1;
+    background-color: @secondaryGreen;
+  }
+}
+
+.section__title-white {
+  color: #fff;
+  letter-spacing: 4px;
+}
+
+.list-flex {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+
+  &.container {
+    padding: 0;
+  }
+}
+
+.hackathon2020__banner {
+  width: 100%;
+  height: 0;
+  background: center / cover no-repeat
+    url('https://download.pingcap.com/images/community/hackathon2020/bg-banner.jpg');
+  margin-top: @headerHeight;
+  padding: 30em 1em 0 1em;
+
+  .container {
+    position: relative;
+  }
+
+  .banner__inner {
+    position: absolute;
+    bottom: 6em;
+    left: 0;
+    width: 48em;
+    height: 16em;
+    background: left / contain no-repeat
+      url('https://download.pingcap.com/images/community/hackathon2020/banner-inner.svg');
+  }
+
+  .banner__buttons {
+    position: absolute;
+    right: 0;
+    bottom: 6em;
+
+    .btn:first-child {
+      margin-right: 1em;
+    }
+  }
+}
+
+.hackathon2020__navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(68, 68, 253, 0.08);
+
+  .navbar {
+    display: flex;
+    font-size: 1em;
+  }
+
+  .navbar__item {
+    position: relative;
+    padding: 1em 0;
+    margin: 0 1em;
+    line-height: 1.5;
+
+    &.active::after {
+      content: ' ';
+      position: absolute;
+      bottom: 0;
+      .h-center();
+      width: 2.5em;
+      height: 6px;
+      background-color: @secondaryGreen;
+    }
+  }
+
+  &.navbar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: @headerHeight;
+    z-index: 99;
+  }
+}
+
+.hackathon2020__section-about {
+  .container {
+    background: center / contain no-repeat
+      url('https://download.pingcap.com/images/community/hackathon2020/infinite-grey.svg');
+  }
+
+  .image-container {
+    padding: 1em;
+
+    img {
+      max-width: 100%;
+    }
+  }
+}
+
+.hackathon2020__intro {
+  max-width: 54em;
+  margin: 0 auto;
+
+  &:not(:last-child) {
+    margin-bottom: 1.5em;
+  }
+}
+
+.highlight-card {
+  width: 24em;
+  height: 20em;
+  padding: 1em;
+  background-color: @mainColor;
+  color: #fff;
+  margin: 1em;
+
+  a {
+    color: @secondaryGreen;
+    text-decoration: underline;
+  }
+
+  .card__inner {
+    width: 22em;
+    height: 18em;
+    padding: 1.5em;
+    border: 2px solid @secondaryGreen;
+  }
+
+  .highlight__title {
+    height: 3em;
+    line-height: 3em;
+    background: center / contain no-repeat
+      url('https://download.pingcap.com/images/community/hackathon2020/infinite-blue.svg');
+    font-size: 1.25em;
+    color: @secondaryGreen;
+  }
+
+  .highlight__icon {
+    margin: 1.2em 0;
+
+    img {
+      display: block;
+      height: 2em;
+      margin: auto;
+    }
+  }
+}
+
+.moments-steps {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5em !important;
+}
+
+.moment-item {
+  position: relative;
+  width: 20%;
+  margin-top: -1.5em;
+  z-index: 0;
+  color: @mainColor;
+
+  &.active {
+    color: @primaryBlue;
+
+    .moment__milestone {
+      background-color: @primaryBlue;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 1.5em;
+    left: 0;
+    height: 0;
+    width: 100%;
+    border-top: 1px dashed @mainColor;
+    z-index: -1;
+    opacity: 0.5;
+  }
+
+  &:first-child {
+    &::after {
+      width: 50%;
+      left: 50%;
+    }
+  }
+
+  &:last-child {
+    &::after {
+      width: 50%;
+      right: 50%;
+    }
+  }
+}
+
+.moment__milestone {
+  width: 3em;
+  height: 3em;
+  margin: auto;
+  border-radius: 50%;
+  background-color: @mainColor;
+
+  .spot {
+    display: block;
+    width: 1em;
+    height: 1em;
+    margin: auto;
+    transform: translate3d(0, 1em, 0);
+    border-radius: 50%;
+    background-color: @secondaryGreen;
+  }
+}
+
+.moment__content {
+  width: 12em;
+  margin: 1em auto 0;
+
+  p {
+    line-height: 1.5;
+  }
+}
+
+.schedule-card {
+  position: relative;
+  width: 36em;
+  min-height: 18em;
+  margin: 1em 1.5em;
+  padding: 2em 3em;
+  border-radius: 10px;
+  background: center / cover no-repeat
+    url('https://download.pingcap.com/images/community/hackathon2020/bg-banner.jpg');
+  color: #fff;
+
+  .btn {
+    display: block;
+    position: absolute;
+    bottom: 2em;
+    .h-center();
+    font-size: 1em;
+  }
+
+  &::before {
+    content: attr(data-step);
+    position: absolute;
+    top: 1 * @REM;
+    left: 2 * @REM;
+    font-size: 40px;
+    color: @primaryBlue;
+    font-weight: 600;
+  }
+}
+
+.schedule__title {
+  height: 4em;
+  line-height: 2em;
+  background: center / contain no-repeat
+    url('https://download.pingcap.com/images/community/hackathon2020/infinite-dark-blue.svg');
+  font-size: 1.25em;
+  color: @secondaryGreen;
+}
+
+.schedule__detail {
+  margin: 1em 0;
+}
+
+.award-card {
+  position: relative;
+  width: 24em;
+  height: 18em;
+  margin: 1em;
+  background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-4.svg');
+  background-color: #1f1f21;
+  color: #fff;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+
+  &:hover {
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &::after {
+    content: attr(data-name);
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
+    font-size: 1.75em;
+  }
+
+  &::before {
+    content: attr(data-team);
+    position: absolute;
+    top: 4em;
+    right: 2em;
+    font-size: 1em;
+  }
+
+  &:hover::after,
+  &:hover::before {
+    display: none;
+  }
+
+  &:nth-child(1) {
+    background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-1.svg');
+    background-color: #4242e8;
+
+    &:hover {
+      background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-1-hover.svg');
+    }
+  }
+
+  &:nth-child(2) {
+    background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-2.svg');
+    background-color: #32e0a1;
+    color: @mainColor;
+
+    &:hover {
+      background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-2-hover.svg');
+    }
+  }
+
+  &:nth-child(3) {
+    background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-3.svg');
+    background-color: #cc0b2f;
+
+    &:hover {
+      background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-3-hover.svg');
+    }
+  }
+
+  &:nth-child(4) {
+    &:hover {
+      background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-4-hover.png');
+    }
+  }
+
+  &:nth-child(5) {
+    &:hover {
+      background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-5-hover.png');
+    }
+  }
+
+  &:nth-child(6) {
+    &:hover {
+      background-image: url('https://download.pingcap.com/images/community/hackathon2020/bg-award-card-6-hover.png');
+    }
+  }
+}
+
+.tutor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1em 3em 3em;
+}
+
+.tutor__avatar {
+  width: 10em;
+  height: 10em;
+  margin-bottom: 1em;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.tutor__name {
+  margin-bottom: 0.5em;
+  font-size: 1.25em;
+}
+
+.hackathon2020__section-faq {
+  background: #20202c;
+
+  .faq-list {
+    max-width: 48em;
+    padding: 1.5em 1.5em 4em;
+    margin: 0 auto;
+  }
+
+  .expand {
+    &::before {
+      content: '-';
+      color: @secondaryGreen;
+      border: 1px solid @secondaryGreen;
+    }
+
+    &::after {
+      border-bottom: 1px dashed @secondaryGreen;
+    }
+  }
+}
+
+.faq__question {
+  color: white;
+  font-size: 18px;
+  position: relative;
+  padding: 1em 0 0.5em;
+  cursor: pointer;
+  line-height: 1.7;
+
+  &::after {
+    content: '';
+    border-bottom: 1px dashed #3a58f0;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
+
+  &:hover {
+    &::before {
+      color: @secondaryGreen;
+      border: 1px solid @secondaryGreen;
+    }
+
+    &::after {
+      border-bottom: 1px dashed @secondaryGreen;
+    }
+  }
+
+  &::before {
+    content: '+';
+    color: @secondaryGreen;
+    border: 1px solid @secondaryGreen;
+    border-radius: 50%;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+}
+
+.faq__answer {
+  color: white;
+  font-size: 18px;
+  padding: 1rem 2rem;
+  display: none;
+  line-height: 1.7;
+}
+
+.partners {
+  max-width: 1024px;
+  margin: 4rem auto;
+
+  .sponsor-type {
+    font-size: 0.9rem;
+    text-align: center;
+    padding-top: 10px;
+  }
+}
+
+.sponsor-type {
+  margin: 1em 0;
+  color: inherit;
+}
+
+.partners-list {
+  img {
+    display: block;
+    height: 4em;
+    width: auto;
+    margin: 1em;
+  }
+}
+
+.reviews-list {
+  padding: 1em 0 5em;
+
+  .review-item {
+    margin: 1em;
+
+    img {
+      display: block;
+      width: auto;
+      height: 16.25em;
+      margin-bottom: 1em;
+      border-radius: 10px;
+
+      &:hover {
+        box-shadow: 0 5px 14px 3px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+@media (min-width: 1408px) {
+  .hackathon2020__banner {
+    .banner__inner {
+      left: -2em;
+    }
+  }
+
+  .hackathon2020__navbar .navbar {
+    margin-left: -1.75em;
+  }
+
+  .hackathon2020__section:nth-child(2n + 1) {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 1em;
+      left: 2em;
+      width: 12em;
+      height: 12em;
+      background: center / contain no-repeat
+        url('https://download.pingcap.com/images/community/hackathon2020/printing-wormhole.svg');
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 1em;
+      right: 2em;
+      width: 12em;
+      height: 12em;
+      background: center / contain no-repeat
+        url('https://download.pingcap.com/images/community/hackathon2020/printing-ripple.svg');
+    }
+
+    &.hackathon2020__section-faq {
+      &::before {
+        background: center / contain no-repeat
+          url('https://download.pingcap.com/images/community/hackathon2020/printing-wormhole-blue.svg');
+      }
+
+      &::after {
+        background: center / contain no-repeat
+          url('https://download.pingcap.com/images/community/hackathon2020/printing-ripple-blue.svg');
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .hackathon2020 {
+    font-size: 0.875 * @REM;
+
+    .modal {
+      max-width: 90%;
+    }
+  }
+
+  .hackathon2020__banner {
+    padding-top: 24em;
+
+    .banner__inner {
+      bottom: 8em;
+      height: 14em;
+      max-width: 100%;
+    }
+
+    .banner__buttons {
+      bottom: 3em;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .hackathon2020__navbar .navbar {
+    justify-content: center;
+  }
+
+  .hackathon2020__intro {
+    max-width: 100%;
+  }
+
+  .schedule-card {
+    min-height: 20em;
+  }
+
+  .award-card:not(:hover) {
+    background-size: 60%;
+  }
+
+  .tutor-item {
+    margin: 2em 1em;
+    width: 42%;
+  }
+
+  .moments-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .moment-item {
+    height: 9em;
+    width: 100%;
+
+    &::after {
+      width: 0;
+      height: 100%;
+      left: 50%;
+      border-top: none;
+      border-left: 1px dashed @mainColor;
+    }
+
+    &:last-child {
+      height: 3em;
+
+      &::after {
+        height: 0;
+      }
+    }
+
+    .moment__content {
+      position: absolute;
+      width: 10em;
+      margin-top: -3em;
+    }
+
+    &:nth-child(2n + 1) {
+      .moment__content {
+        right: calc(~'50% + 2.5em');
+        text-align: right;
+      }
+    }
+
+    &:nth-child(2n) {
+      .moment__content {
+        left: calc(~'50% + 2.5em');
+        text-align: left;
+      }
+    }
+  }
+
+  .reviews-list .review-item img {
+    height: 15em;
+  }
+}
+
+@media (max-width: 428px) {
+  .hackathon2020 .modal__header {
+    padding: 3em 1em;
+
+    &::after {
+      height: 6em;
+      width: 12em;
+      top: 2em;
+      right: 1em;
+    }
+  }
+
+  .hackathon2020 .modal__content {
+    padding: 1em;
+  }
+
+  .hackathon2020 .modal__content-schedule .list-flex {
+    flex-direction: column;
+    align-items: center;
+
+    .agenda-item {
+      width: 100%;
+      margin-bottom: 2em;
+    }
+  }
+
+  .hackathon2020 .modal__content-grading {
+    padding-left: 3em;
+  }
+}
+
+@media (max-width: 320px) {
+  .hackathon2020 {
+    font-size: 0.75 * @REM;
+  }
+
+  .hackathon2020__banner .banner__buttons .btn {
+    font-size: 0.75 * @REM;
+  }
+
+  .hackathon2020 .modal__header {
+    &::after {
+      display: none;
+    }
+  }
+}
