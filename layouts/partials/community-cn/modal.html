@@ -2,11 +2,13 @@
 <div class="modal-overlay j-{{.type}}-overlay" style="display: none;">
     <div class="modal modal-{{.type}}">
 		<div class="modal__header align-left">
-			<h1 class="title">{{ .title }}</h1>
-			<div class="upper-first">{{ .type }}</div>
+			<h1 class="title uppercase">{{ .title }}</h1>
+			{{- if not (eq .lang "en") -}}
+				<div class="upper-first">{{ .type }}</div>
+			{{- end -}}
 		</div>
 		<div class="modal__content modal__content-{{ .type }}">
-			{{- if eq .type "schedule" -}}
+			{{- if eq .type "agenda" -}}
 			<div class="list-flex">
 				{{- range $idx, $s := .modal_content -}}
 				<div class="agenda-item align-left">
@@ -24,16 +26,30 @@
 			</div>
 			{{- end -}}
 
-			{{- if eq .type "grading" -}}
-				<ul>
-					{{- range $idx, $i := .modal_content -}}
+			{{- if eq .type "criteria" -}}
+				{{- if eq .lang "en" -}}
+					<ul>
+						{{- range $idx, $i := .modal_content -}}
+							<li class="grading-item en align-left">
+								<div class="label">{{- $i.label -}}</div>
+								<ul class="content">
+								{{- range $idx, $c := $i.content -}}
+									<li>- {{ $c }}</li>
+								{{- end -}}
+								</ul>
+							</li>
+						{{- end -}}
+					</ul>
+				{{- else -}}
+					<ul>
+						{{- range $idx, $i := .modal_content -}}
 						<li class="grading-item align-left">
 							{{ $i.label }}: {{ $i.content }}
 						</li>
-					{{- end -}}
-				</ul>
+						{{- end -}}
+					</ul>
+				{{- end -}}
 			{{- end -}}
-                
         </div>
     </div>
 </div>

@@ -20,25 +20,21 @@ function processDate() {
   const date = new Date()
   const today =
     date.getFullYear() + '.' + (date.getMonth() + 1) + '.' + date.getDate()
-  const milestones = [
-    '2020.12.15',
-    '2021.1.10',
-    '2021.1.11',
-    '2021.1.16',
-    '2021.1.17',
-  ]
+  const milestones = ['2021.1.10', '2021.1.11', '2021.1.16', '2021.1.17']
   const moments = $('.moment-item')
 
   if (today <= milestones[0]) {
+    // ~ 2020.1.10
     $(moments[0]).addClass('active')
-  } else if (today <= milestones[1]) {
+  } else if (today < milestones[2]) {
+    // 2021.1.11 ~ 2021.1.15
     $(moments[1]).addClass('active')
   } else if (today < milestones[3]) {
+    // 2021.1.16 ~ 2021.1.17
     $(moments[2]).addClass('active')
-  } else if (today < milestones[4]) {
-    $(moments[3]).addClass('active')
   } else {
-    $(moments[4]).addClass('active')
+    // 2021.1.17 ~
+    $(moments[3]).addClass('active')
   }
 }
 
@@ -76,14 +72,14 @@ $(document).ready(function() {
       .slideUp()
   })
 
-  $('.j-open-schedule-modal').click(function() {
-    $('.j-schedule-overlay').fadeIn()
-    $('.j-schedule-overlay, .modal').addClass('active')
+  $('.j-open-agenda-modal').click(function() {
+    $('.j-agenda-overlay').fadeIn()
+    $('.j-agenda-overlay, .modal').addClass('active')
   })
 
-  $('.j-open-grading-modal').click(function() {
-    $('.j-grading-overlay').fadeIn()
-    $('.j-grading-overlay, .modal').addClass('active')
+  $('.j-open-criteria-modal').click(function() {
+    $('.j-criteria-overlay').fadeIn()
+    $('.j-criteria-overlay, .modal').addClass('active')
   })
 
   $('.modal-overlay').on('click', function(e) {

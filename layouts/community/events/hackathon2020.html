@@ -11,14 +11,13 @@
 {{- end -}}
 
 {{- define "main" -}}
-<div class="hackathon2020">
+<div class="hackathon2020 hackathon2020-en">
     <section class="hackathon2020__banner">
 		<div class="container">
 			<div class="banner__inner"></div>
 			<div class="banner__buttons">
-				<a class="btn secondary" href="https://forms.pingcap.com/f/tidb-hackathon-2020" target="_blank" rel="noopener noreferrer">立即报名</a>
-				<!-- TODO: href -->
-				<a class="btn" href="" target="_blank" rel="noopener noreferrer">官方 SLACK</a>
+				<a class="btn secondary uppercase" href="https://forms.pingcap.com/f/tidb-hackathon-2020" target="_blank" rel="noopener noreferrer">Sign Up</a>
+				<a class="btn uppercase" href="https://slack.tidb.io/invite?team=tidb-community&channel=tidb-hackathon&ref=website" target="_blank" rel="noopener noreferrer">Slack Channel</a>
 			</div>
 		</div>	
 	</section>
@@ -27,30 +26,31 @@
 		<div class="container">
 			<ul class="navbar">
 				<li class="navbar__item">
-					<a href="#about">关于比赛</a>
+					<a href="#about" class="uppercase">About</a>
 				</li>
 				<li class="navbar__item">
-					<a href="#moments">大赛时间线</a>
+					<a href="#timeline" class="uppercase">Timeline</a>
 				</li>
 				<li class="navbar__item">
-					<a href="#awards">奖项设置</a>
+					<a href="#prize-pool" class="uppercase">Prize Pool</a>
 				</li>
 				<li class="navbar__item">
-					<a href="#reviews">往期回顾</a>
+					<a href="#participate" class="uppercase">Participate</a>
 				</li>
 			</ul>
 		</div>
 	</section>
 	
     <section class="hackathon2020__section hackathon2020__section-about">
-		<h2 class="section__title" id="about">关于比赛</h2>
+		<h2 class="section__title uppercase" id="about">About</h2>
 		<div class="container">
 			<p class="hackathon2020__intro">
-				又到了 TiDB 一年一度的黑客马拉松时间，作为社区最硬核的保留项目 ，黑客马拉松一直倍受期待。TiDB Hackathon 是由 PingCAP 举办的黑客马拉松大赛，选手需围绕组委会规定的主题做出一个完整的作品并由评审最终评选出获奖者。
+				Welcome to TiDB Hackathon 2020, the most innovative technical challenge and one of the most popular events in the TiDB community! At TiDB Hackathon 2020, developers across the world will engage, collaborate, and innovate together to work on solutions to improve the productivity and efficiency of TiDB and its ecosystem projects, including TiKV and Chaos Mesh®️.
 			</p>
 			<p class="hackathon2020__intro">
-				今年大赛主题为「∞」，参赛项目可围绕 TiDB 组件或 TiDB 生态周边（TiKV，ChaosMesh®️）进行创作。期待大家用最硬核的技术和最炸裂的创意为 TiDB 创造无限可能。
+				The theme of Hackathon this year is [∞], by which we expect participants to use their infinite power to innovate, to challenge, and to create a better TiDB. Participants completing Hackathon programs will get limited edition Hackathon T-shirts!
 			</p>
+			<p>Join us to create unlimited possibilities for TiDB!</p>
 		</div>
 		<div class="image-container">
 			<img src="https://download.pingcap.com/images/community/hackathon2020/t-shirt.png" alt="">
@@ -58,12 +58,12 @@
     </section>
 
     <section class="hackathon2020__section hackathon2020__section-highlights">
-		<h2 class="section__title" id="highlights">大赛亮点</h2>
+		<h2 class="section__title uppercase" id="highlights">Highlights</h2>
 		<div class="container list-flex">
 			{{- range $idx, $i := .Site.Data.hackathon_2020.highlights -}}
 				<div class="highlight-card">
 					<div class="card__inner">
-						<div class="highlight__title">{{ $i.title }}</div>
+						<div class="highlight__title uppercase">{{ $i.title }}</div>
 						<div class="highlight__icon">
 							<img class="lazy thumbnail-img" data-original="{{ $i.icon }}" src="/images/svgs/loader-spinner.svg" alt="team-avatar" />
 						</div>
@@ -77,9 +77,9 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-		<h2 class="section__title" id="moments">大赛时间线</h2>
+		<h2 class="section__title uppercase" id="timeline">Timeline</h2>
 		<div class="container">
-			<ul class="moments-steps">
+			<ul class="moments">
 				{{- range $idx, $i := .Site.Data.hackathon_2020.moments -}}
 				<li class="moment-item {{ if $i.active }}active{{ end }}">
 					<div class="moment__milestone"><span class="spot"></span></div>
@@ -94,25 +94,25 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-        <h2 class="section__title" id="schedule">参赛流程</h2>
+        <h2 class="section__title uppercase" id="participate">Participate</h2>
         <div class="list-flex container">
             {{- range $idx, $i := .Site.Data.hackathon_2020.schedule -}}
             <div class="schedule-card" data-step="{{ $i.step }}">
-                <div class="schedule__title">
+                <div class="schedule__title uppercase">
 					<p class="name">{{ $i.name }}</p>
                     <p class="time">{{ $i.time }}</p>
                 </div>
-				<p class="schedule__detail {{ if $i.align_left }}align-left{{ end }}">{{ $i.detail }}</p>
+				<p class="schedule__detail {{ if $i.align_left }}align-left{{ end }}">
+					{{ $i.detail }}
+				</p>
+				{{- if $i.detail_note -}}
+					<p class="schedule__detail align-left">{{ $i.detail_note }}</p>
+				{{- end -}}
 				{{- if $i.btn_link -}} 
-					<a class="btn" href="{{ $i.btn_link }}" target="_blank" rel="noopener noreferrer">{{ $i.btn_text }}</a>
+					<a class="btn uppercase" href="{{ $i.btn_link }}" target="_blank" rel="noopener noreferrer">{{ $i.btn_text }}</a>
 				{{- else -}}
-					{{- if eq $i.modal_name "schedule" -}}
-						<button class="btn j-open-schedule-modal">{{ $i.btn_text }}</button>
-                        {{- partial "community-cn/modal" (dict "type" "schedule" "title" $i.btn_text "modal_content" $i.modal_content) -}}
-                    {{- else if eq $i.modal_name "grading" -}}
-                        <button class="btn j-open-grading-modal">{{ $i.btn_text }}</button>
-						{{- partial "community-cn/modal" (dict "type" "grading" "title" $i.btn_text "modal_content" $i.modal_content) -}}
-					{{- end -}}
+					<button class="btn uppercase j-open-{{$i.modal_name}}-modal">{{ $i.btn_text }}</button>
+					{{- partial "community-cn/modal" (dict "lang" "en" "type" $i.modal_name "title" $i.btn_text "modal_content" $i.modal_content) -}}
 				{{- end -}}
             </div>
             {{- end -}}
@@ -120,7 +120,7 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-        <h2 class="section__title" id="awards">奖项设置</h2>
+        <h2 class="section__title uppercase" id="prize-pool">Prize Pool</h2>
         <div class="list-flex container">
             {{- range $idx, $i := .Site.Data.hackathon_2020.awards -}}
                 <div class="award-card" data-name="{{ $i.award }}" data-team="{{ $i.team_numbers }}"></div>
@@ -129,9 +129,9 @@
     </section>
 
     <section class="hackathon2020__section">
-        <h2 class="section__title" id="tutors">大赛评委</h2>
+        <h2 class="section__title uppercase" id="judges">Judges</h2>
         <div class="list-flex container">
-            {{- range $idx, $i := .Site.Data.hackathon_2020.tutors -}}
+            {{- range $idx, $i := .Site.Data.hackathon_2020.judges -}}
                 <div class="tutor-item">
                     <div class="tutor__avatar">
                         <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.avatar }}" alt="Tutor avatar" />
@@ -144,7 +144,7 @@
     </section>
 
     <section class="hackathon2020__section hackathon2020__section-faq">
-        <h2 class="section__title section__title-white" id="faq">FAQ</h2>
+        <h2 class="section__title section__title-white uppercase" id="faq">FAQ</h2>
         <div class="faq-list container">
             {{- range $idx, $i := .Site.Data.hackathon_2020.faq -}}
                 <div class="faq-item align-left">
@@ -162,8 +162,8 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-        <h2 class="section__title" id="partners">赞助合作</h2>
-        <h3 class="sponsor-type">黄金赞助</h3>
+        <h2 class="section__title uppercase" id="partners">Partners</h2>
+        <h3 class="sponsor-type uppercase">Gold sponsor</h3>
         <div class="list-flex container partners-list">
 			{{- range $idx, $i := .Site.Data.hackathon_2020.sponsors -}}
 				<a href="{{ $i.link }}" target="_blank" rel="noopener noreferrer">
@@ -171,7 +171,7 @@
 				</a>
             {{- end -}}
         </div>
-        <h3 class="sponsor-type">云计算基础设施支持</h3>
+        <h3 class="sponsor-type uppercase">Cloud computing equipment support</h3>
         <div class="list-flex container partners-list">
 			{{- range $idx, $i := .Site.Data.hackathon_2020.partners.resources -}}
 				<a href="{{ $i.link }}" target="_blank" rel="noopener noreferrer">
@@ -179,7 +179,7 @@
 				</a>
             {{- end -}}
         </div>
-        <h3 class="sponsor-type">社区支持</h3>
+        <h3 class="sponsor-type uppercase">community support</h3>
         <div class="list-flex container partners-list">
             {{- range $idx, $i := .Site.Data.hackathon_2020.partners.community -}}
 			<a href="{{ $i.link }}" target="_blank" rel="noopener noreferrer">
@@ -188,21 +188,6 @@
             {{- end -}}
         </div>
 	</section>
-	
-	<section class="hackathon2020__section">
-		<h2 class="section__title" id="reviews">往期回顾</h2>
-		<div class="list-flex reviews-list">
-			{{- range $idx, $i := .Site.Data.hackathon_2020.reviews -}}
-			<div class="review-item">
-				<a href="{{ $i.link }}" target="{{ if $i.outbound }}_blank{{ end }}">
-					<img class="lazy" data-original="{{ $i.image }}" src="/images/svgs/loader-spinner.svg" alt="{{ $i.alt }}" />
-				</a>
-				<p>{{ $i.alt }}</p>
-			</div>
-			{{- end -}}
-		</div>
-	</section>
-
 </div>
 {{- end -}}
 

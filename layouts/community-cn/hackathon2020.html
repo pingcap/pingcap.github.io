@@ -18,8 +18,7 @@
 			<div class="banner__inner"></div>
 			<div class="banner__buttons">
 				<a class="btn secondary" href="https://forms.pingcap.com/f/tidb-hackathon-2020" target="_blank" rel="noopener noreferrer">立即报名</a>
-				<!-- TODO: href -->
-				<a class="btn" href="" target="_blank" rel="noopener noreferrer">官方 SLACK</a>
+				<a class="btn" href="https://slack.tidb.io/invite?team=tidb-community&channel=tidb-hackathon&ref=website" target="_blank" rel="noopener noreferrer">官方 SLACK</a>
 			</div>
 		</div>	
 	</section>
@@ -31,10 +30,10 @@
 					<a href="#about">关于比赛</a>
 				</li>
 				<li class="navbar__item">
-					<a href="#moments">大赛时间线</a>
+					<a href="#timeline">大赛时间线</a>
 				</li>
 				<li class="navbar__item">
-					<a href="#awards">奖项设置</a>
+					<a href="#prize-pool">奖项设置</a>
 				</li>
 				<li class="navbar__item">
 					<a href="#reviews">往期回顾</a>
@@ -50,8 +49,9 @@
 				又到了 TiDB 一年一度的黑客马拉松时间，作为社区最硬核的保留项目 ，黑客马拉松一直倍受期待。TiDB Hackathon 是由 PingCAP 举办的黑客马拉松大赛，选手需围绕组委会规定的主题做出一个完整的作品并由评审最终评选出获奖者。
 			</p>
 			<p class="hackathon2020__intro">
-				今年大赛主题为「∞」，参赛项目可围绕 TiDB 组件或 TiDB 生态周边（TiKV，ChaosMesh®️）进行创作。期待大家用最硬核的技术和最炸裂的创意为 TiDB 创造无限可能。
+				今年大赛主题为「∞」，参赛项目可围绕 TiDB 组件或 TiDB 生态周边（TiKV，ChaosMesh®️ 等）进行创作。期待大家用最硬核的技术和最炸裂的创意为 TiDB 创造无限可能。
 			</p>
+			<p class="hackathon2020__intro">所有完赛选手都可以获得 Hackathon 定制 Tshirt 哦～</p>
 		</div>
 		<div class="image-container">
 			<img src="https://download.pingcap.com/images/community/hackathon2020/t-shirt.png" alt="">
@@ -78,9 +78,9 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-		<h2 class="section__title" id="moments">大赛时间线</h2>
+		<h2 class="section__title" id="timeline">大赛时间线</h2>
 		<div class="container">
-			<ul class="moments-steps">
+			<ul class="moments">
 				{{- range $idx, $i := .Site.Data.hackathon_cn_2020.moments -}}
 				<li class="moment-item">
 					<div class="moment__milestone"><span class="spot"></span></div>
@@ -95,7 +95,7 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-        <h2 class="section__title" id="schedule">参赛流程</h2>
+        <h2 class="section__title" id="participate">参赛流程</h2>
         <div class="list-flex container">
             {{- range $idx, $i := .Site.Data.hackathon_cn_2020.schedule -}}
             <div class="schedule-card" data-step="{{ $i.step }}">
@@ -107,13 +107,8 @@
 				{{- if $i.btn_link -}} 
 					<a class="btn" href="{{ $i.btn_link }}" target="_blank" rel="noopener noreferrer">{{ $i.btn_text }}</a>
 				{{- else -}}
-					{{- if eq $i.modal_name "schedule" -}}
-						<button class="btn j-open-schedule-modal">{{ $i.btn_text }}</button>
-                        {{- partial "community-cn/modal" (dict "type" "schedule" "title" $i.btn_text "modal_content" $i.modal_content) -}}
-                    {{- else if eq $i.modal_name "grading" -}}
-                        <button class="btn j-open-grading-modal">{{ $i.btn_text }}</button>
-						{{- partial "community-cn/modal" (dict "type" "grading" "title" $i.btn_text "modal_content" $i.modal_content) -}}
-					{{- end -}}
+					<button class="btn j-open-{{$i.modal_name}}-modal">{{ $i.btn_text }}</button>
+					{{- partial "community-cn/modal" (dict "type" $i.modal_name "title" $i.btn_text "modal_content" $i.modal_content) -}}
 				{{- end -}}
             </div>
             {{- end -}}
@@ -121,7 +116,7 @@
 	</section>
 	
 	<section class="hackathon2020__section">
-        <h2 class="section__title" id="awards">奖项设置</h2>
+        <h2 class="section__title" id="prize-pool">奖项设置</h2>
         <div class="list-flex container">
             {{- range $idx, $i := .Site.Data.hackathon_cn_2020.awards -}}
                 <div class="award-card" data-name="{{ $i.award }}" data-team="{{ $i.team_numbers }}"></div>
@@ -130,9 +125,9 @@
     </section>
 
     <section class="hackathon2020__section">
-        <h2 class="section__title" id="tutors">大赛评委</h2>
+        <h2 class="section__title" id="judges">大赛评委</h2>
         <div class="list-flex container">
-            {{- range $idx, $i := .Site.Data.hackathon_cn_2020.tutors -}}
+            {{- range $idx, $i := .Site.Data.hackathon_cn_2020.judges -}}
                 <div class="tutor-item">
                     <div class="tutor__avatar">
                         <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.avatar }}" alt="Tutor avatar" />
