@@ -1,4 +1,4 @@
-import { getCookies } from './cookies.js'
+import { getCookies } from './utils/cookies.js'
 import './vendor/jquery-dateformat.js'
 // https://github.com/phstc/jquery-dateFormat
 

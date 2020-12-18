@@ -1,4 +1,4 @@
-import { dynamicAddSubscribeForm } from './mailchimp'
+import { dynamicAddSubscribeForm } from './utils/mailchimp'
 // JS Goes here - ES6 supported
 
 // Global JS

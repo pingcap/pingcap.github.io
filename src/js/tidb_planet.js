@@ -1,7 +1,7 @@
 // JS Code in TiDB Planet Pages
 
 // import Cookies from './vendor/js.cookie.js'
-import { getCookies, setCookies } from './cookies.js'
+import { getCookies, setCookies } from './utils/cookies.js'
 // https://github.com/js-cookie/js-cookie
 // import './vendor/jquery-dateformat.js'
 // // https://github.com/phstc/jquery-dateFormat

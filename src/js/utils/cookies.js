@@ -1,4 +1,4 @@
-import Cookies from './vendor/js.cookie.js'
+import Cookies from '../vendor/js.cookie.js'
 // https://github.com/js-cookie/js-cookie
 
 const prefix = '_tidb_planet_'
