@@ -3,19 +3,17 @@ const glob = require('glob')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
 const isDev = process.env.NODE_ENV === 'development'
-const srcDir = path.join(__dirname, 'src', 'js')
-const entries = glob
-  .sync('*.js', {
-    cwd: srcDir,
-  })
-  .map(key => [key.replace('.js', ''), path.resolve(srcDir, key)])
-const entryObj = Object.fromEntries(entries)
 
 module.exports = {
   mode: isDev ? 'development' : 'production',
-  entry: entryObj,
+  entry: glob
+    .sync(path.join(__dirname, './src/js/*.js'))
+    .reduce((entries, path) => {
+      let arr = path.split('/')
+      entries[arr[arr.length - 1]] = path
+      return entries
+    }, {}),
   output: {
     path: path.join(__dirname, 'dist', 'js'),
     publicPath: '/js/',
