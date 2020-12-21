@@ -15,6 +15,7 @@ module.exports = {
       return entries
     }, {}),
   output: {
+    filename: '[name]',
     path: path.join(__dirname, 'dist', 'js'),
     publicPath: '/js/',
   },
