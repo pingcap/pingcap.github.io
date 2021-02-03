@@ -30,6 +30,9 @@
 					<a href="#about">关于比赛</a>
 				</li>
 				<li class="navbar__item">
+					<a href="#winners">赛事奖项归属</a>
+				</li>
+				<li class="navbar__item">
 					<a href="#timeline">大赛时间线</a>
 				</li>
 				<li class="navbar__item">
@@ -76,6 +79,36 @@
 			{{- end -}}
 		</div>
 	</section>
+
+	<section class="hackathon2020__section hackathon2020__section-winners">
+		<h2 class="section__title" id="winners">赛事奖项归属</h2>
+		<div class="list">
+			{{- range $idx, $i := .Site.Data.hackathon_cn_2020.winners_2020 -}}
+			<div class="winner-team">
+				<div class="thumbnail">
+					<img class="lazy thumbnail-img" data-original="{{ $i.thumbnail }}"
+						src="/images/svgs/loader-spinner.svg" alt="team-avatar" />
+					<p class="thumbnail-text j-thumbnailText-click">{{ $i.project_intro }}</p>
+				</div>
+				{{- partial "tidb-planet/modal" (dict "type" "schedule" "modal_img" $i.modal_img) -}}
+				<div class="team-info">
+					<p class="award">{{ $i.award }}</p>
+					<p class="project-name">{{ $i.project_name }}</p>
+				</div>
+				<div class="misc">
+					<div class="misc-btns">
+						<a href="{{ $i.rfc }}" target="_blank"><button class="GitHub-repo">RFC</button></a>
+						<a href="{{ $i.github }}" target="_blank"><button class="GitHub-repo">GitHub Repo</button></a>
+					</div>
+				</div>
+			</div>
+			{{- end -}}
+		</div>
+		<a href="https://github.com/pingcap/presentations/blob/master/hackathon-2020-projects.md">
+			<button class="more-project-btn">查看所有项目</button>
+		</a>
+	</section>
+
 
 	<section class="hackathon2020__section">
 		<h2 class="section__title" id="timeline">大赛时间线</h2>
@@ -221,4 +254,5 @@
     })
 </script>
 <script type="text/javascript" src="/js/hackathon2020.js"></script>
+<script type="text/javascript" src="/js/community.js"></script>
 {{- end -}}
