@@ -21,7 +21,7 @@ function processDate() {
   const today =
     date.getFullYear() + '.' + (date.getMonth() + 1) + '.' + date.getDate()
   const milestones = ['2021.1.10', '2021.1.11', '2021.1.16', '2021.1.17']
-  const hackingCampMilestones = ['2021.2.23', '2021.3.15', '2021.4.20', '2021.4.28']
+  const hackingCampMilestones = ['2021.3.14', '2021.3.21', '2021.4.26', '2021.4.29']
   const moments = $('.hackathon-moment-item')
   const hackingMoments = $('.hacking-camp-moment')
 

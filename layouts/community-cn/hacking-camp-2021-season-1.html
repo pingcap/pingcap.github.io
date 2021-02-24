@@ -15,7 +15,7 @@
 <div class="hackathon2020">
     <section class="hackathon2020__banner">
 		<div class="container">
-			<div class="banner__inner"></div>
+			<div class="banner__inner hacking-camp"></div>
 		</div>
 	</section>
 
@@ -32,7 +32,7 @@
 					<a href="#timeline">Hacking Camp 时间线</a>
 				</li>
 				<li class="navbar__item">
-					<a href="#prize-pool">特别赞助</a>
+					<a href="#partners">支持企业及社区</a>
 				</li>
 			</ul>
 		</div>
@@ -45,7 +45,7 @@
 				2021 年 1 月结束的 TiDB 黑客马拉松中诞生了许多明星项目，如 UDF、图数据库、文档自动纠错等等，为 TiDB 构建了丰富的生态和卓越的性能提升，令人不禁感叹「社区的力量」。
 			</p>
 			<p class="hackathon2020__intro">
-				为了让这些项目能够真正落地，继续在社区中发光发热，PingCAP 计划在 2 月举办一个为期 4 周的黑客冬令营（Hacking Camp）。由 PingCAP 提供导师，帮助项目团队一起制定合理的后续计划，并将向社区公开阶段性成果。
+				为了让这些项目能够真正落地，继续在社区中发光发热，PingCAP 计划在 2 月举办一个为期 8 周的黑客冬令营（Hacking Camp）。由 PingCAP 提供导师，帮助项目团队一起制定合理的后续计划，并将向社区公开阶段性成果。
 			</p>
 			<p class="hackathon2020__intro">第一期 Hacking Camp 结束后将由每支队伍的导师评估是否可以顺利毕业。所有毕业的团队队员将获得 TiDB 定制周边一份。</p>
 		</div>
@@ -53,7 +53,7 @@
 
 	<section class="hackathon2020__section hackathon2020__section-winners">
 		<h2 class="section__title" id="winners">第一期入围项目</h2>
-		<p>第一期 Hacking Camp 共有 5 个项目入围，感兴趣的小伙伴可以点击加入队伍下方的交流群，共同为项目添砖加瓦。</p>
+		<p class="desc">第一期 Hacking Camp 共有 5 个项目入围，感兴趣的小伙伴可以点击加入队伍下方的交流群，共同为项目添砖加瓦。</p>
 		<div class="list">
 			{{- range $idx, $i := .Site.Data.hacking_camp_2021_s1.winners -}}
 			<div class="winner-team hacking-camp">
@@ -79,7 +79,7 @@
 
 
 	<section class="hackathon2020__section">
-		<h2 class="section__title" id="timeline">大赛时间线</h2>
+		<h2 class="section__title" id="timeline">Hacking Camp 时间线</h2>
 		<div class="container">
 			<ul class="moments">
 				{{- range $idx, $i := .Site.Data.hacking_camp_2021_s1.moments -}}
@@ -95,24 +95,15 @@
 		</div>
 	</section>
 
-	<section class="hackathon2020__section">
-        <h2 class="section__title" id="prize-pool">奖项设置</h2>
-        <div class="list-flex container prize-container">
-            {{- range $idx, $i := .Site.Data.hackathon_cn_2020.awards -}}
-                <div class="award-card" data-name="{{ $i.award }}" data-team="{{ $i.team_numbers }}"></div>
-            {{- end -}}
-        </div>
-    </section>
-
     <section class="hackathon2020__section">
-        <h2 class="section__title" id="judges">大赛评委</h2>
+        <h2 class="section__title" id="judges">Hacking Camp 导师团</h2>
         <div class="list-flex container">
             {{- range $idx, $i := .Site.Data.hacking_camp_2021_s1.judges -}}
-                <div class="tutor-item">
+                <div class="tutor-item hacking-camp">
                     <div class="tutor__avatar">
                         <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="{{ $i.avatar }}" alt="Tutor avatar" />
                     </div>
-                    <div class="tutor__name">{{ $i.name }} | {{ $i.team_name }} </div>
+                    <div class="tutor__name hacking-camp">{{ $i.name }} | {{ $i.team_name }} </div>
                     <div class="tutor__title">{{ $i.word }}</div>
                 </div>
             {{- end -}}
@@ -120,9 +111,16 @@
     </section>
 
 	<section class="hackathon2020__section">
-        <h2 class="section__title" id="partners">其他合作支持</h2>
-        <div class="list-flex container partners-list">
-			{{- range $idx, $i := .Site.Data.hacking_camp_2021_s1.sponsors -}}
+		<h2 class="section__title" id="partners">支持企业及社区</h2>
+		<div class="list-flex container partners-list hacking-camp">
+			{{- range $idx, $i := .Site.Data.hacking_camp_2021_s1.sponsors1 -}}
+				<a href="{{ $i.link }}" target="_blank" rel="noopener noreferrer">
+					<img class="lazy" data-original="{{ $i.img }}" src="/images/svgs/loader-spinner.svg" alt="sponsor logo">
+				</a>
+            {{- end -}}
+        </div>
+        <div class="list-flex container partners-list hacking-camp">
+			{{- range $idx, $i := .Site.Data.hacking_camp_2021_s1.sponsors2 -}}
 				<a href="{{ $i.link }}" target="_blank" rel="noopener noreferrer">
 					<img class="lazy" data-original="{{ $i.img }}" src="/images/svgs/loader-spinner.svg" alt="sponsor logo">
 				</a>
