@@ -20,41 +20,42 @@
 }
 
 .read-more {
-    position: relative;
-    margin-top: 1rem;
-    transition: 0.5s;
-    padding-left: 0;
-    font-size: @P1;
-    color: @btnBlue;
+    a {
+        position: relative;
+        margin-top: 1rem;
+        transition: 0.5s;
+        padding-left: 0;
+        font-size: @P1;
+        color: @btnBlue;
 
-    &:hover {
-        padding-left: 1rem;
-
-        a {
+        &:hover {
+            padding-left: 1rem;
             color: @btnBlue;
+
+            &::after {
+                opacity: 1;
+                left: 0;
+            }
         }
 
         &::after {
-            opacity: 1;
-            left: 0;
+            content: '➔';
+            position: absolute;
+            opacity: 0;
+            left: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: opacity .5s, left .5s;
         }
-    }
-
-    &::after {
-        content: '➔';
-        position: absolute;
-        opacity: 0;
-        left: -1rem;
-        transition: opacity .5s, left .5s;
     }
 }
 
 button {
-    padding: 10px 1rem;
+    padding: 13px 2rem;
     font-size: @P1;
     color: #FFFFFF;
     background: @btnBlue;
-    border-radius: 3px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
 }
@@ -71,16 +72,12 @@ section {
 .campaign-v5 {
     &-hero {
         position: relative;
-        padding-top: 49%;
-        height: 0;
-        background: url('/images/campaign/tidb-v5.0/hero-pc.svg');
+        background: url('https://download.pingcap.com/images/campaign/tidb-v5.0/hero-pc.svg');
         background-repeat: no-repeat;
         background-size: cover;
 
-        .container {
-            position: absolute;
-            left: 4rem;
-            top: 10rem;
+        .hero-body {
+            padding: 15rem 0;
         }
 
         .slogan {
@@ -94,8 +91,7 @@ section {
             &-subtitle {
                 display: flex;
                 align-items: center;
-                padding: 2rem 0;
-                margin-bottom: 3rem;
+                padding: 0.5rem 0 2rem;
                 font-size: @H1;
 
                 img {
@@ -107,6 +103,13 @@ section {
             .book-btn button {
                 color: #2D3758;
                 background: white;
+                font-size: @H2;
+
+                &:hover {
+                    color: white;
+                    background: #0A2559;
+                    transition: 0.1s ease-in-out;
+                }
             }
         }
 
@@ -144,7 +147,7 @@ section {
             padding: 5rem 0;
             margin: 0 auto;
             text-align: center;
-            width: 80%;
+            width: 83%;
             font-size: @P1;
             font-family: Lato-light;
             line-height: 1.75;
@@ -160,7 +163,7 @@ section {
         background: @bgGrey;
 
         .columns {
-            padding-bottom: 8rem;
+            padding-bottom: 5rem;
 
             &.reverse {
                 flex-direction: row-reverse;
@@ -196,6 +199,10 @@ section {
 
     &-ribbon {
         padding: 0;
+
+        img {
+            width: 100%;
+        }
 
         .mobile {
             display: none;
@@ -321,17 +328,12 @@ section {
         &-hero {
             text-align: center;
             position: relative;
-            padding-top: 80%;
-            background: url('/images/campaign/tidb-v5.0/hero-mobile.svg');
+            background: url('https://download.pingcap.com/images/campaign/tidb-v5.0/hero-mobile.svg');
             background-repeat: no-repeat;
             background-size: cover;
 
-            .container {
-                padding: 6rem 0 2rem;
-                width: 100%;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+            .hero-body {
+                padding: 16rem 0;
             }
 
             .slogan {
@@ -444,6 +446,16 @@ section {
                         height: auto;
                     }
                 }
+            }
+        }
+    }
+}
+
+@media (max-width: 412px) {
+    .campaign-v5 {
+        &-hero {
+            .hero-body {
+                padding: 6rem 0;
             }
         }
     }
