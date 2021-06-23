@@ -5,7 +5,7 @@ tags:
 location: 上海
 avatar: zhangmen
 position: true
-aliases: ['/community-cn/careers/zhangmen/dba/']
+aliases: ['/archived/events/careers/zhangmen/dba/']
 ---
 
 # DBA - TiDB 专岗 @上海掌小门教育科技有限公司，社招，上海，20k - 30k

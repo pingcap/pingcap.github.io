@@ -5,7 +5,7 @@ tags:
 location: 北京
 avatar: lixiangqiche
 position: true
-aliases: ['/community-cn/careers/lixiangqiche/dba']
+aliases: ['/archived/events/careers/lixiangqiche/dba']
 ---
 
 # 数据库平台高级开发工程师@理想汽车，社招，北京，25 ~ 40k + 股票
