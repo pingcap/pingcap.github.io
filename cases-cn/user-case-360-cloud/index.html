@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"/><meta content="IE=edge" http-equiv="X-UA-Compatible"/><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>为什么我们要从 MySQL 迁移到 TiDB？ | PingCAP</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="“我截止目前，360 云平台这边有三套 TiDB 集群，总节点数在 50+。有 9 个业务线接入使用，有过百亿级表 Online 加索引的案例，总数据量目前在 80T。”" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="为什么我们要从 MySQL 迁移到 TiDB？ | PingCAP" property="og:title"/>
+<meta content="“我截止目前，360 云平台这边有三套 TiDB 集群，总节点数在 50+。有 9 个业务线接入使用，有过百亿级表 Online 加索引的案例，总数据量目前在 80T。”" property="og:description"/>
+<meta content="https://pingcap.com/cases-cn/user-case-360-cloud/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image:secure_url"/><meta content="summary" name="twitter:card"/><meta content="“我截止目前，360 云平台这边有三套 TiDB 集群，总节点数在 50+。有 9 个业务线接入使用，有过百亿级表 Online 加索引的案例，总数据量目前在 80T。”" name="twitter:description"/>
+<meta content="为什么我们要从 MySQL 迁移到 TiDB？ | PingCAP" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/><meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image"/><meta content="@pingcap" name="twitter:creator"/>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script async="" src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js" type="text/javascript"></script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head> <body data-lang="cn"><div id="page-content">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/zh"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li class="docs-type-selector " id="docsTypeSelector">
+<a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+</li>
+<li class="sel"><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" data-type="" id="search-input" name="q" placeholder="搜索 TiDB 文档" type="search"/>
+</div>
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+<li class="sel"><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP Education</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-mobile"></div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/success-stories" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container"><div class="sidebar">
+<div class="sticky-sidebar ">
+<div class="title"> 用户案例 </div><div class="st_tree nav-toc "><ul><li class="has-child"><a href="#">
+<span>互联网</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child">
+<a href="/cases-cn/user-case-zto-express-2/">
+<span>中通快递（二）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-pingan/">
+<span>平安人寿金管家</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-360-2/">
+<span>360(二)</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-banyu-2/">
+<span>伴鱼(二)</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-zhihu/">
+<span>知乎</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-zhuanzhuan-3/">
+<span>转转（三）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-vipkid/">
+<span>VIPKID</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-unext/">
+<span>U-Next</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-360-cloud/">
+<span>360 cloud</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-xiaohongshu-2/">
+<span>小红书（二）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-zto-express/">
+<span>中通快递</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-meituandianping/">
+<span>美团点评</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-banyu/">
+<span>伴鱼</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-wangyihuyu/">
+<span>网易互娱</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-bigo/">
+<span>Bigo</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-jingdongzhilianyun/">
+<span>京东智联云</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-xiaohongshu/">
+<span>小红书(一)</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-xiaomi/">
+<span>小米</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-fengchao/">
+<span>丰巢</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-yiguo/">
+<span>易果集团</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-58/">
+<span>58 集团</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-360-business/">
+<span>360 智能商业</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-iqiyi/">
+<span>爱奇艺</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-shopee/">
+<span>Shopee</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-zhuanzhuan/">
+<span>转转（一）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-zhuanzhuan-2/">
+<span>转转（二）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-qichezhijia/">
+<span>汽车之家</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-mobike/">
+<span>摩拜单车(一)</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-mobike-2/">
+<span>摩拜单车(二)</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-erweihuo/">
+<span>二维火</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-keruyun/">
+<span>客如云</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-toutiao/">
+<span>今日头条</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-tongcheng/">
+<span>同程艺龙</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-qunar/">
+<span>去哪儿网</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-yuanfudao/">
+<span>猿辅导</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-telaidian/">
+<span>特来电</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-ifeng/">
+<span>凤凰网</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-linkdoc/">
+<span>零氪科技</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-yimian/">
+<span>一面数据</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-mobikok/">
+<span>Mobikok</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-kasi/">
+<span>卡思数据</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-lianghuapai/">
+<span>量化派</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-g7/">
+<span>G7</span>
+</a>
+</li></ul>
+</li><li class="has-child"><a href="#">
+<span>游戏</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child">
+<a href="/cases-cn/user-case-xishanju/">
+<span>西山居</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-youzu/">
+<span>游族网络</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-gaea-ad/">
+<span>盖娅互娱</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-funyours-japan/">
+<span>株式会社 FUNYOURS JAPAN</span>
+</a>
+</li></ul>
+</li><li class="has-child"><a href="#">
+<span>金融</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child">
+<a href="/cases-cn/user-case-zheshang-bank/">
+<span>浙商银行</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-webank-2/">
+<span>微众银行（二）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-bestpay-2/">
+<span>翼支付（二）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-bank-of-china/">
+<span>中国银行</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-bob-fintech/">
+<span>北银科技</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-beijing-bank-2/">
+<span>北京银行（二）</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-bestpay/">
+<span>翼支付</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-pingankeji/">
+<span>平安科技</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-webank/">
+<span>微众银行</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-huataizhengquan/">
+<span>华泰证券</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-zalopay/">
+<span>ZaloPay</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-mashangxiaofei/">
+<span>马上消费</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-beikejinfu/">
+<span>贝壳金服</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-ping++/">
+<span>Ping++</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-360/">
+<span>360 金融</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-beijing-bank/">
+<span>北京银行（一）</span>
+</a>
+</li></ul>
+</li><li class="has-child"><a href="#">
+<span>大型企业</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child">
+<a href="/cases-cn/user-case-oppo/">
+<span>OPPO</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-china-mobile-lot/">
+<span>中移物联网</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-ekingtech/">
+<span>海航易建</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-weiruida/">
+<span>威锐达测控</span>
+</a>
+</li><li class="leaf-child">
+<a href="/cases-cn/user-case-wanda/">
+<span>万达网络科技集团</span>
+</a>
+</li></ul>
+</li><li class="has-child"><a href="#">
+<span>政府</span>
+<i class="icon-arrow"></i></a><ul><li class="leaf-child">
+<a href="/cases-cn/user-case-jilinxiangyun/">
+<span>吉林祥云</span>
+</a>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">为什么我们要从 MySQL 迁移到 TiDB？</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img alt="Date icon" src="/images/svgs/icon-date.svg"/>Wed, Mar 25, 2020</li>
+<li class="meta-item">
+<img alt="Pen icon" src="/images/svgs/icon-writer.svg"/>贺磊</li>
+</ul>
+<div class="blog-text"><blockquote>
+<p><strong>作者介绍</strong>：贺磊，360 数据库运维资深工程师，《MongoDB 运维实战作者》，知名论坛 MySQL 版主，51CTO 博客之星，闲暇之余，喜欢将部分案例写成博客，累计访问量过百万。</p>
+</blockquote>
+<p><strong>我先说几个最让你兴奋和开心的点吧：</strong></p>
+<ul>
+<li>
+<p>在 TiDB 里，你完全不用担心磁盘容量的问题。</p>
+</li>
+<li>
+<p>在 TiDB 里，原生支持 Online DDL，你完全不用担心第三方改表工具改表出现各种 Bug 的问题，相信用开源工具改过上 T 级别表的同学都遇到过或多或少的各类 error。</p>
+</li>
+<li>
+<p>在 TiDB 里，加列、主键扩容字段都是秒级的，比如我刚刚就刚对一张 19 亿的表加完了字段，1 秒完事，这在 MySQL 里要 8.0 才可以，而且还要求列在最后才行。</p>
+</li>
+<li>
+<p>在 TiDB 里，你会发现 count(*) 惊人的快，一张近 20 亿的表 coun(*) 大概在 1 分钟完事儿，当然，这取决于你的 KV 数量和磁盘性能。</p>
+</li>
+<li>
+<p>在 TiDB 里，从 MySQL 迁移将变得简单，图形化一键迁移，爽不爽？</p>
+</li>
+<li>
+<p>在 TiDB 里，绝大多数情况你会发现比单机 MySQL 有更好的性能，当然也不排除一些例外，例如 enum 这样奇葩的字段类型。</p>
+</li>
+<li>
+<p>在 TiDB 里……您且往下看，我慢慢和您说。</p>
+</li>
+</ul>
+<h2 id="heading">使用背景</h2>
+<p>60 云平台对 360 集团各大业务线均有提供服务支持，涉及的数据库支持方案有：MySQL、Redis、MongoDB、ES、GP、PiKA。</p>
+<p>其中 MySQL 至今已有过万的实例，目前，对于一些写入量大的业务，已经出现瓶颈。</p>
+<p>例如磁盘空间，虽然我们可以通过分库分表的方式，拆分出来，但这对业务和 DBA 来说都是不小的工作量，最痛苦的无异于这些大表的改表。</p>
+<p>无论是单表上 T，还是分库分表，对一张大表执行 DDL 的代价是非常大的。</p>
+<p>针对业务爆发式增长的数据量，我们开始调研选型是否有其他数据库可以代替传统的 MySQL。</p>
+<p><strong>通过调研我们了解到 TiDB，迁移平滑，基本上无需业务变动代码，完全的事务 ACID 支持，分布式的架构，自带高可用、Online DDL。</strong></p>
+<p><strong>截止目前，360 云平台这边有三套 TiDB 集群，总节点数在 50+。有 9 个业务线接入使用，有过百亿级表 Online 加索引的案例，总数据量目前在 80T。</strong></p>
+<p>版本上，我们从 3.0.1 一路跟随到 3.0.5，DM 版本从内测到 1.0.2 GA 版本，共计提出 9 个 Bug 或改进项反馈。</p>
+<p>后续我们计划将 TiDB 上到 360 HULK 云平台上，并定制化开发一些功能为业务提供可视化的服务，以便让 360 集团更多的业务线接触到 TiDB、使用 TiDB。</p>
+<p>版本的选择我们之所以从大版本 3 开始，也是看到了一些 2.X 版本的社区反馈，尤其是索引执行计划这块，3.X 版本较之前的版本会好很多。DM 版本我们是直接选取的最新版，后一路跟随新版本升级。</p>
+<h2 id="heading-1">集群架构</h2>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/1-tidb-cluster.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>整体架构上，我们除了 TiDB 集群外，还用到了 DM 和 Pump、Drainer 套件。</p>
+<p><strong>这块主要是由于我们使用 TiDB 的业务有两种：</strong></p>
+<h4 id="1--mysql-">1. 老的 MySQL 业务</h4>
+<p>老得 MySQL 业务因单机磁盘受限，导致单实例磁盘无法支撑爆炸式增长的数据量，数据比较重要，需要备份和支持 7*24 小时的恢复。</p>
+<p>这类业务我们用到 DM 套件来实现无障碍迁移，1TB 的导入时间在 16 小时，这里如果是比较大的数据源，且 TiDB 是全新集群，可以使用 TiDB Lightning，速度可以更快。</p>
+<p>Lightning 的实测导入速度，37 分钟，导完 2 张大表共计 54G 的数据，符合 100G/H 预估，是 loader 的 3 倍速度，loader 用时 2 小时 4 分钟。</p>
+<p><strong>说起 DM 使用这块文章后面会单独分享下这块需要注意的问题，如下图所示：</strong></p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/2-lightning.png" src="/images/svgs/loader-spinner.svg"/></p>
+<h4 id="2-">2. 全新的业务</h4>
+<p>全新的业务，或者由业务自行导入到 TiDB 集群中，这种业务数据量一般都会比较大，也是看中了 TiDB 支持 ACID 和分布式的特点。</p>
+<p>目前网盾业务有多张表都过 10 亿级别，其中有张表到达了 100 亿+，建索引花了近 10 天（这块其实我们应当注意，不是分布式就一张表就完事儿了，因为表量级过大，清理老旧数据都是个问题）。</p>
+<p>TiDB 现在支持分区表，但我们在使用过程中发现性能上和普通表有差距，期待后续版本能够让分区表功能和性能更加的完善。</p>
+<h2 id="tidb--360-">TiDB 在 360 云平台的使用情况</h2>
+<p>对于这一全新的数据库，我们本着大胆用，不拘泥于传统的态度进行使用。
+我们的 MySQL 现在也正在适配 8.0 版本，MongoDB、ES 也都是时刻关注着新版本情况来评估是否适合云平台。</p>
+<p>因此 TiDB 的上线也是从离线业务→边缘业务→核心业务来过渡的。</p>
+<p><strong>经过大量的测试、也参考了其他公司的使用情况，我们计划将 TiDB 纳入 360 HULK 云平台，并计划后期对其不断完善在云平台中的功能，对全公司业务线开放使用。</strong></p>
+<p>定制化开发一些 MySQL 已经具备的，例如 SQL 审核、慢查统计、冗余索引检测、自增索引阈值等各项基础功能等等。</p>
+<p>虽然在使用过程中遇到了一些小问题，例如索引的选取、参数的调优，因为一些配置导致的性能抖动，但都得到了 PingCAP 同学快速的响应和回复，这对我们推进 TiDB 有重大的帮助。</p>
+<h3 id="-dm-">一键迁移工具 DM 干货分享</h3>
+<p><strong>DM 使用经验如下：</strong></p>
+<h4 id="1-">1. 权限</h4>
+<p>官网手册上只说明需要如下权限：</p>
+<p><strong>TiDB Lightning 需要以下权限：</strong></p>
+<ul>
+<li>
+<p>SELECT</p>
+</li>
+<li>
+<p>UPDATE</p>
+</li>
+<li>
+<p>ALTER</p>
+</li>
+<li>
+<p>CREATE</p>
+</li>
+<li>
+<p>DROP</p>
+</li>
+</ul>
+<p><strong>存储断点的数据库额外需要以下权限：</strong></p>
+<ul>
+<li>
+<p>INSERT</p>
+</li>
+<li>
+<p>DELETE</p>
+</li>
+</ul>
+<p><strong>但实测过程中发现还需要如下权限：</strong></p>
+<ul>
+<li>
+<p>上游 （REPLICATION SLAVE 权限必须具备，要不增量同步会 access deny）。</p>
+</li>
+<li>
+<p>下游 （不加 super 会导致 checksum table 无法执行）。</p>
+</li>
+</ul>
+<h4 id="2-tikv-rezcore">2. TiKV Rezcore</h4>
+<p>PD 监控中 -Statistics-balance 中，有 Store-region-score 监控项，这里记录的是各个节点的 Score 得分，正常情况下，我们期望的结果是得分接近的，这说明无需进行 Region 大规模迁移。</p>
+<h4 id="3-pd-">3. PD 调度原理</h4>
+<p>Region 负载均衡调度主要依赖 balance-leader 和 balance-region 两个调度器。</p>
+<p><strong>二者的调度目标是将 Region 均匀地分散在集群中的所有 Store 上，但它们各有侧重：</strong></p>
+<ul>
+<li>
+<p>balance-leader 关注 Region 的 Leader，目的是分散处理客户端请求的压力。</p>
+</li>
+<li>
+<p>balance-region 关注 Region 的各个 Peer，目的是分散存储的压力，同时避免出现爆盘等状况。</p>
+</li>
+</ul>
+<p>我们这里重点关注的是 balance-region，当它出现不均衡的时候，我们可以直接在监控中看到类似下图所示：</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/3-leader-balance.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>调度期间，不可避免的会出现 IO 争用、磁盘的 lantency，都会出现不同程度的上涨，从业务上的反馈看，就会出现积压，响应不及时等等。而当 Region Balance 完成后， Duration 等都会恢复正常水平。</p>
+<p><strong>因此，我们要关注的地方有两点：</strong></p>
+<ul>
+<li>
+<p>如何控制或减小 Region Balance 大规模迁移时对业务的影响；</p>
+</li>
+<li>
+<p>如何提前规避因磁盘导致的大规模 Region Balance。</p>
+</li>
+</ul>
+<p>对于第一点，我们迁移的时候是有参数可以控制的。这里无论是磁盘空间阈值，还是 Region Balance 调度速度，或者 Drop 大量表后调整空 Region Merge 的速度，其实都是可以通过 pd-ctl 的 config set 命令来实时调节。</p>
+<p><strong>例如：</strong></p>
+<ul>
+<li>
+<p><strong>high-space-ratio 0.7 #设置空间充裕阈值为 0.7</strong>。当节点的空间占用比例小于指定值时，PD 调度时会忽略剩余空间这个指标，主要针对实际数据量进行均衡。</p>
+</li>
+<li>
+<p><strong>region-schedule-limit 8 #最多同时进行 8 个 Region 调度</strong>。这个值主要影响 Region Balance 的速度，值越大调度得越快，设置为 0 则关闭调度。Region 调度的开销较大，所以这个值不宜调得太大。也可以通过减小该值来限制调度region对集群产生的影响。</p>
+</li>
+<li>
+<p><strong>merge-schedule-limit 12 #最多同时进行 12 个 merge 调度</strong>。设置为 0 则关闭 Region Merge。Merge 调度的开销较大，所以这个值不宜调得过大。</p>
+</li>
+<li>
+<p><strong>leader-schedule-limit 8 #最多同时进行 8 个 leader 调度</strong>。这个值主要影响 Leader Balance 的速度，值越大调度得越快，设置为 0 则关闭调度。Leader 调度的开销较小，需要的时候可以适当调大。</p>
+</li>
+<li>
+<p><strong>max-merge-region-keys 50000 #设置 Region Merge 的 keyCount 上限为 50k</strong>。当 Region KeyCount 大于指定值时 PD 不会将其与相邻的 Region 合并。</p>
+</li>
+<li>
+<p><strong>max-merge-region-size 16 #设置 Region Merge 的 size 上限为 16M</strong>。当 Region Size 大于指定值时 PD 不会将其与相邻的 Region 合并。设置为 0 表示不开启 Region Merge 功能。</p>
+</li>
+</ul>
+<p><strong>TIPS</strong>：理解了作用和原理，上述参数都可以根据需求自行控制。</p>
+<p><strong>例如当我们在 Drop 大量的表后，会产生很多的空 Region</strong>。在 Region 数量较多的情况下，Raftstore 需要花费一些时间去处理大量 Region 的心跳，从而带来一些延迟，导致某些读写请求得不到及时处理。</p>
+<p>如果读写压力较大，Raftstore 线程的 CPU 使用率容易达到瓶颈，导致延迟进一步增加，进而影响性能表现。</p>
+<p>因此我们会希望尽快的进行 Region Merge，来避免过多的 Region 对集群造成性能损耗时，我们可以同时调小 max-merge-region-keys、max-merge-region-size，来让其更快的触发 Merge 操作，同时调大 merge-schedule-limit 提高并发度。</p>
+<p><strong>例如当我们发现某台 KV 磁盘空间剩余 40% 开始大量调度时</strong>，我们可以将 high-space-ratio 调整到 0.7，以临时避免调度对业务产生的影响。</p>
+<p>我们也可以控制调度的并发度，来减少对业务产生的影响，实测这都是立竿见影的参数，大家如果遇到这些问题可供参考。</p>
+<p>对于第二点，尤其是使用 DM 期间，将 DM-worker 和 TiKV 混合部署的情况下，要注意清理全量备份留下的文件和 Relaylog。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/4-log.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>默认调度策略是当磁盘剩余的有效空间不足 40%，处于中间态时则同时考虑数据量和剩余空间两个因素做加权和当作得分，当得分出现比较大的差异时，就会开始调度。</p>
+<p>所以 DM 导入完成后，要记得删除全量备份。就是 dumped_data.task_xxx 文件夹，这个全量备份一般都会比较大，如果 dm-worker 和 TiKV 混部，就会出现某个 TiKV 节点磁盘已使用率高于其他。</p>
+<p>这时 PD 的 store region score 就会相比其他节点出现异常，引起性能抖动和 Duration 升高。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/5-store.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><strong>一直等待其追上后，才会像下图这样：</strong></p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/6-store-region.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><strong>此时，balancer 已达平衡状态：</strong></p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/7-leader-balance.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><strong>Duration 恢复正常水平，如下图 16:54 分时的情况：</strong></p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/8-duration.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><strong>QPS 也不再积压，恢复正常水准：</strong></p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/9-query-summary.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>关于 relay-log，默认是不清理的，就和 MySQL 的 expire_logs_days 一样，这块可以通过 dm-worker 的配置文件来进行配置。</p>
+<p><strong>例如将 Expires 配置为 7，代表 7 天后删除：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">[purge]
+interval = 3600
+expires = 7
+remain-space = 15
+</code></pre></div><p>Expires 来控制保留天数。默认 expires=0，即没有过期时间，而 remain-space=15 意思是当磁盘只剩于 15G 的时候开始尝试清理，这种情况我们极少会碰到，因此这个清理方式其实基本上是用不到的。</p>
+<p>所以建议有需要删除过期 relay-log 的小伙伴，直接配置 Expires 保留天数就可以了。</p>
+<p>DM 导入完成后，应该提供是否在完成后自动删除全备文件的选项，可以默认不删，由使用者决定是否删除。</p>
+<p>从使用者角度来说，全量备份目录无论是全量一次性导入还是 all 增量同步，后续都不会再使用到。</p>
+<p>如果 dm-worker 和 TiKV 混部，会导致全备文件占据大量磁盘空间，引起 TiKV Region 评分出现异常，导致性能下降，已转化为 PRM 产品需求。</p>
+<h4 id="4--dm-">4. 关于 DM 使用期间出现数据丢失的问题</h4>
+<p>在早期还没有 dm-portal 自动化生成 task 时，我们都是自行编写 DM 的 task 同步文件。后来有了 dm-portal 自动化生成工具，只要图形页面点点点就可以了。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/10-dm.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>但该工具目前有一个问题是，没有全库正则匹配，即便你只勾选一个库，他底层是默认把每张表都给你配置一遍。</p>
+<p>这就会出现当上层 MySQL 新创建某张表的时候，下游会被忽略掉，例如当你使用改表工具 gh-ost 或者 pt-online-schema-change，你的临时表都会被当做为不在白名单内而被忽略，这个问题使用者需要注意。</p>
+<p>我们也已经反馈给了官方。未来不久的版本估计就可以修复。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">["skip event"] [task=task_20357] [unit="binlog replication"] [event=query] [statement="ALTER TABLE `360`.`_data_201910_gho` ADD COLUMN `raw_url_md5` CHAR(32) NOT NULL DEFAULT '' COMMENT 'raw_url md5'"]
+["skip event"] [task=task_20357] [unit="binlog replication"] [event=query] [statement="ALTER TABLE `360`.`_data_201910_gho` ADD INDEX `idx_rawurl_md5`(`raw_url_md5`)"] [schema=flow]
+["skip event"] [task=task_20357] [unit="binlog replication"] [event=query] [statement="ALTER TABLE `360`.`_data_201910_gho` DROP INDEX `idx_raw_url`"] [schema=flow]
+</code></pre></div><p>这里日志可以看到 event 被 skip 了。</p>
+<h4 id="5--dm--1062-">5. 关于 DM 使用期间偶发性 1062 主键冲突的问题</h4>
+<p>query-error task 能看到具体的报错信息，下游看都没有该值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> client <span style="color:#66d9ef">where</span> clientid<span style="color:#f92672">=</span><span style="color:#e6db74">'</span><span style="color:#e6db74">82b51e6f6eb64955487f978dd94a2c81e492f6170xxxxxxxxxxxxxxxxxxxxxxxxx</span><span style="color:#e6db74">'</span>;
+Empty <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)
+</code></pre></div><p>再去上游看，结果发现也没有值，业务逻辑应该是后来 delete 了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> client <span style="color:#66d9ef">where</span> clientid<span style="color:#f92672">=</span><span style="color:#e6db74">'</span><span style="color:#e6db74">82b51e6f6eb64955487f978dd94a2c81e492f6170xxxxxxxxxxxxxxxxxxxxxxxxx</span><span style="color:#e6db74">'</span>;
+Empty <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)
+</code></pre></div><p><strong>因为上游也没有值，去上游看 Binlog 后分析如下：</strong></p>
+<p>是先写入，再删除，所以上游没值是可以预期的，但是下游还没有同步到这块，此时也是没有值的，不应该存在 1062 的问题。</p>
+<p>当集群有大规模 kv:1062 报错时，或者集群写入压力大时，DM 从结果看无法保证 Binlog 的有序落盘，需确认 DM能不能保证 LVS 下的多个 TiDB Binlog 的每一个 Event 是有序执行的。</p>
+<p>只从现象看，只要集群没有大量的 1062 报错，PD 相关的监控值都比较低，DM 也不会出现任何同步报错，反之就出现。</p>
+<p>从 Binlog 看就像是第一条 Insert了，还没来得及 Delete，直接 Insert 产生的报错，但报错后那个 Delete 的也完成了，所以这时候我再怎么快也快不到毫秒级，下游看不到所有记录。</p>
+<p>解决的办法是将 1062 大量冲突的业务拆分出集群，或 DM 直接写 TiDB 的真实 IP 而不是 LVS。</p>
+<h4 id="6-dm-">6. DM 同步异常</h4>
+<p>有业务反馈 Drop 分区和 Drop 列时出现同步异常。补充下分区表相关的测试的结果，DM 更多的无法拆分的情况还是在 Drop 这块，普通的 add，modify 没问题的。</p>
+<p><strong>一次删除多个分区的操作则会报错：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">alter table dsp_group_media_report drop partition p202006 ,p202007 ;
+</code></pre></div><p><strong>Drop 含有索引的列操作会报错：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Alter table dsp_group drop column test_column;
+</code></pre></div><p>40 亿表添加 DDL 添加索引导致的 Duration 升高：</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/11-qps.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>定位到是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">mysql&gt; show global variables like 'tidb_ddl_reorg_worker_cnt';
++---------------------------+-------+
+| Variable_name             | Value |
++---------------------------+-------+
+| tidb_ddl_reorg_worker_cnt | 16    |
++---------------------------+-------+
+1 row in set (0.11 sec)
+
+mysql&gt; show global variables like 'tidb_ddl_reorg_batch_size';
++---------------------------+-------+
+| Variable_name             | Value |
++---------------------------+-------+
+| tidb_ddl_reorg_batch_size | 1024  |
++---------------------------+-------+
+</code></pre></div><p>上述两个参数对已有非 pcie 集群压力比较大导致。通过 set global 调节（3.0.3 后，默认从 256 涨到了 1000 和 16）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">tidb_ddl_reorg_batch_size 1000-256
+tidb_ddl_reorg_worker_cnt 16-4
+</code></pre></div><p>同时，提高 Compaction 相关：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">max-background-jobs: 8-10-12
+max-sub-compactions: 1-2-4
+defaultcf.compression-per-level: ["lz4", "lz4", "lz4", "lz4", "lz4", "zstd", "zstd"]
+writecf.compression-per-level: ["lz4", "lz4", "lz4", "lz4", "lz4", "zstd", "zstd"]
+</code></pre></div><p>最终的优化结果是，QPS 稳定在 3K 左右：</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/12-statement-ops.png" src="/images/svgs/loader-spinner.svg"/></p>
+<h4 id="7--region-">7. 静默 Region 开启</h4>
+<p>在实际情况中，读写请求并不会均匀分布到每个 Region 上，而是集中在少数的 Region 上。</p>
+<p>那么可以尽量减少暂时空闲的 Region 的消息数量，这也就是 Hibernate Region 的功能。</p>
+<p>无必要时可不进行 raft-base-tick，即不驱动空闲 Region 的 Raft 状态机，那么就不会触发这些 Region 的 Raft 产生心跳信息，极大地减小了 Raftstore 的工作负担。</p>
+<p>截至 TiDB v3.0.5，Hibernate Region 仍是一个实验功能，在 TiKV master 分支上已经默认开启。可根据实际情况和需求来开启该功能。</p>
+<p><strong>参数如下：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">raftstore.hibernate-regions: true
+</code></pre></div><p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/13-raft-store-cpu.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/14-messages.png" src="/images/svgs/loader-spinner.svg"/></p>
+<h4 id="8-dm--duration-">8. DM 导入期间 Duration 升高</h4>
+<p>在 DM 导入集群期间，确实会因为写热点的问题导致集群整体 Duration 更高，因为 IO 争用会更明显。这里其实也是可以通过一些参数来让集群运行的更快的。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/15-tikv-trouble-shopting.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p><strong>如下参数从原值调到-新值：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">raftstore:
+apply-pool-size: 3-4
+store-pool-size: 3-4
+
+storage:
+scheduler-worker-pool-size: 4-6
+
+server:
+grpc-concurrency: 4-6
+
+rocksdb:
+max-background-jobs: 8-10
+max-sub-compactions: 1-2
+</code></pre></div><p>可以看到效果如下：QPS 不再抖动，Duration 也恢复到正常的水平。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/16-qps.png" src="/images/svgs/loader-spinner.svg"/></p>
+<h4 id="9-dm-debug-">9. DM Debug 相关</h4>
+<p>DM 还有个注意点就是 dm-worker.toml 配置文件里的配置 log-level=“debug” 是不生效的，启动的时候默认有个 -L=info 选项，会覆盖掉配置文件里的，默认 -L 优先级高于配置文件，人工排查时自行启动。</p>
+<p>也就是说当需要对 dm-worker 开启 debug 模式，要人工拉起进程并指定 -L 选项=debug。</p>
+<h4 id="10-tidb-load-data-">10. TiDB load data 速度不理想</h4>
+<p>TiDB 目前 load data 的导入速度不及 MySQL，如果依赖 load data 的话，这块可以调优一下参数。</p>
+<p>我们的场景是 TiKV 上没有明显的瓶颈，主要慢在了 scheduler latch wait duration，可以调下参数看看：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">storage:
+scheduler-concurrency: 204800000
+
+raftstore:
+raft-max-inflight-msgs: 4096
+</code></pre></div><p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/17-scheduler-latch-wait-duration.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>调优完成后是有提升，但提升不大，我们得知新版本的 TiDB 在 Load data 这块又有速度提升，比较期待新版本。</p>
+<h3 id="heading-2">其他干货打包分享</h3>
+<h4 id="1-tidb-">1. TiDB 列数超限</h4>
+<p>MySQL 是 1024，TiDB 目前限制是 512 列。如果你的表有非常多的列，那么这块要提前注意下是不是可以拆分出去。</p>
+<h4 id="2-gc-can-not-work">2. GC can not work</h4>
+<p>GC 的数据包括两部分，一部分是 DML 和 DDL ，DDL 的 GC 的对象信息包含在 mysql.gc_delete_range 和 mysql.gc_delete_range_done ，分别记录的是待 GC 的对象以及已经 GC 的对象。mysql.gc_delete_range_done表里面没有数据不代表 GC 异常。</p>
+<p>官方建议更换规则：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">sum(increase(tikv_gcworker_gc_tasks_vec{task="gc"}[1d]))
+</code></pre></div><h4 id="3-tidb-or-">3. TiDB or 条件优化</h4>
+<p><strong>在 TiDB 中，如下查询是不能用到索引的：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">select * from manual_domain where host_md5  = '55fbea39965484a61xxxxxxxxxx'  or domain_md5 = '55fbea39965484a61xxxxxxxxxx';
+</code></pre></div><p>MySQL 中用到了 index_merge，TiDB 计划 4.0 支持，可以先用 union all 来处理这种 a or b。</p>
+<h4 id="4-coprocessor-cpu-">4. Coprocessor CPU 消耗过大</h4>
+<p>业务反馈查询变慢，发现是另外一个业务全表扫 insert into select 导数据导致的。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/user-case-360-cloud/18-coprocessor-cpu.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>去 CPU 占用率高的这台机器上搜索对应的 log，关键字 slow，发现如下情况：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">[2019/09/18 10:04:37.339 +08:00] [INFO] [tracker.rs:150] [slow-query] [internal_key_skipped_count=46649] [internal_delete_skipped_count=0] [block_cache_hit_count=1596] [block_read_count=9] [block_read_byte=31933] [scan_first_range="Some(start: 7480000000000002285F72800000000021E9BD end: 7480000000000002285F72800000000024199A)"] [scan_ranges=1] [scan_iter_processed=46650] [scan_iter_ops=46652] [scan_is_desc=false] [tag=select] [table_id=552] [txn_start_ts=411244239493267464] [wait_time=2ms] [total_process_time=1.41s] [peer_id=ipv4:192.168.1.248:45686] [region_id=835437]
+</code></pre></div><p>根据 table_id 去通过 information_schema.tables 表查一下，可以通过上述方式来定位到是哪张表导致的问题。</p>
+<p>TiDB enum 导致的性能问题：</p>
+<p>enum 在 TiDB 3.0.2 进行 where 条件查找时，发现不能下推到 TiKV。官方说4.0GA 修复。临时办法是修改到其他类型。</p>
+<p>enum modify 为 tinyint 发现内容出现变化，原本的’‘变成了 default 值，‘1’ 变成了 2，经测试 varchar 正常，因此不要尝试去变更 DM 备份出来的 Schema 文件来实现表结构变更，应该从上游 MySQL 解决。</p>
+<h4 id="5-">5. 分区表元数据无法获取</h4>
+<p>没有视图可以查询当前已建分区信息。在 TiDB 中目前没有视图支持查询分区表已建分区信息，那么用户那边没有办法直观的判断当前已建的分区，以及当前是否需要及时的添加新分区。目前已转化为 PRM 产品需求，相信新版本不久会实现。</p>
+<p><strong>分区表 - 部分分区 - limit 未下推</strong>：分区表出现 limit 未下推的现象，表 content_info_p 其中只有分区 p201911 有数据。该问题已在 3.0.6 版本修复。</p>
+<p><strong>mysql.tidb 表权限异常</strong>：使用 use db_name 或者 mysql 客户端指定 DB name 后，可以对该表进行查询或更新操作。计划 3.1 版本修复。</p>
+<p><strong>事物的限制</strong>：单个事物的 SQL statement 不超过 5000（stmt-count-limit 参数可调）；每个键值对不超过 6M；键值对的总数不超过 300000；键值对的总大小不超过 100M。</p>
+<p>注：键值对是指一张表里有 2 个索引，那么一共就是数值 +2 个索引，总共 3 个键值对，那么每个键值对的总是不能超过 30 万/3=10 万。</p>
+<p>一行数据会映射为一个 KV entry，每多一个索引，也会增加一个 KV entry，所以这个限制反映在 SQL 层面是：总的行数*(1+索引个数)&lt;30w。</p>
+<p><strong>官方提供内部 batch 的方法，来绕过大事务的限制，分别由三个参数来控制：</strong></p>
+<ul>
+<li>
+<p>tidb_batch_insert</p>
+</li>
+<li>
+<p>tidb_batch_delete</p>
+</li>
+<li>
+<p>tidb_dml_batch_size</p>
+</li>
+</ul>
+<p><strong>写热点的处理</strong>：如果可以去掉 MySQL 自增主键，就可以通过建表时指定 SHARD_ROW_ID_BITS、PRE_SPLIT_REGION 来实现预切分，避免单调自增引发的只往某个 KV 上写数据引起的热点问题。</p>
+<p>详情可参考官网 TiDB 专用系统变量和语法中 SHARD_ROW_ID_BITS 的介绍。</p>
+<h4 id="6-tidb--dm--ansible-">6. TiDB 监控和 DM 监控 Ansible 部署数据冲突</h4>
+<p>这块可以通过将 TiDB 和 DM 监控部署到不同的机器上来绕过解决，否则就会出现通过 Ansible 安装后，ansible-playbook rolling_update_monitor.yml –tags=prometheus 时，两者只有一个是正常的。</p>
+<p><strong>磁盘已使用不建议超过 50%</strong>：数据量太多 LSM 过大， compaction 成本会很高，并且内存命中率下降，同时单机恢复时间很长，50% 左右最好，使用率太高，如果突然写入爆增，region 来不及调度会写满磁盘，有风险。</p>
+<p>因此建议 SSD 不要使用超过 2T 的，采用更多的机器会有更好的性能。</p>
+<h4 id="7-mydumper-">7. Mydumper 导致的内存和网卡打满</h4>
+<p>在使用 Mydumper 备份大时，会打满 TiDB 网卡，同时会消耗 TiDB、TiKV 更多的内存。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">TiDB ERR】[emergency]TiDB_schema_error:192.168.1.1:10080,[add_dba_mysql]【360】
+【TiDB ERR】[critical]NODE_memory_used_more_than_80%:192.168.1.2:9100,[add_dba_mysql]【360】
+</code></pre></div><p><strong>去抓取慢日志会看到如下内容：</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">grep Query_time tidb_slow_query-2019-12-24T04-53-14.111.log|awk -F : '$2&gt;10'
+# Time: 2019-12-24T03:18:49.685904971+08:00
+# Txn_start_ts: 413433784152621060
+# User: backup@192.168.1.3
+# Conn_ID: 4803611
+# Query_time: 4002.295099802
+SELECT /*!40001 SQL_NO_CACHE */ * FROM `360`.`t_d` ;
+</code></pre></div><p>期待后续的版本物理备份，逻辑备份看起来目前是可以备份，但会比较消耗资源，同时恢复时间也会更久。</p>
+<h2 id="heading-3">展望</h2>
+<p>从 TiDB 2.x 开始我们就已经开始进行测试了，最终选择的版本是 3.0.2，后续升级到 3.0.5。</p>
+<p>上述文章总结和一些案例希望能够帮助到已使用或打算使用 TiDB 的朋友。</p>
+<p>360 云平台 DBA 团队也计划将 TiDB 推上 360 HULK 云平台，为 360 集团更多的业务线提供丰富多彩和稳定可靠的数据库服务。</p>
+<p>在这里首先要感谢 PingCAP 同学及时的技术支持，帮助我们尽快的解决了一些技术问题。</p>
+<p>同时，我自己也通读了 TiDB 的官方手册。从 Ansible 部署、二进制部署、升级、DM、Lighting、Pump、Drainer、调优、排障、迁移、备份，这一路打怪下来，切身感受到了 TiDB 越来越好的过程。</p>
+<p>我相信未来随着 3.1 和 4.0 版本的推出，有更多人加入使用 TiDB 的这个队伍中来。</p>
+<p>从业务给我们的反馈也是对 TiDB 的使用情况表示满意，我们相信，TiDB 会在大家共同的努力下，越来越好。</p>
+<blockquote>
+<p>本文转载自公众号 <a href="https://mp.weixin.qq.com/s/8d7aUr32tOWCCMihpIqZ-A">51CTO技术栈</a>。</p>
+</blockquote>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com" onclick="trackViews('blog-contact-us', 'mail_to_info_view')" target="_blank">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/cases-cn/user-case-360-cloud/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+</li>
+<li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+<li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+<li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+<li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li><a href="/solutions/intel/" onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+<li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')" target="_blank">Ask TUG</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="https://careers.pingcap.com" onclick="trackViews('footer-recruit-join', 'recruit-join_view')" target="_blank">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+<li><a href="/zh/privacy-policy/">隐私申明</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="tel" href="/" target="_blank"><svg enable-background="new 0 0 512.021 512.021" height="19" id="Layer_1" viewbox="0 0 512.021 512.021" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"></path></g></svg>
+ 商务咨询：</a></li>
+<li class="tel-li">4006790886</li>
+<li class="tel-li">010-58400041</li>
+<li><a class="twitter" href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&amp;id=4240&amp;channel=9034" target="_blank"><svg height="19" p-id="2379" t="1622000094837" version="1.1" viewbox="0 0 1069 1024" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-pc"></div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2021 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/success-stories" id="lang">English</a>
+<a class="prepared-num" href="https://beian.miit.gov.cn/">京 ICP 备 16046278 号 - 2</a>
+<a class="prepared-num" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" target="_blank">
+<img src="/images/beian.png"/>
+<p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/anchor.js" type="text/javascript"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script crossorigin="anonymous" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

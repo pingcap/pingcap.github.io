@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"/><meta content="IE=edge" http-equiv="X-UA-Compatible"/><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>事务前沿研究丨事务测试体系解析 | PingCAP</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="本篇文章将继续在第一讲的事务隔离级别的基础上，对数据库事务的测试进行研究，主要讲述我们在 PingCAP 是如何保证事务的正确性的。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="事务前沿研究丨事务测试体系解析 | PingCAP" property="og:title"/>
+<meta content="本篇文章将继续在第一讲的事务隔离级别的基础上，对数据库事务的测试进行研究，主要讲述我们在 PingCAP 是如何保证事务的正确性的。" property="og:description"/>
+<meta content="https://pingcap.com/blog-cn/transaction-frontiers-research-article-talk2/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image:secure_url"/><meta content="summary" name="twitter:card"/><meta content="本篇文章将继续在第一讲的事务隔离级别的基础上，对数据库事务的测试进行研究，主要讲述我们在 PingCAP 是如何保证事务的正确性的。" name="twitter:description"/>
+<meta content="事务前沿研究丨事务测试体系解析 | PingCAP" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://download.pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image"/><meta content="@pingcap" name="twitter:creator"/>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script async="" src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js" type="text/javascript"></script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head> <body data-lang="cn"><div id="page-content">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/zh"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li class="docs-type-selector " id="docsTypeSelector">
+<a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+</li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" data-type="" id="search-input" name="q" placeholder="搜索 TiDB 文档" type="search"/>
+</div>
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP Education</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-mobile"></div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><a class="tag all" href="#">ALL (287)</a>
+<div class="tag-list"><a class="tag " data-tag="Chaos-Mesh" href="/blog-cn/#Chaos-Mesh">Chaos Mesh (10)
+                </a><a class="tag " data-tag="Committer" href="/blog-cn/#Committer">Committer (3)
+                </a><a class="tag " data-tag="Contributor" href="/blog-cn/#Contributor">Contributor (9)
+                </a><a class="tag " data-tag="DM" href="/blog-cn/#DM">DM (2)
+                </a><a class="tag " data-tag="DM-源码阅读" href="/blog-cn/#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">DM 源码阅读 (10)
+                </a><a class="tag " data-tag="Go" href="/blog-cn/#Go">Go (3)
+                </a><a class="tag " data-tag="HTAP" href="/blog-cn/#HTAP">HTAP (4)
+                </a><a class="tag " data-tag="Hackathon" href="/blog-cn/#Hackathon">Hackathon (4)
+                </a><a class="tag " data-tag="K8s" href="/blog-cn/#K8s">K8s (2)
+                </a><a class="tag " data-tag="Key-Visualizer" href="/blog-cn/#Key-Visualizer">Key Visualizer (2)
+                </a><a class="tag " data-tag="Kubernetes" href="/blog-cn/#Kubernetes">Kubernetes (3)
+                </a><a class="tag " data-tag="Linux" href="/blog-cn/#Linux">Linux (4)
+                </a><a class="tag " data-tag="MVCC" href="/blog-cn/#MVCC">MVCC (2)
+                </a><a class="tag " data-tag="MySQL" href="/blog-cn/#MySQL">MySQL (2)
+                </a><a class="tag " data-tag="PD" href="/blog-cn/#PD">PD (5)
+                </a><a class="tag " data-tag="Percolator" href="/blog-cn/#Percolator">Percolator (3)
+                </a><a class="tag " data-tag="PingCAP" href="/blog-cn/#PingCAP">PingCAP (2)
+                </a><a class="tag " data-tag="Prometheus" href="/blog-cn/#Prometheus">Prometheus (3)
+                </a><a class="tag " data-tag="Raft" href="/blog-cn/#Raft">Raft (11)
+                </a><a class="tag " data-tag="RocksDB" href="/blog-cn/#RocksDB">RocksDB (3)
+                </a><a class="tag " data-tag="Rust" href="/blog-cn/#Rust">Rust (5)
+                </a><a class="tag " data-tag="SQL" href="/blog-cn/#SQL">SQL (6)
+                </a><a class="tag " data-tag="Spanner" href="/blog-cn/#Spanner">Spanner (2)
+                </a><a class="tag sel" data-tag="TiDB" href="/blog-cn/#TiDB">TiDB (94)
+                </a><a class="tag " data-tag="TiDB-4.0-新特性" href="/blog-cn/#TiDB-4.0-%e6%96%b0%e7%89%b9%e6%80%a7">TiDB 4.0 新特性 (11)
+                </a><a class="tag " data-tag="TiDB-Binlog" href="/blog-cn/#TiDB-Binlog">TiDB Binlog (5)
+                </a><a class="tag " data-tag="TiDB-Binlog-源码阅读" href="/blog-cn/#TiDB-Binlog-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB Binlog 源码阅读 (9)
+                </a><a class="tag " data-tag="TiDB-Ecosystem-Tools" href="/blog-cn/#TiDB-Ecosystem-Tools">TiDB Ecosystem Tools (3)
+                </a><a class="tag " data-tag="TiDB-Hackathon-2020" href="/blog-cn/#TiDB-Hackathon-2020">TiDB Hackathon 2020 (7)
+                </a><a class="tag " data-tag="TiDB-Operator" href="/blog-cn/#TiDB-Operator">TiDB Operator (9)
+                </a><a class="tag " data-tag="TiDB-性能挑战赛" href="/blog-cn/#TiDB-%e6%80%a7%e8%83%bd%e6%8c%91%e6%88%98%e8%b5%9b">TiDB 性能挑战赛 (2)
+                </a><a class="tag " data-tag="TiDB-易用性挑战赛" href="/blog-cn/#TiDB-%e6%98%93%e7%94%a8%e6%80%a7%e6%8c%91%e6%88%98%e8%b5%9b">TiDB 易用性挑战赛 (4)
+                </a><a class="tag " data-tag="TiDB-源码阅读" href="/blog-cn/#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB 源码阅读 (24)
+                </a><a class="tag " data-tag="TiFlash" href="/blog-cn/#TiFlash">TiFlash (7)
+                </a><a class="tag " data-tag="TiKV" href="/blog-cn/#TiKV">TiKV (29)
+                </a><a class="tag " data-tag="TiKV-源码解析" href="/blog-cn/#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90">TiKV 源码解析 (21)
+                </a><a class="tag " data-tag="TiSpark" href="/blog-cn/#TiSpark">TiSpark (4)
+                </a><a class="tag " data-tag="WebAssembly" href="/blog-cn/#WebAssembly">WebAssembly (2)
+                </a><a class="tag " data-tag="gRPC" href="/blog-cn/#gRPC">gRPC (2)
+                </a><a class="tag sel" data-tag="事务" href="/blog-cn/#%e4%ba%8b%e5%8a%a1">事务 (9)
+                </a><a class="tag " data-tag="优化器" href="/blog-cn/#%e4%bc%98%e5%8c%96%e5%99%a8">优化器 (2)
+                </a><a class="tag " data-tag="分布式系统前沿技术" href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e5%89%8d%e6%b2%bf%e6%8a%80%e6%9c%af">分布式系统前沿技术 (4)
+                </a><a class="tag " data-tag="分布式系统测试" href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a><a class="tag " data-tag="备份恢复" href="/blog-cn/#%e5%a4%87%e4%bb%bd%e6%81%a2%e5%a4%8d">备份恢复 (2)
+                </a><a class="tag " data-tag="工具" href="/blog-cn/#%e5%b7%a5%e5%85%b7">工具 (4)
+                </a><a class="tag " data-tag="性能" href="/blog-cn/#%e6%80%a7%e8%83%bd">性能 (4)
+                </a><a class="tag " data-tag="数据同步" href="/blog-cn/#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5">数据同步 (2)
+                </a><a class="tag " data-tag="最佳实践" href="/blog-cn/#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">最佳实践 (6)
+                </a><a class="tag " data-tag="架构" href="/blog-cn/#%e6%9e%b6%e6%9e%84">架构 (6)
+                </a><a class="tag " data-tag="版本" href="/blog-cn/#%e7%89%88%e6%9c%ac">版本 (2)
+                </a><a class="tag " data-tag="社区" href="/blog-cn/#%e7%a4%be%e5%8c%ba">社区 (103)
+                </a><a class="tag " data-tag="社区动态" href="/blog-cn/#%e7%a4%be%e5%8c%ba%e5%8a%a8%e6%80%81">社区动态 (29)
+                </a><a class="tag " data-tag="集群调度" href="/blog-cn/#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6">集群调度 (2)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">事务前沿研究丨事务测试体系解析</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img alt="Date icon" src="/images/svgs/icon-date.svg"/>Thu, May 20, 2021</li>
+<li class="meta-item">
+<img alt="Pen icon" src="/images/svgs/icon-writer.svg"/>童牧</li>
+</ul>
+<div class="blog-text"><h2 id="heading">绪论</h2>
+<p>在程序员的生涯中，bug 一直伴随着我们，虽然我们期望写出完美的程序，但是再优秀的程序员也无法保证自己能够不写出 bug。因此，我们为程序编写测试，通过提前发现 bug 来提高最终交付程序的质量。我从在 PingCAP 的工作中感受到，做好数据库和做好数据库测试是密不可分的，本次分享，我们将在第一讲的事务隔离级别的基础上，对数据库事务的测试进行研究，主要讲述，在 PingCAP 我们是如何保证事务的正确性的。</p>
+<p>因为我们保证事务正确性的方法比较多，所以本次我们会着重讲解 Jepsen 和 Elle，而其他方法则是作为补充，我也会简单说明他们的做法和优缺点。我将事务测试的方法划分为以下几个类别：</p>
+<ul>
+<li>
+<p>理论正确性的验证</p>
+</li>
+<li>
+<p>基于不变量的正确性验证</p>
+</li>
+<li>
+<p>对执行历史进行检查的验证</p>
+</li>
+<li>
+<p>辅助测试手段</p>
+</li>
+</ul>
+<h2 id="-percolator-">回顾 Percolator 提交协议</h2>
+<h3 id="percolator">Percolator</h3>
+<p>在开始讲述测试方法前，我们先对 Percolator 提交协议进行回顾，感受一下这一协议下的复杂性。Percolator 提交协议使用 2PC 的提交方式来保证事务的原子性，但是在 shared-nothing 架构下，没有一个节点有全局的事务信息，事务的状态信息被打散到了每个 Key 上，使得对于 Key 状态的处理变得更加复杂。</p>
+<p><img alt="1" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 1 - Percolator 下的两阶段提交</div>
+<p>图 1 是 Percolator 下的两阶段提交的流程，在 Prewrite 阶段，将数据写入到存储引擎中，这些键值对可能存储在不同的实例上，其中 Primary Key(PK) 是这个事务中的第一个 Key，是事务成功的原子性标志。Prewrite 阶段写入的数据包含了事务实际要写入的数据和事务的 PK（图中为 x），所以一旦 Prewrite 阶段完成，则说明这个事务已经写入成功。但是我们还需要 Commit 阶段来使得这一成功的事务对外可见，在 Commit 阶段中，会先 Commit PK，这一操作将事务标记为成功状态；然后 Commit 其他的 Key，让整个事务都可以被直接读取。</p>
+<p><img alt="2" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 2 - Percolator 下的读写关系处理</div>
+<p>但是在这一提交协议下，另一个事务可能从任意一个时间点对正在提交的事务进行读取，图 2 给出了从 4 个时间点对事务进行读取的情况。read1 时，事务还没有 prewrite，所以读取到旧的值即可；read2 时，读事务看到了 Prewrite 的结果，但是对应的 Key 还没有被 Commit，这时候会查询这一事务对应的 PK 来确认状态，但此时 PK 也还未提及，因此需要判断所读取到的事务是否过期，如果没有过期，那么等待一段时间后重试，如果已经过期，则会将这个事务 Rollback 掉；read3 和 read2 的过程相似，但是因为查到了 PK 是已经提交的状态，所以会读取到这个事务的内容，并且把这个事务中读取到的未提交的 Key 提交掉；read4 读到的 Key 都是已经提交状态的，直接读取到数据即可。</p>
+<h3 id="-bug">一个破坏原子性的 bug</h3>
+<p>原子性是事务正确性的重要保证之一，比如在一个转账事务中，如果一个事务只有一半成功了，可能就会出现一个账号扣了钱，而另一个账号没有收到钱的情况。</p>
+<p><img alt="3" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/3.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 3 - 原子性被破坏 bug</div>
+<p>图 3 是一个原子性被破坏的 bug，是三个事务并发执行产生的情况。Txn1 执行一条语句尝试锁住 x-z 这 3 个 Key，但是语句运行失败，其中已经上锁的 x-y 需要被异步撤销，随后第二条语句会重新选出一个主键，这里假设新主键是 a，同时也尝试对 y 加锁，此时会阻止异步清锁继续执行。Txn3 对 y 加锁时读到了 stmt1 加的锁，resolve 时发现 pk 已经被 rollback，因为错误读取了 Txn2 产生的缓存，Txn3 误 rollback 掉了 stmt2 加上的 y，导致了事务原子性的破坏。在原本的 Percolator 提交协议中，并没有包含主键更换的逻辑，而为了避免在加锁失败时重启事务，我们在实现中是有这一优化的，也因此使得所实现的事务模型更加复杂。</p>
+<p>这里的问题是没有考虑到执行失败的语句可能会造成事务中选取出新的主键，但原始的 Percolator 提交协议并没有包括主键的更换，即是说我们在实现分布式事务的实现中所做的优化，使得这一模型变得更加复杂了。</p>
+<h3 id="heading-1">理论正确性的验证</h3>
+<p>我们使用 TLA+ 对理论正确性进行验证，TLA+ 是为并行和分布式系统设计的建模语言，能够模拟出所有可能发生的情况，来保证理论的正确性。</p>
+<p><img alt="4" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/4.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 4 - 形式化验证过程</div>
+<p>使用 TLA+ 对模型进行形式化验证需要先定义初始状态，然后定义 Next 过程和验证正确性的 THEOREM。Next 指的是可能会发生的过程，在一个并行系统中，虽然串行过程会逐个发生，但是并行过程发生的先后则不可被预测。图 4 是形式化验证的运行过程，执行一次 Next 过程，然后使用定义的 THEOREM 验证状态是否出现问题。因为 Next 是可能会发生的过程，所有一次 Next 调用可能会产生多种执行路径，TLA+ 会搜索所有可能的路径，确保在这个并行系统中，任意一种顺序都不会违反我们所定义的约束。</p>
+<p>虽然 TLA+ 能够从理论上验证正确性，但这一方法也有着各种限制：</p>
+<ul>
+<li>
+<p>复杂度随过程量指数级提示，如果搜索路径过于复杂，要完成期望深度的搜索可能需要消耗大量的时间。</p>
+</li>
+<li>
+<p>理论上的正确不能防止实现上的错误。</p>
+</li>
+</ul>
+<h3 id="-snapshot-isolation">线性一致性和 Snapshot Isolation</h3>
+<p>首先我们需要明白，线性一致性和事务的隔离性是不相关的两个概念。</p>
+<p><img alt="5" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/5.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 5 - 非可线性化</div>
+<p>可线性化（Linearizability）原本是多处理器并行操作内存时的概念，后续被引入到数据库中来，对单个元素的事务提出了两点要求：</p>
+<ul>
+<li>
+<p>单个元素上的事务可串行化；</p>
+</li>
+<li>
+<p>单个元素上，如果 Txn2 开启的时间点晚于 Txn1 提交完成的时间点，Txn2 在串行化的队列中一定在 Txn1 之后。</p>
+</li>
+</ul>
+<p>图 5 是一个可串行化但是不可线性化的例子，可串行化的执行顺序是 Txn2 -&gt; Txn1。虽然 Txn2 开启的时间点晚于 Txn1 提交的时间点，但是在可串行化的队列中，Txn2 在 Txn1 之前。Spanner 提出了外部一致性的概念，并且认为外部一致性是强于可线性化的一致性标准，因为其对事务的先后约束能够拓展到多元素的操作上，外部一致性也被理解为一种可线性化的定义，他们约束的效果大体上相同。当我们综合考虑隔离性和一致性时，就会发现可串行化并不是理想中的完美的隔离与一致性级别，例如图 5 中，Txn1 是一个进行消费的事务，在进行消费后，还有事务读取到了消费前的余额，显然这在很多场景下是无法被接受的。Jepsen 的一致性模型中，在可串行化之上又设定了一个隔离与一致性级别。当一个数据库同时满足可串行化和可线性化时，将其称为严格可串行化（Strict Serializable）。</p>
+<p><img alt="6" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/6.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 6 - 可线性化与外部一致性</div>
+<p>如图 6 所示，在可线性化的执行下，Txn3 将 x 从 1 改写成 2，并且提交时间是从 ts1 到 ts2，那么对于客户端而言，早于 ts1 的时间点和晚于 ts2 的时间点是状态确认的，而在 ts1 和 ts2 之中，因为不能确定 Txn3 实际生效的时间点，所以 x 的值处于不可知的状态，读取到 1 或 2 都是允许的。</p>
+<p>Snapshot Isolation(SI) 是一个被广泛采用的隔离级别，同时 TiDB 也是一个 SI 隔离级别的数据库，所以我们也在谈论事务测试之前，需要搞清楚 SI 隔离级别是如何使用事务间依赖进行定义的。需要注意的是，SI 是一个先射箭再画靶的隔离级别，所以我们对其的定义的目标是避免如“SI 就是事务从一个快照读”这种模糊的语言，而是要给出相对客观的靶子。</p>
+<p><img alt="7" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/7.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 7 - 偏序依赖</div>
+<p>为了定义 SI，需要引入了一个新的事务依赖，叫事务开始依赖，这一依赖反映了一个事务提交时间点和另一个事务开启时间点之间的偏序关系，偏序关系往往和其他依赖同时发生，并且具有传递性。如图 7 所示，Txn2 读取到了 Txn1 的写入，既可以说明 Txn2 的开始时间点晚于 Txn1 提交生效的时间点。需要注意的是，这里的偏序指的是数据库内部的时间点，需要和线性一致性级别综合考虑，才能从外部观测到的顺序推断出数据库内部的时间点的偏序关系，即如果图 7 中，Txn2 没有读取到 Txn1 的写入，即使连接数据库的客户端能够肯定 Txn2 是在 Txn1 完全提交后才开启的，也不能得到 c1 ≺t s2 的结论，这也有可能是数据库不提供可线性化的线性一致性。</p>
+<p>Adya 将 SI 的隔离级别称为 PL-SI，是在 PL-2 上附加了对数据库内部时间点的约束，其包括事务开始依赖和一部分读后写依赖。</p>
+<p><img alt="8" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/8.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 8 - G-SIa 异常</div>
+<p>SI 的通俗理解是，一个事务会取有一个快照，其读操作在这个快照上进行，读取的作用范围是时间点小于等于这个快照时间点的所有写入。那么对于两个存在偏序关系的事务，如果 c1 ≺t s2，那么 Txn2 则需要读取到 Txn1 的修改，同时 Txn1 不应该读取到 Txn2 的写入内容（从偏序关系的传递性可以推导  s1 ≺t c1 ≺t s2 ≺t c2），但是图 8 中的 Txn1 却读取到了 Txn2 的写入内容，从而破坏了 SI 的语义。从另一个角度来理解，事务开始依赖和 WR 依赖和 WW 依赖一样，反映的是事务间的先后关系，当这些关系出现环的时候，他们的先后关系就无法被确认了，G-SIa(Interference) 异常指的是就是 WR, WW 和 S 依赖之间形成了环。</p>
+<p><img alt="9" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/9.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 9 - G-SIb 异常</div>
+<p>图 9 展示了 G-SIb(Missed Effects) 的异常现象，指的是 WR, WW, RW 和 S 依赖形成了环，但是其中只允许有一个 RW 依赖。这一现象可以理解为，一个事务没有完整的读取到另一个事务的写入，图中 Txn2 写入了两个值，但是 Txn1 只读取到一个值，另一个值读取的是旧版本，产生了 RW 依赖。之所以只允许有一个 RW 依赖，是因为一个 RW 依赖就足以检查住这种问题，而两个 RW 则会带来如 Write Skew 的误判。</p>
+<p>PL-SI 需要在 PL-2 的基础上防止 G-SIa 和 G-SIb 的发生，这点和对标可重复读的 PL-2.99 是有些细微的差别的，请小心对待。</p>
+<h2 id="jepsen">Jepsen</h2>
+<p>提到事务测试，就不得不提 Jepsen。Jepsen 是 TiDB 质量保证的重要一环，除了每一次发版，在日常测试中，Jepsen 也在不间断的运行。</p>
+<p><img alt="10" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/10.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 10 - 约束检查的思想</div>
+<p>什么是 Jepsen，为什么 Jepsen 是有效、高效的？图 10 是作者的一些想法，如果我们要验证由 ① 和 ② 组成的方程组的求解是否正确，我们可以仔细地检查求解过程，也可以将结果代入到原式中，检查是否符合给定条件。我相信大部分人在检查方程结果的时候，都会选择后者，因为后者能够简单有效的检查出错误。而 Jepsen 的思想，就是通过设计一些“方程”，将求解交给数据库，最后通过一些约束条件检查数据库是否求解的正确。</p>
+<h3 id="bank">Bank</h3>
+<p><img alt="10-1" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/10-1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 10 - Jepsen Bank</div>
+<p>Jepsen Bank 是一个非常经典的测试，其模拟的情况也很简单，图 10 是这个用例运行的方式，在一张表中有许多用户和他们的余额纪录，同时会有许多事务并发的进行转账操作。Bank 的检查条件也非常简单，就是所有用户的账户总余额不变。并且在 SI 隔离级别中，任意一个快照都应该满足这一约束，如果某个快照不符合这一约束，则说明可能出现了 G-SIb(Missed Effects) 的异常现象，读者可以思考一下原因。Jepsen 会在运行过程中，定时开启事务，查询总余额，检查是否破坏约束。</p>
+<p>Bank 是一个比较接近现实业务的测试场景，逻辑理解简单，但是因为并发构造，在实际运行过程中可能会造成大量的事务冲突，Bank 并不关心数据库如何处理这些冲突，会不会带来事务失败，大部分错误最终都会反应到余额之上。</p>
+<h3 id="long-fork">Long Fork</h3>
+<p><img alt="11" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/11.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 11 - Jepsen Long Fork</div>
+<p>Long Fork 是一个为 SI 隔离级别设计的事务测试场景，其中有两种事务，写事务会对一个寄存器进行赋值，而读事务则会查询多个寄存器，最后分析这些读事务是否读到了破坏 PL-SI 的情况。图 11 中，Txn1 和 Txn2 是写事务，Txn3 和 Txn4 是读事务，图 11 中存在 G-SIa，破坏了 PL-SI，但是在这里我们需要做一些假设才能发现环。</p>
+<p><img alt="12" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/12.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 12 - Jepsen Long Fork</div>
+<p>图 12 是对图 11 例子的分析，根据 WR 依赖，我们可以确定 c2 ≺t s3 和 c1 ≺t s4。但是因为我们不知道 Txn3 和 Txn4 的开始时间点，所以我们需要进行假设，如果 s3 ≺t s4，则如图中左侧的假设，从偏序的传递性，可以推导出 c2 ≺t s4，于是就能发现一个由  S 依赖和 RW 依赖组成的环；如果  s4 ≺t s3，则如图中右侧所示，也能发现一个 G-SIb 异常。如果 s3 和 s4 相等，那么说明 Txn3 和 Txn4 是从会读取到同样的内容，但是实际读取到的内容却出现了矛盾，也存在异常，具体找到环的步骤就留给读者自行推导了。</p>
+<h3 id="heading-2">小结</h3>
+<p>Jepsen 提供了一些通过约束检查来发现异常的方法，并且设计了一系列测试场景。有比较好的覆盖率，其优点有：</p>
+<ul>
+<li>
+<p>着眼于约束条件，简化了正确性的验证；</p>
+</li>
+<li>
+<p>测试的效率高。</p>
+</li>
+</ul>
+<p><img alt="13" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/13.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 13 - Missing Lost Update</div>
+<p>但是 Jepsen 也有他的不足之处，图 13 表达了一个在 Bank 下的 Lost Update 异常，T2 的转账丢失了，但是最后并不能从结果上检查出这个异常，因为余额的总和没有变。</p>
+<h2 id="history-check">History Check</h2>
+<h3 id="-bfs-">通过 BFS 进行检测</h3>
+<p>有一类测试方法是通过 history check 来进行的，其目的是为了寻找到更多的异常现象，尽可能的挖掘执行历史中的信息。「On the Complexity of Checking Transactional Consistency」这篇论文就研究了从执行历史分析事务一致性和其复杂度。</p>
+<p><img alt="14" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/14.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 14 - 可序列化的检测</div>
+<p>可串行化的检测遵循其字面意思，我们只需要找到一个执行序列，能够让所有的事务串行执行的即可，那么很自然的，只需要采用一个广度优先搜索（BFS），就可以检查是否是串行的。但是问题在于，这种方法在假设事务执行满足 Sequential Consistency 的前提下，复杂度为 O(deep^(N+3))，其中 deep 为每个线程执行事务的数量，N 为线程数。</p>
+<p><img alt="15" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/15.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 15 - 通过 guard 变量转化 SI 检测</div>
+<p>检测可串行化是简单的，但是要检测一个历史序列是否符合 SI 隔离级别就无法直接进行，如图 15 所示，论文通过添加 guard 变量，从而可以通过上文提到的对可串行化的检测来判断 SI 的读写关系是否合理。以 Lost Update 为例，两个事务都对 x 进行了修改，分别写入了第一个版本和第二个版本，因此插入两个 guard 变量，将这两个事务对 x 的这两个修改串联起来，不允许其中插入对 x 的修改，只要验证图中 (b) 的执行历史能够满足可串行化的要求，就可以说明 (a) 的执行历史满足 SI 的要求。</p>
+<h3 id="elle">Elle</h3>
+<p>为了解决理解困难和复杂度高等问题，Jensen 的作者 Kyle Kingsbury 发表了名为 Elle 的事务一致性检测方法。</p>
+<p>Elle 通过环检测和异常检测的方式，来验证事务的一致性和隔离性是否达到我们所指定的要求，它的工作方式是尽可能的找出执行历史中的异常，而非尝试找出一个可串行的执行序列，因此在效率是有着明显的优势，但相对的，这一测试方法的过程较为复杂。</p>
+<p><img alt="16" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/16.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 16 - 简单的 G1c 检测</div>
+<p>图 16 就是检测出 G1c 的例子，根据我们在第一讲所讨论的理论，我们不需要按照可串行化的字面定义，去寻找一个执行序列，而只需要检测是否出现某些不允许出现的情况。虽然从直觉上，我们并不能肯定不出现某些异常就等同于字面上的可串行化，但是从在隔离级别定义的研究基础上来说，通过检查异常来判断是否可串行化是合理的。此外，对于事务测试而言，找到异常已经是我们所期望的结果了。</p>
+<p><img alt="17" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/17.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 17 - Elle 所设计的模型</div>
+<p>如图 17 所示，Elle 设计了四个模型，分别是寄存器、加法计数器、集合和列表，其对执行历史的检测的方法大同小异，后面会以 List Append 作为对象展开讲解。</p>
+<p>Elle 中的事务有生成和执行两个阶段，在生成阶段，Elle 会随机产生这个事务需要读写的内容，这些预生成好的读写会在执行阶段得到结果。即一个事务在历史中会存在两条记录，生成阶段的 :invoke 和执行阶段的 :ok/:fail/:info 中的一个。</p>
+<ul>
+<li>
+<p>:invoke，事务被生成，之后会被执行。</p>
+</li>
+<li>
+<p>:ok，事务执行并确定提交成功。</p>
+</li>
+<li>
+<p>:fail，确定事务没有被提交。</p>
+</li>
+<li>
+<p>:info，事务状态不一定（例如提交时出现连接错误）。</p>
+</li>
+</ul>
+<p>为了分析线性一致性，Elle 在分析过程中，考虑 Adya 所定义的事务间读写关系的依赖的同时，还给出了和时间相关的依赖，时间上的依赖在满足对应的线性一致性的前提下也能够反应事务的先后关系。</p>
+<ul>
+<li>
+<p>Process Depend，一个线程中事务执行的先后严格遵循执行顺序，在支持 Sequential Consistency 的系统中可以使用。</p>
+</li>
+<li>
+<p>Realtime Depend，所有线程中事务执行的先后严格遵循执行时间，在支持 Linearizability 的系统中可以使用。</p>
+</li>
+</ul>
+<p><img alt="18" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/18.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 18 - 对时间依赖的环检测</div>
+<p>图 18 展示了一个符合 Sequential Consistency 但不符合 Linearizability 的例子，客户端分两个线程执行事务，但是客户端知道不同线程间事务的严格顺序，注意在分布式数据库中，这些线程可能连接到的是不同的数据库节点。如果系统只满足 Sequential Consistency，那么对应的依赖图应该如左下方所示，其中并没有出现环；但是如果系统是满足 Linearizability 的，那么依赖图就会变成右下方所示，Txn3 和 Txn4 之间形成了环，换句话说，Txn4 发生在 Txn3 之前，但是却读取到了 Txn3 的写入，并且这一异常，单纯从 Adya 所定义的读写关系中是发现不了的。</p>
+<p>接下来我们会通过几个例子来讲解，Elle 具体是如何工作和发现数据库在事务处理上的异常的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">{:type :invoke, :f :txn, :value [[:a :x [1 2]] [:a :y [1]]], :process 0, :time 10, :index 1}
+{:type :invoke, :f :txn, :value [[:r :x nil] [:a :y [2]]], :process 1, :time 20, :index 2}
+{:type :ok, :f :txn, :value [[:a :x [1 2]] [:a :y [1]]], :process 0, :time 30, :index 3}
+{:type :ok, :f :txn, :value [[:r :x []] [:a :y [2]]], :process 1, :time 40, :index 4}
+{:type :invoke, :f :txn, :value [[:r :y nil]], :process 0, :time 50, :index 5}
+{:type :ok, :f :txn, :value [[:r :y [1 2]]], :process 0, :time 60, :index 6}
+</code></pre></div><div class="caption-center">例 1 - 包含 G-SIb 的执行历史</div>
+<p><img alt="19" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/19.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 19 - G-SIb 的依赖图</div>
+<p>例 1 是一个出现 G-SIb 异常的历史，这里用 Clojure 的 edn 的格式来表示，通过 :process 属性，可以推断出第一行和第三行是 Txn1，第二行和第四行是 Txn2，第五行和第六行是 Txn3。从 Txn1 和 Txn2 从 :invoke 到 :ok 状态的 :time 属性来看，他们可能是并行的。而 Txn3 则是在这两个事务都成功提交之后才开启的，从 Txn3 读取到的 [[:r :y [2 1]] 来看，因为 List 是按照 Append 顺序排列的，所以可以判断 Txn2 发生在 Txn1 之前，但是 Txn2 又读到了 Txn1 写入之前的 x，这里产生了 RW 依赖，出现了环。在这个例子中，Elle 利用 List 的特性，找出了原本不容易判断的 WW 依赖。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">{:type :invoke, :f :txn, :value [[:a :x [1 2]] [:a :y [1]]], :process 0, :time 10, :index 1}
+{:type :invoke, :f :txn, :value [[:a :x [3]] [:a :y [2]]], :process 1, :time 20, :index 2}
+{:type :ok, :f :txn, :value [[:a :x [1 2]] [:a :y [1]]], :process 0, :time 30, :index 3}
+{:type :ok, :f :txn, :value [[:a :x [3]] [:a :y [2]]], :process 1, :time 40, :index 4}
+{:type :invoke, :f :txn, :value [[:r :x nil]], :process 2, :time 50, :index 5}
+{:type :ok, :f :txn, :value [[:r :x [1 2 3]]], :process 2, :time 60, :index 6}
+{:type :invoke, :f :txn, :value [[:r :x nil]], :process 3, :time 70, :index 7}
+{:type :ok, :f :txn, :value [[:r :x [1 2]]], :process 3, :time 80, :index 8}
+</code></pre></div><div class="caption-center">例 2 - 可能破坏 Linearizability 的执行历史</div>
+<p><img alt="20" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/20.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 20 - 可能破坏 Linearizability 的依赖图</div>
+<p>例 2 是一个可能破坏 Linearizability 的例子，从图 20 上方的依赖图来看，出现了 RW，WR 和 Realtime 依赖组成的环，即 G-SIb 现象，但是这个环里有一个 Realtime 依赖，这个系统还有可能是因为破坏了 Linearizability 而产生这个环的。破坏 Linearizability 的情况可以从图的下面更加清晰的发现，当遇到这种情况时，因为不能断言是出现了哪一种异常，Elle 会汇报可能产生的异常种类。</p>
+<p><img alt="21" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/21.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 21 - Elle 论文中的例子</div>
+<p>图 21 是 Elle 的论文中给出的例子，令第一行为 Txn1，第二行为 Txn2，第三行为 Txn3。Txn1 和 Txn2 之间存在 Realtime 关系，而 Txn2 对 Key 为 255 的 List 的读取中没有 Txn3 的写入，说明其中存在一个 RW 依赖，而 Txn1 则读取到了 Txn3 的写入，于是出现了和图 20 中类似的情况，这里不再展开分析了。</p>
+<h3 id="mikadzuki">MIKADZUKI</h3>
+<p>Elle 展示了依赖图在测试中的巨大作用，在 PingCAP 内部，我们尝试通过另一种方式来通过依赖图对数据库进行测试。回顾 Elle 的流程，是执行后分析执行历史，将其转化为依赖图后，判断其是否符合某个隔离级别或一致性级别。MIKADZUKI 的做法正好相反，尝试在有依赖图的情况下，生成出执行历史，对比生成的执行历史和数据库实际执行的表现，就可以发现数据库是否正常。</p>
+<p><img alt="22" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/22.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 22 - MIKADZUKI 依赖图层次</div>
+<p>图 22 是 MIKADZUKI 内部的图的层次，Process 中的事务会串行执行，而 Process 间的事务会并行执行。同一个 Process 下的事务，首尾之间存在 Realtime 的关系，而 Process 间的事务会生成 Depend，Depend 和 Realtime 都代表了事务执行的先后关系，所以在生成时，这两类依赖不会让事务形成环。</p>
+<p><img alt="23" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/23.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 23 - MIKADZUKI 的执行流程</div>
+<p>图 23 是 MIKADZUKI 的执行流程，一轮有四个阶段：</p>
+<ul>
+<li>
+<p>生成一张没有环的 Graph；</p>
+</li>
+<li>
+<p>为 Graph 中的写请求填充随机生成的读写数据，数据以 KV 形式表达，其中 Key 是主键索引或唯一索引，Value 是整行数据；</p>
+</li>
+<li>
+<p>从写请求根据事务间的依赖，推测出读请求应当读取到的结果；</p>
+</li>
+<li>
+<p>按照图的事务依赖描述，并行执行事务，如果读取到与第三步预测中不同的结果，则说明结果有误。</p>
+</li>
+</ul>
+<p>这一测试方法帮助我们发现过一些问题，在实验后期，我们尝试添加制造成环的依赖，WW 依赖所成的环，在正常执行下会出现死锁，而死锁检测则是以往的测试方法不容易发现的，因为死锁检测卡住不会导致任何异常。</p>
+<h3 id="heading-3">小结</h3>
+<p>通过对执行历史的检查，我们能够尽可能的发现异常，得益于对隔离级别和一致性的学术研究，对历史的检查复杂度大幅降低。Elle 进而设计了一些模型，能够为分析事务间关系提供线索，从而使得对完整历史的检查变得可能且有效。</p>
+<h2 id="heading-4">错误注入</h2>
+<p>墨菲法则声称——任何可能发生错误的地方都会发生错误，即再小的发生错误的概率，也总有一天会发生。另一方面，测试环境的规模和数量又远小于生产环境，正常情况下，绝大部分的错误都将发生在生产环境，那么几乎所有因此引发的罕见的系统的 bug 也将发生在生产环境下，这显然是我们所不期望发生的。</p>
+<p>为了将 bug 止于测试环境，我们会使用一些方法进行故障模拟，主要包括：</p>
+<ul>
+<li>
+<p>Failpoint，为进程注入错误。</p>
+</li>
+<li>
+<p>Chaos Test，模拟外界产生的故障，更接近真实情况。</p>
+</li>
+</ul>
+<h3 id="failpoint">Failpoint</h3>
+<p>Failpoint 是用于向进程中注入一些问题的测试手段，可以在编译期决定是否打开，正常发布的版本是关闭 Failpoint 的。TiDB 通过折叠代码来控制 Failpoint，TiKV 则通过宏和编译时的环境变量进行控制。通过 Failpoint，我们可以高效的模拟一些平时罕见但又存在发生可能的情况：</p>
+<ul>
+<li>
+<p>存在一些难以被访问到的代码路径，并且可能是正确性的重要保障；</p>
+</li>
+<li>
+<p>程序可能在任意节点被 kill；</p>
+</li>
+<li>
+<p>代码执行可能在任意一个节点 hang 住。</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">// disable
+failpoint.Inject("getMinCommitTSFromTSO", nil)
+
+// enable
+failpoint.Eval(_curpkg_("getMinCommitTSFromTSO"))
+</code></pre></div><div class="caption-center">例3 - 打开 Failpoint</div>
+<p>例 3 是一个简单的打开 Failpoint 的例子，在关闭状态下，Inject 函数不会做任何事情，而当 Failpoint 打开后，Inject 函数就会变成 Eval 函数，此时我们可以使用 HTTP 请求去控制 Failpoint 的行为，包括：</p>
+<ul>
+<li>
+<p>人为添加 sleep；</p>
+</li>
+<li>
+<p>让 goroutine panic；</p>
+</li>
+<li>
+<p>暂停这个 goroutine 的执行；</p>
+</li>
+<li>
+<p>进入 gdb 中断。</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">// disable
+failpoint.Inject("beforeSchemaCheck", func() {
+    c.ttlManager.close()
+    failpoint.Return()
+})
+
+// enable
+if _, _err_ := failpoint.Eval(_curpkg_("beforeSchemaCheck"));
+    _err_ == nil {
+    c.ttlManager.close()
+    return
+}
+</code></pre></div><div class="caption-center">例 4 - 利用 Failpoint 注入变量</div>
+<p>在例 4 中，TiDB 利用 Failpoint 做了更多的注入，在其中关闭了 TTL Manager，这将导致悲观锁的快速过期，并且中断事务的提交。此外，还可以借助 Failpoint 修改当前作用域下的变量。如果没有 Failpoint，这些故障情况可能极少发生，而通过 Failpoint，我们就可以快速的测试当发生故障时，是否会产生如破坏一致性的异常现象。</p>
+<p><img alt="24" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/24.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 24 - 对提交 Secondary Keys 的 Failpoint 注入</div>
+<p>图 24 展示了在两阶段提交中的提交阶段下，通过注入来达到延迟或者跳过 Secondary Keys 的效果，而这些情况在通常情况下是几乎不会出现的。</p>
+<h3 id="chaos-test">Chaos Test</h3>
+<p>在一个分布式系统中，我们难以要求开发人员总是写出正确的代码，事实上大部分时候我们都不能做到完全的正确实现。如果说 Failpoint 是细粒度的控制某段代码可能会出现的现象，是演习；那么 Chaos Test 就是无差别的对系统进行破坏，是真正的战场。</p>
+<p><img alt="25" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/transaction-frontiers-research-article-talk2/25.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 25 - Chaos Test 概念图</div>
+<p>图 25 是 Chaos Test 的概念图，Chaos Test 和 Failpoint 最大的区别在于，Failpoint 仍然是开发人员所设想的可能出现异常的地方，那么开发人员在绝大多数情况下，是无法将 Failpoint 设计的全面的，Chaos Test 为这一纰漏加上了一层额外的保险。</p>
+<p>在开发 Chaos Mesh 的过程中，我们也做了诸多尝试，例如：</p>
+<ul>
+<li>
+<p>kill node</p>
+</li>
+<li>
+<p>物理机的断电测试</p>
+</li>
+<li>
+<p>网络延迟与丢包</p>
+</li>
+<li>
+<p>机器的时间漂移</p>
+</li>
+<li>
+<p>IO 性能限制</p>
+</li>
+</ul>
+<p>Chaos Mesh 在正式发布前，Chaos Test 就在 PingCAP 被证明是有效的，我们将这些测试心得通过 Chaos Mesh 分享给社区。</p>
+<h2 id="heading-5">总结</h2>
+<p>尚未提笔写这篇文章的时候，我也曾反复思考过，关于事务测试，究竟能够分享些什么？并且一度陷入觉得没有东西好说的困境。然而当我尝试说明白一些测试方法时，才后知后觉的意识到，测试是一门很深奥也容易被忽视的学问，我们在开发数据库的过程中花费了不少的心思在设计和运行测试上，本文所提及的，也只是事务测试体系的冰山一角。所有的测试，都是为了更好的产品质量，事务作为数据库的核心特性之一，更应该受到关注。Through the fire and the flames, we carry on.</p>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com" onclick="trackViews('blog-contact-us', 'mail_to_info_view')" target="_blank">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/blog-cn/transaction-frontiers-research-article-talk2/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+</li>
+<li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+<li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+<li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+<li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li><a href="/solutions/intel/" onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+<li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')" target="_blank">Ask TUG</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="https://careers.pingcap.com" onclick="trackViews('footer-recruit-join', 'recruit-join_view')" target="_blank">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+<li><a href="/zh/privacy-policy/">隐私申明</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="tel" href="/" target="_blank"><svg enable-background="new 0 0 512.021 512.021" height="19" id="Layer_1" viewbox="0 0 512.021 512.021" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"></path></g></svg>
+ 商务咨询：</a></li>
+<li class="tel-li">4006790886</li>
+<li class="tel-li">010-58400041</li>
+<li><a class="twitter" href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&amp;id=4240&amp;channel=9034" target="_blank"><svg height="19" p-id="2379" t="1622000094837" version="1.1" viewbox="0 0 1069 1024" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-pc"></div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2021 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/blog" id="lang">English</a>
+<a class="prepared-num" href="https://beian.miit.gov.cn/">京 ICP 备 16046278 号 - 2</a>
+<a class="prepared-num" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" target="_blank">
+<img src="/images/beian.png"/>
+<p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/anchor.js" type="text/javascript"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script crossorigin="anonymous" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

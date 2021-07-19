@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"/><meta content="IE=edge" http-equiv="X-UA-Compatible"/><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>【Infra Meetup No.95】Introduction of TiDB SQL Layer | PingCAP</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="【Infra Meetup No.95】Introduction of TiDB SQL Layer | PingCAP" property="og:title"/>
+<meta content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。" property="og:description"/>
+<meta content="https://pingcap.com/meetup/meetup-95-20190403/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="/images/meetup/meetup-95-20190403/1.jpg" property="og:image"/>
+<meta content="/images/meetup/meetup-95-20190403/1.jpg" property="og:image:secure_url"/><meta content="summary_large_image" name="twitter:card"/>
+<meta content="1200" name="og:image:width"/>
+<meta content="600" name="og:image:height"/><meta content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。" name="twitter:description"/>
+<meta content="【Infra Meetup No.95】Introduction of TiDB SQL Layer | PingCAP" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/><meta content="https://pingcap.com/images/meetup/meetup-95-20190403/1.jpg" name="twitter:image"/><meta content="@pingcap" name="twitter:creator"/>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script async="" src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js" type="text/javascript"></script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head> <body data-lang="cn"><div id="page-content">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/zh"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li class="docs-type-selector " id="docsTypeSelector">
+<a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+</li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" data-type="" id="search-input" name="q" placeholder="搜索 TiDB 文档" type="search"/>
+</div>
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP Education</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-mobile"></div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/weekly" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="meetup">
+<div class="container">
+<div class="sidebar">
+<div class="sticky-sidebar"><div class="title">Meetup</div><div class="st_tree">
+<ul><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020(8)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-08(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-129-20200805/"><i class="icon-file"></i>【Infra Meetup No.129】Horoscope and TiDB Query Optimizer</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-07(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-128-20200708/"><i class="icon-file"></i>【Infra Meetup No.128】Rancher x TiDB 联合专场 Meetup</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-06(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-127-20200623/"><i class="icon-file"></i>【Infra Meetup No.127】TiDB 4.0 新特性讲解</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-05(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-126-20200522/"><i class="icon-file"></i>【Infra Meetup No.126】在 K8s 中管理有状态应用 &amp; TiDB 4.0 安全新特性</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-03(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-125-20200305/"><i class="icon-file"></i>【Infra Meetup No.125】TiDB KeyViz：睁开双眼看业务</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-02(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-124-20200219/"><i class="icon-file"></i>【Infra Meetup No.124】TiDB + TiFlash：行列混存数据库，究竟有多快？</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2020-01(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-123-20200102/"><i class="icon-file"></i>【Infra Meetup No.123】WebAssembly</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-122-20200102/"><i class="icon-file"></i>【Infra Meetup No.122】基于 Hadoop 的 ES 索引 &amp; TiDB 4.0</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019(35)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-12(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-121-20191227/"><i class="icon-file"></i>【Infra Meetup No.121】ZILLIZ Arch Meetup x PingCAP Infra Meetup</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-120-20191211/"><i class="icon-file"></i>【Infra Meetup No.120】丰巢支付平台的 TiDB 迁移之旅 &amp; TiKV 优化之路</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-119-20191203/"><i class="icon-file"></i>【Infra Meetup No.119】Pulsar 事务简介 &amp; TiDB 悲观事务的设计与实现</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-11(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/geographic-data-distribution-traffic-and-latency-halved/"><i class="icon-file"></i>流量和延迟减半！挑战 TiDB 跨数据中心难题</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-10(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-117-20191023/"><i class="icon-file"></i>【Infra Meetup No.117】TiDB 悲观事务的设计与实现 &amp; Introduction to performance engineering</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-116-20191023/"><i class="icon-file"></i>【Infra Meetup No.116】SQL 语言漫谈 &amp; 构建高可用数据库服务</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-115-20191023/"><i class="icon-file"></i>【Infra Meetup No.115】Infra Meetup X Kubernetes &amp; Cloud Native Meetup</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-09(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-114-20190911/"><i class="icon-file"></i>【Infra Meetup No.114】ACMUG 专场</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-113-20190911/"><i class="icon-file"></i>【Infra Meetup No.113】TiDB Operator 的设计与实现</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-112-20190904/"><i class="icon-file"></i>【Infra Meetup No.112】华泰证券 x PingCAP：分布式数据库 TiDB 的探索与应用</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-08(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-111-201908118/"><i class="icon-file"></i>【Infra Meetup No.111】网易分布式时序数据库 NTSDB &amp; 数据库构建背后的故事</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-110-20190814/"><i class="icon-file"></i>【Infra Meetup No.110】Linux 内核虚拟机 BPF 原理及应用</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-07(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-109-20190731/"><i class="icon-file"></i>【Infra Meetup No.109】TiKV internal &amp; 基于 Kafka 的数据处理微服务链</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-06(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-108-20190619/"><i class="icon-file"></i>【Infra Meetup No.108】TiDB DDL &amp; 数据云平台访问 &amp; 同盾大数据平台</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-107-20190619/"><i class="icon-file"></i>【Infra Meetup No.107】SQLFlow：Brings SQL and AI together</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-106-20190606/"><i class="icon-file"></i>【Infra Meetup No.106】 Alluxio &amp; 仿真技术 &amp; TiDB 的 HTAP 之路 &amp; Zeppelin</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-105-20190606/"><i class="icon-file"></i>【Infra Meetup No.105】 Happy Hacking TiDB &amp; Chaos Practice in TiDB</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-05(5)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-100-20190510/"><i class="icon-file"></i>势高，则围广：TiDB 的架构演进哲学</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-104-20190530/"><i class="icon-file"></i>【Infra Meetup No.104】 云原生数据库的核心特点 - TiDB 架构及发展 &amp; 反应式编程之 Spring WebFlux</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-103-20190530/"><i class="icon-file"></i>【Infra Meetup No.103】 TiDB 开源社区专题</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-102-20190523/"><i class="icon-file"></i>【Infra Meetup No.102】 How We Build TiDB &amp; TiDB Ecosystem Tools 概览</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-101-20190514/"><i class="icon-file"></i>【Infra Meetup No.101】 Log, Observability and Filebeat &amp; 易果集团的数据平台建设历程 &amp; The Evolution of TiKV</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-04(6)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-99-20190420/"><i class="icon-file"></i>【Infra Meetup No.99】数据中台 &amp; WiredTiger 引擎实现原理 &amp; JIT in Databases</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-98-20190420/"><i class="icon-file"></i>【Infra Meetup No.98】Everything You Always Wanted to Know About Compiled and Vectorized Queries But Were Afraid to Ask</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-97-20190420/"><i class="icon-file"></i>【Infra Meetup No.97】What's New in TiDB 3.0 &amp; An Introduction to Failpoint Design</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-96-20190413/"><i class="icon-file"></i>【Infra Meetup No.96】Introduction to Titan</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-95-20190403/"><i class="icon-file"></i>【Infra Meetup No.95】Introduction of TiDB SQL Layer</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-94-20190403/"><i class="icon-file"></i>【Infra Meetup No.94】TiFlash、Spark SQL</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-03(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-93-20190327/"><i class="icon-file"></i>【Infra Meetup No.93】A Study of LSM-Tree</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-92-20190327/"><i class="icon-file"></i>【Infra Meetup No.92】Introduction to TiDB Statistics</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-91-20190321/"><i class="icon-file"></i>【Infra Meetup No.91】Head First Distributed Transaction in TiDB</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-90-20190314/"><i class="icon-file"></i>【Infra Meetup No.90】知乎已读服务架构演进</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-02(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-89-20190227/"><i class="icon-file"></i>【Infra Meetup No.89】TiKV 最新性能优化</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2019-01(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-88-20190116/"><i class="icon-file"></i>【Infra Meetup No.88】小红书的社区架构 &amp; TiDB 在小红书的实践案例分享 &amp; Vectorized Execution Explained</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-87-20190108/"><i class="icon-file"></i>【Infra Meetup No.87】摩拜数据复制中心 Gravity 介绍</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018(24)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-12(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-85-20181226/"><i class="icon-file"></i>【Infra Meetup No.85】宝尊 + Apache Spark + TiDB SQL Layer</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-84-20181220/"><i class="icon-file"></i>【Infra Meetup No.84】如何在三分钟内跑完千万测试 case &amp; 硬核 Paper Reading</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-83-20181220/"><i class="icon-file"></i>【Infra Meetup No.83】What's New in TiDB 2.1 and What's Next</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-11(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-82-20181127/"><i class="icon-file"></i>【Infra Meetup No.82】数据库统计信息的自动挖掘与维护 &amp; What's New in TiDB</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-81-20181127/"><i class="icon-file"></i>【Infra Meetup No.81】基于 TiKV 的 Redis 协议兼容层 Titan</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-80-20181112/"><i class="icon-file"></i>【Infra Meetup No.80】从实现角度看 Aurora</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-79-20181107/"><i class="icon-file"></i>【Infra Meetup No.79】小米开源 SQL 优化工具 SOAR 技术内幕</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-10(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-78-20181030/"><i class="icon-file"></i>【Infra Meetup No.78】Bigdata@Bilibili &amp; Chaos Practice in TiDB</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-77-20181023/"><i class="icon-file"></i>【Infra Meetup No.77】我司成都分舵第一次 Meetup</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-76-20181023/"><i class="icon-file"></i>【Infra Meetup No.76】列式存储如何进行在线更新</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-75-20181016/"><i class="icon-file"></i>【Infra Meetup No.75】这次我们聊了聊 Google F1 的最新论文</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-09(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-74-20180919/"><i class="icon-file"></i>【Infra Meetup No.74】TitanDB 首次公开分享</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-73-20180905/"><i class="icon-file"></i>【Infra Meetup No.73】TiKV 原理剖析</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-08(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-72-20180820/"><i class="icon-file"></i>【Infra Meetup No.72】TiDB Operator，让 TiDB 成为真正的 Cloud-Native 数据库</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-07(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-71-20180710/"><i class="icon-file"></i>【Infra Meetup No.71】TiDB 2.1 新特性与未来规划</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-06(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-70-20180626/"><i class="icon-file"></i>【Infra Meetup No.70】Paper Party：CEO 解读 TiDB 下一代存储引擎</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-69-20180612/"><i class="icon-file"></i>【Infra Meetup No.69】CASPaxos，一个有趣的 RSM 算法</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-05(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-68-20180531/"><i class="icon-file"></i>【Infra Meetup No.68】虚怀迎远客 魔都 Talk 「长」</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-67-20180509/"><i class="icon-file"></i>【Infra Meetup No.67】杭州站</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-04(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-66-20180417/"><i class="icon-file"></i>【Infra Meetup No.66】Application of TLA+ at PingCAP</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-65-20180404/"><i class="icon-file"></i>【Infra Meetup No.65】「四美具，二难并」之成都行</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-03(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-64-20180314/"><i class="icon-file"></i>【Infra Meetup No.64】Chaos Practice in TiDB</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-02(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-63-20180207/"><i class="icon-file"></i>【Infra Meetup No.63】深入了解 TiDB 新执行框架</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2018-01(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-62-20180110/"><i class="icon-file"></i>【Infra Meetup No.62】Apache Pulsar</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017(23)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-12(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-60-20171223/"><i class="icon-file"></i>【Infra Meetup No.60】初探 Orca 查询优化器</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-11(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-58-20171115/"><i class="icon-file"></i>【Infra Meetup No.58】TiSpark 架构设计与实现</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-10(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-57-20171025/"><i class="icon-file"></i>【Infra Meetup No.57 Rust 专场】Rocket Web 框架解析</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-09(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-56-20170920/"><i class="icon-file"></i>【Infra Meetup No.56】MonetDB/X100 Paper 解读</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-55-20170906/"><i class="icon-file"></i>【Infra Meetup No.55】TiDB Pre-GA 版本新特性介绍以及后续功能展望</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-08(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-54-20170825/"><i class="icon-file"></i>【Infra Meetup No.54】数据库计算存储分离架构分析</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-53-20170805/"><i class="icon-file"></i>【Infra Meetup No.53】知乎数据平台实践</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-07(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-52-20170722/"><i class="icon-file"></i>【Infra Meetup No.52】TiDB 自动化运维管理 —— TiDB-Operator</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-51-20170701/"><i class="icon-file"></i>【Infra Meetup No.51】百度统一分布式计算框架 Bigflow (内附 PPT 下载链接)</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-06(1)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-49-20170603/"><i class="icon-file"></i>【Infra Meetup No.49】TiDB Best Practice</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-05(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-48-20170513/"><i class="icon-file"></i>【Infra Meetup No.48】分布式对象存储面临的挑战</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-47-20170506/"><i class="icon-file"></i>【Infra Meetup No.47】分布式定时任务中间件架构 Elastic-Job 的两种实现</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-04(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-46-20170422/"><i class="icon-file"></i>【Infra Meetup No.46】MySQL 5.7 的特性及实践</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-45-20170416/"><i class="icon-file"></i>【Infra Meetup No.45】Rust 专场</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-44-20170408/"><i class="icon-file"></i>【Infra Meetup No.44】Elasticsearch 运维</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-03(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-43-20170325/"><i class="icon-file"></i>【Infra Meetup No.43】RocksDB 专场分享</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-42-20170318/"><i class="icon-file"></i>【Infra Meetup No.42】Spark 与机器学习</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-41-20170311/"><i class="icon-file"></i>【Infra Meetup No.41】大容量 redis 存储中间件（onestore）架构实践 &amp; TiKV RC2 性能大幅提升的秘密</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-40-20170304/"><i class="icon-file"></i>【Infra Meetup No.40】tcp 链接的建立与释放 &amp; 分布式数据库中统计信息的收集和使用</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-02(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-39-20170225/"><i class="icon-file"></i>【Infra Meetup No.39】百度 Galaxy 集群管理系统</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-38-20170218/"><i class="icon-file"></i>【Infra Meetup No.38】深入解读 Google Spanner</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2017-01(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-37-20170114/"><i class="icon-file"></i>【Infra Meetup No.37】PD 调度的实现 &amp; 主流分布式文件系统对比介绍</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-36-20170107/"><i class="icon-file"></i>【Infra Meetup No.36】Tera 的单机存储引擎 &amp; 机器学习之我见</a>
+</li></ul>
+</li></ul>
+</li><li class="level-1 year-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016(27)</a>
+<ul><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-12(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-35-20161224/"><i class="icon-file"></i>【Infra Meetup No.35】Sofa-pbrpc 设计与实现 &amp; 自底向上纵览 TiKV 架构</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-34-20161217/"><i class="icon-file"></i>【Infra Meetup No.34】Pegasus：一个分布式 KV 系统的设计过程 &amp; TiDB 架构介绍</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-33-20161210/"><i class="icon-file"></i>【Infra Meetup No.33】zeppelin 的设计与实现 &amp; 海量结构化数据库 Tera 总览</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-32-20161203/"><i class="icon-file"></i>【Infra Meetup No.32】百度文件系统－面向实时应用的分布式文件系统 &amp; TiDB - The Future of Database</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-11(4)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-31-20161126/"><i class="icon-file"></i>【Infra Meetup No.31】PD 的实现和演进 &amp; 从容器和微服务的发展看基础架构变迁</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-30-20161119/"><i class="icon-file"></i>【Infra Meetup No.30】深度学习，众包数据与短时临近预报系统 &amp; 谈谈 TiDB-Binlog 的设计</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-29-20161112/"><i class="icon-file"></i>【Infra Meetup No.29】映客直播服务端架构优化之路 &amp; MySQL 与 TiDB 的事务机制</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-28-20161105/"><i class="icon-file"></i>【Infra Meetup No.28】Spark 架构设计要点剖析 &amp; Performing group-by before join</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-10(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-27-20161029/"><i class="icon-file"></i>【Infra Meetup No.27】Impala 在用户行为分析中的应用与优化 &amp; How we build CI/CD for TiDB at scale</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-26-20161022/"><i class="icon-file"></i>【Infra Meetup No.26】京东分布式数据库实践 &amp; 深度探索分布式系统测试</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-25-20161015/"><i class="icon-file"></i>【Infra Meetup No.25】分布式数据处理在个性化系统的应用 &amp; TiKV 性能优化</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-09(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-24-20160924/"><i class="icon-file"></i>【Infra Meetup No.24】LLVM 简介及其在大规模 OLAP 中的应用 &amp; 阻塞访问数据库的相关问题</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-23-20160910/"><i class="icon-file"></i>【Infra Meetup No.23】How to write a good commit message &amp; QuorumKV：微信分布式 KV 存储系统</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-22-20160903/"><i class="icon-file"></i>【Infra Meetup No.22】360开发的大容量redis -pika &amp; 分布式对象存储系统设计介绍</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-08(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-21-20160827/"><i class="icon-file"></i>【Infra Meetup No.21】An Introduction to Join-Reorder in TiDB &amp; MPP and SMP in TiDB</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-20-20190820/"><i class="icon-file"></i>【Infra Meetup No.20】搜索引擎背后的万亿量级存储系统 Tera &amp; Cloudtable：分布式强一致的 KV 存储系统</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-19-20160806/"><i class="icon-file"></i>【Infra Meetup No.19】What's New in Spark 2.0 &amp; An Overview of Cost Based Optimization and Join Reorder</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-07(5)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-18-20160730/"><i class="icon-file"></i>【Infra Meetup No.18】Kudu 的设计思想和具体实现 &amp; Kubernetes in PingCAP</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-17-20160723/"><i class="icon-file"></i>【Infra Meetup No.17】How does TiKV auto-balance work?</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-16-20160716/"><i class="icon-file"></i>【Infra Meetup No.16】基于 Ceph 构建文件共享服务的实践 &amp; Cool Extensions of Raft for NewSQL</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-15-20160709/"><i class="icon-file"></i>【Infra Meetup No.15】TiDB 存储模型变更 &amp; TiDB 优化器统计信息的采集</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-14-20160702/"><i class="icon-file"></i>【Infra Meetup No.14】HashData 数据仓库的动态缩容扩容实现 &amp; TiDB Beta 版现场演示</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-06(3)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-13-20160625/"><i class="icon-file"></i>【Infra Meetup No.13】百度 redis3 生产环境实践 &amp; TiKV Auto Balance</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-12-20160618/"><i class="icon-file"></i>【Infra Meetup No.12】rocksdb 日志分析和性能调优经验</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-11-20160604/"><i class="icon-file"></i>【Infra Meetup No.11】TiKV 的结构化存储模型优化 &amp; 深入解析 LevelDB</a>
+</li></ul>
+</li><li class="level-2 month-item has-child">
+<a href="#"><i class="icon-arrow"></i>2016-05(2)</a>
+<ul><li class="leaf-child">
+<a href="/meetup/meetup-10-20160528/"><i class="icon-file"></i>【Infra Meetup No.10】TiKV 的网络模拟测试 &amp; TiDB 的条件下推优化</a>
+</li><li class="leaf-child">
+<a href="/meetup/meetup-09-20160521/"><i class="icon-file"></i>【Infra Meetup No.9】SQL 子查询优化 &amp; TiKV MVCC 和 GC 实现</a>
+</li></ul>
+</li></ul>
+</li></ul>
+</div>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">【Infra Meetup No.95】Introduction of TiDB SQL Layer</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img alt="Date icon" src="/images/svgs/icon-date.svg"/>Wed, Apr 3, 2019</li>
+<li class="meta-item">
+<img alt="Pen icon" src="/images/svgs/icon-writer.svg"/>
+                        姚珂男</li>
+</ul>
+<div class="blog-text"><p>在上周举办的成都 · Infra Meetup No.95 上，我司 TiDB SQL Engine 开发工程师姚珂男为大家介绍 TiDB SQL 层的技术原理，以下是视频&amp;文字回顾，enjoy～</p>
+<p><img alt="姚珂男 | TiDB SQL Engine 开发工程师" class="lazy" data-original="https://download.pingcap.com/images/meetup/meetup-95-20190403/1.jpg" src="/images/svgs/loader-spinner.svg"/></p>
+<blockquote>
+<p>讲师介绍：姚珂男，TiDB SQL Engine 开发工程师，主要工作为优化器及相关模块的维护和新功能开发，致力于提升查询计划的正确性和稳定性。</p>
+</blockquote>
+<ul>
+<li><a href="https://www.bilibili.com/video/av48246570">视频 | Infra Meetup No.95：Introduction of TiDB SQL Layer</a></li>
+<li><a href="https://eyun.baidu.com/s/3i5ZbdWh">PPT 链接</a></li>
+</ul>
+<p>本次分享主要介绍 TiDB SQL 层的三个组件：优化器，统计信息和执行引擎。</p>
+<ul>
+<li>优化器部分主要举例介绍了逻辑优化规则和物理优化框架；</li>
+<li>统计信息部分主要介绍直方图，CMSketch 以及使用方法；</li>
+<li>执行引擎部分以两种 join 方式为例介绍了我们在执行引擎实现中用到的一些优化方法。</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+</li>
+<li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+<li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+<li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+<li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li><a href="/solutions/intel/" onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+<li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')" target="_blank">Ask TUG</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="https://careers.pingcap.com" onclick="trackViews('footer-recruit-join', 'recruit-join_view')" target="_blank">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+<li><a href="/zh/privacy-policy/">隐私申明</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="tel" href="/" target="_blank"><svg enable-background="new 0 0 512.021 512.021" height="19" id="Layer_1" viewbox="0 0 512.021 512.021" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"></path></g></svg>
+ 商务咨询：</a></li>
+<li class="tel-li">4006790886</li>
+<li class="tel-li">010-58400041</li>
+<li><a class="twitter" href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&amp;id=4240&amp;channel=9034" target="_blank"><svg height="19" p-id="2379" t="1622000094837" version="1.1" viewbox="0 0 1069 1024" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-pc"></div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2021 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/weekly" id="lang">English</a>
+<a class="prepared-num" href="https://beian.miit.gov.cn/">京 ICP 备 16046278 号 - 2</a>
+<a class="prepared-num" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" target="_blank">
+<img src="/images/beian.png"/>
+<p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/anchor.js" type="text/javascript"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script crossorigin="anonymous" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

@@ -1,0 +1,2633 @@
+<!doctype html><html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async src="https://download.pingcap.com/js/ga-analytics.js"></script>
+
+
+
+<link rel="stylesheet" href="/css/user-words.css">
+
+
+
+
+
+<link rel="stylesheet" href="/css/vendor/swiper.css">
+<title>TiDB 非官方使用指南 |&nbsp;PingCAP</title><link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<meta name="description" content="进入 PingCAP 官网，体验全新的分布式 HTAP 数据库。">
+<meta name="robots" content="noodp">
+<meta name="keywords" content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TiDB 非官方使用指南 | PingCAP">
+<meta property="og:description" content="进入 PingCAP 官网，体验全新的分布式 HTAP 数据库。">
+<meta property="og:url" content="https://pingcap.com/cases-cn/user-message-2019/">
+<meta property="og:site_name" content="MySQL at Scale. No more manual sharding">
+<meta property="og:image" content="/images/pingcap-opengraph.jpg">
+<meta property="og:image:secure_url" content="/images/pingcap-opengraph.jpg"><meta name="twitter:card" content="summary_large_image">
+<meta name="og:image:width" content="1200">
+<meta name="og:image:height" content="600"><meta name="twitter:description" content="进入 PingCAP 官网，体验全新的分布式 HTAP 数据库。">
+<meta name="twitter:title" content="TiDB 非官方使用指南 | PingCAP">
+<meta name="twitter:site" content="@pingcap"><meta name="twitter:image" content="https://pingcap.com/images/pingcap-opengraph.jpg"><meta name="twitter:creator" content="@pingcap">
+
+
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+
+
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+<script type="text/javascript" async src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js"></script>
+    
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+<link rel="preload" href="https://download.pingcap.com/js/jquery.min.js" as="script">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/docsearch.min.css">
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head>       <body data-lang="cn" ><div id="page-content">
+<header role="navigation" class="fixed-top">
+    <div class="container">
+        <a class="nav-brand" href="/zh"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        <div class="nav-wrapper">
+            <div class="navigation">
+                <ul>
+                    <li><a href="https://university.pingcap.com/" target="_blank" class="nav-blinking"
+                            onclick="trackViews('navbar-university', 'pingcap-university_view')">PingCAP
+                            Education</a></li>
+                    <li class="docs-type-selector " id="docsTypeSelector">
+                        
+                        <a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+                    </li>
+                    <li class="sel" ><a href="/cases-cn">案例</a></li>
+                    <li ><a href="/community-cn">社区</a></li>
+                    <li ><a href="/blog-cn">博客</a></li>
+                    <li ><a href="/about-cn">关于</a></li>
+                    <li><a href="https://asktug.com" target="_blank"
+                            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+                    <li ><a href="/download-cn">下载试用</a></li>
+                    <li><a class="link-download" href="/about-cn/#contact-us"
+                            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="global-search">
+                
+                
+                
+                <div class="search-wrapper">
+    <span class="icon-search"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#fff" viewBox="0 0 67.125 67.125"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"/><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"/></svg></span>
+    <input data-lang="cn" data-type="" type="search" id="search-input" name="q"
+        placeholder="搜索 TiDB 文档">
+</div>
+
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+
+            </div>
+        </div>
+        <div class="nav-btn nav-slider">
+            <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 459 459"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"/></svg></i>
+        </div>
+    </div>
+</header>
+
+
+
+<nav class="mobile-sidebar">
+    <div class="nav-header">
+        <div class="logo-wrap">
+        <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        </div>
+    </div>
+    <ul class="ul-base">
+        
+
+        <li ><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+        <li class="sel"><a href="/cases-cn">案例</a></li>
+        <li ><a href="/community-cn">社区</a></li>
+        <li ><a href="/blog-cn">博客</a></li>
+        <li ><a href="/about-cn">关于</a></li>
+        <li><a href="https://asktug.com" target="_blank"
+            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+        <li ><a href="/download-cn">下载试用</a></li>
+        <li><a class="link-download" href="/about-cn/#contact-us"
+            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+        <li><a href="https://university.pingcap.com/"
+            onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank"
+            class="nav-blinking">PingCAP Education</a></li>
+    </ul>
+    <div class="nav-footer">
+        <div class="contact-list-wrap">
+        <div class="flex-list">
+            <h4 class="list-title"><strong>Contact</strong></h4>
+            <ul class="social social-cn ul-base">
+            <li><a href="https://twitter.com/PingCAP" class="twitter" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="18"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg></a></li>
+            <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg></a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="18"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg></a></li>
+            <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg></a></li>
+            <li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg></a><div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+            </ul>
+        </div>
+        <div class="subscribe" id="subscribe-mobile"></div>
+        </div>
+        <div class="container">
+        <a href="/" class="btn-lang" id="lang">English</a>
+        </div>
+    </div>
+</nav>
+
+<div class="pc-container">
+    <div class="panel hero-panel">
+        <section class="hero">
+            <div class="title">TiDB 非官方使用指南</div>
+            <div class="slogan">
+                <p>我们邀请了 48 位用户代表</p>
+                <p>汇成了这份“非官方使用指南”</p>
+                <p>这些实操中闯过的关和踩过的坑</p>
+                <p>创造了 TiDB 的更多可能</p></br>
+
+                <p>一切伟大，都源于开始</p>
+                <p>2020 到来了，感谢大家</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="panel" id="one">
+        <section class="s1">
+            <div class="section-title">
+                他们说 TiDB 解决了很多问题，希望这里也有你的燃眉之急
+            </div>
+            <div class="swiper-container swiper-one">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                金管家在系统架构的演进过程中，业务功能的快速增长与数据库服务不稳定之间的矛盾，逐渐成为我们产品快速迭代、提升用户体验所面临的主要矛盾之一。TiDB 的分布式很好解决了我们面临的数据快速增长、数据库服务不能弹性扩容的问题。在可以预见的未来，分布式、可弹性扩容的 NewSQL 数据库一定是主流，我们会更多的关注这个领域的动态，希望 TiDB 在社区活跃、产品成熟度方面有更好的表现。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                左德军
+                            </div>
+                            <div class="misc">
+                                <span>中国平安人寿</span>
+                                <span>开发专家</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/zuodejun.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                系统 A 有较多的多维并发报表查询。使用 MySQL 实现报表查询出现了很多性能问题，考虑改造，选型时考虑过 HBase，ES 等等，鉴于 TiDB 支持 HTAP 特性，我们选择了 TiDB 来替换 MySQL 存储, 满足业务报表需求，系统迁移后，整体性能稳定，用户满意度上升。系统 B 作为公司的一个重要系统，在开发阶段选择 MyCAT 来作为数据存储方案。但是 MyCAT 处理跨分片，多表关联的查询和分布式事务的性能不佳。针对这部分场景，我们使用 TiDB 作为数据存储，TiDB 支持分布式事务，可扩展的特性较好地满足了业务的需求。实际使用一年多来，已存储了数亿的业务数据，整体功能稳定。TiDB 作为一个年轻的产品，本身存在一些不完善的地方，在实际使用中，我们也碰到了各种各样的问题，如本身存在的 BUG， 分区表和优化器方面的问题。在此需要感谢 PingCAP 公司的大力支持，这些问题都得到了较好的解决。经过一段时间的试点，运维和研发都建立了对 TiDB 的信心，相信未来 2020 年度，会有更多的系统使用 TiDB。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                陈博
+                            </div>
+                            <div class="misc">
+                                <span>顺丰科技</span>
+                                <span>云数据库 SRE 工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/chenbo.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                我们原先的数据存储架构都是按业务垂直拆分的，多是使用 MySQL 主备架构。数据量累积超千万级别运维比较复杂，不容易迁移，垂直数据不容易关联，事务难处理等。我们将数据集中汇聚 TiDB 这个成熟的分布式的数据库后，使我们的数据运维复杂度大大降低，数据整合能力也比较方便，基于 Raft 协议保证数据多节点的一致性和可用性，也使用我们弹性扩容变的简单方便。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                沈立均
+                            </div>
+                            <div class="misc">
+                                <span>中国电信</span>
+                                <span>电子渠道销售推广中心技术架构师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/shenlijun.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                依靠 TiDB 优秀的线性扩展能力，以及丰富的工具链，我们基于 TiDB DM 工具将拉卡拉金融所有 MHA 集群中的数据实时同步到 TiDB 集群；集中后的数据能够提供业务所需的高并发能力，完美的支持统一消息系统，风控变量计算、交易对账、业务报表输出等需求。基于 TiDB 高可用设计，在应用无感知的情况下升级到 3.0.5 的版本，集群性能进一步提升。在 TiDB 集群使用过程中，始终与 PingCAP 兄弟保持友好而高效的沟通及时解决了集群 POC、生产服务器选型、集群生产运行过程中遇到的问题。同时列存、raft leaner 等重磅功能的逐渐成熟，让我们看到在一个中等数据规模下依托 TiDB 实现高效的 HTAP 融合数据库的可行性，这将极大的简化数据抽取、整合和分析的技术栈，更快的支持业务发展。TiDB 的系统设计思想，以及 TiKV，Raft 开源，对于我们构建分布式系统很有借鉴意义。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                唐希元
+                            </div>
+                            <div class="misc">
+                                <span>拉卡拉金融</span>
+                                <span>基础架构师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/tangxiyuan.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                自 2019 年 10 月我们将 zz 项目迁移上生产环境 Cloud TiDB 后，每天承受 6 万 QPS 读写压力。TiDB 3.0 结合 K8s，这款云原生的 NewSQL 在稳定性、性能、易维护等方面都表现了全新的生命力。由于严谨的场景特性，金融行业对数据库技术选型尤其慎重。我们将持续推进，稳步探索更多核心业务场景，获得新型数据库技术革新带来的强大生产力。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                李银龙
+                            </div>
+                            <div class="misc">
+                                <span>马上消费金融</span>
+                                <span>容器云 TiDB 负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liyinlong.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                选型 TiDB 当初主要是解决业务在分库分表后有些查询场景的实现起来较为麻烦这个问题，不需要分库分表后，业务上面的扩展变得更加灵活透明。而且 TiDB 的扩容升级也比较方便友好，目前已经多次完成扩容和升级操作。TiDB 每次大版本升级都有很大的性能提升和新功能，也期望 TiDB 在未来能带给用户更多的 surprise。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                蔡江
+                            </div>
+                            <div class="misc">
+                                <span>中通快递</span>
+                                <span>科技与信息中心 数据中心运维部 数据库技术负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/caijiang.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                2019 年度，我们引入了优秀的开源 NewSQL 数据库产品 TiDB，并成功的在银行部分业务场景中灰度上线。基于 TiDB 水平可扩展的特性，以及优秀的 MySQL 兼容能力，使得我们业务的迁移成本达到了最低。得益于 TiDB 产品的开源精神，上线过程中遇到的任何问题，都能得到快速的反馈和解决。TiDB 虽然还年轻，远不能称完美，但能真切看到其产品的快速进步，其团队的专业和努力。在金融数据库国产化的浪潮中，期待与 TiDB 共同为行业做出一点贡献。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                胡盼盼
+                            </div>
+                            <div class="misc">
+                                <span>微众银行</span>
+                                <span>数据库平台室室经理</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/hupanpan.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                TiDB 是一个优秀的开源分布式数据库软件，是解决 MySQL 单机数据库性能瓶颈的最佳方案，感谢 TiDB 对我们技术架构改进的支持与帮助，我们未来会尝试在更多业务上尝试使用 TiDB，希望 TiDB 开源生态可以越来越好。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                陈永超
+                            </div>
+                            <div class="misc">
+                                <span>七天教育</span>
+                                <span>技术总监</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/chenyongchao.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                计算与存储分离，这是数据库多年的需求与痛点。随着互联网时代数据的发展，主流的开源方案或多或少都做出了一些牺牲。TiDB 在真正分离后还保持着常用关系型数据库的特性。而良好的可扩展性又可以让业务更加聚焦。结合容器等新技术，使得其更具有想象力。年轻的数据库或许在生态以及细节上还有待提高，但是仍然值得去尝试、参与其中。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                徐嘉埥
+                            </div>
+                            <div class="misc">
+                                <span>Bigo</span>
+                                <span>DBA</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                TiDB 作为集团准实时架构试点，在多表关联查询上面展现了惊喜的成绩，架构组也颇为认可。对于我们实时台账，园区业务有了很好的支撑。相交之前的 Spark 开发，省时省力，让我们有更多的时间聚焦业务。而且对于 MySQL 的兼容性也是非常好。当然前提稳定性要达到我们的要求。目前来看还算可以。后续会考虑大规模业务在 TiDB 上实现。我们金融模块也使用了 TiDB，遇到了很多问题。不过 TiDB 的小伙伴们对我们的 support 也是非常及时的。只要东西好，我们不会吝啬预算。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                陈炳新
+                            </div>
+                            <div class="misc">
+                                <span>传化智联</span>
+                                <span>大数据部</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                TiDB 兼容 MySQL 协议，它一出现就完美解决了我们使用 MySQL 遇到的分库分表的痛点，凭借优秀的在线扩展能力，一张几十亿行 TB 级的表不损失查询性能可以不分表完整存储下来，非常优雅地实现了去分库分表化，拥有其他中间件方案不可比拟的优势。众所周知 MySQL 有极大的单点存储风险，而 TiDB 使用 Raft 协议实现数据多副本分布式存储，很好地保证了数据的一致性和高可用要求。从 2017 年开始使用 TiDB 至今，从这几年的生产环境实践结果来看，TiDB 展现了很大的技术架构优势，同时对开发和运维友好，今后计划继续扩大使用场景和规模。我们会不断和 PingCAP 保持交流，为 TiDB 社区发展和生态完善提供助力。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                李文杰
+                            </div>
+                            <div class="misc">
+                                <span>网易互娱</span>
+                                <span>数据库工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liwenjie.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                从 2018 年初接触 TiDB 开始，TiDB 已经陪伴我走过了将近两个春秋。作为一款 HATP 新型数据库，TiDB 解决了很多困扰许久的 MySQL 难点，丰富了我们数据库的应用场景，使得我们在选型上更加灵活。目前我们已部署 20 余套 TiDB 集群，持续稳定运行超过 1 年。这离不开 PingCAP 官方人员的鼎力支持。加入 TUG（TiDB 用户组）后，充分感受到了社区用户的热情，提出的问题都能及时得到回复，官方活动也办的风生水起。在此期间，在各路小伙伴的帮助下，学习到了很多知识，获得了很多灵感，也交到了很多朋友。最后，祝 PingCAP 的事业蒸蒸日上，祝 TiDB 尽早登顶国产数据库巅峰。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                旋凯
+                            </div>
+                            <div class="misc">
+                                <span>58 集团</span>
+                                <span>高级 DBA</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/xuankai.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                在引入 TiDB 的一年里，它帮助我们承接了迅猛增长的业务流量；以业务无感的方式完成了数据中心的迁移。全新发布的 3.0 版本在同样的硬件资源配置下，在响应时间和吞吐上比 2.1 版本有着巨大的提升。这一切都给了我们莫大的信心，我们会持续扩大 TiDB 在知乎的使用范围，相信拥有强大且活跃社区的 TiDB 在未来一定会为我们带来更多的惊喜。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                孙晓光
+                            </div>
+                            <div class="misc">
+                                <span>知乎</span>
+                                <span>技术平台负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/sunxiaoguang.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                从 TiDB 的技术体系中我们学到不少东西，对于我们现在开发的东西有很多借鉴。对我们来讲 TiDB 不仅是一个数据库，而是一个技术体系，体系借鉴比单纯使用产品的价值大很多。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                贾世闻
+                            </div>
+                            <div class="misc">
+                                <span>京东云</span>
+                                <span>架构师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/jiashiwen.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                转转引入 TiDB，解决了大数据量下分库分表的主要问题，DBA 不需要考虑如何进行实例拆分，业务不需要再去考虑如何分库分表，专注业务的开发，助力公司业务快速发展。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                冀浩东
+                            </div>
+                            <div class="misc">
+                                <span>转转</span>
+                                <span>数据库负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                2017 年底，一次偶然的机会，得知有一款支持水平扩展、高可用、兼容 MySQL 的开源 NewSQL 产品，那时我们业务刚刚起步，面临复杂的分库分表、聚合等情况，于是我们进行了一个季度的全方面测试，最终在 18 年 3 月正式上线 1.0 版本，到目前为止，经过过多次服务器宕机及升级，一切运行稳定。一路走来，TiDB 都在为解决用户痛点为目标快速迭代，未来定大有作为。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                彭兴
+                            </div>
+                            <div class="misc">
+                                <span>曹操专车</span>
+                                <span>数据库团队负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/pengxing.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                58 公司依靠 TiDB 数据库，解决了业务上的需求以及 MySQL 数据库的痛点问题。在使用经验上，我们推荐使用多核 CPU、SSD 磁盘的性能好的机器，并及时升级至最新版本。平时要关注慢 SQL 情况，关注由执行计划问题带来的慢 SQL 情况。期待 TiDB 做得更好，58 与 TiDB 共同成长。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                刘春雷
+                            </div>
+                            <div class="misc">
+                                <span>58 同城</span>
+                                <span>高级 DBA</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liuchunlei.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote1"></div>
+                            <div class="words">
+                                TiDB 高度兼容 MySQL，上手门槛很低。计算和存储分离的架构设计很优秀，可以很好的满足我们的需求。同时 TiDB 也有很活跃的社区，让大家可以很方便得参与其中一起建设产品。我们也计划积极推广 TiDB，从边缘业务到核心业务逐渐渗透，挖掘更多使用场景，贴近社区回馈社区。
+                            </div>
+                            <div class="read-more s1-color s1-">Read More</div>
+                            <div class="name">
+                                TUG member
+                            </div>
+                            <div class="misc">
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="swiper-pagination pagination-one"></div>
+
+            <div class="swiper-button-prev button-prev-one"></div>
+            <div class="swiper-button-next button-next-one"></div>
+        </section>
+    </div>
+
+    <div class="panel" id="two">
+        <section class="s2">
+            <div class="section-title">
+                这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
+            </div>
+            <div class="swiper-container swiper-two">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                在过去的一年中，TiDB 分布式数据库应用于我行的云图系统中，承载了海量运维数据的查询和分析的功能。从实践结果来看，TiDB 良好的计算与存储分离的扩展性、海量数据的查询能力、分布式数据强一致的优异特性，对我们探索新一代分布式数据库的技术尝试提供了信心和帮助，当前 TiDB 在资源要求上还略显昂贵，但随着 TiDB 开源社区不断涌现的新特性和技术成果，在成本和性能上不断地的攀升，让我们感受和相信分布式数据库的时代已经向我们走来。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                韩宇
+                            </div>
+                            <div class="misc">
+                                <span>中国银行</span>
+                                <span>数据中心技术专家</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/hanyu.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                TiDB 我们已经应用在预警中心、数据风控等多个核心场景，因为其高度兼容 MySQL，迁移成本较低，避免了传统方案中分库分表的复杂性。目前，我们正在建设公司的中台矩阵，推动云原生落地，希望未来 TiDB 在 Kubernetes 上的使用可以更稳定、更完善。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                冯伟
+                            </div>
+                            <div class="misc">
+                                <span>人民网</span>
+                                <span>舆情数据中心 人民在线 CTO</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/fengwei.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                北京银行分布式 NewSQL 云数据库平台于 2018 年 3 月成功投产，成为国内首家将分布式 NewSQL 数据库应用于银行核心业务场景的技术案例。分布式事务数据库 TiDB 的可扩展性、高可用性以及 OLTP 分布式特性，为我行网联支付清算平台、银联无卡支付平台、线上业务贷款平台等提供了互联网金融级别的业务处理能力，大幅提升了面向移动互联场景海量数据处理能力与高并发业务处理效率，在“双十一”、“618” 等场景稳定运行。在多年的合作中，双方优势互补，今后北京银行分布式数据库团队会继续推进行内业务系统的分布式转型，充分发挥分布式 NewSQL 数据库的优势。希望我们在分布式数据库领域的建设经验可以为更多金融机构提供帮助。未来，北京银行分布式数据库团队将继续携手 TiDB 团队积极参与行业内相关技术交流与标准制定，共同推进分布式 NewSQL 数据库技术在金融领域的应用与发展。在此特别感谢 PingCAP 公司为我行分布式数据库技术的发展所做出的努力和付出。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                分布式数据库团队
+                            </div>
+                            <div class="misc">
+                                <span>北京银行</span>
+                                <span></span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/beijingbank.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                从 v1.0 开始我们就一直关注 TiDB 的发展，主要是被开源、水平弹性扩展和兼容 MySQL 三个特点所吸引。经过一段时间对 TiDB 2.x 的测试和试用，认为 TiDB 在运维和海量数据量处理和分析方面优于 MySQL 的各种集群方案和中间件方案。目前逐步在生产系统中替换原有的 MySQL 及切换其他关系型数据库，TiDB 较好地支撑了相关业务系统的 HTAP 需求。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                李超
+                            </div>
+                            <div class="misc">
+                                <span>中国经济信息社</span>
+                                <span>技术与数据中心架构师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/lichao.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                2019 年我们使用了 TiDB 作为我们某核心业务的实时数据中心存储和计算引擎，极大的减轻了架构复杂度，减少了工作量，系统上下游的接口也都非常友好。升级后的 3.0.5 版本也非常稳定，性能接近一倍的提升。项目实施过程还得到官方大力支持，非常专业和尽责。我们持续看好 HTAP 方向，期待 TiDB 生态越来越繁荣！
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                羊欢
+                            </div>
+                            <div class="misc">
+                                <span>OPPO</span>
+                                <span>高级数据分析师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/yanghuan.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                TiDB 的高可用、水平弹性扩容、读取历史版本数据等特点给我们带来非常多的好处。未来丰巢是敢于把所有 OLTP 系统全部迁移到 TiDB 上的。它对于丰巢的意义在于，避免在数据库产品的使用上浪费资源和时间，使我们的开发同学可以更加聚焦在业务开发上。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                刘光亮
+                            </div>
+                            <div class="misc">
+                                <span>丰巢</span>
+                                <span>中间件团队负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liuguangliang.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                依托 TiDB 强大的横向扩展能力、多样的查询引擎工具和 PingCAP 专业团队快速的支持响应，我们搭建了一套实时数仓，将上游近 50 个 MySQL 库及 APP 埋点数据实时入库。结合我们的智能报表系统和运维监控系统，大大提升了 500 多个业务报表产出效率及时效，并实现了两百个核心指标的实时监控。现 MySQL 数据同步配置比较繁琐，如 DM 能提供 restful 接口配置同步任务则能大大优化我们的数据同步效率，实现 MySQL 表的自助化同步。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                黄龙
+                            </div>
+                            <div class="misc">
+                                <span>360 金融</span>
+                                <span>深圳大数据组负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/huanglong.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                PingCAP 是中国做开源软件最好的一家公司，其研发的分布式数据库 TiDB 在满足高性能、高可用的同时， 又解决了高可扩展的难题。在数据爆发式增长的今天，为用户提供一站式解决方案，得到了众多用户的青睐。 这也是我们为什么推出 UCloud TiDB Service 的原因。希望 TiDB 将来被打磨的越来越完善，服务更多的用户。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                蒙晓净
+                            </div>
+                            <div class="misc">
+                                <span>UCloud</span>
+                                <span>PaaS 组件平台研发负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/mengxiaojing.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                从 16 年开始就和 PingCAP 有接触，18 年开始在产线小规模的上线 TiDB 的服务。这段时间中逐步和 PingCAP 的一起向前，从 2.0.0 到 2.0.5 再到现在的 3.0.5 使用感受越来越好，功能越来越强大。今年年末我们已经和 PingCAP 一起确定孵化一个开源项目：DB Mesh For TiDB，期待再来年和 PingCAP 一起给大家带来更好的服务。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                瞿锴
+                            </div>
+                            <div class="misc">
+                                <span>同程艺龙</span>
+                                <span>存储运维经理</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                TiDB 在 NewSQL HTAP 领域，一直领跑数据技术的革新。其活跃且持续高热度的社区 TUG 拉近了技术爱好者以及用户和 TiDB 原厂之间的距离，持续提升产品的用户体验。TiDB 开源社区汇聚了国内外众多技术 Geek，大家持续奉献着自己对数据库优秀技术产品的迭代优化，持续打磨符合彼此特定应用场景下的解决方案。期待更多的伙伴加入到 TUG 社区，彼此赋能，我们一起迭代进阶。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                侯圣文
+                            </div>
+                            <div class="misc">
+                                <span>贝壳找房</span>
+                                <span>技术总监</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/houshengwen.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                今年我们完成了汽车之家社区从 SQL Server 到 TiDB 的数据库迁移，经过几个月的监测和观察，整个系统运行稳定。本次迁移不但解决了我们遇到的很多痛点，也为我们技术栈的升级积累了很好的经验。希望能与官方一起继续完善我们研发的从 SQL Server 到 TiDB 的迁移工具，以后让有相同场景的同学快速使用，避免踩坑。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                路思勇
+                            </div>
+                            <div class="misc">
+                                <span>汽车之家</span>
+                                <span>技术主管</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/lusiyong.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote2"></div>
+                            <div class="words">
+                                首先要对 PingCAP 在 2019 年的优质支持和通力合作表示衷心的感谢。在这样强有力的帮助下，我们得以在多个业务领域应用了 TiDB 数据库，并且在诸如双 11 等重要活动中表现出了极高的性能和稳定性。希望未来能够和 PingCAP 一起努力，与时俱进，共同发展。
+                            </div>
+                            <div class="read-more s2-color s2-">Read More</div>
+                            <div class="name">
+                                张亿皓
+                            </div>
+                            <div class="misc">
+                                <span>TUG</span>
+                                <span>Ambassador</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="swiper-pagination pagination-two"></div>
+            <div class="swiper-button-prev button-prev-two"></div>
+            <div class="swiper-button-next button-next-two"></div>
+        </section>
+    </div>
+
+    <div class="panel" id="three">
+        <section class="s3">
+            <div class="section-title">
+                面对大家的期待，我们还在努力完善，也希望能得到更多的反馈
+            </div>
+            <div class="swiper-container swiper-three">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 是分布式数据库的主要引领者之一，其强大的扩展性、数据的强一致性是我们看中的主要特性。当前 TiDB 集群只承载互联网理财系统，随着 TiDB 版本不断更新改进，我们有信心会在更多系统上进行推广。TiDB 当前最大缺点是发展时间略短，对商业客户的需求依旧在不断的完善中，但随着时间的推进，我相信其一定会越来越好。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                刘浩然
+                            </div>
+                            <div class="misc">
+                                <span>光大银行</span>
+                                <span>运维中心资深工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liuhaoran.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                2019 年我们正式上线了一套 TiDB 集群，并部署了容灾环境，上线至今已有 8 个多月时间，TiDB 未发生一起宕机事故。期间我们还做了一次 TiKV 扩容以及 TiDB 与 PD 节点迁移，虽然没有图形化操作界面，但是整个过程基本都是采用 Ansible 在中控机进行操作，还是比较简单的，产品的稳定性和易用性给我们留下了非常好的印象。TiDB 的性能虽然在业界不是最优秀，但也是不错的，性能曲线也比较平稳，各节点资源使用也比较均衡，可以看出来 TiDB 原厂在这方面下了很大的功夫。任何产品都不可能尽善尽美，TiDB 还比较年轻，我们在使用中也确实遇到了一些问题，比如：1）主集群 write CF 和 default CF 的大小比例有点异常，但是数据完全一致的容灾集群 write CF 和 default CF 的大小比例却是正常的；2）监控中对于 failed query 的错误原因分类还比较粗糙，时不时会出现一些 unknown 错误原因的 query，而日志中并不会出现 unknown 这样的关键字；3）我们的 TiDB 容灾集群采用 TiDB Binlog 组件进行数据同步，监控中只能看到当前的 latency，没有办法看到 latency 的历史，这样很难判断 latency 最大能够到多少，最大的时间点是什么时候。对于 TiDB 的工程师们，我一定要点个赞，不管是现场工程师还是研发，给我的感受是非常积极，上报的问题都会积极响应。最后祝愿 TiDB 越做越好。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                匿名
+                            </div>
+                            <div class="misc">
+                                <span>某大型券商</span>
+                                <span>分布式数据库负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                我们看到目前最适合分布式数据库运行的基础设施是云设施。TiDB Operator 项目依托 Kubernetes 云原生生态，为我们将 TiDB 上云提供了便利性，通过自动化运维的方式，让交付更敏捷，让部署更灵活，同时让整个 TiDB 集群增强服务弹性。希望今后 TiDB Operator 项目增强稳定性，丰富测试用例，更新版本尽量保持向前兼容或提供升级迁移路径。最后感谢 cloud 团队的鼎力帮助，解决各种疑难问题。让我们一起在上云之路上一同前行！
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                宋歌
+                            </div>
+                            <div class="misc">
+                                <span>平安科技</span>
+                                <span>IaaS 研发工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/songge.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                2018 年我们引入分布式数据库 TiDB，从最初的 1.0 版本，一直到现在 3.0，一路看着 TiDB 产品的完善和成长。从最初的外围和边缘业务试点，到现在营销、风控、对账等场景陆续的试点和上线，应用范围和场景逐渐变广，其性能和稳定性也以可见的速度在发展，逐渐变成我们期待的样子。虽然在外围工具组件以及生态上还有一些不足，但是相信随着时间的发展会逐步完善，希望 TiDB 有更稳定和迅速的发展。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                刘宇
+                            </div>
+                            <div class="misc">
+                                <span>天翼支付</span>
+                                <span>资深技术专家</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liuyu.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                从我们在业务中台使用 TiDB 近一年的时间结果看，TiDB 这种 NewSQL  数据库展现了不错的技术优势，基于 Raft 协议的多副本机制，极大的保证了数据的一致性和高可用性，其云原生的设计概念，让扩容缩容变得非常方便。但是我们也要看到它的缺点，TiDB 还是比较年轻的产品，所以我们会先在部分业务上部署，后续将扩大在核心业务系统中的应用。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                东向利
+                            </div>
+                            <div class="misc">
+                                <span>新奥燃气</span>
+                                <span>智能装备中心 软件群召集人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/dongxiangli.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 兼容 MySQL，支持无限的水平扩展，具备强一致性和高可用性。可通过增加新节点（机器）即可实现 TiDB 的水平扩展，按需扩展吞吐或存储，轻松应对高并发、海量数据等场景。但是，TiDB 对生产环境的硬件要求和 CPU 及内存的使用要求相对较高。对于存储节点来讲，SSD 或者 NVMe 或者 Optane 仅是刚需满足。在应对大规模的集群、网络时仍有一定疲力。TiDB是异步的 schema，通过调整 TiDB Bscheme 可随时满足需求，通常添加列和索引并不会影响进行中的操作。希望 TiDB 未来能在进行大量数据导出、插入时，单节点连接数彪高时 IO 的积压进行更好的优化。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                陈执政
+                            </div>
+                            <div class="misc">
+                                <span>联通大数据公司</span>
+                                <span>项目经理</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/chenzhizheng.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 在弹性扩容上优势比较大，在线集群可以做到 RPO 等于 0，同时可以把 MySQL 数据库平滑的迁移到 TiDB，很好的兼容 MySQL 生态；在社区建设上也做的很不错，受到开发者的青睐，期待在数据库运维管理上能更便捷，如各个指标的性能视图；数据库物理备份等。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                何志勇
+                            </div>
+                            <div class="misc">
+                                <span>平安科技</span>
+                                <span>资深云数据库工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/hezhiyong.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                PingCAP（TiDB）在开源方向走的非常靠前，他们不仅仅是推广 TiDB，还为技术社区做持续输出，为技术创业也提供了非常多有价值的可借鉴模式，让中国国内生态得到非常大的提升。我有幸参与其中，非常开心，也非常自豪。希望 PingCAP 能够尽快推出完整的 HTAP 分布式数据库。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                杨文
+                            </div>
+                            <div class="misc">
+                                <span>早安科技</span>
+                                <span>后端技术负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/yangwen.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                分布式数据库 TiDB 解决了大数据量下  MySQL 分库分表这个 DBA 运维痛点。之前的分库分表依赖中间件，数据量大到一定程度又需要二次拆分，迁移数据和重新配置中间件的代价十分巨大。TiDB 作为一站式 HTAP 解决方案，具有高可用，水平平滑扩展，ACID 等特性，很好地解决了大数据量分库分表的问题，并且提供了高效的迁移和同步工具 (DM/Lightning) ，让 DBA 更多地关注业务优化，让 RD 更加专注业务开发。虽然在使用的过程中也遇到了不少坑，不过通过 TiDB 技术支持在线沟通，AskTUG 上提问和浏览各个公司的“避坑攻略”，都已经解决。最后希望 TiDB 能在 SQL 执行计划最优选择、分区表、DM、TiDB 运维 Web 化等方面加大研发投入，为我们使用者提供更高效易用的 TiDB。目前 360 已经部署了多个 TiDB 集群，上百节点，数据量几十 T，未来会在更多的业务线使用。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                代晓磊
+                            </div>
+                            <div class="misc">
+                                <span>360 智能商业</span>
+                                <span>数据库运维专家</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/daixiaolei.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                开源，弹性扩展，兼容 MySQL —— 这些是我们当初选择 TiDB 的重要原因。在过去的两年时间里, 作为一线使用者很开心能近距离、持续看到它的快速进化和长足进步。目前，TiDB 已经成为我们内部最为重要的数据库基础设施之一；我们也开始推动在生产环境中部署 3.0 版本。相信新版本能进一步拓宽 TiDB 的适用场景，承担更多流量，并为我们的业务增长作出更大贡献。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                刘春辉
+                            </div>
+                            <div class="misc">
+                                <span>Shopee</span>
+                                <span>DBA Lead</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/liuchunhui.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                首先，先感谢下 TiDB 这个产品/生态的出现。其使得无论是在个人学习提高，还是解决一些业务痛点上都让我和一些小伙伴颇有收获。在 VIPKID，TiDB 帮我们解决了很多业务层分库分表后很难做多维度查询及下游业务数据分析处理逻辑复杂的问题。当然，TiDB 也还年轻也有它的问题。首先，性能稳定性上仍有提高空间。其次，在冷数据低成本存储这块也可以做些处理。最后，也希望 DM 组件这块尽快推出官方的高可用方案。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                许超
+                            </div>
+                            <div class="misc">
+                                <span>VIPKID</span>
+                                <span>资深数据库工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/xuchao.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 可靠的在线动态弹性扩容能力和完善的原生分片能力，为我们业务中台数据从地方学校逐步上迁集团过程中动态调整数据库计算和存储资源提供了极大的灵活性，并减少了后续数据搬迁工作，原生分片支持也减少了我们的开发成本。目前 TiDB 还无法很好地实现 HTAP 场景下资源物理隔离和互不影响，优化器方面还可以更智能。平稳，可靠，易扩展的数据库基础架构是企业快速发展过程中数据安全保障的基石。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                傅少峰
+                            </div>
+                            <div class="misc">
+                                <span>新东方</span>
+                                <span>数据服务团队负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/fushaofeng.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 扩展了 Spark 的 OLTP 的能力，提升贝壳金服数据平台场景中数据同步、报表展示、数据服务的能力，降低了房产 MySQL 数据库迁移的成本，对 Spark 数据平台能力是一个很好的补充。但是目前在存储安全控制、计算的 shuffle 上还存在功能性缺失，在外围生态工具、处理性能上也有待提升。希望未来 PingCAP 团队可以在上面这些点继续发力，也期待 TiDB 可以发挥更大的作用。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                李振环
+                            </div>
+                            <div class="misc">
+                                <span>贝壳金服</span>
+                                <span>大数据基础架构负责人</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/lizhenhuan.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 以其卓越的性能和强韧的水平扩展能力吸引了众多用户。对业务完全透明，让业务人员真正回归业务。期待着 TiDB 带来快速备份恢复等更丰富的功能，也坚信 TiDB 会越来越好。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                常彦德
+                            </div>
+                            <div class="misc">
+                                <span>UCloud</span>
+                                <span>资深研发工程师</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/changyande.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                我是 2019 年 4 月份接触 TiDB 的，并且在 5 月份进行了一个月的封闭培训，顺利拿到了 PingCAP 的初级讲师。我原来是一个长期使用 Oracle 数据库环境的工程师，对于 Oracle 的稳定性、高可用、高性能有着充分的理解，但又对 Oracle 的扩展能力的约束有着刻骨铭心的痛感。可以看到 TiDB 在解决企业数据库所需要的扩展性时和其他开源数据库所不同的机制，有着旺盛的生命力；并且随着开源技术的不断应用和发展，相信 TiDB 一定会有更加广阔的前景。个人希望 TiDB 能够打造出自己的优势场景，能在企业级应用得到更广阔的发展，在 TiDB 的培训内容上能够有针对性地满足不同 Level 的人的需求。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                黄云鹏
+                            </div>
+                            <div class="misc">
+                                <span>东方龙马</span>
+                                <span>服务实施</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/huangyunpeng.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                TiDB 设计上采用了主流的存储和计算分离的架构，实现上采用使用 ETCD、RocksDB 等等开源社区已经成熟并且已经被广泛使用验证的组件，很大程度上避免了业务采坑也带来了活力。官方最近两年内保持着两周一个小版本和半年一个大版本的节奏，通过小步快跑策略快速迭代，性能得到了成倍的提升；TiDB 是云原生数据库，拥抱 K8s，未来发展前景非常有想象力。TiDB 的社区非常火热，定期的 Meetup 活动、AskTUG 的问答社区、定期的业务分享都让人收益满满。希望未来 TiDB 能进一步加强系统稳定性，周边工具中上下游导入导出工具更加简单易用和稳定可靠。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                黄潇
+                            </div>
+                            <div class="misc">
+                                <span>TUG</span>
+                                <span>Ambassador</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="card">
+                            <div class="quote quote3"></div>
+                            <div class="words">
+                                作为 NewSQL 的 TiDB 与传统关系型数据库对比有太多的优势。基于成熟的raft协议，最大限度保证了数据的一致性和高可用性。轻松实现水平扩展，完美解决了MySQL分库分表的所有痛点。但是作为 OLTP 型系统来说 TiDB 也有一些小缺陷，比如暂时 join 无法下推到 TiKV，目前还无法实现物理热备等等，但是官方版本在快速迭代中，相信很快能解决这小问题。
+                            </div>
+                            <div class="read-more s3-color s3-">Read More</div>
+                            <div class="name">
+                                田维繁
+                            </div>
+                            <div class="misc">
+                                <span>TUG</span>
+                                <span>Ambassador</span>
+                            </div>
+                            <div class="avatar">
+                                <img src="https://download.pingcap.com/images/user-words/avatars/tianweifan.png" alt="avatar" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="swiper-pagination pagination-three"></div>
+            <div class="swiper-button-prev button-prev-three"></div>
+            <div class="swiper-button-next button-next-three"></div>
+        </section>
+    </div>
+</div>
+
+
+<div id="slider-control">
+    <a id="one-dot" href="#one" class="active">
+        <div class="dot"></div>
+    </a>
+    <a id="two-dot" href="#two">
+        <div class="dot"></div>
+    </a>
+    <a id="three-dot" href="#three">
+        <div class="dot"></div>
+    </a>
+</div>
+
+
+<div class="swiper-container mobile-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="panel hero-panel">
+                <section class="hero">
+                    <div class="title">TiDB 非官方使用指南</div>
+                    <div class="slogan">
+                        <p>我们邀请了 48 位用户代表</p>
+                        <p>汇成了这份“非官方使用指南”</p>
+                        <p>这些实操中闯过的关和踩过的坑</p>
+                        <p>创造了 TiDB 的更多可能</p></br>
+
+                        <p>一切伟大，都源于开始</p>
+                        <p>2020 到来了，感谢大家</p>
+                    </div>
+                    <div class="down-arrow"></div>
+                </section>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel" id="one">
+                <section class="s1">
+                    <div class="section-title">
+                        他们说 TiDB 解决了很多问题，希望这里也有你的燃眉之急
+                    </div>
+                    <div class="swiper-container swiper-one-mobile">
+                        <div class="swiper-wrapper">
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        金管家在系统架构的演进过程中，业务功能的快速增长与数据库服务不稳定之间的矛盾，逐渐成为我们产品快速迭代、提升用户体验所面临的主要矛盾之一。TiDB 的分布式很好解决了我们面临的数据快速增长、数据库服务不能弹性扩容的问题。在可以预见的未来，分布式、可弹性扩容的 NewSQL 数据库一定是主流，我们会更多的关注这个领域的动态，希望 TiDB 在社区活跃、产品成熟度方面有更好的表现。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        左德军
+                                    </div>
+                                    <div class="misc">
+                                        <span>中国平安人寿</span>
+                                        <span>开发专家</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/zuodejun.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        系统 A 有较多的多维并发报表查询。使用 MySQL 实现报表查询出现了很多性能问题，考虑改造，选型时考虑过 HBase，ES 等等，鉴于 TiDB 支持 HTAP 特性，我们选择了 TiDB 来替换 MySQL 存储, 满足业务报表需求，系统迁移后，整体性能稳定，用户满意度上升。系统 B 作为公司的一个重要系统，在开发阶段选择 MyCAT 来作为数据存储方案。但是 MyCAT 处理跨分片，多表关联的查询和分布式事务的性能不佳。针对这部分场景，我们使用 TiDB 作为数据存储，TiDB 支持分布式事务，可扩展的特性较好地满足了业务的需求。实际使用一年多来，已存储了数亿的业务数据，整体功能稳定。TiDB 作为一个年轻的产品，本身存在一些不完善的地方，在实际使用中，我们也碰到了各种各样的问题，如本身存在的 BUG， 分区表和优化器方面的问题。在此需要感谢 PingCAP 公司的大力支持，这些问题都得到了较好的解决。经过一段时间的试点，运维和研发都建立了对 TiDB 的信心，相信未来 2020 年度，会有更多的系统使用 TiDB。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        陈博
+                                    </div>
+                                    <div class="misc">
+                                        <span>顺丰科技</span>
+                                        <span>云数据库 SRE 工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/chenbo.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        我们原先的数据存储架构都是按业务垂直拆分的，多是使用 MySQL 主备架构。数据量累积超千万级别运维比较复杂，不容易迁移，垂直数据不容易关联，事务难处理等。我们将数据集中汇聚 TiDB 这个成熟的分布式的数据库后，使我们的数据运维复杂度大大降低，数据整合能力也比较方便，基于 Raft 协议保证数据多节点的一致性和可用性，也使用我们弹性扩容变的简单方便。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        沈立均
+                                    </div>
+                                    <div class="misc">
+                                        <span>中国电信</span>
+                                        <span>电子渠道销售推广中心技术架构师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/shenlijun.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        依靠 TiDB 优秀的线性扩展能力，以及丰富的工具链，我们基于 TiDB DM 工具将拉卡拉金融所有 MHA 集群中的数据实时同步到 TiDB 集群；集中后的数据能够提供业务所需的高并发能力，完美的支持统一消息系统，风控变量计算、交易对账、业务报表输出等需求。基于 TiDB 高可用设计，在应用无感知的情况下升级到 3.0.5 的版本，集群性能进一步提升。在 TiDB 集群使用过程中，始终与 PingCAP 兄弟保持友好而高效的沟通及时解决了集群 POC、生产服务器选型、集群生产运行过程中遇到的问题。同时列存、raft leaner 等重磅功能的逐渐成熟，让我们看到在一个中等数据规模下依托 TiDB 实现高效的 HTAP 融合数据库的可行性，这将极大的简化数据抽取、整合和分析的技术栈，更快的支持业务发展。TiDB 的系统设计思想，以及 TiKV，Raft 开源，对于我们构建分布式系统很有借鉴意义。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        唐希元
+                                    </div>
+                                    <div class="misc">
+                                        <span>拉卡拉金融</span>
+                                        <span>基础架构师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/tangxiyuan.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        自 2019 年 10 月我们将 zz 项目迁移上生产环境 Cloud TiDB 后，每天承受 6 万 QPS 读写压力。TiDB 3.0 结合 K8s，这款云原生的 NewSQL 在稳定性、性能、易维护等方面都表现了全新的生命力。由于严谨的场景特性，金融行业对数据库技术选型尤其慎重。我们将持续推进，稳步探索更多核心业务场景，获得新型数据库技术革新带来的强大生产力。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        李银龙
+                                    </div>
+                                    <div class="misc">
+                                        <span>马上消费金融</span>
+                                        <span>容器云 TiDB 负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liyinlong.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        选型 TiDB 当初主要是解决业务在分库分表后有些查询场景的实现起来较为麻烦这个问题，不需要分库分表后，业务上面的扩展变得更加灵活透明。而且 TiDB 的扩容升级也比较方便友好，目前已经多次完成扩容和升级操作。TiDB 每次大版本升级都有很大的性能提升和新功能，也期望 TiDB 在未来能带给用户更多的 surprise。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        蔡江
+                                    </div>
+                                    <div class="misc">
+                                        <span>中通快递</span>
+                                        <span>科技与信息中心 数据中心运维部 数据库技术负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/caijiang.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        2019 年度，我们引入了优秀的开源 NewSQL 数据库产品 TiDB，并成功的在银行部分业务场景中灰度上线。基于 TiDB 水平可扩展的特性，以及优秀的 MySQL 兼容能力，使得我们业务的迁移成本达到了最低。得益于 TiDB 产品的开源精神，上线过程中遇到的任何问题，都能得到快速的反馈和解决。TiDB 虽然还年轻，远不能称完美，但能真切看到其产品的快速进步，其团队的专业和努力。在金融数据库国产化的浪潮中，期待与 TiDB 共同为行业做出一点贡献。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        胡盼盼
+                                    </div>
+                                    <div class="misc">
+                                        <span>微众银行</span>
+                                        <span>数据库平台室室经理</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/hupanpan.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        TiDB 是一个优秀的开源分布式数据库软件，是解决 MySQL 单机数据库性能瓶颈的最佳方案，感谢 TiDB 对我们技术架构改进的支持与帮助，我们未来会尝试在更多业务上尝试使用 TiDB，希望 TiDB 开源生态可以越来越好。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        陈永超
+                                    </div>
+                                    <div class="misc">
+                                        <span>七天教育</span>
+                                        <span>技术总监</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/chenyongchao.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        计算与存储分离，这是数据库多年的需求与痛点。随着互联网时代数据的发展，主流的开源方案或多或少都做出了一些牺牲。TiDB 在真正分离后还保持着常用关系型数据库的特性。而良好的可扩展性又可以让业务更加聚焦。结合容器等新技术，使得其更具有想象力。年轻的数据库或许在生态以及细节上还有待提高，但是仍然值得去尝试、参与其中。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        徐嘉埥
+                                    </div>
+                                    <div class="misc">
+                                        <span>Bigo</span>
+                                        <span>DBA</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        TiDB 作为集团准实时架构试点，在多表关联查询上面展现了惊喜的成绩，架构组也颇为认可。对于我们实时台账，园区业务有了很好的支撑。相交之前的 Spark 开发，省时省力，让我们有更多的时间聚焦业务。而且对于 MySQL 的兼容性也是非常好。当然前提稳定性要达到我们的要求。目前来看还算可以。后续会考虑大规模业务在 TiDB 上实现。我们金融模块也使用了 TiDB，遇到了很多问题。不过 TiDB 的小伙伴们对我们的 support 也是非常及时的。只要东西好，我们不会吝啬预算。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        陈炳新
+                                    </div>
+                                    <div class="misc">
+                                        <span>传化智联</span>
+                                        <span>大数据部</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        TiDB 兼容 MySQL 协议，它一出现就完美解决了我们使用 MySQL 遇到的分库分表的痛点，凭借优秀的在线扩展能力，一张几十亿行 TB 级的表不损失查询性能可以不分表完整存储下来，非常优雅地实现了去分库分表化，拥有其他中间件方案不可比拟的优势。众所周知 MySQL 有极大的单点存储风险，而 TiDB 使用 Raft 协议实现数据多副本分布式存储，很好地保证了数据的一致性和高可用要求。从 2017 年开始使用 TiDB 至今，从这几年的生产环境实践结果来看，TiDB 展现了很大的技术架构优势，同时对开发和运维友好，今后计划继续扩大使用场景和规模。我们会不断和 PingCAP 保持交流，为 TiDB 社区发展和生态完善提供助力。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        李文杰
+                                    </div>
+                                    <div class="misc">
+                                        <span>网易互娱</span>
+                                        <span>数据库工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liwenjie.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        从 2018 年初接触 TiDB 开始，TiDB 已经陪伴我走过了将近两个春秋。作为一款 HATP 新型数据库，TiDB 解决了很多困扰许久的 MySQL 难点，丰富了我们数据库的应用场景，使得我们在选型上更加灵活。目前我们已部署 20 余套 TiDB 集群，持续稳定运行超过 1 年。这离不开 PingCAP 官方人员的鼎力支持。加入 TUG（TiDB 用户组）后，充分感受到了社区用户的热情，提出的问题都能及时得到回复，官方活动也办的风生水起。在此期间，在各路小伙伴的帮助下，学习到了很多知识，获得了很多灵感，也交到了很多朋友。最后，祝 PingCAP 的事业蒸蒸日上，祝 TiDB 尽早登顶国产数据库巅峰。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        旋凯
+                                    </div>
+                                    <div class="misc">
+                                        <span>58 集团</span>
+                                        <span>高级 DBA</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/xuankai.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        在引入 TiDB 的一年里，它帮助我们承接了迅猛增长的业务流量；以业务无感的方式完成了数据中心的迁移。全新发布的 3.0 版本在同样的硬件资源配置下，在响应时间和吞吐上比 2.1 版本有着巨大的提升。这一切都给了我们莫大的信心，我们会持续扩大 TiDB 在知乎的使用范围，相信拥有强大且活跃社区的 TiDB 在未来一定会为我们带来更多的惊喜。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        孙晓光
+                                    </div>
+                                    <div class="misc">
+                                        <span>知乎</span>
+                                        <span>技术平台负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/sunxiaoguang.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        从 TiDB 的技术体系中我们学到不少东西，对于我们现在开发的东西有很多借鉴。对我们来讲 TiDB 不仅是一个数据库，而是一个技术体系，体系借鉴比单纯使用产品的价值大很多。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        贾世闻
+                                    </div>
+                                    <div class="misc">
+                                        <span>京东云</span>
+                                        <span>架构师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/jiashiwen.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        转转引入 TiDB，解决了大数据量下分库分表的主要问题，DBA 不需要考虑如何进行实例拆分，业务不需要再去考虑如何分库分表，专注业务的开发，助力公司业务快速发展。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        冀浩东
+                                    </div>
+                                    <div class="misc">
+                                        <span>转转</span>
+                                        <span>数据库负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        2017 年底，一次偶然的机会，得知有一款支持水平扩展、高可用、兼容 MySQL 的开源 NewSQL 产品，那时我们业务刚刚起步，面临复杂的分库分表、聚合等情况，于是我们进行了一个季度的全方面测试，最终在 18 年 3 月正式上线 1.0 版本，到目前为止，经过过多次服务器宕机及升级，一切运行稳定。一路走来，TiDB 都在为解决用户痛点为目标快速迭代，未来定大有作为。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        彭兴
+                                    </div>
+                                    <div class="misc">
+                                        <span>曹操专车</span>
+                                        <span>数据库团队负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/pengxing.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        58 公司依靠 TiDB 数据库，解决了业务上的需求以及 MySQL 数据库的痛点问题。在使用经验上，我们推荐使用多核 CPU、SSD 磁盘的性能好的机器，并及时升级至最新版本。平时要关注慢 SQL 情况，关注由执行计划问题带来的慢 SQL 情况。期待 TiDB 做得更好，58 与 TiDB 共同成长。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        刘春雷
+                                    </div>
+                                    <div class="misc">
+                                        <span>58 同城</span>
+                                        <span>高级 DBA</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liuchunlei.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote1"></div>
+                                    <div class="words">
+                                        TiDB 高度兼容 MySQL，上手门槛很低。计算和存储分离的架构设计很优秀，可以很好的满足我们的需求。同时 TiDB 也有很活跃的社区，让大家可以很方便得参与其中一起建设产品。我们也计划积极推广 TiDB，从边缘业务到核心业务逐渐渗透，挖掘更多使用场景，贴近社区回馈社区。
+                                    </div>
+                                    <div class="read-more s1-color s1-">Read More</div>
+                                    <div class="name">
+                                        TUG member
+                                    </div>
+                                    <div class="misc">
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="swiper-pagination pagination-one-mobile"></div>
+                    <div class="down-arrow"></div>
+                </section>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel" id="two">
+                <section class="s2">
+                    <div class="section-title">
+                        这里汇聚了 TiDB 的多种玩法，有惊喜，也有灵感
+                    </div>
+                    <div class="swiper-container swiper-two-mobile">
+                        <div class="swiper-wrapper">
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        在过去的一年中，TiDB 分布式数据库应用于我行的云图系统中，承载了海量运维数据的查询和分析的功能。从实践结果来看，TiDB 良好的计算与存储分离的扩展性、海量数据的查询能力、分布式数据强一致的优异特性，对我们探索新一代分布式数据库的技术尝试提供了信心和帮助，当前 TiDB 在资源要求上还略显昂贵，但随着 TiDB 开源社区不断涌现的新特性和技术成果，在成本和性能上不断地的攀升，让我们感受和相信分布式数据库的时代已经向我们走来。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        韩宇
+                                    </div>
+                                    <div class="misc">
+                                        <span>中国银行</span>
+                                        <span>数据中心技术专家</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/hanyu.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        TiDB 我们已经应用在预警中心、数据风控等多个核心场景，因为其高度兼容 MySQL，迁移成本较低，避免了传统方案中分库分表的复杂性。目前，我们正在建设公司的中台矩阵，推动云原生落地，希望未来 TiDB 在 Kubernetes 上的使用可以更稳定、更完善。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        冯伟
+                                    </div>
+                                    <div class="misc">
+                                        <span>人民网</span>
+                                        <span>舆情数据中心 人民在线 CTO</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/fengwei.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        北京银行分布式 NewSQL 云数据库平台于 2018 年 3 月成功投产，成为国内首家将分布式 NewSQL 数据库应用于银行核心业务场景的技术案例。分布式事务数据库 TiDB 的可扩展性、高可用性以及 OLTP 分布式特性，为我行网联支付清算平台、银联无卡支付平台、线上业务贷款平台等提供了互联网金融级别的业务处理能力，大幅提升了面向移动互联场景海量数据处理能力与高并发业务处理效率，在“双十一”、“618” 等场景稳定运行。在多年的合作中，双方优势互补，今后北京银行分布式数据库团队会继续推进行内业务系统的分布式转型，充分发挥分布式 NewSQL 数据库的优势。希望我们在分布式数据库领域的建设经验可以为更多金融机构提供帮助。未来，北京银行分布式数据库团队将继续携手 TiDB 团队积极参与行业内相关技术交流与标准制定，共同推进分布式 NewSQL 数据库技术在金融领域的应用与发展。在此特别感谢 PingCAP 公司为我行分布式数据库技术的发展所做出的努力和付出。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        分布式数据库团队
+                                    </div>
+                                    <div class="misc">
+                                        <span>北京银行</span>
+                                        <span></span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/beijingbank.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        从 v1.0 开始我们就一直关注 TiDB 的发展，主要是被开源、水平弹性扩展和兼容 MySQL 三个特点所吸引。经过一段时间对 TiDB 2.x 的测试和试用，认为 TiDB 在运维和海量数据量处理和分析方面优于 MySQL 的各种集群方案和中间件方案。目前逐步在生产系统中替换原有的 MySQL 及切换其他关系型数据库，TiDB 较好地支撑了相关业务系统的 HTAP 需求。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        李超
+                                    </div>
+                                    <div class="misc">
+                                        <span>中国经济信息社</span>
+                                        <span>技术与数据中心架构师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/lichao.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        2019 年我们使用了 TiDB 作为我们某核心业务的实时数据中心存储和计算引擎，极大的减轻了架构复杂度，减少了工作量，系统上下游的接口也都非常友好。升级后的 3.0.5 版本也非常稳定，性能接近一倍的提升。项目实施过程还得到官方大力支持，非常专业和尽责。我们持续看好 HTAP 方向，期待 TiDB 生态越来越繁荣！
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        羊欢
+                                    </div>
+                                    <div class="misc">
+                                        <span>OPPO</span>
+                                        <span>高级数据分析师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/yanghuan.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        TiDB 的高可用、水平弹性扩容、读取历史版本数据等特点给我们带来非常多的好处。未来丰巢是敢于把所有 OLTP 系统全部迁移到 TiDB 上的。它对于丰巢的意义在于，避免在数据库产品的使用上浪费资源和时间，使我们的开发同学可以更加聚焦在业务开发上。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        刘光亮
+                                    </div>
+                                    <div class="misc">
+                                        <span>丰巢</span>
+                                        <span>中间件团队负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liuguangliang.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        依托 TiDB 强大的横向扩展能力、多样的查询引擎工具和 PingCAP 专业团队快速的支持响应，我们搭建了一套实时数仓，将上游近 50 个 MySQL 库及 APP 埋点数据实时入库。结合我们的智能报表系统和运维监控系统，大大提升了 500 多个业务报表产出效率及时效，并实现了两百个核心指标的实时监控。现 MySQL 数据同步配置比较繁琐，如 DM 能提供 restful 接口配置同步任务则能大大优化我们的数据同步效率，实现 MySQL 表的自助化同步。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        黄龙
+                                    </div>
+                                    <div class="misc">
+                                        <span>360 金融</span>
+                                        <span>深圳大数据组负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/huanglong.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        PingCAP 是中国做开源软件最好的一家公司，其研发的分布式数据库 TiDB 在满足高性能、高可用的同时， 又解决了高可扩展的难题。在数据爆发式增长的今天，为用户提供一站式解决方案，得到了众多用户的青睐。 这也是我们为什么推出 UCloud TiDB Service 的原因。希望 TiDB 将来被打磨的越来越完善，服务更多的用户。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        蒙晓净
+                                    </div>
+                                    <div class="misc">
+                                        <span>UCloud</span>
+                                        <span>PaaS 组件平台研发负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/mengxiaojing.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        从 16 年开始就和 PingCAP 有接触，18 年开始在产线小规模的上线 TiDB 的服务。这段时间中逐步和 PingCAP 的一起向前，从 2.0.0 到 2.0.5 再到现在的 3.0.5 使用感受越来越好，功能越来越强大。今年年末我们已经和 PingCAP 一起确定孵化一个开源项目：DB Mesh For TiDB，期待再来年和 PingCAP 一起给大家带来更好的服务。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        瞿锴
+                                    </div>
+                                    <div class="misc">
+                                        <span>同程艺龙</span>
+                                        <span>存储运维经理</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        TiDB 在 NewSQL HTAP 领域，一直领跑数据技术的革新。其活跃且持续高热度的社区 TUG 拉近了技术爱好者以及用户和 TiDB 原厂之间的距离，持续提升产品的用户体验。TiDB 开源社区汇聚了国内外众多技术 Geek，大家持续奉献着自己对数据库优秀技术产品的迭代优化，持续打磨符合彼此特定应用场景下的解决方案。期待更多的伙伴加入到 TUG 社区，彼此赋能，我们一起迭代进阶。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        侯圣文
+                                    </div>
+                                    <div class="misc">
+                                        <span>贝壳找房</span>
+                                        <span>技术总监</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/houshengwen.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        今年我们完成了汽车之家社区从 SQL Server 到 TiDB 的数据库迁移，经过几个月的监测和观察，整个系统运行稳定。本次迁移不但解决了我们遇到的很多痛点，也为我们技术栈的升级积累了很好的经验。希望能与官方一起继续完善我们研发的从 SQL Server 到 TiDB 的迁移工具，以后让有相同场景的同学快速使用，避免踩坑。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        路思勇
+                                    </div>
+                                    <div class="misc">
+                                        <span>汽车之家</span>
+                                        <span>技术主管</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/lusiyong.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote2"></div>
+                                    <div class="words">
+                                        首先要对 PingCAP 在 2019 年的优质支持和通力合作表示衷心的感谢。在这样强有力的帮助下，我们得以在多个业务领域应用了 TiDB 数据库，并且在诸如双 11 等重要活动中表现出了极高的性能和稳定性。希望未来能够和 PingCAP 一起努力，与时俱进，共同发展。
+                                    </div>
+                                    <div class="read-more s2-color s2-">Read More</div>
+                                    <div class="name">
+                                        张亿皓
+                                    </div>
+                                    <div class="misc">
+                                        <span>TUG</span>
+                                        <span>Ambassador</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="swiper-pagination pagination-two-mobile"></div>
+                    <div class="down-arrow"></div>
+                </section>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel" id="three">
+                <section class="s3">
+                    <div class="section-title">
+                        面对大家的期待，我们还在努力完善，也希望能得到更多的反馈
+                    </div>
+                    <div class="swiper-container swiper-three-mobile">
+                        <div class="swiper-wrapper">
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 是分布式数据库的主要引领者之一，其强大的扩展性、数据的强一致性是我们看中的主要特性。当前 TiDB 集群只承载互联网理财系统，随着 TiDB 版本不断更新改进，我们有信心会在更多系统上进行推广。TiDB 当前最大缺点是发展时间略短，对商业客户的需求依旧在不断的完善中，但随着时间的推进，我相信其一定会越来越好。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        刘浩然
+                                    </div>
+                                    <div class="misc">
+                                        <span>光大银行</span>
+                                        <span>运维中心资深工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liuhaoran.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        2019 年我们正式上线了一套 TiDB 集群，并部署了容灾环境，上线至今已有 8 个多月时间，TiDB 未发生一起宕机事故。期间我们还做了一次 TiKV 扩容以及 TiDB 与 PD 节点迁移，虽然没有图形化操作界面，但是整个过程基本都是采用 Ansible 在中控机进行操作，还是比较简单的，产品的稳定性和易用性给我们留下了非常好的印象。TiDB 的性能虽然在业界不是最优秀，但也是不错的，性能曲线也比较平稳，各节点资源使用也比较均衡，可以看出来 TiDB 原厂在这方面下了很大的功夫。任何产品都不可能尽善尽美，TiDB 还比较年轻，我们在使用中也确实遇到了一些问题，比如：1）主集群 write CF 和 default CF 的大小比例有点异常，但是数据完全一致的容灾集群 write CF 和 default CF 的大小比例却是正常的；2）监控中对于 failed query 的错误原因分类还比较粗糙，时不时会出现一些 unknown 错误原因的 query，而日志中并不会出现 unknown 这样的关键字；3）我们的 TiDB 容灾集群采用 TiDB Binlog 组件进行数据同步，监控中只能看到当前的 latency，没有办法看到 latency 的历史，这样很难判断 latency 最大能够到多少，最大的时间点是什么时候。对于 TiDB 的工程师们，我一定要点个赞，不管是现场工程师还是研发，给我的感受是非常积极，上报的问题都会积极响应。最后祝愿 TiDB 越做越好。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        匿名
+                                    </div>
+                                    <div class="misc">
+                                        <span>某大型券商</span>
+                                        <span>分布式数据库负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        我们看到目前最适合分布式数据库运行的基础设施是云设施。TiDB Operator 项目依托 Kubernetes 云原生生态，为我们将 TiDB 上云提供了便利性，通过自动化运维的方式，让交付更敏捷，让部署更灵活，同时让整个 TiDB 集群增强服务弹性。希望今后 TiDB Operator 项目增强稳定性，丰富测试用例，更新版本尽量保持向前兼容或提供升级迁移路径。最后感谢 cloud 团队的鼎力帮助，解决各种疑难问题。让我们一起在上云之路上一同前行！
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        宋歌
+                                    </div>
+                                    <div class="misc">
+                                        <span>平安科技</span>
+                                        <span>IaaS 研发工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/songge.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        2018 年我们引入分布式数据库 TiDB，从最初的 1.0 版本，一直到现在 3.0，一路看着 TiDB 产品的完善和成长。从最初的外围和边缘业务试点，到现在营销、风控、对账等场景陆续的试点和上线，应用范围和场景逐渐变广，其性能和稳定性也以可见的速度在发展，逐渐变成我们期待的样子。虽然在外围工具组件以及生态上还有一些不足，但是相信随着时间的发展会逐步完善，希望 TiDB 有更稳定和迅速的发展。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        刘宇
+                                    </div>
+                                    <div class="misc">
+                                        <span>天翼支付</span>
+                                        <span>资深技术专家</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liuyu.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        从我们在业务中台使用 TiDB 近一年的时间结果看，TiDB 这种 NewSQL  数据库展现了不错的技术优势，基于 Raft 协议的多副本机制，极大的保证了数据的一致性和高可用性，其云原生的设计概念，让扩容缩容变得非常方便。但是我们也要看到它的缺点，TiDB 还是比较年轻的产品，所以我们会先在部分业务上部署，后续将扩大在核心业务系统中的应用。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        东向利
+                                    </div>
+                                    <div class="misc">
+                                        <span>新奥燃气</span>
+                                        <span>智能装备中心 软件群召集人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/dongxiangli.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 兼容 MySQL，支持无限的水平扩展，具备强一致性和高可用性。可通过增加新节点（机器）即可实现 TiDB 的水平扩展，按需扩展吞吐或存储，轻松应对高并发、海量数据等场景。但是，TiDB 对生产环境的硬件要求和 CPU 及内存的使用要求相对较高。对于存储节点来讲，SSD 或者 NVMe 或者 Optane 仅是刚需满足。在应对大规模的集群、网络时仍有一定疲力。TiDB是异步的 schema，通过调整 TiDB Bscheme 可随时满足需求，通常添加列和索引并不会影响进行中的操作。希望 TiDB 未来能在进行大量数据导出、插入时，单节点连接数彪高时 IO 的积压进行更好的优化。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        陈执政
+                                    </div>
+                                    <div class="misc">
+                                        <span>联通大数据公司</span>
+                                        <span>项目经理</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/chenzhizheng.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 在弹性扩容上优势比较大，在线集群可以做到 RPO 等于 0，同时可以把 MySQL 数据库平滑的迁移到 TiDB，很好的兼容 MySQL 生态；在社区建设上也做的很不错，受到开发者的青睐，期待在数据库运维管理上能更便捷，如各个指标的性能视图；数据库物理备份等。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        何志勇
+                                    </div>
+                                    <div class="misc">
+                                        <span>平安科技</span>
+                                        <span>资深云数据库工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/hezhiyong.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        PingCAP（TiDB）在开源方向走的非常靠前，他们不仅仅是推广 TiDB，还为技术社区做持续输出，为技术创业也提供了非常多有价值的可借鉴模式，让中国国内生态得到非常大的提升。我有幸参与其中，非常开心，也非常自豪。希望 PingCAP 能够尽快推出完整的 HTAP 分布式数据库。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        杨文
+                                    </div>
+                                    <div class="misc">
+                                        <span>早安科技</span>
+                                        <span>后端技术负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/yangwen.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        分布式数据库 TiDB 解决了大数据量下  MySQL 分库分表这个 DBA 运维痛点。之前的分库分表依赖中间件，数据量大到一定程度又需要二次拆分，迁移数据和重新配置中间件的代价十分巨大。TiDB 作为一站式 HTAP 解决方案，具有高可用，水平平滑扩展，ACID 等特性，很好地解决了大数据量分库分表的问题，并且提供了高效的迁移和同步工具 (DM/Lightning) ，让 DBA 更多地关注业务优化，让 RD 更加专注业务开发。虽然在使用的过程中也遇到了不少坑，不过通过 TiDB 技术支持在线沟通，AskTUG 上提问和浏览各个公司的“避坑攻略”，都已经解决。最后希望 TiDB 能在 SQL 执行计划最优选择、分区表、DM、TiDB 运维 Web 化等方面加大研发投入，为我们使用者提供更高效易用的 TiDB。目前 360 已经部署了多个 TiDB 集群，上百节点，数据量几十 T，未来会在更多的业务线使用。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        代晓磊
+                                    </div>
+                                    <div class="misc">
+                                        <span>360 智能商业</span>
+                                        <span>数据库运维专家</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/daixiaolei.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        开源，弹性扩展，兼容 MySQL —— 这些是我们当初选择 TiDB 的重要原因。在过去的两年时间里, 作为一线使用者很开心能近距离、持续看到它的快速进化和长足进步。目前，TiDB 已经成为我们内部最为重要的数据库基础设施之一；我们也开始推动在生产环境中部署 3.0 版本。相信新版本能进一步拓宽 TiDB 的适用场景，承担更多流量，并为我们的业务增长作出更大贡献。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        刘春辉
+                                    </div>
+                                    <div class="misc">
+                                        <span>Shopee</span>
+                                        <span>DBA Lead</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/liuchunhui.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        首先，先感谢下 TiDB 这个产品/生态的出现。其使得无论是在个人学习提高，还是解决一些业务痛点上都让我和一些小伙伴颇有收获。在 VIPKID，TiDB 帮我们解决了很多业务层分库分表后很难做多维度查询及下游业务数据分析处理逻辑复杂的问题。当然，TiDB 也还年轻也有它的问题。首先，性能稳定性上仍有提高空间。其次，在冷数据低成本存储这块也可以做些处理。最后，也希望 DM 组件这块尽快推出官方的高可用方案。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        许超
+                                    </div>
+                                    <div class="misc">
+                                        <span>VIPKID</span>
+                                        <span>资深数据库工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/xuchao.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 可靠的在线动态弹性扩容能力和完善的原生分片能力，为我们业务中台数据从地方学校逐步上迁集团过程中动态调整数据库计算和存储资源提供了极大的灵活性，并减少了后续数据搬迁工作，原生分片支持也减少了我们的开发成本。目前 TiDB 还无法很好地实现 HTAP 场景下资源物理隔离和互不影响，优化器方面还可以更智能。平稳，可靠，易扩展的数据库基础架构是企业快速发展过程中数据安全保障的基石。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        傅少峰
+                                    </div>
+                                    <div class="misc">
+                                        <span>新东方</span>
+                                        <span>数据服务团队负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/fushaofeng.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 扩展了 Spark 的 OLTP 的能力，提升贝壳金服数据平台场景中数据同步、报表展示、数据服务的能力，降低了房产 MySQL 数据库迁移的成本，对 Spark 数据平台能力是一个很好的补充。但是目前在存储安全控制、计算的 shuffle 上还存在功能性缺失，在外围生态工具、处理性能上也有待提升。希望未来 PingCAP 团队可以在上面这些点继续发力，也期待 TiDB 可以发挥更大的作用。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        李振环
+                                    </div>
+                                    <div class="misc">
+                                        <span>贝壳金服</span>
+                                        <span>大数据基础架构负责人</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/lizhenhuan.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 以其卓越的性能和强韧的水平扩展能力吸引了众多用户。对业务完全透明，让业务人员真正回归业务。期待着 TiDB 带来快速备份恢复等更丰富的功能，也坚信 TiDB 会越来越好。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        常彦德
+                                    </div>
+                                    <div class="misc">
+                                        <span>UCloud</span>
+                                        <span>资深研发工程师</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/changyande.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        我是 2019 年 4 月份接触 TiDB 的，并且在 5 月份进行了一个月的封闭培训，顺利拿到了 PingCAP 的初级讲师。我原来是一个长期使用 Oracle 数据库环境的工程师，对于 Oracle 的稳定性、高可用、高性能有着充分的理解，但又对 Oracle 的扩展能力的约束有着刻骨铭心的痛感。可以看到 TiDB 在解决企业数据库所需要的扩展性时和其他开源数据库所不同的机制，有着旺盛的生命力；并且随着开源技术的不断应用和发展，相信 TiDB 一定会有更加广阔的前景。个人希望 TiDB 能够打造出自己的优势场景，能在企业级应用得到更广阔的发展，在 TiDB 的培训内容上能够有针对性地满足不同 Level 的人的需求。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        黄云鹏
+                                    </div>
+                                    <div class="misc">
+                                        <span>东方龙马</span>
+                                        <span>服务实施</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/huangyunpeng.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        TiDB 设计上采用了主流的存储和计算分离的架构，实现上采用使用 ETCD、RocksDB 等等开源社区已经成熟并且已经被广泛使用验证的组件，很大程度上避免了业务采坑也带来了活力。官方最近两年内保持着两周一个小版本和半年一个大版本的节奏，通过小步快跑策略快速迭代，性能得到了成倍的提升；TiDB 是云原生数据库，拥抱 K8s，未来发展前景非常有想象力。TiDB 的社区非常火热，定期的 Meetup 活动、AskTUG 的问答社区、定期的业务分享都让人收益满满。希望未来 TiDB 能进一步加强系统稳定性，周边工具中上下游导入导出工具更加简单易用和稳定可靠。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        黄潇
+                                    </div>
+                                    <div class="misc">
+                                        <span>TUG</span>
+                                        <span>Ambassador</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/general.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <div class="quote quote3"></div>
+                                    <div class="words">
+                                        作为 NewSQL 的 TiDB 与传统关系型数据库对比有太多的优势。基于成熟的raft协议，最大限度保证了数据的一致性和高可用性。轻松实现水平扩展，完美解决了MySQL分库分表的所有痛点。但是作为 OLTP 型系统来说 TiDB 也有一些小缺陷，比如暂时 join 无法下推到 TiKV，目前还无法实现物理热备等等，但是官方版本在快速迭代中，相信很快能解决这小问题。
+                                    </div>
+                                    <div class="read-more s3-color s3-">Read More</div>
+                                    <div class="name">
+                                        田维繁
+                                    </div>
+                                    <div class="misc">
+                                        <span>TUG</span>
+                                        <span>Ambassador</span>
+                                    </div>
+                                    <div class="avatar">
+                                        <img src="https://download.pingcap.com/images/user-words/avatars/tianweifan.png" alt="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="swiper-pagination pagination-three-mobile"></div>
+                    <div class="down-arrow"></div>
+                </section>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel">
+                <div class="user-case">
+                    <div class="datas">
+                        <div class="data">
+                            <p class="num num1"><span>20000+</span></p>
+                            <p class="desc">节点规模</p>
+                        </div>
+                        <div class="data">
+                            <p class="num num2"><span>20000+</span><span>亿</span></p>
+                            <p class="desc">单表最大数据规模</p>
+                        </div>
+                        <div class="data">
+                            <p class="num num3"><span>200+</span></p>
+                            <p class="desc">单集群最大节点规模</p>
+                        </div>
+                        <div class="data">
+                            <p class="num num4"><span>700+</span></p>
+                            <p class="desc">单公司最大集群规模</p>
+                        </div>
+                    </div>
+                    <div class="intro">
+                        <p>2019 年</p>
+                        <p>TiDB 被广泛应用于海内外互联网、银行、保险、证券、支付、物流、制造业、快消、电信等多个行业</p>
+                        <p>经受住了近 1000 家企业的线上环境打磨</p>
+                        <p>护航数十家电商、物流及金融机构应对 6.18、11.11 等大促流量高峰</p></br>
+
+                        <p>TiDB 过硬的产品实力背后，有社区开发者持续贡献的支撑</p>
+                        <p>也有一线用户在实操中对其的不断打磨</p>
+                        <p>感谢所有热爱、信任 TiDB 的伙伴们</p>
+                    </div>
+                </div>
+                <div class="down-arrow down-arrow-center"></div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel">
+                <div class="logo">
+                    <img src="/images/user-words/logo-mobile1.png" alt="logo" />
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <div class="panel">
+                <div class="logo logo2">
+                    <img src="/images/user-words/logo-mobile2.png" alt="logo" />
+                </div><div class="readMoreBtn">
+    <a href="/cases-cn/">
+        <button class="readMore-btn">
+            <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" alt="Arrow"/></span>
+            <span class="btn-text">更多案例文章</span>
+        </button>
+    </a>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="user-case pc-user-case">
+    <div class="datas">
+        <div class="data">
+            <p class="num num1"><span>20000+</span></p>
+            <p class="desc">节点规模</p>
+        </div>
+        <div class="data">
+            <p class="num num2"><span>20000+</span><span>亿</span></p>
+            <p class="desc">单表最大数据规模</p>
+        </div>
+        <div class="data">
+            <p class="num num3"><span>200+</span></p>
+            <p class="desc">单集群最大节点规模</p>
+        </div>
+        <div class="data">
+            <p class="num num4"><span>700+</span></p>
+            <p class="desc">单公司最大集群规模</p>
+        </div>
+    </div>
+    <div class="intro">
+        <p>2019 年</p>
+        <p>TiDB 被广泛应用于海内外互联网、银行、保险、证券、支付、物流、制造业、快消、电信等多个行业</p>
+        <p>经受住了近 1000 家企业的线上环境打磨</p>
+        <p>护航数十家电商、物流及金融机构应对 6.18、11.11 等大促流量高峰</p></br>
+
+        <p>TiDB 过硬的产品实力背后，有社区开发者持续贡献的支撑</p>
+        <p>也有一线用户在实操中对其的不断打磨</p>
+        <p>感谢所有热爱、信任 TiDB 的伙伴们</p>
+    </div>
+</div>
+<div class="pc-logos logos"></div>
+<div class="pc-readMoreBtn"><div class="readMoreBtn">
+    <a href="/cases-cn/">
+        <button class="readMore-btn">
+            <span class="arrow"><img src="/images/svgs/blue-right-arrow.svg" alt="Arrow"/></span>
+            <span class="btn-text">更多案例文章</span>
+        </button>
+    </a>
+</div>
+</div>
+<div class="pc-footer">
+<footer>
+    <div class="container">
+        <div class="flex-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>产品</strong></h4>
+                <ul>
+                    <li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+                    </li>
+                    <li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+                    <li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>文档</strong></h4>
+                <ul>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+                    <li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+                    <li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+                    <li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>资源</strong></h4>
+                <ul>
+                    <li><a href="/blog-cn/">博客</a></li>
+                    <li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+                    <li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+                    <li><a href="https://university.pingcap.com/"
+                            onclick="trackViews('footer-source-university', 'pingcap-university_view')"
+                            target="_blank">PingCAP
+                            Education</a></li>
+                    <li><a href="/solutions/intel/"
+                            onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+                    <li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')"
+                            target="_blank">Ask TUG</a></li>
+                    
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>公司</strong></h4>
+                <ul>
+                    <li><a href="/about-cn/">关于我们</a></li>
+                    <li><a href="https://careers.pingcap.com" target="_blank"
+                            onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+                    </li>
+                    <li><a href="/about-cn/news/">新闻报道</a></li>
+                    <li><a href="/zh/privacy-policy/">隐私申明</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="contact-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>联系我们</strong></h4>
+                <ul>
+                    <li><a href="/" class="tel"  target="_blank"><svg id="Layer_1" enable-background="new 0 0 512.021 512.021" width="18" height="19" viewBox="0 0 512.021 512.021" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"/></g></svg>
+ 商务咨询：</a></li>
+                    <li class="tel-li">4006790886</li>
+                    <li class="tel-li">010-58400041</li>
+                <li><a href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&id=4240&channel=9034" class="twitter"  target="_blank"><svg t="1622000094837" viewBox="0 0 1069 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2379" width="18" height="19"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+                <li><a href="https://twitter.com/PingCAP" class="twitter"  target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="19"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg> Twitter</a></li>
+                <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg> LinkedIn</a></li>
+                <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg> Reddit</a></li>
+                <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="20"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg> Google Group</a></li>
+                <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg> Stack Overflow</a></li>
+                <li id="wechat"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+                </ul>
+            </div>
+            <div class="subscribe" id="subscribe-pc"></div>
+        </div>
+    </div>
+    <div class="container copyright-container">
+        <p class="copyright">&copy; 2021 北京平凯星辰科技发展有限公司</p>
+        <a href="" class="copyright-btn-lang copyright-btn-en"
+            id="lang">English</a>
+        <a href="https://beian.miit.gov.cn/" class="prepared-num">京 ICP 备 16046278 号 - 2</a>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" class="prepared-num">
+            <img src="/images/beian.png" />
+            <p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+        </a>
+    </div>
+</footer>
+</div><button class="back-to-top" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 284.929 284.929"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"/></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script type="text/javascript" src="/js/vendor/swiper.min.js"></script>
+<script type="text/javascript">
+    var slides_per_view, slides_per_group, pagination_one, pagination_two, pagination_three
+
+
+    if (window.matchMedia('(max-width: 600px)').matches) {
+        slides_per_view = 1
+        slides_per_group = 1
+    } else {
+        slides_per_view = 3
+        slides_per_group = 3
+    }
+
+    function removeModal() {
+        $('.word-modal').remove()
+    }
+
+    var swiperOne = new Swiper('.swiper-one', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-one',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+        loop: false,
+        navigation: {
+            nextEl: '.button-next-one',
+            prevEl: '.button-prev-one',
+        },
+    })
+
+    var swiperTwo = new Swiper('.swiper-two', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-two',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.button-next-two',
+            prevEl: '.button-prev-two',
+        },
+    })
+
+    var swiperThree = new Swiper('.swiper-three', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-three',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.button-next-three',
+            prevEl: '.button-prev-three',
+        },
+    })
+
+    var swiperOneMobile = new Swiper('.swiper-one-mobile', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-one-mobile',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+    })
+
+    var swiperTwoMobile = new Swiper('.swiper-two-mobile', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-two-mobile',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+    })
+
+    var swiperThreeMobile = new Swiper('.swiper-three-mobile', {
+        direction: 'horizontal',
+        pagination: {
+            el: '.pagination-three-mobile',
+            clickable: true,
+        },
+        slidesPerView: slides_per_view,
+        slidesPerGroup: slides_per_group,
+        spaceBetween: 20,
+    })
+
+    var mobileContainer = new Swiper('.mobile-container', {
+        direction: 'vertical',
+        slidesPerView: 1,
+        on: {
+            slideChange: function () {
+                removeModal()
+            },
+        }
+    })
+
+    $('.words').each(function () {
+        const $this = $(this)
+        if ($this[0].scrollHeight == $this[0].clientHeight) {
+            $this.next().css('visibility', 'hidden')
+        }
+    })
+
+    $('.read-more').click(function () {
+        const $this = $(this)
+        var bgColor = $this.attr('class').split(' ')[2]
+        var words = $this.prev()[0].innerText
+        $('.panel').append('\
+        <div class="word-modal ' + bgColor + 'bg"><p>' + words + '</p></div>\
+        ')
+
+        $('.word-modal').click(function () {
+            removeModal()
+        })
+    })
+
+    function addSmoothScrolling() {
+        var links = document.querySelectorAll('#slider-control a')
+
+        for (let i = 0; i < links.length; i++) {
+            let link = links[i]
+            let id = $(link).attr('href')
+
+            link.addEventListener('click', function (event) {
+                event.preventDefault()
+                $('html, body').animate(
+                    {
+                        scrollTop:
+                            $(id).offset().top - 50
+                    },
+                    1000
+                )
+            })
+        }
+    }
+    addSmoothScrolling()
+
+
+
+    window.addEventListener('scroll', function () {
+        var diffTop = $('#slider-control').offset().top
+        if (diffTop)
+            if (diffTop > 2700 || diffTop < 600) {
+                $('#slider-control').css('opacity', 0)
+            } else {
+                $('#slider-control').css('opacity', 1)
+                if (diffTop > 2000) {
+                    $('a').removeClass('active')
+                    $('#three-dot').addClass('active')
+                } else if (diffTop > 1300) {
+                    $('a').removeClass('active')
+                    $('#two-dot').addClass('active')
+                } else {
+                    $('a').removeClass('active')
+                    $('#one-dot').addClass('active')
+                }
+            }
+    })
+</script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" crossorigin="anonymous"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"/><meta content="IE=edge" http-equiv="X-UA-Compatible"/><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<style media="screen" type="text/css">
+        .st_tree {
+            display: none;
+        }
+    </style>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>MPP and SMP in TiDB | PingCAP</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。本篇文章整理自第 21 期 PingCAP Infra Meetup 上申砾分享的《MPP and SMP in TiDB》内容。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="MPP and SMP in TiDB | PingCAP" property="og:title"/>
+<meta content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。本篇文章整理自第 21 期 PingCAP Infra Meetup 上申砾分享的《MPP and SMP in TiDB》内容。" property="og:description"/>
+<meta content="https://pingcap.com/meetup/recording/mpp-smp-tidb/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image:secure_url"/><meta content="summary" name="twitter:card"/><meta content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。本篇文章整理自第 21 期 PingCAP Infra Meetup 上申砾分享的《MPP and SMP in TiDB》内容。" name="twitter:description"/>
+<meta content="MPP and SMP in TiDB | PingCAP" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/><meta content="https://pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image"/><meta content="@pingcap" name="twitter:creator"/>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script async="" src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js" type="text/javascript"></script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head> <body data-lang="cn"><div id="page-content">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/zh"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li class="docs-type-selector " id="docsTypeSelector">
+<a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+</li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" data-type="" id="search-input" name="q" placeholder="搜索 TiDB 文档" type="search"/>
+</div>
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP Education</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-mobile"></div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/weekly" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="meetup">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签</div><a class="tag all" href="#">ALL (7)</a>
+<div class="tag-list"><a class="tag sel" data-tag="SQL" href="/meeting/recording/#SQL">SQL (2)
+                </a><a class="tag sel" data-tag="TiDB" href="/meeting/recording/#TiDB">TiDB (6)
+                </a><a class="tag " data-tag="分布式系统测试" href="/meeting/recording/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">MPP and SMP in TiDB</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img alt="Date icon" src="/images/svgs/icon-date.svg"/>Tue, Nov 15, 2016</li>
+<li class="meta-item">
+<img alt="Pen icon" src="/images/svgs/icon-writer.svg"/>
+                        申砾</li>
+</ul>
+<div class="blog-text"><p>今天主要是想把我们 TiDB 做 SQL 性能优化的一些经验和一些思考，就此跟大家探讨一下。题目写的比较大，但是内容还是比较简单。我们做 TiDB 的 SQL 层时，一开始做的很简单，就是通过最简单的 KV 接口(Get/Set/Seek)去存数据、取数据，做一些非常直白、简单的计算。然而后来我们发现，这个方案在性能上不可接受，可能行不通，我们就重新思考了这个事情。</p>
+<p>TiDB 的目标是做一个 NewSQL 的 database ，什么是 NewSQL？从 Wikipedia 上我们看到 NewSQL 的定义『NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system.』。首先NewSQL Database 需要能存储海量数据，这点就像一些 NoSQL  数据库一样。然后，能够提供事务的功能。所以 NewSQL 中的计算，主要有两个特点。第一个，就是数据是海量的，这跟 MySQL 传统数据有可能不一样，他们当然可以通过一些 sharding 的方式来进行处理，但是 sharding 之后会损失，比如说你不能跨节点做 Join，没有跨节点事务等。二是，在海量数据情况下，我们还需要对数据进行随时的取用，因为数据存在那，你算不出来就是对用户没有价值、没有意义的，所以我们需要在海量数据的前提下，能够随时把它计算出来。</p>
+<p>计算主要分两种任务，一种是 OLTP 的 query，就是简单的查询，通过一些索引，就能过滤到大部分数据，然后能够做一些简单的处理和计算。还有一种是 OLAP的 query，这个一般来说会涉及到大量的数据及复杂的 query，比如说 Join，SubQuery 以及 Aggregate 这样一些东西。并且在海量数据的情况下，很多传统数据库上的 OLTP 的 query，看起来可能更像一个 OLAP 的 query，因为涉及到的数据量会非常大。那么在这样一些背景下，我们应该怎么考虑 SQL 计算呢？简单来讲，我们需要想办法在海量数据上，对计算进行优化和提速。</p>
+<h2 id="heading">传统数据库的提速方法</h2>
+<p>传统数据库有很多提速的方法，有两种比较有名的，一个是 MPP，它的架构参见下图。计算数据是分在不同的节点上，并且很可能不在一台机器上，它们通过高速的网络连接，让每个节点都自己去处理数据，处理完数据之后再汇总在一起，最后给用户返回结果。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/1.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>这个架构最大的特点就是它是一种 share nothing 的架构，也就是说节点之间的计算是相互不知道的，然后他们只执行自己的事情，不需要去交换数据，这是一种架构。</p>
+<p>还有一种叫 SMP，这个跟 MPP 对应，它是一种 share everything 的架构。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>这种架构一般都是在一个 node 上、一个计算节点上进行，然后它们有多个 CPU 同时计算，它们会去通过总线去共享，比如说内存、IO 这样一些东西，这是一种 share everything 的一个架构。可以看到 MPP 和 SMP 这是两种传统数据库中用来提速的一些方案。我看到 PG（PostgreSQL） 最新的代码，他们已经支持了并行的处理，比如他们可以做并行 scan，他们可以去定义并发度，比如说 scan 一个表，他们利用多核这个特性，能够提速很多。当然这个肯定不是线性的，因为你去做并行，做数据交换，是有 overhead 的，这个 overhead 在你并行度太高的时候是挺大的。</p>
+<h3 id="tidb">TiDB</h3>
+<p>说完传统数据，我们说一下 TiDB。TiDB 的架构如下图所示。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/3.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>虚框所标的是 TiDB SQL layer，它的最上层是 protocol layer ，就是解析 MySQL 协议。然后是 SQL layer，它主要负责 SQL 的解析、查询，查询计划的制定以及生成执行器。它会调用底下的接口来获取数据，然后进行 SQL 的运算。接下来这一层，可以看到，分两个接口，一个就是 KV 的 API ，就是我们会把数据映射为 KV，因为我们最底下一层是一个 KV 的 storage engine 。比如说一行数据我们会用 Row ID 加上 Table ID 加上 Database ID 这些来做一个 key，然后把这行里面的数据作为 value ，再扔到 KV 中，就转成一种 key-value 的模式。对于 index 来说，我们也是转成了 KV 的模式，因为我们的 KV 有一个特点，就是可以进行有序的 scan。比如说你要在某些 Column 上建了 index，我们就会把这个 Column 编码成一个 key，然后再加上 index ID、Table ID 之类的东西，也 send  到这个 KV 里面去。就是说我们的上层，你可以认为只通过这个 API 也是能够正确的获取到数据、访问数据的，大概就是这样一个架构。然后这里还有一个 DistSQL API，这个是我们分布式计算框架的对上层提供了一个抽象，后面我会详细介绍这个 API 。最下面一层，就是我们的 TiKV 。你可以把 TiKV 考虑成一个纯的分布式的带事务的 key-value engine 。为了支持我们分布式 SQL 的 API ，我们给它上面加了更多功能，在这里我们有参考 HBase 的 coprocessor 方案，然后提供一些  EndPoint 的功能，这样对上一层可以提供更丰富的语义。</p>
+<p><strong>那么，我们怎么让 SQL 在 TiDB/TiKV 中跑的更快？这半年多我们一直在做这个事情。</strong></p>
+<p>第一就是不管是 NewSQL 数据库还是传统数据库，我们肯定要对 optimizer 进行一些优化，在这方面我们做了特别多特别多的事情，包括常量折叠，后面还会做更多的，比如常量传播这些。然后 Join 怎么去选择，还有就是我们现在有一个 Cost Based Optimize 的一个框架，我们会考虑下层数据的统计信息，然后在统计信息的基础上，再制订查询计划，所以这是一个巨大的坑，我们正在努力的填它。我觉得 Google F1 这部分做的很好，它应该也做了挺多优化，但其它的数据库我觉得倒不一定有我们做的好，比如我看了一下 Spark，它的 Optimizor 比较简单，就是用了大概一部分 Rule 不断地去 Apply。我想主要的原因是 Spark 定位于做一个通用的计算框架，所以对底层的数据信息无法有细致的了解。</p>
+<p>除了优化器这块儿，确定一个查询计划之后，怎么去执行它，也是很重要的事情。就是说同样的一个计划，可能用不同的执行器执行起来会有不同的效果。因为我们做的是一个 NewSQL 数据库，数据是分布在很多很多节点上的，我们完全可以利用数据广泛分布的特点，提高整体的并行度。而且我们 TiDB SQL layer 是用 Go 来写的，Go 在多核机器上能够发挥并发优势，它的 Goroutine 调度的开销很小，我们可以建很多 Goroutine，利用现在 CPU 越来越多的这个特性，去提高计算的并行度。还有就是说像传统的，比如 MySQL 、PG 上的东西，它主要还是访问内存、访问硬盘这样的一些开销。但对 TiDB 来说，它很大一部分都耗在网络上了，就是说你发一个请求过去，拿到数据，要走一遍网络，这还是有挺大开销的。所以我们一个很重要的目的就是让整个数据的流程尽可能快起来，尽可能的平滑，把网络这种开销尽可能的搞掉。</p>
+<p>先讲一下，本次分享的标题叫 “MPP and SMP in TiDB”  主要是说我们有一个并行的、分布式的计算框架，怎么用这个计算框架来提高我们 SQL 计算的并行度，还有就是我们提供了coprocessor ，刚才介绍了，是从 HBase 来的。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/4.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>上图中的 Regions 是 TiKV 的一个 region servers ，我们可以在这里面插入一些代码，让它能够执行我们给它定义的一些任务。大家可以先看上图，整个的分层大概就是这样一个流程。它的最上面是执行器，就是我们经过 SQL Optimizer 之后生成执行计划，而后我们会根据执行计划生成这个执行器。接下来是刚才说的 DistSQL API，它会调用我们的 TiClient，就是说是一个 TiKV 的 Client，通过它来访问 TiKV，通过 Rpc 发送请求。它还有一个很重要的功能就是能获取数据分布在哪儿。因为一个表会分成很多 KV，这些 KV 是散列在很多很多 TiKV server 上的，它很重要的功能就是干这个事情，就相当于数据路由，是它一个重要的任务。最下面就是 region server ，这中间可以认为是网络。</p>
+<p>这样分了几层之后，每一层都有它自己的任务，就是说我们每一层都抽的很薄。Executor 最重要的工作就是制定执行逻辑。就是说它要告诉下面你需要干什么事情。比如你是需要做 count ，还是需要计算 Where ，它理解的是 SQL 逻辑。DistSQL API 是两层之间的封装，就是说我们下面除了 TiKV 之外，还可以接其它的存储引擎，只要你满足我们这个接口的定义就可以。然后 DistSQL API 把上下隔离了，它提供了一个 API ，这个 API  稍后我会详细介绍一下。然后 TiKV Client 就是数据路由，数据的分发，比如说请求失败了怎么办，它干的就是数据请求发送的。Regions 这一层存储了数据，它需要利用上层传下来这个计算逻辑，在这个数据上进行计算。大概就是这些层，每一层只干了自己的事情，不需要关心下一层的实现。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/5.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>这个 API 就是刚才上面那个 DistSQL 提供的对外最重要的一个接口，叫 Select。</p>
+<p>它有几个参数一个是 client。就是说只要你的 KV 引擎满足带事务、满足 KV 接口，并且满足这个 client 的一些接口，就可以接入 TiDB。有一些其他的厂商跟我们合作，在他们的 KV 上也能 run 我们这个分布式的 SQL ，这是相当于是 KV 的 Client。</p>
+<p>第二个，就是 SelectRequest。这个东西是由上层执行器构造出来的，它把计算上的逻辑，比如说一些表达式要不要排序、要不要做聚合，所有的信息都放在 req 里边，是一个 Protobuf 结构，然后发给 Select 接口，它会扔到下层，最后扔到那个 region server 上进行计算。</p>
+<p>还有 concurrency int。这个其实只是个建议，它的作用是提示下层要不要并发的去请求数据。因为我们数据是分在很多 region server 上的，所以要考虑去以多大并发度去发。然后，KeepOrder 这个参数是这样的，就是说下层是有很多 region server 的，我们要把请求发在很多 region server 上，但先发的结果不一定先返回来，因为有网络延迟、计算的延迟，所以这个顺序是不能预先设定好的。但是并不是所有的计算任务都依赖于数据的顺序，大多数情况下从拿到第一个结果开始就可以计算了，你就需要把结果先返回上来。在另一些情况下，我们需要下面按某一种顺序返回结果的，比如说 SQL 语句中有 OrderBy，并且对应的列上有索引，那么制定出来的查询计划很有可能就是首先扫描索引，然后依赖于索引的顺序对数据进行排序，因为索引是有序的，可以节约掉排序的时间。假设我们按照扫索引的顺序给你返回数据的话，你就可以不用后续自己去排了，这个 sort 已经帮你做好了。这个时候，就需要下层数据，下层的这个接口对你返回的数据是按照某个 key 有序的，所以这里就加了一个 KeepOrder 。当你不需要下层数据有序的时候，你就可以把这个设为 false ，假设这是 TiKV ，然后这是 TiDB，假设这个请求发了好几个 region server，虽然这个 TiKV 你可以认为是一个大的 key 的空间，并且按照 key 有序，假设某个后面的 key range 的请求先返回，如果你不要求下层返回有序，你完全可以把这个请求的结果先返回到上面进行计算，让整个计算过程能够更快。</p>
+<p>接着这个接口返回了一个数据结构，叫 SelectResult ，这个结构可以认为它是一个迭代器，因为我们下层是有很多 TiKV ，然后每个结果是一个 PartialResult。上层封装了一个 SelectResult ，就是一个 PartialResult  的迭代器。通过这个的 next 方法可以拿到下一个  PartialResult ，但是具体的下一个 PartialResult 是哪个的 region server ，是不一定的，就像我刚才说的，取决于你要不要 KeepOrder 。
+SelectResult 的内部实现你可以认为是个 pipeline。我们会并发的去往各个 region server 发数据，但是可能有的先返回给你了，有的后返回给你了。虽然某个 region 存储数据的 key 的范围比另外一个 region 的小，但是要不要先把某个 region 的结果返回给你，是由你这个 KeepOrder 决定的。</p>
+<p>然后如果你是不要 KeepOrder ，那我们就是一个 channel，也就是有数据返回了就往里扔，扔完之后就可以对上返回了。然后这个 API 返回的是  SelectResult 。</p>
+<p>如果你是要求下面有序，那么这里会对这个 request  建一个slice ，假如前面的没返回来，是不会把后面的 request 返回给你的。主要是定义了这样一个语义，我们就可以很方便的决定下面的这个行为。</p>
+<p>这个地方，我们是做了一些优化的。当 KeepOrder 为 false 的时候，如果它先到了一部分，你可以先处理那一部分。就是说这个 KeepOrder 是 true 还是 false，影响了最下面一层的返回逻辑。比如你不要这个 KeepOrder ，那么我给一堆 KV server 发了request 之后，这个 response 是扔到一个统一的 channel 里面的，谁先返回就把谁的扔进来，然后外面调用 next 就已经拿到了。但如果你是 KeepOrder 为 true ，我下面所有的 request 按照这个 key 的顺序建了一个 slice，然后你调这个的 next 的时候，它是遍历这个 slice，就是如果前面那个 result 没拿到，它是不会往后面走的，即使后面 response 已经到了，它也不会给你返回的。</p>
+<p>这个接口还是挺重要的。举个例子吧，来看一下我们怎么去做这个分布式的 SQL ，比如 <code>select * from t where age &gt; 20 and age &lt; 30</code>。在这里， t 这个数据可能分布在很多 region 上，我们会把要扫描 t 这个表的信息以及这个 filter，整个推到 region server 上进行计算，然后 Executor 构造的就是比如说我要扫哪个表，它的表的信息是什么。通过这个表的信息，下层就能去构造 KV，Ti-Client 就能通过这些 KV 找到这个表的数据分布在哪些 region 上面，然后它就会把这个请求发在这些 region 上面，同时在 selecter request 信息里面也会带上我要做 filter 的那个 condition，它会把要查询的表的元信息等都发到存储个表数据的 region server 上。然后它再利用表的信息把数据拿出来并过一遍 filter，只有过了这个 filter 的数据，之后才会返回给 TiDB。这样一方面能够增加这个计算并行度，因为我们可能有很多 region server 存储这个数据，当然只有有这个数据的 region server 我们才会发请求过去。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/6.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>第二，你把 filter 推下去很重要的好处就是，只有过了这个 filter 才能返回，这样返回你的数量是减小了很多，你就能减小无意义的网络传输。据我们在 Google 那边了解的情况是，他们好像不太care这个事儿，因为他们内部网络实在太快了，他们可以直接把所有数据 load 过来，在这边去算，可以认为整个 IPC 就是一台巨大的机器。就像所有的机器都通过总线连起来，有这种感觉，它就不考虑效率问题。所以他们的效率我觉得还是值得考虑。但大部分用户可能是用一些廉价的 PC，我们这个方案其实是更好的一个方案。这是比较简单的一种。我们还有分布式 aggregate，这种是更好搞的，就假设我们把这个 ability 也推下去，比如说 count，然后你在这边过完 filter，你只需要每个 region 计算自己上的结果，给我返回一个这边的计数就可以了，然后我在 TiDB Server 再把这个  partial result 制成一个 final result ，比如说你这边是五个，这边十个，这边二十个，那我加起来直接算个 sum 返回给你就可以了，这是它最大的好处。</p>
+<p>刚才是介绍了一下我们 TiDB 的一个分布式的计算框架，然后下面我们介绍一下之前我们做这两项工作，就是把这个 Join 让它变得更快一些。</p>
+<p>最开始的时候，TiDB 进行 Join 运算非常慢，其实这也是 MySQL 的缺陷，MySQL 只支持 look up Join ，它是说你先取一个表的数据，然后用每一行数据去另一个表拿数据，这个在数据量大的时候是很慢的。所以我们支持了 Hash Join。</p>
+<p><img alt="示意图" class="lazy" data-original="https://download.pingcap.com/images/meetup/mpp-smp-tidb/7.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>Hash Join 的话比如说你有一个大一个小两个表，大表在千万量级，其实也不是特别大，内存还是能放下的。你可以用一个小表去建一个 Hash 表，然后再从大表去读数据，读数据的时候你可以去 Hash 表中拿数据，待拿到 Join on 那个条件能对应上那个小表的数据，再算，再过一些 filter ，看看要不要输出这一行，然后对外返回结果。</p>
+<p>为了让它算的更快，我们最近干了一些工作。第一，我们读小表的数据和读大表的数据，是可以并行来搞的，你可以想象成两条数据流。因为我们网络延迟是比较大的，所以我们想让数据尽可能的平滑、平顺地去流动，对于 Join 读取 DataSource 有两个事情要做，第一个是读小表数据，第二个是读大表数据，我们读小表数据可以用一个单独的线程来做，然后它就会发请求去读小表数据。拿到小表数据之后，拿到一行，然后它就可以对这行扔到一个 Hash 表中，算一个 key 。与此同时，我们可以新建另一个线程，它在这同时去读大表的数据，读完大表的数据之后，它再扔给一堆 worker，这堆 worker 就是做 Join 这个事的。就比如说它把数据虽然发到这些 worker，这些 worker 拿到大表的一行，算出 Join 的 key ，然后它去 Hash 表中去拿到对应的小表的数据，再看能不能过这个 Join 的 filter，最后再输出结果。这个时候，整个数据可以看到，已经尽可能的去并行，不会因为比如说小表数据没读到，就阻碍大表拿数据。当然，这个中间还有个同步的问题，就是这个 Hash 表只有完全建好之后，大表的 Join 的 worker 才会开始工作。</p>
+<p>用 Go 写这种计算任务是非常简单的，因为 Go 有 goroutine，它的调度开销非常小，并且 Go 还有 channel，它们之间的通讯也是可以通过 channel 去扔的。但是有一点要注意，就是你这个大表假设比较大，有好几千万，你可以一条一条数据扔到 channel 里面去，它开销很大，我们后来采用的是用 batch 的方式往里扔。比如说读个一千条扔到一个 channel 里面，然后一个 worker 再拿着这个数据来进行计算。等到这些 worker 计算完之后，再把这个结果扔到一个 channel 里面去，这时外面就可以通过这个 channel 拿到计算的结果。这个做完之后，我们 Join 差不多快了十倍。
+在这里，读取数据的时候是一个单线程的。因为下面我们没有保障线程安全，这个后面可以再考虑，怎么让下面也去线程安全。但是读数据这个步骤，只要不 block 后面计算流程就可以了。</p>
+<p>然后还有一个优化是这样的。我们之前发现了一个问题，就当我们通过索引去读数据，以前的一个串行的模式是比较有问题的。我们索引和数据你可以认为是两个 KV 的 region ，想通过索引 filter 数据，首先你要构造一个索引的范围，在这边读索引表，然后拿到所有的 row ID。拿到 row ID 之后，再用这些 row ID去访问一下数据表，大概是这样一个流程。实际这样对 TiDB 来说，可以看成是两次网络请求，第一次是读，拿到所有的数据，row ID，然后第二次用 row ID 去拿真正的数据，再在 Join 上进行处理。</p>
+<p>index data 也分布在很多 region server 里面， row 的数据也分布在很多 region server 里面，当网络开销比较大的时候，如果你先读索引数据，拿到所有的数据再去读数据表，那么读数据表的工作就会等读完所有的索引数据后才开始，这是不合理的。因为上面我们介绍过，我们发很多 region server 之后，你可以让它不 KeepOrder ，就是有数据先返回来了，你就可以去用了。这个时候，我们可以把整个这个改成一个 pipeline 的模式，比如说你拿到一部分 index handle ，然后我们可以拿 row ID 先构造一个 job ，起一个 goroutine 让它去拿这个数据表的内容，这样我们可以把整个数据的流动让它更平滑，让它更快一些。</p>
+<p>一般来说，当你拿到最后一个 index 的 row ID 的这个 respond 之后，你只需要拿那一个 respond 就可以了。而且你拿到最前面这个 row data 之后，已经可以对你的更上一层的 executor 返回数据了。这样将无论是执行的成本，还是启动代价都降的很低。以前的你可以认为启动代价是整个 scan 之后才能返回第一行数据，现在只是一个 scan index 的第一个 reason server 返回结果，然后拿那个结果到第一个 row data 的 response 已经能返回数据了。</p>
+<p>这个改造完之后，我们又快了很多，至少有两三倍吧。</p>
+<p>刚刚介绍了我们之前已经做的很多事情，那么，我们后面还能做一些什么样的事情，能让整个TiDB跑的更快、SQL 跑的更快呢？</p>
+<p>第一个，我们还需要一个更牛逼的执行框架，执行引擎。我们现在是一个很简单的，可以认为是一堆 Map 、一个 reduce 这种模式。但这种已经足够解决所有的 OLTP 请求，以及中小规模 OLAP 请求，但大型的 OLAP 请求我们可能还是有一些风险，我们还要继续去解决这个事。未来，我们可能会像 Spark 一样，有一个 DAG 引擎，它会有一些更丰富的语义能够让你把整个 job 描述出来，分成很多 task 一起帮你来算。当然，这个东西也要考虑它的代价，因为当你的数据量不是特别大的时候，比如千万这种级别，你把这个数据去做 shuffle，它还要去落盘，还要去走网络传输，还是有一些额外的开销，我们试过，在中小规模上 spark 不如我们快。</p>
+<p>但如果是更大规模， Spark 能做的更快的。这个是我们后续要做的。当然我们有个考虑，就是 SQL 的优化和执行，还是要看你的场景，你是 TP 的还是 AP 的。比如说你 AP 的可以做你的优化，你的执行器可以做的很重，对吧？当然你数据量很大，你之前的那些代价就可以忽略不计了。比如说你要去生成一个更高效代码，这个都有开销的，但是你在 OLTP 的请求中，这些事情就不太适合。所以 TiDB 完全可以区分这两个请求，比如说通过设置一些标识或者直接打两套引擎，满足不同的需求，更灵活一些。</p>
+<p>第二，后面可能还需要把这种并行度搞成可配置，因为这个东西也是跟你的硬件架构有关，比如说你是多少核，你有多少块盘，是不是 SSD 的，然后你网络什么情况等等这些。我们需要有些可配置的东西，比如可以通过一些系统变量或者配置文件来进行制定。还有就是我们有很多 executor 都可以搞成并行的，比如说一些排序，包括 where 拿到数据之后，算那个 where 表达式，我们也可以并行来搞，诸如此类。</p>
+<p>还有就是，我们现在有一个 cost-based optimizer。它考虑 cost 的时候，还是按照传统数据库那样考虑。当然我们是考虑了网络的，但是如果下面的 executor 可以并行的去做，这个时候它的 cost 可能会变，所以我们后面需要把并行的计算考虑到这个 optimizer 的 cost 计算中去，以更好的适应整个框架。</p>
+<p>这两个工作很好搞，DAG 引擎是一个比较大的工作，它有很多坑，其实 Spark 用不好也有很多坑，比如说你有数据倾斜，你内存会爆，对吧？所以这个是很复杂的事情，可能这个事情我们也走在前沿了，但我们会长期的来做，并且肯定会做出来。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+</li>
+<li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+<li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+<li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+<li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li><a href="/solutions/intel/" onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+<li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')" target="_blank">Ask TUG</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="https://careers.pingcap.com" onclick="trackViews('footer-recruit-join', 'recruit-join_view')" target="_blank">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+<li><a href="/zh/privacy-policy/">隐私申明</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="tel" href="/" target="_blank"><svg enable-background="new 0 0 512.021 512.021" height="19" id="Layer_1" viewbox="0 0 512.021 512.021" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"></path></g></svg>
+ 商务咨询：</a></li>
+<li class="tel-li">4006790886</li>
+<li class="tel-li">010-58400041</li>
+<li><a class="twitter" href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&amp;id=4240&amp;channel=9034" target="_blank"><svg height="19" p-id="2379" t="1622000094837" version="1.1" viewbox="0 0 1069 1024" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-pc"></div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2021 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/weekly" id="lang">English</a>
+<a class="prepared-num" href="https://beian.miit.gov.cn/">京 ICP 备 16046278 号 - 2</a>
+<a class="prepared-num" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" target="_blank">
+<img src="/images/beian.png"/>
+<p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/anchor.js" type="text/javascript"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script crossorigin="anonymous" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

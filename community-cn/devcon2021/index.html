@@ -1,0 +1,1344 @@
+<!doctype html><html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async src="https://download.pingcap.com/js/ga-analytics.js"></script>
+
+
+
+
+
+<link rel="stylesheet" href="/css/community/devcon2021.css">
+
+
+<link rel="stylesheet" href="/css/tidb-planet/modal.css">
+<style type="text/css">
+    .amap-logo,
+    .amap-copyright {
+        display: none !important;
+    }
+
+    .amap-icon img {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+</style><title>
+DevCon 2021 |&nbsp;PingCAP</title><link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<meta name="description" content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。">
+<meta name="robots" content="noodp">
+<meta name="keywords" content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content=" | PingCAP">
+<meta property="og:description" content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。">
+<meta property="og:url" content="https://pingcap.com/community-cn/devcon2021/">
+<meta property="og:site_name" content="MySQL at Scale. No more manual sharding">
+<meta property="og:image" content="/images/pingcap-opengraph.jpg">
+<meta property="og:image:secure_url" content="/images/pingcap-opengraph.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:description" content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。">
+<meta name="twitter:title" content=" | PingCAP">
+<meta name="twitter:site" content="@pingcap"><meta name="twitter:image" content="https://pingcap.com/images/pingcap-opengraph.jpg"><meta name="twitter:creator" content="@pingcap">
+
+
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+
+
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+<script type="text/javascript" async src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js"></script>
+    
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+<link rel="preload" href="https://download.pingcap.com/js/jquery.min.js" as="script">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/docsearch.min.css">
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head>       <body data-lang="cn" ><div id="page-content">
+<header role="navigation" class="fixed-top">
+    <div class="container">
+        <a class="nav-brand" href="/zh"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        <div class="nav-wrapper">
+            <div class="navigation">
+                <ul>
+                    <li><a href="https://university.pingcap.com/" target="_blank" class="nav-blinking"
+                            onclick="trackViews('navbar-university', 'pingcap-university_view')">PingCAP
+                            Education</a></li>
+                    <li class="docs-type-selector " id="docsTypeSelector">
+                        
+                        <a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+                    </li>
+                    <li ><a href="/cases-cn">案例</a></li>
+                    <li class="sel" ><a href="/community-cn">社区</a></li>
+                    <li ><a href="/blog-cn">博客</a></li>
+                    <li ><a href="/about-cn">关于</a></li>
+                    <li><a href="https://asktug.com" target="_blank"
+                            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+                    <li ><a href="/download-cn">下载试用</a></li>
+                    <li><a class="link-download" href="/about-cn/#contact-us"
+                            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="global-search">
+                
+                
+                
+                <div class="search-wrapper">
+    <span class="icon-search"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#fff" viewBox="0 0 67.125 67.125"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"/><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"/></svg></span>
+    <input data-lang="cn" data-type="" type="search" id="search-input" name="q"
+        placeholder="搜索 TiDB 文档">
+</div>
+
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+
+            </div>
+        </div>
+        <div class="nav-btn nav-slider">
+            <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 459 459"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"/></svg></i>
+        </div>
+    </div>
+</header>
+
+
+
+<nav class="mobile-sidebar">
+    <div class="nav-header">
+        <div class="logo-wrap">
+        <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        </div>
+    </div>
+    <ul class="ul-base">
+        
+
+        <li ><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+        <li ><a href="/cases-cn">案例</a></li>
+        <li class="sel"><a href="/community-cn">社区</a></li>
+        <li ><a href="/blog-cn">博客</a></li>
+        <li ><a href="/about-cn">关于</a></li>
+        <li><a href="https://asktug.com" target="_blank"
+            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+        <li ><a href="/download-cn">下载试用</a></li>
+        <li><a class="link-download" href="/about-cn/#contact-us"
+            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+        <li><a href="https://university.pingcap.com/"
+            onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank"
+            class="nav-blinking">PingCAP Education</a></li>
+    </ul>
+    <div class="nav-footer">
+        <div class="contact-list-wrap">
+        <div class="flex-list">
+            <h4 class="list-title"><strong>Contact</strong></h4>
+            <ul class="social social-cn ul-base">
+            <li><a href="https://twitter.com/PingCAP" class="twitter" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="18"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg></a></li>
+            <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg></a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="18"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg></a></li>
+            <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg></a></li>
+            <li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg></a><div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+            </ul>
+        </div>
+        <div class="subscribe" id="subscribe-mobile"></div>
+        </div>
+        <div class="container">
+        <a href="/community/" class="btn-lang" id="lang">English</a>
+        </div>
+    </div>
+</nav>
+
+<div class="devcon2021">
+    <section class="devcon2021-hero">
+        <div class="container">
+            <div class="bg-el-1"></div>
+            <div class="bg-el-2"></div>
+            <div class="bg-el-3"></div>
+            <div class="bg-el-4"></div>
+            <div class="hero-pc">
+                <div class="column">
+                    <img class="logo" src="/images/community/devcon2021/pingcap-tidb-logo.png" />
+                    <img class="slogan" src="/images/community/devcon2021/slogan.svg" />
+                    <a href="http://www.huodongxing.com/event/3601574266800?qd=website" target="_blank">
+                        <div class="button signup-btn">立即报名</div>
+                    </a>
+                    <p>2021.7.23 - 24 | 北京望京凯悦酒店</p>
+                </div>
+                <div class="column">
+                    <img src="/images/community/devcon2021/hero-bg.svg" />
+                </div>
+            </div>
+            <div class="hero-mobile">
+                <img src="/images/community/devcon2021/hero-bg.svg" />
+                <img class="slogan" src="/images/community/devcon2021/slogan.svg" />
+                <a href="http://www.huodongxing.com/event/3601574266800?qd=website" target="_blank">
+                    <div class="button signup-btn">立即报名</div>
+                </a>
+                <p>2021.7.23 - 24 | 北京望京凯悦酒店</p>
+                <img class="logo" src="/images/community/devcon2021/pingcap-tidb-logo.png" />
+            </div>
+        </div>
+    </section>
+
+    <section class="devcon2021-navbar navbar-sticky">
+        <div class="container">
+            <ul class="navbar">
+                <li class="navbar-item">
+                    <a href="#agenda">会议议程</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#speaker">嘉宾介绍</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#sponsors">赞助合作</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#notice">参会须知</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="devcon2021-intro has-grey-bg">
+        <div class="container">
+            <div class="intro">
+                <img class="img1" src="/images/community/devcon2021/bg-el-3.svg" />
+                <p>“PingCAP DevCon” 是由 PingCAP
+                    举办的年度顶级数据技术盛会，大会已连续举办三年，成为观测开源产业、数据库前瞻趋势的风向标。本次大会旨在探讨前沿科技与数字化趋势的融合，解读行业领袖观点，分享技术大咖实战经验，展示用户场景的多元化创新，并展现多元化数据技术生态。
+                </p>
+                <img class="img2" src="/images/community/devcon2021/bg-el-1.svg" />
+            </div>
+        </div>
+    </section>
+
+    <section class="devcon2021-schedule">
+        <div class="container">
+            <h2 id="agenda" class="section-title">会议议程</h2>
+            <div class="dates">
+                <div class="date date1 is-active">大会日 - 2021. 07. 24</div>
+                <div class="date date2">开发者嘉年华 - 2021. 07. 23</div>
+            </div>
+            <div class="venues">
+                <div class="day1"><div class="venue-detail">
+                        <div class="time">9:00 - 12:00</div>
+                        <div class="venue-list"><a class="venue" href="#%e5%bc%80%e6%94%be-x-%e8%bf%9e%e6%8e%a5-x-%e9%a2%84%e8%a7%81-%e4%b8%bb%e9%a2%98%e6%bc%94%e8%ae%b2">
+                                <img src="/images/community/devcon2021/day1-icon1.svg" alt="开放 x 连接 x 预见 主题演讲">
+                                <p>开放 x 连接 x 预见 主题演讲</p>
+                            </a></div>
+                    </div><div class="venue-detail">
+                        <div class="time">13:00 - 18:20</div>
+                        <div class="venue-list"><a class="venue" href="#%e4%b8%9a%e5%8a%a1%e6%95%8f%e6%8d%b7-%e5%88%86%e8%ae%ba%e5%9d%9b">
+                                <img src="/images/community/devcon2021/day1-icon2.svg" alt="业务敏捷 分论坛">
+                                <p>业务敏捷 分论坛</p>
+                            </a><a class="venue" href="#%e5%ae%9e%e6%97%b6%e6%b4%9e%e5%af%9f-%e5%88%86%e8%ae%ba%e5%9d%9b">
+                                <img src="/images/community/devcon2021/day1-icon3.svg" alt="实时洞察 分论坛">
+                                <p>实时洞察 分论坛</p>
+                            </a><a class="venue" href="#%e5%88%9b%e6%96%b0%e7%94%9f%e6%80%81-%e5%88%86%e8%ae%ba%e5%9d%9b">
+                                <img src="/images/community/devcon2021/day1-icon4.svg" alt="创新生态 分论坛">
+                                <p>创新生态 分论坛</p>
+                            </a></div>
+                    </div></div>
+                <div class="day2 hide-schedule">
+                    <p>大会前一天我们将举办为期半天的开发者嘉年华，活动将包括 TiDB 调优竞赛、Coding 动手实验、PingCAP Education
+                        课程体验等丰富活动，现场更有吐槽大会与精美晚宴，大家千万不要错过！</p>
+                </div>
+            </div>
+
+
+
+<div class="schedule day1"
+    id="开放-x-连接-x-预见-主题演讲">
+    
+        <div class="forum">
+            <div class="forum-title">
+                <div class="venue-title">开放 x 连接 x 预见 主题演讲</div><img src="/images/community/devcon2021/day1-icon1.svg" />
+            </div>
+            <div class="venue-desc">本次大会主论坛 PingCAP CEO 刘奇与 CTO 黄东旭将和众多外部嘉宾一起，分享他们对未来数据库产业发展的洞见，阐述开源生态的最新进展；同时，我们还将邀请开源领域的业内大咖、资深媒体人、知名投资人，共同探讨开源生态的多元思考。</div>
+        </div>
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="">
+            <td>9:00-10:30</td>
+            <td>开放 x 连接 x 预见</td><td>刘奇</td><td></td></tr><tr class="">
+            <td>10:30-11:10</td>
+            <td>The Future of Database</td><td>黄东旭</td><td></td></tr><tr class="">
+            <td>11:10-12:00</td>
+            <td>圆桌讨论：开源生态的创新价值</td><td>圆桌主持人：黄东旭</td><td></td></tr></table>
+    
+</div><div class="schedule day1"
+    id="业务敏捷-分论坛">
+    
+        <div class="forum">
+            <div class="forum-title">
+                <div class="venue-title">业务敏捷 分论坛</div><img src="/images/community/devcon2021/day1-icon2.svg" />
+            </div>
+            <div class="venue-desc">本场分论坛 TiDB 将邀请大量国际用户和中国用户，分享他们如何借助 TiDB 的规模化 OLTP 能力，应对随时触发的业务高峰，保证业务敏捷性；同时，本次论坛将邀请云原生应用的前瞻客户及合作伙伴分享实战经验，共话云原生技术的未来。</div>
+        </div>
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="">
+            <td>13:30-13:45</td>
+            <td>TiDB 在小米的落地及云原生探索</td><td>刘子东 | 小米</td><td></td></tr><tr class="">
+            <td>13:45-14:00</td>
+            <td>微众银行核心批量场景的 TiDB 实践</td><td>胡盼盼 | 微众银行</td><td></td></tr><tr class="">
+            <td>14:00-14:15</td>
+            <td>TiDB at Databricks</td><td>Min Zhou | Databricks</td><td></td></tr><tr class="">
+            <td>14:15-14:30</td>
+            <td>B 站的 TiDB 服务治理</td><td>王志广 | bilibili</td><td></td></tr><tr class="">
+            <td>14:30-14:45</td>
+            <td>光大银行混沌工程实践</td><td>王莉莉 | 中国光大银行</td><td></td></tr><tr class="">
+            <td>14:45-15:00</td>
+            <td>Chaos Engineering with Chaos Mesh® and Linkerd</td><td>Sergio Méndez | University of San Carlos of Guatemala</td><td></td></tr><tr class="">
+            <td>15:00-15:15</td>
+            <td>分布式数据库在保险核心场景的实践</td><td>盛玉 | 中国人寿</td><td></td></tr><tr class="">
+            <td>15:15-15:45</td>
+            <td>从 TiDB 5.0 聊聊 TiDB 的产品演化之路</td><td>唐刘 | PingCAP</td><td></td></tr><tr class="">
+            <td>15:45-16:05</td>
+            <td>直挂“云”帆济沧海 —— TiDB On GCP 助力电商出海</td><td>唐辉 | Google Cloud</td><td></td></tr><tr class="">
+            <td>16:05-16:20</td>
+            <td>从混沌到秩序：Chaos Mesh® 生态构建之路</td><td>殷成文 | PingCAP</td><td></td></tr><tr class="">
+            <td>16:20-16:35</td>
+            <td>The Exploration of Distributed SQL at Pinterest</td><td>Lianghong Xu | Pinterest</td><td></td></tr><tr class="">
+            <td>16:35-16:50</td>
+            <td>TiDB Cloud 云原生安全架构实践</td><td>王鹏飞 | PingCAP</td><td></td></tr><tr class="">
+            <td>16:50-17:05</td>
+            <td>TiDB 在 Classin 的应用</td><td>韦彪 | ClassIn</td><td></td></tr><tr class="">
+            <td>17:05-17:20</td>
+            <td>涂鸦智能选型 TiKV 的心路历程</td><td>刘筠松 | 涂鸦</td><td></td></tr><tr class="">
+            <td>17:20-17:35</td>
+            <td>TiDB on KubeSphere</td><td>曾常习 | 青云科技</td><td></td></tr></table>
+    
+</div><div class="schedule day1"
+    id="实时洞察-分论坛">
+    
+        <div class="forum">
+            <div class="forum-title">
+                <div class="venue-title">实时洞察 分论坛</div><img src="/images/community/devcon2021/day1-icon3.svg" />
+            </div>
+            <div class="venue-desc">本场分论坛为 TiDB HTAP 舞台的一次集中展示，将有超过 10 个用户和合作伙伴分享他们在 HTAP 的实战经验和创新思考，是业界少有的 HTAP 实战观察窗。</div>
+        </div>
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="">
+            <td>13:30-13:45</td>
+            <td>TiDB HTAP，我们现在走到了哪里</td><td>马晓宇 | PingCAP</td><td></td></tr><tr class="">
+            <td>13:45-14:00</td>
+            <td>TiDB 在中通的落地</td><td>朱友志 | 中通快递</td><td></td></tr><tr class="">
+            <td>14:00-14:15</td>
+            <td>TiDB 在理想汽车的应用实践</td><td>张攀 | 理想汽车</td><td></td></tr><tr class="">
+            <td>14:15-14:30</td>
+            <td>TiDB 在爱奇艺实时分析场景的应用实践</td><td>路希 | 爱奇艺</td><td></td></tr><tr class="">
+            <td>14:30-14:45</td>
+            <td>Building a Data Platform for Health Analytics at MOHT Singapore</td><td>Julian Kuiyu CHANG | 新加坡卫生部</td><td></td></tr><tr class="">
+            <td>14:45-15:05</td>
+            <td>云上数据分析</td><td>费良宏 | AWS</td><td></td></tr><tr class="">
+            <td>15:05-15:20</td>
+            <td>Power the Future with TiDB on Kubernetes</td><td>宫梦南 | Ninja Van</td><td></td></tr><tr class="">
+            <td>15:20-15:35</td>
+            <td>浙商银行数字化转型实践</td><td>富浩 | 浙商银行</td><td></td></tr><tr class="">
+            <td>15:35-15:50</td>
+            <td>TiDB 在汽车之家的应用实践</td><td>陶会祥 | 汽车之家</td><td></td></tr><tr class="">
+            <td>15:50-16:05</td>
+            <td>TiDB 在茄子科技的应用实践及演进</td><td>闫林林 | 茄子快传</td><td></td></tr><tr class="">
+            <td>16:05-16:20</td>
+            <td>IGG 游戏数据分析</td><td>柯君炎 | IGG</td><td></td></tr><tr class="">
+            <td>16:20-16:35</td>
+            <td>TiDB 在网易游戏实践之路</td><td>田维繁 | 网易互娱</td><td></td></tr><tr class="">
+            <td>16:35-16:50</td>
+            <td>TiDB 在智慧芽在线分析场景的应用探索</td><td>金路 | 智慧芽</td><td></td></tr><tr class="">
+            <td>16:50-17:05</td>
+            <td>TiDB HTAP 助力 360 业务升级</td><td>代晓磊 | 360</td><td></td></tr><tr class="">
+            <td>17:05-17:20</td>
+            <td>58 同城 HTAP 之路</td><td>刘春雷 | 58 同城</td><td></td></tr></table>
+    
+</div><div class="schedule day1"
+    id="创新生态-分论坛">
+    
+        <div class="forum">
+            <div class="forum-title">
+                <div class="venue-title">创新生态 分论坛</div><img src="/images/community/devcon2021/day1-icon4.svg" />
+            </div>
+            <div class="venue-desc">本场分论坛将邀请两类 TiDB 的合作伙伴，一类为 “Built on TiDB” 的顶级 ISV 和超级用户，他们将分享 TiDB 在金融、电信、物流、互联网等行业解决方案中如何提供创新的性能，另外一类为 “TiDB&#43;Anything” 的第三方技术厂商，他们将分享 TiDB 分布式数据库与大数据技术栈的融合数据处理的跨界方案，尤其是在异构的数据环境里数据集成、大数据融合处理、分布式数据监控等热门话题。</div>
+        </div>
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="">
+            <td>13:30-13:40</td>
+            <td>共建跨界的数据技术生态</td><td>范若晗 | PingCAP</td><td></td></tr><tr class="">
+            <td>13:40-14:00</td>
+            <td>TiDB &amp; Flink 实时数仓白皮书联合发布</td><td>杨克特 | 阿里云</td><td></td></tr><tr class="">
+            <td>14:00-14:15</td>
+            <td>从 MySQL 到 Cloud TiDB——京东物流在云数据库上的选择和实战</td><td>杨牧 | 京东云</td><td></td></tr><tr class="">
+            <td>14:15-14:30</td>
+            <td>TiDB for PostgreSQL</td><td>沈旸 | 神州数码</td><td></td></tr><tr class="">
+            <td>14:30-14:50</td>
+            <td>开源构筑云原生基础架构</td><td>刘秉伟 | Intel</td><td></td></tr><tr class="">
+            <td>14:50-15:05</td>
+            <td>从 VC 视角看中国企业服务公司的创新及未来前景</td><td>黄明明 | 明势资本</td><td></td></tr><tr class="">
+            <td>15:05-15:20</td>
+            <td>敏捷开源 自主可控——金融行业实践</td><td>沈波 | 宇信科技</td><td></td></tr><tr class="">
+            <td>15:20-15:35</td>
+            <td>TiDB &amp; Zetta 在知乎的应用</td><td>白瑜庆 | 知乎</td><td></td></tr><tr class="">
+            <td>15:35-16:05</td>
+            <td>圆桌讨论：TiDB 社区共创</td><td>主持人:孙晓光 | 知乎</td><td></td></tr><tr class="">
+            <td>16:05-16:20</td>
+            <td>YiDB 的“前世今生”</td><td>袁武 | 天翼数智科技</td><td></td></tr><tr class="">
+            <td>16:20-16:35</td>
+            <td>伴鱼数据库平台化建设的思考与实践：从 SQL 审核到 Weir 中间件</td><td>刘江 | 伴鱼</td><td></td></tr><tr class="">
+            <td>16:35-16:50</td>
+            <td>多库选型和管理的新挑战和应对</td><td>李恒 | 爱可生</td><td></td></tr><tr class="">
+            <td>16:50-17:05</td>
+            <td>Stream is the new file —— 云原生流存储 Pravega</td><td>滕昱 | 戴尔科技集团</td><td></td></tr><tr class="">
+            <td>17:05-17:20</td>
+            <td>TiDB x Flink 原生实时计算</td><td>孙晓光 | 知乎</td><td></td></tr><tr class="">
+            <td>17:20-17:35</td>
+            <td>移动云如何基于 TiDB 实现 ServerlessDB 服务</td><td>薛港 | 中国移动</td><td></td></tr><tr class="">
+            <td>17:35-17:50</td>
+            <td>Zabbix 5.4 新功能及 Zabbix 对 TiDB 开箱即用的监控模板说明</td><td>米宏 | Zabbix</td><td></td></tr><tr class="">
+            <td>17:50-18:05</td>
+            <td>How does Chaos Mesh® make a more resilience StarPay</td><td>苗立尧 | NetStars 株式会社</td><td></td></tr></table>
+    
+</div>
+
+
+
+<div class="schedule hide-schedule day2"
+    id="">
+    
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>日程</td>
+            <td></td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>15:30-17:30</td>
+            <td>TiDB 调优竞赛</td><td></td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">活动介绍：TiDB 调优大赛为竞赛类活动，选手在规定的时间内对同一应用场景下的 TiDB 进行性能调优， 按照性能提升的百分比进行排名。</li><li class="pagraphList">面向人群：熟悉 TiDB，对 TiDB 的性能优化点有一定了解的社区用户、Contributor 等。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td></td>
+            <td>Coding 动手实验</td><td></td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">活动介绍：PingCAP CTO 黄东旭将手把手教你如何基于 TiDB，从前端到后端写一个有趣的小应用。</li><li class="pagraphList">面向人群：对 Golang / React.js / TiDB 有一定了解的小伙伴们。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td></td>
+            <td>PingCAP Education 课程体验</td><td></td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">活动介绍：TiDB 5.0 课程体验活动为专业培训和考试体验课。参加学员可以在 2 小时内通过学习《TiDB 5.0 快速起步》这门课程和参与现场 TiDB 5.0 知识竞赛考试，获得 TiDB 课程体验官 （TiExploer 徽章和奖品）和 PingCAP Education 专属学习课程大礼包。</li><li class="pagraphList">面向人群：无门槛，对 TiDB 感兴趣的小伙伴们均可参与。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>18:00-21:00</td>
+            <td>吐槽大会 &amp; 晚宴</td><td></td><td></td></tr></table>
+    
+</div></div>
+    </section>
+
+    <section class="devcon2021-speakers">
+        <div class="container">
+            <h2 id="speaker" class="section-title">嘉宾介绍</h2>
+            <div class="tutor-list"><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liuqi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘奇</div>
+                    <div class="title">PingCAP | 创始人兼 CEO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/huangdongxu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">黄东旭</div>
+                    <div class="title">PingCAP | 联合创始人兼 CTO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/zhuwei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">朱巍</div>
+                    <div class="title">PingCAP | 中国区商业化总经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/shenli.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">申砾</div>
+                    <div class="title">PingCAP | 国际业务总经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/fanruohan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">范若晗</div>
+                    <div class="title">PingCAP | SVP</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/hebaohong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">何宝宏</div>
+                    <div class="title">中国信息通信研究院 | 云计算与大数据研究所所长</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liuxiangming.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘湘明</div>
+                    <div class="title">钛媒体 | 联合创始人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/chris.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Chris Aniszczyk</div>
+                    <div class="title">CNCF | CTO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/shenyang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">沈旸</div>
+                    <div class="title">神州数码集团股份有限公司 | CIO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/chenjiepeng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈杰鹏</div>
+                    <div class="title">百胜集团 | 架构总监</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/wangyang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">汪洋</div>
+                    <div class="title">平安科技 | 数据库团队总工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/chenyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈昱</div>
+                    <div class="title">云启资本 | 合伙人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/huangmingming.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">黄明明</div>
+                    <div class="title">明势资本 | 创始合伙人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/tangliu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">唐刘</div>
+                    <div class="title">PingCAP | 首席架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/maxiaoyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">马晓宇</div>
+                    <div class="title">PingCAP | HTAP 产品部负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/wangpengfei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王鹏飞</div>
+                    <div class="title">PingCAP | 资深专家</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/yinchengwen.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">殷成文</div>
+                    <div class="title">PingCAP | 混沌工程负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/baiyuqing.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">白瑜庆</div>
+                    <div class="title">知乎 | 基础研发在线架构组负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/cengchangxi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">曾常习</div>
+                    <div class="title">青云 | 高级技术顾问</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/daixiaolei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">代晓磊</div>
+                    <div class="title">360 | 高级 DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/feilianghong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">费良宏</div>
+                    <div class="title">AWS | 首席云计算技术顾问</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/fuhao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">富浩</div>
+                    <div class="title">浙商银行总行 | 金融科技部研究规划中心总经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/gongmengnan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">宫梦南</div>
+                    <div class="title">Ninja Van | Senior Software Engineer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/hupanpan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">胡盼盼</div>
+                    <div class="title">微众银行 | 数据库平台负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/jinlu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">金路</div>
+                    <div class="title">智慧芽数仓 | 团队负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/julian.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Dr. Julian Kuiyu CHANG</div>
+                    <div class="title">MOHT | Principal Data Engineer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/kejunyan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">柯君炎</div>
+                    <div class="title">IGG | 高级 DBA 主管</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liubinwei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘秉伟</div>
+                    <div class="title">Intel | 资深技术总监</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liheng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李恒</div>
+                    <div class="title">爱可生 | CEO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liujiang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘江</div>
+                    <div class="title">伴鱼 | DBA 组负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liuchunlei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘春雷</div>
+                    <div class="title">58 同城 | TiDB 及 DorisDB 项目负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liuyunsong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘筠松</div>
+                    <div class="title">涂鸦 | DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/xulianghong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Lianghong Xu</div>
+                    <div class="title">Pinterest |  Engineering Manager</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/liuzidong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘子东</div>
+                    <div class="title">小米 | 数据库工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/luxi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">路希</div>
+                    <div class="title">爱奇艺 | 数据库高级经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/miaoliyao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">苗立尧</div>
+                    <div class="title">Netstars株式会社 | DevOps Lead</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/mihong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">米宏</div>
+                    <div class="title">Zabbix | 大中华区培训师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/reynoldxin.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Reynold Xin</div>
+                    <div class="title">Databricks | Co-founder &amp; Chief Architect</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/sergio.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Sergio Méndez</div>
+                    <div class="title">San Carlos University of Guatemala | System Engineer and Professor of Operating Systems</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/shaunchong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Shaun Chong</div>
+                    <div class="title">Ninja Van | Co-Founder &amp; CTO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/shenbo.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">沈波</div>
+                    <div class="title">宇信科技 | 助理总裁、研发中心总经理、战略合作部总经理、宇信技术专家委员会主任委员</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/shengyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">盛玉</div>
+                    <div class="title">中国人寿财产保险有限公司 | 数据库及中间件团队负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/sunxiaoguang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">孙晓光</div>
+                    <div class="title">知乎 | 知乎基础研发架构师，TiDB 社区 TOC 主席, TiKV Maintainer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/tanghui.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">唐辉</div>
+                    <div class="title">Google Cloud | 架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/taohuixiang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陶会祥</div>
+                    <div class="title">汽车之家 | 数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/tengyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">滕昱</div>
+                    <div class="title">戴尔科技集团 | 软件开发总监</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/wanglili.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王莉莉</div>
+                    <div class="title">中国光大银行 | 业务经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/wangweifan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王维繁</div>
+                    <div class="title">网易游戏 | 资深数据库工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/wangzhiguang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王志广</div>
+                    <div class="title">Bilibili | Bilibili DBA，TUG 内容组 Co-leader</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/weibiao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">韦彪</div>
+                    <div class="title">ClassIn | 数据库组负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/xuegang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">薛港</div>
+                    <div class="title">中国移动 | 高级软件研发工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/yangkete.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">杨克特</div>
+                    <div class="title">阿里云 | 阿里云智能资深技术专家，Apache Flink PMC</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/yangmu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">杨牧</div>
+                    <div class="title">京东云 | 资深产品经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/yanlinlin.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">闫林林</div>
+                    <div class="title">茄子科技 | 存储组件负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/yuanwu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">袁武</div>
+                    <div class="title">天翼数智科技（北京）有限公司 | 总经理助理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/zhangpan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">张攀</div>
+                    <div class="title">理想汽车 | 资深数据库架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/zhoumin.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Min Zhou</div>
+                    <div class="title">Databricks | Staff Engineer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/zhuyouzhi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">朱友志</div>
+                    <div class="title">中通快递 | 数据智能部基础架构负责人</div>
+                </div></div>
+        </div>
+    </section>
+
+    <section class="devcon2021-sponsors">
+        <div class="container">
+            <h2 id="sponsors" class="section-title">赞助合作</h2>
+            <h3>铂金赞助</h3>
+            <div class="medias"><div class="media">
+                    <a href="http://www.digitalchina.com/" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-digitalchina.png" /> </a>
+                    <div class="desc">
+                        <p>神州数码集团（股票代码 000034.SZ）,是国内领先的云及数字化服务商之一。深耕中国信息化二十年，神州数码始终坚持以卓越技术及服务推动产业升级。数字时代，神州数码以自主创新和生态体系为依托，着力打造全栈云服务能力，以及全线自有品牌产品及解决方案能力，为处在不同数字化转型阶段的政府、金融、零售、教育、制造、汽车、文旅、医疗等行业客户提供全生命周期的产品、方案和服务，持续赋能产业升级和数字经济发展。</p>
+                        <a href="http://www.digitalchina.com/" target="_blank">http://www.digitalchina.com/</a>
+                    </div>
+                </div></div>
+            <h3>黄金赞助</h3>
+            <div class="medias"><div class="media">
+                    <a href="https://www.actionsky.com/" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-action.png" />
+                    </a>
+                    <div class="desc">
+                        <p>爱可生是领先的开源数据库整体解决方案提供商，经过 10 余年在金融、新经济和工业领域等核心业务数据库管理的技术创新，公司已有 60 余项云树系列软件产品著作权和核心发明专利，提供多数据库管理平台（支持 TiDB、MySQL、MongoDB、Redis 等数据库）、分布式数据库、数据库容器云平台、跨云容灾等解决方案，以及数据库一站式服务。公司客户包括 400 多 家大型企业，其中含工商银行、交通银行、中国人寿、中国太保、国家电网、上汽集团、中国移动、华为等世界 500 强企业。</p>
+                        <a href="https://www.actionsky.com/" target="_blank">https://www.actionsky.com/</a>
+                    </div>
+                </div><div class="media">
+                    <a href="https://www.future-cap.com" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-future-capital.png" />
+                    </a>
+                    <div class="desc">
+                        <p>明势资本是极少数自创立以来就专注于高科技领域投资的风险投资机构，由黄明明先生于 2014 年创立。明势资本愿意第一个相信创业者梦想，并成为科技创业者长期坚定的陪跑者。明势资本自创立坚持至今，已在企业服务、AI 大数据、智能物流供应链、智能出行、智能制造、智能硬件和家居等领域投资了诸如理想汽车（NASDAQ:LI）、小牛电动(NASDAQ:NIU)、赤子城(SEHK:09911)、PingCAP、神策数据、易快报、鸭嘴兽、必示科技、云鲸机器人、酷家乐、石墨文档、云麦、全应科技等 160&#43; 家创新企业。</p>
+                        <a href="https://www.future-cap.com" target="_blank">https://www.future-cap.com</a>
+                    </div>
+                </div><div class="media">
+                    <a href="http://www.yunqi.vc" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-yunqi.png" />
+                    </a>
+                    <div class="desc">
+                        <p>云启资本成立于 2014 年，一直坚持专注于技术产业化和产业数字化系统投资布局，投资领域覆盖人工智能大数据、企业 SaaS 及服务、B2B 供应链平台、智能网联、先进制造等行业，投资组合包括 360 数科（NASDAQ: QFIN）、英科医疗（SZ: 300677）、一起写（被快手全资收购）、酷家乐、百布、PingCAP、冰鉴科技、擎朗智能、XTransfer、Zilliz、Jina、环世物流、找钢网、智齿科技、晓羊教育、德风科技、小胖熊、元戎启行、新石器、e换电等 100 多家优秀创业公司。</p>
+                        <a href="http://www.yunqi.vc" target="_blank">http://www.yunqi.vc</a>
+                    </div>
+                </div><div class="media">
+                    <a href="https://gcp.infoq.cn/" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-gcp.png" />
+                    </a>
+                    <div class="desc">
+                        <p>Google Cloud 在提供安全、开放、智能的变革性企业级云平台方面， 是全球公认的领导者。我们的技术依托 Google 的专用网络构建而成，是近 20 年来在安全、网络架构、协作、人工智能和开源软件方面不懈创新的产物。我们在 Google Cloud Platform 和 Google Workspace 中提供了一套设计简洁的工具和无可比拟的技术，帮助客户有效地融合人力、洞见和创意。来自 150 多个国家/地区的客户依靠 Google Cloud 来实现计算环境现代化，以满足当今数字世界的需求。</p>
+                        <a href="https://gcp.infoq.cn/" target="_blank">https://gcp.infoq.cn/</a>
+                    </div>
+                </div><div class="media">
+                    <a href="http://aws.amazon.com" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-aws.png" />
+                    </a>
+                    <div class="desc">
+                        <p>15 年多以来，亚马逊云科技（Amazon Web Services）一直是世界上以服务丰富、应用广泛而著称的云平台。亚马逊云科技一直不断扩展其服务组合以支持几乎云上任意工作负载，目前提供了超过 200 项全功能的服务，涵盖计算、存储、数据库、联网、分析、机器人、机器学习与人工智能、物联网、移动、安全、混合云、虚拟现实与增强现实、媒体、以及应用开发、部署与管理等方面，遍及 25 个地理区域的 81 个可用区（AZ），并已公布计划在澳大利亚、印度、印度尼西亚、以色列、西班牙、瑞士和阿拉伯联合酋长国新建 7 个区域、21 个可用区。全球数百万客户，包括发展迅速的初创公司、大型企业和领先的政府机构都信赖亚马逊云科技，通过亚马逊云科技的服务强化其基础设施，提高敏捷性，降低成本。</p>
+                        <a href="http://aws.amazon.com" target="_blank">http://aws.amazon.com</a>
+                    </div>
+                </div><div class="media">
+                    <a href="http://www.intel.com.cn" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-intel.png" />
+                    </a>
+                    <div class="desc">
+                        <p>英特尔是半导体行业和计算创新领域的全球领先厂商，创造改变世界的科技，造福地球上每一个人。英特尔创始于 1968 年，拥有 50 余年推动技术创新和耕耘产业生态的成功经验。如今，英特尔正转型为一家以数据为中心的公司，致力于做可信赖的性能领导者，释放数据无限潜能。英特尔与合作伙伴一起，推动人工智能、5G、智能边缘等转折性技术的创新和应用突破，驱动智能互联世界，帮助解决人类面临的重大挑战。英特尔扎根中国 36 年，与中国产业伙伴的合作久经考验、风雨同舟。作为在中国扎根最久的跨国公司之一，英特尔在中国的战略从未变过，始终如一，就是“做正确的事”，就是与中国同行远行。</p>
+                        <a href="http://www.intel.com.cn" target="_blank">http://www.intel.com.cn</a>
+                    </div>
+                </div></div>
+            <h3>白银赞助</h3>
+            <div class="medias"><div class="media">
+                    <a href="https://www.suse.com" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-suse.png" />
+                    </a>
+                    <div class="desc">
+                        <p>SUSE 是全球范围内创新且可靠的企业级开源解决方案领导者。SUSE 专注于企业级 Linux、Kubernetes 管理平台(Rancher)和边缘解决方案，通过与合作伙伴和社区合作，帮助客户随时随地在任意场景进行创新——无论是在数据中心、云端还是边缘环境。SUSE 让“开源”重新“开放”，使客户能够灵活地应对当今的创新挑战，并能够自由地在未来发展其 IT 战略和解决方案。</p>
+                        <a href="https://www.suse.com" target="_blank">https://www.suse.com</a>
+                    </div>
+                </div><div class="media">
+                    <a href="https://www.showmebug.com/" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-showmebug.png" />
+                    </a>
+                    <div class="desc">
+                        <p>ShowMeBug 是⾄简天成公司旗下一款数字化驱动的可记录、可分析、可复盘的技术评估和在线 Coding 面试平台，成立于 2019 年 6 ⽉，利⽤创造性的实时互动代码协同技术和 WebRTC ⾳视频技术，还原真实的 IDE 编程环境，让用户体验硅谷流行的像真正工作中一样的代码面试。通过在线笔试和在线面试两大场景，让企业规模化、自动化、智能化的进行技术招聘，助力企业快速精准招聘技术人才，目前注册⽤户超 10 倍高速增长，已覆盖 6000&#43; 大型和高成长型企业 。</p>
+                        <a href="https://www.showmebug.com/" target="_blank">https://www.showmebug.com/</a>
+                    </div>
+                </div><div class="media">
+                    <a href="https://www.ggvchina.com" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-ggv.png" />
+                    </a>
+                    <div class="desc">
+                        <p>GGV 纪源资本是一家专注于全球企业的风险投资公司，管理共 17 支基金，累计约 92 亿美元的资产，在硅谷、旧金山、上海、北京、新加坡设有办公室。GGV 纪源资本关注前沿科技、互联网服务、企业服务和云、消费及新零售等领域的创业公司，投资过包括阿里巴巴、滴滴出行、去哪儿、Airbnb、满帮集团、今日头条等 420 余家公司。GGV 纪源资本对全球市场长期专注，深入本地化耕耘，交融贯通，积累了独特的资源，鼎力支持创业者不断开拓创新。</p>
+                        <a href="https://www.ggvchina.com" target="_blank">https://www.ggvchina.com</a>
+                    </div>
+                </div><div class="media">
+                    <a href="https://www.dellemc-solution.com" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                            data-original="/images/community/devcon2021/logo-dell.png" />
+                    </a>
+                    <div class="desc">
+                        <p>戴尔科技集团致力于帮助政府、企业和个人构建数字化未来，改进他们的工作、生活和娱乐方式。集团为客户提供面向数据时代业界全面、创新的技术及服务组合。戴尔于 1998 年进入中国。目前，戴尔科技集团在大中华区拥有从设计研发、生产制造、供应链管理、销售到服务的全面体系，支持中国及全球业务的发展。</p>
+                        <a href="https://www.dellemc-solution.com" target="_blank">https://www.dellemc-solution.com</a>
+                    </div>
+                </div><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/logo-amd.png" /></div>
+            <h3>独家报名渠道</h3>
+            <div class="medias"><a href="https://www.huodongxing.com/" target="_blank"><img class="lazy" src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-huodongxing.png" />
+                </a></div>
+        </div>
+    </section>
+
+    <section class="devcon2021-sponsors">
+        <div class="container">
+            <h2 id="sponsors" class="section-title">支持媒体及社区</h2>
+            <div class="medias"><a href="https://www.infoq.cn/" target="_blank"><img class="lazy " src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-infoq.png" /></a><a href="https://segmentfault.com/" target="_blank"><img class="lazy " src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-segmentfault.png" /></a><a href="https://www.oschina.net/" target="_blank"><img class="lazy " src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-oschina.png" /></a><a href="https://juejin.cn/" target="_blank"><img class="lazy " src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-juejin.png" /></a><a href="https://www.zabbix.com/cn" target="_blank"><img class="lazy " src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-grandage.png" /></a><a href="https://www.cncf.io" target="_blank"><img class="lazy big-img" src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-cncf.svg" /></a><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2021/logo-datafun.png" /><a href="https://www.modb.pro/" target="_blank"><img class="lazy " src="/images/svgs/loader-spinner.svg"
+                        data-original="/images/community/devcon2021/logo-motianlun.png" /></a></div>
+        </div>
+
+        <div class="content">
+            <p>更多合作伙伴敬请期待</p>
+            <p>如有意向赞助，欢迎联系 <a href="mailto:devcon2021@pingcap.com">devcon2021@pingcap.com</a></p>
+        </div>
+    </section>
+
+    <section class="devcon2021-notice">
+        <div class="container">
+            <h2 id="notice" class="section-title">参会须知</h2>
+            <div class="notice-navbar">
+                <div class="notice-tab is-active">
+                    会场分布
+                </div>
+                <div class="notice-tab">
+                    交通路线
+                </div>
+                <div class="notice-tab">
+                    住宿推荐
+                </div>
+            </div>
+            <div class="content-list">
+                <div id="content-address" class="tabContent is-active">
+                    <div class="image">
+                        <img src="/images/community/devcon2021/map.svg" />
+                        <span class="j-open-map-modal">点击查看大图</span>
+                        <div class="modal-overlay j-map-overlay" style="display: none;">
+                            <img class="modal" src="/images/community/devcon2021/map.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div id="content-traffic" class="tabContent">
+                    <div class="image">
+                        <img src="/images/community/devcon2021/hotel-1.png" />
+                        <span class="j-open-hotel-modal">点击查看大图</span>
+                        <div class="modal-overlay j-hotel-overlay" style="display: none;">
+                            <img class="modal" src="/images/community/devcon2021/hotel-1.png" />
+                        </div>
+                    </div>
+                    <p>地址：北京，广顺南大街 8 号院 2 号楼</p>
+                    <p>总机：+86-10-86301234 （联系电话）</p>
+                    <p>
+                        作为凯悦酒店集团在京的一家核心品牌酒店，北京望京凯悦酒店坐落于京城富活力的望京中心商务区，北临望京中央公园，南接自然花园，将望京中心区域连接成一片“可呼吸的都市绿洲”，现代时尚简约设计与温馨舒适住宿体验在此完美融合，与望京动感迷人的城市风景相得益彰。
+                    </p>
+
+                    <div class="divider">前往路线</div>
+                    <p>一、自驾路线：</p>
+                    <p>导航屏会显示“北京望京凯悦酒店”</p>
+                    <p>二、首都机场到达：</p>
+                    <p>地铁：2 号航站楼乘首都机场线，到三元桥站 B 东北口出，步行 267 米到达三元桥公交站乘坐 404 路公交车（来广营西桥东方向），阜通东大街下车。步行 750 米至北京望京凯悦酒店。</p>
+                    <p>打车：从首都机场直接打车至北京望京凯悦酒店，30 分钟车程，费用约 45 元。</p>
+                    <p>三、大兴机场到达：</p>
+                    <p>地铁：北京大兴机场线，在草桥地铁站换成 10 号线外环（角门西方向），十里河地铁站换成 14 号线（善各庄方向），阜通地铁站 C 东南口出，步行 694 米至北京望京凯悦酒店。</p>
+                    <p>打车：从大兴机场直接打车至北京望京凯悦酒店，1 小时 15 分钟车程，费用约 190 元。</p>
+                    <p>四、北京南站：</p>
+                    <p>地铁：14 号线东段（善各庄方向）至阜通地铁站 C 东南口出，步行 694 米至北京望京凯悦酒店。</p>
+                    <p>打车：北京南站打车至北京望京凯悦酒店，45 分钟车程，费用约 70 元。</p>
+                    <p>五、北京西站：</p>
+                    <p>地铁：7 号线（花庄方向）至九龙山地铁站，换乘地铁 14 号线（善各庄方向）至阜通地铁站 C 东南口出，步行 694 米至北京望京凯悦酒店。</p>
+                    <p>打车：北京西站至北京望京凯悦酒店，40 分钟车程，费用约 60 元。</p>
+                    <p>六、北京站：</p>
+                    <p>地铁：2 号线（建国门方向）至朝阳门地铁站，换乘地铁 6 号线（潞城方向）至金台路地铁站，换乘地铁 14 号线（善各庄方向）至阜通地铁站 C 东南口出，步行 694 米至北京望京凯悦酒店。
+                    </p>
+                    <p>打车：北京站至北京望京凯悦酒店，30 分钟路程，费用约 40 元。</p>
+
+                </div>
+                <div id="content-hotel" class="tabContent">
+                    <p class="hotel-intro">以下酒店为本次大会推荐酒店，参会者可根据自身情况选择预定。</p>
+                    <div class="hotel-list">
+                        <div class="hotel">
+                            <img src="/images/community/devcon2021/hotel-1.png" />
+                            <div class="content">
+                                <p>1. 北京望京凯悦酒店（五星级)</p>
+                                <p>北京市朝阳区广顺南大街 8 号院 2 号楼</p>
+                                <p>参考房型：标准间/大床房等</p>
+                                <p>参考房价： 980 含单早，1130 含双早</p>
+                                <p>酒店电话： 010-86301234</p>
+                            </div>
+                        </div>
+                        <div class="hotel">
+                            <img src="/images/community/devcon2021/hotel-2.png" />
+                            <div class="content">
+                                <p>2. 七天优品酒店（北京望京 SOHO 阜通地铁站店）</p>
+                                <p>北京市朝阳区望京西园 428 号</p>
+                                <p>参考房型：标准间/大床房</p>
+                                <p>酒店电话： 010-64718688 </p>
+                                <p>距离会议酒店：步行 621 米，约 9 分钟</p>
+                            </div>
+                        </div>
+                        <div class="hotel">
+                            <img src="/images/community/devcon2021/hotel-3.png" />
+                            <div class="content">
+                                <p>3. 北京望京智选假日酒店</p>
+                                <p>北京市朝阳区望京阜通大街 6 号院 6 号楼</p>
+                                <p>参考房型：标准间/大床房等</p>
+                                <p>酒店电话： 010-59269688</p>
+                                <p>距离会议酒店：步行 705 米，约 5 分钟</p>
+                            </div>
+                        </div>
+                        <div class="hotel">
+                            <img src="/images/community/devcon2021/hotel-4.png" />
+                            <div class="content">
+                                <p>4. 全季酒店（北京望京店）</p>
+                                <p>北京市朝阳区湖光中街 8 号 1 栋</p>
+                                <p>参考房型：标准间/大床房等</p>
+                                <p>酒店电话： 010-64776877</p>
+                                <p>距离会议酒店：车程 1.9 公里，约 8 分钟</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="devcon2021-signup">
+        <div class="sign-up">
+            <div class="btn-wrap">
+                <p>立即报名参与 PingCAP DevCon 2021</p>
+                <a href="http://www.huodongxing.com/event/3601574266800?qd=website" target="_blank">
+                    <div class="button signup-btn">立即报名</div>
+                </a>
+            </div>
+            <img class="el1" src="/images/community/devcon2021/bg-el-2.svg" />
+            <img class="el2" src="/images/community/devcon2021/bg-el-3.svg" />
+        </div>
+
+    </section>
+
+    <section class="devcon2021-reviews">
+        <div class="container">
+            <h2 id="notice" class="section-title">往期回顾</h2>
+            <div class="review-list">
+                <a href="/community-cn/devcon2020/" class="item"><img
+                        src="/images/community/devcon2021/review-devcon2020.png" /></a>
+                <a href="/community-cn/devcon2019/" class="item"><img
+                        src="/images/community/devcon2021/review-devcon2019.png" /></a>
+                <a href="/community-cn/devcon2018/" class="item"><img
+                        src="/images/community/devcon2021/review-devcon2018.png" /></a>
+            </div>
+        </div>
+    </section>
+
+    <a href="http://www.huodongxing.com/event/3601574266800?qd=website" target="_blank
+    ">
+        <div class="signup-code pc"></div>
+    </a>
+    <div class="signup-code mobile">
+        <a href="http://www.huodongxing.com/event/3601574266800?qd=website" target="_blank">立即报名</a>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <div class="flex-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>产品</strong></h4>
+                <ul>
+                    <li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+                    </li>
+                    <li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+                    <li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>文档</strong></h4>
+                <ul>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+                    <li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+                    <li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+                    <li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>资源</strong></h4>
+                <ul>
+                    <li><a href="/blog-cn/">博客</a></li>
+                    <li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+                    <li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+                    <li><a href="https://university.pingcap.com/"
+                            onclick="trackViews('footer-source-university', 'pingcap-university_view')"
+                            target="_blank">PingCAP
+                            Education</a></li>
+                    <li><a href="/solutions/intel/"
+                            onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+                    <li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')"
+                            target="_blank">Ask TUG</a></li>
+                    
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>公司</strong></h4>
+                <ul>
+                    <li><a href="/about-cn/">关于我们</a></li>
+                    <li><a href="https://careers.pingcap.com" target="_blank"
+                            onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+                    </li>
+                    <li><a href="/about-cn/news/">新闻报道</a></li>
+                    <li><a href="/zh/privacy-policy/">隐私申明</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="contact-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>联系我们</strong></h4>
+                <ul>
+                    <li><a href="/" class="tel"  target="_blank"><svg id="Layer_1" enable-background="new 0 0 512.021 512.021" width="18" height="19" viewBox="0 0 512.021 512.021" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"/></g></svg>
+ 商务咨询：</a></li>
+                    <li class="tel-li">4006790886</li>
+                    <li class="tel-li">010-58400041</li>
+                <li><a href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&id=4240&channel=9034" class="twitter"  target="_blank"><svg t="1622000094837" viewBox="0 0 1069 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2379" width="18" height="19"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+                <li><a href="https://twitter.com/PingCAP" class="twitter"  target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="19"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg> Twitter</a></li>
+                <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg> LinkedIn</a></li>
+                <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg> Reddit</a></li>
+                <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="20"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg> Google Group</a></li>
+                <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg> Stack Overflow</a></li>
+                <li id="wechat"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+                </ul>
+            </div>
+            <div class="subscribe" id="subscribe-pc"></div>
+        </div>
+    </div>
+    <div class="container copyright-container">
+        <p class="copyright">&copy; 2021 北京平凯星辰科技发展有限公司</p>
+        <a href="/community/" class="copyright-btn-lang copyright-btn-en"
+            id="lang">English</a>
+        <a href="https://beian.miit.gov.cn/" class="prepared-num">京 ICP 备 16046278 号 - 2</a>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" class="prepared-num">
+            <img src="/images/beian.png" />
+            <p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+        </a>
+    </div>
+</footer>
+<button class="back-to-top" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 284.929 284.929"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"/></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+    $('.lazy').lazyload({
+        effect: 'fadeIn',
+        threshold: 200
+    })
+</script>
+<script type="text/javascript" src="/js/devcon2021.js"></script>
+<script type="text/javascript" src="/js/community.js"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" crossorigin="anonymous"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

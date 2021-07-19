@@ -1,0 +1,1620 @@
+<!doctype html><html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async src="https://download.pingcap.com/js/ga-analytics.js"></script>
+
+
+
+
+
+<link rel="stylesheet" href="/css/community/devcon2020.css">
+
+
+<link rel="stylesheet" href="/css/community/hackathon2019.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css" />
+<style type="text/css">
+    .amap-logo,
+    .amap-copyright {
+        display: none !important;
+    }
+
+    .amap-icon img {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+</style><title>
+DevCon 2020 |&nbsp;PingCAP</title><link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<meta name="description" content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。">
+<meta name="robots" content="noodp">
+<meta name="keywords" content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content=" | PingCAP">
+<meta property="og:description" content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。">
+<meta property="og:url" content="https://pingcap.com/community-cn/devcon2020/">
+<meta property="og:site_name" content="MySQL at Scale. No more manual sharding">
+<meta property="og:image" content="/images/pingcap-opengraph.jpg">
+<meta property="og:image:secure_url" content="/images/pingcap-opengraph.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:description" content="我们相信对技术的追求和对开源的热爱把你带到了这里。欢迎加入 TiDB 社区，和我们一起开启一段精彩的旅程。">
+<meta name="twitter:title" content=" | PingCAP">
+<meta name="twitter:site" content="@pingcap"><meta name="twitter:image" content="https://pingcap.com/images/pingcap-opengraph.jpg"><meta name="twitter:creator" content="@pingcap">
+
+
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+
+
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+<script type="text/javascript" async src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js"></script>
+    
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+<link rel="preload" href="https://download.pingcap.com/js/jquery.min.js" as="script">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/docsearch.min.css">
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head>       <body data-lang="cn" ><div id="page-content">
+<header role="navigation" class="fixed-top">
+    <div class="container">
+        <a class="nav-brand" href="/zh"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        <div class="nav-wrapper">
+            <div class="navigation">
+                <ul>
+                    <li><a href="https://university.pingcap.com/" target="_blank" class="nav-blinking"
+                            onclick="trackViews('navbar-university', 'pingcap-university_view')">PingCAP
+                            Education</a></li>
+                    <li class="docs-type-selector " id="docsTypeSelector">
+                        
+                        <a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+                    </li>
+                    <li ><a href="/cases-cn">案例</a></li>
+                    <li class="sel" ><a href="/community-cn">社区</a></li>
+                    <li ><a href="/blog-cn">博客</a></li>
+                    <li ><a href="/about-cn">关于</a></li>
+                    <li><a href="https://asktug.com" target="_blank"
+                            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+                    <li ><a href="/download-cn">下载试用</a></li>
+                    <li><a class="link-download" href="/about-cn/#contact-us"
+                            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="global-search">
+                
+                
+                
+                <div class="search-wrapper">
+    <span class="icon-search"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#fff" viewBox="0 0 67.125 67.125"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"/><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"/></svg></span>
+    <input data-lang="cn" data-type="" type="search" id="search-input" name="q"
+        placeholder="搜索 TiDB 文档">
+</div>
+
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+
+            </div>
+        </div>
+        <div class="nav-btn nav-slider">
+            <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 459 459"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"/></svg></i>
+        </div>
+    </div>
+</header>
+
+
+
+<nav class="mobile-sidebar">
+    <div class="nav-header">
+        <div class="logo-wrap">
+        <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        </div>
+    </div>
+    <ul class="ul-base">
+        
+
+        <li ><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+        <li ><a href="/cases-cn">案例</a></li>
+        <li class="sel"><a href="/community-cn">社区</a></li>
+        <li ><a href="/blog-cn">博客</a></li>
+        <li ><a href="/about-cn">关于</a></li>
+        <li><a href="https://asktug.com" target="_blank"
+            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+        <li ><a href="/download-cn">下载试用</a></li>
+        <li><a class="link-download" href="/about-cn/#contact-us"
+            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+        <li><a href="https://university.pingcap.com/"
+            onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank"
+            class="nav-blinking">PingCAP Education</a></li>
+    </ul>
+    <div class="nav-footer">
+        <div class="contact-list-wrap">
+        <div class="flex-list">
+            <h4 class="list-title"><strong>Contact</strong></h4>
+            <ul class="social social-cn ul-base">
+            <li><a href="https://twitter.com/PingCAP" class="twitter" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="18"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg></a></li>
+            <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg></a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="18"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg></a></li>
+            <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg></a></li>
+            <li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg></a><div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+            </ul>
+        </div>
+        <div class="subscribe" id="subscribe-mobile"></div>
+        </div>
+        <div class="container">
+        <a href="/community/devcon2020" class="btn-lang" id="lang">English</a>
+        </div>
+    </div>
+</nav>
+
+<div class="devCon devCon2020 devCon-cn">
+    <div class="banner__section devcon2020-banner">
+        <div class="sigup-btn" href="#sign-up" style="cursor: not-allowed;">
+            活动已结束
+        </div>
+    </div>
+
+    <section class="activity-breif">
+        TiDB DevCon 是 PingCAP 团队面向 TiDB 社区推出的技术会议，每年在北京举办。本届 DevCon 在 6 月 6 ～ 7 日举办，以线上直播的方式，为大家展示 TiDB
+        近一年的产品技术蜕变，分享最新的海内外生态进展，并邀请了来自全球的 80+ 位开发者、用户及合作伙伴，分享他们的实战经验和开源思考，覆盖金融、制造业、电信、电商、物流、能源、快消、新零售、云计算等多个领域。
+    </section>
+
+    <div class="agenda-wrapper">
+        <div class="el-side1">
+            <img src="/images/community/devcon2020/el-side.svg" />
+        </div>
+        <div class="el-side2">
+            <img src="/images/community/devcon2020/el-side.svg" />
+        </div>
+        <div class="el-side3">
+            <img src="/images/community/devcon2020/el-side.svg" />
+        </div>
+        <section class="dc20-agenda">
+            <h1 class="dc20-title" id="dc20-agenda-table">会议日程</h1>
+            <div class="dates">
+                <div class="date date1 is-active">DAY 1 - 2020.06.06</div>
+                <div class="date date2">DAY 2 - 2020.06.07</div>
+            </div>
+
+            <div class="venues">
+                <div class="day1"><div class="venue-detail">
+                        <div class="time">9:30 - 12:00</div><a class="venue" href="#%e4%b8%bb%e8%ae%ba%e5%9d%9b%e6%9a%a8-TiDB-4.0-%e5%8f%91%e5%b8%83">
+                            <img src="/images/community/devcon2020/el-main.svg" alt="主论坛暨 TiDB 4.0 发布">
+                            <p class="large-size">主论坛暨 TiDB 4.0 发布</p>
+                        </a></div><div class="venue-detail">
+                        <div class="time">13:00 - 18:20</div><a class="venue" href="#%e9%87%91%e8%9e%8d-%e4%b8%93%e9%a2%98%e8%ae%ba%e5%9d%9b">
+                            <img src="/images/community/devcon2020/el-finance.svg" alt="金融 专题论坛">
+                            <p class="">金融 专题论坛</p>
+                        </a><a class="venue" href="#%e7%94%b5%e5%95%86-%e7%89%a9%e6%b5%81-%e6%96%b0%e9%9b%b6%e5%94%ae-%e5%87%ba%e8%a1%8c-%e4%b8%93%e9%a2%98%e8%ae%ba%e5%9d%9b">
+                            <img src="/images/community/devcon2020/el-business.svg" alt="电商/物流/新零售/出行 专题论坛">
+                            <p class="">电商/物流/新零售/出行 专题论坛</p>
+                        </a></div></div>
+                <div class="day2 hide-schedule"><div class="venue-detail">
+                        <div class="time">9:00 - 12:25</div><a class="venue" href="#%e5%90%88%e4%bd%9c%e4%bc%99%e4%bc%b4%e7%94%9f%e6%80%81%e5%8f%8a%e6%96%b0%e4%ba%a7%e5%93%81%e7%89%b9%e6%80%a7-%e4%b8%93%e9%a2%98%e8%ae%ba%e5%9d%9b">
+                            <img src="/images/community/devcon2020/el-developer.svg" alt="合作伙伴生态及新产品特性 专题论坛">
+                            <p>合作伙伴生态及新产品特性 专题论坛</p>
+                        </a><a class="venue" href="#%e5%bc%80%e5%8f%91%e8%80%85%e7%a4%be%e5%8c%ba-%e4%b8%93%e9%a2%98%e8%ae%ba%e5%9d%9b">
+                            <img src="/images/community/devcon2020/el-product.svg" alt="开发者社区 专题论坛">
+                            <p>开发者社区 专题论坛</p>
+                        </a></div><div class="venue-detail">
+                        <div class="time">13:30 - 18:25</div><a class="venue" href="#%e7%94%b5%e4%bf%a1-%e5%8c%bb%e7%96%97-%e8%83%bd%e6%ba%90-%e5%88%b6%e9%80%a0%e4%b8%9a-%e9%ab%98%e7%a7%91%e6%8a%80-%e4%b8%93%e9%a2%98%e8%ae%ba%e5%9d%9b">
+                            <img src="/images/community/devcon2020/el-service.svg" alt="电信/医疗/能源/制造业/高科技 专题论坛">
+                            <p>电信/医疗/能源/制造业/高科技 专题论坛</p>
+                        </a><a class="venue" href="#%e6%95%99%e8%82%b2-%e8%a7%86%e9%a2%91-%e8%b5%84%e8%ae%af-%e4%b8%93%e9%a2%98%e8%ae%ba%e5%9d%9b">
+                            <img src="/images/community/devcon2020/el-education.svg" alt="教育/视频/资讯 专题论坛">
+                            <p>教育/视频/资讯 专题论坛</p>
+                        </a></div></div>
+            </div>
+
+
+
+<div class="schedule day1"
+    id="主论坛暨-TiDB-4.0-发布">
+    
+        
+        <div class="venue-title">主论坛暨 TiDB 4.0 发布</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="">
+            <td>9:30 - 9:50</td>
+            <td>Opening Keynote</td><td>刘奇</td><td></td></tr><tr class="collapsable">
+            <td>9:50 - 10:20</td>
+            <td>TiDB 4.0 - The Future is Now</td><td>唐刘</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 的 4.0 终于迎来了 GA 版本的发布，4.0 不光在性能，易用性，稳定性等各个方面有了大量改进和提升，也是 TiDB 在成为「未来数据库」上面一个重要的里程碑。在本次分享中，我们将给大家介绍 TiDB 4.0 里面 Real-Time HTAP，Serverless 等重要特性，让大家一起来感受和领略 4.0 的魅力。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>10:20 - 10:40</td>
+            <td>Database-as-a-Service: TiDB Cloud</td><td>刘寅</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 具备天然的 Cloud Native 架构，只有在云上才能真正发挥 TiDB 弹性调度的威力，并且极大降低用户的总体拥有成本。用户通过点击几下鼠标就可以在几分钟内创建一个 TiDB 集群，之后复杂的运维工作和可靠性都交给 PingCAP 的专家们来保障，用户只需要将精力专注在自身的业务发展。随着 TiDB 4.0 发布，我们即将在今年 6 月份正式推出 fully-managed TiDB Cloud 云服务，并率先支持 AWS/GCP 两家公有云。在本次 Talk 中让我们来揭开 TiDB DBaaS 的面纱，大家先睹为快。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>10:40 - 11:00</td>
+            <td>TiDB’s Scale-out at Global Scope</td><td>申砾</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">在过去的一年多时间中，PingCAP 逐渐将 TiDB 的脚步在世界范围内扩展，从社区/商业/学术等方面将 TiDB 和整个世界连接在一起。在这里，我会和大家聊一下过去一年我们取得成就以及我们对全球市场的认知体会。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>11:00 - 11:30</td>
+            <td>Empower Yourself in TiDB Community</td><td>崔秋</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">在过去的一年里，我们把用户生态正式纳入到了社区治理框架；在开发者生态方面，我们也探索了更好的协作方式和荣誉晋级体系。TiDB 的社区经过了 5 年的持续发展，收获了来自于全球的上千位社区贡献者和不同行业的 TiDB 用户的回馈和建议，社区也同样希望能反哺每一位热情的参与者，与大家一起成长。人人为社区，社区为人人。如果你想了解 TiDB 开源社区背后的故事，欢迎来 DevCon 2020 一起聊聊。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>11:30 -12:00</td>
+            <td>TiDB 下一步技术  Roadmap 展望</td><td>黄东旭</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">之前在一次直播中，我提到 TiDB 这几年的发展中就像是“在下一盘大棋”，五年磨一剑，终于在 4.0 这个版本中开始初露锋芒。TiDB 在技术和社区基础已经逐渐牢固的当下，下一步会走向何方，尤其在技术上有哪些重大的亮点? 在这次分享中，我会给出一些方向性的思考，和对 TiDB 下一个大版本的技术展望。</li></ul>
+            </td>
+        </tr></table>
+    
+</div><div class="schedule day1"
+    id="金融-专题论坛">
+    
+        
+        <div class="venue-title">金融 专题论坛</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>13:00 - 13:20</td>
+            <td>技术方案精讲（1）TiDB 金融级备份及多中心容灾</td><td><span class="speaker">余军 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">从金融行业关系数据库大规模应用伊始，灾备与容灾就成为了对数据库的刚性要求。分布式数据库在提供强大扩展能力的同时，也提供了不同于传统单机数据库的灾备与容灾能力。TiDB 针对不同的灾备容灾需求，提供了多种灵活可靠的金融级保障方案，可靠的支撑金融业务的安全稳定运行。本次分享会介绍 TiDB 的多种灾备与容灾方案与实践案例。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>13:20 - 13:40</td>
+            <td>分布式数据库在银行关键业务系统的应用探索</td><td><span class="speaker">王志刚 | </span>光大银行</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">国内商业银行的技术架构一直在持续演进，同时，银行业务特点也决定了它对信息系统组件稳定性、可靠性和可信性的极致要求，随着分布式技术从互联网走入银行信息系统，如何平衡新技术的收益与风险？分布式数据库在银行关键业务系统的应用发展如何？在这里给大家分享光大银行在分布式数据库领域的实践和思考。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>13:40 - 14:00</td>
+            <td>TiDB at PayPay : How we migrated in 3 months</td><td><span class="speaker">Munenori Hirakawa | </span>PayPay</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">PayPay is the No.1 share mobile payment company in Japan. In 1.5 years since the service started, the number of users reached 28 million and the number of payment transactions reached 1 billion. In the rapid growth, we have migrated the most mission-critical database which is managing payment transactions to TiDB in March with just three months of preparation. I will talk about why we chose TiDB and how we achieved the migration.</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:00 -14:20</td>
+            <td>亿联银行核心银行系统 TiDB 数据库实践之路</td><td><span class="speaker">卢秀红 | </span>亿联银行</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">亿联银行在金融核心业务上通过分布式 TiDB 系统的探索和实践落地，在银行业核心场景关键数据自主可控方面，完成了分布式开源数据库的评估体系、测试方案、应用适配优化最佳实践等方面积累了宝贵的经验。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:20 - 14:40</td>
+            <td>TiDB 在微众银行核心场景演进路径及方向探索</td><td><span class="speaker">胡盼盼 | </span>微众银行</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">微众银行携手 TiDB 已经走过一年多的时间。本次分享主要介绍两个方面，一个是 TiDB 在微众银行的核心业务场景的接入情况以及未来的接入计划；另一个是介绍微众银行在 TiDB 的上优化和创新方向的探索，包括 DM（TiDB Data Migration） 工具的优化、ARM 平台的探索、Cloud TiDB 的试用以及 TiFlash 的测试等。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:40 -14:55</td>
+            <td>TiDB 在马上消费金融总账系统的容器化实践之路</td><td><span class="speaker">李银龙 | </span>马上消费</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">马上消费金融 2018 年初着手调研分布式数据库 TiDB 技术，到 2019 年底，已将 TiDB 全部运行在 K8s 之上。本次分享，将向大家分享马上消费金融 TiDB 技术实践历程。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:55 -15:10</td>
+            <td>拉卡拉金融 TiDB 实时风控及实时数据中台实战</td><td><span class="speaker">唐希元 | </span>拉卡拉金融</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">结合 TiDB 的生态链构建金融实时风控和数据分析平台；</li><li class="pagraphList">以 TiDB 作为交易系统， 整合 TiFlash 提供数据分析能力；</li><li class="pagraphList">扩展 Raft Learner， 整合数据加密以及作为一个事件驱动器来联动营销及风控等系统。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>15:10 - 15:25</td>
+            <td>金融行业开源数据库运维管理体系建设</td><td><span class="speaker">李恒 | </span>爱可生</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1. 开源数据库运维管理体系的理解</li><li class="pagraphList">2. 与 PingCAP 的合作</li><li class="pagraphList">3. 整合 &amp; 产品 Roadmap</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>15:25 - 15:45</td>
+            <td>TiDB 在银行批处理场景中的实践</td><td><span class="speaker">薛春雨 | </span>神州信息</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">银行的日终批量处理业务场景复杂，待处理的数据量大，在考虑应用架构的同时，需要兼顾 TiDB 数据库的特性，以实现整体执行时间的可控。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>15:45 - 16:05</td>
+            <td>构建金融行业数据库用户生态  - TUG 金融组成立</td><td></td><td></td></tr><tr class="collapsable">
+            <td>16:05 - 16:25</td>
+            <td>TiZabbix - TiDB 在 Zabbix 监控方案中的应用</td><td><span class="speaker">韩宇 | </span>中国银行</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">Zabbix 作为一个老牌的开源监控方案，长期被用于生产实践。但是原生方案一般会采用 MySQL 作为后端存储，无法应对更大规模的监控。TiDB 兼容 MySQL 协议，可以替换 MySQL 从而增强 Zabbix 的大规模监控能力，从而实现新的监控方案 TiZabbix。TiZabbix 通过优化监控实施逻辑，弥补因 TiDB 和 MySQL 差异造成的诸多问题，成功完成了 10000&#43; 监控对象和 16T 数据存储查询的实践。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>16:25 - 16:45</td>
+            <td>TiDB 在金融行业大规模应用的实践</td><td><span class="speaker">陈振东 | </span>北京银行</td><td></td></tr><tr class="collapsable">
+            <td>16:45 - 17:05</td>
+            <td>TiDB 在平安互联网保险业务系统的实践</td><td><span class="speaker">何志勇 | </span>平安科技</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">从 2018 年使用 TiDB 以来，于今已有 2 年时间，本次主要分享在平安使用 TiDB 的一些收获与感想。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:05 - 17:20</td>
+            <td>陆金所如何在线更换金融核心场景 Oracle 数据库</td><td><span class="speaker">王英杰 | </span>陆金所</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">讲述陆金所 Oracle 核心业务进行下迁的过程，讲述 TiDB 的应用，源端端为 Oracle ，目标端为 TiDB 进行迁移，讲述迁移过程中的方法论和落地实战。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:20 - 17:35</td>
+            <td>精准保险时代，保险业务系统多信源架构方案</td><td><span class="speaker">张荐森 | </span>中科软</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">精准保险时代，数据已成为核心生产资料，新一代保险信息系统需要具备大规模、多元化数据处理运用的能力。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>17:35 - 17:50</td>
+            <td>Using TiDB as the Merchant Platform Core Database in ZaloPay</td><td><span class="speaker">Tan To Nguyen Duy | </span>ZaloPay</td><td></td></tr><tr class="collapsable">
+            <td>17:50 - 18:05</td>
+            <td>TiDB 实时数据处理平台实战</td><td><span class="speaker">李振环 | </span>贝壳金服</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">讲述贝壳金服自 2018 年以来，在基于 TiDB 进行实时数据处理的实战经验，分享源端多个数据库数据传输到 TiDB 进行数据汇聚分析，以及实时数据处理平台的建设历程。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>18:05 - 18:20</td>
+            <td>乐信分布式关系型数据库选型的思考</td><td><span class="speaker">赖侯奇 | </span>乐信金融</td><td></td></tr></table>
+    
+</div><div class="schedule day1"
+    id="电商-物流-新零售-出行-专题论坛">
+    
+        
+        <div class="venue-title">电商/物流/新零售/出行 专题论坛</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>13:30 - 13:50</td>
+            <td>技术方案精讲（2）TiDB 异构数据库复制的最佳实践</td><td><span class="speaker">秦天爽 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">现有业务系统的分布式改造，其中一个难点在于数据库的迁移。迁移使用全量还是增量？在线还是离线？使用现成的工具还是开发作业？用户往往面对多种选择。这里将和大家分享 PingCAP 团队在多年的实施经验中积攒的大量异构平台迁移经验，以及数据库复制技术的更多应用场景。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>13:50 - 14:20</td>
+            <td>TiDB 走向云原生的运维实践</td><td><span class="speaker">黄潇 | </span>美团点评</td><td></td></tr><tr class="collapsable">
+            <td>14:20 - 14:50</td>
+            <td>TiDB 在百胜中台的应用实践</td><td><span class="speaker">吴剑锋 | </span>百胜中国</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">随着百胜中国数字化业务高速发展，百胜在打造自已的业务中台与数据中台的道路上，对分布式的数据库，特别是新型的 HTAP 数据库有了更多的场景需求以及应用实践。TiDB 的数据库产品在百胜的重要业务中已经有了落地，有效地支持了业务的快速发展。未来我们期望 TiDB 能够在百胜有更加丰富的场景应用，也同时向 TiDB 社区贡献力量。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:50 - 15:20</td>
+            <td>Shopee Chat 系统迁移 TiDB 最佳实践</td><td><span class="speaker">彭义，刘春辉 | </span>Shopee</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">Chat 系统是 Shopee 的关键子系统之一，为买家和卖家提供了直接沟通的工具和平台支持。开发团队和 DBA 团队通力合作，花费了一年时间把 Shopee Chat 系统后端数据存储组件从一个巨大的 MySQL 集群 &#43; 一个内部开发的文件系统服务迁移到了 一个 TiDB 集群 &#43; 一个 TiKV 集群上。本次分享将介绍此次迁移的过程和我们的一些经验心得。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>15:20 - 15:30</td>
+            <td>出行行业数据库选型之路</td><td><span class="speaker">彭兴 | </span>曹操出行</td><td></td></tr><tr class="collapsable">
+            <td>15:30 - 15:40</td>
+            <td>社交电商的数据库架构选型之路</td><td><span class="speaker">皮雪锋 | </span>云集</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1.背景：是什么让我们选择了 TiDB？</li><li class="pagraphList">2.现状：TiDB 给我们带来了哪些惊喜？</li><li class="pagraphList">3.展望：未来会有更多的惊喜吗？</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>15:40 - 15:50</td>
+            <td>从 MyCAT 到 TiDB</td><td><span class="speaker">沈均 | </span>壹米滴答集团</td><td></td></tr><tr>
+            <td>15:50 - 16:05</td>
+            <td colspan="3">
+                <p class="TBA">【中场休息】</p>
+            </td>
+        </tr><tr class="collapsable">
+            <td>16:05 - 16:25</td>
+            <td>TiDB 在快消品行业供应链系统的应用实践</td><td><span class="speaker">易南伟 | </span>华润创业</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">深圳华创智信科技有限公司自主研发了快速消费品行业的数字化供应链管理。</li><li class="pagraphList">该数字化供应链管理覆盖了快速消费品行业的原料生产、加工、包装、运输、分销、销售到售后服务等的大部分环节，帮助企业了解和把握需求信号和及时作出精确的预测，对需求进行分析和制定出可行的需求计划，并迅速地对需求信号作出反应，从而提高整个供应链的效率与效益。</li><li class="pagraphList">改造前系统架构 - 采用 MySQL 分库分表</li><li class="pagraphList">采用 MySQL 中间件进行分库分表。分库分表后，跨库一致性问题，都是使用最终一致性，代码维护繁琐；表加字段麻烦，每个库每个表都要加；新增节点需要进行停机、然后迁移数据，停机迁移对线上用户造成实时的读写影响。</li><li class="pagraphList">改造后的系统架构 - 引入 TiDB 替换 MySQL</li><li class="pagraphList">为从根本上解决以上问题，技术团队决定通过增加部署一套高性能的数据库系统，以解决当前业务的痛点。 最终从满足业务需求、降低切换成本和减少运维成本等角度考虑，选择了分布式关系型数据库－TiDB 作为业务的首选事务型数据库。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>16:25 - 16:45</td>
+            <td>数据库，从集中式到分布式的演进</td><td><span class="speaker">侯圣文 | </span>贝壳找房</td><td></td></tr><tr class="collapsable">
+            <td>16:45 - 17:05</td>
+            <td>TiDB 在车好多的实践过程与思考</td><td><span class="speaker">汪涉洋 | </span>车好多集团</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 在瓜子其实从开始搭建集群到现在，已经快有一年半了。 目前在一部分 MySQL 大表 adhoc 和毛豆新车部分在线业务有落地，但离能在车好多充分挖掘潜力还有不少事情要做。</li><li class="pagraphList">期间我们在  MySQL 切 TiDB 的实施过程，使用 DM（TiDB Data Migration）同步 binlog ， 部署 TiDB 的方案优化提升资源利用率 ，TiDB  jsontype 性能测试等技术点上有一些积累和思考。 然后在集团，一项新的存储技术如何从技术、运维、落地等逐步在公司业务研发中建立信任感也有值得分享的点。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:05 - 17:25</td>
+            <td>TiDB 4.0 新特性在电商行业的探索</td><td><span class="speaker">冀浩东 | </span>转转</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">转转是 TiDB 的深度用户，TiDB 1.0 版本时就开始调研接入，提交很多 case 以及功能建议。目前在转转主要解决分库分表的业务场景，目标是将服务的业务逻辑简化，让 RD 专注业务逻辑开发，提高整体开发效率。直到 TiDB 4.0 rc 发布，在测试过程，看到了很多具有里程碑意义的功能，解决了部分业务问题，本次主要介绍新版本的一些新特性体验。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:25 - 17:35</td>
+            <td>基于 Elastic Stack 实现 TiDB 的可观察性</td><td><span class="speaker">魏彬 | </span>普翔科技</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 因其强大的分布式处理性能和日渐完善的 HTAP 能力，被越来越多的用户接受并应用于核心业务场景。随着 TiDB 集群和节点数的增多，针对这些集群的监控、告警、分析等观察性工作的跟进是否及时，将会从很大程度上决定 TiDB 的服务质量。本次主题我们将会基于 Elastic Stack 和大家分享，如何从 metric、logging、Tracing 等多个维度实现 TiDB 的可观察性，提升 TiDB 的服务质量。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:35 - 17:45</td>
+            <td>TiDB 在马蜂窝中的应用实践和启发</td><td><span class="speaker">胡国青 | </span>马蜂窝</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">主要结合公司的服务化数据库系统——在设计、研发和运营以及维护过程中遇到的挑战来展开：</li><li class="pagraphList">1. 服务化 TiDB 的设计优势是为研发屏蔽 TiDB 的底层运维细节，通过可视化界面或 API 就可获取 TiDB 服务，不需关注资源分配[资源可行性分析]、部署、迁移、扩容、监控及宕机处理等细节；</li><li class="pagraphList">2. 服务化 TiDB 的另一个优势是资源的统一控制和管理，确保环境的一致性，为运维自动化奠定基础，兼而有效降低硬件和人力资源。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:45 - 17:55</td>
+            <td>中通快递 TiDB 大规模运维实践</td><td><span class="speaker">蔡江 | </span>中通快递</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1. TiDB 引入中通背景</li><li class="pagraphList">2. 上线前的准备</li><li class="pagraphList">3. 目前使用状况</li><li class="pagraphList">4. 对未来的展望</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:55 - 18:05</td>
+            <td>我与 TiDB 如何结缘</td><td><span class="speaker">田朋 | </span>京东数科</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1. 我是如何与 TiDB 结缘的，TiDB 有哪些优秀的特性比较吸引我；</li><li class="pagraphList">2. 我是如何学习 TiDB，哪些靠谱的学习 TiDB 的资料推荐给大家参考学习；</li><li class="pagraphList">3. 在学习和实践 TiDB 的过程中遇到了哪些困难，又是如何解决的。</li></ul>
+            </td>
+        </tr></table>
+    
+</div>
+
+
+
+<div class="schedule hide-schedule day2"
+    id="合作伙伴生态及新产品特性-专题论坛">
+    
+        
+        <div class="venue-title">合作伙伴生态及新产品特性 专题论坛</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>9:30 - 9:50</td>
+            <td>TiDB 合作伙伴生态体系构建</td><td><span class="speaker">余梦杰 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">2020 年 PingCAP 合作伙伴生态体系构建全面启动，基于 TiDB 社区，秉承开放平等的全新社区化合作伙伴生态理念，产业生态合作、解决方案合作、联合技术中心等众多计划百花齐放，本次分享主要把我们生态体系的理念、整体框架和一些在前几个月的落地成绩向大家做一次汇报。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>9:50 - 10:10</td>
+            <td>基于鲲鹏多核并发 &amp; 硬件加速在数据库领域的深度实践</td><td><span class="speaker">陈龙 | </span>华为</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1. 分享鲲鹏 ARM 的生态体系特别是构建于其上的软件生态的发展现状；</li><li class="pagraphList">2. 完整的鲲鹏开发者套件助力开发者简化软件迁移流程；</li><li class="pagraphList">3. 基于鲲鹏多核并发优势如何让数据库跑的更快；</li><li class="pagraphList">4. TiDB &#43; 鲲鹏联合测试方案以及性能优化深度实践。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>10:10 - 10:30</td>
+            <td>TiDB 在 U-Next ARM 平台上的应用与实践</td><td><span class="speaker">丁炜，黄必荣 | </span>U-Next</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 在 ARM 平台的落地实践及 TiDB 在 U-Next 的数据分析运用。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>10:30 - 10:45</td>
+            <td>Why HTAP Matters?</td><td><span class="speaker">马晓宇 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">HTAP 是一个比较新的概念，表示数据库有能力应付交易和分析两种不同业务。HTAP 数据库相比传统方案有何优势？为何 HTAP 数据库难以实现？本次分享将会介绍 TiDB HTAP 架构的实现原理，如何解决两种不同设计方向的冲突。也会为大家分享实际业务如果利用 HTAP 来简化架构，加强实时性和一致性，为更高效敏捷的业务建设赋能。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>10:45 - 11:05</td>
+            <td>TiDB HTAP 助力小红书业务升级</td><td><span class="speaker">张亿皓 | </span>小红书</td><td></td></tr><tr class="collapsable">
+            <td>11:05 - 11:25</td>
+            <td>从 Exadata 到 TiDB，中通快递 HTAP 实践</td><td><span class="speaker">朱友志 | </span>中通快递</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">近几年，快递行业的业务量突飞猛进，数据激增，无论以前单机的性能多么强大都已经支持不了数量增长和访问压力，更满足不了日益多元化的数据分析需求。</li><li class="pagraphList">中通大数据团队 18 年开始接触 TiDB，多轮测试敏锐的感知到 TiDB 在 TP 和 AP 不同场景的强大功能，完成了部分核心业务去“O”，摆脱 Oracle Exadata 一体机单机的瓶颈限制。</li><li class="pagraphList">19 年双 11 扛住了QPS 12w&#43; 的峰值，并且一套集群同时完成 TP 和 AP 的业务，中通将继续在 TiDB 上落地更多的业务场景。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>11:25 - 11:40</td>
+            <td>Chaos Practice in PingCAP</td><td><span class="speaker">唐刘 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">构建一个分布式数据库是非常困难的，因为我们要保证用户数据安全，不能丢失，损坏等。在 PingCAP，我们做了非常多的测试来保证 TiDB 的安全性，其中就包括 Chaos Engineering。在本次分享，我们聊聊 PingCAP 的测试理念，Chaos 实践，介绍基于 K8s 上的 Chaos 平台 - Chaos Mesh，以及告诉大家如何使用 Chaos Mesh 来集成并测试自己的业务。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>11:40 - 12:00</td>
+            <td>小鹏汽车 Chaos Mesh™ 实践</td><td><span class="speaker">谭恒亮 | </span>小鹏汽车</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1. 为什么选择 Chaos Mesh™？</li><li class="pagraphList">2. 如何在 Chaos Mesh™ 早期进行落地？</li><li class="pagraphList">3. 如何发 PR 实现可用性和安全性的自我救赎？</li><li class="pagraphList">4. 在汽车行业特殊场景下如何发挥作用？</li></ul>
+            </td>
+        </tr></table>
+    
+</div><div class="schedule hide-schedule day2"
+    id="开发者社区-专题论坛">
+    
+        
+        <div class="venue-title">开发者社区 专题论坛</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>9:00 - 9:40</td>
+            <td>Have Fun with 1000&#43; developers</td><td><span class="speaker">姚维 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 开发者社区经过 5 年的发展，目前已经收获来自世界各地的一千名 Contributor。在过去的一年中，为了贡献者在社区中获得更有趣，更有归属感的体验。TiDB 社区推出了 SIG（Special Interest Group） 以及 WG（Working Group）组织用以提高社区协作的效率。也推出了一系列的社区挑战赛，让大家能在贡献的同时收获荣誉以及社区周边。TiDB 社区也持续投入资源给大家带来更好的学习体验，推出了 Talent Plan 2.0 课程，无论是否接触过数据库开发，都可以在最短的时间学习数据库内核知识，加入开发者社区。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>9:40 - 10:00</td>
+            <td>荣誉时刻</td><td><span class="speaker">姚维 | </span>PingCAP</td><td></td></tr><tr class="collapsable">
+            <td>10:00 - 10:20</td>
+            <td>TiKV Contributor 的进阶之路 —— Engine SIG 方向</td><td><span class="speaker">陈付 | </span>TiKV Maintainer</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">主要介绍本人参与 TiKV 开源项目开发历程，包括社区初接触、RawKV 性能优化、加入 engine sig 并开展 rocksdb/rust-rocksdb 相关工作和 VerKV 提案与开发等，其中也会分享 TiKV 在一点资讯生产环境上线过程中遇到的多方面问题和解决方案。最后，分享从 TiKV contributor 到 TiKV maintainer 过程中的心得体会和参与社区工作的总结，以及 TiKV 社区吸引人的地方。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>10:20 - 10:40</td>
+            <td>BigTable on TiKV</td><td><span class="speaker">孙晓光 | </span>TiKV Maintainer</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">得益于 TiKV 优秀的架构，TiDB 以完备的 SQL 支持和强大的可扩展性在众多领域得到了广泛的应用，在 NewSQL 领域成绩斐然。而在许多特定领域 NoSQL 仍然充满着旺盛的生机，让我们一同探讨 TiKV 和 BigTable 的组合能够迸发出什么样的火花。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>10:40 - 11:05</td>
+            <td>高校合作经验交流——前沿 research 与人才培养实践</td><td><span class="speaker">万继光 | </span>武汉光电国家研究中心</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">华中科技大学信息存储系统教育部重点实验室与 PingCAP 在新技术研究方面进行了密切合作，分别在基于 Intel 新型 NVM 存储设备、智能云数据库的弹性调度等方向进行了深入的技术研究。</li><li class="pagraphList">在人才培养方面，也联合 Talent Plan 项目，面向华中科技大学的在校学生，组织了多期线上线下学习活动，为分布式数据库方向培养了多名学术与工业实践并重的优秀人才。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>11:05-11:30</td>
+            <td>高校合作经验交流——关于 DiffKV 的工程实践</td><td><span class="speaker">李永坤 | </span>中国科学技术大学</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">近年来，key-value 存储系统被广泛研究和使用，并作为数据库等应用的存储引擎，以实现较好的横向扩展。在该报告中，我将首先介绍 DiffKV 的系统设计，尤其是其如何实现数据写入、单点查询、范围查询、存储开销之间的均衡。在此基础上，我将以 DiffKV 为例，分享 DiffKV 在 TiKV 的落地实现过程与经验，并结合跟 PingCAP 的项目合作经历分享校企合作的一些心得体会。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>11:30-11:45</td>
+            <td>作为 TiKV Committer，我是如何参与社区的</td><td><span class="speaker">庄天翼 | </span>TiKV Committer</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">本次 talk 将介绍我是如何与 TiKV 结缘，并从一名 contributor 成长为一个 committer。也会分享一些难忘的经历，希望可以给大家参与社区带来一些帮助。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>11:45-11:55</td>
+            <td>数据库测试技术的 TiDB 实践</td><td><span class="speaker">Manuel Rigger | </span>ETH Zurich</td><td></td></tr><tr class="collapsable">
+            <td>11:55-12:10</td>
+            <td>Drainer 的定制化与使用</td><td><span class="speaker">高海涛 | </span>TiDB Reviewer</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">目前 Drainer 仅支持下游是 MySQL，Kafka，file，pb。但在公司内部，通常有将 binlog 同步到公司内部系统组件的需求，此时 Drainer 无法满足。因此我们在 Drainer 基础上进行了扩展，使 Drainer 有被定制化的能力，大大增加了其扩展性，能够满足公司内部需求。本 Talk 主要介绍 Drainer 扩展化的设计实现与定制化方法</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>12:10-12:25</td>
+            <td>参与 TiDB 社区初级指南</td><td><span class="speaker">刘东坡 | </span>TiDB Contributor</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">在 Talent Plan 中用 GitHub 社区资源（GitBook &#43; GitHub Actions）科学高效完成作业，熟悉社区协作流程和工具。Talnet Plan 到 TiDB 社区，从简单的 issue 开始！</li></ul>
+            </td>
+        </tr></table>
+    
+</div><div class="schedule hide-schedule day2"
+    id="电信-医疗-能源-制造业-高科技-专题论坛">
+    
+        
+        <div class="venue-title">电信/医疗/能源/制造业/高科技 专题论坛</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>13:30 - 13:50</td>
+            <td>技术方案精讲（3）TiDB on Kubernetes 最佳实践</td><td><span class="speaker">吴叶磊 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">随着 Kubernetes(K8s) 的全面成熟，越来越多的组织开始大规模地基于 K8s 构建基础设施层。然而，考虑到数据库在架构中的核心地位与 K8s 在有状态应用编排上的短板，仍有不少组织认为在 K8s 上运行核心数据库会带来颇高的风险。事实上，在 K8s 上运行 TiDB 不仅能实现企业技术栈的统一，降低维护成本，还能带来更高的可用性与安全性。本次分享将介绍 TiDB 在 K8s 上的运维管理系统 TiDB Operator，再从各类故障场景入手剖析 TiDB on K8s 如何实现高效的故障自愈并保障数据安全。最后，我们会分享来自国内外一线公司的 TiDB Operator 生产环境案例，并总结出一套 TiDB on K8s 最佳实践。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>13:50 - 14:20</td>
+            <td>TiDB 在中国电信翼支付的大规模深度实践</td><td><span class="speaker">刘宇 | </span>天翼支付</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">讲述中国电信天翼支付从 2018 年引入 TiDB，从外围应用逐步使用到核心业务场景，对于 TiDB 从 TP 到 HTAP 的应用，包含多种业务场景应用分享，以及对未来应用展望。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:20 - 14:40</td>
+            <td>TiDB 在 360 的落地及 DM 实战干货分享</td><td><span class="speaker">贺磊 | </span>奇虎 360</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">DM（TiDB Data Migration）工具大家如果用过的话，都了解其功能特性了，本次分享就生产环境使用 DM 过程中遇到的一些问题进行分享，帮助你提前绕开这些问题，以及因为 DM 迁移引起的集群性能抖动的调优，带你玩转这个一站式迁移工具，提高工作效率。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>14:40 - 15:00</td>
+            <td>TiDB 在电网运行控制管理及现货交易场景下的探索</td><td><span class="speaker">杨立波 | </span>国网河北省电力公司</td><td></td></tr><tr class="collapsable">
+            <td>15:00 - 15:20</td>
+            <td>TiDB 在风电 IIoT 健康管理平台的实践</td><td><span class="speaker">巨思旸 | </span>威锐达</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">分享威锐达是如何使用 TiDB 构建面向风电设备健康管理大数据平台的数据存储架构，如何基于 TiDB 进行风电设备健康的可视化分析。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>15:20 - 15:40</td>
+            <td>新一代医疗数据中心数据库选型与实践</td><td><span class="speaker">许登峰 | </span>北大医信</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">随着北大医信临床数据中心在医院的推广普及，基于数据中心的应用逐步展开和深入，存储数据库也面临着越来越大的压力。应用既有面向临床的小量数据查询，也有面向上级机构上报的批量数据处理、面向科研的复杂查询。延续当前的传统关系数据库存储已经难以满足来自应用越来越苛刻的要求。通过适配 TiDB 数据库，北大医信数据中心为在医疗领域构建面向未来的领先架构奠定了坚实的基础。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>15:40 -16:00</td>
+            <td>TiDB 在理想汽车的使用现状</td><td><span class="speaker">赵海军 | </span>理想汽车</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">我们在生产环境上线 TiDB 快一年多时间了，此次分享和大家简单聊聊我们是怎么用的，主要分为 3 个方面：</li><li class="pagraphList">1. 介绍 TiDB 在理想汽车的使用场景；</li><li class="pagraphList">2. 关于 TiDB 的生态体系我们的使用情况，重点介绍 DM（TiDB Data Migration）工具的使用；</li><li class="pagraphList">3. 分享下我们遇到的一些问题以及解决方案。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>16:00 - 16:20</td>
+            <td>TiDB 助力燃气中台建设</td><td><span class="speaker">张含宇 | </span>新奥燃气</td><td></td></tr><tr>
+            <td>16:20 - 16:35</td>
+            <td colspan="3">
+                <p class="TBA">【中场休息】</p>
+            </td>
+        </tr><tr class="collapsable">
+            <td>16:35 - 16:55</td>
+            <td>中移物联网在车联网场景的 TiDB 探索和实现</td><td><span class="speaker">薛超 | </span>中移物联网有限公司</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">介绍中移物联网公司数字化产品部的车联网业务在分布式数据库 TiDB 的探索和实践，该场景主要特点是高并发，高写入，我们的业务经历了从 Oracle RAC 迁移至 MyCAT &#43; MySQL 集群，目前行车轨迹模块正在 TiDB 中验证，进展顺利。本次分享就探索过程中遇到的一些问题和感触进行介绍。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>16:55 - 17:15</td>
+            <td>TiDB 在 WPS 中的应用</td><td><span class="speaker">岑启超 | </span>金山办公</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">金山办公在各办公化场景的 OLTP 实践上一直以来有过多样的数据库方案。而随着用户日趋成熟的在线办公习惯，用户海量文档数据对服务质量和稳定性带来非常大的考验。为了解决持续增长的数据所带来机器维护&amp;运维成本问题，金山办毅然选择了 TiDB 来作为分布式数据库的落地方案，并一直“痛苦&amp;快乐”地践行着。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:15 - 17:35</td>
+            <td>UCloud TiDB 公有云服务探索</td><td><span class="speaker">常彦德 | </span>UCloud</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">将 TiDB 运行在 UCloud 公有云上，结合 UCloud 公有云的优势，让用户以非常低廉的成本在两分钟内即可拥有生产级 TiDB 服务。近期我们又推出了新一代 TiDB 服务，将会带来哪些变化，本次 talk 将作详细讲解。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:35 - 17:55</td>
+            <td>国产软件助力企业智能化转型</td><td><span class="speaker">陈柳源 | </span>用友</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">用友从 1988 年走到 2020 年，走了 32 年。我们用友确实一直在努力，在发展的过程之中我们也在不断的去实践，通过倾听客户、敬畏技术、荣于生态的指导方针，为数百万的客户提供国产软件服务，致力于通过国产自主可控软件推动商业数字化国产和社会进步。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>17:55 - 18:15</td>
+            <td>联通大数据基于 TiDB 的分布数据库实践</td><td><span class="speaker">陈执政 | </span>联通大数据</td><td></td></tr><tr class="collapsable">
+            <td>18:15 - 18:35</td>
+            <td>TiDB 在智能制造 MES 系统的实践</td><td><span class="speaker">汤凌菲 | </span>光迅科技</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1.智能制造面临的数据处理挑战；</li><li class="pagraphList">2.解决之道 —— 引入 TiDB；</li><li class="pagraphList">3.TiDB 在光迅的应用实践；</li><li class="pagraphList">4.总结和展望。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>18:35 - 18:55</td>
+            <td>基于 TiDB 的清结算中台系统应用</td><td><span class="speaker">陈浩 | </span>汉得信息</td><td></td></tr></table>
+    
+</div><div class="schedule hide-schedule day2"
+    id="教育-视频-资讯-专题论坛">
+    
+        
+        <div class="venue-title">教育/视频/资讯 专题论坛</div>
+        
+    
+    
+    <table class="schedule-table">
+        <tr class="head">
+            <td>时间</td>
+            <td>议题</td>
+            <td>演讲嘉宾</td>
+            <td></td>
+        </tr><tr class="collapsable">
+            <td>13:30 - 13:50</td>
+            <td>技术方案精讲（4）基于 TiSpark 的海量数据批量处理技术</td><td><span class="speaker">杨哲轩 | </span>PingCAP</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">说起批处理，你脑海里蹦出来的第一个词是什么？是分片么？是麻烦么？是太慢了么？现在如果告诉你，批处理不用在忍受这些的痛苦，借助 Spark 分布式计算框架的能力用统一的视角高效处理数据，再写回 TiDB 中，同时还能够保证数据的 ACID特性，你会觉得这不可能么？本次分享将会揭秘基于 TiSpark 的海量数据批量处理技术的实现和使用方法。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>13:50 - 14:20</td>
+            <td>TiDB 在 bilibili 的实践 2.0</td><td><span class="speaker">王旭，张雯 | </span>bilibili</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">TiDB 在 bilibili 应用于主站社区点赞收藏，直播包裹道具，电商用户订单分析，游戏广告推送，视频云直播流，数据平台等多个子业务线。在不同业务场景需求的分析和落地的过程中，TiDB 的高可用 &amp; 水平扩展特性帮助支持业务快速增长，分布式特性帮助 DBA 维护变更集群对业务透明无感。期待 TiDB 4.0 带来更多新特性，帮助我们更好的支持业务发展。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:20 - 14:50</td>
+            <td>TiDB 在腾讯内部云平台的实践</td><td><span class="speaker">郑智辉 | </span>腾讯</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">主要介绍 TiDB 在 PCG 内部云平台提供关系型数据库的使用经验，内容包括：自动化运维的实现，平台周边管理功能介绍例如备份、慢查询、资源管理等方面的思考，以及运营过程中遇到的坑点和问题分享。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>14:50 - 15:10</td>
+            <td>TiDB 的选择和实践</td><td><span class="speaker">李文杰 | </span>网易互娱</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">计费组是为网易互娱产品提供统一登录和支付高效解决方案的公共支持部门，对内是互娱的各个游戏工作室，对外是国内外数百个渠道。近些年随着部门业务量的激增，单机 MySQL 在容量、性能、扩展性等方面都遇到了瓶颈。在经过一系列的数据库调研选型对比后，TiDB 映入眼帘。</li><li class="pagraphList">TiDB 兼容 MySQL 协议，它一出现就完美解决了我们在 MySQL 分库分表的痛点，凭借优秀的在线扩展能力，一张几十亿行 TB 级的表不损失查询性能可以不分表完整存储下来。非常优雅地实现了去分库分表化，其拥有其他中间件方案不可比拟的优势。众所周知 MySQL 有极大的单点存储风险，而 TiDB 使用 Raft 协议实现数据多副本分布式存储，很好地保证了数据的一致性和高可用要求。从 2017 年开始使用 TiDB 至今，从这几年的生产环境实践结果来看，TiDB 展现了很大的技术架构优势，同时对开发和运维非常友好，我们今后还会继续扩大使用场景和规模。</li><li class="pagraphList">很愿意给大家分享下我们对数据库选型的一些思考，以及使用 TiDB 的实践经验，供大家参考和交流，也希望为 TiDB 在社区的发展和生态圈完善提供助力。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>15:10 - 15:30</td>
+            <td>TiDB 在人民在线“评价科技”转型中的应用与实践</td><td><span class="speaker">冯伟 | </span>人民在线</td><td></td></tr><tr class="">
+            <td>15:30 - 15:50</td>
+            <td>TiDB 4.0 在 VIPKID 的应用实践</td><td><span class="speaker">许超 | </span>VIPKID</td><td></td></tr><tr>
+            <td>15:50 - 16:05</td>
+            <td colspan="3">
+                <p class="TBA">【中场休息】</p>
+            </td>
+        </tr><tr class="">
+            <td>16:05 - 16:25</td>
+            <td>TiDB 在高速增长视频业务中的应用</td><td><span class="speaker">朱博帅 | </span>爱奇艺</td><td></td></tr><tr class="collapsable">
+            <td>16:25 - 16:45</td>
+            <td>分布式数据库在金融信息服务中的应用实践</td><td><span class="speaker">李超 | </span>新华财经</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">1. 中经社介绍；</li><li class="pagraphList">2. 为什么选择 TiDB；</li><li class="pagraphList">3. 我们是如何用的；</li><li class="pagraphList">4. 迁移碰到的坑；</li><li class="pagraphList">5. 未来规划；</li><li class="pagraphList">6. 期待。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>16:45 - 17:05</td>
+            <td>疫情之下的在线教育：伴鱼少儿英语 TiDB 深度实践</td><td><span class="speaker">刘江 | </span>伴鱼英语</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">伴鱼旗下 4 款产品，包括伴鱼英语、伴鱼绘本、伴鱼自然拼读和伴鱼精品课。伴鱼早期数据库选型为 MongoDB，随着业务的快速发展带来的数据增长，MongoDB 使用过程中有些力不从心，加上业务对事务、高可用、可扩展等需求，后来引进了 TiDB。本次分享主要介绍伴鱼 TiDB 实践过程中遇到的一些问题、我们是如何解决的，以及配套自动化建设等方面的一些介绍。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:05 - 17:25</td>
+            <td>从 SQL Server 到 TiDB 迁移实践</td><td><span class="speaker">张帆 | </span>汽车之家</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">SQL Server &#43; .Net 是很多早期互联网企业的标配技术栈，虽然 TiDB 是兼容 MySQL 协议和生态的数据库，但是 TiDB 适用的业务场景是通用的，在开源新技术大行其道的今天，如何从 SQL Server 无缝迁移至 TiDB，汽车之家为社区做了很好的示范。</li><li class="pagraphList">这次我们带来汽车之家的一个案例，从业务背景，到迁移方案、同步、业务改造、上线效果、周边建设等多个角度，详细介绍了如何从 SQL Server 数据库迁移至 TiDB 数据库。相信无论你是架构师、业务开发、还是 DBA，一定会有不同层面的收获。</li></ul>
+            </td>
+        </tr><tr class="collapsable">
+            <td>17:25 - 17:45</td>
+            <td>TiDB 如何快速应对突增流量</td><td><span class="speaker">傅少峰 | </span>新东方</td><td class="add-icon"> + </td></tr><tr class="detail-block">
+            <td></td>
+            <td colspan="3">
+                <ul style="list-style: none;"><li class="pagraphList">灵活和强大的 TiDB 在线弹性扩展能力以及完善的 SQL 支持，让我们的数据库基础架构能从容的应对业务突增并发量和数据量，是传统的分库分表架构不具备的灵活优势。</li></ul>
+            </td>
+        </tr><tr class="">
+            <td>17:45 - 18:05</td>
+            <td>海外直播行业的 TiDB 4.0 线上体验</td><td><span class="speaker">徐嘉埥 | </span>Bigo</td><td></td></tr></table>
+    
+</div><div class="switch-date-btn date2">DAY2 日程</div>
+        </section>
+    </div>
+
+    <div class="tutor-members">
+        <section>
+            <h1 class="dc20-title">嘉宾介绍</h1>
+            <div class="tutor-list"><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/caijiang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">蔡江</div>
+                    <div class="title">中通快递 | 高级运维工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/cenqichao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">岑启超</div>
+                    <div class="title">金山办公 | 开发经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/changyande.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">常彦德</div>
+                    <div class="title">UCloud | 存储组件产品部负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/chenfu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈付</div>
+                    <div class="title">一点资讯 | TiKV Maintainer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/chenliuyuan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈柳源</div>
+                    <div class="title">用友 | 数据智能总经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/chenlong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈龙</div>
+                    <div class="title">华为 | 鲲鹏计算产品部生态经理，高级工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/chenzhendong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈振东</div>
+                    <div class="title">北京银行 | 软件开发部</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/chenzhizheng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">陈执政</div>
+                    <div class="title">联通大数据 | 联通系统集成项目经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/cuiqiu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">崔秋</div>
+                    <div class="title">PingCAP | 联合创始人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/dingwei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">丁炜</div>
+                    <div class="title">U-Next | Senior Engineer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/fengwei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">冯伟</div>
+                    <div class="title">人民在线 | CTO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/fushaofeng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">傅少峰</div>
+                    <div class="title">新东方 | 数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/gaohaitao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">高海涛</div>
+                    <div class="title">美团点评 | TiDB Reviewer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/hanyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">韩宇</div>
+                    <div class="title">中国银行 | 信息科技运营中心工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/helei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">贺磊</div>
+                    <div class="title">奇虎 360 | 高级 DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/hezhiyong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">何志勇</div>
+                    <div class="title">平安科技 | 资深云数据库工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/huangbirong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">黄必荣</div>
+                    <div class="title">U-Next | Senior Engineer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/huangdongxu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">黄东旭</div>
+                    <div class="title">PingCAP | 联合创始人兼 CTO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/huangxiao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">黄潇</div>
+                    <div class="title">美团点评 | DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/huguoqing.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">胡国青</div>
+                    <div class="title">马蜂窝 | DBA 负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/hupanpan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">胡盼盼</div>
+                    <div class="title">微众银行 | 数据库平台室室经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/jusiyang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">巨思旸</div>
+                    <div class="title">威锐达 | 大数据平台产品经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/lichao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李超</div>
+                    <div class="title">新华财经 | 事业部技术中心经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liheng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李恒</div>
+                    <div class="title">爱可生 | CEO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liuchunhui.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘春辉</div>
+                    <div class="title">Shopee | DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liudongpo.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘东坡</div>
+                    <div class="title">Morningstar | TiDB Contributor</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liujiang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘江</div>
+                    <div class="title">伴鱼英语 | 数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liuqi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘奇</div>
+                    <div class="title">PingCAP | 联合创始人兼 CEO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liuyin.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘寅</div>
+                    <div class="title">PingCAP | VP &amp; General Manager of DBaaS Solution Team</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liwenjie.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李文杰</div>
+                    <div class="title">网易互娱 | 数据库工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liyinlong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李银龙</div>
+                    <div class="title">马上消费 | 容器云数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liyongkun.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李永坤</div>
+                    <div class="title">中国科学技术大学 | 计算机学院副教授</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/liuyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">刘宇</div>
+                    <div class="title">天翼支付 | 资深架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/lizhenhuan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">李振环</div>
+                    <div class="title">贝壳金服 | 数据平台负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/luxiuhong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">卢秀红</div>
+                    <div class="title">亿联银行 | 科技运维部副总经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/mannuelrigger.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Manuel Rigger</div>
+                    <div class="title">ETH Zurich | Postdoctoral Researcher in the Advanced Software Technologies (AST) Lab</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/maxiaoyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">马晓宇</div>
+                    <div class="title">PingCAP | 实时分析产品负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/munenorihirakawa.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Munenori Hirakawa</div>
+                    <div class="title">PayPay | Senior Manager at Product Tech Division</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/pengxing.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">彭兴</div>
+                    <div class="title">曹操出行 | 数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/pengyi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">彭义</div>
+                    <div class="title">Shopee | Developer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/pixuefeng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">皮雪锋</div>
+                    <div class="title">云集 | 供应链研发经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/qintianshuang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">秦天爽</div>
+                    <div class="title">PingCAP | 解决方案事业部架构总监</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/shenjun.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">沈均</div>
+                    <div class="title">壹米滴答集团 | 资深DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/shenli.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">申砾</div>
+                    <div class="title">PingCAP | VP of Engineering</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/sunxiaoguang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">孙晓光</div>
+                    <div class="title">知乎 | TiKV Maintainer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/tanhengliang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">谭恒亮</div>
+                    <div class="title">小鹏汽车 | 云平台技术专家</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/tanglingfei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">汤凌菲</div>
+                    <div class="title">光迅科技 | 资深软件工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/tangliu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">唐刘</div>
+                    <div class="title">PingCAP | 首席架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/tangxiyuan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">唐希元</div>
+                    <div class="title">拉卡拉金融 | 基础架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/tantonguyenduy.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">Tan To Nguyen Duy</div>
+                    <div class="title">ZaloPay | DevOps Engineer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/tianpeng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">田朋</div>
+                    <div class="title">京东数科 | 高级 DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wangsheyang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">汪涉洋</div>
+                    <div class="title">车好多集团 | 大数据团队技术经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wangxu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王旭</div>
+                    <div class="title">bilibili | 主站技术中心 资深开发工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wangyingjie.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王英杰</div>
+                    <div class="title">陆金所 | 数据架构团队负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wangzhigang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">王志刚</div>
+                    <div class="title">光大银行 |  数据库运维主管</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wanjiguang.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">万继光</div>
+                    <div class="title">武汉光电国家研究中心 | 并行数据存储实验室教授</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/weibin.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">魏彬</div>
+                    <div class="title">普翔科技 | CTO</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wujianfeng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">吴剑锋</div>
+                    <div class="title">百胜中国 | 资讯技术部 架构副总监</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/wuyelei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">吴叶磊</div>
+                    <div class="title">PingCAP | Cloud 工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/xuchao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">许超</div>
+                    <div class="title">VIPKID | 资深 DBA 工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/xudengfeng.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">许登峰</div>
+                    <div class="title">北大医信 | 资深架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/xuechao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">薛超</div>
+                    <div class="title">中移物联网有限公司 | 数据库运维高级工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/xuechunyu.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">薛春雨</div>
+                    <div class="title">神州信息 | 基础架构专家</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/xujiaqing.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">徐嘉埥</div>
+                    <div class="title">Bigo | DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/yangzhexuan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">杨哲轩</div>
+                    <div class="title">PingCAP | 资深解决方案架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/yaowei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">姚维</div>
+                    <div class="title">PingCAP | TiDB 开源社区运营负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/jihaodong.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">冀浩东</div>
+                    <div class="title">转转 | 数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/yinanwei.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">易南伟</div>
+                    <div class="title">华润创业 | 资深架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/yujun.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">余军</div>
+                    <div class="title">PingCAP | 解决方案事业部总经理</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/yumengjie.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">余梦杰</div>
+                    <div class="title">PingCAP | 合伙人、执行副总裁</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhangfan.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">张帆</div>
+                    <div class="title">汽车之家 | 工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhangjiansen.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">张荐森</div>
+                    <div class="title">中科软 | 技术总监</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhangwen.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">张雯</div>
+                    <div class="title">bilibili | 基础技术部 DBA</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhangyihao.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">张亿皓</div>
+                    <div class="title">小红书 | 基础技术部资深开发工程师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhaohaijun.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">赵海军</div>
+                    <div class="title">理想汽车 | 数据库负责人</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhengzhihui.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">郑智辉</div>
+                    <div class="title">腾讯 | 运营开发</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhuyouzhi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">朱友志</div>
+                    <div class="title">中通快递 | 大数据架构师</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhuangtianyi.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">庄天翼</div>
+                    <div class="title">阿里巴巴 | TiKV Committer</div>
+                </div><div class="tutor">
+                    <div class="tutor-avatar">
+                        <img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/speakers/zhuboshuai.png"
+                            alt="Tutor avator" />
+                    </div>
+                    <div class="name">朱博帅</div>
+                    <div class="title">爱奇艺 | 资深数据库架构师</div>
+                </div></div>
+        </section>
+    </div>
+
+    <section class="support-medias">
+        <h1 class="dc20-title">媒体/社区支持</h1>
+        <div class="medias"><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/juejin.png" /><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/oschina.png" /><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/infoq.png" /><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/segmentfault.png" /><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/tgo.png" /><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/it168.png" /><img class="lazy" src="/images/svgs/loader-spinner.svg" data-original="/images/community/devcon2020/sponsors/motianlun.png" /></div>
+    </section>
+
+
+    
+
+    <div class="reviews">
+<section>
+    
+    <h1 class="dc20-title">Highlights from previous DevCons</h1>
+    
+    <div class="reviews-list"><a href="/community-cn/devcon2019/" class="review-item" target="">
+            <img class="lazy" data-original="https://download.pingcap.com/images/new-devcon-banner-pc.png" src="/images/svgs/loader-spinner.svg" alt="devcon 2019 banner" />
+        </a><a href="/community-cn/devcon2018/" class="review-item" target="">
+            <img class="lazy" data-original="https://download.pingcap.com/images/banners/devcon2018-pc.jpg" src="/images/svgs/loader-spinner.svg" alt="devcon 2018 banner" />
+        </a></div>
+</section>
+</div>
+
+    <section class="back-to-community-section">
+        <a href="/community-cn/#activities">
+            <button class="back-to-community">
+                更多社区活动
+            </button>
+        </a>
+    </section>
+</div>
+<footer>
+    <div class="container">
+        <div class="flex-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>产品</strong></h4>
+                <ul>
+                    <li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+                    </li>
+                    <li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+                    <li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>文档</strong></h4>
+                <ul>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+                    <li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+                    <li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+                    <li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>资源</strong></h4>
+                <ul>
+                    <li><a href="/blog-cn/">博客</a></li>
+                    <li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+                    <li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+                    <li><a href="https://university.pingcap.com/"
+                            onclick="trackViews('footer-source-university', 'pingcap-university_view')"
+                            target="_blank">PingCAP
+                            Education</a></li>
+                    <li><a href="/solutions/intel/"
+                            onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+                    <li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')"
+                            target="_blank">Ask TUG</a></li>
+                    
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>公司</strong></h4>
+                <ul>
+                    <li><a href="/about-cn/">关于我们</a></li>
+                    <li><a href="https://careers.pingcap.com" target="_blank"
+                            onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+                    </li>
+                    <li><a href="/about-cn/news/">新闻报道</a></li>
+                    <li><a href="/zh/privacy-policy/">隐私申明</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="contact-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>联系我们</strong></h4>
+                <ul>
+                    <li><a href="/" class="tel"  target="_blank"><svg id="Layer_1" enable-background="new 0 0 512.021 512.021" width="18" height="19" viewBox="0 0 512.021 512.021" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"/></g></svg>
+ 商务咨询：</a></li>
+                    <li class="tel-li">4006790886</li>
+                    <li class="tel-li">010-58400041</li>
+                <li><a href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&id=4240&channel=9034" class="twitter"  target="_blank"><svg t="1622000094837" viewBox="0 0 1069 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2379" width="18" height="19"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+                <li><a href="https://twitter.com/PingCAP" class="twitter"  target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="19"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg> Twitter</a></li>
+                <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg> LinkedIn</a></li>
+                <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg> Reddit</a></li>
+                <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="20"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg> Google Group</a></li>
+                <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg> Stack Overflow</a></li>
+                <li id="wechat"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+                </ul>
+            </div>
+            <div class="subscribe" id="subscribe-pc"></div>
+        </div>
+    </div>
+    <div class="container copyright-container">
+        <p class="copyright">&copy; 2021 北京平凯星辰科技发展有限公司</p>
+        <a href="/community/devcon2020" class="copyright-btn-lang copyright-btn-en"
+            id="lang">English</a>
+        <a href="https://beian.miit.gov.cn/" class="prepared-num">京 ICP 备 16046278 号 - 2</a>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" class="prepared-num">
+            <img src="/images/beian.png" />
+            <p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+        </a>
+    </div>
+</footer>
+<button class="back-to-top" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 284.929 284.929"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"/></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+<script type="text/javascript">
+    $('.lazy').lazyload({
+        effect: 'fadeIn',
+        threshold: 200
+    })
+</script>
+<script type="text/javascript" src="/js/devcon.js"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" crossorigin="anonymous"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

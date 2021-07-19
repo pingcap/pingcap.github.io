@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"/><meta content="IE=edge" http-equiv="X-UA-Compatible"/><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>TiDB-Wasm 原理与实现 | Hackathon 优秀项目介绍 | PingCAP</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="TiDB-Wasm 项目实现了将 TiDB 编译成 Wasm 运行在浏览器里，让用户无需安装就可以使用 TiDB，最终获得了 TiDB Hackathon 2019 的二等奖。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="TiDB-Wasm 原理与实现 | Hackathon 优秀项目介绍 | PingCAP" property="og:title"/>
+<meta content="TiDB-Wasm 项目实现了将 TiDB 编译成 Wasm 运行在浏览器里，让用户无需安装就可以使用 TiDB，最终获得了 TiDB Hackathon 2019 的二等奖。" property="og:description"/>
+<meta content="https://pingcap.com/blog-cn/tidb-wasm-introduction/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image:secure_url"/><meta content="summary" name="twitter:card"/><meta content="TiDB-Wasm 项目实现了将 TiDB 编译成 Wasm 运行在浏览器里，让用户无需安装就可以使用 TiDB，最终获得了 TiDB Hackathon 2019 的二等奖。" name="twitter:description"/>
+<meta content="TiDB-Wasm 原理与实现 | Hackathon 优秀项目介绍 | PingCAP" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://download.pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image"/><meta content="@pingcap" name="twitter:creator"/>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script async="" src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js" type="text/javascript"></script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head> <body data-lang="cn"><div id="page-content">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/zh"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li class="docs-type-selector " id="docsTypeSelector">
+<a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+</li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" data-type="" id="search-input" name="q" placeholder="搜索 TiDB 文档" type="search"/>
+</div>
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP Education</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-mobile"></div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><a class="tag all" href="#">ALL (287)</a>
+<div class="tag-list"><a class="tag " data-tag="Chaos-Mesh" href="/blog-cn/#Chaos-Mesh">Chaos Mesh (10)
+                </a><a class="tag " data-tag="Committer" href="/blog-cn/#Committer">Committer (3)
+                </a><a class="tag " data-tag="Contributor" href="/blog-cn/#Contributor">Contributor (9)
+                </a><a class="tag " data-tag="DM" href="/blog-cn/#DM">DM (2)
+                </a><a class="tag " data-tag="DM-源码阅读" href="/blog-cn/#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">DM 源码阅读 (10)
+                </a><a class="tag " data-tag="Go" href="/blog-cn/#Go">Go (3)
+                </a><a class="tag " data-tag="HTAP" href="/blog-cn/#HTAP">HTAP (4)
+                </a><a class="tag sel" data-tag="Hackathon" href="/blog-cn/#Hackathon">Hackathon (4)
+                </a><a class="tag " data-tag="K8s" href="/blog-cn/#K8s">K8s (2)
+                </a><a class="tag " data-tag="Key-Visualizer" href="/blog-cn/#Key-Visualizer">Key Visualizer (2)
+                </a><a class="tag " data-tag="Kubernetes" href="/blog-cn/#Kubernetes">Kubernetes (3)
+                </a><a class="tag " data-tag="Linux" href="/blog-cn/#Linux">Linux (4)
+                </a><a class="tag " data-tag="MVCC" href="/blog-cn/#MVCC">MVCC (2)
+                </a><a class="tag " data-tag="MySQL" href="/blog-cn/#MySQL">MySQL (2)
+                </a><a class="tag " data-tag="PD" href="/blog-cn/#PD">PD (5)
+                </a><a class="tag " data-tag="Percolator" href="/blog-cn/#Percolator">Percolator (3)
+                </a><a class="tag " data-tag="PingCAP" href="/blog-cn/#PingCAP">PingCAP (2)
+                </a><a class="tag " data-tag="Prometheus" href="/blog-cn/#Prometheus">Prometheus (3)
+                </a><a class="tag " data-tag="Raft" href="/blog-cn/#Raft">Raft (11)
+                </a><a class="tag " data-tag="RocksDB" href="/blog-cn/#RocksDB">RocksDB (3)
+                </a><a class="tag " data-tag="Rust" href="/blog-cn/#Rust">Rust (5)
+                </a><a class="tag " data-tag="SQL" href="/blog-cn/#SQL">SQL (6)
+                </a><a class="tag " data-tag="Spanner" href="/blog-cn/#Spanner">Spanner (2)
+                </a><a class="tag " data-tag="TiDB" href="/blog-cn/#TiDB">TiDB (94)
+                </a><a class="tag " data-tag="TiDB-4.0-新特性" href="/blog-cn/#TiDB-4.0-%e6%96%b0%e7%89%b9%e6%80%a7">TiDB 4.0 新特性 (11)
+                </a><a class="tag " data-tag="TiDB-Binlog" href="/blog-cn/#TiDB-Binlog">TiDB Binlog (5)
+                </a><a class="tag " data-tag="TiDB-Binlog-源码阅读" href="/blog-cn/#TiDB-Binlog-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB Binlog 源码阅读 (9)
+                </a><a class="tag " data-tag="TiDB-Ecosystem-Tools" href="/blog-cn/#TiDB-Ecosystem-Tools">TiDB Ecosystem Tools (3)
+                </a><a class="tag " data-tag="TiDB-Hackathon-2020" href="/blog-cn/#TiDB-Hackathon-2020">TiDB Hackathon 2020 (7)
+                </a><a class="tag " data-tag="TiDB-Operator" href="/blog-cn/#TiDB-Operator">TiDB Operator (9)
+                </a><a class="tag " data-tag="TiDB-性能挑战赛" href="/blog-cn/#TiDB-%e6%80%a7%e8%83%bd%e6%8c%91%e6%88%98%e8%b5%9b">TiDB 性能挑战赛 (2)
+                </a><a class="tag " data-tag="TiDB-易用性挑战赛" href="/blog-cn/#TiDB-%e6%98%93%e7%94%a8%e6%80%a7%e6%8c%91%e6%88%98%e8%b5%9b">TiDB 易用性挑战赛 (4)
+                </a><a class="tag " data-tag="TiDB-源码阅读" href="/blog-cn/#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB 源码阅读 (24)
+                </a><a class="tag " data-tag="TiFlash" href="/blog-cn/#TiFlash">TiFlash (7)
+                </a><a class="tag " data-tag="TiKV" href="/blog-cn/#TiKV">TiKV (29)
+                </a><a class="tag " data-tag="TiKV-源码解析" href="/blog-cn/#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90">TiKV 源码解析 (21)
+                </a><a class="tag " data-tag="TiSpark" href="/blog-cn/#TiSpark">TiSpark (4)
+                </a><a class="tag sel" data-tag="WebAssembly" href="/blog-cn/#WebAssembly">WebAssembly (2)
+                </a><a class="tag " data-tag="gRPC" href="/blog-cn/#gRPC">gRPC (2)
+                </a><a class="tag " data-tag="事务" href="/blog-cn/#%e4%ba%8b%e5%8a%a1">事务 (9)
+                </a><a class="tag " data-tag="优化器" href="/blog-cn/#%e4%bc%98%e5%8c%96%e5%99%a8">优化器 (2)
+                </a><a class="tag " data-tag="分布式系统前沿技术" href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e5%89%8d%e6%b2%bf%e6%8a%80%e6%9c%af">分布式系统前沿技术 (4)
+                </a><a class="tag " data-tag="分布式系统测试" href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a><a class="tag " data-tag="备份恢复" href="/blog-cn/#%e5%a4%87%e4%bb%bd%e6%81%a2%e5%a4%8d">备份恢复 (2)
+                </a><a class="tag " data-tag="工具" href="/blog-cn/#%e5%b7%a5%e5%85%b7">工具 (4)
+                </a><a class="tag " data-tag="性能" href="/blog-cn/#%e6%80%a7%e8%83%bd">性能 (4)
+                </a><a class="tag " data-tag="数据同步" href="/blog-cn/#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5">数据同步 (2)
+                </a><a class="tag " data-tag="最佳实践" href="/blog-cn/#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">最佳实践 (6)
+                </a><a class="tag " data-tag="架构" href="/blog-cn/#%e6%9e%b6%e6%9e%84">架构 (6)
+                </a><a class="tag " data-tag="版本" href="/blog-cn/#%e7%89%88%e6%9c%ac">版本 (2)
+                </a><a class="tag sel" data-tag="社区" href="/blog-cn/#%e7%a4%be%e5%8c%ba">社区 (103)
+                </a><a class="tag " data-tag="社区动态" href="/blog-cn/#%e7%a4%be%e5%8c%ba%e5%8a%a8%e6%80%81">社区动态 (29)
+                </a><a class="tag " data-tag="集群调度" href="/blog-cn/#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6">集群调度 (2)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">TiDB-Wasm 原理与实现 | Hackathon 优秀项目介绍</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img alt="Date icon" src="/images/svgs/icon-date.svg"/>Tue, Nov 12, 2019</li>
+<li class="meta-item">
+<img alt="Pen icon" src="/images/svgs/icon-writer.svg"/>Ti-Cool</li>
+</ul>
+<div class="blog-text"><blockquote>
+<p>上周我们推送了《<a href="https://pingcap.com/blog-cn/tidb-in-the-browser-running-a-golang-database-on-wasm/">让数据库运行在浏览器里？TiDB + WebAssembly 告诉你答案</a>》，向大家展示了 TiDB-Wasm 的魅力：TiDB-Wasm 项目是 TiDB Hackathon 2019 中诞生的二等奖项目，实现了将 TiDB 编译成 Wasm 运行在浏览器里，让用户无需安装就可以使用 TiDB。</p>
+<p>本文由 Ti-Cool 队成员主笔，为大家详细介绍 TiDB-Wasm 设计与实现细节。</p>
+</blockquote>
+<p>10 月 27 日，为期两天的 Hackathon 落下帷幕，我们用一枚二等奖为此次上海之行画上了圆满的句号，不枉我们风尘仆仆跑去异地参赛（强烈期待明年杭州能作为赛场，主办方也该鼓励鼓励杭州当地的小伙伴呀 :D ）。</p>
+<p>我们几个 PingCAP 的小伙伴找到了 Tony 同学一起组队，组队之后找了一个周末进行了“秘密会晤”——Hackathon kick off。想了 N 个 idea，包括使用 unikernel 技术将 TiDB 直接跑在裸机上，或者将网络协议栈做到用户态以提升 TiDB 集群性能，亦或是使用异步 io 技术提升 TiKV 的读写能力，这些都被一一否决，原因是这些 idea 不是和 Tony 的工作内容相关，就是和我们 PingCAP 小伙伴的日常工作相关，做这些相当于我们在 Hackathon 加了两天班，这一点都不酷。本着「与工作无关」的标准，我们想了一个 idea：把 TiDB 编译成 Wasm 运行在浏览器里，让用户无需安装就可以使用 TiDB。我们一致认为这很酷，于是给队伍命名为 Ti-Cool（太酷了）。</p>
+<h2 id="webassembly-">WebAssembly 简介</h2>
+<p>这里插入一些 WebAssembly 的背景知识，让大家对这个技术有个大致的了解。</p>
+<p>WebAssembly 的 <a href="https://webassembly.org/">官方介绍</a> 是这样的：WebAssembly（缩写为 Wasm）是一种为基于堆栈的虚拟机设计的指令格式。它被设计为 C/C++/Rust 等高级编程语言的可移植目标，可在 web 上部署客户端和服务端应用程序。</p>
+<p>从上面一段话我们可以得出几个信息：</p>
+<ol>
+<li>Wasm 是一种可执行的指令格式。</li>
+<li>C/C++/Rust 等高级语言写的程序可以编译成 Wasm。</li>
+<li>Wasm 可以在 web（浏览器）环境中运行。</li>
+</ol>
+<h3 id="heading">可执行指令格式</h3>
+<p>看到上面的三个信息我们可能又有疑问：什么是指令格式？</p>
+<p>我们常见的 <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF 文件</a> 就是 Unix 系统上最常用的二进制指令格式，它被 loader 解析识别，加载进内存执行。同理，Wasm 也是被某种实现了 Wasm 的 runtime 识别，加载进内存执行，目前常见的实现了 Wasm runtime 的工具有各种主流浏览器，nodejs，以及一个专门为 Wasm 设计的通用实现：Wasmer，甚至还有人给 Linux 内核提 feature 将 Wasm runtime 集成在内核中，这样用户写的程序可以很方便的跑在内核态。</p>
+<p>各种主流浏览器对 WebAssembly 的支持程度：</p>
+<p><img alt="图 1 主流浏览器对 WebAssembly 的支持程度" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/1-%E4%B8%BB%E6%B5%81%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%B9-WebAssembly-%E7%9A%84%E6%94%AF%E6%8C%81.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 1 主流浏览器对 WebAssembly 的支持程度</div>
+<h3 id="-wasm">从高级语言到 Wasm </h3>
+<p>有了上面的背景就不难理解高级语言是如何编译成 Wasm 的，看一下高级语言的编译流程：</p>
+<p><img alt="图 2 高级语言编译流程" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/2-%E9%AB%98%E7%BA%A7%E8%AF%AD%E8%A8%80%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 2 高级语言编译流程</div>
+<p>我们知道高级编程语言的特性之一就是可移植性，例如 C/C++ 既可以编译成 x86 机器可运行的格式，也可以编译到 ARM 上面跑，而我们的 Wasm 运行时和 ARM，x86_32 其实是同类东西，可以认为它是一台虚拟的机器，支持执行某种字节码，这一点其实和 Java 非常像，实际上 C/C++ 也可以编译到 JVM 上运行（参考：<a href="https://stackoverflow.com/questions/4221605/compiling-c-for-the-jvm">compiling-c-for-the-jvm</a>）。</p>
+<h3 id="-runtime--wasi">各种 runtime 以及 WASI</h3>
+<p>再啰嗦一下各种环境中运行 Wasm 的事，上面说了 Wasm 是设计为可以在 web 中运行的程序，其实 Wasm 最初设计是为了弥补 js 执行效率的问题，但是发展到后面发现，这玩意儿当虚拟机来移植各种程序也是很赞的，于是有了 nodejs 环境，Wasmer 环境，甚至还有内核环境。</p>
+<p>这么多环境就有一个问题了：各个环境支持的接口不一致。比如 nodejs 支持读写文件，但浏览器不支持，这挑战了 Wasm 的可移植性，于是 WASI (WebAssembly System Interface) 应运而生，它定义了一套底层接口规范，只要编译器和 Wasm 运行环境都支持这套规范，那么编译器生成的 Wasm 就可以在各种环境中无缝移植。如果用现有的概念来类比，Wasm runtime 相当于一台虚拟的机器，Wasm 就是这台机器的可执行程序，而 WASI 是运行在这台机器上的系统，它为 Wasm 提供底层接口（如文件操作，socket 等）。</p>
+<p>Example or  Hello World？</p>
+<p>程序员对 Hello World 有天生的好感，为了更好的说明 Wasm 和 WASI 是啥，我们这里用一个 Wasm 的 Hello World 来介绍（例程来源：<a href="https://talks.godoc.org/github.com/chai2010/awesome-go-zh/chai2010/chai2010-golang-wasm.slide#27">chai2010-golang-wasm.slide#27</a>）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lisp" data-lang="lisp">(module
+    <span style="color:#75715e">;; type iov struct { iov_base, iov_len int32 }</span>
+    <span style="color:#75715e">;; func fd_write(id *iov, iovs_len int32, nwritten *int32) (written int32)</span>
+    (<span style="color:#a6e22e">import</span> <span style="color:#e6db74">"wasi_unstable"</span> <span style="color:#e6db74">"fd_write"</span> (func $fd_write (param i32 i32 i32 i32) (result i32)))
+
+    (memory <span style="color:#ae81ff">1</span>)(<span style="color:#a6e22e">export</span> <span style="color:#e6db74">"memory"</span> (memory <span style="color:#ae81ff">0</span>))
+
+    <span style="color:#75715e">;; The first 8 bytes are reserved for the iov array, starting with address 8</span>
+    (data (i32.const <span style="color:#ae81ff">8</span>) <span style="color:#e6db74">"hello world\n"</span>)
+
+    <span style="color:#75715e">;; _start is similar to main function, will be executed automatically</span>
+    (func $main (<span style="color:#a6e22e">export</span> <span style="color:#e6db74">"_start"</span>)
+        (i32.store (i32.const <span style="color:#ae81ff">0</span>) (i32.const <span style="color:#ae81ff">8</span>))  <span style="color:#75715e">;; iov.iov_base - The string address is 8</span>
+        (i32.store (i32.const <span style="color:#ae81ff">4</span>) (i32.const <span style="color:#ae81ff">12</span>)) <span style="color:#75715e">;; iov.iov_len  - String length</span>
+
+        (call $fd_write
+            (i32.const <span style="color:#ae81ff">1</span>)  <span style="color:#75715e">;; 1 is stdout</span>
+            (i32.const <span style="color:#ae81ff">0</span>)  <span style="color:#75715e">;; *iovs - The first 8 bytes are reserved for the iov array</span>
+            (i32.const <span style="color:#ae81ff">1</span>)  <span style="color:#75715e">;; len(iovs) - Only 1 string</span>
+            (i32.const <span style="color:#ae81ff">20</span>) <span style="color:#75715e">;; nwritten - Pointer, inside is the length of the data to be written</span>
+        )
+        drop <span style="color:#75715e">;; Ignore return value</span>
+    )
+)
+</code></pre></div><p>具体指令的解释可以参考 <a href="https://pengowray.github.io/wasm-ops/html/wasm-opcodes.html">这里</a>。</p>
+<p>这里的 test.wat 是 Wasm 的文本表示，wat 之于 Wasm 的关系类似于汇编和 ELF 的关系。</p>
+<p>然后我们把 wat 编译为 Wasm 并且使用 Wasmer（一个通用的 Wasm 运行时实现）运行：</p>
+<p><img alt="图 3 Hello World" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/3-hello-world.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 3 Hello World</div>
+<h2 id="heading-1">改造工作</h2>
+<p>恐惧来自未知，有了背景知识动起手来才无所畏惧，现在可以开启 TiDB 的浏览器之旅。</p>
+<h3 id="heading-2">浏览器安全限制</h3>
+<p>我们知道，浏览器本质是一个沙盒，是不会让内部的程序做一些危险的事情的，比如监听端口，读写文件。而 TiDB 的使用场景实际是用户启动一个客户端通过 MySQL 协议连接到 TiDB，这要求 TiDB 必须监听某个端口。</p>
+<p><strong>考虑片刻之后，我们认为即便克服了浏览器沙盒这个障碍，真让用户用 MySQL 客户端去连浏览器也并不是一个优雅的事情，我们希望的是用户在页面上可以有一个开箱即用的 MySQL 终端，它已经连接好了 TiDB。</strong></p>
+<p>于是我们第一件事是给 TiDB 集成一个终端，让它启动后直接弹出这个终端接受用户输入 SQL。所以我们需要在 TiDB 的代码中找到一个工具，它的输入是一串 SQL，输出是 SQL 的执行结果，写一个这样的东西对于我们几个没接触过 TiDB 代码的人来说还是有些难度，于是我们想到了一个捷径：TiDB 的测试代码中肯定会有输入 SQL 然后检查输出的测试。那么把这种测试搬过来改一改不就是我们想要的东西嘛？然后我们翻了翻 TiDB 的测试代码，发现了大量的这样的用法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">result</span> = <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">MustQuery</span>(<span style="color:#e6db74">"select count(*) from t group by d order by c"</span>)
+<span style="color:#a6e22e">result</span>.<span style="color:#a6e22e">Check</span>(<span style="color:#a6e22e">testkit</span>.<span style="color:#a6e22e">Rows</span>(<span style="color:#e6db74">"3"</span>, <span style="color:#e6db74">"2"</span>, <span style="color:#e6db74">"2"</span>))
+</code></pre></div><p>所以我们只需要看看这个 <code>tk</code> 是个什么东西，借来用一下就行了。这是 <code>tk</code> 的主要函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Exec executes a sql statement.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">tk</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TestKit</span>) <span style="color:#a6e22e">Exec</span>(<span style="color:#a6e22e">sql</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">args</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">interface</span>{}) (<span style="color:#a6e22e">sqlexec</span>.<span style="color:#a6e22e">RecordSet</span>, <span style="color:#66d9ef">error</span>) {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">session</span>.<span style="color:#a6e22e">CreateSession4Test</span>(<span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">store</span>)
+        <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Assert</span>(<span style="color:#a6e22e">err</span>, <span style="color:#a6e22e">check</span>.<span style="color:#a6e22e">IsNil</span>)
+        <span style="color:#a6e22e">id</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">AddUint64</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">connectionID</span>, <span style="color:#ae81ff">1</span>)
+        <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span>.<span style="color:#a6e22e">SetConnectionID</span>(<span style="color:#a6e22e">id</span>)
+    }
+    <span style="color:#a6e22e">ctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>()
+    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">args</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rss</span> []<span style="color:#a6e22e">sqlexec</span>.<span style="color:#a6e22e">RecordSet</span>
+        <span style="color:#a6e22e">rss</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span>.<span style="color:#a6e22e">Execute</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">sql</span>)
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> len(<span style="color:#a6e22e">rss</span>) &gt; <span style="color:#ae81ff">0</span> {
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rss</span>[<span style="color:#ae81ff">0</span>], <span style="color:#66d9ef">nil</span>
+        }
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">stmtID</span>, <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span>.<span style="color:#a6e22e">PrepareStmt</span>(<span style="color:#a6e22e">sql</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">params</span> <span style="color:#f92672">:=</span> make([]<span style="color:#a6e22e">types</span>.<span style="color:#a6e22e">Datum</span>, len(<span style="color:#a6e22e">args</span>))
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">params</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+        <span style="color:#a6e22e">params</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">types</span>.<span style="color:#a6e22e">NewDatum</span>(<span style="color:#a6e22e">args</span>[<span style="color:#a6e22e">i</span>])
+    }
+    <span style="color:#a6e22e">rs</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span>.<span style="color:#a6e22e">ExecutePreparedStmt</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">stmtID</span>, <span style="color:#a6e22e">params</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">tk</span>.<span style="color:#a6e22e">Se</span>.<span style="color:#a6e22e">DropPreparedStmt</span>(<span style="color:#a6e22e">stmtID</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">Trace</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">rs</span>, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div><p>剩下的事情就非常简单了，写一个 Read-Eval-Print-Loop (REPL)  读取用户输入，将输入交给上面的 Exec，再将 Exec 的输出格式化到标准输出，然后循环继续读取用户输入。</p>
+<h3 id="heading-3">编译问题</h3>
+<p><strong>集成一个终端只是迈出了第一步，我们现在需要验证一个非常关键的问题：TiDB 能不能编译到 Wasm，虽然 TiDB 是 Golang 写的，但是中间引用的第三方库没准哪个写了平台相关的代码就没法直接编译了</strong>。</p>
+<p>我们先按照 <a href="https://github.com/golang/go/wiki/WebAssembly#getting-started">Golang 官方文档</a> 编译：</p>
+<p><img alt="图 4 按照 Golang 官方文档编译（1/2）" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/4-%E6%8C%89%E7%85%A7-Golang-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%BC%96%E8%AF%91.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 4 按照 Golang 官方文档编译（1/2）</div>
+<p>果然出师不利，查看 goleveldb 的代码发现，storage 包下面的代码针对不同平台有各自的实现，唯独没有 Wasm/js 的：</p>
+<p><img alt="图 5 按照 Golang 官方文档编译（2/2）" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/5-%E6%8C%89%E7%85%A7-Golang-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E7%BC%96%E8%AF%91-2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 5 按照 Golang 官方文档编译（2/2）</div>
+<p>所以在 Wasm/js 环境下编译找不到一些函数。所以这里的方案就是添加一个 <code>file_storage_js.go</code>，然后给这些函数一个 unimplemented 的实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">storage</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">"os"</span>
+	<span style="color:#e6db74">"syscall"</span>
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">newFileLock</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">readOnly</span> <span style="color:#66d9ef">bool</span>) (<span style="color:#a6e22e">fl</span> <span style="color:#a6e22e">fileLock</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">ENOTSUP</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setFileLock</span>(<span style="color:#a6e22e">f</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">File</span>, <span style="color:#a6e22e">readOnly</span>, <span style="color:#a6e22e">lock</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">ENOTSUP</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">rename</span>(<span style="color:#a6e22e">oldpath</span>, <span style="color:#a6e22e">newpath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">ENOTSUP</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isErrInvalid</span>(<span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) <span style="color:#66d9ef">bool</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">syncDir</span>(<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">ENOTSUP</span>
+}
+</code></pre></div><p>然后再次编译：</p>
+<p><img alt="图 6 再次编译的结果" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/6-%E5%86%8D%E6%AC%A1%E7%BC%96%E8%AF%91%E7%9A%84%E7%BB%93%E6%9E%9C.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 6 再次编译的结果</div>
+<p>emm… 编译的时候没有函数可以说这个函数没有 Wasm/js 对应的版本，没有 body 是个什么情况？好在我们有代码可以看，到 <code>arith_decl.go</code> 所在的目录看一下就知道怎么回事了：</p>
+<p><img alt="图 7 查看目录" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/7-%E6%9F%A5%E7%9C%8B%E7%9B%AE%E5%BD%95.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 7 查看目录</div>
+<p>然后 <code>arith_decl.go</code> 的内容是一些列的函数声明，但是具体的实现放到了上面的各个平台相关的汇编文件中了。</p>
+<p>看起来还是和刚刚一样的情况，我们只需要为 Wasm 实现一套这些函数就可以了。但这里有个问题是，这是一个代码不受我们控制的第三方库，并且 TiDB 不直接依赖这个库，而是依赖了一个叫 <code>mathutil</code> 的库，然后 <code>mathutil</code> 依赖这个 <code>bigfft</code>。悲催的是，这个 <code>mathutil</code> 的代码也不受我们控制，因此很直观的想到了两种方案：</p>
+<ol>
+<li>
+<p>给这两个库的作者提 PR，让他们支持 Wasm。</p>
+</li>
+<li>
+<p>我们将这两个库 clone 过来改掉，然后把 TiDB 依赖改到我们 clone 过来的库上。</p>
+</li>
+</ol>
+<p>方案一的问题很明显，整个周期较长，等作者接受 PR 了我们的 Hackathon 都凉凉了（而且还不一定会接受）；方案二的问题也不小，这会导致我们和上游脱钩。那么有没有第三种方案呢，即在编译 Wasm 的时候不依赖这两个库，在编译正常的二进制文件的时候又用这两个库？经过搜索发现，我们很多代码都用到了 <code>mathutil</code>，但是基本上只用了几个函数：<code>MinUint64</code>，<code>MaxUint64</code>，<code>MinInt32</code>，<code>MaxInt32</code> 等等，我们想到的方案是：</p>
+<ol>
+<li>
+<p>新建一个 <code>mathutil</code> 目录，在这个目录里建立 <code>mathutil_linux.go</code> 和 <code>mathutil_js.go</code>。</p>
+</li>
+<li>
+<p>在 <code>mathutil_linux.go</code> 中 reexport 第三方包的几个函数。</p>
+</li>
+<li>
+<p>在 <code>mathutil_js.go</code> 中自己实现这几个函数，不依赖第三方包。</p>
+</li>
+<li>
+<p>将所有对第三方的依赖改到 <code>mathutil</code> 目录上。</p>
+</li>
+</ol>
+<p>这样，<code>mathutil</code> 目录对外提供了原来 <code>mathutil</code> 包的函数，同时整个项目只有 <code>mathutil</code> 目录引入了这个不兼容 Wasm 的第三方包，并且只在 <code>mathutil_linux.go</code> 中引入（<code>mathutil_js.go</code> 是自己实现的），因此编译 Wasm 的时候就不会再用到 <code>mathutil</code> 这个包。</p>
+<p>再次编译，成功了！</p>
+<p><img alt="图 8 编译成功" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/8-%E7%BC%96%E8%AF%91%E6%88%90%E5%8A%9F.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 8 编译成功</div>
+<h3 id="heading-4">兼容性问题</h3>
+<p>编译出 main.Wasm 按照 Golang 的 Wasm 文档跑一下，由于目前是直接通过 os.Stdin 读用户输入的 SQL，通过 os.Stdout 输出结果，所以理论上页面上会是空白的（我们还没有操作 dom），但是由于 TiDB 的日志会打向 os.Stdout，所以在浏览器的控制台上应该能看到 TiDB 正常启动的日志才对。然而很遗憾看到的是异常栈：</p>
+<p><img alt="图 9 异常栈" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/9-%E5%BC%82%E5%B8%B8%E6%A0%88.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 9 异常栈</div>
+<p>可以看到这个错是运行时没实现 os.stat 操作，这是因为目前的 Golang 没有很好的支持 WASI，它仅在 <code>wasm_exec.js</code> 中 mock 了一个 <code>fs</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">fs</span> <span style="color:#f92672">=</span> {
+        <span style="color:#a6e22e">writeSync</span>(<span style="color:#a6e22e">fd</span>, <span style="color:#a6e22e">buf</span>) {
+                ...
+        },
+        <span style="color:#a6e22e">write</span>(<span style="color:#a6e22e">fd</span>, <span style="color:#a6e22e">buf</span>, <span style="color:#a6e22e">offset</span>, <span style="color:#a6e22e">length</span>, <span style="color:#a6e22e">position</span>, <span style="color:#a6e22e">callback</span>) {
+                ...
+        },
+        <span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">flags</span>, <span style="color:#a6e22e">mode</span>, <span style="color:#a6e22e">callback</span>) {
+                ...
+        },
+        ...
+}
+</code></pre></div><p>而且这个 mock 的 <code>fs</code> 并没有实现 <code>stat</code>, <code>lstat</code>, <code>unlink</code>, <code>mkdir</code> 之类的调用，那么解决方案就是我们在启动之前在全局的 <code>fs</code> 对象上 mock 一下这几个函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">unimplemented</span>(<span style="color:#a6e22e">callback</span>) {
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Error(<span style="color:#e6db74">"not implemented"</span>);
+    <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">code</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">"ENOSYS"</span>;
+    <span style="color:#a6e22e">callback</span>(<span style="color:#a6e22e">err</span>);
+}
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">unimplemented1</span>(<span style="color:#a6e22e">_1</span>, <span style="color:#a6e22e">callback</span>) { <span style="color:#a6e22e">unimplemented</span>(<span style="color:#a6e22e">callback</span>); }
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">unimplemented2</span>(<span style="color:#a6e22e">_1</span>, <span style="color:#a6e22e">_2</span>, <span style="color:#a6e22e">callback</span>) { <span style="color:#a6e22e">unimplemented</span>(<span style="color:#a6e22e">callback</span>); }
+
+<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">stat</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unimplemented1</span>;
+<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">lstat</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unimplemented1</span>;
+<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">unlink</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unimplemented1</span>;
+<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">rmdir</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unimplemented1</span>;
+<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">mkdir</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unimplemented2</span>;
+<span style="color:#a6e22e">go</span>.<span style="color:#a6e22e">run</span>(<span style="color:#a6e22e">result</span>.<span style="color:#a6e22e">instance</span>);
+</code></pre></div><p>然后再刷新页面，在控制台上出现了久违的日志：</p>
+<p><img alt="图 10 日志信息" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/10-%E6%97%A5%E5%BF%97.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 10 日志信息</div>
+<p>到目前为止就已经解决了 TiDB 编译到 Wasm 的所有技术问题，剩下的工作就是找一个合适的能运行在浏览器里的 SQL 终端替换掉前面写的终端，和 TiDB 对接上就能让用户在页面上输入 SQL 并运行起来了。</p>
+<h3 id="heading-5">用户接口</h3>
+<p>通过上面的工作，我们现在有了一个 Exec 函数，它接受 SQL 字符串，输出 SQL 执行结果，并且它可以在浏览器里运行，我们还需要一个浏览器版本 SQL 终端和这个函数交互，两种方案：</p>
+<ol>
+<li>
+<p>使用 Golang 直接操作 dom 来实现这个终端。</p>
+</li>
+<li>
+<p>在 Golang 中把 Exec 暴露到全局，然后找一个现成的 js 版本的终端和这个全局的 Exec 对接。</p>
+</li>
+</ol>
+<p>对于前端小白的我们来说，第二种方式成本最低，我们很快找到了 jquery.console.js 这个库，它只需要传入一个 SQL 处理的 callback 即可运行，而我们的 Exec 简直就是为这个 callback 量身打造的。</p>
+<p>因此我们第一步工作就是把 Exec 挂到浏览器的 window 上（暴露到全局给 js 调用）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Global</span>().<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">"executeSQL"</span>, <span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">FuncOf</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">this</span> <span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Value</span>, <span style="color:#a6e22e">args</span> []<span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">interface</span>{} {
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+	    <span style="color:#75715e">// Simplified code
+</span><span style="color:#75715e"></span>	    <span style="color:#a6e22e">sql</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">String</span>()
+	    <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">1</span>].<span style="color:#a6e22e">Invoke</span>(<span style="color:#a6e22e">k</span>.<span style="color:#a6e22e">Exec</span>(<span style="color:#a6e22e">sql</span>))
+    }()
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}))
+</code></pre></div><p>这样就能在浏览器的控制台运行 SQL 了：</p>
+<p><img alt="图 11 在浏览器控制台运行 SQL" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/11-%E8%BF%90%E8%A1%8C-SQL.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 11 在浏览器控制台运行 SQL</div>
+<p>然后将用 jquery.console.js 搭建一个 SQL 终端，再将 executeSQL 作为 callback 传入，大功告成：</p>
+<p><img alt="图 12 搭建 SQL 终端" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/12-%E6%90%AD%E5%BB%BA-SQL-%E7%BB%88%E7%AB%AF.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 12 搭建 SQL 终端</div>
+<p>现在算是有一个能运行的版本了。</p>
+<h3 id="heading-6">本地文件访问</h3>
+<p>还有一点点小麻烦要解决，那就是 TiDB 的 load stats 和 load data 功能。load data 语法和功能详解可以参考 <a href="https://pingcap.com/docs-cn/v3.0/reference/sql/statements/load-data/">TiDB 官方文档</a>，其功能简单的说就是用户指定一个文件路径，然后客户端将这个文件内容传给 TiDB，TiDB 将其加载到指定的表里。我们的问题在于，浏览器中是不能读取用户电脑上的文件的，于是我们只好在用户执行这个语句的时候打开浏览器的文件上传窗口，让用户主动选择一个这样的文件传给 TiDB：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Global</span>().<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">"upload"</span>).<span style="color:#a6e22e">Invoke</span>(<span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">FuncOf</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">this</span> <span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Value</span>, <span style="color:#a6e22e">args</span> []<span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">interface</span>{} {
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#a6e22e">fileContent</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">String</span>()
+        <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doSomething</span>(<span style="color:#a6e22e">fileContent</span>)
+        <span style="color:#a6e22e">c</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">e</span>
+    }()
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}), <span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">FuncOf</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">this</span> <span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Value</span>, <span style="color:#a6e22e">args</span> []<span style="color:#a6e22e">js</span>.<span style="color:#a6e22e">Value</span>) <span style="color:#66d9ef">interface</span>{} {
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#a6e22e">c</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">String</span>())
+    }()
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}))
+</code></pre></div><p>load stats 的实现也是同理。</p>
+<p><strong>此外，我们还使用同样的原理 “自作主张” 加入了一个新的指令：source，用户执行这个命令可以上传一个 SQL 文件，然后我们会执行这个文件里的语句。我们认为这个功能的主要使用场景是：用户初次接触 TiDB 时，想验证其对 MySQL 的兼容性，但是一条一条输入 SQL 效率太低了，于是可以将所有用户业务中用到的 SQL 组织到一个 SQL 文件中（使用脚本或其他自动化工具），然后在页面上执行 source 导入这个文件，验证结果。</strong></p>
+<p>以一个 test.sql 文件为例，展示下 source 命令的效果，test.sql 文件内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span> samp_db;
+
+USE samp_db;
+
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span> person (
+      number INT(<span style="color:#ae81ff">11</span>),
+      name VARCHAR(<span style="color:#ae81ff">255</span>),
+      birthday DATE
+);
+
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">INDEX</span> person_num <span style="color:#66d9ef">ON</span> person (number);
+
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> person <span style="color:#66d9ef">VALUES</span>(<span style="color:#e6db74">"</span><span style="color:#e6db74">1</span><span style="color:#e6db74">"</span>,<span style="color:#e6db74">"</span><span style="color:#e6db74">tom</span><span style="color:#e6db74">"</span>,<span style="color:#e6db74">"</span><span style="color:#e6db74">20170912</span><span style="color:#e6db74">"</span>);
+
+<span style="color:#66d9ef">UPDATE</span> person <span style="color:#66d9ef">SET</span> birthday<span style="color:#f92672">=</span><span style="color:#e6db74">'</span><span style="color:#e6db74">20171010</span><span style="color:#e6db74">'</span> <span style="color:#66d9ef">WHERE</span> name<span style="color:#f92672">=</span><span style="color:#e6db74">'</span><span style="color:#e6db74">tom</span><span style="color:#e6db74">'</span>;
+</code></pre></div><p>source 命令执行之后弹出文件选择框：</p>
+<p><img alt="图 13 source 命令执行（1/2）" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/13-source-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 13 source 命令执行（1/2）</div>
+<p>选中 SQL 文件上传后自动执行，可以对数据库进行相应的修改：</p>
+<p><img alt="图 14 source 命令执行（2/2）" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/14-source-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-2.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 14 source 命令执行（2/2）</div>
+<h2 id="heading-7">总结与展望</h2>
+<p>总的来说，这次 Hackathon 为了移植 TiDB 我们主要解决了几个问题：</p>
+<ol>
+<li>
+<p>浏览器中无法监听端口，我们给 TiDB 嵌入了一个 SQL 终端。</p>
+</li>
+<li>
+<p>goleveldb 对 Wasm 的兼容问题。</p>
+</li>
+<li>
+<p>bigfft 的 Wasm 兼容问题。</p>
+</li>
+<li>
+<p>Golang 自身对 WASI 支持不完善导致的 fs 相关函数缺失。</p>
+</li>
+<li>
+<p>TiDB 对本地文件加载转换为浏览器上传文件方式加载。</p>
+</li>
+<li>
+<p>支持 source 命令批量执行 SQL。</p>
+</li>
+</ol>
+<p><strong>目前而言我们已经将这个项目作为 TiDB Playground (<a href="https://play.pingcap.com/">https://play.pingcap.com/</a>) 和 TiDB Tour (<a href="https://tour.pingcap.com/">https://tour.pingcap.com/</a>) 开放给用户使用。由于它不需要用户安装配置就能让用户在阅读文档的同时进行尝试，很大程度上降低了用户学习使用 TiDB 的成本，社区有小伙伴已经基于这些自己做数据库教程了，譬如：<a href="https://github.com/imiskolee/tidb-wasm-markdown">imiskolee/tidb-wasm-markdown</a>（<a href="https://mp.weixin.qq.com/s/0Vo4apK4VdBfOs0-KyWXZA">相关介绍文章</a>）。</strong></p>
+<p><img alt="图 15 TiDB Playground" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/tidb-wasm-introduction/0-tidb-playground.png" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">图 15 TiDB Playground</div>
+<p>由于 Hackathon 时间比较紧张，其实很多想做的东西还没实现，比如：</p>
+<ol>
+<li>
+<p>使用 indexedDB 让数据持久化：需要针对 indexedDB 实现一套 Storage 的 interface。</p>
+</li>
+<li>
+<p>使用 P2P 技术（如 webrtc）对其他浏览器提供服务：未来必定会有越来越多的应用迁移到 Wasm，而很多应用是需要数据库的，TiDB-Wasm 恰好可以扮演这样的角色。</p>
+</li>
+<li>
+<p>给 TiDB 的 Wasm 二进制文件瘦身：目前编译出来的二进制文件有将近 80M，对浏览器不太友好，同时运行时占用内存也比较多。</p>
+</li>
+</ol>
+<p>欢迎更多感兴趣的社区小伙伴们加入进来，一起在这个项目上愉快的玩耍（<a href="https://github.com/pingcap/tidb/projects/27">github.com/pingcap/tidb/projects/27</a>），也可以通过 <a href="mailto:info@pingcap.com">info@pingcap.com</a> 联系我们。</p>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com" onclick="trackViews('blog-contact-us', 'mail_to_info_view')" target="_blank">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/blog-cn/tidb-wasm-introduction/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+</li>
+<li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+<li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+<li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+<li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li><a href="/solutions/intel/" onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+<li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')" target="_blank">Ask TUG</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="https://careers.pingcap.com" onclick="trackViews('footer-recruit-join', 'recruit-join_view')" target="_blank">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+<li><a href="/zh/privacy-policy/">隐私申明</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="tel" href="/" target="_blank"><svg enable-background="new 0 0 512.021 512.021" height="19" id="Layer_1" viewbox="0 0 512.021 512.021" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"></path></g></svg>
+ 商务咨询：</a></li>
+<li class="tel-li">4006790886</li>
+<li class="tel-li">010-58400041</li>
+<li><a class="twitter" href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&amp;id=4240&amp;channel=9034" target="_blank"><svg height="19" p-id="2379" t="1622000094837" version="1.1" viewbox="0 0 1069 1024" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-pc"></div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2021 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/blog" id="lang">English</a>
+<a class="prepared-num" href="https://beian.miit.gov.cn/">京 ICP 备 16046278 号 - 2</a>
+<a class="prepared-num" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" target="_blank">
+<img src="/images/beian.png"/>
+<p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/anchor.js" type="text/javascript"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script crossorigin="anonymous" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

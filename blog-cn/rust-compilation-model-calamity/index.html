@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"/><meta content="IE=edge" http-equiv="X-UA-Compatible"/><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async="" src="https://download.pingcap.com/js/ga-analytics.js"></script>
+<link href="https://download.pingcap.com/style/github-markdown.css" rel="stylesheet"/>
+<link href="/css/doc.css" rel="stylesheet"/>
+<title>Rust 编译模型之殇 | PingCAP</title><link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/images/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="许多人抱怨构建的时间太长。有时，在开发模式下完全重新构建需要花费 15 分钟，而在发布模式则需要 30 分钟。" name="description"/>
+<meta content="noodp" name="robots"/>
+<meta content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative" name="keywords"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="website" property="og:type"/>
+<meta content="Rust 编译模型之殇 | PingCAP" property="og:title"/>
+<meta content="许多人抱怨构建的时间太长。有时，在开发模式下完全重新构建需要花费 15 分钟，而在发布模式则需要 30 分钟。" property="og:description"/>
+<meta content="https://pingcap.com/blog-cn/rust-compilation-model-calamity/" property="og:url"/>
+<meta content="MySQL at Scale. No more manual sharding" property="og:site_name"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image"/>
+<meta content="/images/pingcap-opengraph.jpg" property="og:image:secure_url"/><meta content="summary" name="twitter:card"/><meta content="许多人抱怨构建的时间太长。有时，在开发模式下完全重新构建需要花费 15 分钟，而在发布模式则需要 30 分钟。" name="twitter:description"/>
+<meta content="Rust 编译模型之殇 | PingCAP" name="twitter:title"/>
+<meta content="@pingcap" name="twitter:site"/>
+<meta content="https://download.pingcap.com/images/pingcap-opengraph.jpg" name="twitter:image"/><meta content="@pingcap" name="twitter:creator"/>
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script async="" src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js" type="text/javascript"></script>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" rel="preload" type="font/woff"/>
+<link as="font" crossorigin="anonymous" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" rel="preload" type="font/ttf"/>
+<link as="script" href="https://download.pingcap.com/js/jquery.min.js" rel="preload"/>
+<link href="/css/main.css" rel="stylesheet"/>
+<link href="https://download.pingcap.com/style/docsearch.min.css" rel="stylesheet"/>
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head> <body data-lang="cn"><div id="page-content">
+<header class="fixed-top" role="navigation">
+<div class="container">
+<a class="nav-brand" href="/zh"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+<div class="nav-wrapper">
+<div class="navigation">
+<ul>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li class="docs-type-selector " id="docsTypeSelector">
+<a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+</li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+</ul>
+</div>
+<div class="global-search">
+<div class="search-wrapper">
+<span class="icon-search"><svg fill="#fff" height="18" viewbox="0 0 67.125 67.125" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"></path><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"></path></svg></span>
+<input data-lang="cn" data-type="" id="search-input" name="q" placeholder="搜索 TiDB 文档" type="search"/>
+</div>
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+</div>
+</div>
+<div class="nav-btn nav-slider">
+<i class="material-icons"><svg height="16" viewbox="0 0 459 459" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"></path></svg></i>
+</div>
+</div>
+</header>
+<nav class="mobile-sidebar">
+<div class="nav-header">
+<div class="logo-wrap">
+<a class="nav-brand" href="/en"><img alt="PingCAP" src="/images/pingcap-logo.png"/></a>
+</div>
+</div>
+<ul class="ul-base">
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+<li><a href="/cases-cn">案例</a></li>
+<li><a href="/community-cn">社区</a></li>
+<li class="sel"><a href="/blog-cn">博客</a></li>
+<li><a href="/about-cn">关于</a></li>
+<li><a href="https://asktug.com" onclick="trackViews('navbar-asktug', 'asktug_view')" target="_blank">问答</a></li>
+<li><a href="/download-cn">下载试用</a></li>
+<li><a class="link-download" href="/about-cn/#contact-us" onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+<li><a class="nav-blinking" href="https://university.pingcap.com/" onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank">PingCAP Education</a></li>
+</ul>
+<div class="nav-footer">
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>Contact</strong></h4>
+<ul class="social social-cn ul-base">
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="18" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg></a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="18" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg></a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg></a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="18" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg></a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="18" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg></a></li>
+<li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg></a><div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-mobile"></div>
+</div>
+<div class="container">
+<a class="btn-lang" href="/blog" id="lang">English</a>
+</div>
+</div>
+</nav>
+<div class="blog">
+<div class="container">
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg height="17" viewbox="0 0 402.041 402.04" width="13" xmlns="http://www.w3.org/2000/svg"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"></path><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"></path></g></svg></a></div><a class="tag all" href="#">ALL (287)</a>
+<div class="tag-list"><a class="tag " data-tag="Chaos-Mesh" href="/blog-cn/#Chaos-Mesh">Chaos Mesh (10)
+                </a><a class="tag " data-tag="Committer" href="/blog-cn/#Committer">Committer (3)
+                </a><a class="tag " data-tag="Contributor" href="/blog-cn/#Contributor">Contributor (9)
+                </a><a class="tag " data-tag="DM" href="/blog-cn/#DM">DM (2)
+                </a><a class="tag " data-tag="DM-源码阅读" href="/blog-cn/#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">DM 源码阅读 (10)
+                </a><a class="tag " data-tag="Go" href="/blog-cn/#Go">Go (3)
+                </a><a class="tag " data-tag="HTAP" href="/blog-cn/#HTAP">HTAP (4)
+                </a><a class="tag " data-tag="Hackathon" href="/blog-cn/#Hackathon">Hackathon (4)
+                </a><a class="tag " data-tag="K8s" href="/blog-cn/#K8s">K8s (2)
+                </a><a class="tag " data-tag="Key-Visualizer" href="/blog-cn/#Key-Visualizer">Key Visualizer (2)
+                </a><a class="tag " data-tag="Kubernetes" href="/blog-cn/#Kubernetes">Kubernetes (3)
+                </a><a class="tag " data-tag="Linux" href="/blog-cn/#Linux">Linux (4)
+                </a><a class="tag " data-tag="MVCC" href="/blog-cn/#MVCC">MVCC (2)
+                </a><a class="tag " data-tag="MySQL" href="/blog-cn/#MySQL">MySQL (2)
+                </a><a class="tag " data-tag="PD" href="/blog-cn/#PD">PD (5)
+                </a><a class="tag " data-tag="Percolator" href="/blog-cn/#Percolator">Percolator (3)
+                </a><a class="tag " data-tag="PingCAP" href="/blog-cn/#PingCAP">PingCAP (2)
+                </a><a class="tag " data-tag="Prometheus" href="/blog-cn/#Prometheus">Prometheus (3)
+                </a><a class="tag " data-tag="Raft" href="/blog-cn/#Raft">Raft (11)
+                </a><a class="tag " data-tag="RocksDB" href="/blog-cn/#RocksDB">RocksDB (3)
+                </a><a class="tag sel" data-tag="Rust" href="/blog-cn/#Rust">Rust (5)
+                </a><a class="tag " data-tag="SQL" href="/blog-cn/#SQL">SQL (6)
+                </a><a class="tag " data-tag="Spanner" href="/blog-cn/#Spanner">Spanner (2)
+                </a><a class="tag " data-tag="TiDB" href="/blog-cn/#TiDB">TiDB (94)
+                </a><a class="tag " data-tag="TiDB-4.0-新特性" href="/blog-cn/#TiDB-4.0-%e6%96%b0%e7%89%b9%e6%80%a7">TiDB 4.0 新特性 (11)
+                </a><a class="tag " data-tag="TiDB-Binlog" href="/blog-cn/#TiDB-Binlog">TiDB Binlog (5)
+                </a><a class="tag " data-tag="TiDB-Binlog-源码阅读" href="/blog-cn/#TiDB-Binlog-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB Binlog 源码阅读 (9)
+                </a><a class="tag " data-tag="TiDB-Ecosystem-Tools" href="/blog-cn/#TiDB-Ecosystem-Tools">TiDB Ecosystem Tools (3)
+                </a><a class="tag " data-tag="TiDB-Hackathon-2020" href="/blog-cn/#TiDB-Hackathon-2020">TiDB Hackathon 2020 (7)
+                </a><a class="tag " data-tag="TiDB-Operator" href="/blog-cn/#TiDB-Operator">TiDB Operator (9)
+                </a><a class="tag " data-tag="TiDB-性能挑战赛" href="/blog-cn/#TiDB-%e6%80%a7%e8%83%bd%e6%8c%91%e6%88%98%e8%b5%9b">TiDB 性能挑战赛 (2)
+                </a><a class="tag " data-tag="TiDB-易用性挑战赛" href="/blog-cn/#TiDB-%e6%98%93%e7%94%a8%e6%80%a7%e6%8c%91%e6%88%98%e8%b5%9b">TiDB 易用性挑战赛 (4)
+                </a><a class="tag " data-tag="TiDB-源码阅读" href="/blog-cn/#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb">TiDB 源码阅读 (24)
+                </a><a class="tag " data-tag="TiFlash" href="/blog-cn/#TiFlash">TiFlash (7)
+                </a><a class="tag sel" data-tag="TiKV" href="/blog-cn/#TiKV">TiKV (29)
+                </a><a class="tag " data-tag="TiKV-源码解析" href="/blog-cn/#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90">TiKV 源码解析 (21)
+                </a><a class="tag " data-tag="TiSpark" href="/blog-cn/#TiSpark">TiSpark (4)
+                </a><a class="tag " data-tag="WebAssembly" href="/blog-cn/#WebAssembly">WebAssembly (2)
+                </a><a class="tag " data-tag="gRPC" href="/blog-cn/#gRPC">gRPC (2)
+                </a><a class="tag " data-tag="事务" href="/blog-cn/#%e4%ba%8b%e5%8a%a1">事务 (9)
+                </a><a class="tag " data-tag="优化器" href="/blog-cn/#%e4%bc%98%e5%8c%96%e5%99%a8">优化器 (2)
+                </a><a class="tag " data-tag="分布式系统前沿技术" href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e5%89%8d%e6%b2%bf%e6%8a%80%e6%9c%af">分布式系统前沿技术 (4)
+                </a><a class="tag " data-tag="分布式系统测试" href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95">分布式系统测试 (3)
+                </a><a class="tag " data-tag="备份恢复" href="/blog-cn/#%e5%a4%87%e4%bb%bd%e6%81%a2%e5%a4%8d">备份恢复 (2)
+                </a><a class="tag " data-tag="工具" href="/blog-cn/#%e5%b7%a5%e5%85%b7">工具 (4)
+                </a><a class="tag " data-tag="性能" href="/blog-cn/#%e6%80%a7%e8%83%bd">性能 (4)
+                </a><a class="tag " data-tag="数据同步" href="/blog-cn/#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5">数据同步 (2)
+                </a><a class="tag " data-tag="最佳实践" href="/blog-cn/#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">最佳实践 (6)
+                </a><a class="tag " data-tag="架构" href="/blog-cn/#%e6%9e%b6%e6%9e%84">架构 (6)
+                </a><a class="tag " data-tag="版本" href="/blog-cn/#%e7%89%88%e6%9c%ac">版本 (2)
+                </a><a class="tag " data-tag="社区" href="/blog-cn/#%e7%a4%be%e5%8c%ba">社区 (103)
+                </a><a class="tag " data-tag="社区动态" href="/blog-cn/#%e7%a4%be%e5%8c%ba%e5%8a%a8%e6%80%81">社区动态 (29)
+                </a><a class="tag " data-tag="集群调度" href="/blog-cn/#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6">集群调度 (2)
+                </a>
+</div>
+</div>
+<div class="archive">
+<div class="content markdown-body">
+<h1 class="title">Rust 编译模型之殇</h1>
+<ul class="blog-post-meta">
+<li class="meta-item">
+<img alt="Date icon" src="/images/svgs/icon-date.svg"/>Sun, Mar 1, 2020</li>
+<li class="meta-item">
+<img alt="Pen icon" src="/images/svgs/icon-writer.svg"/>Brian Anderson</li>
+</ul>
+<div class="blog-text"><blockquote>
+<p><strong>作者介绍:</strong></p>
+<p>Brian Anderson 是 Rust 编程语言及其姊妹项目 Servo Web 浏览器的共同创始人之一。他目前在 PingCAP 担任高级数据库工程师。</p>
+<p><strong>感谢 Rust 中文社区翻译小组对本文翻译及审校上的贡献：</strong></p>
+<ul>
+<li>翻译：张汉东、黄珏珅</li>
+<li>审校 ：吴聪</li>
+</ul>
+</blockquote>
+<p><strong>Rust 编译缓慢的根由在于语言的设计。</strong></p>
+<p>我的意思并非是此乃 Rust 语言的<strong>设计目标</strong>。正如语言设计者们相互争论时经常说的那样，编程语言的设计总是充满了各种权衡。其中最主要的权衡就是：<strong>运行时性能</strong>和<strong>编译时性能</strong>。而 Rust 团队几乎总是选择运行时而非编译时。</p>
+<p>因此，Rust 编译时间很慢。这有点让人恼火，因为 Rust 在其他方面的表现都非常好，唯独 Rust 编译时间却表现如此糟糕。</p>
+<h2 id="rust--tikv--1-">Rust 与 TiKV 的编译时冒险：第 1 集</h2>
+<p>在 <a href="https://pingcap.com/">PingCAP</a>，我们基于 Rust 开发了分布式存储系统 TiKV 。然而它的编译速度慢到足以让公司里的许多人不愿使用 Rust。我最近花了一些时间，与 TiKV 团队及其社区中的其他几人一起调研了 <a href="https://github.com/tikv/tikv/">TiKV</a> 编译时间缓慢的问题。</p>
+<ul>
+<li>通过这一系列博文，我将会讨论在这个过程中的收获：</li>
+<li>为什么 Rust 编译那么慢，或者说让人感觉那么慢；</li>
+<li>Rust 的发展如何造就了编译时间的缓慢；</li>
+<li>编译时用例；</li>
+<li>我们测量过的，以及想要测量但还没有或者不知道如何测量的项目；</li>
+<li>改善编译时间的一些思路；</li>
+<li>事实上未能改善编译时间的思路；</li>
+<li>TiKV 编译时间的历史演进；</li>
+<li>有关如何组织 Rust 项目可加速编译的建议；</li>
+<li>最近和未来，上游将对编译时间的改进。</li>
+</ul>
+<h2 id="pingcap-tikv--">PingCAP 的阴影：TiKV 编译次数 “余额不足”</h2>
+<p>在 <a href="https://pingcap.com/en/">PingCAP</a>，我的同事用 Rust 写 <a href="https://github.com/tikv/tikv/">TiKV</a>。它是我们的分布式数据库 <a href="https://github.com/pingcap/tidb">TiDB</a> 的存储节点。采用这样的架构，是因为他们希望该系统中作为最重要的节点，能被构造得快速且可靠，至少是在一个最大程度的合理范围内（译注：通常情况下人们认为快和可靠是很难同时做到的，人们只能在设计/构造的时候做出权衡。选择 Rust 是为了尽可能让 TiKV 能够在尽可能合理的情况下去提高它的速度和可靠性）。</p>
+<p>这是一个很棒的决定，并且团队内大多数人对此都非常满意。</p>
+<p>但是许多人抱怨构建的时间太长。有时，在开发模式下完全重新构建需要花费 15 分钟，而在发布模式则需要 30 分钟。对于大型系统项目的开发者而言，这看上去可能并不那么糟糕。但是它与许多开发者从现代的开发环境中期望得到的速度相比则慢了很多。TiKV 是一个相当巨大的代码库，它拥有 200 万行 Rust 代码。相比之下，Rust 自身包含超过 300 万行 Rust 代码，而 <a href="https://github.com/servo/servo">Servo</a> 包含 270 万行（请参阅 <a href="https://gist.github.com/brson/31b6f8c5467b050779ce9aa05d41aa84">此处的完整行数统计</a>）。</p>
+<p>TiDB 中的其他节点是用 Go 编写的，当然，Go 与 Rust 有不同的优点和缺点。PingCAP 的一些 Go 开发人员对于不得不等待 Rust 组件的构建而表示不满。因为他们习惯于快速的构建-测试迭代。</p>
+<p>在 Go 开发人员忙碌工作的同时，Rust 开发人员却在编译时间休息（喝咖啡、喝茶、抽烟，或者诉苦）。Rust 开发人员有多余的时间来跨越内心的“阴影（译注：据说，TiKV 一天只有 24 次编译机会，用一次少一次）。</p>
+<h2 id="tikv-">概览：TiKV 编译时冒险历程</h2>
+<p>本系列的第一篇文章只是关于 Rust 在编译时间方面的历史演进。因为在我们深入研究 TiKV 编译时间的具体技术细节之前，可能需要更多的篇章。所以，这里先放一个漂亮的图表，无需多言。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/rust-compilation-model-calamity/2-rust-compile-times-tikv.svg" src="/images/svgs/loader-spinner.svg"/></p>
+<div class="caption-center">TiKV 的 Rust 编译时间</div>
+<h2 id="-rust-">造就编译时间缓慢的 Rust 设计</h2>
+<p>Rust 编译缓慢的根由在于语言的设计。</p>
+<p>我的意思并非是此乃 Rust 语言的<strong>设计目标</strong>。正如语言设计者们相互争论时经常说的那样，编程语言的设计总是充满了各种权衡。其中最主要的权衡就是：<strong>运行时性能</strong>和<strong>编译时性能</strong>。而 Rust 团队几乎总是选择运行时而非编译时。</p>
+<p>刻意的运行时/编译时权衡不是 Rust 编译时间差劲的唯一原因，但这是一个大问题。还有一些语言设计对运行时性能并不是至关重要，但却意外地有损于编译时性能。Rust 编译器的实现方式也抑制了编译时性能。</p>
+<p>所以，Rust 编译时间的差劲，既是刻意为之的造就，又有出于设计之外的原因。尽管编译器的改善、设计模式和语言的发展可能会缓解这些问题，但这些问题大多无法得到解决。还有一些偶然的编译器架构原因导致了 Rust 的编译时间很慢，这些需要通过大量的工程时间和精力来修复。</p>
+<p>如果迅速地编译不是 Rust 的核心设计原则，那么 Rust 的核心设计原则是什么呢？下面列出几个核心设计原则：</p>
+<ul>
+<li><strong>实用性（Practicality）</strong> ：它应该是一种可以在现实世界中使用的语言；</li>
+<li><strong>务实（Pragmatism）</strong>：它应该是符合人性化体验，并且能与现有系统方便集成的语言；</li>
+<li><strong>内存安全性（Memory-safety）</strong> ：它必须加强内存安全，不允许出现段错误和其他类似的内存访问违规操作；</li>
+<li><strong>高性能（Performance）</strong> ：它必须拥有能和 C++ 比肩的性能；</li>
+<li><strong>高并发（Concurrency）</strong> ：它必须为编写并发代码提供现代化的解决方案。</li>
+</ul>
+<p>但这并不是说设计者没有为编译速度做任何考虑。例如，对于编译 Rust 代码所要做的任何分析，团队都试图确保合理的算法复杂度。然而，Rust 的设计历史也是其一步步陷入糟糕的编译时性能沼泽的历史。</p>
+<p>讲故事的时间到了。</p>
+<h2 id="rust-">Rust 的自举</h2>
+<p>我不记得自己是什么时候才开始意识到，Rust 糟糕的编译时间其实是该语言的一个战略问题。在面对未来底层编程语言的竞争时可能会是一个致命的错误。在最初的几年里，我几乎完全是对 Rust 编译器进行 Hacking（非常规暴力测试），我并不太关心编译时间的问题，我也不认为其他大多数同事会太关心该问题。我印象中大部分时间 Rust 编译时总是很糟糕，但不管怎样，我能处理好。</p>
+<p>针对 Rust 编译器工作的时候，我通常都会在计算机上至少保留三份存储库副本，在其他所有的编译器都在构建和测试时，我就会 Hacking 其中的一份。我会开始构建 Workspace 1，切换终端，记住在 Workspace 2 发生了什么，临时做一下修改，然后再开始构建 Workspace 2，切换终端，等等。整个流程比较零碎且经常切换上下文。</p>
+<p>这（可能）也是其他 Rust 开发者的日常。我现在对 TiKV 也经常在做类似的 Hacking 测试。</p>
+<p>那么，从历史上看，Rust 编译时间有多糟糕呢？这里有一个简单的统计表，可以看到 Rust 的自举（Self-Hosting）时间在过去几年里发生了怎样的变化，也就是使用 Rust 来构建它自己的时间。出于各种原因，Rust 构建自己不能直接与 Rust 构建其他项目相比，但我认为这能说明一些问题。</p>
+<p>首个 <a href="https://gist.github.com/brson/31b6f8c5467b050779ce9aa05d41aa84/edit">Rust 编译器</a> 叫做 rustboot，始于 2010 年，是用 OCaml 编写的，它最终目的是被用于构建第二个由 Rust 实现的编译器 rustc，并由此开启了 Rust 自举的历程。除了基于 Rust 编写之外，rustc 还使用了 <a href="https://llvm.org/">LLVM</a> 作为后端来生成机器代码，来代替之前 rustboot 的手写 x86 代码生成器。</p>
+<p>Rust 需要自举，那样就可以作为一种“自产自销（Dog-Fooding）”的语言。使用 Rust 编写编译器意味着 Rust 的作者们需要在语言设计过程的早期，使用自己的语言来编写实用的软件。在实现自举的过程中让 Rust 变成一种实用的语言。</p>
+<p>Rust 第一次自举构建是在 2011 年 4 月 20 日。该过程总共花了 <a href="https://mail.mozilla.org/pipermail/rust-dev/2011-April/000330.html">一个小时</a>，这个编译时间对当时而言，很漫长，甚至还觉得有些可笑。</p>
+<p>最初那个超级慢的自举程序慢的有些反常，在于其包含了糟糕的代码生成和其他容易修复的早期错误（可能，我记不清了）。rustc 的性能很快得到了改善，Graydon 很快就 <a href="https://github.com/rust-lang/rust/commit/6997adf76342b7a6fe03c4bc370ce5fc5082a869">抛弃了旧的 rustboot 编译器</a> ，因为没有足够的人力和动力来维护两套实现。</p>
+<p>在 2010 年 6 月首次发布的 11 个月之后，Rust 漫长而艰难的编译时代就此开始了。</p>
+<h3 id="heading">注意</h3>
+<p>我本想在这里分享一些有历史意义的自举时间，但在经历了数小时，以及试图从2011年开始构建 Rust 修订版的障碍之后，我终于放弃了，决定在没有它们的情况下发布这篇文章。作为补充，这里作一个类比：</p>
+<ul>
+<li>
+<p><strong>兔子飞奔几米（7）</strong>：rustboot 构建 Rust 的时间；</p>
+</li>
+<li>
+<p><strong>仓鼠狂奔一公里（49）</strong>：在 rustboot 退役后使用 rustc 构建 Rust 的时间；</p>
+</li>
+<li>
+<p><strong>树獭移动一万米（188）</strong>：在 2020 年构建 rustc 所需的时间。</p>
+</li>
+</ul>
+<p>反正，几个月前我构建 Rust 的时候，花了五个小时。</p>
+<p>Rust 语言开发者们已经适应了 Rust 糟糕的自举时间，并且在 Rust 的关键早期设计阶段未能识别或处理糟糕编译时间问题的严重性。</p>
+<h2 id="heading-1">（非）良性循环</h2>
+<p>在 Rust 项目中，我们喜欢能够增强自身基础的流程。无论是作为语言还是社区，这都是 Rust 取得成功的关键之一。</p>
+<p>一个明显非常成功的例子就是 <a href="https://github.com/servo/servo">Servo</a>。Servo 是一个基于 Rust 构建的 Web 浏览器，并且 Rust 也是为了构建 Servo 而诞生。Rust 和 Servo 是姊妹项目。它们是由同一个（初始）团队，在（大致）同一时间创造的，并同时进化。不只是为了创造 Servo 而创建 Rust，而且 Servo 也是为了解 Rust 的设计而构建的。</p>
+<p>这两个项目最初的几年都非常困难，两个项目都是并行发展的。此处非常适合用 <a href="https://en.wikipedia.org/wiki/Ship_of_Theseus">忒修斯之船</a> 做比喻——我们不断地重建 Rust，以便在 Sevro 的海洋中畅行。毫无疑问，使用 Rust 构建 Servo 的经验，来构建 Rust 语言本身，直接促进了很多好的决定，使得 Rust 成为了实用的语言。</p>
+<p>这里有一些关于 Servo-Rust 反馈回路的例子：</p>
+<ul>
+<li>
+<p>为了<a href="https://github.com/rust-lang/rust/issues/2216">自动生成HTML解析器</a>，实现了带标签的 break 和 continue 。</p>
+</li>
+<li>
+<p><a href="https://github.com/rust-lang/rust/issues/2549#issuecomment-19588158">在分析了 Servo 内闭包使用情况之后实现了</a> ，所有权闭包（Owned closures）。</p>
+</li>
+<li>
+<p>外部函数调用曾经被认为是安全的。<a href="https://github.com/rust-lang/rust/issues/2628#issuecomment-9384243">这部分变化（改为了 Unsafe）得益于 Servo 的经验</a> 。</p>
+</li>
+<li>
+<p>从绿色线程迁移到本地线程，也是由构建 Sevro、观察 Servo 中 SpiderMonkey 集成的 FFI 开销以及剖析“hot splits”的经验所决定的，其中绿色线程堆栈需要扩展和收缩。</p>
+</li>
+</ul>
+<p>Rust 和 Servo 的共同发展创造了一个 <a href="https://en.wikipedia.org/wiki/Virtuous_circle_and_vicious_circle">良性循环</a> ，使这两个项目蓬勃发展。今天，Servo 组件被深度集成到火狐（Firefox）中，确保在火狐存活的时候，Rust 不会死去。</p>
+<p>任务完成了。</p>
+<p><img alt="" class="lazy" data-original="https://download.pingcap.com/images/blog-cn/rust-compilation-model-calamity/3-rust-compile-mission-completed.png" src="/images/svgs/loader-spinner.svg"/></p>
+<p>前面提到的早期自举对 Rust 的设计同样至关重要，使得 Rust 成为构建 Rust 编译器的优秀语言。同样，Rust 和 <a href="https://webassembly.org/">WebAssembly</a>  是在密切合作下开发的（我与 <a href="https://github.com/emscripten-core/emscripten">Emscripten</a>  的作者，<a href="https://github.com/CraneStation/cranelift">Cranelift</a>  的作者并排工作了好几年)，这使得 WASM 成为了一个运行 Rust 的优秀平台，而 Rust 也非常适合 WASM。</p>
+<p>遗憾的是，没有这样的增强来缩短 Rust 编译时间。事实可能正好相反——Rust 越是被认为是一种快速语言，它成为最快的语言就越重要。而且，Rust 的开发人员越习惯于跨多个分支开发他们的 Rust 项目，在构建之间切换上下文，就越不需要考虑编译时间。</p>
+<p>直到 2015 年 Rust 1.0 发布并开始得到更广泛的应用后，这种情况才真正有所改变。</p>
+<p>多年来，Rust 在糟糕的编译时间的<a href="https://en.wikipedia.org/wiki/Boiling_frog">“温水中”被慢慢“烹煮”</a>，当意识到它已经变得多么糟糕时，已为时已晚。已经 1.0 了，那些（设计）决策早已被锁定了。</p>
+<p>这一节包含了太多令人厌倦的隐喻，抱歉了。</p>
+<h2 id="heading-2">运行时优先于编译时的早期决策</h2>
+<p>如果是 Rust 设计导致了糟糕的编译时间，那么这些设计具体又是什么呢？我会在这里简要地描述一些。本系列的下一集将会更加深入。有些在编译时的影响比其他的更大，但是我断言，所有这些都比其他的设计耗费更多的编译时间。</p>
+<p>现在回想起来，我不禁会想，“当然，Rust 必须有这些特性”。确实，如果没有这些特性，Rust 将会是另一门完全不同的语言。然而，语言设计是折衷的，这些并不是注定要成 Rust 的部分。</p>
+<ul>
+<li>
+<p><strong>借用（Borrowing）</strong>——Rust 的典型功能。其复杂的指针分析以编译时的花费来换取运行时安全。</p>
+</li>
+<li>
+<p><strong>单态化（Monomorphization）</strong>——Rust 将每个泛型实例转换为各自的机器代码，从而导致代码膨胀并增加了编译时间。</p>
+</li>
+<li>
+<p><strong>栈展开（Stack unwinding）</strong>——不可恢复异常发生后，栈展开向后遍历调用栈并运行清理代码。它需要大量的编译时登记（book-keeping）和代码生成。</p>
+</li>
+<li>
+<p><strong>构建脚本（Build scripts）</strong>——构建脚本允许在编译时运行任意代码，并引入它们自己需要编译的依赖项。它们未知的副作用和未知的输入输出限制了工具对它们的假设，例如限制了缓存的可能。</p>
+</li>
+<li>
+<p><strong>宏（Macros）</strong>——宏需要多次遍历才能展开，展开得到的隐藏代码量惊人，并对部分解析施加限制。过程宏与构建脚本类似，具有负面影响。</p>
+</li>
+<li>
+<p><strong>LLVM 后端（LLVM backend）</strong>——LLVM 产生良好的机器代码，但编译相对较慢。</p>
+</li>
+<li>
+<p><strong>过于依赖LLVM优化器（Relying too much on the LLVM optimizer）</strong>——Rust 以生成大量 LLVM IR 并让 LLVM 对其进行优化而闻名。单态化则会加剧这种情况。</p>
+</li>
+<li>
+<p><strong>拆分编译器/软件包管理器（Split compiler/package manager）</strong>——尽管对于语言来说，将包管理器与编译器分开是很正常的，但是在 Rust 中，至少这会导致 cargo 和 rustc 同时携带关于整个编译流水线的不完善和冗余的信息。当流水线的更多部分被短路以便提高效率时，则需要在编译器实例之间传输更多的元数据。这主要是通过文件系统进行传输，会产生开销。</p>
+</li>
+<li>
+<p><strong>每个编译单元的代码生成（Per-compilation-unit code-generation）</strong>——rustc 每次编译单包（crate）时都会生成机器码，但是它不需要这样做，因为大多数 Rust 项目都是静态链接的，直到最后一个链接步骤才需要机器码。可以通过完全分离分析和代码生成来提高效率。</p>
+</li>
+<li>
+<p><strong>单线程的编译器（Single-threaded compiler）</strong>——理想情况下，整个编译过程都将占用所有 CPU 。然而，Rust 并非如此。由于原始编译器是单线程的，因此该语言对并行编译不够友好。目前正在努力使编译器并行化，但它可能永远不会使用所有 CPU 核心。</p>
+</li>
+<li>
+<p><strong>trait 一致性（trait coherence）</strong>——Rust 的 trait（特质）需要遵循“一致性（conherence）”，这使得开发者不可能定义相互冲突的实现。trait  一致性对允许代码驻留的位置施加了限制。这样，很难将 Rust 抽象分解为更小的、易于并行化的编译单元。</p>
+</li>
+<li>
+<p><strong>“亲密”的代码测试（Tests next to code）</strong>——Rust 鼓励测试代码与功能代码驻留在同一代码库中。由于 Rust 的编译模型，这需要将该代码编译和链接两次，这份开销非常昂贵，尤其是对于有很多包（crate）的大型项目而言。</p>
+</li>
+</ul>
+<h2 id="-rust--1">改善 Rust 编译时间的最新进展</h2>
+<p>现状并非没有改善的希望。一直有很多工作在努力改善 Rust 的编译时间，但仍有许多途径可以探索。我希望我们能持续看到进步。以下是我最近一两年所知道的一些进展。感谢所有为该问题提供帮助的人。</p>
+<ul>
+<li>
+<p>Rust 编译时<a href="https://github.com/rust-lang/rust/issues/48547">主要问题</a>：</p>
+<ul>
+<li>跟踪各种工作以缩短编译时间。</li>
+<li>全面概述了影响 Rust 编译性能的因素和潜在的缓解策略。</li>
+</ul>
+</li>
+<li>
+<p>流水线编译 (<a href="https://github.com/rust-lang/rust/issues/60988">1</a>,<a href="https://github.com/rust-lang/cargo/issues/6660">2</a>,<a href="https://internals.rust-lang.org/t/evaluating-pipelined-rustc-compilation/10199">3</a>)</p>
+<ul>
+<li>与上游代码生成并行地对下游包进行类型检查。现在默认情况下在稳定（Stable）频道上。</li>
+<li>由 <a href="https://github.com/alexcrichton">@alexcrichton</a>  和  <a href="https://github.com/nikomatsakis">@nikomatsakis</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p>并行 rustc (<a href="https://internals.rust-lang.org/t/parallelizing-rustc-using-rayon/6606">1</a>,<a href="https://github.com/rust-lang/rust/issues/48685">2</a>,<a href="https://internals.rust-lang.org/t/help-test-parallel-rustc/11503/14">3</a>)</p>
+<ul>
+<li>并行运行编译器的分析阶段。稳定（Stable）频道尚不可用。</li>
+<li>由 <a href="https://github.com/Zoxc">@Zoxc</a> ,  <a href="https://github.com/michaelwoerister">@michaelwoerister</a> ,  <a href="http://github.com/oli-obk">@oli-obk</a> , 以及其他一些人开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://blog.rust-lang.org/inside-rust/2019/12/02/const-prop-on-by-default.html">MIR 级别的常量传播（constant propagation）</a></p>
+<ul>
+<li>在 MIR 上执行常量传播，从而减少了 LLVM 对单态函数的重复工作。</li>
+<li>由 <a href="https://github.com/wesleywiser">@wesleywiser</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/rust-lang/rust/pulls?q=mir-opt">MIR 优化</a></p>
+<ul>
+<li>优化 MIR 应该比优化单态 LLVM IR 更快。</li>
+<li>稳定（Stable）编译器尚不可用。</li>
+<li>由 <a href="https://github.com/wesleywiser">@wesleywiser</a> 和其他人一起开发。</li>
+</ul>
+</li>
+<li>
+<p>cargo build -Ztimings (<a href="https://internals.rust-lang.org/t/exploring-crate-graph-build-times-with-cargo-build-ztimings/10975">1</a>,<a href="https://github.com/rust-lang/cargo/issues/7405">2</a>)</p>
+<ul>
+<li>收集并图形化有关 Cargo 并行建造时间的信息。</li>
+<li>由 <a href="https://github.com/ehuss">@ehuss</a>  和  <a href="https://github.com/luser">@luser</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p>rustc -Zself-profile (<a href="https://rust-lang.github.io/rustc-guide/profiling.html">1</a>,<a href="https://github.com/rust-lang/rust/issues/58967">2</a>,<a href="https://github.com/rust-lang/rust/pull/51657">3</a>)</p>
+<ul>
+<li>生成有关 rustc 内部性能的详细信息。</li>
+<li>由 <a href="https://github.com/wesleywiser">@wesleywiser</a>  和  <a href="https://github.com/michaelwoerister">@michaelwoerister</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/rust-lang/rust/issues/47317">共享单态化（Shared monomorphizations）</a></p>
+<ul>
+<li>通过消除多个包（crate）中出现的单态化来减少代码膨胀。</li>
+<li>如果优化级别小于 3，则默认启用。</li>
+<li>由<a href="https://github.com/michaelwoerister">@michaelwoerister</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://www.reddit.com/r/rust/comments/enxgwh/cranelift_backend_for_rust/">Cranelift 后端</a></p>
+<ul>
+<li>通过使用 <a href="https://github.com/bytecodealliance/cranelift">cranelift</a> 来生成代码，减少了 Debug 模式的编译时间。</li>
+<li>由 <a href="https://github.com/bjorn3">@bjorn3</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://perf.rust-lang.org/">perf.rust-lang.org</a></p>
+<ul>
+<li>详细跟踪了 Rust 的编译时性能，基准测试持续增加中。</li>
+<li>由 <a href="https://github.com/nrc">@nrc</a> ,  <a href="https://github.com/Mark-Simulacrum">@Mark-Simulacrum</a> ,  <a href="https://github.com/nnethercote">@nnethercote</a> 以及其他人一起开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/RazrFalcon/cargo-bloat">cargo-bloat</a></p>
+<ul>
+<li>查找二进制文件中占用最多空间的地方。膨胀（Bloat）会影响编译时间。</li>
+<li>由 <a href="https://github.com/RazrFalcon">@RazrFalcon</a> 和其他人一起开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/psinghal20/cargo-feature-analyst">cargo-feature-analyst</a></p>
+<ul>
+<li>发现未使用的特性（features）。</li>
+<li>由 <a href="https://github.com/psinghal20">@psinghal20</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/est31/cargo-udeps">cargo-udeps</a></p>
+<ul>
+<li>发现未使用的包 （crate）。</li>
+<li>由 <a href="https://github.com/est31">@est31</a> 开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/rustwasm/twiggy">twiggy</a></p>
+<ul>
+<li>分析代码大小，该大小与编译时间相关。</li>
+<li>由 <a href="https://github.com/fitzgen">@fitzgen</a> ,  <a href="https://github.com/data-pup">@data-pup</a> 以及其他人一起开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/rust-analyzer/rust-analyzer">rust-analyzer</a></p>
+<ul>
+<li>用于Rust的新语言服务器，其响应时间比原始 <a href="https://github.com/rust-lang/rls">RLS</a> 更快。</li>
+<li>由 <a href="https://github.com/matklad">@matklad</a> ,  <a href="https://github.com/flodiebold">@flodiebold</a> ,  <a href="https://github.com/kjeremy">@kjeremy</a> 以及其他人一起开发。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://vfoley.xyz/rust-compile-speed-tips/">“如何缓解 Rust 编译时间带来的痛苦”</a></p>
+<ul>
+<li>vfoley 写的博文。</li>
+</ul>
+</li>
+<li>
+<p><a href="https://raphlinus.github.io/rust/2019/08/21/rust-bloat.html">“关于 Rust 代码膨胀的思考”</a></p>
+<ul>
+<li><a href="https://github.com/raphlinus">@raphlinus</a> 写的博文。</li>
+</ul>
+</li>
+<li>
+<p>Nicholas Nethercote 对 rustc 的优化工作：</p>
+<ul>
+<li><a href="https://blog.mozilla.org/nnethercote/2019/07/17/how-to-speed-up-the-rust-compiler-in-2019/">“2019 年 Rust 编译器如何提速”</a></li>
+<li><a href="https://blog.mozilla.org/nnethercote/2019/07/25/the-rust-compiler-is-still-getting-faster/">“Rust 编译器的速度持续变快”</a></li>
+<li><a href="https://blog.mozilla.org/nnethercote/2019/10/10/visualizing-rust-compilation/">“可视化 Rust 编译”</a></li>
+<li><a href="https://blog.mozilla.org/nnethercote/2019/10/11/how-to-speed-up-the-rust-compiler-some-more-in-2019/">“如何在 2019 年进一步提升 Rust 编译器的速度”</a></li>
+<li><a href="https://blog.mozilla.org/nnethercote/2019/12/11/how-to-speed-up-the-rust-compiler-one-last-time-in-2019/">“如何在 2019 年最后一次提升 Rust 编译器”</a></li>
+</ul>
+</li>
+</ul>
+<p>对于未上榜的人员或项目，我需要说一声抱歉。</p>
+<h2 id="heading-3">下集预告</h2>
+<p>所以多年来，Rust 把自己深深地逼进了一个死角，而且很可能会持续逼进，直到玩完。Rust 的编译时能否从 Rust 自身的运行时成功中得到拯救？TiKV 的构建速度能否让我的管理者满意吗？</p>
+<p>在下一集中，我们将深入讨论 Rust 语言设计的细节，这些细节会导致它编译缓慢。</p>
+<p><strong>继续享受 Rust 吧，朋友们！</strong></p>
+<blockquote>
+<p><strong>鸣谢:</strong></p>
+<p>很多人参与了本系列博客。特别感谢 Niko Matsakis、Graydon Hoare 和 Ted Mielczarek 的真知卓见，以及 Calvin Weng 的校对和编辑。</p>
+</blockquote>
+<p>💡 有兴趣可点击查看 <a href="https://pingcap.com/blog/rust-compilation-model-calamity/">英文原版</a> 。</p>
+</div>
+</div><div class="ssba-wrap">
+<div class="ssba">
+<a class="ssba_mail_share" href="mailto:info@pingcap.com" onclick="trackViews('blog-contact-us', 'mail_to_info_view')" target="_blank">
+<svg height="18" viewbox="0 0 14 14" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"></path><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"></path></svg>
+</a>
+<a class="ssba_wechat_share" data-site="wechat" data-url="https://pingcap.com/blog-cn/rust-compilation-model-calamity/" href="javascript:void(0)" id="wechat_share_btn" onclick="toggleBlogQRCode()">
+<svg height="18" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg>
+</a>
+</div>
+</div>
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div class="f-hide" id="share_qrcode_outer">
+<i id="close_share_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<p>分享到微信</p>
+<div id="share_qrcode"></div>
+<p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+<script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+</div>
+</div>
+<footer>
+<div class="container">
+<div class="flex-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>产品</strong></h4>
+<ul>
+<li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+</li>
+<li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+<li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>文档</strong></h4>
+<ul>
+<li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+<li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+<li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+<li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+<li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>资源</strong></h4>
+<ul>
+<li><a href="/blog-cn/">博客</a></li>
+<li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+<li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+<li><a href="https://university.pingcap.com/" onclick="trackViews('footer-source-university', 'pingcap-university_view')" target="_blank">PingCAP
+                            Education</a></li>
+<li><a href="/solutions/intel/" onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+<li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')" target="_blank">Ask TUG</a></li>
+</ul>
+</div>
+<div class="flex-list">
+<h4 class="list-title"><strong>公司</strong></h4>
+<ul>
+<li><a href="/about-cn/">关于我们</a></li>
+<li><a href="https://careers.pingcap.com" onclick="trackViews('footer-recruit-join', 'recruit-join_view')" target="_blank">招贤纳士</a>
+</li>
+<li><a href="/about-cn/news/">新闻报道</a></li>
+<li><a href="/zh/privacy-policy/">隐私申明</a></li>
+</ul>
+</div>
+</div>
+<div class="contact-list-wrap">
+<div class="flex-list">
+<h4 class="list-title"><strong>联系我们</strong></h4>
+<ul>
+<li><a class="tel" href="/" target="_blank"><svg enable-background="new 0 0 512.021 512.021" height="19" id="Layer_1" viewbox="0 0 512.021 512.021" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"></path></g></svg>
+ 商务咨询：</a></li>
+<li class="tel-li">4006790886</li>
+<li class="tel-li">010-58400041</li>
+<li><a class="twitter" href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&amp;id=4240&amp;channel=9034" target="_blank"><svg height="19" p-id="2379" t="1622000094837" version="1.1" viewbox="0 0 1069 1024" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+<li><a class="twitter" href="https://twitter.com/PingCAP" target="_blank"><svg height="19" viewbox="0 0 612 612" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"></path></svg> Twitter</a></li>
+<li><a class="linkedin" href="https://www.linkedin.com/company/pingcap/" target="_blank"><svg height="16" viewbox="0 0 438.536 438.535" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"></path></svg> LinkedIn</a></li>
+<li><a class="reddit" href="https://www.reddit.com/r/TiDB/" target="_blank"><svg height="18" viewbox="0 0 279.748 279.748" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"></path></svg> Reddit</a></li>
+<li><a class="google-plus" href="https://groups.google.com/forum/#!forum/tidb-user" target="_blank"><svg height="20" viewbox="0 0 491.858 491.858" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"></path></svg> Google Group</a></li>
+<li><a class="stack-overflow" href="https://stackoverflow.com/questions/tagged/tidb" target="_blank"><svg height="17" viewbox="0 0 547.597 547.597" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"></path><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"></path><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"></path></svg> Stack Overflow</a></li>
+<li id="wechat"><a class="wechat" href="javascript:void(0)"><svg height="17" viewbox="0 0 31.403 31.404" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"></path><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"></path></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+<div class="qr_code">
+<i id="close_qrcode"><svg viewbox="0 0 224.512 224.512" xmlns="http://www.w3.org/2000/svg"><path d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z" fill="#010002"></path></svg></i>
+<img alt="Wechat qrCode" class="qr_code_img" id="js_qr_code_img" src="/images/wechat-qrcode.jpg"/>
+<p>微信扫一扫<br/> 微信ID：pingcap2015</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="subscribe" id="subscribe-pc"></div>
+</div>
+</div>
+<div class="container copyright-container">
+<p class="copyright">© 2021 北京平凯星辰科技发展有限公司</p>
+<a class="copyright-btn-lang copyright-btn-en" href="/blog" id="lang">English</a>
+<a class="prepared-num" href="https://beian.miit.gov.cn/">京 ICP 备 16046278 号 - 2</a>
+<a class="prepared-num" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" target="_blank">
+<img src="/images/beian.png"/>
+<p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+</a>
+</div>
+</footer>
+<button class="back-to-top" type="button"><svg height="512" viewbox="0 0 284.929 284.929" width="512" xmlns="http://www.w3.org/2000/svg"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"></path></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script src="/js/vendor/lazyload.min.js" type="text/javascript"></script>
+<script src="/js/doc.js" type="text/javascript"></script>
+<script src="/js/anchor.js" type="text/javascript"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script crossorigin="anonymous" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>

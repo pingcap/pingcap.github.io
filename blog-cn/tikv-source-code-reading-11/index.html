@@ -1,0 +1,640 @@
+<!doctype html><html lang="en"><head>
+<meta name="robots" content="noindex"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script>
+window.ga =
+    window.ga ||
+    function() {
+        ;(ga.q = ga.q || []).push(arguments)
+    }
+ga.l = +new Date()
+ga('create', 'UA-99991864-4', 'auto')
+ga('send', 'pageview')
+</script>
+<script async src="https://download.pingcap.com/js/ga-analytics.js"></script>
+
+
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/github-markdown.css">
+
+
+<link rel="stylesheet" href="/css/doc.css">
+
+        <title>TiKV 源码解析系列文章（十一）Storage - 事务控制层 |&nbsp;PingCAP</title><link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<meta name="description" content="本文将为大家介绍 TiKV 源码中的 Storage 模块，它位于 Service 与底层 KV 存储引擎之间，主要负责事务的并发控制。TiKV 端事务相关的实现都在 Storage 模块中。">
+<meta name="robots" content="noodp">
+<meta name="keywords" content="TiDB, MySQL, HTAP, Open Source, Cloud-Native, NewSQL, Aurora Alternative">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TiKV 源码解析系列文章（十一）Storage - 事务控制层 | PingCAP">
+<meta property="og:description" content="本文将为大家介绍 TiKV 源码中的 Storage 模块，它位于 Service 与底层 KV 存储引擎之间，主要负责事务的并发控制。TiKV 端事务相关的实现都在 Storage 模块中。">
+<meta property="og:url" content="https://pingcap.com/blog-cn/tikv-source-code-reading-11/">
+<meta property="og:site_name" content="MySQL at Scale. No more manual sharding">
+<meta property="og:image" content="/images/pingcap-opengraph.jpg">
+<meta property="og:image:secure_url" content="/images/pingcap-opengraph.jpg"><meta name="twitter:card" content="summary"><meta name="twitter:description" content="本文将为大家介绍 TiKV 源码中的 Storage 模块，它位于 Service 与底层 KV 存储引擎之间，主要负责事务的并发控制。TiKV 端事务相关的实现都在 Storage 模块中。">
+<meta name="twitter:title" content="TiKV 源码解析系列文章（十一）Storage - 事务控制层 | PingCAP">
+<meta name="twitter:site" content="@pingcap">
+<meta name="twitter:image" content="https://download.pingcap.com/images/pingcap-opengraph.jpg"><meta name="twitter:creator" content="@pingcap">
+
+
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "http:\/\/schema.org",
+    "@type": "WebSite",
+    "url": "https:\/\/pingcap.com\/",
+    "name": "PingCAP",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https:\/\/pingcap.com\/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+
+
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+
+<script type="text/javascript" async src="https://accounts.pingcap.com/static/pingcap_sso/js/track.beta.js"></script>
+    
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/lato/lato-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://download.pingcap.com/fonts/titilliumweb/titilliumweb-regular-webfont.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+<link rel="preload" href="https://download.pingcap.com/js/jquery.min.js" as="script">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="https://download.pingcap.com/style/docsearch.min.css">
+<script type="text/javascript">
+var trackOutboundLink = function(url) {
+  var redirectTriggered = false
+  ga('send', 'event', 'outbound', 'click', url, {
+    hitCallback: function() {
+      redirectTriggered = true
+      document.location = url
+    }
+  })
+  setTimeout(function() {
+    if (!redirectTriggered) {
+      document.location = url
+    }
+  }, 1500)
+}
+
+var trackViews = function(btn_type, event_category) {
+  var event_label = btn_type
+  var eventCategory = event_category
+  ga('send', 'event', {
+    'eventCategory': eventCategory,
+    'eventAction': 'click',
+    'eventLabel': event_label,
+    'transport': 'beacon'
+  });
+}
+</script>
+<script>if (location.pathname === '/') {
+        if (location.hostname === 'pingcap.github.io') {
+            location.href = '/en/'
+        }
+    }</script></head>       <body data-lang="cn" ><div id="page-content">
+<header role="navigation" class="fixed-top">
+    <div class="container">
+        <a class="nav-brand" href="/zh"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        <div class="nav-wrapper">
+            <div class="navigation">
+                <ul>
+                    <li><a href="https://university.pingcap.com/" target="_blank" class="nav-blinking"
+                            onclick="trackViews('navbar-university', 'pingcap-university_view')">PingCAP
+                            Education</a></li>
+                    <li class="docs-type-selector " id="docsTypeSelector">
+                        
+                        <a class="header-doc-nav" href="https://docs.pingcap.com/zh" target="_blank">文档</a>
+                    </li>
+                    <li ><a href="/cases-cn">案例</a></li>
+                    <li ><a href="/community-cn">社区</a></li>
+                    <li class="sel" ><a href="/blog-cn">博客</a></li>
+                    <li ><a href="/about-cn">关于</a></li>
+                    <li><a href="https://asktug.com" target="_blank"
+                            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+                    <li ><a href="/download-cn">下载试用</a></li>
+                    <li><a class="link-download" href="/about-cn/#contact-us"
+                            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="global-search">
+                
+                
+                
+                <div class="search-wrapper">
+    <span class="icon-search"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#fff" viewBox="0 0 67.125 67.125"><path d="M23.902 0C11.01 0 .523 10.488.523 23.38c0 12.891 10.487 23.379 23.379 23.379a23.258 23.258 0 0 0 14.471-5.037l24.816 24.817c.391.391.902.586 1.414.586s1.023-.195 1.414-.586a2 2 0 0 0 0-2.828L41.293 38.985c3.721-4.142 5.989-9.613 5.989-15.605C47.282 10.488 36.794 0 23.902 0zM4.523 23.38C4.523 12.694 13.216 4 23.902 4c10.687 0 19.38 8.694 19.38 19.38 0 5.396-2.221 10.279-5.791 13.795a1.959 1.959 0 0 0-.488.349 2.003 2.003 0 0 0-.271.343C33.31 40.9 28.825 42.76 23.903 42.76c-10.686-.001-19.38-8.695-19.38-19.38z"/><path d="M24.075 8.591c-8.25 0-14.962 6.712-14.962 14.962a2 2 0 0 0 4 0c0-6.044 4.918-10.962 10.962-10.962a2 2 0 0 0 0-4z"/></svg></span>
+    <input data-lang="cn" data-type="" type="search" id="search-input" name="q"
+        placeholder="搜索 TiDB 文档">
+</div>
+
+<script>
+    const inputNode = document.getElementById("search-input")
+
+    inputNode.addEventListener('keyup', ({key}) => {
+        if (key === "Enter") {
+            if ($('#search-input').data('lang') == 'cn') {
+                lang = 'zh'
+            } else {
+                lang = 'en'
+            }
+
+            const query = $('#search-input').val()
+            if (query) {
+                url = "https://docs.pingcap.com/" + (lang == 'zh' ? 'zh/' : '') + "search/?lang=" + lang + "&type=tidb&version=stable&q=" + query
+                window.location.href = url
+            }
+        }
+    })
+</script>
+
+            </div>
+        </div>
+        <div class="nav-btn nav-slider">
+            <i class="material-icons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 459 459"><path d="M0 382.5h459v-51H0v51zM0 255h459v-51H0v51zM0 76.5v51h459v-51H0z" fill="#FFF"/></svg></i>
+        </div>
+    </div>
+</header>
+
+
+
+<nav class="mobile-sidebar">
+    <div class="nav-header">
+        <div class="logo-wrap">
+        <a class="nav-brand" href="/en"><img src="/images/pingcap-logo.png" alt="PingCAP"></a>
+        </div>
+    </div>
+    <ul class="ul-base">
+        
+
+        <li ><a href="https://docs.pingcap.com/zh/tidb/stable/">文档</a></li>
+        <li ><a href="/cases-cn">案例</a></li>
+        <li ><a href="/community-cn">社区</a></li>
+        <li class="sel"><a href="/blog-cn">博客</a></li>
+        <li ><a href="/about-cn">关于</a></li>
+        <li><a href="https://asktug.com" target="_blank"
+            onclick="trackViews('navbar-asktug', 'asktug_view')">问答</a></li>
+        <li ><a href="/download-cn">下载试用</a></li>
+        <li><a class="link-download" href="/about-cn/#contact-us"
+            onclick="trackViews('navbar-contact-us', 'about_cn_view')">联系我们</a></li>
+        <li><a href="https://university.pingcap.com/"
+            onclick="trackViews('navbar-university', 'pingcap-university_view')" target="_blank"
+            class="nav-blinking">PingCAP Education</a></li>
+    </ul>
+    <div class="nav-footer">
+        <div class="contact-list-wrap">
+        <div class="flex-list">
+            <h4 class="list-title"><strong>Contact</strong></h4>
+            <ul class="social social-cn ul-base">
+            <li><a href="https://twitter.com/PingCAP" class="twitter" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="18"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg></a></li>
+            <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg></a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="18"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg></a></li>
+            <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg></a></li>
+            <li id="wechat-mobile"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg></a><div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+            </ul>
+        </div>
+        <div class="subscribe" id="subscribe-mobile"></div>
+        </div>
+        <div class="container">
+        <a href="/blog" class="btn-lang" id="lang">English</a>
+        </div>
+    </div>
+</nav>
+
+<div class="blog">
+        <div class="container">
+
+<div class="sidebar nav-tags" data-type="single"><div class="title">热门标签<a class="rss" href="/blog-cn/index.xml" title="RSS Feed"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 402.041 402.04"><g fill="#3A59F0"><path d="M54.816 292.382c-15.229 0-28.169 5.331-38.831 15.988C5.33 319.026 0 331.969 0 347.197c0 15.232 5.325 28.172 15.985 38.828 10.662 10.657 23.606 15.988 38.831 15.988 15.227 0 28.168-5.331 38.828-15.988 10.656-10.656 15.986-23.596 15.986-38.828 0-15.229-5.33-28.171-15.986-38.827-10.657-10.657-23.598-15.988-38.828-15.988zM181.01 221.002c-21.51-21.698-46.158-38.97-73.948-51.816-27.79-12.85-56.914-20.511-87.366-22.985h-1.425c-4.949 0-9.042 1.619-12.275 4.854C1.997 154.477 0 158.953 0 164.472v38.543c0 4.757 1.569 8.85 4.708 12.279 3.14 3.429 7.089 5.332 11.848 5.708 43.586 4.189 80.845 21.752 111.773 52.678 30.93 30.926 48.49 68.187 52.677 111.771.382 4.764 2.284 8.712 5.712 11.847 3.427 3.148 7.517 4.72 12.275 4.72h38.545c5.517 0 9.989-1.995 13.415-5.996 3.621-3.812 5.236-8.381 4.863-13.709-2.478-30.447-10.14-59.573-22.987-87.361-12.846-27.792-30.121-52.438-51.819-73.95z"/><path d="M367.728 239.701c-20.365-45.585-48.345-86.078-83.936-121.482-35.405-35.594-75.896-63.572-121.485-83.939C116.723 13.917 68.996 2.494 19.126.02h-.855c-4.949 0-9.136 1.713-12.563 5.14C1.903 8.583 0 12.964 0 18.294v40.825c0 4.76 1.667 8.897 4.996 12.419 3.33 3.523 7.373 5.376 12.132 5.57 40.924 2.478 79.799 12.188 116.63 29.127 36.83 16.94 68.806 38.972 95.93 66.09 27.118 27.123 49.149 59.101 66.089 95.931 16.94 36.836 26.557 75.705 28.839 116.627.195 4.764 2.046 8.809 5.564 12.139 3.524 3.329 7.762 4.999 12.71 4.999h40.823c5.331 0 9.701-1.902 13.134-5.715 3.809-3.806 5.517-8.274 5.144-13.415-2.471-49.874-13.898-97.6-34.263-143.19z"/></g></svg></a></div><a href="#" class="tag all">ALL (287)</a>
+    <div class="tag-list"><a href="/blog-cn/#Chaos-Mesh" class="tag " data-tag="Chaos-Mesh">Chaos Mesh&nbsp;(10)
+                </a><a href="/blog-cn/#Committer" class="tag " data-tag="Committer">Committer&nbsp;(3)
+                </a><a href="/blog-cn/#Contributor" class="tag " data-tag="Contributor">Contributor&nbsp;(9)
+                </a><a href="/blog-cn/#DM" class="tag " data-tag="DM">DM&nbsp;(2)
+                </a><a href="/blog-cn/#DM-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb" class="tag " data-tag="DM-源码阅读">DM 源码阅读&nbsp;(10)
+                </a><a href="/blog-cn/#Go" class="tag " data-tag="Go">Go&nbsp;(3)
+                </a><a href="/blog-cn/#HTAP" class="tag " data-tag="HTAP">HTAP&nbsp;(4)
+                </a><a href="/blog-cn/#Hackathon" class="tag " data-tag="Hackathon">Hackathon&nbsp;(4)
+                </a><a href="/blog-cn/#K8s" class="tag " data-tag="K8s">K8s&nbsp;(2)
+                </a><a href="/blog-cn/#Key-Visualizer" class="tag " data-tag="Key-Visualizer">Key Visualizer&nbsp;(2)
+                </a><a href="/blog-cn/#Kubernetes" class="tag " data-tag="Kubernetes">Kubernetes&nbsp;(3)
+                </a><a href="/blog-cn/#Linux" class="tag " data-tag="Linux">Linux&nbsp;(4)
+                </a><a href="/blog-cn/#MVCC" class="tag " data-tag="MVCC">MVCC&nbsp;(2)
+                </a><a href="/blog-cn/#MySQL" class="tag " data-tag="MySQL">MySQL&nbsp;(2)
+                </a><a href="/blog-cn/#PD" class="tag " data-tag="PD">PD&nbsp;(5)
+                </a><a href="/blog-cn/#Percolator" class="tag " data-tag="Percolator">Percolator&nbsp;(3)
+                </a><a href="/blog-cn/#PingCAP" class="tag " data-tag="PingCAP">PingCAP&nbsp;(2)
+                </a><a href="/blog-cn/#Prometheus" class="tag " data-tag="Prometheus">Prometheus&nbsp;(3)
+                </a><a href="/blog-cn/#Raft" class="tag " data-tag="Raft">Raft&nbsp;(11)
+                </a><a href="/blog-cn/#RocksDB" class="tag " data-tag="RocksDB">RocksDB&nbsp;(3)
+                </a><a href="/blog-cn/#Rust" class="tag " data-tag="Rust">Rust&nbsp;(5)
+                </a><a href="/blog-cn/#SQL" class="tag " data-tag="SQL">SQL&nbsp;(6)
+                </a><a href="/blog-cn/#Spanner" class="tag " data-tag="Spanner">Spanner&nbsp;(2)
+                </a><a href="/blog-cn/#TiDB" class="tag " data-tag="TiDB">TiDB&nbsp;(94)
+                </a><a href="/blog-cn/#TiDB-4.0-%e6%96%b0%e7%89%b9%e6%80%a7" class="tag " data-tag="TiDB-4.0-新特性">TiDB 4.0 新特性&nbsp;(11)
+                </a><a href="/blog-cn/#TiDB-Binlog" class="tag " data-tag="TiDB-Binlog">TiDB Binlog&nbsp;(5)
+                </a><a href="/blog-cn/#TiDB-Binlog-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb" class="tag " data-tag="TiDB-Binlog-源码阅读">TiDB Binlog 源码阅读&nbsp;(9)
+                </a><a href="/blog-cn/#TiDB-Ecosystem-Tools" class="tag " data-tag="TiDB-Ecosystem-Tools">TiDB Ecosystem Tools&nbsp;(3)
+                </a><a href="/blog-cn/#TiDB-Hackathon-2020" class="tag " data-tag="TiDB-Hackathon-2020">TiDB Hackathon 2020&nbsp;(7)
+                </a><a href="/blog-cn/#TiDB-Operator" class="tag " data-tag="TiDB-Operator">TiDB Operator&nbsp;(9)
+                </a><a href="/blog-cn/#TiDB-%e6%80%a7%e8%83%bd%e6%8c%91%e6%88%98%e8%b5%9b" class="tag " data-tag="TiDB-性能挑战赛">TiDB 性能挑战赛&nbsp;(2)
+                </a><a href="/blog-cn/#TiDB-%e6%98%93%e7%94%a8%e6%80%a7%e6%8c%91%e6%88%98%e8%b5%9b" class="tag " data-tag="TiDB-易用性挑战赛">TiDB 易用性挑战赛&nbsp;(4)
+                </a><a href="/blog-cn/#TiDB-%e6%ba%90%e7%a0%81%e9%98%85%e8%af%bb" class="tag " data-tag="TiDB-源码阅读">TiDB 源码阅读&nbsp;(24)
+                </a><a href="/blog-cn/#TiFlash" class="tag " data-tag="TiFlash">TiFlash&nbsp;(7)
+                </a><a href="/blog-cn/#TiKV" class="tag " data-tag="TiKV">TiKV&nbsp;(29)
+                </a><a href="/blog-cn/#TiKV-%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90" class="tag sel" data-tag="TiKV-源码解析">TiKV 源码解析&nbsp;(21)
+                </a><a href="/blog-cn/#TiSpark" class="tag " data-tag="TiSpark">TiSpark&nbsp;(4)
+                </a><a href="/blog-cn/#WebAssembly" class="tag " data-tag="WebAssembly">WebAssembly&nbsp;(2)
+                </a><a href="/blog-cn/#gRPC" class="tag " data-tag="gRPC">gRPC&nbsp;(2)
+                </a><a href="/blog-cn/#%e4%ba%8b%e5%8a%a1" class="tag " data-tag="事务">事务&nbsp;(9)
+                </a><a href="/blog-cn/#%e4%bc%98%e5%8c%96%e5%99%a8" class="tag " data-tag="优化器">优化器&nbsp;(2)
+                </a><a href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e5%89%8d%e6%b2%bf%e6%8a%80%e6%9c%af" class="tag " data-tag="分布式系统前沿技术">分布式系统前沿技术&nbsp;(4)
+                </a><a href="/blog-cn/#%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f%e6%b5%8b%e8%af%95" class="tag " data-tag="分布式系统测试">分布式系统测试&nbsp;(3)
+                </a><a href="/blog-cn/#%e5%a4%87%e4%bb%bd%e6%81%a2%e5%a4%8d" class="tag " data-tag="备份恢复">备份恢复&nbsp;(2)
+                </a><a href="/blog-cn/#%e5%b7%a5%e5%85%b7" class="tag " data-tag="工具">工具&nbsp;(4)
+                </a><a href="/blog-cn/#%e6%80%a7%e8%83%bd" class="tag " data-tag="性能">性能&nbsp;(4)
+                </a><a href="/blog-cn/#%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5" class="tag " data-tag="数据同步">数据同步&nbsp;(2)
+                </a><a href="/blog-cn/#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" class="tag " data-tag="最佳实践">最佳实践&nbsp;(6)
+                </a><a href="/blog-cn/#%e6%9e%b6%e6%9e%84" class="tag " data-tag="架构">架构&nbsp;(6)
+                </a><a href="/blog-cn/#%e7%89%88%e6%9c%ac" class="tag " data-tag="版本">版本&nbsp;(2)
+                </a><a href="/blog-cn/#%e7%a4%be%e5%8c%ba" class="tag sel" data-tag="社区">社区&nbsp;(103)
+                </a><a href="/blog-cn/#%e7%a4%be%e5%8c%ba%e5%8a%a8%e6%80%81" class="tag " data-tag="社区动态">社区动态&nbsp;(29)
+                </a><a href="/blog-cn/#%e9%9b%86%e7%be%a4%e8%b0%83%e5%ba%a6" class="tag " data-tag="集群调度">集群调度&nbsp;(2)
+                </a>
+    </div>
+</div>
+<div class="archive">
+                <div class="content markdown-body">
+                    <h1 class="title">TiKV 源码解析系列文章（十一）Storage - 事务控制层</h1>
+                    <ul class="blog-post-meta">
+                        <li class="meta-item">
+                            <img src="/images/svgs/icon-date.svg" alt="Date icon">Mon, Jul 29, 2019</li>
+                        <li class="meta-item">
+                            <img src="/images/svgs/icon-writer.svg" alt="Pen icon">张金鹏</li>
+                    </ul>
+                    <div class="blog-text"><h2 id="heading">背景知识</h2>
+<p>TiKV 是一个强一致的支持事务的分布式 KV 存储。TiKV 通过 raft 来保证多副本之间的强一致，事务这块 TiKV 参考了 Google 的 <a href="https://ai.google/research/pubs/pub36726">Percolator 事务模型</a>，并进行了一些优化。</p>
+<p>当 TiKV 的 Service 层收到请求之后，会根据请求的类型把这些请求转发到不同的模块进行处理。对于从 TiDB 下推的读请求，比如 sum，avg 操作，会转发到 Coprocessor 模块进行处理，对于 KV 请求会直接转发到 Storage 进行处理。</p>
+<p>KV 操作根据功能可以被划分为 Raw KV 操作以及 Txn KV 操作两大类。Raw KV 操作包括 raw put、raw get、raw delete、raw batch get、raw batch put、raw batch delete、raw scan 等普通 KV 操作。 Txn KV 操作是为了实现事务机制而设计的一系列操作，如 prewrite 和 commit 分别对应于 2PC 中的 prepare 和 commit 阶段的操作。</p>
+<p><strong>本文将为大家介绍 TiKV 源码中的 Storage 模块，它位于 Service 与底层 KV 存储引擎之间，主要负责事务的并发控制。TiKV 端事务相关的实现都在 Storage 模块中。</strong></p>
+<h2 id="heading-1">源码解析</h2>
+<p>接下来我们将从 Engine、Latches、Scheduler 和 MVCC 等几个方面来讲解 Storage 相关的源码。</p>
+<h3 id="1-engine-trait">1. Engine trait</h3>
+<p>TiKV 把底层 KV 存储引擎抽象成一个 Engine trait（trait 类似其他语言的 interface），定义见 <code>storage/kv/mod.rs</code>。Engine trait 主要提供了读和写两个接口，分别为 <code>async_snapshot</code> 和 <code>async_write</code>。调用者把要写的内容交给 <code>async_write</code>，<code>async_write</code> 通过回调的方式告诉调用者写操作成功完成了或者遇到错误了。同样的，<code>async_snapshot</code> 通过回调的方式把数据库的快照返回给调用者，供调用者读，或者把遇到的错误返回给调用者。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">trait</span> Engine: Send <span style="color:#f92672">+</span> Clone <span style="color:#f92672">+</span> &#39;static {
+    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Snap</span>: <span style="color:#a6e22e">Snapshot</span>;
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">async_write</span>(<span style="color:#f92672">&amp;</span>self, ctx: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">Contect</span>, batch: Vec<span style="color:#f92672">&lt;</span>Modify<span style="color:#f92672">&gt;</span>, callback: <span style="color:#a6e22e">Callback</span><span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span>) -&gt; Result<span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span>;
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">async_snapshot</span>(<span style="color:#f92672">&amp;</span>self, ctx: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">Context</span>, callback: <span style="color:#a6e22e">Callback</span><span style="color:#f92672">&lt;</span>Self::Snap<span style="color:#f92672">&gt;</span>) -&gt; Result<span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span>;
+}
+</code></pre></div><p>只要实现了以上两个接口，都可以作为 TiKV 的底层 KV 存储引擎。在 3.0 版本中，TiKV 支持了三种不同的 KV 存储引擎，包括单机 RocksDB 引擎、内存 B 树引擎和 RaftKV 引擎，分别位于 <code>storage/kv</code> 文件夹下面的 <code>rocksdb_engine.rs</code>、<code>btree_engine.rs</code> 和 <code>raftkv.rs</code>。其中单机 RocksDB 引擎和内存红黑树引擎主要用于单元测试和分层 benchmark，TiKV 真正使用的是 RaftKV 引擎。当调用 RaftKV 的 <code>async_write</code> 进行写入操作时，如果 <code>async_write</code> 通过回调方式成功返回了，说明写入操作已经通过 raft 复制给了大多数副本，并且在 leader 节点（调用者所在 TiKV）完成写入了，后续 leader 节点上的读就能够看到之前写入的内容。</p>
+<h3 id="2-raw-kv-">2. Raw KV 执行流程</h3>
+<p>Raw KV 系列接口是绕过事务直接操纵底层数据的接口，没有事务控制，比较简单，所以在介绍更复杂的事务 KV 的执行流程前，我们先介绍 Raw KV 的执行流程。</p>
+<h4 id="raw-put">Raw put</h4>
+<p>raw put 操作不需要 Storage 模块做额外的工作，直接把要写的内容通过 engine 的 <code>async_write</code> 接口发送给底层的 KV 存储引擎就好了。调用堆栈为 <code>service/kv.rs: raw_put</code> -&gt; <code>storage/mod.rs: async_raw_put</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>E: <span style="color:#a6e22e">Engine</span><span style="color:#f92672">&gt;</span> Storage<span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">async_raw_put</span>(
+        <span style="color:#f92672">&amp;</span>self,
+        ctx: <span style="color:#a6e22e">Context</span>,
+        cf: String,
+        key: Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>,
+        value: Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>,
+        callback: <span style="color:#a6e22e">Callback</span><span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span>,
+    ) -&gt; Result<span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span> {
+        <span style="color:#75715e">// Omit some limit checks about key and value here...
+</span><span style="color:#75715e"></span>        self.engine.async_write(
+            <span style="color:#f92672">&amp;</span>ctx,
+            vec<span style="color:#f92672">!</span>[Modify::Put(
+                Self::rawkv_cf(<span style="color:#f92672">&amp;</span>cf),
+                Key::from_encoded(key),
+                value,
+            )],
+            Box::new(<span style="color:#f92672">|</span>(_, res)<span style="color:#f92672">|</span> callback(res.map_err(Error::from))),
+        )<span style="color:#f92672">?</span>;
+        Ok(())
+    }
+}
+</code></pre></div><h4 id="raw-get">Raw get</h4>
+<p>同样的，raw get 只需要调用 engine 的 <code>async_snapshot</code> 拿到数据库快照，然后直接读取就可以了。当然对于 RaftKV 引擎，<code>async_snapshot</code> 在返回数据库快照之前会做一些检查工作，比如会检查当前访问的副本是否是 leader（3.0.0 版本只支持从 leader 进行读操作，follower read 目前仍然在开发中），另外也会检查请求中携带的 region 版本信息是否足够新。</p>
+<h3 id="3-latches">3. Latches</h3>
+<p>在事务模式下，为了防止多个请求同时对同一个 key 进行写操作，请求在写这个 key 之前必须先获取这个 key 的内存锁。为了和事务中的锁进行区分，我们称这个内存锁为 latch，对应的是 <code>storage/txn/latch.rs</code> 文件中的 Latch 结构体。每个 Latch 内部包含一个等待队列，没有拿到 latch 的请求按先后顺序插入到等待队列中，队首的请求被认为拿到了该 latch。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">#[</span><span style="color:#75715e">derive(Clone)</span><span style="color:#75715e">]</span>
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Latch</span> {
+    <span style="color:#66d9ef">pub</span> waiting: <span style="color:#a6e22e">VecDeque</span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span><span style="color:#f92672">&gt;</span>,
+}
+</code></pre></div><p>Latches 是一个包含多个 Latch 的结构体，内部包含一个固定长度的 Vector，Vector 的每个 slot 对应一个 Latch。默认配置下 Latches 内部 Vector 的长度为 2048000。每个 TiKV 有且仅有一个 Latches 实例，位于 <code>Storage.Scheduler</code> 中。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Latches</span> {
+    slots: Vec<span style="color:#f92672">&lt;</span>Mutex<span style="color:#f92672">&lt;</span>Latch<span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>,
+    size: <span style="color:#66d9ef">usize</span>,
+}
+</code></pre></div><p>Latches 的 <code>gen_lock</code> 接口用于计算写入请求执行前所需要获取的所有 latch。<code>gen_lock</code> 通过计算所有 key 的 hash，然后用这些 hash 对 Vector 的长度进行取模得到多个 slots，对这些 slots 经过排序去重得到该命令需要的所有 latch。这个过程中的排序是为了保证获取 latch 的顺序性防止出现死锁情况。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span> Latches {
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">gen_lock</span><span style="color:#f92672">&lt;</span>H: <span style="color:#a6e22e">Hash</span><span style="color:#f92672">&gt;</span>(<span style="color:#f92672">&amp;</span>self, keys: <span style="color:#66d9ef">&amp;</span>[H]) -&gt; <span style="color:#a6e22e">Lock</span> {
+        <span style="color:#75715e">// prevent from deadlock, so we sort and deduplicate the index.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> slots: Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">usize</span><span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> keys.iter().map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span>
+        self.calc_slot(x)).collect();
+        slots.sort();
+        slots.dedup();
+        Lock::new(slots)
+    }
+}
+</code></pre></div><h3 id="4-storage--scheduler">4. Storage 和事务调度器 Scheduler</h3>
+<h4 id="storage">Storage</h4>
+<p>Storage 定义在 <code>storage/mod.rs</code> 文件中，下面我们介绍下 Storage 几个重要的成员：</p>
+<p><code>engine</code>：代表的是底层的 KV 存储引擎。</p>
+<p><code>sched</code>：事务调度器，负责并发事务请求的调度工作。</p>
+<p><code>read_pool</code>：读取线程池，所有只读 KV 请求，包括事务的非事务的，如 raw get、txn kv get 等最终都会在这个线程池内执行。由于只读请求不需要获取 latches，所以为其分配一个独立的线程池直接执行，而不是与非只读事务共用事务调度器。</p>
+<p><code>gc_worker</code>：从 3.0 版本开始，TiKV 支持分布式 GC，每个 TiKV 有一个 <code>gc_worker</code> 线程负责定期从 PD 更新 safepoint，然后进行 GC 工作。</p>
+<p><code>pessimistic_txn_enabled</code>： 另外 3.0 版本也支持悲观事务，<code>pessimistic_txn_enabled</code> 为 true 表示 TiKV 以支持悲观事务的模式启动，关于悲观事务后续会有一篇源码阅读文章专门介绍，这里我们先跳过。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Storage</span><span style="color:#f92672">&lt;</span>E: <span style="color:#a6e22e">Engine</span><span style="color:#f92672">&gt;</span> {
+    engine: <span style="color:#a6e22e">E</span>,
+    sched: <span style="color:#a6e22e">Scheduler</span><span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span>,
+    read_pool: <span style="color:#a6e22e">ReadPool</span>,
+    gc_worker: <span style="color:#a6e22e">GCWorker</span><span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span>,
+    pessimistic_txn_enabled: <span style="color:#66d9ef">bool</span>,
+    <span style="color:#75715e">// Other fields...
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>对于只读请求，包括 txn get 和 txn scan，Storage 调用 engine 的 <code>async_snapshot</code> 获取数据库快照之后交给 <code>read_pool</code> 线程池进行处理。写入请求，包括 prewrite、commit、rollback 等，直接交给 Scheduler 进行处理。Scheduler 的定义在 <code>storage/txn/scheduler.rs</code> 中。</p>
+<h4 id="scheduler">Scheduler</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Scheduler</span><span style="color:#f92672">&lt;</span>E: <span style="color:#a6e22e">Engine</span><span style="color:#f92672">&gt;</span> {
+    engine: Option<span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span>,
+    inner: <span style="color:#a6e22e">Arc</span><span style="color:#f92672">&lt;</span>SchedulerInner<span style="color:#f92672">&gt;</span>,
+}
+
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">SchedulerInner</span> {
+    id_alloc: <span style="color:#a6e22e">AtomicU64</span>,
+    task_contexts: Vec<span style="color:#f92672">&lt;</span>Mutex<span style="color:#f92672">&lt;</span>HashMap<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span>, TaskContext<span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>,
+    lathes: <span style="color:#a6e22e">Latches</span>,
+    sched_pending_write_threshold: <span style="color:#66d9ef">usize</span>,
+    worker_pool: <span style="color:#a6e22e">SchedPool</span>,
+    high_priority_pool: <span style="color:#a6e22e">SchedPool</span>,
+    <span style="color:#75715e">// Some other fields...
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>接下来简单介绍下 Scheduler 几个重要的成员：</p>
+<p><code>id_alloc</code>：到达 Scheduler 的请求都会被分配一个唯一的 command id。</p>
+<p><code>latches</code>：写请求到达 Scheduler 之后会尝试获取所需要的 latch，如果暂时获取不到所需要的 latch，其对应的 command id 会被插入到 latch 的 waiting list 里，当前面的请求执行结束后会唤醒 waiting list 里的请求继续执行，这部分逻辑我们将会在下一节 prewrite 请求在 scheduler 中的执行流程中介绍。</p>
+<p><code>task_contexts</code>：用于存储 Scheduler 中所有请求的上下文，比如暂时未能获取所需 latch 的请求都会被暂存在 <code>task_contexts</code> 中。</p>
+<p><code>sched_pending_write_threshold</code>：用于统计 Scheduler 内所有写入请求的写入流量，可以通过该指标对 Scheduler 的写入操作进行流控。</p>
+<p><code>worker_pool</code>，<code>high_priority_pool</code>：两个线程池，写请求在调用 engine 的 async_write 之前需要进行事务约束的检验工作，这些工作都是在这个两个线程池中执行的。</p>
+<h5 id="prewrite--scheduler-">prewrite 请求在 Scheduler 中的执行流程</h5>
+<p>下面我们以 prewrite 请求为例子来讲解下写请求在 Scheduler 中是如何处理的：</p>
+<p>1）Scheduler 收到 prewrite 请求的时候首先会进行流控判断，如果 Scheduler 里的请求过多，会直接返回 <code>SchedTooBusy</code> 错误，提示等一会再发送，否则进入下一步。</p>
+<p>2）接着会尝试获取所需要的 latch，如果获取 latch 成功那么直接进入下一步。如果获取 latch 失败，说明有其他请求占住了 latch，这种情况说明其他请求可能也正在对相同的 key 进行操作，那么当前 prewrite 请求会被暂时挂起来，请求的上下文会暂存在 Scheduler 的 <code>task_contexts</code> 里面。当前面的请求执行结束之后会将该 prewrite 请求重新唤醒继续执行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>E: <span style="color:#a6e22e">Engine</span><span style="color:#f92672">&gt;</span> Scheduler<span style="color:#f92672">&lt;</span>E<span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">try_to_wake_up</span>(<span style="color:#f92672">&amp;</span>self, cid: <span style="color:#66d9ef">u64</span>) {
+        <span style="color:#66d9ef">if</span> self.inner.acquire_lock(cid) {
+            self.get_snapshot(cid);
+        }
+    }
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">release_lock</span>(<span style="color:#f92672">&amp;</span>self, lock: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">Lock</span>, cid: <span style="color:#66d9ef">u64</span>) {
+        <span style="color:#66d9ef">let</span> wakeup_list <span style="color:#f92672">=</span> self.inner.latches.release(lock, cid);
+        <span style="color:#66d9ef">for</span> wcid <span style="color:#66d9ef">in</span> wakeup_list {
+            self.try_to_wake_up(wcid);
+        }
+    }
+}
+</code></pre></div><p>3）获取 latch 成功之后会调用 Scheduler 的 <code>get_snapshot</code> 接口从 engine 获取数据库的快照。<code>get_snapshot</code> 内部实际上就是调用 engine 的 <code>async_snapshot</code> 接口。然后把 prewrite 请求以及刚刚获取到的数据库快照交给 <code>worker_pool</code> 进行处理。如果该 prewrite 请求优先级字段是 <code>high</code> 就会被分发到 <code>high_priority_pool</code> 进行处理。<code>high_priority_pool</code> 是为了那些高优先级请求而设计的，比如 TiDB 系统内部的一些请求要求 TiKV 快速返回，不能由于 <code>worker_pool</code> 繁忙而被卡住。需要注意的是，目前 <code>high_priority_pool</code> 与 <code>worker_pool</code> 仅仅是语义上不同的两个线程池，它们内部具有相同的操作系统调度优先级。</p>
+<p>4）<code>worker_pool</code> 收到 prewrite 请求之后，主要工作是从拿到的数据库快照里确认当前 prewrite 请求是否能够执行，比如是否已经有更大 ts 的事务已经对数据进行了修改，具体的细节可以参考 <a href="https://ai.google/research/pubs/pub36726">Percolator 论文</a>，或者参考我们的官方博客 <a href="https://pingcap.com/blog-cn/tidb-transaction-model/">《TiKV 事务模型概览》</a>。当判断 prewrite 是可以执行的，会调用 engine 的 <code>async_write</code> 接口执行真正的写入操作。这部分的具体的代码见 <code>storage/txn/process.rs</code> 中的 <code>process_write_impl</code> 函数。</p>
+<p>5）当 <code>async_write</code> 执行成功或失败之后，会调用 Scheduler 的 <code>release_lock</code> 函数来释放 latch 并且唤醒等待在这些 latch 上的请求继续执行。</p>
+<h3 id="5-mvcc">5. MVCC</h3>
+<p>TiKV MVCC 相关的代码位于 <code>storage/mvcc</code> 文件夹下，强烈建议大家在阅读这部分代码之前先阅读 <a href="https://ai.google/research/pubs/pub36726">Percolator 论文</a>，或者我们的官方博客 <a href="https://pingcap.com/blog-cn/tidb-transaction-model/">《TiKV 事务模型概览》</a>。</p>
+<p>MVCC 下面有两个比较关键的结构体，分别为 <code>MvccReader</code> 和 <code>MvccTxn</code>。<code>MvccReader</code> 位于 <code>storage/mvcc/reader/reader.rs</code> 文件中，它主要提供读功能，将多版本的处理细节隐藏在内部。比如 <code>MvccReader</code> 的 <code>get</code> 接口，传入需要读的 key 以及 ts，返回这个 ts 可以看到的版本或者返回 <code>key is lock</code> 错误等。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>S: <span style="color:#a6e22e">Snapshot</span><span style="color:#f92672">&gt;</span> MvccReader<span style="color:#f92672">&lt;</span>S<span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">get</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self, key: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">Key</span>, <span style="color:#66d9ef">mut</span> ts: <span style="color:#66d9ef">u64</span>) -&gt; Result<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;</span>Value<span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>;
+}
+</code></pre></div><p><code>MvccTxn</code> 位于 <code>storage/mvcc/txn.rs</code> 文件中，它主要提供写之前的事务约束检验功能，上一节 prewrite 请求的处理流程中第四步就是通过调用 <code>MvccTxn</code> 的 prewrite 接口来进行的事务约束检验。</p>
+<h2 id="heading-2">小结</h2>
+<p>TiKV 端事务相关的实现都位于 Storage 模块中，该文带大家简单概览了下这部分几个关键的点，想了解更多细节的读者可以自行阅读这部分的源码（code talks XD）。另外从 3.0 版本开始，TiDB 和 TiKV 支持悲观事务，TiKV 端对应的代码主要位于 <code>storage/lock_manager</code> 以及上面提到的 MVCC 模块中。</p>
+</div>
+                    
+                </div><div class="ssba-wrap">
+    <div class="ssba">
+        <a class="ssba_mail_share" href="mailto:info@pingcap.com" target="_blank"
+        onclick="trackViews('blog-contact-us', 'mail_to_info_view')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="18" height="18"><path d="M7 9L5.268 7.484.316 11.729c.18.167.423.271.691.271h11.986c.267 0 .509-.104.688-.271L8.732 7.484 7 9z"/><path d="M13.684 2.271A1.007 1.007 0 0 0 12.993 2H1.007c-.267 0-.509.104-.689.273L7 8l6.684-5.729zM0 2.878v8.308l4.833-4.107zM9.167 7.079L14 11.186V2.875z"/></svg>
+        </a>
+        <a id="wechat_share_btn" data-site="wechat" data-url="https://pingcap.com/blog-cn/tikv-source-code-reading-11/" class="ssba_wechat_share" href="javascript:void(0)" onclick="toggleBlogQRCode()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg>
+        </a>
+    </div>
+</div>
+
+<style type="text/css">
+    .fixed-qrcode {
+        position: fixed;
+        top: 120px;
+        right: 105px;
+        padding: 10px 15px;
+        width: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+    }
+
+    .fixed-qrcode p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 1.6;
+        margin: 8px 0;
+        color: #333;
+    }
+
+    .fixed-qrcode #close_share_qrcode {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    .fixed-qrcode #close_share_qrcode svg {
+        display: block;
+    }
+
+    .f-hide #share_qrcode {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .fixed-qrcode #share_qrcode {
+        visibility: visible;
+        opacity: 1;
+        height: 128px;
+        transition: visibility 0s linear 0s, opacity .3s 0s;
+        -webkit-transition: visibility 0s linear 0s, opacity .3s 0s;
+    }
+
+    #share_qrcode img {
+        margin: 0 auto;
+    }
+</style>
+<div id="share_qrcode_outer" class="f-hide">
+    <i id="close_share_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+    <p>分享到微信</p>
+    <div id="share_qrcode"></div>
+    <p>打开微信，使用 “扫一扫” 即可将网页分享至朋友圈。</p>
+</div>
+
+<script type="text/javascript" src="/js/vendor/qrcode.min.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var close_share_qrcode_btn = document.getElementById('close_share_qrcode')
+        var wechat_share_btn = document.getElementById('wechat_share_btn')
+        var blog_url = wechat_share_btn.getAttribute('data-url')
+
+        window.pingcap_blog_qrcode = new QRCode(
+            document.getElementById('share_qrcode'),
+            {
+            text: blog_url,
+            width: 128,
+            height: 128,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+            }
+        )
+
+        close_share_qrcode_btn.addEventListener('click', function(event) {
+            document
+            .getElementById('share_qrcode_outer')
+            .setAttribute('class', 'f-hide')
+        })
+    }
+
+    function toggleBlogQRCode() {
+        var qrcode_wrapper = document.getElementById('share_qrcode_outer')
+
+        if (qrcode_wrapper.getAttribute('class') == 'f-hide') {
+            qrcode_wrapper.setAttribute('class', 'fixed-qrcode')
+        } else {
+            qrcode_wrapper.setAttribute('class', 'f-hide')
+        }
+    }
+</script>
+</div>
+        </div>
+    </div>
+<footer>
+    <div class="container">
+        <div class="flex-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>产品</strong></h4>
+                <ul>
+                    <li><a href="/docs-cn/stable/" onclick="trackViews('footer-product-tidb', 'docs-cn_view')">TiDB</a>
+                    </li>
+                    <li><a href="/docs-cn/stable/reference/tispark/">TiSpark</a></li>
+                    <li><a href="/docs-cn/stable/roadmap/">TiDB 路线图</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>文档</strong></h4>
+                <ul>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/stable/quick-start-with-tidb">快速入门</a></li>
+                    <li><a href="/blog-cn/tidb-best-practice/">最佳实践</a></li>
+                    <li><a href="/docs-cn/stable/faq/tidb/">常见问题解答</a></li>
+                    <li><a href="/docs-cn/stable/reference/tools/user-guide/">TiDB 周边工具</a></li>
+                    <li><a href="https://docs.pingcap.com/zh/tidb/dev/release-notes">版本发布说明</a></li>
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>资源</strong></h4>
+                <ul>
+                    <li><a href="/blog-cn/">博客</a></li>
+                    <li><a href="https://github.com/pingcap" target="_blank">GitHub</a></li>
+                    <li><a href="https://book.tidb.io" target="_blank">TiDB in Action</a></li>
+                    <li><a href="https://university.pingcap.com/"
+                            onclick="trackViews('footer-source-university', 'pingcap-university_view')"
+                            target="_blank">PingCAP
+                            Education</a></li>
+                    <li><a href="/solutions/intel/"
+                            onclick="trackViews('footer-resource-solutions', 'solutions_view')">联合解决方案</a></li>
+                    <li><a href="https://asktug.com/" onclick="trackViews('footer-resource-asktug', 'asktug_view')"
+                            target="_blank">Ask TUG</a></li>
+                    
+                </ul>
+            </div>
+            <div class="flex-list">
+                <h4 class="list-title"><strong>公司</strong></h4>
+                <ul>
+                    <li><a href="/about-cn/">关于我们</a></li>
+                    <li><a href="https://careers.pingcap.com" target="_blank"
+                            onclick="trackViews('footer-recruit-join', 'recruit-join_view')">招贤纳士</a>
+                    </li>
+                    <li><a href="/about-cn/news/">新闻报道</a></li>
+                    <li><a href="/zh/privacy-policy/">隐私申明</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="contact-list-wrap">
+            <div class="flex-list">
+                <h4 class="list-title"><strong>联系我们</strong></h4>
+                <ul>
+                    <li><a href="/" class="tel"  target="_blank"><svg id="Layer_1" enable-background="new 0 0 512.021 512.021" width="18" height="19" viewBox="0 0 512.021 512.021" xmlns="http://www.w3.org/2000/svg"><g><path d="m367.988 512.021c-16.528 0-32.916-2.922-48.941-8.744-70.598-25.646-136.128-67.416-189.508-120.795s-95.15-118.91-120.795-189.508c-8.241-22.688-10.673-46.108-7.226-69.612 3.229-22.016 11.757-43.389 24.663-61.809 12.963-18.501 30.245-33.889 49.977-44.5 21.042-11.315 44.009-17.053 68.265-17.053 7.544 0 14.064 5.271 15.645 12.647l25.114 117.199c1.137 5.307-.494 10.829-4.331 14.667l-42.913 42.912c40.482 80.486 106.17 146.174 186.656 186.656l42.912-42.913c3.838-3.837 9.361-5.466 14.667-4.331l117.199 25.114c7.377 1.581 12.647 8.101 12.647 15.645 0 24.256-5.738 47.224-17.054 68.266-10.611 19.732-25.999 37.014-44.5 49.977-18.419 12.906-39.792 21.434-61.809 24.663-6.899 1.013-13.797 1.518-20.668 1.519zm-236.349-479.321c-31.995 3.532-60.393 20.302-79.251 47.217-21.206 30.265-26.151 67.49-13.567 102.132 49.304 135.726 155.425 241.847 291.151 291.151 34.641 12.584 71.866 7.64 102.132-13.567 26.915-18.858 43.685-47.256 47.217-79.251l-95.341-20.43-44.816 44.816c-4.769 4.769-12.015 6.036-18.117 3.168-95.19-44.72-172.242-121.772-216.962-216.962-2.867-6.103-1.601-13.349 3.168-18.117l44.816-44.816z"/></g></svg>
+ 商务咨询：</a></li>
+                    <li class="tel-li">4006790886</li>
+                    <li class="tel-li">010-58400041</li>
+                <li><a href="https://page.ma.scrmtech.com/form/index?pf_uid=19697_1864&id=4240&channel=9034" class="twitter"  target="_blank"><svg t="1622000094837" viewBox="0 0 1069 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2379" width="18" height="19"><path d="M746.028 190.084q-11.242 0-18.906-7.665t-12.775-17.884-7.664-20.95-2.555-17.884V0h2.044q9.197 0 17.373 2.044t19.928 9.708 28.615 21.462 42.411 36.279q27.593 24.527 43.944 41.39t25.038 28.614 10.73 19.928 2.044 14.308v16.35H746.028z m317.828 481.341q3.066 8.176 4.088 20.44t-10.22 23.504q-5.11 5.11-9.197 9.709t-7.154 7.665q-4.088 4.087-7.153 6.131l-86.867-85.844q6.132-5.11 13.797-12.264t12.774-11.241q12.264-11.242 26.571-9.709T1024 626.46q10.22 5.11 21.972 17.884t17.884 27.082z m-360.75 95.042q22.483 0 37.812-12.263l-198.26 206.435h-282.06q-19.416 0-42.41-11.242t-42.923-29.637-33.213-42.41-13.286-49.566V131.832q0-21.46 9.709-44.966t26.57-42.41 38.324-31.682T248.335 0h391.41v127.745q0 19.417 6.131 41.9t18.906 41.389 33.214 31.68 49.054 12.775h149.205v338.267L756.248 738.874q11.241-16.351 11.241-35.768 0-26.571-18.906-45.477t-45.477-18.906H319.872q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234zM319.872 383.234q-26.57 0-44.966 18.906t-18.395 45.477 18.395 44.966 44.966 18.395h383.234q26.57 0 45.477-18.395t18.906-44.966-18.906-45.477-45.477-18.906H319.872z m385.278 512l13.285-13.286 25.549-25.549q15.33-15.33 33.725-34.235t36.79-37.302q43.944-43.944 99.13-98.108l85.844 85.845-99.13 99.13-36.79 36.79-33.725 33.725q-14.307 14.307-24.016 24.526t-10.73 11.242q-5.11 4.088-11.242 8.687t-12.263 7.664-18.906 7.665-26.06 8.687-25.55 7.153-18.394 4.088q-12.264 2.044-16.352-3.066t-2.044-17.373q1.022-6.132 4.088-18.395t7.154-25.038 7.665-24.016 5.62-15.33q6.132-13.285 16.352-23.504z" fill="#ffffff" p-id="2380"></path></svg>
+ 或让我们与您联系</a></li>
+                <li><a href="https://twitter.com/PingCAP" class="twitter"  target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" width="18" height="19"><path d="M612 116.258a250.714 250.714 0 0 1-72.088 19.772c25.929-15.527 45.777-40.155 55.184-69.411-24.322 14.379-51.169 24.82-79.775 30.48-22.907-24.437-55.49-39.658-91.63-39.658-69.334 0-125.551 56.217-125.551 125.513 0 9.828 1.109 19.427 3.251 28.606-104.326-5.24-196.835-55.223-258.75-131.174-10.823 18.51-16.98 40.078-16.98 63.101 0 43.559 22.181 81.993 55.835 104.479a125.556 125.556 0 0 1-56.867-15.756v1.568c0 60.806 43.291 111.554 100.693 123.104-10.517 2.83-21.607 4.398-33.08 4.398-8.107 0-15.947-.803-23.634-2.333 15.985 49.907 62.336 86.199 117.253 87.194-42.947 33.654-97.099 53.655-155.916 53.655-10.134 0-20.116-.612-29.944-1.721 55.567 35.681 121.536 56.485 192.438 56.485 230.948 0 357.188-191.291 357.188-357.188l-.421-16.253c24.666-17.593 46.005-39.697 62.794-64.861z"/></svg> Twitter</a></li>
+                <li><a href="https://www.linkedin.com/company/pingcap/" class="linkedin" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 438.536 438.535"><path d="M5.424 145.895H99.64v282.932H5.424zM408.842 171.739c-19.791-21.604-45.967-32.408-78.512-32.408-11.991 0-22.891 1.475-32.695 4.427-9.801 2.95-18.079 7.089-24.838 12.419-6.755 5.33-12.135 10.278-16.129 14.844-3.798 4.337-7.512 9.389-11.136 15.104v-40.232h-93.935l.288 13.706c.193 9.139.288 37.307.288 84.508 0 47.205-.19 108.777-.572 184.722h93.931V270.942c0-9.705 1.041-17.412 3.139-23.127 4-9.712 10.037-17.843 18.131-24.407 8.093-6.572 18.13-9.855 30.125-9.855 16.364 0 28.407 5.662 36.117 16.987 7.707 11.324 11.561 26.98 11.561 46.966V428.82h93.931V266.664c-.007-41.688-9.897-73.328-29.694-94.925zM53.103 9.708c-15.796 0-28.595 4.619-38.4 13.848C4.899 32.787 0 44.441 0 58.529 0 72.42 4.758 84.034 14.275 93.358c9.514 9.325 22.078 13.99 37.685 13.99h.571c15.99 0 28.887-4.661 38.688-13.99 9.801-9.324 14.606-20.934 14.417-34.829-.19-14.087-5.047-25.742-14.561-34.973C81.562 14.323 68.9 9.708 53.103 9.708z"/></svg> LinkedIn</a></li>
+                <li><a href="https://www.reddit.com/r/TiDB/" class="reddit" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 279.748 279.748" width="18" height="18"><path d="M279.748 133.142c0-19.299-15.701-35-35-35-10.768 0-20.674 4.812-27.279 13.064-18.532-8.431-39.663-13.626-62.015-15.271l19.206-60.692 42.895 9.294c3.285 12.782 14.901 22.258 28.693 22.258 16.336 0 29.627-13.29 29.627-29.626 0-16.336-13.291-29.627-29.627-29.627-11.801 0-21.999 6.941-26.759 16.95l-49.497-10.725a10.002 10.002 0 0 0-11.651 6.756L134.636 95.43c-26.164.638-50.988 6.053-72.356 15.775-6.606-8.251-16.512-13.063-27.28-13.063-19.299 0-35 15.701-35 35 0 9.373 3.683 18.173 10.222 24.709-3.9 8.37-5.875 17.076-5.875 25.936 0 24.048 14.396 46.492 40.538 63.199 25.447 16.264 59.183 25.221 94.989 25.221 35.808 0 69.542-8.957 94.989-25.221 26.142-16.707 40.538-39.151 40.538-63.199 0-8.859-1.975-17.565-5.875-25.936 6.539-6.537 10.222-15.336 10.222-24.709zM15.369 145.139c-2.212-3.59-3.369-7.688-3.369-11.997 0-12.682 10.317-23 23-23 5.444 0 10.558 1.851 14.649 5.258-14.622 8.302-26.132 18.289-34.28 29.739zm52.671 20.266c0-13.785 11.215-25 25-25s25 11.215 25 25-11.215 25-25 25-25-11.215-25-25zm123.119 57.054c-9.745 10.637-29.396 17.244-51.285 17.244-21.888 0-41.539-6.607-51.284-17.244a9.937 9.937 0 0 1-2.617-7.192 9.933 9.933 0 0 1 3.235-6.937 9.974 9.974 0 0 1 6.754-2.627c2.797 0 5.484 1.183 7.373 3.244 5.803 6.333 20.827 10.756 36.539 10.756s30.737-4.423 36.539-10.756a10.022 10.022 0 0 1 7.374-3.244c2.508 0 4.906.933 6.755 2.627a9.928 9.928 0 0 1 3.234 6.937 9.933 9.933 0 0 1-2.617 7.192zm-4.451-32.054c-13.785 0-25-11.215-25-25s11.215-25 25-25 25 11.215 25 25-11.215 25-25 25zm77.671-45.266c-8.147-11.45-19.657-21.436-34.28-29.739 4.092-3.408 9.205-5.258 14.649-5.258 12.683 0 23 10.318 23 23 0 4.309-1.157 8.407-3.369 11.997z"/></svg> Reddit</a></li>
+                <li><a href="https://groups.google.com/forum/#!forum/tidb-user" class="google-plus" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.858 491.858" width="18" height="20"><path d="M377.472 224.957H201.319v58.718H308.79c-16.032 51.048-63.714 88.077-120.055 88.077-69.492 0-125.823-56.335-125.823-125.824 0-69.492 56.333-125.823 125.823-125.823 34.994 0 66.645 14.289 89.452 37.346l42.622-46.328c-34.04-33.355-80.65-53.929-132.074-53.929C84.5 57.193 0 141.693 0 245.928s84.5 188.737 188.736 188.737c91.307 0 171.248-64.844 188.737-150.989v-58.718l-.001-.001zM491.858 224.857h-36.031v-36.031h-30.886v36.031H388.91v30.883h36.031v36.032h30.886V255.74h36.031z"/></svg> Google Group</a></li>
+                <li><a href="https://stackoverflow.com/questions/tagged/tidb" class="stack-overflow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 547.597 547.597"><path d="M140.81 475.111h.024l189.91-.269c8.434-.013 15.3-6.886 15.3-15.318v-21.298c0-8.428-6.854-15.288-15.3-15.288l-189.91.264c-8.433.012-15.3 6.885-15.3 15.318v21.31c.001 8.427 6.855 15.281 15.276 15.281z"/><path d="M58.667 517.854c.073 29.26.073 29.449 3.072 29.449h.055l10.612.294h.086s85.814 0 171.629-.036c42.914-.019 85.821-.05 118-.092 16.09-.019 29.505-.043 38.887-.074 17.803-.055 17.803-.055 17.803-3.072l.3-10.697V333.299c0-8.434-6.866-15.3-15.3-15.3h-11.909c-8.434 0-15.3 6.866-15.3 15.3V496.22c0 5.062-4.119 9.18-9.181 9.18H110.51c-5.061 0-9.18-4.118-9.18-9.18V333.299c0-8.434-6.867-15.3-15.3-15.3H73.82c-8.433 0-15.3 6.86-15.3 15.3 0 23.342.012 76.084.055 122.981.019 23.447.05 45.442.092 61.574z"/><path d="M142.322 397.399l189.402 17.467c.478.043.948.062 1.413.062 7.956 0 14.468-5.985 15.159-13.917l1.83-21.096c.729-8.396-5.508-15.851-13.898-16.628l-189.102-17.461c-8.593-.795-15.869 5.441-16.653 13.825l-1.97 21.108a15.172 15.172 0 0 0 3.452 11.181 15.19 15.19 0 0 0 10.367 5.459zM437.636 208.849a15.253 15.253 0 0 0 17.694 12.443l21.065-3.678c8.311-1.451 13.898-9.395 12.454-17.706l-32.504-187.23c-1.42-8.207-9.21-13.917-17.692-12.448l-21.065 3.678c-8.311 1.451-13.898 9.395-12.454 17.705l32.502 187.236zM190.333 194.375l163.6 96.708a15.28 15.28 0 0 0 7.778 2.136c5.393 0 10.447-2.876 13.183-7.509l10.876-18.36c2.08-3.519 2.674-7.631 1.658-11.591a15.18 15.18 0 0 0-7.032-9.358l-163.6-96.714c-7.014-4.149-16.836-1.597-20.967 5.374l-10.869 18.36a15.2 15.2 0 0 0-1.658 11.591 15.21 15.21 0 0 0 7.031 9.363zM387.525 240.501a15.276 15.276 0 0 0 12.626 6.659c3.091 0 6.077-.924 8.635-2.681l17.405-11.934c6.953-4.768 8.752-14.314 4.015-21.292L323.29 54.104c-4.584-6.732-14.498-8.623-21.236-3.984l-17.737 12.21c-6.945 4.779-8.727 14.327-3.971 21.291l107.179 156.88zM154.482 302.319l183.465 49.156c1.298.349 2.632.526 3.966.526 6.903 0 12.98-4.67 14.762-11.347l5.508-20.624c2.179-8.152-2.681-16.555-10.826-18.74l-183.465-49.162c-8.017-2.148-16.604 2.852-18.728 10.826l-5.508 20.63c-2.179 8.142 2.68 16.551 10.826 18.735z"/></svg> Stack Overflow</a></li>
+                <li id="wechat"><a class="wechat" href="javascript:void(0)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 31.403 31.404"><path d="M31.403 21.306c0-4.597-4.388-8.32-9.8-8.32-5.414 0-9.802 3.725-9.802 8.32 0 4.597 4.388 8.322 9.802 8.322 1.701 0 3.302-.369 4.697-1.019l3.863 1.671-.447-4.309c1.066-1.329 1.687-2.937 1.687-4.665zm-13.102-2.254a1.395 1.395 0 1 1 0-2.79 1.395 1.395 0 0 1 0 2.79zm6.604 0a1.395 1.395 0 1 1 .003-2.79 1.395 1.395 0 0 1-.003 2.79z"/><path d="M21.604 11.885c1.515 0 2.957.27 4.271.755.009-.175.03-.345.03-.521 0-6.074-5.801-10.996-12.953-10.996C5.799 1.123 0 6.044 0 12.119c0 2.284.822 4.408 2.229 6.167l-.591 5.694 5.104-2.213c1.264.59 2.661.986 4.136 1.189a8.143 8.143 0 0 1-.179-1.65c.001-5.195 4.892-9.421 10.905-9.421zm-4.287-6.428a1.84 1.84 0 1 1-1.841 1.84c0-1.016.825-1.84 1.841-1.84zM8.586 9.139a1.84 1.84 0 0 1 0-3.682 1.84 1.84 0 1 1 0 3.682z"/></svg> 微信公众号</a> <div class="qr_code_outer f-hide f-tc">
+    <div class="qr_code">
+        <i id="close_qrcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.512 224.512"><path fill="#010002" d="M224.507 6.997L217.521 0 112.256 105.258 6.998 0 .005 6.997l105.258 105.257L.005 217.512l6.993 7L112.256 119.24l105.265 105.272 6.986-7-105.258-105.258z"/></svg></i>
+        <img id="js_qr_code_img" class="qr_code_img" src="/images/wechat-qrcode.jpg" alt="Wechat qrCode" />
+        <p>微信扫一扫<br> 微信ID：pingcap2015</p>
+    </div>
+</div>
+</li>
+                </ul>
+            </div>
+            <div class="subscribe" id="subscribe-pc"></div>
+        </div>
+    </div>
+    <div class="container copyright-container">
+        <p class="copyright">&copy; 2021 北京平凯星辰科技发展有限公司</p>
+        <a href="/blog" class="copyright-btn-lang copyright-btn-en"
+            id="lang">English</a>
+        <a href="https://beian.miit.gov.cn/" class="prepared-num">京 ICP 备 16046278 号 - 2</a>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802035112" class="prepared-num">
+            <img src="/images/beian.png" />
+            <p style="margin: 0px 0px 0px 5px;">京公网安备
+                11010802035112号</p>
+        </a>
+    </div>
+</footer>
+<button class="back-to-top" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 284.929 284.929"><path d="M282.082 195.285L149.028 62.24c-1.901-1.903-4.088-2.856-6.562-2.856s-4.665.953-6.567 2.856L2.856 195.285C.95 197.191 0 199.378 0 201.853c0 2.474.953 4.664 2.856 6.566l14.272 14.271c1.903 1.903 4.093 2.854 6.567 2.854s4.664-.951 6.567-2.854l112.204-112.202 112.208 112.209c1.902 1.903 4.093 2.848 6.563 2.848 2.478 0 4.668-.951 6.57-2.848l14.274-14.277c1.902-1.902 2.847-4.093 2.847-6.566.001-2.476-.944-4.666-2.846-6.569z" fill="#FFF"/></svg>
+</button>
+</div><div class="overlay"></div><script src="https://download.pingcap.com/js/jquery.min.js"></script><script type="text/javascript" src="/js/vendor/lazyload.min.js"></script>
+    <script type="text/javascript" src="/js/doc.js"></script>
+    <script type="text/javascript" src="/js/anchor.js"></script><script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script><script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script src="https://browser.sentry-cdn.com/5.11.0/bundle.min.js" integrity="sha384-jbFinqIbKkHNg+QL+yxB4VrBC0EAPTuaLGeRT0T+NfEV89YC6u1bKxHLwoo+/xxY" crossorigin="anonymous"></script><script>Sentry.init({ 
+            dsn: 'https://3f28ed393c5545daa74496b3cdb2e9ba@sentry.io/1887163' 
+        });</script><script src="/js/app.js"></script></body></html>
