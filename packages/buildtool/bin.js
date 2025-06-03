@@ -1,1 +1,0 @@
-import './dist/bin/cli.js';
