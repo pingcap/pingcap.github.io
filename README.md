@@ -1,4 +1,4 @@
-# OSSInsight lite
+# OSSInsight lite (archived)
 
 > 🚧🚧🚧 This project is still in very early version, see [roadmap](https://github.com/pingcap/ossinsight-lite/issues/1).
 > Features might be changed before stable release without notification.
