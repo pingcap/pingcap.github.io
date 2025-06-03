@@ -1,1 +1,0 @@
-/// <reference types="@ossinsight-lite/buildtool/env" />
