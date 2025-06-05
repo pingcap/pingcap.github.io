@@ -14,7 +14,8 @@ As a relational database, TiDB allows you to store diverse data in tables with d
     Create a `documents` table and insert some sample data:
 
     ```python
-    from pytidb import TableModel, Field, Session
+    from pytidb import Session
+    from pytidb.schema import TableModel, Field
     from pytidb.sql import select
 
     class Document(TableModel, table=True):
