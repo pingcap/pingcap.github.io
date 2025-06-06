@@ -92,7 +92,7 @@ As a relational database, TiDB allows you to store diverse data in tables with d
         query = (
             select(Chunk)
             .join(Document, Chunk.document_id == Document.id)
-            .where(Document.title == "Alice")
+            .where(Document.title == "The Power of Positive Thinking")
         )
         chunks = db_session.exec(query).all()
 

@@ -56,7 +56,7 @@ Once the table is created, you can use the `table` object to insert, update, del
 
 ### With TableModel
 
-You can using a `TableModel` instance to represent a record and insert it into the table.
+You can use a `TableModel` instance to represent a record and insert it into the table.
 
 Insert a single record:
 

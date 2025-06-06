@@ -20,10 +20,10 @@
     from pytidb.datatype import TEXT
 
     class Chunk(TableModel, table=True):
-        __table__ = "chunks"
+        __tablename__ = "chunks"
         id: int = Field(primary_key=True)
         text: str = Field(sa_type=TEXT)
-        text_vec: list[float] = VectorField(dimension=3)
+        text_vec: list[float] = VectorField(dimensions=3)
 
     table = db.create_table(schema=Chunk)
     ```
