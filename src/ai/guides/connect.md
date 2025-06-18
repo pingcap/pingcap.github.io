@@ -125,7 +125,6 @@ db = TiDBClient(db_engine=db_engine)
 After connecting to your TiDB database, you can explore the following guides to learn how to work with your data:
 
 - [Working with Tables](./tables.md): Learn how to define and manage tables in TiDB.
-- [Basic CRUD Operations](./crud.md): Insert, query, update, and delete data in your tables.
 - [Vector Search](./vector-search.md): Perform semantic search using vector embeddings.
 - [Fulltext Search](./fulltext-search.md): Retrieve documents using keyword-based search.
 - [Hybrid Search](./hybrid-search.md): Combine vector and full-text search for more relevant results.
