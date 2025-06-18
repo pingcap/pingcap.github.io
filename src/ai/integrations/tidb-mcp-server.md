@@ -26,8 +26,8 @@ The connection parameters for the TiDB cluster can be provided through environme
 
 You can refer to our individual guides for detailed examples on using the TiDB MCP Server with specific MCP clients:
 
-- [Cursor](./mcp-cursor.md)
-- [Claude Desktop](./mcp-claude-desktop.md)
+- [Cursor](./tidb-mcp-cursor.md)
+- [Claude Desktop](./tidb-mcp-claude-desktop.md)
 
 If your MCP client is not listed above, you can refer to the following [Setup options](#setup-options) to set up the TiDB MCP Server.
 
@@ -86,29 +86,35 @@ The TiDB MCP Server provides the following actions (tools) to MCP Clients. You c
 **Database Management**
 
 - `show_databases` - Show all databases in the TiDB cluster
-  - `username`: Database username (string, optional)
-  - `password`: Database password (string, optional)
+
+    * `username`: Database username (string, optional)
+    * `password`: Database password (string, optional)
 
 - `switch_database` - Switch to a specific database
-  - `db_name`: Database name to switch to (string, required)
-  - `username`: Database username (string, optional)
-  - `password`: Database password (string, optional)
+
+    * `db_name`: Database name to switch to (string, required)
+    * `username`: Database username (string, optional)
+    * `password`: Database password (string, optional)
 
 - `show_tables` - Show all tables in the current database
 
 **SQL query and execution**
 
 - `db_query` - Execute read-only SQL queries
-  - `sql_stmt`: SQL query statement (string, required)
+
+    * `sql_stmt`: SQL query statement (string, required)
 
 - `db_execute` - Execute data modification SQL statements
-  - `sql_stmts`: A single SQL statement or an array of SQL statements (string|array, required)
+
+    * `sql_stmts`: A single SQL statement or an array of SQL statements (string|array, required)
 
 **User Management**
 
 - `db_create_user` - Create a new database user
-  - `username`: Name for the new user (string, required)
-  - `password`: Password for the new user (string, required)
+
+    * `username`: Name for the new user (string, required)
+    * `password`: Password for the new user (string, required)
 
 - `db_remove_user` - Remove an existing database user
-  - `username`: Name of the user to remove (string, required)
+
+    * `username`: Name of the user to remove (string, required)
