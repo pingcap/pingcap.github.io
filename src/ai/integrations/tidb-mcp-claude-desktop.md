@@ -9,43 +9,41 @@ This guide shows you how to configure the TiDB MCP Server in Claude Desktop.
 
 ## Prerequisites
 
-You need to install the following tools in advance:
+Before you begin, ensure you have the following:
 
-- [Claude Desktop](https://claude.ai/download)
-- [uv](https://docs.astral.sh/uv/getting-started/installation/) (Python package installer)
+- **Claude Desktop**: Download and install Claude Desktop from [claude.ai](https://claude.ai/download).
+- **Python (>=3.10) and uv**: Ensure Python (version 3.10 or later) and uv is installed. Follow the [installation guide](https://docs.astral.sh/uv/getting-started/installation/) to install uv.
+- **A TiDB Serverless Cluster**: You can create a free TiDB CLoud Serverless cluster here [tidbcloud.com](https://tidbcloud.com/free-trial).
 
-  > **Note**
-  >
-  > For macOS users, you can install the `uvx` command globally by running `brew install uv`.
+## Setup steps
 
-- A TiDB cluster for testing. If you don't have one, you can go to [TiDB Cloud](https://tidbcloud.com/free-trial) to create a free serverless cluster.
-
-## Configuration
-
-For Claude Desktop users, please refer to the quickstart guide to learn [how to configure the MCP server in Claude Desktop](https://modelcontextprotocol.io/quickstart/user).
-
-In short, you can follow these steps:
+You can follow the steps below to set up the TiDB MCP Server in Claude Desktop:
 
 1. Open the **Settings** dialog.
 2. Click the **Developers** tab in the dialog.
 3. Click the **Edit Config** button to open the MCP config file `claude_desktop_config.json`.
-4. Copy the following configuration into the `claude_desktop_config.json` file and replace the environment variables with your own values.
+4. Copy the following configuration into the `claude_desktop_config.json` file.
 
-  ```json
-  {
-    "mcpServers": {
-      "TiDB": {
-        "command": "uvx --from pytidb[mcp] tidb-mcp-server",
-        "env": {
-          "TIDB_HOST": "localhost",
-          "TIDB_PORT": "4000",
-          "TIDB_USERNAME": "root",
-          "TIDB_PASSWORD": "",
-          "TIDB_DATABASE": "test"
+    ```json
+    {
+      "mcpServers": {
+        "TiDB": {
+          "command": "uvx --from pytidb[mcp] tidb-mcp-server",
+          "env": {
+            "TIDB_HOST": "localhost",
+            "TIDB_PORT": "4000",
+            "TIDB_USERNAME": "root",
+            "TIDB_PASSWORD": "",
+            "TIDB_DATABASE": "test"
+          }
         }
       }
     }
-  }
-  ```
-5. Restart Claude Desktop.
-6. After restarting, you will see the TiDB tools in the **Tools** panel.
+    ```
+
+5. Go to the [TiDB Cloud cluster page](https://tidbcloud.com/console/clusters) and navigate to the cluster you want to connect to.
+6. Click the **Connect** button to get the connection parameters, and replace the `TIDB_HOST`, `TIDB_PORT`, `TIDB_USERNAME`, `TIDB_PASSWORD`, and `TIDB_DATABASE` values with your own.
+7. Restart Claude Desktop.
+
+
+For more details, please refer to the quickstart guide to learn [how to configure the MCP server in Claude Desktop](https://modelcontextprotocol.io/quickstart/user).
