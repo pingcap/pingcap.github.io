@@ -6,7 +6,7 @@ Full-text search enables you to retrieve documents for exact keywords.
 
     Currently, full-text search is only available for the following product option and region:
     
-    - **TiDB Cloud Serverless: Frankfurt (eu-central-1)**
+    - **TiDB Cloud Serverless: Frankfurt (eu-central-1), Singapore (ap-southeast-1)**
 
 !!! tip
 
