@@ -1,191 +1,247 @@
-# Fulltext Search
+# Full-text Search
 
-Full-text search enables you to retrieve documents for exact keywords.
+**Full-text search** enables you to find documents or data by matching keywords or phrases within the entire text content. It is widely used in search engines, document management, e-commerce, and any scenario where users need to search large volumes of unstructured or semi-structured text.
+
+TiDB provides full-text search capabilities for **massive datasets** with high performance and built-in **multilingual support**.
 
 !!! note
 
-    Currently, full-text search is only available for the following product option and region:
+    Full-text search is currently in the early stages with limited accessibility. It is only available for **TiDB Cloud Serverless** in the following regions:
     
-    - **TiDB Cloud Serverless: Frankfurt (eu-central-1)**
+    - **Frankfurt (eu-central-1)**
+    - **Singapore (ap-southeast-1)**
+  
+    If you have feedback or need help, feel free to reach out to us on [Discord](https://discord.gg/zcqexutz2R).
 
 !!! tip
 
-    To check the complete example code, please refer to the [full-text search example](https://github.com/pingcap/pytidb/blob/main/examples/fulltext_search).
+    For complete example code, see the [full-text search example](https://github.com/pingcap/pytidb/blob/main/examples/fulltext_search).
 
 ## Basic Usage
 
-### Step 1. Create a table and a full-text index
+### Step 1. Create Table and Full-text Index
 
 === "Python"
 
-    You can use `table.create_fts_index()` method to create full-text search index on the specified column (e.g. `title`).
+    You can use `FullTextField` to define a text field with full-text search enabled. The `fts_parser` parameter in Python corresponds to the `WITH PARSER` clause in SQL.
 
-    ```python hl_lines="10"
-    from pytidb.schema import TableModel, Field
-    from pytidb.datatype import Text
+    For example, the following code creates a table with a full-text index on the `title` column:
 
-    class StockItem(TableModel, table=True):
+    ```python hl_lines="6"
+    from pytidb.schema import TableModel, Field, FullTextField
+
+    class Item(TableModel):
+        __tablename__ = "items"
         id: int = Field(primary_key=True)
-        title: str = Field(sa_type=Text)
+        title: str = FullTextField(fts_parser="MULTILINGUAL")
 
-    table = db.create_table(schema=StockItem)
-
-    table.create_fts_index("title")
+    table = client.create_table(schema=Item, mode="overwrite")
     ```
+
+    The `fts_parser` parameter specifies the parser for the full-text index. Supported values:
+    
+    - `STANDARD`: Fast, works for English content, splits words by spaces and punctuation.
+    - `MULTILINGUAL` (default): Supports multiple languages, including English, Chinese, Japanese, and Korean.
 
 === "SQL"
 
     Create a table with a full-text index:
 
-    ```sql
-    CREATE TABLE stock_items(
-        id INT,
+    ```sql hl_lines="4"
+    CREATE TABLE items(
+        id INT PRIMARY KEY,
         title TEXT,
         FULLTEXT INDEX (title) WITH PARSER MULTILINGUAL
     );
     ```
 
-    Or add a full-text index to an existing table:
+    You can also add a full-text index to an existing table with a separate statement:
 
     ```sql
-    ALTER TABLE stock_items ADD FULLTEXT INDEX (title)
+    CREATE TABLE items(
+        id INT PRIMARY KEY,
+        title TEXT
+    );
+
+    ALTER TABLE items ADD FULLTEXT INDEX (title)
     WITH PARSER MULTILINGUAL ADD_COLUMNAR_REPLICA_ON_DEMAND;
     ```
 
-    The following parsers are accepted in the `WITH PARSER <PARSER_NAME>` clause:
+    The following parsers are supported in the `WITH PARSER <PARSER_NAME>` clause:
 
-    - `STANDARD`: fast, works for English contents, splitting words by spaces and punctuation.
-    - `MULTILINGUAL`: supports multiple languages, including English, Chinese, Japanese, and Korean.
+    - `STANDARD`: Fast, works for English content, splits words by spaces and punctuation.
+    - `MULTILINGUAL`: Supports multiple languages, including English, Chinese, Japanese, and Korean.
 
-### Step 2. Ingest sample data
+### Step 2. Insert Sample Data
 
-For demonstration purposes, we will ingest some sample text data with multiple languages into the table.
+For demonstration purposes, the following sample data covers English, Japanese, and Chinese text.
 
 === "Python"
 
+    You can use the `bulk_insert` method to insert sample data into the table.
+
     ```python
     table.bulk_insert([
-        {"id": 1, "title": "イヤホン bluetooth ワイヤレスイヤホン "},
-        {"id": 2, "title": "完全ワイヤレスイヤホン/ウルトラノイズキャンセリング 2.0 "},
-        {"id": 3, "title": "ワイヤレス ヘッドホン Bluetooth 5.3 65時間再生 ヘッドホン 40mm HD "},
-        {"id": 4, "title": "楽器用 オンイヤーヘッドホン 密閉型【国内正規品】"},
-        {"id": 5, "title": "ワイヤレスイヤホン ハイブリッドANC搭载 40dBまでアクティブノイズキャンセル"},
-        {"id": 6, "title": "Lightweight Bluetooth Earbuds with 48 Hours Playtime"},
-        {"id": 7, "title": "True Wireless Noise Cancelling Earbuds - Compatible with Apple & Android, Built-in Microphone"},
-        {"id": 8, "title": "In-Ear Earbud Headphones with Mic, Black"},
-        {"id": 9, "title": "Wired Headphones, HD Bass Driven Audio, Lightweight Aluminum Wired in Ear Earbud Headphones"},
-        {"id": 10, "title": "LED Light Bar, Music Sync RGB Light Bar, USB Ambient Lamp"},
-        {"id": 11, "title": "无线消噪耳机-黑色 手势触控蓝牙降噪 主动降噪头戴式耳机（智能降噪 长久续航）"},
-        {"id": 12, "title": "专业版USB7.1声道游戏耳机电竞耳麦头戴式电脑网课办公麦克风带线控"},
-        {"id": 13, "title": "投影仪家用智能投影机便携卧室手机投影"},
-        {"id": 14, "title": "无线蓝牙耳机超长续航42小时快速充电 流光金属耳机"},
-        {"id": 15, "title": "皎月银 国家补贴 心率血氧监测 蓝牙通话 智能手表 男女表"},
+        Item(id=1, title="Bluetooth Earphones, HiFi sound, 48h battery, Fast charge, Low latency"),
+        Item(id=2, title="Bluetooth 5.3 Headphones, Noise Cancelling, Immersive sound, Comfortable"),
+        Item(id=3, title="IPX7 Waterproof Earbuds, Sport ready, Touch control, High-quality music"),
+        Item(id=4, title="Sports Earbuds, Secure fit, Sweatproof, Long battery, Workout support"),
+        Item(id=5, title="Wired Headphones, Studio-grade, HD sound, Comfortable, Pro music experience"),
+        Item(id=6, title="Bluetoothイヤホン HiFi音質 48hバッテリー 急速充電 低遅延"),
+        Item(id=7, title="Bluetooth5.3ヘッドホン ノイズキャンセリング 没入サウンド 快適装着"),
+        Item(id=8, title="IPX7防水イヤホン スポーツ対応 タッチ操作 高音質音楽"),
+        Item(id=9, title="スポーツイヤホン 安定装着 防汗 長持ちバッテリー ワークアウト対応"),
+        Item(id=10, title="有線ヘッドホン スタジオ級 HDサウンド 快適装着 プロ音楽体験"),
+        Item(id=11, title="无线蓝牙耳机 HiFi音质 48小时超长续航 快速充电 低延迟"),
+        Item(id=12, title="蓝牙5.3降噪头戴式耳机 杜比全景声 沉浸音效 舒适佩戴 畅享静谧音乐时光"),
+        Item(id=13, title="IPX7防水真无线耳机 运动无忧 智能触控 随时畅听高品质音乐"),
+        Item(id=14, title="运动专用耳机 稳固佩戴 防汗设计 超长续航 低延迟音频 高清通话"),
+        Item(id=15, title="录音室级有线耳机 高清音质 舒适佩戴 可拆卸线材 多设备兼容 降噪麦克风"),
     ])
     ```
 
 === "SQL"
 
+    You can use the `INSERT INTO` statement to insert the sample data into the table.
+
     ```sql
-    INSERT INTO stock_items(id, title) VALUES
-        (1, "イヤホン bluetooth ワイヤレスイヤホン "),
-        (2, "完全ワイヤレスイヤホン/ウルトラノイズキャンセリング 2.0 "),
-        (3, "ワイヤレス ヘッドホン Bluetooth 5.3 65時間再生 ヘッドホン 40mm HD "),
-        (4, "楽器用 オンイヤーヘッドホン 密閉型【国内正規品】"),
-        (5, "ワイヤレスイヤホン ハイブリッドANC搭載 40dBまでアクティブノイズキャンセル"),
-        (6, "Lightweight Bluetooth Earbuds with 48 Hours Playtime"),
-        (7, "True Wireless Noise Cancelling Earbuds - Compatible with Apple & Android, Built-in Microphone"),
-        (8, "In-Ear Earbud Headphones with Mic, Black"),
-        (9, "Wired Headphones, HD Bass Driven Audio, Lightweight Aluminum Wired in Ear Earbud Headphones"),
-        (10, "LED Light Bar, Music Sync RGB Light Bar, USB Ambient Lamp"),
-        (11, "无线消噪耳机-黑色 手势触控蓝牙降噪 主动降噪头戴式耳机（智能降噪 长久续航）"),
-        (12, "专业版USB7.1声道游戏耳机电竞耳麦头戴式电脑网课办公麦克风带线控"),
-        (13, "投影仪家用智能投影机便携卧室手机投影"),
-        (14, "无线蓝牙耳机超长续航42小时快速充电 流光金属耳机"),
-        (15, "皎月银 国家补贴 心率血氧监测 蓝牙通话 智能手表 男女表");
+    INSERT INTO items (id, title) VALUES
+        (1, 'Bluetooth Earphones, HiFi sound, 48h battery, Fast charge, Low latency'),
+        (2, 'Bluetooth 5.3 Headphones, Noise Cancelling, Immersive sound, Comfortable'),
+        (3, 'IPX7 Waterproof Earbuds, Sport ready, Touch control, High-quality music'),
+        (4, 'Sports Earbuds, Secure fit, Sweatproof, Long battery, Workout support'),
+        (5, 'Wired Headphones, Studio-grade, HD sound, Comfortable, Pro music experience'),
+        (6, 'Bluetoothイヤホン HiFi音質 48hバッテリー 急速充電 低遅延'),
+        (7, 'Bluetooth5.3ヘッドホン ノイズキャンセリング 没入サウンド 快適装着'),
+        (8, 'IPX7防水イヤホン スポーツ対応 タッチ操作 高音質音楽'),
+        (9, 'スポーツイヤホン 安定装着 防汗 長持ちバッテリー ワークアウト対応'),
+        (10, '有线ヘッドホン スタジオ级 HDサウンド 快适装着 プロ音楽体験'),
+        (11, '无线蓝牙耳机 HiFi音质 48小时超长续航 快速充电 低延迟'),
+        (12, '蓝牙5.3降噪头戴式耳机 杜比全景声 沉浸音效 舒适佩戴 畅享静谧音乐时光'),
+        (13, 'IPX7防水真无线耳机 运动无忧 智能触控 随时畅听高品质音乐'),
+        (14, '运动专用耳机 稳固佩戴 防汗设计 超长续航 低延迟音频 高清通话'),
+        (15, '录音室级有线耳机 高清音质 舒适佩戴 可拆卸线材 多设备兼容 降噪麦克风');
     ```
 
-### Step 3. Perform a full-text search
+### Step 3. Perform a Full-text Search
 
 === "Python"
 
-    To perform a full-text search via pytidb, you need to pass the `search_type="fulltext"` parameter to the `search` method:
+    To perform a full-text search with pytidb, use the `search` method and set the `search_type` parameter to `"fulltext"`.
+
+    **Example: Search for the 3 most relevant documents**
 
     ```python
-    table.search("bluetoothイヤホン", search_type="fulltext").limit(3)
+    results = table.search("Bluetooth Headphones", search_type="fulltext").limit(3).to_list()
+    print(json.dumps(results, indent=2, ensure_ascii=False))
     ```
 
     ```python title="Execution result"
     [
-        {"id": 1, "title": "イヤホン bluetooth ワイヤレスイヤホン "},
-        {"id": 6, "title": "Lightweight Bluetooth Earbuds with 48 Hours Playtime"},
-        {"id": 2, "title": "完全ワイヤレスイヤホン/ウルトラノイズキャンセリング 2.0 "},
+        {
+            "id": 2,
+            "title": "Bluetooth 5.3 Headphones, Noise Cancelling, Immersive sound, Comfortable",
+            "_match_score": 3.7390857,
+            "_score": 3.7390857
+        },
+        {
+            "id": 5,
+            "title": "Wired Headphones, Studio-grade, HD sound, Comfortable, Pro music experience",
+            "_match_score": 1.9798478,
+            "_score": 1.9798478
+        },
+        {
+            "id": 1,
+            "title": "Bluetooth Earphones, HiFi sound, 48h battery, Fast charge, Low latency",
+            "_match_score": 1.620981,
+            "_score": 1.620981
+        }
     ]
     ```
 
-    The results are ordered by relevance, with the most relevant documents first.
+    The results are sorted by relevance, with the most relevant documents listed first.
 
-    Try searching keywords in another language:
+    The `_match_score` (or `_score`) field indicates the relevance score of each document, calculated using the [BM25](https://en.wikipedia.org/wiki/Okapi_BM25) algorithm—a widely used ranking function in information retrieval.
+
+    **Example: Search for the 3 most relevant documents in another language**
 
     ```python
-    table.search("蓝牙耳机", search_type="fulltext").limit(3)
+    results = table.search("蓝牙耳机", search_type="fulltext").limit(3).to_list()
+    print(json.dumps(results, indent=2, ensure_ascii=False))
     ```
 
     ```python title="Execution result"
     [
-        {"id": 14, "title": "无线蓝牙耳机超长续航42小时快速充电 流光金属耳机"},
-        {"id": 11, "title": "无线消噪耳机-黑色 手势触控蓝牙降噪 主动降噪头戴式耳机（智能降噪 长久续航）"},
-        {"id": 15, "title": "皎月银 国家补贴 心率血氧监测 蓝牙通话 智能手表 男女表"},
+        {
+            "id": 11,
+            "title": "无线蓝牙耳机 HiFi音质 48小时超长续航 快速充电 低延迟",
+            "_match_score": 3.000002,
+            "_score": 3.000002
+        },
+        {
+            "id": 12,
+            "title": "蓝牙5.3降噪头戴式耳机 杜比全景声 沉浸音效 舒适佩戴 畅享静谧音乐时光",
+            "_match_score": 2.5719738,
+            "_score": 2.5719738
+        },
+        {
+            "id": 14,
+            "title": "运动专用耳机 稳固佩戴 防汗设计 超长续航 低延迟音频 高清通话",
+            "_match_score": 1.1418362,
+            "_score": 1.1418362
+        }
     ]
     ```
 
 === "SQL"
 
-    To perform a full-text search, you can use the `fts_match_word()` function.
+    To perform a full-text search, use the `fts_match_word()` function.
+
+    **Example: Search for the 3 most relevant documents**
 
     ```sql
-    SELECT *
-    FROM stock_items
-    WHERE fts_match_word("bluetoothイヤホン", title)
-    ORDER BY fts_match_word("bluetoothイヤホン", title) DESC
-    LIMIT 10;
+    SELECT *, fts_match_word("Bluetooth Headphones", title) AS score
+    FROM items
+    WHERE fts_match_word("Bluetooth Headphones", title)
+    ORDER BY score DESC
+    LIMIT 3;
     ```
 
     ```plain title="Execution result"
-    +----+--------------------------------------------------------------------+
-    | id | title                                                              |
-    +----+--------------------------------------------------------------------+
-    |  1 | イヤホン bluetooth ワイヤレスイヤホン                                  |
-    |  6 | Lightweight Bluetooth Earbuds with 48 Hours Playtime               |
-    |  2 | 完全ワイヤレスイヤホン/ウルトラノイズキャンセリング 2.0                    |
-    |  3 | ワイヤレス ヘッドホン Bluetooth 5.3 65時間再生 ヘッドホン 40mm HD        |
-    |  5 | ワイヤレスイヤホン ハイブリッドANC搭载 40dBまでアクティブノイズキャンセル     |
-    +----+--------------------------------------------------------------------+
+    +----+-----------------------------------------------------------------------------+-----------+
+    | id | title                                                                       | score     |
+    +----+-----------------------------------------------------------------------------+-----------+
+    |  2 | Bluetooth 5.3 Headphones, Noise Cancelling, Immersive sound, Comfortable    | 3.7390857 |
+    |  5 | Wired Headphones, Studio-grade, HD sound, Comfortable, Pro music experience | 1.9798478 |
+    |  1 | Bluetooth Earphones, HiFi sound, 48h battery, Fast charge, Low latency      |  1.620981 |
+    +----+-----------------------------------------------------------------------------+-----------+
     ```
 
     The results are ordered by relevance, with the most relevant documents first.
 
-    Try searching keywords in another language:
+    **Example: Search for the 3 most relevant documents in another language**
 
     ```sql
-    SELECT *
-    FROM stock_items
+    SELECT *, fts_match_word("蓝牙耳机", title) AS score
+    FROM items
     WHERE fts_match_word("蓝牙耳机", title)
-    ORDER BY fts_match_word("蓝牙耳机", title) DESC
-    LIMIT 10;
+    ORDER BY score DESC
+    LIMIT 3;
     ```
 
     ```plain title="Execution result"
-    +----+-------------------------------------------------------------------+
-    | id | title                                                             |
-    +----+-------------------------------------------------------------------+
-    | 14 | 无线蓝牙耳机超长续航42小时快速充电 流光金属耳机                          |
-    | 11 | 无线消噪耳机-黑色 手势触控蓝牙降噪 主动降噪头戴式耳机（智能降噪 长久续航）    |
-    | 15 | 皎月银 国家补贴 心率血氧监测 蓝牙通话 智能手表 男女表                     |
-    +----+-------------------------------------------------------------------+
+    +----+------------------------------------------------------------------+-----------+
+    | id | title                                                            | score     |
+    +----+------------------------------------------------------------------+-----------+
+    | 11 | 无线蓝牙耳机 HiFi音质 48小时超长续航 快速充电 低延迟                    |  3.000002 |
+    | 12 | 蓝牙5.3降噪头戴式耳机 杜比全景声 沉浸音效 舒适佩戴 畅享静谧音乐时光        | 2.5719738 |
+    | 14 | 运动专用耳机 稳固佩戴 防汗设计 超长续航 低延迟音频 高清通话               | 1.1418362 |
+    +----+------------------------------------------------------------------+-----------+
     ```
 
-## See also
+## See Also
 
-In Retrieval-Augmented Generation (RAG) scenarios, you may need to use full-text search together with vector search to improve the retrieval quality.
+In Retrieval-Augmented Generation (RAG) scenarios, it is often beneficial to utilize both full-text search and vector search for optimal results.
 
-In next section, we will introduce how to combine full-text search and vector search via [hybrid search](./hybrid-search.md) mode.
+- Learn how to combine these approaches in the [hybrid search guide](./hybrid-search.md).
+- For more on vector search, see the [vector search guide](../concepts/vector-search.md).
