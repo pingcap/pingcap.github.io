@@ -32,9 +32,9 @@ embed_fn = EmbeddingFunction(
 
 === "Python"
 
-    After you have [connected to your TiDB database](./connect.md) using `TiDBClient`:
+    After you have [connected to your TiDB database](./connect.md) using `TiDBClient` and get the `client` instance:
 
-    You can now create a table with both a text field and a vector field. PyTiDB will automatically create a vector index on the `text_vec` column, and a full-text index can be created using the `create_fts_index()` method.
+    You can now create a table with both a `FullTextField` and a `VectorField` to store the text data and its vector embedding.
 
     Example:
 
@@ -47,8 +47,10 @@ embed_fn = EmbeddingFunction(
         text: str = FullTextField()
         text_vec: list[float] = embed_fn.VectorField(source_field="text")
 
-    table = db.create_table(schema=Chunk, mode="overwrite")
+    table = client.create_table(schema=Chunk, mode="overwrite")
     ```
+
+    In this example, PyTiDB will automatically create a full-text index on the `text` column and a vector index on the `text_vec` column.
 
 ### Step 3. Insert Sample Data
 
@@ -193,9 +195,13 @@ final_score = vs_weight * vector_score + fts_weight * fulltext_score
 
 ## Rerank Method
 
+Hybrid search also supports reranking using reranker-specific models. 
+
 === "Python"
 
-    Hybrid search also supports reranking using reranker-specific models. Use the `rerank()` method to specify a reranker that sorts search results by relevance between the query and the documents.
+    Use the `rerank()` method to specify a reranker that sorts search results by relevance between the query and the documents.
+
+    **Example: Using JinaAI Reranker to rerank the hybrid search results**
 
     ```python
     reranker = Reranker(
@@ -214,3 +220,5 @@ final_score = vs_weight * vector_score + fts_weight * fulltext_score
         .to_list()
     )
     ```
+
+    To check other reranker models, see the [Reranking](../guides/reranking.md) guide.
