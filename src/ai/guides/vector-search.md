@@ -1,41 +1,58 @@
 # Vector Search
 
-[Vector search](https://docs.pingcap.com/tidbcloud/vector-search-overview) uses semantic similarity to help you find the most relevant records, even if your query does not explicitly include all the keywords.
+Vector search uses semantic similarity to help you find the most relevant records, even if your query does not explicitly include all the keywords.
 
 !!! tip
 
-    To check complete example of vector search, please refer to the [vector-search example](https://github.com/pingcap/pytidb/tree/main/examples/vector_search).
+    For a complete example of vector search, see the [vector-search example](https://github.com/pingcap/pytidb/tree/main/examples/vector_search).
 
 
 ## Basic Usage
+
+This section shows you how to use vector search in your application in minimal steps. Before you start, you need to [connect to the database](./connect.md).
 
 ### Step 1. Create a table with a vector field
 
 === "Python"
 
-    To store vector data, you need to define a vector field via `VectorField` in the table schema.
+    You can use `client.create_table()` to create a table and use `VectorField` to define a vector field.
 
-    ```python hl_lines="7"
+    In this example, we create a table named `documents` with four columns:
+
+    - `id`: The primary key of the table.
+    - `text`: The text content of the document.
+    - `text_vec`: The vector embedding of the text content.
+    - `meta`: The metadata of the document, which is a JSON object.
+
+    ```python hl_lines="9"
     from pytidb.schema import TableModel, Field, VectorField
-    from pytidb.datatype import TEXT
+    from pytidb.datatype import TEXT, JSON
 
-    class Chunk(TableModel, table=True):
-        __tablename__ = "chunks"
+    class Document(TableModel):
+        __tablename__ = "documents"
+
         id: int = Field(primary_key=True)
         text: str = Field(sa_type=TEXT)
         text_vec: list[float] = VectorField(dimensions=3)
+        meta: dict = Field(sa_type=JSON, default_factory=dict)
 
-    table = db.create_table(schema=Chunk)
+    table = client.create_table(schema=Chunk, mode="overwrite")
     ```
 
-    By default, the `create_table` method will create a [vector index](https://docs.pingcap.com/tidbcloud/vector-search-index/) for cosine distance metric on the vector field.
+    The `VectorField` class accepts the following parameters:
+
+    - `dimensions`: The number of dimensions of the vector. Once specified, only vectors with this exact dimension can be stored in this field.
+    - `index`: Whether to create a [vector index](https://docs.pingcap.com/tidbcloud/vector-search-index/) for the vector field. Defaults to `True`.
+    - `distance_metric`: The distance metric to use for the vector index. Supported values:
+        - `DistanceMetric.COSINE` (default): Cosine distance metric, suitable for measuring text similarity
+        - `DistanceMetric.L2`: L2 distance metric, suitable for capturing overall difference
 
 === "SQL"
 
-    To store vector data, you need to define a column of `VECTOR` type in the `CREATE TABLE` statement.
+    You can use the `CREATE TABLE` statement to create a table and using `VECTOR` type to define a vector column.
 
     ```sql hl_lines="4 5"
-    CREATE TABLE chunks (
+    CREATE TABLE documents (
         id INT PRIMARY KEY,
         text TEXT,
         text_vec VECTOR(3),
@@ -43,52 +60,60 @@
     );
     ```
 
-    In the example above, we also create a `VECTOR INDEX` on the `text_vec` column to optimize vector search using the `VEC_COSINE_DISTANCE` function.
+    In this example:
+
+    - The `text_vec` column is defined as a `VECTOR` type with 3 dimensions, it means that the vector to be stored in this column must have 3 dimensions.
+    - A vector index is created using the `VEC_COSINE_DISTANCE` function to optimize vector search performance
+
+    TiDB supports two distance functions for vector indexes:
+    
+    - `VEC_COSINE_DISTANCE`: Calculates the cosine distance between two vectors
+    - `VEC_L2_DISTANCE`: Calculates L2 distance (Euclidean distance) between two vectors
 
 
 ### Step 2. Insert vector data into the table
 
-For demonstration purposes, we will ingest some text and their corresponding vector embeddings into the table. To simplify the example, we use simplified 3-dimensional vectors.
+For demonstration purposes, insert some text and their corresponding vector embeddings into the table. In this example, we use simple 3-dimensional vectors.
 
-In this example, we insert 3 documents:
+We insert three documents:
 
-- `dog` with vector embedding `[1, 2, 1]`
-- `fish` with vector embedding `[1, 2, 4]`
-- `tree` with vector embedding `[1, 0, 0]`
+- `dog` with the vector embedding `[1, 2, 1]`
+- `fish` with the vector embedding `[1, 2, 4]`
+- `tree` with the vector embedding `[1, 0, 0]`
 
 === "Python"
 
     ```python
     table.bulk_insert([
-        Chunk(text="dog", text_vec=[1,2,1]),
-        Chunk(text="fish", text_vec=[1,2,4]),
-        Chunk(text="tree", text_vec=[1,0,0]),
+        Document(text="dog", text_vec=[1,2,1], meta={"category": "animal"}),
+        Document(text="fish", text_vec=[1,2,4], meta={"category": "animal"}),
+        Document(text="tree", text_vec=[1,0,0], meta={"category": "plant"}),
     ])
     ```
 
 === "SQL"
 
     ```sql
-    INSERT INTO chunks (id, text, text_vec)
+    INSERT INTO documents (id, text, text_vec, meta)
     VALUES
-        (1, 'dog', '[1,2,1]'),
-        (2, 'fish', '[1,2,4]'),
-        (3, 'tree', '[1,0,0]');
+        (1, 'dog', '[1,2,1]', '{"category": "animal"}'),
+        (2, 'fish', '[1,2,4]', '{"category": "animal"}'),
+        (3, 'tree', '[1,0,0]', '{"category": "plant"}');
     ```
 
 !!! tip
 
-    In real-world applications, the vector embedding is usually generated by a [embedding model](../concepts/vector-search.md#embedding-model).
+    In real-world applications, vector embeddings are usually generated by an [embedding model](../concepts/vector-search.md#embedding-model).
     
     For convenience, pytidb provides an auto embedding feature that can automatically generate vector embeddings for your text fields when you insert, update, or search—no manual processing needed.
 
-    For details, see the [Auto Embedding](./auto-embedding.md) guide.  
+    For details, see the [Auto Embedding](./auto-embedding.md) guide.
 
 ### Step 3. Perform vector search
 
-Vector search uses vector distance metrics to find the most relevant records, the closer the distance, the more relevant the record.
+Vector search uses vector distance metrics to measure the similarity and relevance between vectors. The closer the distance, the more relevant the record. To find the most relevant documents in the table, you need to specify a query vector. 
 
-To find the most relevant documents in the table, you need to specify a query vector. Assume the query is `A swimming animal` and its vector embedding is `[1, 2, 3]`.
+In this example, we assume the query is `A swimming animal` and its vector embedding is `[1, 2, 3]`.
 
 === "Python"
 
@@ -112,11 +137,11 @@ To find the most relevant documents in the table, you need to specify a query ve
 
     You can use the `ORDER BY <distance_function>(<column_name>, <query_vector>) LIMIT <n>` clause in the `SELECT` statement to get the n nearest neighbors of the query vector.
 
-    In this example, we use the `vec_cosine_distance` function to calculate the cosine distance between the `text_vec` column and the query vector `[1, 2, 3]`.
+    In this example, we use the `vec_cosine_distance` function to calculate the cosine distance between the vectors stored in the `text_vec` column and the provided query vector `[1, 2, 3]`.
 
     ```sql
     SELECT id, text, vec_cosine_distance(text_vec, '[1,2,3]') AS distance
-    FROM chunks
+    FROM documents
     ORDER BY distance
     LIMIT 3;
     ```
@@ -137,32 +162,30 @@ To find the most relevant documents in the table, you need to specify a query ve
 
 ## Distance metrics
 
-Distance metrics are a measure of the similarity between a pair of vectors. Currently, TiDB supports the following metrics:
+Distance metrics are a measure of the similarity between a pair of vectors. Currently, TiDB supports the following distance metrics:
 
 === "Python"
 
-    pytidb provides the following functions on vector column to calculate vector distances:
+    The `table.search()` API supports the following distance metrics:
 
-    | Function Name | Description |
-    |---------------|-------------|
-    | `l1_distance()` | Calculates the L1 distance (Manhattan distance) between two vectors |
-    | `l2_distance()` | Calculates the L2 distance (Euclidean distance) between two vectors |
-    | `cosine_distance()` | Calculates the cosine distance between two vectors |
-    | `negative_inner_product()` | Calculates the negative of the inner product between two vectors |
+    | Metric Name              | Description                                                    | Best For |
+    |--------------------------|----------------------------------------------------------------|----------|
+    | `DistanceMetric.COSINE`  | Calculates the cosine distance between two vectors (default). Measures the angle between vectors. | Text embeddings, semantic search |
+    | `DistanceMetric.L2`      | Calculates the L2 distance (Euclidean distance) between two vectors. Measures the straight-line distance. | Image features |
 
-    For example, to calculate the L1 distance between the `text_vec` column and the query vector `[1, 2, 3]`, you can use the following SQL statement:
+    To change the distance metric used for vector search, use the `.distance_metric()` method.
+
+    **Example: Use the L2 distance metric**
 
     ```python
-    from pytidb.sql import select
+    from pytidb.schema import DistanceMetric
 
-    # table is created in the previous basic usage example.
-    stmt = select(
-        table.id,
-        table.text,
-        table.text_vec.l1_distance([1, 2, 3])
-    ).limit(3)
-
-    db.query(stmt).to_list()
+    results = (
+        table.search([1, 2, 3])
+            .distance_metric(DistanceMetric.L2)
+            .limit(10)
+            .to_list()
+    )
     ```
 
 === "SQL"
@@ -177,30 +200,243 @@ Distance metrics are a measure of the similarity between a pair of vectors. Curr
     | [`VEC_L1_DISTANCE`](https://docs.pingcap.com/tidbcloud/vector-search-functions-and-operators/#vec_l1_distance)                       | Calculates L1 distance (Manhattan distance) between two vectors |
 
 
+## Distance threshold
+
+The `table.search()` API allows you to set a distance threshold to control the similarity of the returned results. By specifying this threshold, you can exclude less similar vectors and return only those that meet your relevance criteria.
+
+=== "Python"
+
+    Use the `.distance_threshold()` method to set a maximum distance for the search results. Only records with a distance less than the threshold are returned.
+
+    **Example: Only return documents with a distance less than 0.5**
+
+    ```python
+    results = table.search([1, 2, 3]).distance_threshold(0.5).limit(10).to_list()
+    ```
+
+=== "SQL"
+
+    In SQL, use the `HAVING` clause with a distance function to filter results by distance:
+
+    **Example: Only return documents with a distance less than 0.1**
+
+    ```sql
+    SELECT id, text, vec_cosine_distance(text_vec, '[1,2,3]') AS distance
+    FROM documents
+    HAVING distance < 0.1
+    ORDER BY distance
+    LIMIT 10;
+    ```
+
+## Distance range
+
+The `table.search()` API also supports specifying a distance range to further refine the results.
+
+=== "Python"
+
+    Use the `.distance_range()` method to set both minimum and maximum distance values. Only records with a distance within this range are returned.
+
+    **Example: Only return documents with a distance between 0.01 and 0.05**
+
+    ```python
+    results = table.search([1, 2, 3]).distance_range(0.01, 0.05).limit(10).to_list()
+    ```
+
+=== "SQL"
+
+    To specify a distance range in SQL, use `BETWEEN` or other comparison operators in the `HAVING` clause:
+
+    **Example: Only return documents with a distance between 0.01 and 0.05**
+
+    ```sql
+    SELECT id, text, vec_l2_distance(text_vec, '[1,2,3]') AS distance
+    FROM documents
+    HAVING distance BETWEEN 0.01 AND 0.05
+    ORDER BY distance
+    LIMIT 10;
+    ```
+
+## Metadata filtering
+
+As a relational database, TiDB supports a rich set of [SQL operators](https://docs.pingcap.com/tidbcloud/operators/) and allows flexible combinations of filtering conditions.
+
+For vector search in TiDB, you can apply metadata filtering on scalar fields (e.g., integers, strings) or JSON fields.
+
+Typically, vector search combined with metadata filtering operates in two modes:
+
+- **Post-filtering**: In a two-stage retrieval process, TiDB first performs vector search to retrieve the top-k candidate results from the entire vector space, then applies the filter to this candidate set. Vector search typically leverages a vector index for efficiency.
+- **Pre-filtering**: The filter is applied before vector search. If the filter is highly selective and the filtered field is indexed with a scalar index, this approach can significantly reduce the search space and improve performance.
+
+=== "Python"
+
+    Use the `.filter()` method with a filter dictionary to apply filtering to vector search. By default, the `table.search()` API uses post-filtering mode to maximize search performance with the vector index.
+
+    **Example: Vector search with post-filtering**
+
+    ```python
+    results = (
+        table.search([1, 2, 3])
+            .filter({"meta.category": "animal"})
+            .num_candidate(50)
+            .limit(10)
+            .to_list()
+    )
+    ```
+
+    !!! tip
+        When using a vector index, if the final `limit` is very small, the accuracy of the results may decrease. You can use the `.num_candidate()` method to control how many candidates to retrieve from the vector index during the vector search phase, without changing the `limit` parameter.
+
+        A higher `num_candidate` value generally improves recall but may reduce query performance. Adjust this value based on your dataset and accuracy requirements.
+
+    To enable pre-filtering, set the `prefilter` parameter to `True` in the `.filter()` method.
+
+    **Example: Vector search with pre-filtering**
+
+    ```python
+    results = (
+        table.search([1, 2, 3])
+            .filter({"meta.category": "animal"}, prefilter=True)
+            .limit(10)
+            .to_list()
+    )
+    ```
+
+    For supported filter operators, see [Filtering](./filtering.md).
+
+=== "SQL"
+
+    In SQL, use the `->>` operator or `JSON_EXTRACT` to access JSON fields in the `WHERE` clause:
+
+    ```sql
+    SELECT id, text, meta, vec_cosine_distance(text_vec, '[1,2,3]') AS distance
+    FROM documents
+    WHERE meta->>'$.category' = 'animal'
+    ORDER BY distance
+    LIMIT 10;
+    ```
+
+    For supported SQL operators, see [Operators](https://docs.pingcap.com/tidbcloud/operators/) in the TiDB Cloud documentation.
+
+## Multiple vector fields
+
+TiDB supports defining multiple vector columns in a single table, allowing you to store and search different types of vector embeddings. For example, you can store both text embeddings and image embeddings in the same table, making it convenient to manage multi-modal data.
+
+=== "Python"
+
+    You can define multiple vector fields in the schema and perform vector search on the specified vector field by using the `.vector_column()` method.
+
+    **Example: Specify the vector field to search on**
+
+    ```python
+    from pytidb.schema import TableModel, Field, VectorField
+    from pytidb.datatype import TEXT, JSON
+    from pytidb.schema import DistanceMetric
+
+    class RichTextDocument(TableModel):
+        __tablename__ = "rich_text_documents"
+        id: int = Field(primary_key=True)
+        text: str = Field(sa_type=TEXT)
+        text_vec: list[float] = VectorField(dimensions=3)
+        image_url: str
+        image_vec: list[float] = VectorField(dimensions=3)
+
+    table = client.create_table(schema=RichTextDocument, mode="overwrite")
+
+    # Insert sample data
+    table.bulk_insert([
+        RichTextDocument(id=1, text="dog", text_vec=[1,2,1], image_url="https://example.com/dog.jpg", image_vec=[1,2,4]),
+        RichTextDocument(id=2, text="fish", text_vec=[1,2,4], image_url="https://example.com/fish.jpg", image_vec=[1,2,1]),
+        RichTextDocument(id=3, text="tree", text_vec=[1,0,0], image_url="https://example.com/tree.jpg", image_vec=[1,2,4]),
+    ])
+
+    # Search using text vector field
+    results = (
+        table.search([1, 2, 3])
+            .vector_column("text_vec")
+            .distance_metric(DistanceMetric.COSINE)
+            .limit(10)
+            .to_list()
+    )
+
+    # Search using image vector field 
+    results = (
+        table.search([4, 5, 6])
+            .vector_column("image_vec")
+            .distance_metric(DistanceMetric.L2)
+            .limit(10)
+            .to_list()
+    )
+    ```
+
+=== "SQL"
+
+    You can create multiple vector columns in a table and search them using suitable distance functions:
+
+    ```sql
+    -- Create a table with multiple vector fields
+    CREATE TABLE rich_text_documents (
+        id BIGINT PRIMARY KEY,
+        text TEXT,
+        text_vec VECTOR(3),
+        image_url VARCHAR(255),
+        image_vec VECTOR(3)
+    );
+
+    -- Insert sample data
+    INSERT INTO rich_text_documents (id, text, text_vec, image_url, image_vec)
+    VALUES
+        (1, 'dog', '[1,2,1]', 'https://example.com/dog.jpg', '[1,2,4]'),
+        (2, 'fish', '[1,2,4]', 'https://example.com/fish.jpg', '[1,2,1]'),
+        (3, 'tree', '[1,0,0]', 'https://example.com/tree.jpg', '[1,2,4]');
+
+    -- Search using text vector
+    SELECT id, text, vec_cosine_distance(text_vec, '[1,2,3]') AS text_distance
+    FROM rich_text_documents
+    ORDER BY text_distance
+    LIMIT 10;
+
+    -- Search using image vector
+    SELECT id, image_url, vec_l2_distance(image_vec, '[4,5,6]') AS image_distance
+    FROM rich_text_documents
+    ORDER BY image_distance
+    LIMIT 10;
+    ```
+
+
 ## Output search results
 
-pytidb provides several helper methods to output the search results in a convenient format as you need.
+=== "Python"
 
-### As SQLAlchemy result rows
+    The `table.search()` API lets you convert search results into several common data processing formats:
 
-If you want to work with the raw SQLAlchemy result rows, you can use:
+    ### As SQLAlchemy result rows
 
-```python
-table.search([1, 2, 3]).to_rows()
-```
+    To work with raw SQLAlchemy result rows, use:
 
-### As a list of Python dicts
+    ```python
+    table.search([1, 2, 3]).limit(10).to_rows()
+    ```
 
-For easier manipulation in Python, you can convert the results to a list of dictionaries:
+    ### As a list of Python dictionaries
 
-```python
-table.search([1, 2, 3]).to_list()
-```
+    For easier manipulation in Python, convert the results to a list of dictionaries:
 
-### As a pandas DataFrame
+    ```python
+    table.search([1, 2, 3]).limit(10).to_list()
+    ```
 
-To display the results in a user-friendly table—especially useful in Jupyter notebooks—you can convert them to a pandas DataFrame:
+    ### As a pandas DataFrame
 
-```python
-table.search([1, 2, 3]).to_pandas()
-```
+    To display results in a user-friendly table—especially useful in Jupyter notebooks—convert them to a pandas DataFrame:
+
+    ```python
+    table.search([1, 2, 3]).limit(10).to_pandas()
+    ```
+
+    ### As a list of Pydantic model instances
+
+    The `TableModel` class can also be used as a Pydantic model to represent data entities. To work with results as Pydantic model instances, use:
+
+    ```python
+    table.search([1, 2, 3]).limit(10).to_pydantic()
+    ```
