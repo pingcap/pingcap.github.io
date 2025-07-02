@@ -1,8 +1,8 @@
 # Hybrid Search
 
-Hybrid search is a technique that combines multiple search algorithms to deliver more accurate and relevant results. 
+Hybrid search is a technique that combines multiple search algorithms to deliver more accurate and relevant results.
 
-TiDB supports both semantic search (also termed vector search) and keyword-based search (also known as full-text search). You can leverage the strengths of both approaches to achieve better search results via hybrid search.
+TiDB supports both semantic search (also known as vector search) and keyword-based search (full-text search). By leveraging the strengths of both approaches, you can achieve superior search results through hybrid search.
 
 <p align="center">
     <img src="https://docs-download.pingcap.com/media/images/docs/vector-search/hybrid-search-overview.svg" alt="hybrid search overview" width="800"/>
@@ -10,12 +10,12 @@ TiDB supports both semantic search (also termed vector search) and keyword-based
 
 !!! tip
 
-    To check complete example of hybrid search, please refer to the [hybrid-search example](https://github.com/pingcap/pytidb/tree/main/examples/hybrid_search).
+    For a complete example of hybrid search, refer to the [hybrid-search example](https://github.com/pingcap/pytidb/tree/main/examples/hybrid_search).
 
 
 ## Basic Usage
 
-### Step 1. Define a embedding function
+### Step 1. Define an Embedding Function
 
 Define an embedding function to generate vector representations of text data.
 
@@ -28,40 +28,38 @@ embed_fn = EmbeddingFunction(
 )
 ```
 
-### Step 2. Create a table with vector index and full-text index
+### Step 2. Create a Table with Vector and Full-Text Indexes
 
 === "Python"
 
-    Assuming you have already [connected to your TiDB database](./connect.md) using `TiDBClient`:
+    After you have [connected to your TiDB database](./connect.md) using `TiDBClient` and get the `client` instance:
 
-    Now, you can create a table with a text field and a vector field. PyTiDB will automatically create a vector index on the `text_vec` column and a full-text index can be created via `create_fts_index()` method.
+    You can now create a table with both a `FullTextField` and a `VectorField` to store the text data and its vector embedding.
 
-    Sample code:
+    Example:
 
     ```python
-    from pytidb.schema import TableModel, Field
-    from pytidb.datatype import Text
+    from pytidb.schema import TableModel, Field, FullTextField
 
     class Chunk(TableModel, table=True):
         __tablename__ = "chunks_for_hybrid_search"
         id: int = Field(primary_key=True)
-        text: str = Field(sa_type=Text)
+        text: str = FullTextField()
         text_vec: list[float] = embed_fn.VectorField(source_field="text")
 
-    table = db.create_table(schema=Chunk)
-
-    if not table.has_fts_index("text"):
-        table.create_fts_index("text")
+    table = client.create_table(schema=Chunk, mode="overwrite")
     ```
 
-### Step 3. Insert some sample data
+    In this example, PyTiDB will automatically create a full-text index on the `text` column and a vector index on the `text_vec` column.
+
+### Step 3. Insert Sample Data
 
 === "Python"
 
-    Using `bulk_insert()` method to insert some sample data into the table.
+    Use the `bulk_insert()` method to insert sample data into the table.
 
     ```python
-    table.delete()
+    table.truncate()
     table.bulk_insert([
         Chunk(
             text="TiDB is a distributed database that supports OLTP, OLAP, HTAP and AI workloads.",
@@ -75,9 +73,11 @@ embed_fn = EmbeddingFunction(
     ])
     ```
 
-### Step 4. Perform hybrid search
+    The `text_vec` field is automatically populated with the vector embedding of the text data via the [Auto Embedding](../guides/auto-embedding.md) feature.
 
-To enable hybrid search, you need to set the `search_type` parameter to `hybrid` when calling the `search()` method.
+### Step 4. Perform Hybrid Search
+
+To enable hybrid search, set the `search_type` parameter to `hybrid` when calling the `search()` method.
 
 ```python
 results = (
@@ -93,11 +93,11 @@ for item in results:
 print(json.dumps(results, indent=4, sort_keys=True))
 ```
 
-The search results contains three special fields:
+The search results contain three special fields:
 
-- `_distance`: The distance between the query vector and the vector data in the table returned by the vector search.
-- `_match_score`: The match score between the query and the text field returned by the full-text search.
-- `_score`: The final score of the search result, which is calculated by the fusion algorithm.
+- `_distance`: The distance between the query vector and the vector data in the table, as returned by the vector search.
+- `_match_score`: The match score between the query and the text field, as returned by the full-text search.
+- `_score`: The final score of the search result, calculated by the fusion algorithm.
 
 ```json title="Output"
 [
@@ -126,28 +126,33 @@ The search results contains three special fields:
 ```
 
 
-## Fusion Method
+## Fusion Methods
 
-PyTiDB currently supports one fusion methods:
+Fusion methods combine results from vector (semantic) and full-text (keyword) searches into a single, unified ranking. This ensures that the final results leverage both semantic relevance and keyword matching.
 
-- `rrf`: Reciprocal Rank Fusion (RRF) (default)
+PyTiDB supports two fusion methods:
+
+- `rrf`: Reciprocal Rank Fusion (default)
+- `weighted`: Weighted Score Fusion
+
+You can select the fusion method that best fits your use case to optimize hybrid search results.
 
 ### Reciprocal Rank Fusion (RRF)
 
-Reciprocal Rank Fusion (RRF) is an algorithm that evaluates the search by leveraging the rank of the documents in multiple search result sets.
+Reciprocal Rank Fusion (RRF) is an algorithm that evaluates search results by leveraging the rank of documents in multiple result sets.
 
-For more details, please refer to the [RRF paper](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf).
+For more details, see the [RRF paper](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf).
 
 === "Python"
 
-    You can use `fusion()` method to specify the fusion method and parameters.
+    Enable reciprocal rank fusion by specifying the `method` parameter as `"rrf"` in the `.fusion()` method.
 
     ```python
     results = (
         table.search(
             "AI database", search_type="hybrid"
         )
-        .fusion(method="rrf", k=60)
+        .fusion(method="rrf")
         .limit(3)
         .to_list()
     )
@@ -155,18 +160,52 @@ For more details, please refer to the [RRF paper](https://plg.uwaterloo.ca/~gvco
 
     Parameters:
 
-    - `k`: is a constant (default: 60) to prevent division by zero and control the impact of high-ranked documents.
+    - `k`: A constant (default: 60) to prevent division by zero and control the impact of high-ranked documents.
 
+### Weighted Score Fusion
 
-## Reranking
+Weighted Score Fusion combines vector search and full-text search scores using weighted sum:
+
+```python
+final_score = vs_weight * vector_score + fts_weight * fulltext_score
+```
 
 === "Python"
 
-    Use the `rerank()` method to specify a reranker that sorts search results by relevance between the query and documents. See the [Reranking](./reranking.md) section for details.
+    Enable weighted score fusion by specifying the `method` parameter as `"weighted"` in the `.fusion()` method.
+
+    For example, to give more weight to vector search, set the `vs_weight` parameter to 0.7 and the `fts_weight` parameter to 0.3:
+
+    ```python
+    results = (
+        table.search(
+            "AI database", search_type="hybrid"
+        )
+        .fusion(method="weighted", vs_weight=0.7, fts_weight=0.3)
+        .limit(3)
+        .to_list()
+    )
+    ```
+
+    Parameters:
+
+    - `vs_weight`: The weight of the vector search score.
+    - `fts_weight`: The weight of the full-text search score.
+
+
+## Rerank Method
+
+Hybrid search also supports reranking using reranker-specific models. 
+
+=== "Python"
+
+    Use the `rerank()` method to specify a reranker that sorts search results by relevance between the query and the documents.
+
+    **Example: Using JinaAI Reranker to rerank the hybrid search results**
 
     ```python
     reranker = Reranker(
-        # Using the `jina-reranker-m0` model
+        # Use the `jina-reranker-m0` model
         model_name="jina_ai/jina-reranker-m0",
         api_key="{your-jinaai-api-key}"
     )
@@ -181,3 +220,5 @@ For more details, please refer to the [RRF paper](https://plg.uwaterloo.ca/~gvco
         .to_list()
     )
     ```
+
+    To check other reranker models, see the [Reranking](../guides/reranking.md) guide.
