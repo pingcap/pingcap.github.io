@@ -36,7 +36,7 @@ This section shows you how to use vector search in your application in minimal s
         text_vec: list[float] = VectorField(dimensions=3)
         meta: dict = Field(sa_type=JSON, default_factory=dict)
 
-    table = client.create_table(schema=Chunk, mode="overwrite")
+    table = client.create_table(schema=Document, mode="overwrite")
     ```
 
     The `VectorField` class accepts the following parameters:
