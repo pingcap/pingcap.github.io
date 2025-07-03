@@ -7,7 +7,7 @@ TiDB supports ACID transactions, which ensure data consistency and reliability.
 === "Python"
 
     ```python
-    with db.session() as session:
+    with client.session() as session:
         initial_total_balance = session.query("SELECT SUM(balance) FROM players").scalar()
 
         # Transfer 10 coins from player 1 to player 2

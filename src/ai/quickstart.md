@@ -1,5 +1,6 @@
 ---
 title: Quickstart
+description: Get started with TiDB using Python SDK.
 ---
 
 # Quickstart
@@ -51,7 +52,7 @@ pip install "pytidb[models]"
     ```python
     from pytidb import TiDBClient
 
-    db = TiDBClient.connect(
+    client = TiDBClient.connect(
         host="gateway01.us-east-1.prod.shared.aws.tidbcloud.com",
         port=4000,
         username="4EfqPF23YKBxaQb.root",
@@ -69,18 +70,19 @@ pip install "pytidb[models]"
     ```python
     from pytidb import TiDBClient
 
-    db = TiDBClient.connect(
+    client = TiDBClient.connect(
         host="localhost",
         port=4000,
         username="root",
         password="",
         database="test",
+        ensure_db=True,
     )
     ```
 
     > **Tip:** Please modify the connection parameters according to your actual deployment.
 
-Once connected, you can use the `db` object to operate tables, query data, and more. 
+Once connected, you can use the `client` object to operate tables, query data, and more. 
 
 ## Create an embedding function
 
@@ -126,13 +128,13 @@ As an example, create a table named `chunks` with the following columns:
     ```python hl_lines="6"
     from pytidb.schema import TableModel, Field, VectorField
 
-    class Chunk(TableModel, table=True):
-        id: int = Field(primary_key=True)
+    class Chunk(TableModel):
+        id: int | None = Field(default=None, primary_key=True)
         text: str = Field()
         text_vec: list[float] = text_embed.VectorField(source_field="text")
         user_id: int = Field()
 
-    table = db.create_table(schema=Chunk)
+    table = client.create_table(schema=Chunk, mode="overwrite")
     ```
 
 Once created, you can use the `table` object to insert data, search data, and more.
@@ -208,10 +210,10 @@ table.delete({
 
 ## Drop table
 
-When you no longer need a table, you can drop it using the `db.drop_table()` method:
+When you no longer need a table, you can drop it using the `client.drop_table()` method:
 
 ```python
-db.drop_table("chunks")
+client.drop_table("chunks")
 ```
 
 ## Next steps

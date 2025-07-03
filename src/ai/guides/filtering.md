@@ -1,57 +1,79 @@
 # Filtering
 
-TiDB provides powerful filtering capabilities that enable precise querying of your data.
+As a relational database, TiDB supports a rich set of [SQL operators](https://docs.pingcap.com/tidbcloud/operators/) and allows flexible combinations of filtering conditions that enable you to query your data precisely.
 
-TiDB supports filtering on scalar and JSON fields, and JSON field filtering is often used to implement Metadata Filtering.
+## Overview
 
-## Basic Usage
-
-You can filter the queried and operated data rows by passing a `filters` dictionary as a parameter in the `table.query()`, `table.delete()`, `table.update()`, and `table.search()` methods.
+You can not only apply filtering on scalar fields but also on JSON fields. Filtering on JSON fields is often used for [metadata filtering](./vector-search.md#metadata-filtering) in vector search.
 
 === "Python"
 
-Sample code for `table.query()`:
+For PyTiDB, you can apply filtering by passing a **filters** parameter to the `table.query()`, `table.delete()`, `table.update()`, and `table.search()` methods.
+
+The **filters** parameter supports two formats: [Dictionary Filters](#dictionary-filters) and [SQL String Filters](#sql-string-filters).
+
+## Dictionary Filters
+
+=== "Python"
+
+PyTiDB allows you to define filter conditions using a Python dictionary with operators as the **filters** parameter.
+
+The dictionary structure of **filters** is as follows:
 
 ```python
-table.query({
+{
     "<key>": {
         "<operator>": <value>
     },
     ...
+}
+```
+
+- `<key>`: The key can be a column name, a JSON path expression to access a JSON field (see [Metadata filtering](./vector-search.md#metadata-filtering)), or a [logical operator](#logical-operators).
+- `<operator>`: The operator can be a [compare operator](#compare-operators) or an [inclusion operator](#inclusion-operators).
+- `<value>`: The value can be a scalar value, an array, it depends on the operator.
+
+**Example: Filter records where `created_at` is greater than 2024-01-01**
+
+```python
+table.query({
+    # The `created_at` is a scalar field with DATETIME type
+    "created_at": {
+        "$gt": "2024-01-01"
+    }
 })
 ```
 
-Sample code for `table.search()`:
+**Example: Filter records where `meta.category` is in the array ["tech", "science"]**
 
 ```python
 results = (
-    table.search("<query>", search_type="vector")
+    table.search("some query", search_type="vector")
         .filter({
-            "<key>": {
-                "<operator>": <value>
-            },
-            ...
+            # The `meta` is a JSON field, and its value is a JSON object like {"category": "tech"}
+            "meta.category": {
+                "$in": ["tech", "science"]
+            }
         })
         .limit(10)
         .to_list()
 )
 ```
 
-- `<key>` can be the name of a column in the table, a JSON Path expression to access a JSON field (see [Metadata Filtering](#metadata-filtering) for details), or [Logical Operator](#logical-operators).
-- `<operator>` can be a [Compare Operator](#compare-operators), [Inclusion Operator](#inclusion-operators).
+### Compare operators
 
-### Compare Operators
+You can use the following compare operators to filter records:
 
-| Operator | Description                                  | 
-|----------|----------------------------------------------|
-| `$eq`    | Equal to value                                |
-| `$ne`    | Not equal to value                            |
-| `$gt`    | Greater than value                            |
-| `$gte`   | Greater than or equal to value                |
-| `$lt`    | Less than value                               |
-| `$lte`   | Less than or equal to value                   |
+| Operator | Description                       |
+|----------|-----------------------------------|
+| `$eq`    | Equal to value                    |
+| `$ne`    | Not equal to value                |
+| `$gt`    | Greater than value                |
+| `$gte`   | Greater than or equal to value    |
+| `$lt`    | Less than value                   |
+| `$lte`   | Less than or equal to value       |
 
-For example:
+**Example: filter records where `user_id` is equal to 1**
 
 ```python
 {
@@ -61,7 +83,7 @@ For example:
 }
 ```
 
-The `$eq` operator can be omitted, so the following query is equivalent to the above:
+You can omit the `$eq` operator. The following query is equivalent to the above:
 
 ```python
 {
@@ -69,121 +91,99 @@ The `$eq` operator can be omitted, so the following query is equivalent to the a
 }
 ```
 
-### Inclusion Operators
+### Inclusion operators
 
-| Operator | Description                                  | 
-|----------|----------------------------------------------|
-| `$in`    | In array (string, int, float)                |
-| `$nin`   | Not in array (string, int, float)            |
+You can use the following inclusion operators to filter records:
 
+| Operator | Description                       |
+|----------|-----------------------------------|
+| `$in`    | In array (string, int, or float)  |
+| `$nin`   | Not in array (string, int, float) |
 
-For example:
+**Example: Filter records where `category` is in the array ["tech", "science"]**
+
 ```python
 {
-    "field_name": {
-        "$in": [
-            <value1>,
-            <value2>,
-            ...
-        ]
+    "category": {
+        "$in": ["tech", "science"]
     }
 }
 ```
 
-### Logical Operators
+### Logical operators
 
-You can also use the logical operators `$and` and `$or` to combine multiple filters.
+You can use the logical operators `$and` and `$or` to combine multiple filters.
 
-An `$and` operator will return results that match all of the filters in the list.
+| Operator | Description                                         |
+|----------|-----------------------------------------------------|
+| `$and`   | Returns results that match **all** filters in the list |
+| `$or`    | Returns results that match **any** filter in the list |
+
+**Syntax for using `$and` or `$or`:**
+
+```python
+{
+    "$and|$or": [
+        {
+            "field_name": {
+                <operator>: <value>
+            }
+        },
+        {
+            "field_name": {
+                <operator>: <value>
+            }
+        }
+        ...
+    ]
+}
+```
+
+**Example: using `$and` to combine multiple filters:**
 
 ```python
 {
     "$and": [
         {
-            "field_name": {
-                <operator>: <value>
+            "created_at": {
+                "$gt": "2024-01-01"
             }
         },
         {
-            "field_name": {
-                <operator>: <value>
+            "meta.category": {
+                "$in": ["tech", "science"]
             }
         }
     ]
 }
 ```
 
-An `$or` operator will return results that match any of the filters in the list.
+## SQL String Filters
+
+=== "Python"
+
+You can also use a SQL string as the `filters` parameter. The string should be a valid SQL `WHERE` clause (without the `WHERE` keyword) using TiDB's SQL syntax.
+
+**Example: Filter records where `created_at` is greater than 2024-01-01**
 
 ```python
-{
-    "$or": [
-        {
-            "field_name": {
-                <operator>: <value>
-            }
-        },
-        {
-            "field_name": {
-                <operator>: <value>
-            }
-        }
-    ]
-}
+results = table.query(
+    filters="created_at > '2024-01-01'",
+    limit=10
+).to_list()
 ```
 
-## Metadata Filtering
-
-In TiDB, you can use the [JSON type](https://docs.pingcap.com/tidb/stable/data-type-json/) to store the metadata of the documents.
+**Example: Filter records where the JSON field `meta.category` equals 'tech'**
 
 ```python
-from pytidb.schema import TableModel, Field
-from pytidb.datatype import TEXT, JSON
-
-class Document(TableModel):
-    id: int = Field(primary_key=True)
-    text: str = Field(sa_type=TEXT)
-    metadata: dict = Field(default_factory=dict, sa_type=JSON)
+results = table.query(
+    filters="meta->>'$.category' = 'tech'",
+    limit=10
+).to_list()
 ```
 
-If you want to filter the documents by the metadata, you can use the JSON Path expression to access the metadata.
+You can combine multiple conditions using `AND`, `OR`, and parentheses, and use any [SQL operators](https://docs.pingcap.com/tidbcloud/operators/) supported by TiDB.
 
-For example:
+!!! warning
 
-Here are some documents in the table:
-
-```python
-[
-    {
-        "id": 1,
-        "text": "foo",
-        "metadata": {
-            "source": "website"
-        }
-    },
-    {
-        "id": 2,
-        "text": "bar",
-        "metadata": {
-            "source": "github"
-        }
-    },
-    {
-        "id": 2,
-        "text": "bar",
-        "metadata": {
-            "source": "docs"
-        }
-    }
-]
-```
-
-If you want to filter the documents according to the `source` field in the `metadata` column, you can use the following query:
-
-```python
-{
-    "metadata.source": {
-        "$eq": "website"
-    }
-}
-```
+    When using SQL string filters with dynamic user input, always validate the input to prevent [SQL injection](https://en.wikipedia.org/wiki/SQL_injection) vulnerabilities.

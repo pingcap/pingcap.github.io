@@ -140,7 +140,7 @@ To fetch records from a table:
     **Example: Fetch the first 10 records**
 
     ```python
-    result = table.query().limit(10).to_list()
+    result = table.query(limit=10).to_list()
     ```
 
 === "SQL"
@@ -161,8 +161,9 @@ To fetch records based on query conditions:
 
     ```python
     result = table.query(
-        filters={"meta.category": "database"}
-    ).limit(10).to_list()
+        filters={"meta.category": "database"},
+        limit=10
+    ).to_list()
     ```
 
 === "SQL"
@@ -274,16 +275,16 @@ For a complete list of supported filter operations and examples, refer to the [f
 
 === "Python"
 
-    To permanently remove a table from the database, use the `db.drop_table()` method.
+    To permanently remove a table from the database, use the `client.drop_table()` method.
 
     ```python
-    db.drop_table("items")
+    client.drop_table("items")
     ```
 
     To check that the table is removed from the database:
 
     ```python
-    db.table_names()
+    client.table_names()
     ```
 
 === "SQL"

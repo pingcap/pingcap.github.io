@@ -264,18 +264,24 @@ For vector search in TiDB, you can apply metadata filtering on scalar fields (e.
 
 Typically, vector search combined with metadata filtering operates in two modes:
 
-- **Post-filtering**: In a two-stage retrieval process, TiDB first performs vector search to retrieve the top-k candidate results from the entire vector space, then applies the filter to this candidate set. Vector search typically leverages a vector index for efficiency.
+- **Post-filtering**: In a two-stage retrieval process, TiDB first performs vector search to retrieve the top-k candidate results from the entire vector space, then applies the filter to this candidate set. The vector search stage typically leverages a vector index for efficiency.
 - **Pre-filtering**: The filter is applied before vector search. If the filter is highly selective and the filtered field is indexed with a scalar index, this approach can significantly reduce the search space and improve performance.
+
+### Post-filtering
 
 === "Python"
 
-    Use the `.filter()` method with a filter dictionary to apply filtering to vector search. By default, the `table.search()` API uses post-filtering mode to maximize search performance with the vector index.
+    Use the `.filter()` method with a filter dictionary to apply filtering to vector search.
+
+    By default, the `table.search()` API uses post-filtering mode to maximize search performance with the vector index.
 
     **Example: Vector search with post-filtering**
 
     ```python
     results = (
         table.search([1, 2, 3])
+            # The `meta` is a JSON field, and its value is a JSON object
+            # like {"category": "animal"}
             .filter({"meta.category": "animal"})
             .num_candidate(50)
             .limit(10)
@@ -287,6 +293,46 @@ Typically, vector search combined with metadata filtering operates in two modes:
         When using a vector index, if the final `limit` is very small, the accuracy of the results may decrease. You can use the `.num_candidate()` method to control how many candidates to retrieve from the vector index during the vector search phase, without changing the `limit` parameter.
 
         A higher `num_candidate` value generally improves recall but may reduce query performance. Adjust this value based on your dataset and accuracy requirements.
+
+=== "SQL"
+
+    Currently, vector indexes are only effective in strict ANN (Approximate Nearest Neighbor) queries, such as:
+
+    ```sql
+    SELECT * FROM <table> ORDER BY <distance_func>(<column>) LIMIT <n>
+    ```
+
+    In other words, you cannot use a `WHERE` clause together with a vector index in the same query.
+
+    If you need to combine vector search with additional filtering conditions, you can use the post-filtering pattern. In this approach, the ANN query will be divided into two parts:
+    
+    - The inner query performs the vector search using the vector index.
+    - The outer query applies the `WHERE` condition to filter the results.
+
+    ```sql hl_lines="8"
+    SELECT *
+    FROM (
+        SELECT id, text, meta, vec_cosine_distance(text_vec, '[1,2,3]') AS distance
+        FROM documents
+        ORDER BY distance
+        LIMIT 50
+    ) candidates
+    WHERE meta->>'$.category' = 'animal'
+    ORDER BY distance
+    LIMIT 10;
+    ```
+
+    !!! tip
+
+        The post-filtering pattern may lead to false positives — for example, the inner query may retrieve the top 50 most similar records, but none of them match the `WHERE` condition.
+
+        To mitigate this, you can increase the `LIMIT` value (e.g., 50) in the **inner query** to fetch more candidates, improving the chances of returning enough valid results after filtering.
+
+    For supported SQL operators, see [Operators](https://docs.pingcap.com/tidbcloud/operators/) in the TiDB Cloud documentation.
+
+### Pre-filtering
+
+=== "Python"
 
     To enable pre-filtering, set the `prefilter` parameter to `True` in the `.filter()` method.
 
@@ -319,7 +365,9 @@ Typically, vector search combined with metadata filtering operates in two modes:
 
 ## Multiple vector fields
 
-TiDB supports defining multiple vector columns in a single table, allowing you to store and search different types of vector embeddings. For example, you can store both text embeddings and image embeddings in the same table, making it convenient to manage multi-modal data.
+TiDB supports defining multiple vector columns in a single table, allowing you to store and search different types of vector embeddings. 
+
+For example, you can store both text embeddings and image embeddings in the same table, making it convenient to manage multi-modal data.
 
 === "Python"
 
@@ -327,11 +375,8 @@ TiDB supports defining multiple vector columns in a single table, allowing you t
 
     **Example: Specify the vector field to search on**
 
-    ```python
-    from pytidb.schema import TableModel, Field, VectorField
-    from pytidb.datatype import TEXT, JSON
-    from pytidb.schema import DistanceMetric
-
+    ```python hl_lines="6 8 17"
+    # Create a table with multiple vector fields
     class RichTextDocument(TableModel):
         __tablename__ = "rich_text_documents"
         id: int = Field(primary_key=True)
@@ -342,27 +387,13 @@ TiDB supports defining multiple vector columns in a single table, allowing you t
 
     table = client.create_table(schema=RichTextDocument, mode="overwrite")
 
-    # Insert sample data
-    table.bulk_insert([
-        RichTextDocument(id=1, text="dog", text_vec=[1,2,1], image_url="https://example.com/dog.jpg", image_vec=[1,2,4]),
-        RichTextDocument(id=2, text="fish", text_vec=[1,2,4], image_url="https://example.com/fish.jpg", image_vec=[1,2,1]),
-        RichTextDocument(id=3, text="tree", text_vec=[1,0,0], image_url="https://example.com/tree.jpg", image_vec=[1,2,4]),
-    ])
+    # Insert sample data ...
 
-    # Search using text vector field
+    # Search using image vector field
     results = (
         table.search([1, 2, 3])
-            .vector_column("text_vec")
-            .distance_metric(DistanceMetric.COSINE)
-            .limit(10)
-            .to_list()
-    )
-
-    # Search using image vector field 
-    results = (
-        table.search([4, 5, 6])
             .vector_column("image_vec")
-            .distance_metric(DistanceMetric.L2)
+            .distance_metric(DistanceMetric.COSINE)
             .limit(10)
             .to_list()
     )
@@ -382,20 +413,9 @@ TiDB supports defining multiple vector columns in a single table, allowing you t
         image_vec VECTOR(3)
     );
 
-    -- Insert sample data
-    INSERT INTO rich_text_documents (id, text, text_vec, image_url, image_vec)
-    VALUES
-        (1, 'dog', '[1,2,1]', 'https://example.com/dog.jpg', '[1,2,4]'),
-        (2, 'fish', '[1,2,4]', 'https://example.com/fish.jpg', '[1,2,1]'),
-        (3, 'tree', '[1,0,0]', 'https://example.com/tree.jpg', '[1,2,4]');
+    -- Insert sample data ...
 
     -- Search using text vector
-    SELECT id, text, vec_cosine_distance(text_vec, '[1,2,3]') AS text_distance
-    FROM rich_text_documents
-    ORDER BY text_distance
-    LIMIT 10;
-
-    -- Search using image vector
     SELECT id, image_url, vec_l2_distance(image_vec, '[4,5,6]') AS image_distance
     FROM rich_text_documents
     ORDER BY image_distance

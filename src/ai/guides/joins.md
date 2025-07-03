@@ -18,14 +18,14 @@ As a relational database, TiDB allows you to store diverse data in tables with d
     from pytidb.schema import TableModel, Field
     from pytidb.sql import select
 
-    class Document(TableModel, table=True):
+    class Document(TableModel):
         __tablename__ = "documents"
         id: int = Field(primary_key=True)
         title: str = Field(max_length=255)
 
-    db.create_table(schema=Document)
-    db.table("documents").truncate()
-    db.table("documents").bulk_insert([
+    client.create_table(schema=Document, mode="overwrite")
+    client.table("documents").truncate()
+    client.table("documents").bulk_insert([
         Document(id=1, title="The Power of Positive Thinking"),
         Document(id=2, title="The Happiness Advantage"),
         Document(id=3, title="The Art of Happiness"),
@@ -35,15 +35,15 @@ As a relational database, TiDB allows you to store diverse data in tables with d
     Create a `chunks` table and insert some sample data:
 
     ```python
-    class Chunk(TableModel, table=True):
+    class Chunk(TableModel):
         __tablename__ = "chunks"
         id: int = Field(primary_key=True)
         text: str = Field(max_length=255)
         document_id: int = Field(foreign_key="documents.id")
 
-    db.create_table(schema=Chunk)
-    db.table("chunks").truncate()
-    db.table("chunks").bulk_insert([
+    client.create_table(schema=Chunk, mode="overwrite")
+    client.table("chunks").truncate()
+    client.table("chunks").bulk_insert([
         Chunk(id=1, text="Positive thinking can change your life", document_id=1),
         Chunk(id=2, text="Happiness leads to success", document_id=2),
         Chunk(id=3, text="Finding joy in everyday moments", document_id=3),
@@ -88,7 +88,7 @@ As a relational database, TiDB allows you to store diverse data in tables with d
 === "Python"
 
     ```python
-    with Session(db.db_engine) as db_session:
+    with Session(client.db_engine) as db_session:
         query = (
             select(Chunk)
             .join(Document, Chunk.document_id == Document.id)
