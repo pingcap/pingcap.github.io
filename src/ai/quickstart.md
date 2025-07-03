@@ -129,7 +129,7 @@ As an example, create a table named `chunks` with the following columns:
     from pytidb.schema import TableModel, Field, VectorField
 
     class Chunk(TableModel):
-        id: int | None = Field(primary_key=True)
+        id: int | None = Field(default=None, primary_key=True)
         text: str = Field()
         text_vec: list[float] = text_embed.VectorField(source_field="text")
         user_id: int = Field()
