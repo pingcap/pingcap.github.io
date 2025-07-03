@@ -41,7 +41,7 @@ embed_fn = EmbeddingFunction(
     ```python
     from pytidb.schema import TableModel, Field, FullTextField
 
-    class Chunk(TableModel, table=True):
+    class Chunk(TableModel):
         __tablename__ = "chunks_for_hybrid_search"
         id: int = Field(primary_key=True)
         text: str = FullTextField()

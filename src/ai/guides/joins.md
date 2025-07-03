@@ -18,12 +18,12 @@ As a relational database, TiDB allows you to store diverse data in tables with d
     from pytidb.schema import TableModel, Field
     from pytidb.sql import select
 
-    class Document(TableModel, table=True):
+    class Document(TableModel):
         __tablename__ = "documents"
         id: int = Field(primary_key=True)
         title: str = Field(max_length=255)
 
-    db.create_table(schema=Document)
+    db.create_table(schema=Document, mode="overwrite")
     db.table("documents").truncate()
     db.table("documents").bulk_insert([
         Document(id=1, title="The Power of Positive Thinking"),
@@ -35,13 +35,13 @@ As a relational database, TiDB allows you to store diverse data in tables with d
     Create a `chunks` table and insert some sample data:
 
     ```python
-    class Chunk(TableModel, table=True):
+    class Chunk(TableModel):
         __tablename__ = "chunks"
         id: int = Field(primary_key=True)
         text: str = Field(max_length=255)
         document_id: int = Field(foreign_key="documents.id")
 
-    db.create_table(schema=Chunk)
+    db.create_table(schema=Chunk, mode="overwrite")
     db.table("chunks").truncate()
     db.table("chunks").bulk_insert([
         Chunk(id=1, text="Positive thinking can change your life", document_id=1),

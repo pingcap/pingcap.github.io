@@ -140,7 +140,7 @@ To fetch records from a table:
     **Example: Fetch the first 10 records**
 
     ```python
-    result = table.query().limit(10).to_list()
+    result = table.query(limit=10).to_list()
     ```
 
 === "SQL"
@@ -161,8 +161,9 @@ To fetch records based on query conditions:
 
     ```python
     result = table.query(
-        filters={"meta.category": "database"}
-    ).limit(10).to_list()
+        filters={"meta.category": "database"},
+        limit=10
+    ).to_list()
     ```
 
 === "SQL"
