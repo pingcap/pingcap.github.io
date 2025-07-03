@@ -42,7 +42,7 @@ Auto embedding is a feature that allows you to automatically generate vector emb
         text: str = Field(sa_type=Text)
         text_vec: list[float] = embed_func.VectorField(source_field="text")
 
-    table = db.create_table(schema=Chunk, mode="overwrite")
+    table = client.create_table(schema=Chunk, mode="overwrite")
     ```
 
     You don't need to specify the `dimensions` parameter, it will be automatically determined by the embedding model.

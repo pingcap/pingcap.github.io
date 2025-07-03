@@ -275,16 +275,16 @@ For a complete list of supported filter operations and examples, refer to the [f
 
 === "Python"
 
-    To permanently remove a table from the database, use the `db.drop_table()` method.
+    To permanently remove a table from the database, use the `client.drop_table()` method.
 
     ```python
-    db.drop_table("items")
+    client.drop_table("items")
     ```
 
     To check that the table is removed from the database:
 
     ```python
-    db.table_names()
+    client.table_names()
     ```
 
 === "SQL"
