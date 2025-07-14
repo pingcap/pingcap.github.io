@@ -54,8 +54,17 @@ Each example file is processed to:
 
 ### Initial Setup
 
+First, make sure you have UV installed:
+
 ```bash
-# Install dependencies (from pyproject.toml)
+# Install UV (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then install dependencies:
+
+```bash
+# Install dependencies (from pyproject.toml using UV)
 make install
 
 # Sync examples

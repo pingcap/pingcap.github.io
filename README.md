@@ -21,6 +21,22 @@ This documentation site includes an Example Gallery that showcases various AI ap
 - **Text2SQL**: Natural language to SQL conversion
 - **Vector Search**: Vector similarity search
 
+### Prerequisites
+
+This project uses [UV](https://docs.astral.sh/uv/) for fast dependency management. Install UV first:
+
+```bash
+# Install UV
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then install the project dependencies:
+
+```bash
+# Install all dependencies
+make install
+```
+
 ### Updating Examples
 
 To sync the latest examples from the pytidb repository:

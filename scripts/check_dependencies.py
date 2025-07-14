@@ -96,6 +96,29 @@ def check_examples_directory():
     
     return True
 
+def check_uv_availability():
+    """Check if uv is available."""
+    print("\n⚡ UV Package Manager Check:")
+    
+    try:
+        result = subprocess.run(
+            ["uv", "--version"],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode == 0:
+            version = result.stdout.strip()
+            print(f"  ✅ UV is available: {version}")
+            return True
+        else:
+            print("  ❌ UV not working properly")
+            return False
+    except FileNotFoundError:
+        print("  ❌ UV not found")
+        print("  💡 Install UV: curl -LsSf https://astral.sh/uv/install.sh | sh")
+        return False
+
 def check_makefile_commands():
     """Check if Makefile commands are available."""
     commands = ["install", "sync-examples", "serve", "build", "clean"]
@@ -130,6 +153,7 @@ def main():
     
     checks = [
         check_python_version(),
+        check_uv_availability(),
         check_dependencies(),
         check_project_structure(),
         check_examples_directory(),
@@ -149,9 +173,10 @@ def main():
     else:
         print("❌ Some checks failed. Please fix the issues above.")
         print("\n🔧 Common solutions:")
-        print("  1. Install dependencies: make install")
-        print("  2. Sync examples: make sync-examples")
-        print("  3. Check Python version: python --version")
+        print("  1. Install UV: curl -LsSf https://astral.sh/uv/install.sh | sh")
+        print("  2. Install dependencies: make install")
+        print("  3. Sync examples: make sync-examples")
+        print("  4. Check Python version: python --version")
         return 1
 
 if __name__ == "__main__":
