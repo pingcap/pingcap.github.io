@@ -46,7 +46,9 @@ make build          # Build documentation site
 make clean          # Clean build artifacts
 
 # Demo management
-make generate-demos     # Generate demo pages and gallery from demos.yml config
+make generate-demos         # Generate demo pages and gallery from demos.yml config
+make generate-demo-pages    # Only generate demo pages.
+make generate-demo-gallery  # Only generate demo gallery.
 
 # Other
 make help           # Show all available commands

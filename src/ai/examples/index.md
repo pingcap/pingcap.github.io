@@ -60,6 +60,18 @@ html {
   margin-bottom: 5rem !important;
 }
 
+/* Gallery CTA link styles */
+.gallery-cta-link {
+    position: relative;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.gallery-cta-link:hover {
+    border-bottom: 3px solid var(--brand-color);
+}
+
+
 /* Layout */
 .gallery-layout {
   display: flex;
@@ -332,7 +344,9 @@ html {
   <div class="gallery-header">
     <h1 class="gallery-title">Demo Gallery</h1>
     <p class="gallery-description">
-      Explore hands-on demos showcasing how TiDB empowers AI applications. Get started quickly with TiDB Cloud Serverless to build your own AI-powered solutions.
+      Explore hands-on demos showcasing how TiDB empowers AI applications.<br>
+Get started quickly with <a href='https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=demo_gallery' target='_blank' rel='noopener noreferrer' class='gallery-cta-link'><b>TiDB Cloud Serverless</b></a> to build your own AI-powered solutions.
+
     </p>
   </div>
 
@@ -507,7 +521,7 @@ html {
           Start your AI journey with TiDB Cloud Serverless. Follow our quickstart guide to build your first AI-powered application in minutes, or explore specific examples for your use case.
         </p>
         <div class="cta-buttons">
-          <a href="https://tidbcloud.com/serverless" target="_blank" rel="noopener noreferrer" class="btn-primary">Try TiDB Cloud Serverless</a>
+          <a href="https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme" target="_blank" rel="noopener noreferrer" class="btn-primary">Try TiDB Cloud Serverless</a>
           <a href="quickstart-with-pytidb/" class="btn-secondary">View Quickstart Guide</a>
         </div>
       </div>

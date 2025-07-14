@@ -1,6 +1,6 @@
 ---
 title: {{ config.title }}
-description: {{ config.description }}
+description: {{ config.meta.description }}
 hide:
   - navigation
   - toc
@@ -59,6 +59,18 @@ html {
   padding: 0 120px;
   margin-bottom: 5rem !important;
 }
+
+/* Gallery CTA link styles */
+.gallery-cta-link {
+    position: relative;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.gallery-cta-link:hover {
+    border-bottom: 3px solid var(--brand-color);
+}
+
 
 /* Layout */
 .gallery-layout {
@@ -341,8 +353,7 @@ html {
       <div class="sidebar-nav">
         <h6 class="sidebar-title">Categories</h6>
                           <nav class="sidebar-links">
-            {%- set sorted_categories = categories | sort(attribute='order') %}
-            {%- for category in sorted_categories %}
+            {%- for category in categories %}
             <a href="#{{ category.id }}" class="sidebar-link">{{ category.title | replace('⭐ ', '') | replace('🚀 ', '') | replace('🔍 ', '') | replace('🤖 ', '') }}</a>
             {%- endfor %}
         </nav>
