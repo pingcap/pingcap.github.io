@@ -16,10 +16,9 @@ pip install pytidb
 
 Examples:
 
-- Getting Started: [Quickstart](https://pingcap.github.io/ai/examples/quickstart-with-pytidb/), [Basic Usage](https://pingcap.github.io/ai/examples/basic-with-pytidb/)
-- Search & Retrieval: [Vector Search](https://pingcap.github.io/ai/examples/vector-search-with-pytidb/), [Fulltext Search](https://pingcap.github.io/ai/examples/fulltext-search-with-pytidb/), [Hybrid Search](https://pingcap.github.io/ai/examples/hybrid-search-with-pytidb/)
+- Getting Started: [Basic Usage](https://pingcap.github.io/ai/examples/basic-with-pytidb/), [Auto Embedding](https://pingcap.github.io/ai/examples/auto-embedding-with-pytidb/)
+- Search & Retrieval: [Vector Search](https://pingcap.github.io/ai/examples/vector-search-with-pytidb/), [Fulltext Search](https://pingcap.github.io/ai/examples/fulltext-search-with-pytidb/), [Hybrid Search](https://pingcap.github.io/ai/examples/hybrid-search-with-pytidb/), [Image Search](https://pingcap.github.io/ai/examples/image-search-with-pytidb/)
 - AI Applications: [RAG](https://pingcap.github.io/ai/examples/rag-with-pytidb/), [Text2SQL](https://pingcap.github.io/ai/examples/text2sql-with-pytidb/), [Memory](https://pingcap.github.io/ai/examples/memory-with-pytidb/)
-- Advanced Features: [Auto Embedding](https://pingcap.github.io/ai/examples/auto-embedding-with-pytidb/), [Image Search](https://pingcap.github.io/ai/examples/image-search-with-pytidb/)
 
 
 Integrations:
