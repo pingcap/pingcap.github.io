@@ -4,6 +4,37 @@ TiDB is an open-source, distributed SQL database designed for modern AI applicat
 
 🚀 Follow our [Quickstart Guide](https://pingcap.github.io/ai/quickstart/) to begin building your first AI application with TiDB
 
+## Example Gallery
+
+This documentation site includes an Example Gallery that showcases various AI applications built with TiDB. The examples are automatically synced from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples).
+
+### Available Examples
+
+- **Auto Embedding**: Automatic text embedding with TiDB
+- **Basic Usage**: Basic operations with PyTiDB
+- **Fulltext Search**: Full-text search capabilities
+- **Hybrid Search**: Combining vector and text search
+- **Image Search**: Image similarity search
+- **Memory**: Agent memory storage
+- **Quickstart**: Quick start guide
+- **RAG**: Retrieval-Augmented Generation
+- **Text2SQL**: Natural language to SQL conversion
+- **Vector Search**: Vector similarity search
+
+### Updating Examples
+
+To sync the latest examples from the pytidb repository:
+
+```bash
+make sync-examples
+```
+
+Or run the script directly:
+
+```bash
+python scripts/sync_examples_from_pytidb.py
+```
+
 ## PyTiDB
 
 TiDB provide a Python SDK and a series of integrations with popular AI frameworks to help developers build AI applications efficiently.
