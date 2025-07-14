@@ -1,14 +1,8 @@
 ---
 title: Hybrid Search
-description: "PyTiDB example: hybrid_search"
+description: "Combine vector search and fulltext search for more comprehensive results."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/hybrid_search"
 ---
-
-# Hybrid Search
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/hybrid_search).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Hybrid Search Demo
 
@@ -122,3 +116,16 @@ Search results:
 ]
 ```
 
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/hybrid_search)
+- **Category**: Search
+
+- **Description**: Combine vector search and fulltext search for more comprehensive results.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

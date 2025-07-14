@@ -1,14 +1,8 @@
 ---
 title: Auto Embedding
-description: "PyTiDB example: auto_embedding"
+description: "Automatically generate embeddings for your text data using built-in embedding models."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/auto_embedding"
 ---
-
-# Auto Embedding
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/auto_embedding).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Auto Embedding Demo
 
@@ -83,3 +77,16 @@ id: 1, text: TiDB is a distributed database that supports OLTP, OLAP, HTAP and A
 id: 2, text: PyTiDB is a Python library for developers to connect to TiDB., distance: 0.422506501973434
 id: 3, text: LlamaIndex is a Python library for building AI-powered applications., distance: 0.5267239638442787
 ```
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/auto_embedding)
+- **Category**: Getting-Started
+
+- **Description**: Automatically generate embeddings for your text data using built-in embedding models.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

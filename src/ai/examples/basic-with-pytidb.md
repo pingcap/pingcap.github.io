@@ -1,14 +1,8 @@
 ---
 title: Basic Usage
-description: "PyTiDB example: basic"
+description: "Learn fundamental PyTiDB operations including database connection, table creation, and data manipulation."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/basic"
 ---
-
-# Basic Usage
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/basic).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Basic CRUD Demo
 
@@ -96,3 +90,15 @@ Table dropped
 
 Basic CRUD operations completed!
 ```
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/basic)
+- **Category**: Getting-Started
+
+- **Description**: Learn fundamental PyTiDB operations including database connection, table creation, and data manipulation.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

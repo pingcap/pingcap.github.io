@@ -1,14 +1,8 @@
 ---
 title: Text2SQL
-description: "PyTiDB example: text2sql"
+description: "Convert natural language queries into SQL statements using AI models."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/text2sql"
 ---
-
-# Text2SQL
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/text2sql).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Streamlit Examples
 
@@ -49,3 +43,15 @@ streamlit run main.py
 
 * Input OpenAI API key in left sidebar
 * Input the TiDB Cloud connection string in left sidebar, the format is `mysql+pymysql://root@localhost:4000/test`
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/text2sql)
+- **Category**: Ai-Apps
+
+- **Description**: Convert natural language queries into SQL statements using AI models.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

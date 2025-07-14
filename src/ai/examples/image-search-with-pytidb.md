@@ -1,14 +1,8 @@
 ---
 title: Image Search
-description: "PyTiDB example: image_search"
+description: "Build an image search application using multimodal embeddings for both text-to-image and image-to-image search."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/image_search"
 ---
-
-# Image Search
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/image_search).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Pet Image Search Demo
 
@@ -98,3 +92,16 @@ Or if you want to load all the data in the Oxford Pets dataset, click the **Load
 1. Select the **Search type** in the sidebar
 2. Input a text description of the pet you're looking for, or upload a photo of a dog or cat
 3. Click the **Search** button
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/image_search)
+- **Category**: Search
+
+- **Description**: Build an image search application using multimodal embeddings for both text-to-image and image-to-image search.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

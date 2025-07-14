@@ -1,14 +1,8 @@
 ---
 title: RAG
-description: "PyTiDB example: rag"
+description: "Build a RAG application that combines document retrieval with language generation."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/rag"
 ---
-
-# RAG
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/rag).
-    For the complete source code and latest updates, please visit the original repository.
 
 # RAG Example
 
@@ -99,3 +93,16 @@ streamlit run main.py
 ### `502 Bad Gateway` Error
 
 Try to disable the global proxy settings.
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/rag)
+- **Category**: Ai-Apps
+
+- **Description**: Build a RAG application that combines document retrieval with language generation.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

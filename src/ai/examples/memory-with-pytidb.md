@@ -1,14 +1,8 @@
 ---
 title: Memory
-description: "PyTiDB example: memory"
+description: "Implement conversation memory for chatbots and conversational AI applications."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/memory"
 ---
-
-# Memory
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/memory).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Agent Memory Examples
 
@@ -91,3 +85,16 @@ Goodbye!
 ```
 
 As you can see, the AI assistant remembers you!
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/memory)
+- **Category**: Ai-Apps
+
+- **Description**: Implement conversation memory for chatbots and conversational AI applications.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

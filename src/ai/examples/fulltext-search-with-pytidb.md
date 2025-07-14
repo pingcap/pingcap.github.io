@@ -1,14 +1,8 @@
 ---
 title: Fulltext Search
-description: "PyTiDB example: fulltext_search"
+description: "Perform traditional text search using MySQL fulltext search capabilities."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/fulltext_search"
 ---
-
-# Fulltext Search
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/fulltext_search).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Fulltext Search Example
 
@@ -62,3 +56,16 @@ streamlit run app.py
 ```
 
 **Step 5**: open the browser and visit `http://localhost:8501`
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/fulltext_search)
+- **Category**: Search
+
+- **Description**: Perform traditional text search using MySQL fulltext search capabilities.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

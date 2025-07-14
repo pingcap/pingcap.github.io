@@ -1,14 +1,8 @@
 ---
 title: Vector Search
-description: "PyTiDB example: vector_search"
+description: "Implement semantic search using vector embeddings to find similar content."
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/vector_search"
 ---
-
-# Vector Search
-
-!!! info "Source Repository"
-    This example is from the [pytidb repository](https://github.com/pingcap/pytidb/tree/main/examples/vector_search).
-    For the complete source code and latest updates, please visit the original repository.
 
 # Vector Search Example
 
@@ -80,3 +74,16 @@ streamlit run app.py
 ```
 
 **Step 6**: Open your browser and visit `http://localhost:8501`
+
+
+---
+
+## Related Resources
+
+- **Source Code**: [View on GitHub](https://github.com/pingcap/pytidb/tree/main/examples/vector_search)
+- **Category**: Search
+
+- **Description**: Implement semantic search using vector embeddings to find similar content.
+
+
+[🏠 Back to Demo Gallery](../index.md){ .md-button .md-button--primary } 

@@ -1,6 +1,6 @@
 ---
 title: Demo Gallery
-description: Explore hands-on demos showing how TiDB powers AI applications.
+description: Explore hands-on demos showcasing how TiDB empowers AI applications. Get started quickly with TiDB Cloud Serverless to build your own AI-powered solutions.
 hide:
   - navigation
   - toc
@@ -188,12 +188,6 @@ html {
   font-size: 2.5rem;
 }
 
-.card-gradient.blue { background: linear-gradient(135deg, var(--brand-color), #6366f1); }
-.card-gradient.green { background: linear-gradient(135deg, #10b981, var(--brand-color)); }
-.card-gradient.purple { background: linear-gradient(135deg, #8b5cf6, var(--brand-color)); }
-.card-gradient.indigo { background: linear-gradient(135deg, #6366f1, var(--brand-color)); }
-.card-gradient.cyan { background: linear-gradient(135deg, #06b6d4, var(--brand-color)); }
-
 .card-badge {
   position: absolute;
   top: 0.5rem;
@@ -338,7 +332,7 @@ html {
   <div class="gallery-header">
     <h1 class="gallery-title">Demo Gallery</h1>
     <p class="gallery-description">
-      Explore hands-on demos showcasing how TiDB empowers AI applications. Get started quickly with <a href="https://tidbcloud.com/serverless" target="_blank" rel="noopener noreferrer"><b>TiDB Cloud Serverless</b></a> to build your own AI-powered solutions.
+      Explore hands-on demos showcasing how TiDB empowers AI applications. Get started quickly with TiDB Cloud Serverless to build your own AI-powered solutions.
     </p>
   </div>
 
@@ -346,29 +340,18 @@ html {
     <div class="gallery-sidebar">
       <div class="sidebar-nav">
         <h6 class="sidebar-title">Categories</h6>
-        <nav class="sidebar-links">
-          <a href="#favorites" class="sidebar-link">Favorites</a>
-          <a href="#getting-started" class="sidebar-link">Getting Started</a>
-          <a href="#search" class="sidebar-link">Search & Retrieval</a>
-          <a href="#ai-apps" class="sidebar-link">AI Applications</a>
+                          <nav class="sidebar-links">
+            <a href="#featured" class="sidebar-link">Featured</a>
+            <a href="#getting-started" class="sidebar-link">Getting Started</a>
+            <a href="#search" class="sidebar-link">Search & Retrieval</a>
+            <a href="#ai-apps" class="sidebar-link">AI Applications</a>
         </nav>
       </div>
     </div>
-    <div class="gallery-content">
-      <section id="favorites" class="gallery-section">
-        <h2 class="section-title">⭐ Favorites</h2>
+              <div class="gallery-content">
+        <section id="featured" class="gallery-section">
+        <h2 class="section-title">⭐ Featured</h2>
         <div class="cards-grid">
-          <a href="quickstart-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient blue">
-              <div>🚀</div>
-            </div>
-            <div class="card-content">
-              <h3 class="card-title">Quickstart</h3>
-              <p class="card-description">
-                Get started with PyTiDB in minutes. Learn the basics of connecting to TiDB, creating tables, and performing vector search.
-              </p>
-            </div>
-          </a>
           <a href="image-search-with-pytidb/" class="gallery-card">
             <div class="card-image">
               <img src="https://github.com/user-attachments/assets/7ba9733a-4d1f-4094-8edb-58731ebd08e9" alt="Image Search Demo">
@@ -391,13 +374,24 @@ html {
               </p>
             </div>
           </a>
+          <a href="memory-with-pytidb/" class="gallery-card">
+            <div class="card-image card-gradient" style="background: linear-gradient(135deg, #8b5cf6, var(--brand-color));">
+              <div>💭</div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Memory</h3>
+              <p class="card-description">
+                Implement conversation memory for chatbots and conversational AI applications.
+              </p>
+            </div>
+          </a>
         </div>
       </section>
-      <section id="getting-started" class="gallery-section">
+        <section id="getting-started" class="gallery-section">
         <h2 class="section-title">🚀 Getting Started</h2>
         <div class="cards-grid">
           <a href="basic-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient green">
+            <div class="card-image card-gradient" style="background: linear-gradient(135deg, #10b981, var(--brand-color));">
               <div>⚙️</div>
             </div>
             <div class="card-content">
@@ -408,7 +402,7 @@ html {
             </div>
           </a>
           <a href="auto-embedding-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient purple">
+            <div class="card-image card-gradient" style="background: radial-gradient(circle at center, #8b5cf6 0%, var(--brand-color) 100%);">
               <div>🤖</div>
             </div>
             <div class="card-content">
@@ -420,7 +414,7 @@ html {
           </a>
         </div>
       </section>
-      <section id="search" class="gallery-section">
+        <section id="search" class="gallery-section">
         <h2 class="section-title">🔍 Search & Retrieval</h2>
         <div class="cards-grid">
           <a href="vector-search-with-pytidb/" class="gallery-card">
@@ -456,14 +450,36 @@ html {
               </p>
             </div>
           </a>
+          <a href="image-search-with-pytidb/" class="gallery-card">
+            <div class="card-image">
+              <img src="https://github.com/user-attachments/assets/7ba9733a-4d1f-4094-8edb-58731ebd08e9" alt="Image Search Demo">
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Image Search</h3>
+              <p class="card-description">
+                Build an image search application using multimodal embeddings for both text-to-image and image-to-image search.
+              </p>
+            </div>
+          </a>
         </div>
       </section>
-      <section id="ai-apps" class="gallery-section">
+        <section id="ai-apps" class="gallery-section">
         <h2 class="section-title">🤖 AI Applications</h2>
         <div class="cards-grid">
+          <a href="rag-with-pytidb/" class="gallery-card">
+            <div class="card-image">
+              <img src="https://github.com/user-attachments/assets/dfd85672-65ce-4a46-8dd2-9f77d826363e" alt="RAG Demo">
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">RAG</h3>
+              <p class="card-description">
+                Build a RAG application that combines document retrieval with language generation.
+              </p>
+            </div>
+          </a>
           <a href="memory-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient indigo">
-              <div>🧠</div>
+            <div class="card-image card-gradient" style="background: linear-gradient(135deg, #8b5cf6, var(--brand-color));">
+              <div>💭</div>
             </div>
             <div class="card-content">
               <h3 class="card-title">Memory</h3>
@@ -473,7 +489,7 @@ html {
             </div>
           </a>
           <a href="text2sql-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient cyan">
+            <div class="card-image card-gradient" style="background: linear-gradient(135deg, #06b6d4, var(--brand-color));">
               <div>💬</div>
             </div>
             <div class="card-content">
@@ -497,4 +513,4 @@ html {
       </div>
     </div>
   </div>
-</div>
+</div> 
