@@ -15,7 +15,7 @@ from jinja2 import Environment, FileSystemLoader
 import click
 
 # Configuration
-LOCAL_EXAMPLES_DIR = Path("src/ai/examples")
+LOCAL_EXAMPLES_DIR = Path("src/examples")
 CONFIG_FILE = Path("demos.yml")
 DEMO_TEMPLATE_FILE = Path("src/templates/demo_page_template.j2")
 GALLERY_TEMPLATE_FILE = Path("src/templates/demo_gallery_template.j2")
