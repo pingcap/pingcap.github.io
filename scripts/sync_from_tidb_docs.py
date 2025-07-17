@@ -60,7 +60,7 @@ def remove_see_also_section(content):
 def replace_image_paths(content):
     """Replace image paths to point to the local assets directory."""
     return content.replace(
-        "/media/vector-search/embedding-search.png", "../../assets/embedding-search.png"
+        "/media/vector-search/embedding-search.png", "../assets/embedding-search.png"
     )
 
 
