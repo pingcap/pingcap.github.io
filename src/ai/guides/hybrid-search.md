@@ -10,7 +10,7 @@ TiDB supports both semantic search (also known as vector search) and keyword-bas
 
 !!! tip
 
-    For a complete example of hybrid search, refer to the [hybrid-search example](https://github.com/pingcap/pytidb/tree/main/examples/hybrid_search).
+    For a complete example of hybrid search, refer to the [hybrid-search example](../examples/hybrid-search-with-pytidb.md).
 
 
 ## Basic Usage
