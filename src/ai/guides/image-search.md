@@ -35,15 +35,15 @@ Use `VectorField()` to define a vector field for storing image embeddings. Set t
 ```python
 from pytidb.schema import TableModel, Field
 
-class Pet(TableModel):
-    __tablename__ = "pets"
+class ImageItem(TableModel):
+    __tablename__ = "image_items"
     id: int = Field(primary_key=True)
     image_uri: str = Field()
     image_vec: list[float] = image_embed.VectorField(
         source_field="image_uri"
     )
 
-table = client.create_table(schema=Pet, mode="overwrite")
+table = client.create_table(schema=ImageItem, mode="overwrite")
 ```
 
 ### Step 3. Insert image data
@@ -52,9 +52,9 @@ When you insert data, the `image_vec` field is automatically populated with the 
 
 ```python
 table.bulk_insert([
-    Pet(image_uri="https://example.com/image1.jpg"),
-    Pet(image_uri="https://example.com/image2.jpg"),
-    Pet(image_uri="https://example.com/image3.jpg"),
+    ImageItem(image_uri="https://example.com/image1.jpg"),
+    ImageItem(image_uri="https://example.com/image2.jpg"),
+    ImageItem(image_uri="https://example.com/image3.jpg"),
 ])
 ```
 
@@ -88,11 +88,15 @@ The client converts the PIL image object into a Base64 string before sending it 
 
 #### Option 3: Search by keyword text
 
-You can also search for similar images by providing keyword text:
+You can also search for similar images by providing keyword text. 
+
+For example, if you are working on a pet image dataset, you can search for similar images by keywords like "orange tabby cat" or "golden retriever puppy".
 
 ```python
-results = table.search("cat").limit(3).to_list()
+results = table.search("orange tabby cat").limit(3).to_list()
 ```
+
+The keyword text will be converted to a vector embedding that captures the semantic meaning by the multimodal embedding model, and then a vector search will be performed to find the images whose embeddings are most similar to the keyword embedding.
 
 ## See also
 
