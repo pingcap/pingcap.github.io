@@ -15,7 +15,7 @@ TiDB provides full-text search capabilities for **massive datasets** with high p
 
 !!! tip
 
-    For complete example code, see the [full-text search example](https://github.com/pingcap/pytidb/blob/main/examples/fulltext_search).
+    For a complete example of full-text search, see the [E-commerce product search demo](../examples/fulltext-search-with-pytidb.md).
 
 ## Basic Usage
 

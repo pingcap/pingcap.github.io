@@ -4,7 +4,7 @@ Vector search uses semantic similarity to help you find the most relevant record
 
 !!! tip
 
-    For a complete example of vector search, see the [vector-search example](https://github.com/pingcap/pytidb/tree/main/examples/vector_search).
+    For a complete example of vector search, see the [vector-search example](../examples/vector-search-with-pytidb.md).
 
 
 ## Basic Usage
