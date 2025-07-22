@@ -1,0 +1,54 @@
+name: Sync Sitemap
+
+on:
+  push:
+    branches:
+      - gh-pages
+    paths:
+      - 'sitemap.xml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Check if sitemap.xml exists in root
+        id: check-sitemap
+        run: |
+          if [ -f "sitemap.xml" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create ai directory if it doesn't exist
+        if: steps.check-sitemap.outputs.exists == 'true'
+        run: mkdir -p ai
+
+      - name: Copy sitemap.xml to ai/sitemap.xml
+        if: steps.check-sitemap.outputs.exists == 'true'
+        run: cp sitemap.xml ai/sitemap.xml
+
+      - name: Commit and push changes
+        if: steps.check-sitemap.outputs.exists == 'true'
+        run: |
+          git add ai/sitemap.xml
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Sync sitemap.xml to ai/sitemap.xml"
+            git push origin gh-pages
+          fi 
