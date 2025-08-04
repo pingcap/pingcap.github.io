@@ -129,6 +129,88 @@ To insert multiple records:
         (3, 'LlamaIndex is a Python library for building AI-powered applications', '[0.7, 0.8, 0.9]', '{"category": "rag"}');
     ```
 
+### With Dict
+
+You can also use `dict` to represent records and insert them into the table. This approach is more flexible and doesn't require to use a `TableModel` to insert data.
+
+To insert a single record:
+
+=== "Python"
+
+    Use the `table.insert()` method with a dictionary to insert a single record into the table.
+
+    ```python
+    table.insert({
+        "id": 1,
+        "content": "TiDB is a distributed SQL database",
+        "embedding": [0.1, 0.2, 0.3],
+        "meta": {"category": "database"},
+    })
+    ```
+
+=== "SQL"
+
+    Use the `INSERT INTO` statement to insert a single record into the table.
+
+    ```sql
+    INSERT INTO items(id, content, embedding, meta)
+    VALUES (1, 'TiDB is a distributed SQL database', '[0.1, 0.2, 0.3]', '{"category": "database"}');
+    ```
+
+## Save data to a table
+
+The `save` method provides a convenient way to insert or update a single record. If a record with the specified primary key does not exist, it creates a new record. If the record already exists, it overwrites the entire record.
+
+!!! note
+
+    If a record ID already exists, `table.save()` function overwrites the entire record. To change only part of a record, use `table.update()`.
+
+=== "Python"
+
+    Use the `table.save()` method to save a single record to the table.
+
+    **Example: Save a new record**
+
+    ```python
+    saved_record = table.save(
+        Item(
+            id=4,
+            content="Vector databases enable AI applications",
+            embedding=[1.0, 1.1, 1.2],
+            meta={"category": "vector-db"},
+        )
+    )
+    ```
+
+    **Example: Save an existing record (overwrites the entire record)**
+
+    ```python
+    # This overwrites the entire record with id=1
+    updated_record = table.save(
+        Item(
+            id=1,  # Existing ID
+            content="Updated content for TiDB",
+            embedding=[0.2, 0.3, 0.4],
+            meta={"category": "updated"},
+        )
+    )
+    ```
+
+=== "SQL"
+
+    Use the `INSERT ... ON DUPLICATE KEY UPDATE` statement to save a record.
+
+    **Example: Save a new record or update if it exists**
+
+    ```sql
+    INSERT INTO items(id, content, embedding, meta)
+    VALUES (4, 'Vector databases enable AI applications', '[1.0, 1.1, 1.2]', '{"category": "vector-db"}')
+    ON DUPLICATE KEY UPDATE
+        content = VALUES(content),
+        embedding = VALUES(embedding),
+        meta = VALUES(meta);
+    ```
+
 ## Query data from a table
 
 To fetch records from a table:
