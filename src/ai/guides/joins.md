@@ -23,7 +23,7 @@ As a relational database, TiDB allows you to store diverse data in tables with d
         id: int = Field(primary_key=True)
         title: str = Field(max_length=255)
 
-    client.create_table(schema=Document, mode="overwrite")
+    client.create_table(schema=Document, if_exists="overwrite")
     client.table("documents").truncate()
     client.table("documents").bulk_insert([
         Document(id=1, title="The Power of Positive Thinking"),
@@ -41,7 +41,7 @@ As a relational database, TiDB allows you to store diverse data in tables with d
         text: str = Field(max_length=255)
         document_id: int = Field(foreign_key="documents.id")
 
-    client.create_table(schema=Chunk, mode="overwrite")
+    client.create_table(schema=Chunk, if_exists="overwrite")
     client.table("chunks").truncate()
     client.table("chunks").bulk_insert([
         Chunk(id=1, text="Positive thinking can change your life", document_id=1),

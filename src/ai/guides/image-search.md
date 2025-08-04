@@ -43,7 +43,7 @@ class ImageItem(TableModel):
         source_field="image_uri"
     )
 
-table = client.create_table(schema=ImageItem, mode="overwrite")
+table = client.create_table(schema=ImageItem, if_exists="overwrite")
 ```
 
 ### Step 3. Insert image data

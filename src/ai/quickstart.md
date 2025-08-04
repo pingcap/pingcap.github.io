@@ -134,7 +134,7 @@ As an example, create a table named `chunks` with the following columns:
         text_vec: list[float] = text_embed.VectorField(source_field="text")
         user_id: int = Field()
 
-    table = client.create_table(schema=Chunk, mode="overwrite")
+    table = client.create_table(schema=Chunk, if_exists="overwrite")
     ```
 
 Once created, you can use the `table` object to insert data, search data, and more.
