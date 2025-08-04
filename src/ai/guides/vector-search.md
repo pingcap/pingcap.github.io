@@ -36,7 +36,7 @@ This section shows you how to use vector search in your application in minimal s
         text_vec: list[float] = VectorField(dimensions=3)
         meta: dict = Field(sa_type=JSON, default_factory=dict)
 
-    table = client.create_table(schema=Document, mode="overwrite")
+    table = client.create_table(schema=Document, if_exists="overwrite")
     ```
 
     The `VectorField` class accepts the following parameters:
@@ -385,7 +385,7 @@ For example, you can store both text embeddings and image embeddings in the same
         image_url: str
         image_vec: list[float] = VectorField(dimensions=3)
 
-    table = client.create_table(schema=RichTextDocument, mode="overwrite")
+    table = client.create_table(schema=RichTextDocument, if_exists="overwrite")
 
     # Insert sample data ...
 

@@ -35,14 +35,14 @@ Auto embedding is a feature that allows you to automatically generate vector emb
 
     ```python hl_lines="7"
     from pytidb.schema import TableModel, Field
-    from pytidb.datatype import Text
+    from pytidb.datatype import TEXT
 
     class Chunk(TableModel):
         id: int = Field(primary_key=True)
-        text: str = Field(sa_type=Text)
+        text: str = Field(sa_type=TEXT)
         text_vec: list[float] = embed_func.VectorField(source_field="text")
 
-    table = client.create_table(schema=Chunk, mode="overwrite")
+    table = client.create_table(schema=Chunk, if_exists="overwrite")
     ```
 
     You don't need to specify the `dimensions` parameter, it will be automatically determined by the embedding model.

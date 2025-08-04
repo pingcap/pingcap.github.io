@@ -37,15 +37,15 @@ In the following example, you create a table named `items` with these columns:
         embedding: list[float] = VectorField(dimensions=3)
         meta: dict = Field(sa_type=JSON, default_factory=dict)
 
-    table = client.create_table(schema=Item, mode="overwrite")
+    table = client.create_table(schema=Item, if_exists="overwrite")
     ```
 
     The `create_table` method accepts these parameters:
 
     - `schema`: The `TableModel` class that defines your table structure.
-    - `mode`: The creation mode of the table.
-        - `create` (default): Creates the table if it does not exist; raises an error if it already exists.
-        - `exists_ok`: Creates the table if it does not exist; does nothing if it already exists.
+    - `if_exists`: The creation mode of the table.
+        - `raise` (default): Creates the table if it does not exist; raises an error if it already exists.
+        - `skip`: Creates the table if it does not exist; does nothing if it already exists.
         - `overwrite`: Drops the existing table and creates a new one. This is useful for **testing and development**, but not recommended for production environments.
   
     Once the table is created, you can use the `table` object to insert, update, delete, and query data.

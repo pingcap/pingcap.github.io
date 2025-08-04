@@ -47,7 +47,7 @@ embed_fn = EmbeddingFunction(
         text: str = FullTextField()
         text_vec: list[float] = embed_fn.VectorField(source_field="text")
 
-    table = client.create_table(schema=Chunk, mode="overwrite")
+    table = client.create_table(schema=Chunk, if_exists="overwrite")
     ```
 
     In this example, PyTiDB will automatically create a full-text index on the `text` column and a vector index on the `text_vec` column.

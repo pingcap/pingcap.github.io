@@ -35,7 +35,7 @@ TiDB provides full-text search capabilities for **massive datasets** with high p
         id: int = Field(primary_key=True)
         title: str = FullTextField(fts_parser="MULTILINGUAL")
 
-    table = client.create_table(schema=Item, mode="overwrite")
+    table = client.create_table(schema=Item, if_exists="overwrite")
     ```
 
     The `fts_parser` parameter specifies the parser for the full-text index. Supported values:
