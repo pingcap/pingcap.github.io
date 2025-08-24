@@ -8,20 +8,19 @@ Auto embedding is a feature that allows you to automatically generate vector emb
 
 ## Basic Usage
 
+In this example, we use TiDB Cloud hosted embedding models for demonstration, for other providers, please check the [Supported Providers](../integrations/embedding-overview.md#supported-providers) list.
+
 ### Step 1. Define a embedding function
 
 === "Python"
 
     Define a embedding function to generate vector embeddings for text data.
-    
-    In this example, we use OpenAI as the embedding provider for demonstration, for other providers, please check the [Supported Providers](#supported-providers) list.
 
     ```python
     from pytidb.embeddings import EmbeddingFunction
 
     embed_func = EmbeddingFunction(
-        model_name="openai/{model_name}",       # openai/text-embedding-3-small
-        api_key="{your-openai-api-key}",
+        model_name="tidbcloud_free/amazon/titan-embed-text-v2",
     )
     ```
 
@@ -74,60 +73,3 @@ Auto embedding is a feature that allows you to automatically generate vector emb
     ```python
     table.search("HTAP database").limit(3).to_list()
     ```
-
-## Embedding Function
-
-`EmbeddingFunction` provides a unified interface in `pytidb` for accessing external embedding model services.
-
-#### Constructor Parameters
-
-- `model_name` *(required)*:  
-  Specifies the embedding model to use, in the format `{provider_name}/{model_name}`.
-
-- `dimensions` *(optional)*:  
-  The dimensionality of the output vector embeddings. If not provided and the selected model does not include a default dimension, a test string will be embedded during initialization to automatically determine the actual dimension.
-
-- `api_key` *(optional)*:  
-  The API key used to access the embedding service. If not explicitly set, the key will be retrieved from the default environment variable associated with the provider.
-
-- `api_base` *(optional)*:  
-  The base URL of the embedding API service.
-
-### Supported Providers
-
-Below is a list of supported embedding model providers. You can follow the corresponding example to create an EmbeddingFunction instance for the provider you are using.
-
-#### OpenAI
-
-For OpenAI users, you can go to [OpenAI API Platform](https://platform.openai.com/api-keys) to create your own API key.
-
-```python
-embed_func = EmbeddingFunction(
-    model_name="openai/{model_name}",       # openai/text-embedding-3-small
-    api_key="{your-openai-api-key}",
-)
-```
-
-#### OpenAI Like
-
-If you're using a platform or tool that is compatible with the OpenAI API format, you can indicate this by adding the `openai/` prefix to the `model_name` parameter. Then, use the `api_base` parameter to specify the base URL of the API provided by your platform or tool.
-
-```python
-embed_func = EmbeddingFunction(
-    model_name="openai/{model_name}",        # text-embedding-3-small 
-    api_key="{your-server-api-key}",
-    api_base="{your-api-server-base-url}"    # http://localhost:11434/
-)
-```
-
-#### Jina AI
-
-For Jina AI users, you can go to [Jina AI website](https://jina.ai/embeddings/) to create your own API key.
-
-```python
-embed_func = EmbeddingFunction(
-    model_name="jina_ai/{model_name}",  # jina_ai/jina-embeddings-v3
-    api_key="{your-jina-api-key}"
-)
-```
-
