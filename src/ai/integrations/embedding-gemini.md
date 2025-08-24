@@ -6,7 +6,7 @@ keywords: "TiDB, Google Gemini, Vector search, text embeddings, multimodal embed
 
 # Integrate TiDB Vector Search with Google Gemini Embeddings API
 
-This tutorial walks you through how to use [Google Gemini](https://ai.google.dev/models/gemini) to generate embeddings for text data and image data, and then store the embeddings in TiDB vector storage and search similar texts or images based on embeddings.
+This tutorial demonstrates how to use [Google Gemini](https://ai.google.dev/models/gemini) to generate embeddings for text and image data, store them in TiDB vector storage, and perform semantic search.
 
 !!! info
 
@@ -28,7 +28,7 @@ For a complete list of supported models and detailed specifications, see the [Go
 
 ## Usage example
 
-This example demonstrates how to use Google Gemini's embedding models to create a vector table, insert documents, and find the most similar documents using vector similarity search.
+This example demonstrates creating a vector table, inserting documents, and performing similarity search using Google Gemini embedding models.
 
 ### Step 1: Connect to the database
 

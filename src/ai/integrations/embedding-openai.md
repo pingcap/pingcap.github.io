@@ -1,12 +1,12 @@
 ---
-title: "Integrate TiDB Vector Search with OpenAI AI Embeddings API"
+title: "Integrate TiDB Vector Search with OpenAI Embeddings API"
 description: "Learn how to integrate TiDB Vector Search with OpenAI AI Embeddings API to store embeddings and perform semantic search."
 keywords: "TiDB, OpenAI Embeddings, Vector search, text embeddings"
 ---
 
-# Integrate TiDB Vector Search with OpenAI AI Embeddings API
+# Integrate TiDB Vector Search with OpenAI Embeddings API
 
-This tutorial walks you through how to use [OpenAI](https://openai.com/api/) to generate embeddings for text data, and then store the embeddings in TiDB vector storage and search similar texts based on embeddings.
+This tutorial demonstrates how to use [OpenAI](https://openai.com/api/) to generate text embeddings, store them in TiDB vector storage, and perform semantic search.
 
 !!! info
 
@@ -16,7 +16,7 @@ This tutorial walks you through how to use [OpenAI](https://openai.com/api/) to 
 
 ## OpenAI Embeddings
 
-OpenAI offers a cost-effective and high-performance embedding models. You can integrate the OpenAI Embeddings API with TiDB using either the AI SDK or native SQL functions, which enables automatic embedding generation.
+OpenAI offers cost-effective, high-performance embedding models. You can integrate the OpenAI Embeddings API with TiDB using the AI SDK or native SQL functions for automatic embedding generation.
 
 ### Supported Models
 
@@ -29,7 +29,7 @@ For a complete list of supported models, see the [OpenAI Embedding API Reference
 
 ## Usage example
 
-This example demonstrates how to use OpenAI's embedding models to create a vector table, insert documents, and find the most similar documents using vector similarity search.
+This example demonstrates creating a vector table, inserting documents, and performing similarity search using OpenAI embedding models.
 
 ### Step 1: Connect to the database
 

@@ -6,7 +6,7 @@ keywords: "TiDB, Cohere, Vector search, text embeddings, multilingual embeddings
 
 # Integrate TiDB Vector Search with Cohere Embeddings API
 
-This tutorial walks you through how to use [Cohere](https://cohere.com/embed) to generate embeddings for text data, and then store the embeddings in TiDB vector storage and search similar texts based on embeddings.
+This tutorial demonstrates how to use [Cohere](https://cohere.com/embed) to generate text embeddings, store them in TiDB vector storage, and perform semantic search.
 
 !!! info
 
@@ -32,7 +32,7 @@ For a complete list of supported models and detailed specifications, see the [Co
 
 ## Usage example
 
-This example demonstrates how to use Cohere's embedding models to create a vector table, insert documents, and find the most similar documents using vector similarity search.
+This example demonstrates creating a vector table, inserting documents, and performing similarity search using Cohere embedding models.
 
 ### Step 1: Connect to the database
 

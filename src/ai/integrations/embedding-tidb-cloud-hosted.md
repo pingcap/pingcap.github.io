@@ -6,17 +6,17 @@ keywords: "TiDB, TiDB Cloud, Vector search, text embeddings"
 
 # Integrate TiDB Vector Search with TiDB Cloud Hosted Embedding Models
 
-This tutorial walks you through how to use TiDB Cloud hosted embedding models to generate embeddings for text data, and then store the embeddings in TiDB vector storage and search similar texts based on embeddings.
+This tutorial demonstrates how to use TiDB Cloud hosted embedding models to generate embeddings for text data, store them in TiDB vector storage, and perform semantic search.
 
 !!! info
 
-    Currently, only the following product and regions support native SQL functions for integrating the Cohere Embeddings API:
+    Currently, only the following product and regions support native SQL functions for TiDB Cloud hosted embedding models:
 
     - [TiDB Cloud Starter](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme) on AWS: `Frankfurt (eu-central-1)` and `Singapore (ap-southeast-1)`
 
 ## TiDB Cloud Hosted Embeddings
 
-TiDB Cloud provides a set of hosted embedding models that can be used to generate embeddings for text data.
+TiDB Cloud provides hosted embedding models for generating text embeddings without requiring external API keys.
 
 ### Supported Models
 
@@ -34,7 +34,7 @@ TiDB Cloud currently supports the following hosted embedding models:
 
 ## Usage example
 
-This example demonstrates how to use TiDB Cloud hosted embedding models to create a table with a vector field, insert documents, and search for the most similar documents using vector similarity.
+This example demonstrates creating a vector table, inserting documents, and performing similarity search using TiDB Cloud hosted embedding models.
 
 ### Step 1: Connect to the database
 

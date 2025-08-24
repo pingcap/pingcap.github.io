@@ -6,7 +6,7 @@ keywords: "TiDB, NVIDIA NIM, Vector search, text embeddings, AI models"
 
 # Integrate TiDB Vector Search with NVIDIA NIM Embeddings
 
-This tutorial walks you through how to use [NVIDIA NIM](https://developer.nvidia.com/nim) models to generate embeddings for text data, and then store the embeddings in TiDB vector storage and search similar texts based on embeddings.
+This tutorial demonstrates how to use [NVIDIA NIM](https://developer.nvidia.com/nim) models to generate text embeddings, store them in TiDB vector storage, and perform semantic search.
 
 !!! info
 
@@ -33,7 +33,7 @@ For a complete list of supported models and detailed specifications, see the [NV
 
 ## Usage example
 
-This example demonstrates how to use NVIDIA NIM embedding models to create a vector table, insert documents, and find the most similar documents using vector similarity search.
+This example demonstrates creating a vector table, inserting documents, and performing similarity search using NVIDIA NIM embedding models.
 
 ### Step 1: Connect to the database
 

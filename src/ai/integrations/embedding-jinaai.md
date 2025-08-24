@@ -6,7 +6,7 @@ keywords: "TiDB, Jina AI, Vector search, text embeddings, multimodal embeddings"
 
 # Integrate TiDB Vector Search with Jina AI Embeddings API
 
-This tutorial walks you through how to use [Jina AI](https://jina.ai/embeddings/) to generate embeddings for text data and image data, and then store the embeddings in TiDB vector storage and search similar texts or images based on embeddings.
+This tutorial demonstrates how to use [Jina AI](https://jina.ai/embeddings/) to generate embeddings for text and image data, store them in TiDB vector storage, and perform semantic search.
 
 !!! info
 
@@ -30,7 +30,7 @@ For a complete list of supported models and detailed specifications, see the [Ji
 
 ## Usage example
 
-This example demonstrates how to use Jina AI's embedding models to create a vector table, insert documents, and find the most similar documents using vector similarity search.
+This example demonstrates creating a vector table, inserting documents, and performing similarity search using Jina AI embedding models.
 
 ### Step 1: Connect to the database
 
