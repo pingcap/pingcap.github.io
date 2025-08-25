@@ -18,13 +18,14 @@ For demonstration, you can use Jina AI's multimodal embedding model to generate 
 
 Go to [Jina AI](https://jina.ai/embeddings) to create an API key, then initialize the embedding function as follows:
 
-```python
+```python hl_lines="7"
 from pytidb.embeddings import EmbeddingFunction
 
 image_embed = EmbeddingFunction(
     # Or another provider/model that supports multimodal input
     model_name="jina_ai/jina-embedding-v4",
     api_key="{your-jina-api-key}",
+    multimodal=True,
 )
 ```
 
