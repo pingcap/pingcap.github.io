@@ -173,7 +173,7 @@ Create a table with a vector field that uses the `gemini-embedding-001` model to
     LIMIT 2;
     ```
 
-## Controlling embedding dimensions
+## Custom embedding dimensions
 
 The `gemini-embedding-001` model supports flexible vector dimensions through Matryoshka Representation Learning (MRL). You can specify the desired dimensions in your embedding function:
 
