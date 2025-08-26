@@ -16,7 +16,7 @@ This example demonstrates how to build a semantic search application using TiDB 
 ## Prerequisites
 
 - **Python 3.10+**
-- **A TiDB Cloud Serverless cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
+- **A TiDB Cloud Starter cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
 - **Ollama**: You can install it from [Ollama ↗️](https://ollama.com/download)
 
 ## How to run
@@ -63,7 +63,7 @@ TIDB_HOST={gateway-region}.prod.aws.tidbcloud.com
 TIDB_PORT=4000
 TIDB_USERNAME={prefix}.root
 TIDB_PASSWORD={password}
-TIDB_DATABASE=pytidb_vector_demo
+TIDB_DATABASE=pytidb_vector_search
 EOF
 ```
 

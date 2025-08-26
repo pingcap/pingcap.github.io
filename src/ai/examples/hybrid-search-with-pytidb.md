@@ -23,7 +23,7 @@ In this demo, we will show you how to use hybrid search to combine vector search
 > 
 > Currently, full-text search is only available for the following product option and region:
 >
-> - TiDB Cloud Serverless: Frankfurt (eu-central-1), Singapore (ap-southeast-1)
+> - TiDB Cloud Starter: Frankfurt (eu-central-1), Singapore (ap-southeast-1)
 
 ## How to run
 

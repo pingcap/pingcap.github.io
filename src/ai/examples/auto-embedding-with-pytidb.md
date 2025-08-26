@@ -16,8 +16,7 @@ This example showcases how to use the auto embedding feature with PyTiDB Client.
 ## Prerequisites
 
 - **Python 3.10+**
-- **A TiDB Cloud Serverless cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
-- **Jina AI API key**: Go to [Jina AI](https://jina.ai/embeddings/) to get your own API key
+- **A TiDB Cloud Starter cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
 
 ## How to run
 
@@ -47,7 +46,9 @@ TIDB_PORT=4000
 TIDB_USERNAME={prefix}.root
 TIDB_PASSWORD={password}
 TIDB_DATABASE=test
-JINA_AI_API_KEY={your-jina-api-key}
+
+# Using TiDB Cloud Free embedding model by default, which is no required to set up any API key
+EMBEDDING_PROVIDER=tidbcloud_free
 EOF
 ```
 
@@ -61,7 +62,7 @@ python main.py
 
 ```plain
 === Define embedding function ===
-Embedding function defined
+Embedding function (model id: tidbcloud_free/amazon/titan-embed-text-v2) defined
 
 === Define table schema ===
 Table created

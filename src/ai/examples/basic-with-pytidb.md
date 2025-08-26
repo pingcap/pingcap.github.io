@@ -15,7 +15,7 @@ This example demonstrates basic CRUD (Create, Read, Update, Delete) operations w
 ## Prerequisites
 
 - **Python 3.10+**
-- **A TiDB Cloud Serverless cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
+- **A TiDB Cloud Starter cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
 
 ## How to run
 
@@ -73,13 +73,13 @@ ID: 3, Content: LlamaIndex is a Python library for building AI-powered applicati
 
 === UPDATE ===
 Updated item #1
-After update - ID: 1, Content: TiDB Cloud Serverless is a fully-managed, auto-scaling cloud database service, Metadata: {'category': 'dbass'}
+After update - ID: 1, Content: TiDB Cloud Starter is a fully-managed, auto-scaling cloud database service, Metadata: {'category': 'dbass'}
 
 === DELETE ===
 Deleted item #2
 
 === FINAL STATE ===
-ID: 1, Content: TiDB Cloud Serverless is a fully-managed, auto-scaling cloud database service, Metadata: {'category': 'dbass'}
+ID: 1, Content: TiDB Cloud Starter is a fully-managed, auto-scaling cloud database service, Metadata: {'category': 'dbass'}
 ID: 3, Content: LlamaIndex is a Python library for building AI-powered applications, Metadata: {'category': 'rag'}
 
 === COUNT ROWS ===

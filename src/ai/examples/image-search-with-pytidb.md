@@ -22,7 +22,7 @@ With just a few lines of code, you can create an intelligent search system that 
 ## Prerequisites
 
 - **Python 3.10+**
-- **A TiDB Cloud Serverless cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
+- **A TiDB Cloud Starter cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
 - **Jina AI API Key**: Get your free API key at [jina.ai Embeddings ↗️](https://jina.ai/embeddings/)
 
 ## How to run
@@ -54,7 +54,7 @@ TIDB_USERNAME={prefix}.root
 TIDB_PASSWORD={password}
 TIDB_DATABASE=test
 
-JINA_AI_API_KEY={your-jina-api-key}
+JINA_AI_API_KEY={your-jina-ai-api-key}
 EOF
 ```
 

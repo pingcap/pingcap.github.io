@@ -1,6 +1,6 @@
 ---
 title: Demo Gallery
-description: Explore hands-on demos showcasing how TiDB empowers AI applications. Get started quickly with TiDB Cloud Serverless to build your own AI-powered solutions.
+description: Explore hands-on demos showcasing how TiDB empowers AI applications. Get started quickly with TiDB Cloud Starter to build your own AI-powered solutions.
 hide:
   - navigation
   - toc
@@ -64,7 +64,7 @@ html {
 .gallery-cta-link {
     position: relative;
     text-decoration: none;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .gallery-cta-link:hover {
@@ -345,7 +345,7 @@ html {
     <h1 class="gallery-title">Demo Gallery</h1>
     <p class="gallery-description">
       Explore hands-on demos showcasing how TiDB empowers AI applications.<br>
-Get started quickly with <a href='https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=demo_gallery' target='_blank' rel='noopener noreferrer' class='gallery-cta-link'><b>TiDB Cloud Serverless</b></a> to build your own AI-powered solutions.
+Get started quickly with <a href='https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=demo_gallery' target='_blank' rel='noopener noreferrer' class='gallery-cta-link'><b>TiDB Cloud Starter</b></a> to build your own AI-powered solutions.
 
     </p>
   </div>
@@ -389,8 +389,8 @@ Get started quickly with <a href='https://tidbcloud.com/?utm_source=github&utm_m
             </div>
           </a>
           <a href="memory-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient" style="background: linear-gradient(135deg, #8b5cf6, var(--brand-color));">
-              <div>💭</div>
+            <div class="card-image">
+              <img src="https://github.com/user-attachments/assets/74dee96b-ea20-49dc-ad27-679faa5bf9b8" alt="Memory Demo">
             </div>
             <div class="card-content">
               <h3 class="card-title">Memory</h3>
@@ -492,8 +492,8 @@ Get started quickly with <a href='https://tidbcloud.com/?utm_source=github&utm_m
             </div>
           </a>
           <a href="memory-with-pytidb/" class="gallery-card">
-            <div class="card-image card-gradient" style="background: linear-gradient(135deg, #8b5cf6, var(--brand-color));">
-              <div>💭</div>
+            <div class="card-image">
+              <img src="https://github.com/user-attachments/assets/74dee96b-ea20-49dc-ad27-679faa5bf9b8" alt="Memory Demo">
             </div>
             <div class="card-content">
               <h3 class="card-title">Memory</h3>
@@ -518,11 +518,11 @@ Get started quickly with <a href='https://tidbcloud.com/?utm_source=github&utm_m
       <div class="gallery-cta">
         <h3 class="cta-title">Ready to build your AI application?</h3>
         <p class="cta-description">
-          Start your AI journey with TiDB Cloud Serverless. Follow our quickstart guide to build your first AI-powered application in minutes, or explore specific examples for your use case.
+          Start your AI journey with TiDB Cloud Starter. Follow our quickstart guide to build your first AI-powered application in minutes, or explore specific examples for your use case.
         </p>
         <div class="cta-buttons">
-          <a href="https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme" target="_blank" rel="noopener noreferrer" class="btn-primary">Try TiDB Cloud Serverless</a>
-          <a href="quickstart-with-pytidb/" class="btn-secondary">View Quickstart Guide</a>
+          <a href="https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme" target="_blank" rel="noopener noreferrer" class="btn-primary">Try TiDB Cloud Starter</a>
+          <a href="/ai/quickstart/" class="btn-secondary">View Quickstart Guide</a>
         </div>
       </div>
     </div>

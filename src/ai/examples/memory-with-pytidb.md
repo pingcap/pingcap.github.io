@@ -4,59 +4,102 @@ description: "Implement conversation memory for chatbots and conversational AI a
 source_repo: "https://github.com/pingcap/pytidb/tree/main/examples/memory"
 ---
 
-# Agent Memory Examples
+# AI Agent Memory Demo
 
-* Use `pytidb` to connect to TiDB
+This example showcases how to build an intelligent AI agent with persistent memory powered by TiDB's vector search capabilities.
+
+With just a few lines of code, you can create a conversational AI that remembers past interactions and builds context over time.
+
+- 🧠 **Persistent Memory**: The AI remembers conversations across sessions and user interactions
+- 💬 **Interactive Chat**: Both web interface and command-line options for flexible interaction
+- 👤 **Multi-User Support**: Different users can have separate memory contexts
+- 🔍 **Real-Time Memory Viewing**: Visual display of all stored memories in the web interface
+
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/b57ae0fb-9075-43a9-8690-edaa69ca9f40" alt="AI Agent with memory powered by TiDB" width="700"/>
+    <p align="center"><i>AI Agent with memory powered by TiDB</i></p>
+</p>
 
 ## Prerequisites
 
-* Python 3.10+
-* TiDB server connection parameters, either local or TiDB Cloud
-* OpenAI API key
-
+- **Python 3.10+**
+- **A TiDB Cloud Starter cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
+- **OpenAI API Key**: Get your API key at [OpenAI Platform ↗️](https://platform.openai.com/api-keys)
 
 ## How to run
 
-**Step1**: Clone the repo
+**Step 1**: Clone the repository to local
 
 ```bash
 git clone https://github.com/pingcap/pytidb.git
-cd pytidb/examples/memory;
+cd pytidb/examples/memory/
 ```
 
-**Step2**: Install the required packages and setup environment
+**Step 2**: Install the required packages
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r reqs.txt
 ```
 
-**Step3**: Set up environment to connect to storage
+**Step 3**: Set up environment variables
 
-You can find the connection string in the [TiDB Cloud console](https://tidbcloud.com/).
-
-If you are using a local TiDB server, you can set up the environment variable like this:
+Go to [TiDB Cloud console](https://tidbcloud.com/clusters) and get the connection parameters, then set up the environment variable like this:
 
 ```bash
 cat > .env <<EOF
-TIDB_HOST=localhost
+TIDB_HOST={gateway-region}.prod.aws.tidbcloud.com
 TIDB_PORT=4000
-TIDB_USERNAME=root
-TIDB_PASSWORD=
+TIDB_USERNAME={prefix}.root
+TIDB_PASSWORD={password}
 TIDB_DATABASE=test
 
-OPENAI_API_KEY=your_openai_api_key
+OPENAI_API_KEY={your-openai-api-key}
 EOF
 ```
 
-**Step4**: Run the app
+**Step 4**: Run the application
 
-Run the following command to start the app, feel free to talk with the AI assistant and tell him/her any information about you.
+Choose one of the following options:
+
+**Option 1**: Launch Web Application:
+
+```bash
+streamlit run app.py
+```
+
+Visit `http://localhost:8501` in your browser and follow the instructions in the [Interact with memory in Web Application](https://github.com/pingcap/pytidb/tree/main/examples/memory/#interact-with-memory-in-web-application) section to start interacting with the memory-enabled AI assistant.
+
+**Option 2**: Run Command Line Application:
 
 ```bash
 python main.py
 ```
+
+Follow the instructions in the [Interact with memory in Command Line Application](https://github.com/pingcap/pytidb/tree/main/examples/memory/#interact-with-memory-in-command-line-application) section to start interacting with the memory-enabled AI assistant.
+
+## Interact with memory in Web Application
+
+In the web application, you can interact with the AI assistant, the user interface includes:
+
+- **Sidebar**: User settings and chat list.
+- **Main chat area**: Chat interface with the AI assistant.
+- **Memory viewer**: Real-time memory viewer showing stored facts.
+
+You can follow the following steps to check how the memory works:
+
+1. Introduce yourself in the default chat session. For example, "Hello, I am John. I work as a software engineer and love guitar."
+2. You can see the information you provided in the memory viewer.
+3. Click **New chat** in the sidebar to start a new chat session.
+4. Ask "Who am I?" in the new chat session. The AI will recall your information from previous conversations.
+
+
+## Interact with memory in Command Line Application
+
+In the command line application, you can interact with the AI assistant and introduce yourself.
+
+**Example conversation:**
 
 ```plain
 Chat with AI (type 'exit' to quit)
@@ -70,11 +113,11 @@ You: exit
 Goodbye!
 ```
 
-Open another terminal and run the app again, ask the AI assistant "Who am I?":
+After the first conversation, the AI assistant will remember the information you provided and use it to answer future questions.
 
-```bash
-python main.py
-```
+Now, you can start a new chat session and ask the AI assistant "Who am I?".
+
+**Example conversation in another chat session:**
 
 ```plain
 Chat with AI (type 'exit' to quit)
@@ -84,7 +127,8 @@ You: exit
 Goodbye!
 ```
 
-As you can see, the AI assistant remembers you!
+As you can see, the AI assistant remembers you across sessions!
+
 
 
 ---

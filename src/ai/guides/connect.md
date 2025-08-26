@@ -16,9 +16,9 @@ pip install pytidb
 
 Choose the steps based on your deployment type:
 
-=== "TiDB Cloud Serverless"
+=== "TiDB Cloud Starter"
 
-    You can create a serverless cluster in the [TiDB Cloud](https://tidbcloud.com/free-trial/), and then get the connection parameters from the web console.
+    You can create a starter cluster in the [TiDB Cloud](https://tidbcloud.com/free-trial/), and then get the connection parameters from the web console.
 
     1. Navigate to the [Clusters page](https://tidbcloud.com/clusters), and then click the name of your target cluster to go to its overview page.
     2. Click **Connect** in the upper-right corner. A connection dialog is displayed, with connection parameters listed.
@@ -40,7 +40,7 @@ Choose the steps based on your deployment type:
 
     !!! tip
 
-        For TiDB Cloud Serverless, [TLS connection to the database](https://docs.pingcap.com/tidbcloud/secure-connections-to-serverless-clusters/) is required when using Public Endpoint. TiDB Client will **automatically** enable TLS connection for serverless clusters.
+        For TiDB Cloud Starter, [TLS connection to the database](https://docs.pingcap.com/tidbcloud/secure-connections-to-starter-clusters/) is required when using Public Endpoint. TiDB Client will **automatically** enable TLS connection for starter clusters.
 
 === "TiDB Self-Managed"
 
@@ -70,9 +70,9 @@ Once connected, you can use the `db` object to operate tables, query data, and m
 
 If you prefer to use a connection string (database URL), you can follow the format based on your deployment type:
 
-=== "TiDB Cloud Serverless"
+=== "TiDB Cloud Starter"
 
-    You can create a serverless cluster in the [TiDB Cloud](https://tidbcloud.com/free-trial/), and then get the connection parameters from the web console.
+    You can create a starter cluster in the [TiDB Cloud](https://tidbcloud.com/free-trial/), and then get the connection parameters from the web console.
 
     1. Navigate to the [Clusters page](https://tidbcloud.com/clusters), and then click the name of your target cluster to go to its overview page.
     2. Click **Connect** in the upper-right corner. A connection dialog is displayed with the connection parameters listed.
@@ -88,7 +88,7 @@ If you prefer to use a connection string (database URL), you can follow the form
 
     !!! note
     
-        For TiDB Cloud Serverless, [TLS connection to the database](https://docs.pingcap.com/tidbcloud/secure-connections-to-serverless-clusters/) is required when using Public Endpoint, so you need to set `ssl_verify_cert=true&ssl_verify_identity=true` in the connection string.
+        For TiDB Cloud Starter, [TLS connection to the database](https://docs.pingcap.com/tidbcloud/secure-connections-to-starter-clusters/) is required when using Public Endpoint, so you need to set `ssl_verify_cert=true&ssl_verify_identity=true` in the connection string.
 
 === "TiDB Self-Managed"
 

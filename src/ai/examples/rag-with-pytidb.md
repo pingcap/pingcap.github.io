@@ -20,7 +20,7 @@ This example demonstrates how to use PyTiDB to build a minimal RAG application.
 ## Prerequisites
 
 - **Python 3.10+**
-- **A TiDB Cloud Serverless cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
+- **A TiDB Cloud Starter cluster**: Create a free cluster here: [tidbcloud.com ↗️](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme)
 - **Ollama**: You can install it from [Ollama ↗️](https://ollama.com/download)
 
 ## How to run

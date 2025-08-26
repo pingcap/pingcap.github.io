@@ -9,7 +9,7 @@ In this guide, you will learn how to get started with [vector search](./concepts
 
 ## Prerequisites
 
-- Go [tidbcloud.com](https://tidbcloud.com/) to create a TiDB Cloud Serverless cluster for free or using [tiup playground](https://docs.pingcap.com/tidb/stable/quick-start-with-tidb/#deploy-a-local-test-cluster) to a TiDB Self-Managed cluster for local testing.
+- Go [tidbcloud.com](https://tidbcloud.com/) to create a TiDB Cloud Starter cluster for free or using [tiup playground](https://docs.pingcap.com/tidb/stable/quick-start-with-tidb/#deploy-a-local-test-cluster) to a TiDB Self-Managed cluster for local testing.
 
 ## Installation
 
@@ -29,7 +29,7 @@ pip install "pytidb[models]"
 
 ## Connect to database
 
-=== "TiDB Cloud Serverless"
+=== "TiDB Cloud Starter"
 
     You can get these connection parameters from the [TiDB Cloud console](https://tidbcloud.com/clusters):
 
@@ -47,7 +47,7 @@ pip install "pytidb[models]"
     CA:       /etc/ssl/cert.pem
     ```
 
-    The corresponding Python code to connect to the TiDB Cloud Serverless cluster would be as follows:
+    The corresponding Python code to connect to the TiDB Cloud Starter cluster would be as follows:
 
     ```python
     from pytidb import TiDBClient

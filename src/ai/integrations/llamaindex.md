@@ -5,7 +5,7 @@ This tutorial demonstrates how to integrate the [vector search](https://docs.pin
 
 !!! note
 
-    The vector search feature is only available for TiDB Self-Managed clusters and [TiDB Cloud Serverless](https://docs.pingcap.com/tidbcloud/select-cluster-tier#tidb-cloud-serverless) clusters.
+    The vector search feature is only available for TiDB Self-Managed clusters and [TiDB Cloud Starter](https://docs.pingcap.com/tidbcloud/select-cluster-tier#tidb-cloud-starter) clusters.
 
 !!! tip
 
@@ -55,7 +55,7 @@ from llama_index.vector_stores.tidbvector import TiDBVectorStore
 
 Configure the environment variables depending on the TiDB deployment option you've selected.
 
-For a TiDB Cloud Serverless cluster, take the following steps to obtain the cluster connection string and configure environment variables:
+For a TiDB Cloud Starter cluster, take the following steps to obtain the cluster connection string and configure environment variables:
 
 1. Navigate to the [**Clusters**](https://tidbcloud.com/console/clusters) page, and then click the name of your target cluster to go to its overview page.
 

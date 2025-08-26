@@ -6,7 +6,7 @@ TiDB provides full-text search capabilities for **massive datasets** with high p
 
 !!! note
 
-    Full-text search is currently in the early stages with limited accessibility. It is only available for **TiDB Cloud Serverless** in the following regions:
+    Full-text search is currently in the early stages with limited accessibility. It is only available for **TiDB Cloud Starter** in the following regions:
     
     - **Frankfurt (eu-central-1)**
     - **Singapore (ap-southeast-1)**
