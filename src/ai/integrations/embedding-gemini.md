@@ -10,9 +10,11 @@ This tutorial demonstrates how to use [Google Gemini](https://ai.google.dev/mode
 
 !!! info
 
-    Currently, only the following product and regions support native SQL functions for integrating the Google Gemini Embeddings API:
+    Currently, [Server-Side Auto Embedding](../guides/auto-embedding.md) is only available on [TiDB Cloud Starter](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme) clusters in the following AWS regions:
 
-    - [TiDB Cloud Starter](https://tidbcloud.com/?utm_source=github&utm_medium=referral&utm_campaign=pytidb_readme) on AWS: `Frankfurt (eu-central-1)` and `Singapore (ap-southeast-1)`
+    - `Frankfurt (eu-central-1)`
+    - `Oregon (us-west-2)`
+    - `N. Virginia (us-east-1)`
 
 ## Google Gemini Embeddings
 
