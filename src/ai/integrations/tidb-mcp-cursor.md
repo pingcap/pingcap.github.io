@@ -16,44 +16,51 @@ For one-click installation, you can click the following button:
 Before you begin, ensure you have the following:
 
 - **Cursor Editor**: Download and install Cursor from [cursor.com](https://cursor.com).
-- **Python (>=3.10) and uv**: Ensure Python (version 3.10 or later) and uv is installed. Follow the [installation guide](https://docs.astral.sh/uv/getting-started/installation/) to install uv.
-- **A TiDB Cloud Starter Cluster**: You can create a free TiDB cluster here [tidbcloud.com](https://tidbcloud.com/free-trial).
+- **Python (>=3.10) and uv**: Ensure Python (version 3.10 or later) and uv are installed. Follow the [installation guide](https://docs.astral.sh/uv/getting-started/installation/) to install uv.
+- **A TiDB cluster**: For a managed option, create a TiDB Cloud Starter cluster at [tidbcloud.com](https://tidbcloud.com/free-trial).
 
-## Setup steps
+## Connect to TiDB Cloud Starter (recommended)
 
-You can follow the steps below to set up the TiDB MCP Server in the Cursor editor:
+Use the TiDB Cloud console to create a Cursor configuration with your cluster credentials.
 
-1. Click the **Open Cursor Settings** button in the top right corner of the editor.
-2. On the **Cursor Settings** page, click the **Tools & Integrations** tab.
-3. Click the **New MCP Server** button.
-4. Copy the following configuration into the `.cursor/mcp.json` file.
+1. Go to the [Clusters](https://tidbcloud.com/console/clusters) page, select your cluster, and then click **Use with AI Tools** in the upper-right corner.
+2. In the **Access `your_cluster_name` with AI tools** dialog, select the **Branch** and **Database** that Cursor should access.
+3. Review the **Prerequisites** list in the dialog and install any missing dependencies.
+4. Configure the root password:
 
-    ```json
-    {
-      "mcpServers": {
-        "TiDB": {
-          "command": "uvx --from pytidb[mcp] tidb-mcp-server",
-          "env": {
-            "TIDB_HOST": "localhost",
-            "TIDB_PORT": "4000",
-            "TIDB_USERNAME": "root",
-            "TIDB_PASSWORD": "",
-            "TIDB_DATABASE": "test"
-          }
-        }
+   - If you have not set a password yet, click **Generate Password** and store it in a secure location (it is shown only once).
+   - If a password already exists, enter it in the **Enter the password for easy setup** field.
+   - If you forget the password, click **Reset password** in the **Prerequisites** section to generate a new one.
+
+5. Select the **Cursor** tab, click **Add to Cursor**, and then click **Install** in Cursor.
+
+## Manual configuration (any TiDB cluster)
+
+If you prefer manual setup, add the following configuration to your `.cursor/mcp.json` file and replace the placeholders with your connection parameters:
+
+```json
+{
+  "mcpServers": {
+    "TiDB": {
+      "command": "uvx --from pytidb[mcp] tidb-mcp-server",
+      "env": {
+        "TIDB_HOST": "<YOUR_TIDB_HOST>",
+        "TIDB_PORT": "<YOUR_TIDB_PORT>",
+        "TIDB_USERNAME": "<YOUR_TIDB_USERNAME>",
+        "TIDB_PASSWORD": "<YOUR_TIDB_PASSWORD>",
+        "TIDB_DATABASE": "<YOUR_TIDB_DATABASE>"
       }
     }
-    ```
+  }
+}
+```
 
-5. Go to the [TiDB Cloud cluster page](https://tidbcloud.com/console/clusters) and navigate to the cluster you want to connect to.
-6. Click the **Connect** button to get the connection parameters, and replace the `TIDB_HOST`, `TIDB_PORT`, `TIDB_USERNAME`, `TIDB_PASSWORD`, and `TIDB_DATABASE` values with your own.
-
-For more details, please refer to the [Model Context Protocol documentation](https://docs.cursor.com/context/model-context-protocol#configuring-mcp-servers) to learn how to configure the MCP server in the Cursor editor.
+For more details, see the [Model Context Protocol documentation](https://docs.cursor.com/context/model-context-protocol#configuring-mcp-servers).
 
 ## Troubleshooting
 
-If you encounter any issues installing the TiDB MCP Server, please check the MCP logs in the Cursor editor.
+If you encounter any issues installing the TiDB MCP Server, check the MCP logs in the Cursor editor.
 
 1. Click **View** > **Output** in the main menu at the top of the editor.
 2. Select **MCP** from the dropdown menu in the **Output** panel.
-3. If you find error messages like `[error] Could not start MCP server tidb-mcp-server: Error: spawn uvx ENOENT`, it means the `uvx` command may not exist in your `$PATH` system variable. For macOS users, you can install `uvx` by running `brew install uv`.
+3. If you see errors like `[error] Could not start MCP server tidb-mcp-server: Error: spawn uvx ENOENT`, it means the `uvx` command may not exist in your `$PATH` system variable. For macOS users, you can install `uvx` by running `brew install uv`.
