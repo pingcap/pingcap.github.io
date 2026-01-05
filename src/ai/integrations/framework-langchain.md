@@ -1,4 +1,3 @@
-
 # Integrate Vector Search with LangChain
 
 This tutorial demonstrates how to integrate the [vector search](https://docs.pingcap.com/tidbcloud/vector-search-overview) feature of TiDB with [LangChain](https://python.langchain.com/).
